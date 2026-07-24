@@ -70,7 +70,7 @@ function selectDropdownOption(type, value, name) {
         currentTypeFilter = value;
         document.getElementById('typeDropdownValue').textContent = name;
         
-        document.querySelectorAll('#typeDropdownContent .dropdown-option').forEach(item => {
+        document.querySelectorAll('#typeDropdownContent .dropdown-option').forEach(function(item) {
             item.classList.remove('active');
         });
         event.currentTarget.classList.add('active');
@@ -78,7 +78,7 @@ function selectDropdownOption(type, value, name) {
         currentStatusFilter = value;
         document.getElementById('statusDropdownValue').textContent = name;
         
-        document.querySelectorAll('#statusDropdownContent .dropdown-option').forEach(item => {
+        document.querySelectorAll('#statusDropdownContent .dropdown-option').forEach(function(item) {
             item.classList.remove('active');
         });
         event.currentTarget.classList.add('active');
@@ -86,7 +86,7 @@ function selectDropdownOption(type, value, name) {
         currentContractFilter = value;
         document.getElementById('contractDropdownValue').textContent = name;
         
-        document.querySelectorAll('#contractDropdownContent .dropdown-option').forEach(item => {
+        document.querySelectorAll('#contractDropdownContent .dropdown-option').forEach(function(item) {
             item.classList.remove('active');
         });
         event.currentTarget.classList.add('active');
@@ -98,10 +98,11 @@ function selectDropdownOption(type, value, name) {
 
 function initTypeCapsules() {
     const typeCapsules = document.getElementById('billTypeCapsules');
+    if (!typeCapsules) return;
     
-    typeCapsules.querySelectorAll('.type-capsule').forEach(capsule => {
+    typeCapsules.querySelectorAll('.type-capsule').forEach(function(capsule) {
         capsule.addEventListener('click', function() {
-            typeCapsules.querySelectorAll('.type-capsule').forEach(c => c.classList.remove('active'));
+            typeCapsules.querySelectorAll('.type-capsule').forEach(function(c) { c.classList.remove('active'); });
             this.classList.add('active');
             selectedBillType = this.dataset.type;
         });
@@ -112,7 +113,7 @@ function filterStatements() {
     const cards = document.querySelectorAll('.statement-card');
     let visibleCount = 0;
     
-    cards.forEach(card => {
+    cards.forEach(function(card) {
         const cardType = card.dataset.type;
         const cardStatus = card.dataset.status;
         const cardContract = card.dataset.contract;
@@ -133,20 +134,12 @@ function filterStatements() {
     const statementList = document.getElementById('statementList');
     
     if (visibleCount === 0) {
-        emptyState.style.display = 'block';
-        statementList.style.display = 'none';
+        if (emptyState) emptyState.style.display = 'block';
+        if (statementList) statementList.style.display = 'none';
     } else {
-        emptyState.style.display = 'none';
-        statementList.style.display = 'block';
+        if (emptyState) emptyState.style.display = 'none';
+        if (statementList) statementList.style.display = 'block';
     }
-}
-
-function goToDetail(status, type, role) {
-    let url = `statement-detail.html?status=${status}&type=${type}`;
-    if (role) {
-        url += `&role=${role}`;
-    }
-    window.location.href = url;
 }
 
 function showAddDrawer() {
@@ -168,13 +161,15 @@ function resetAddForm() {
     document.getElementById('charCount').textContent = '0';
     
     const selectEl = document.querySelector('.form-select');
-    selectEl.innerHTML = `
-        <span class="select-placeholder">请选择关联合同</span>
-        <span class="select-arrow">▼</span>
-    `;
-    document.querySelectorAll('.type-capsule').forEach(c => c.classList.remove('active'));
+    if (selectEl) {
+        selectEl.innerHTML = 
+            '<span class="select-placeholder">请选择关联合同</span>' +
+            '<span class="select-arrow">▼</span>';
+    }
+    document.querySelectorAll('.type-capsule').forEach(function(c) { c.classList.remove('active'); });
     
-    document.getElementById('confirmerInfoGroup').style.display = 'none';
+    const confirmerInfoGroup = document.getElementById('confirmerInfoGroup');
+    if (confirmerInfoGroup) confirmerInfoGroup.style.display = 'none';
 }
 
 function showContractPicker() {
@@ -195,10 +190,11 @@ const contractConfirmerMap = {
 function selectContract(contractName) {
     selectedContract = contractName;
     const selectEl = document.querySelector('.form-select');
-    selectEl.innerHTML = `
-        <span class="select-value">${contractName}</span>
-        <span class="select-arrow">▼</span>
-    `;
+    if (selectEl) {
+        selectEl.innerHTML = 
+            '<span class="select-value">' + contractName + '</span>' +
+            '<span class="select-arrow">▼</span>';
+    }
     hideContractPicker();
     
     const confirmerInfo = contractConfirmerMap[contractName];
@@ -231,7 +227,9 @@ function formatAmount(input) {
 function updateCharCount() {
     const descInput = document.getElementById('descInput');
     const charCount = document.getElementById('charCount');
-    charCount.textContent = descInput.value.length;
+    if (descInput && charCount) {
+        charCount.textContent = descInput.value.length;
+    }
 }
 
 function submitStatement() {
@@ -260,7 +258,7 @@ function submitStatement() {
     showToast('提交成功，已通知对方确认');
     hideAddDrawer();
     
-    setTimeout(() => {
+    setTimeout(function() {
         location.reload();
     }, 1500);
 }
@@ -269,12 +267,14 @@ function showToast(message) {
     const toast = document.getElementById('toastModal');
     const toastContent = document.getElementById('toastContent');
     
-    toastContent.textContent = message;
-    toast.classList.add('show');
-    
-    setTimeout(() => {
-        toast.classList.remove('show');
-    }, 2000);
+    if (toast && toastContent) {
+        toastContent.textContent = message;
+        toast.classList.add('show');
+        
+        setTimeout(function() {
+            toast.classList.remove('show');
+        }, 2000);
+    }
 }
 
 function showRejectDrawer() {
@@ -300,7 +300,7 @@ function confirmReject() {
     showToast('已驳回，对方将收到通知');
     hideRejectDrawer();
     
-    setTimeout(() => {
+    setTimeout(function() {
         history.back();
     }, 1500);
 }

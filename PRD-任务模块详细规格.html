@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>良造家管理平台 - 任务模块详细PRD规格</title>
+    <style>
+        :root {
+            --primary-color: #1890FF;
+            --success-color: #52C41A;
+            --warning-color: #FA8C16;
+            --error-color: #FF4D4F;
+            --purple-color: #722ED1;
+            --text-primary: #262626;
+            --text-secondary: #595959;
+            --text-tertiary: #8C8C8C;
+            --border-color: #E8E8E8;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #FAFAFA;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-secondary);
+        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+        .header {
+            background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%);
+            color: white;
+            padding: 48px 24px;
+            margin-bottom: 32px;
+        }
+        .header h1 { font-size: 32px; margin-bottom: 8px; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .section {
+            background: var(--bg-primary);
+            border-radius: 8px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--success-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-title .badge {
+            background: var(--success-color);
+            color: white;
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 12px;
+        }
+        .subsection { margin-bottom: 32px; }
+        .subsection-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+        .page-nav {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        .page-nav-title { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
+        .page-nav-list { list-style: none; display: flex; flex-wrap: wrap; gap: 12px; }
+        .page-nav-list a {
+            display: inline-block;
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--success-color);
+            font-size: 14px;
+        }
+        .page-nav-list a:hover { background: var(--success-color); color: white; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+        table th, table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 13px;
+        }
+        table th { background: var(--bg-secondary); font-weight: 600; color: var(--text-secondary); }
+        table td { color: var(--text-primary); }
+        table tr:hover { background: var(--bg-secondary); }
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .tag-required { background: #FFF1F0; color: var(--error-color); }
+        .tag-optional { background: #F0F5FF; color: var(--primary-color); }
+        .tag-system { background: #F6FFED; color: var(--success-color); }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .info-item { padding: 16px; background: var(--bg-secondary); border-radius: 6px; }
+        .info-label { font-size: 12px; color: var(--text-tertiary); margin-bottom: 4px; }
+        .info-value { font-size: 14px; color: var(--text-primary); font-weight: 500; }
+        .note {
+            background: #FFFBE6;
+            border-left: 4px solid var(--warning-color);
+            padding: 12px 16px;
+            margin-bottom: 24px;
+            border-radius: 0 6px 6px 0;
+        }
+        .note-title { font-weight: 600; color: var(--warning-color); margin-bottom: 4px; }
+        .code-block {
+            background: #1E1E1E;
+            color: #D4D4D4;
+            padding: 16px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin-bottom: 24px;
+        }
+        .flow-diagram {
+            background: var(--bg-secondary);
+            padding: 24px;
+            border-radius: 6px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .flow-step {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px;
+        }
+        .flow-step .box {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .flow-step .box.active { background: var(--success-color); color: white; }
+        .flow-step .box.passive { background: white; border: 1px solid var(--border-color); color: var(--text-tertiary); }
+        .flow-step .arrow { color: var(--text-tertiary); }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>良造家管理平台 - 任务模块详细PRD规格</h1>
+            <div class="meta">
+                版本：v1.0 | 创建日期：2026-07-17 | 模块：任务管理
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 页面导航 -->
+        <div class="page-nav">
+            <div class="page-nav-title">页面导航</div>
+            <ul class="page-nav-list">
+                <li><a href="#page-task-list-service">1. 任务列表页（服务方小程序）</a></li>
+                <li><a href="#page-task-detail-service">2. 任务详情页（服务方小程序）</a></li>
+                <li><a href="#page-task-acceptance-service">3. 任务验收页（服务方小程序）</a></li>
+                <li><a href="#page-task-list-owner">4. 任务列表页（业主小程序）</a></li>
+                <li><a href="#page-task-detail-owner">5. 任务详情页（业主小程序）</a></li>
+                <li><a href="#page-task-acceptance-owner">6. 任务验收页（业主小程序）</a></li>
+            </ul>
+        </div>
+
+        <!-- ==================== 任务状态机 ==================== -->
+        <div class="section">
+            <div class="section-title">
+                任务状态机（已确认）
+            </div>
+
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="box passive">待配置</div>
+                </div>
+                <span class="arrow">→</span>
+                <div class="flow-step">
+                    <div class="box passive">待开始</div>
+                </div>
+                <span class="arrow">→</span>
+                <div class="flow-step">
+                    <div class="box passive">执行中</div>
+                </div>
+                <span class="arrow">→</span>
+                <div class="flow-step">
+                    <div class="box passive">确认中</div>
+                </div>
+                <span class="arrow">→</span>
+                <div class="flow-step">
+                    <div class="box active">已完成</div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">状态定义</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>状态值</th>
+                            <th>状态名称</th>
+                            <th>进入条件</th>
+                            <th>可执行操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>configuring</td>
+                            <td>待配置</td>
+                            <td>合同创建任务后默认状态</td>
+                            <td>配置执行人、配置确认人、提交任务</td>
+                        </tr>
+                        <tr>
+                            <td>pending</td>
+                            <td>待开始</td>
+                            <td>配置完成并提交后</td>
+                            <td>开始执行（执行人）、查看详情</td>
+                        </tr>
+                        <tr>
+                            <td>in_progress</td>
+                            <td>执行中</td>
+                            <td>执行人点击"开始执行"</td>
+                            <td>上传执行记录、提交验收</td>
+                        </tr>
+                        <tr>
+                            <td>confirming</td>
+                            <td>确认中</td>
+                            <td>执行人提交验收后</td>
+                            <td>确认通过、驳回（确认人）</td>
+                        </tr>
+                        <tr>
+                            <td>completed</td>
+                            <td>已完成</td>
+                            <td>所有确认人确认通过后</td>
+                            <td>查看详情、评价（业主）</td>
+                        </tr>
+                        <tr>
+                            <td>rejected</td>
+                            <td>已驳回</td>
+                            <td>确认人点击"驳回"</td>
+                            <td>重新执行（执行人）</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="note">
+                <div class="note-title">驳回流程说明</div>
+                <p>任务被驳回后，状态变为"已驳回"，执行人需要重新上传执行记录并提交验收。驳回记录会保留在确认记录中。</p>
+            </div>
+        </div>
+
+        <!-- ==================== 1. 任务列表页（服务方） ==================== -->
+        <div class="section" id="page-task-list-service">
+            <div class="section-title">
+                一、任务列表页（服务方小程序）
+                <span class="badge">service-miniapp/task-list.html</span>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">1.1 页面概述</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">页面名称</div>
+                        <div class="info-value">任务列表页</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面路径</div>
+                        <div class="info-value">/pages/task-list/index</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">适用角色</div>
+                        <div class="info-value">项目经理、施工组长</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面入口</div>
+                        <div class="info-value">首页"我的任务"卡片、底部导航</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面类型</div>
+                        <div class="info-value">列表页</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">业务目标</div>
+                        <div class="info-value">查看任务列表、筛选、执行任务</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">1.2 页面结构</div>
+                <div class="code-block">
+┌─────────────────────────────────────┐
+│  导航栏                              │
+│  - 标题：我的任务                    │
+├─────────────────────────────────────┤
+│  状态Tab栏（水平滚动）                │
+│  - 全部 | 待配置 | 待开始 | 执行中    │
+│  - 确认中 | 已完成                   │
+│  - 每个Tab显示数量角标               │
+├─────────────────────────────────────┤
+│  筛选栏                              │
+│  - 合同筛选下拉框                    │
+│  - 任务状态下拉框                    │
+│  - 搜索框                            │
+├─────────────────────────────────────┤
+│  合同分组列表（可折叠）               │
+│  ├─ 合同卡片头部                     │
+│  │  - 合同图标 + 合同名称            │
+│  │  - 项目名称                       │
+│  │  - 待处理/确认中数量统计          │
+│  │  - 展开/收起箭头                  │
+│  └─ 任务卡片列表                     │
+│     - 任务名称 + 任务类型标签        │
+│     - 所属阶段                       │
+│     - 执行人、确认人                 │
+│     - 任务状态标签                   │
+│     - 点击跳转详情                   │
+└─────────────────────────────────────┘
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">1.3 状态Tab规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tab名称</th>
+                            <th>筛选条件</th>
+                            <th>角标显示</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>全部</td>
+                            <td>无筛选</td>
+                            <td>显示总数量</td>
+                        </tr>
+                        <tr>
+                            <td>待配置</td>
+                            <td>status=configuring</td>
+                            <td>显示待配置数量（红色）</td>
+                        </tr>
+                        <tr>
+                            <td>待开始</td>
+                            <td>status=pending</td>
+                            <td>显示待开始数量</td>
+                        </tr>
+                        <tr>
+                            <td>执行中</td>
+                            <td>status=in_progress</td>
+                            <td>显示执行中数量</td>
+                        </tr>
+                        <tr>
+                            <td>确认中</td>
+                            <td>status=confirming</td>
+                            <td>显示确认中数量（橙色）</td>
+                        </tr>
+                        <tr>
+                            <td>已完成</td>
+                            <td>status=completed</td>
+                            <td>显示已完成数量</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">1.4 任务卡片规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>元素</th>
+                            <th>数据来源</th>
+                            <th>显示规则</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>任务名称</td>
+                            <td>tasks.name</td>
+                            <td>完整显示，超长换行</td>
+                        </tr>
+                        <tr>
+                            <td>任务类型</td>
+                            <td>tasks.type</td>
+                            <td>标签：正式任务（橙色）/ 临时任务（紫色）</td>
+                        </tr>
+                        <tr>
+                            <td>所属阶段</td>
+                            <td>stages.name</td>
+                            <td>"阶段名称"格式</td>
+                        </tr>
+                        <tr>
+                            <td>执行人</td>
+                            <td>users.name（关联executor_id）</td>
+                            <td>显示姓名，若无数显示"待配置"</td>
+                        </tr>
+                        <tr>
+                            <td>确认人</td>
+                            <td>确认人列表</td>
+                            <td>显示"X人"，点击可查看列表</td>
+                        </tr>
+                        <tr>
+                            <td>任务状态</td>
+                            <td>tasks.status</td>
+                            <td>状态标签（不同颜色）</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">1.5 筛选规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>筛选项</th>
+                            <th>类型</th>
+                            <th>选项</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>合同筛选</td>
+                            <td>下拉选择</td>
+                            <td>全部合同、当前用户相关的合同列表</td>
+                        </tr>
+                        <tr>
+                            <td>任务状态</td>
+                            <td>下拉选择</td>
+                            <td>全部状态、待配置、待开始、执行中、确认中、已完成</td>
+                        </tr>
+                        <tr>
+                            <td>搜索</td>
+                            <td>文本输入</td>
+                            <td>支持任务名称模糊搜索</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">1.6 分页规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>属性</th>
+                            <th>值</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>每页条数</td>
+                            <td>10条</td>
+                        </tr>
+                        <tr>
+                            <td>加载方式</td>
+                            <td>下拉加载更多</td>
+                        </tr>
+                        <tr>
+                            <td>加载提示</td>
+                            <td>"加载中..."、"没有更多了"</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ==================== 2. 任务详情页（服务方） ==================== -->
+        <div class="section" id="page-task-detail-service">
+            <div class="section-title">
+                二、任务详情页（服务方小程序）
+                <span class="badge">service-miniapp/task-detail.html</span>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">2.1 页面概述</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">页面名称</div>
+                        <div class="info-value">任务详情页</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面路径</div>
+                        <div class="info-value">/pages/task-detail/index</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">适用角色</div>
+                        <div class="info-value">项目经理、施工组长、执行人</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面入口</div>
+                        <div class="info-value">任务列表点击任务卡片</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面类型</div>
+                        <div class="info-value">详情展示页 + 操作页</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">2.2 页面结构</div>
+                <div class="code-block">
+┌─────────────────────────────────────┐
+│  导航栏                              │
+│  - 返回按钮 | 标题：任务详情 | ⋯更多  │
+├─────────────────────────────────────┤
+│  任务头部卡片（固定顶部）             │
+│  - 任务名称                          │
+│  - 所属合同 > 所属阶段               │
+│  - 任务状态标签                      │
+│  - 确认进度条（确认中状态显示）       │
+├─────────────────────────────────────┤
+│  前置任务阻塞卡片（条件显示）         │
+│  - 图标 + 标题：前置任务未完成        │
+│  - 阻塞说明                          │
+│  - 前置任务列表（显示状态）           │
+│  - 提示：前置任务完成后自动通知       │
+├─────────────────────────────────────┤
+│  任务流程卡片                         │
+│  - 流程图：待开始→执行中→确认中→已完成│
+│  - 当前步骤高亮                      │
+├─────────────────────────────────────┤
+│  人员配置卡片                         │
+│  - 执行人：姓名 + 角色（可添加/修改） │
+│  - 确认人：列表 + 添加按钮            │
+├─────────────────────────────────────┤
+│  三段标准卡片                         │
+│  - 执行标准（可折叠）                 │
+│  - 确认标准（可折叠）                 │
+│  - 担责标准（可折叠）                 │
+├─────────────────────────────────────┤
+│  执行记录卡片                         │
+│  - 当前有效执行记录                  │
+│  - 历史执行记录（可展开）             │
+├─────────────────────────────────────┤
+│  确认记录卡片                         │
+│  - 确认人列表 + 确认状态              │
+│  - 确认时间、确认内容、媒体、评价     │
+├─────────────────────────────────────┤
+│  底部操作栏（固定底部）               │
+│  - 根据状态和角色显示不同按钮         │
+└─────────────────────────────────────┘
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">2.3 人员配置规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>人员类型</th>
+                            <th>必填</th>
+                            <th>数量限制</th>
+                            <th>配置权限</th>
+                            <th>修改权限</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>执行人</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>1人</td>
+                            <td>项目经理、施工组长</td>
+                            <td>提交前可修改</td>
+                        </tr>
+                        <tr>
+                            <td>确认人</td>
+                            <td><span class="tag tag-optional">选填</span></td>
+                            <td>最多5人</td>
+                            <td>项目经理、施工组长</td>
+                            <td>提交前可修改</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">2.4 三段标准显示规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>标准类型</th>
+                            <th>图标</th>
+                            <th>显示方式</th>
+                            <th>来源</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>执行标准</td>
+                            <td>📝</td>
+                            <td>列表形式，每条编号</td>
+                            <td>合同编辑时定义</td>
+                        </tr>
+                        <tr>
+                            <td>确认标准</td>
+                            <td>✅</td>
+                            <td>列表形式，每条编号</td>
+                            <td>合同编辑时定义</td>
+                        </tr>
+                        <tr>
+                            <td>担责标准</td>
+                            <td>⚠️</td>
+                            <td>列表形式，每条编号</td>
+                            <td>合同编辑时定义</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">2.5 执行记录上传规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>属性</th>
+                            <th>值</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>支持类型</td>
+                            <td>图片、视频、音频</td>
+                        </tr>
+                        <tr>
+                            <td>图片数量</td>
+                            <td>最多9张</td>
+                        </tr>
+                        <tr>
+                            <td>视频数量</td>
+                            <td>最多1个，时长限制3分钟</td>
+                        </tr>
+                        <tr>
+                            <td>音频数量</td>
+                            <td>最多3个，每个时长限制60秒</td>
+                        </tr>
+                        <tr>
+                            <td>文件大小</td>
+                            <td>单个文件不超过20MB</td>
+                        </tr>
+                        <tr>
+                            <td>执行说明</td>
+                            <td>文本描述，选填，最多500字</td>
+                        </tr>
+                        <tr>
+                            <td>语音输入</td>
+                            <td>支持语音转文字（使用小程序录音API）</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">2.6 确认通过/驳回规格</div>
+                <h4>确认通过</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>属性</th>
+                            <th>值</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>触发方式</td>
+                            <td>点击"确认通过"按钮</td>
+                        </tr>
+                        <tr>
+                            <td>弹窗内容</td>
+                            <td>添加图片/视频/音频、填写评语、综合评星、评价标签</td>
+                        </tr>
+                        <tr>
+                            <td>评语</td>
+                            <td>文本，选填，最多200字</td>
+                        </tr>
+                        <tr>
+                            <td>综合评星</td>
+                            <td>1-5星，支持半星，选填</td>
+                        </tr>
+                        <tr>
+                            <td>评价标签</td>
+                            <td>责任心棒、服务态度好、专业能力强，可多选</td>
+                        </tr>
+                        <tr>
+                            <td>确认后</td>
+                            <td>Toast中部显示"确认成功"，持续2秒</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4 style="margin-top: 16px;">驳回</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>属性</th>
+                            <th>值</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>触发方式</td>
+                            <td>点击"驳回"按钮</td>
+                        </tr>
+                        <tr>
+                            <td>弹窗内容</td>
+                            <td>添加图片/视频/音频、填写驳回原因</td>
+                        </tr>
+                        <tr>
+                            <td>驳回原因</td>
+                            <td>文本，必填，最多200字</td>
+                        </tr>
+                        <tr>
+                            <td>驳回后</td>
+                            <td>任务状态变为"已驳回"，执行人可重新执行</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">2.7 操作按钮矩阵（服务方）</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>任务状态</th>
+                            <th>执行人视角</th>
+                            <th>确认人视角</th>
+                            <th>项目经理视角</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>待配置</td>
+                            <td>查看详情</td>
+                            <td>查看详情</td>
+                            <td>配置执行人、配置确认人、提交任务</td>
+                        </tr>
+                        <tr>
+                            <td>待开始</td>
+                            <td>开始执行</td>
+                            <td>查看详情</td>
+                            <td>查看详情</td>
+                        </tr>
+                        <tr>
+                            <td>执行中</td>
+                            <td>上传记录、提交验收</td>
+                            <td>查看详情</td>
+                            <td>查看详情</td>
+                        </tr>
+                        <tr>
+                            <td>确认中</td>
+                            <td>查看详情</td>
+                            <td>确认通过、驳回</td>
+                            <td>查看详情</td>
+                        </tr>
+                        <tr>
+                            <td>已驳回</td>
+                            <td>重新执行</td>
+                            <td>查看详情</td>
+                            <td>查看详情</td>
+                        </tr>
+                        <tr>
+                            <td>已完成</td>
+                            <td>查看详情</td>
+                            <td>查看详情</td>
+                            <td>查看详情</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">2.8 前置任务阻塞</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>属性</th>
+                            <th>值</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>触发条件</td>
+                            <td>阶段设置"按序执行" + 前置任务未完成</td>
+                        </tr>
+                        <tr>
+                            <td>显示内容</td>
+                            <td>阻塞卡片 + 前置任务列表（显示状态）</td>
+                        </tr>
+                        <tr>
+                            <td>操作按钮</td>
+                            <td>显示"请等待前置任务完成"，按钮禁用</td>
+                        </tr>
+                        <tr>
+                            <td>自动通知</td>
+                            <td>前置任务完成后，通过订阅消息通知当前执行人</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ==================== 3. 任务验收页（服务方） ==================== -->
+        <div class="section" id="page-task-acceptance-service">
+            <div class="section-title">
+                三、任务验收页（服务方小程序）
+                <span class="badge">service-miniapp/task-acceptance.html</span>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">3.1 页面概述</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">页面名称</div>
+                        <div class="info-value">任务验收页</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面路径</div>
+                        <div class="info-value">/pages/task-acceptance/index</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">适用角色</div>
+                        <div class="info-value">确认人（项目经理、施工组长）</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面入口</div>
+                        <div class="info-value">订阅消息通知、任务详情页确认按钮</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面类型</div>
+                        <div class="info-value">验收确认页</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note">
+                <div class="note-title">页面说明</div>
+                <p>任务验收页是任务详情页的简化版本，专门用于确认人快速验收任务。页面结构与任务详情页类似，但底部操作栏固定显示"确认通过"和"驳回"按钮。</p>
+            </div>
+        </div>
+
+        <!-- ==================== 4. 任务列表页（业主） ==================== -->
+        <div class="section" id="page-task-list-owner">
+            <div class="section-title">
+                四、任务列表页（业主小程序）
+                <span class="badge">owner-miniapp/task-list.html</span>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">4.1 页面概述</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">页面名称</div>
+                        <div class="info-value">任务列表页</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面路径</div>
+                        <div class="info-value">/pages/task-list/index</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">适用角色</div>
+                        <div class="info-value">业主</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面入口</div>
+                        <div class="info-value">首页"我的任务"卡片</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">4.2 与服务方差异</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>功能</th>
+                            <th>服务方小程序</th>
+                            <th>业主小程序</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>状态Tab</td>
+                            <td>全部状态</td>
+                            <td>仅显示：全部、确认中、已完成</td>
+                        </tr>
+                        <tr>
+                            <td>任务配置</td>
+                            <td>可配置执行人/确认人</td>
+                            <td>❌ 无配置权限</td>
+                        </tr>
+                        <tr>
+                            <td>任务执行</td>
+                            <td>可上传执行记录</td>
+                            <td>❌ 无执行权限</td>
+                        </tr>
+                        <tr>
+                            <td>任务验收</td>
+                            <td>确认人可验收</td>
+                            <td>✅ 业主作为确认人可验收</td>
+                        </tr>
+                        <tr>
+                            <td>评价功能</td>
+                            <td>确认时可评价</td>
+                            <td>✅ 业主可评价</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ==================== 5. 任务详情页（业主） ==================== -->
+        <div class="section" id="page-task-detail-owner">
+            <div class="section-title">
+                五、任务详情页（业主小程序）
+                <span class="badge">owner-miniapp/task-detail.html</span>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">5.1 与服务方差异</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>功能模块</th>
+                            <th>服务方小程序</th>
+                            <th>业主小程序</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>人员配置卡片</td>
+                            <td>可编辑</td>
+                            <td>只读显示</td>
+                        </tr>
+                        <tr>
+                            <td>执行记录上传</td>
+                            <td>✅ 可上传</td>
+                            <td>❌ 仅可查看</td>
+                        </tr>
+                        <tr>
+                            <td>确认通过/驳回</td>
+                            <td>确认人可操作</td>
+                            <td>✅ 业主作为确认人可操作</td>
+                        </tr>
+                        <tr>
+                            <td>评价功能</td>
+                            <td>确认时可评价</td>
+                            <td>✅ 确认时可评价（业主专属）</td>
+                        </tr>
+                        <tr>
+                            <td>分享功能</td>
+                            <td>✅</td>
+                            <td>❌ 不支持分享任务</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">5.2 业主确认按钮规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>属性</th>
+                            <th>值</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>显示条件</td>
+                            <td>业主在确认人列表中 + 任务状态为"确认中"</td>
+                        </tr>
+                        <tr>
+                            <td>按钮位置</td>
+                            <td>底部操作栏</td>
+                        </tr>
+                        <tr>
+                            <td>按钮文案</td>
+                            <td>确认通过、驳回</td>
+                        </tr>
+                        <tr>
+                            <td>确认通过后</td>
+                            <td>显示评价弹窗（必填星级，选填评语和标签）</td>
+                        </tr>
+                        <tr>
+                            <td>评价星级</td>
+                            <td>1-5星，支持半星，<span class="tag tag-required">必填</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ==================== 6. 任务验收页（业主） ==================== -->
+        <div class="section" id="page-task-acceptance-owner">
+            <div class="section-title">
+                六、任务验收页（业主小程序）
+                <span class="badge">owner-miniapp/task-acceptance.html</span>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">6.1 页面概述</div>
+                <p>业主任务验收页与服务方验收页功能类似，主要差异：</p>
+                <ul style="margin-top: 12px; padding-left: 20px;">
+                    <li>确认通过后<strong>必须</strong>进行星级评价</li>
+                    <li>评价内容会作为业主对服务的正式评价记录</li>
+                    <li>业主的评价会显示在执行人的服务评分中</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ==================== API接口汇总 ==================== -->
+        <div class="section">
+            <div class="section-title">
+                七、API接口汇总
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">7.1 任务列表接口</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>接口</th>
+                            <th>方法</th>
+                            <th>调用时机</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>/api/v1/tasks</td>
+                            <td>GET</td>
+                            <td>页面加载、下拉刷新、加载更多</td>
+                            <td>获取任务列表</td>
+                        </tr>
+                        <tr>
+                            <td>/api/v1/tasks/stats</td>
+                            <td>GET</td>
+                            <td>页面加载</td>
+                            <td>获取各状态任务数量统计</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">7.2 任务详情接口</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>接口</th>
+                            <th>方法</th>
+                            <th>调用时机</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>/api/v1/tasks/:id</td>
+                            <td>GET</td>
+                            <td>页面加载</td>
+                            <td>获取任务详情</td>
+                        </tr>
+                        <tr>
+                            <td>/api/v1/tasks/:id/executor</td>
+                            <td>PUT</td>
+                            <td>配置执行人</td>
+                            <td>设置任务执行人</td>
+                        </tr>
+                        <tr>
+                            <td>/api/v1/tasks/:id/confirmers</td>
+                            <td>PUT</td>
+                            <td>配置确认人</td>
+                            <td>设置任务确认人</td>
+                        </tr>
+                        <tr>
+                            <td>/api/v1/tasks/:id/start</td>
+                            <td>POST</td>
+                            <td>点击"开始执行"</td>
+                            <td>开始执行任务</td>
+                        </tr>
+                        <tr>
+                            <td>/api/v1/tasks/:id/execution-records</td>
+                            <td>POST</td>
+                            <td>提交执行记录</td>
+                            <td>上传执行记录</td>
+                        </tr>
+                        <tr>
+                            <td>/api/v1/tasks/:id/submit</td>
+                            <td>POST</td>
+                            <td>点击"提交验收"</td>
+                            <td>提交任务验收</td>
+                        </tr>
+                        <tr>
+                            <td>/api/v1/tasks/:id/confirm</td>
+                            <td>POST</td>
+                            <td>点击"确认通过"</td>
+                            <td>确认通过任务</td>
+                        </tr>
+                        <tr>
+                            <td>/api/v1/tasks/:id/reject</td>
+                            <td>POST</td>
+                            <td>点击"驳回"</td>
+                            <td>驳回任务</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 文档结束 -->
+        <div style="text-align: center; padding: 48px 0; color: var(--text-tertiary);">
+            <p>— 任务模块规格结束 —</p>
+            <p style="font-size: 12px; margin-top: 8px;">继续查看 <a href="PRD-项目模块详细规格.html" style="color: var(--success-color);">项目模块规格</a></p>
+        </div>
+    </div>
+</body>
+</html>

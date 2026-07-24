@@ -1,10 +1,10 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>家装平台小程序原型 - 项目架构</title>
-    <link rel="stylesheet" href="../shared/common.css">
+    <link rel="stylesheet" href="common.css">
     <style>
         .page-content {
             height: calc(100% - 44px);
@@ -1289,11 +1289,10 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">
-                            <span class="required">*</span>
                             <span>甲方</span>
                         </label>
                         <select class="form-select" id="contractPartyA">
-                            <option value="">请选择甲方</option>
+                            <option value="">请选择甲方（选填）</option>
                             <option value="zhangsan">张三（项目经理）</option>
                             <option value="owner">王业主（业主）</option>
                             <option value="lisi">李四（业主代表）</option>
@@ -1301,11 +1300,10 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">
-                            <span class="required">*</span>
                             <span>乙方</span>
                         </label>
                         <select class="form-select" id="contractPartyB">
-                            <option value="">请选择乙方</option>
+                            <option value="">请选择乙方（选填）</option>
                             <option value="lisi">李四（水电组长）</option>
                             <option value="wangwu">王五（强电组长）</option>
                             <option value="sunba">孙八（弱电组长）</option>
@@ -1776,14 +1774,7 @@
                 showAppModal('提示', '请输入合同名称', null, false);
                 return;
             }
-            if (!partyA) {
-                showAppModal('提示', '请选择甲方', null, false);
-                return;
-            }
-            if (!partyB) {
-                showAppModal('提示', '请选择乙方', null, false);
-                return;
-            }
+            // 甲乙方为选填项，无需必填校验
             
             showAppModal('创建确认', `确定要为"${currentContractTarget}"创建合同"${name}"吗？`, function() {
                 const contractId = 'contract-new-' + Date.now();

@@ -1292,9 +1292,9 @@
                 <div class="action-btn" onclick="closeMiniProgram()">✕</div>
             </div>
             <div class="action-menu" id="actionMenu">
-                <div class="action-menu-item" onclick="shareToFriend(); closeActionMenu();">
-                    <span class="icon">📤</span>
-                    <span>分享给朋友</span>
+                <div class="action-menu-item" onclick="closeActionMenu();">
+                    <span class="icon">👥</span>
+                    <span>项目成员</span>
                 </div>
             </div>
         </div>
@@ -1654,7 +1654,6 @@
     <div class="page-nav">
         <div class="page-nav-title">原型导航</div>
         <a href="home.html" class="page-nav-item">首页</a>
-        <a href="project-list.html" class="page-nav-item">项目列表</a>
         <a href="project-detail.html" class="page-nav-item">项目详情</a>
         <a href="member.html" class="page-nav-item active">项目成员</a>
         <a href="architecture.html" class="page-nav-item">项目架构</a>
@@ -2359,7 +2358,7 @@
             closeConfirmModal();
             showToast('已成功退出项目');
             setTimeout(() => {
-                window.location.href = 'project-list.html';
+                window.location.href = 'project-detail.html';
             }, 1500);
         }
 

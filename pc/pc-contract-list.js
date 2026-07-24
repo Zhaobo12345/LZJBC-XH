@@ -1,36 +1,12 @@
-
-        let currentPcRole = 'operator';
-
-        function switchPcRole(role, evt) {
-            currentPcRole = role;
-            
-            document.querySelectorAll('.pc-role-switcher .pc-role-btn').forEach(btn => btn.classList.remove('active'));
-            evt.target.classList.add('active');
-            
-            if (role === 'initiator') {
-                window.location.href = 'pc-contract-edit.html';
-            } else {
-                window.location.href = 'pc-contract-list.html';
-            }
-        }
-
-        function toggleUserDropdown() {
+function toggleUserDropdown() {
             const menu = document.getElementById('userDropdownMenu');
             menu.classList.toggle('show');
         }
 
         function logout() {
             if (confirm('确定要退出登录吗？')) {
-                window.location.href = 'pc-login.html';
+                window.location.href = 'pc-contract-list.html';
             }
-        }
-
-        function goToProfile() {
-            window.location.href = 'pc-profile.html';
-        }
-
-        function goToAccountSettings() {
-            window.location.href = 'pc-account-settings.html';
         }
 
         document.addEventListener('click', function(e) {
@@ -72,95 +48,45 @@
             { id: 12, name: '木工分包合同-桐庐县住宅', project: '桐庐县住宅', type: 'wood', typeName: '木工工程', amount: '￥48,000', status: 'change_reviewed_reject', statusName: '变更已驳回', statusClass: 'review-rejected', time: '2024-01-11 10:30', rejectReason: '变更内容描述不清晰，缺少具体施工范围说明' },
         ];
 
-        function renderContractList(role) {
+        function renderContractList() {
             const tbody = document.getElementById('contractTableBody');
-            let contracts = [];
             
-            if (role === 'operator') {
-                contracts = allContracts.filter(c => 
-                    c.status === 'pending_review' || 
-                    c.status === 'changing' || 
-                    c.status === 'reviewed_pass' || 
-                    c.status === 'reviewed_reject' ||
-                    c.status === 'change_reviewed_pass' ||
-                    c.status === 'change_reviewed_reject'
-                );
-            } else {
-                contracts = allContracts;
-            }
+            const contracts = allContracts.filter(c => 
+                c.status === 'pending_review' || 
+                c.status === 'changing' || 
+                c.status === 'reviewed_pass' || 
+                c.status === 'reviewed_reject' ||
+                c.status === 'change_reviewed_pass' ||
+                c.status === 'change_reviewed_reject'
+            );
             
             tbody.innerHTML = contracts.map(c => {
                 let actionBtns = '';
                 let rejectReasonHtml = '';
-                const rejectReasonParam = c.rejectReason ? c.rejectReason.replace(/'/g, "\\'").replace(/"/g, '\\"') : '';
                 
-                if (role === 'operator') {
-                    if (c.status === 'pending_review') {
-                        actionBtns = `<button class="action-btn primary" onclick="goToReview(${c.id}, 'contract')">去审核</button>`;
-                    } else if (c.status === 'changing') {
-                        actionBtns = `<button class="action-btn primary" onclick="goToReview(${c.id}, 'change')">去审核</button>`;
-                    } else if (c.status === 'reviewed_pass') {
-                        actionBtns = `<span style="color: var(--success-color);">✓ 已通过</span>`;
-                    } else if (c.status === 'reviewed_reject') {
-                        actionBtns = `<span style="color: var(--error-color);">✗ 已驳回</span>`;
-                        if (c.rejectReason) {
-                            rejectReasonHtml = `<div style="font-size: 12px; color: var(--error-color); margin-top: 4px;" title="${c.rejectReason}">驳回原因：${c.rejectReason.length > 20 ? c.rejectReason.substring(0, 20) + '...' : c.rejectReason}</div>`;
-                        }
-                    } else if (c.status === 'change_reviewed_pass') {
-                        actionBtns = `<span style="color: var(--success-color);">✓ 变更已通过</span>`;
-                    } else if (c.status === 'change_reviewed_reject') {
-                        actionBtns = `<span style="color: var(--error-color);">✗ 变更已驳回</span>`;
-                        if (c.rejectReason) {
-                            rejectReasonHtml = `<div style="font-size: 12px; color: var(--error-color); margin-top: 4px;" title="${c.rejectReason}">驳回原因：${c.rejectReason.length > 20 ? c.rejectReason.substring(0, 20) + '...' : c.rejectReason}</div>`;
-                        }
+                if (c.status === 'pending_review') {
+                    actionBtns = `<button class="action-btn primary" onclick="goToReview(${c.id}, 'contract')">去审核</button>`;
+                } else if (c.status === 'changing') {
+                    actionBtns = `<button class="action-btn primary" onclick="goToReview(${c.id}, 'change')">去审核</button>`;
+                } else if (c.status === 'reviewed_pass') {
+                    actionBtns = `<span style="color: var(--success-color);">✓ 已通过</span>`;
+                } else if (c.status === 'reviewed_reject') {
+                    actionBtns = `<span style="color: var(--error-color);">✗ 已驳回</span>`;
+                    if (c.rejectReason) {
+                        rejectReasonHtml = `<div style="font-size: 12px; color: var(--error-color); margin-top: 4px;" title="${c.rejectReason}">驳回原因：${c.rejectReason.length > 20 ? c.rejectReason.substring(0, 20) + '...' : c.rejectReason}</div>`;
                     }
-                } else {
-                    if (c.status === 'pending_review') {
-                        actionBtns = `
-                            <button class="action-btn success" onclick="showReviewModal(${c.id}, 'pass')">审核通过</button>
-                            <button class="action-btn danger" onclick="showReviewModal(${c.id}, 'reject')">审核驳回</button>
-                            <button class="action-btn default" onclick="viewContract(${c.id}, '${c.status}', '${rejectReasonParam}')">查看</button>
-                        `;
-                    } else if (c.status === 'confirming_receiver') {
-                        actionBtns = `
-                            <button class="action-btn primary" onclick="confirmContract(${c.id})">确认合同</button>
-                            <button class="action-btn default" onclick="viewContract(${c.id}, '${c.status}', '${rejectReasonParam}')">查看</button>
-                        `;
-                    } else if (c.status === 'signing') {
-                        actionBtns = `
-                            <button class="action-btn primary" onclick="confirmSign(${c.id})">确认签约</button>
-                            <button class="action-btn default" onclick="viewContract(${c.id}, '${c.status}', '${rejectReasonParam}')">查看</button>
-                        `;
-                    } else if (c.status === 'signed') {
-                        actionBtns = `
-                            <button class="action-btn default" onclick="showChangeModal(${c.id})">发起变更</button>
-                            <button class="action-btn default" onclick="viewContract(${c.id}, '${c.status}', '${rejectReasonParam}')">查看</button>
-                            <button class="action-btn default" onclick="exportContract(${c.id})">导出</button>
-                        `;
-                    } else if (c.status === 'draft') {
-                        actionBtns = `
-                            <button class="action-btn primary" onclick="editContract(${c.id})">编辑</button>
-                            <button class="action-btn success" onclick="submitForReview(${c.id})">提交审核</button>
-                            <button class="action-btn danger" onclick="deleteContract(${c.id})">删除</button>
-                        `;
-                    } else if (c.status === 'review_rejected') {
-                        actionBtns = `
-                            <button class="action-btn primary" onclick="editContract(${c.id})">修改</button>
-                            <button class="action-btn default" onclick="viewContract(${c.id}, '${c.status}', '${rejectReasonParam}')">查看驳回原因</button>
-                        `;
-                    } else if (c.status === 'changing') {
-                        actionBtns = `
-                            <button class="action-btn primary" onclick="confirmChange(${c.id})">确认变更</button>
-                            <button class="action-btn default" onclick="viewContract(${c.id}, '${c.status}', '${rejectReasonParam}')">查看</button>
-                        `;
-                    } else {
-                        actionBtns = `<button class="action-btn default" onclick="viewContract(${c.id}, '${c.status}', '${rejectReasonParam}')">查看</button>`;
+                } else if (c.status === 'change_reviewed_pass') {
+                    actionBtns = `<span style="color: var(--success-color);">✓ 变更已通过</span>`;
+                } else if (c.status === 'change_reviewed_reject') {
+                    actionBtns = `<span style="color: var(--error-color);">✗ 变更已驳回</span>`;
+                    if (c.rejectReason) {
+                        rejectReasonHtml = `<div style="font-size: 12px; color: var(--error-color); margin-top: 4px;" title="${c.rejectReason}">驳回原因：${c.rejectReason.length > 20 ? c.rejectReason.substring(0, 20) + '...' : c.rejectReason}</div>`;
                     }
                 }
                 
                 return `
                     <tr data-status="${c.status}" data-type="${c.type}">
-                        <td><span class="contract-name" onclick="viewContract(${c.id}, '${c.status}', '${rejectReasonParam}')">${c.name}</span></td>
+                        <td><span class="contract-name" onclick="viewContract(${c.id}, '${c.status}', '')">${c.name}</span></td>
                         <td><span class="project-link" onclick="viewProject(${c.id})">${c.project}</span></td>
                         <td>${c.typeName}</td>
                         <td>${c.amount}</td>
@@ -177,9 +103,9 @@
 
         function goToReview(id, type) {
             if (type === 'contract') {
-                window.location.href = 'pc-contract-detail.html?id=' + id + '&status=platform_reviewing&role=operator';
+                window.location.href = 'pc-contract-detail.html?id=' + id + '&status=platform_reviewing';
             } else if (type === 'change') {
-                window.location.href = 'pc-contract-detail.html?id=' + id + '&status=change_reviewing&role=operator';
+                window.location.href = 'pc-contract-detail.html?id=' + id + '&status=change_reviewing';
             }
         }
 
@@ -196,16 +122,12 @@
                 
                 let statusMatch = true;
                 if (status) {
-                    if (currentPcRole === 'operator') {
-                        if (status === 'pending_review') {
-                            statusMatch = rowStatus === 'pending_review';
-                        } else if (status === 'change_review') {
-                            statusMatch = rowStatus === 'changing';
-                        } else if (status === 'reviewed') {
-                            statusMatch = rowStatus === 'reviewed_pass' || rowStatus === 'reviewed_reject' || rowStatus === 'change_reviewed_pass' || rowStatus === 'change_reviewed_reject';
-                        } else {
-                            statusMatch = rowStatus === status;
-                        }
+                    if (status === 'pending_review') {
+                        statusMatch = rowStatus === 'pending_review';
+                    } else if (status === 'change_review') {
+                        statusMatch = rowStatus === 'changing';
+                    } else if (status === 'reviewed') {
+                        statusMatch = rowStatus === 'reviewed_pass' || rowStatus === 'reviewed_reject' || rowStatus === 'change_reviewed_pass' || rowStatus === 'change_reviewed_reject';
                     } else {
                         statusMatch = rowStatus === status;
                     }
@@ -222,26 +144,6 @@
             document.getElementById('statusFilter').value = '';
             document.getElementById('typeFilter').value = '';
             document.getElementById('searchInput').value = '';
-            filterContracts();
-        }
-
-        function filterByStatus(status) {
-            document.querySelectorAll('.stat-card').forEach(card => card.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            
-            const statusFilter = document.getElementById('statusFilter');
-            
-            if (status === 'all') {
-                statusFilter.value = '';
-            } else if (status === 'pending') {
-                statusFilter.value = 'pending_review';
-            } else if (status === 'signing') {
-                statusFilter.value = 'confirmed';
-            } else if (status === 'executing') {
-                statusFilter.value = 'signed';
-            } else if (status === 'completed') {
-                statusFilter.value = 'signed';
-            }
             filterContracts();
         }
 
@@ -302,47 +204,11 @@
                 targetStatus = 'change_reviewing';
             }
             
-            let url = 'pc-contract-detail.html?id=' + id + '&status=' + targetStatus + '&role=operator';
+            let url = 'pc-contract-detail.html?id=' + id + '&status=' + targetStatus;
             if (rejectReason) {
                 url += '&rejectReason=' + encodeURIComponent(rejectReason);
             }
             location.href = url;
-        }
-
-        function editContract(id) {
-            location.href = 'pc-contract-edit.html?contractId=' + id;
-        }
-
-        function submitForReview(id) {
-            if (confirm('确定要提交审核吗？提交后将由运营人员进行审核。')) {
-                showToast('📤', '提交成功', '合同已提交审核，请等待运营人员审核');
-            }
-        }
-
-        function deleteContract(id) {
-            if (confirm('确定要删除此合同吗？')) {
-                showToast('🗑️', '删除成功', '合同已删除');
-            }
-        }
-
-        function confirmContract(id) {
-            location.href = 'pc-contract-detail.html?id=' + id + '&action=confirm';
-        }
-
-        function confirmSign(id) {
-            location.href = 'pc-contract-detail.html?id=' + id + '&action=sign';
-        }
-
-        function showChangeModal(id) {
-            location.href = 'pc-contract-change.html?contractId=' + id;
-        }
-
-        function confirmChange(id) {
-            location.href = 'pc-contract-detail.html?id=' + id + '&action=confirmChange';
-        }
-
-        function exportContract(id) {
-            showToast('📄', '导出成功', '合同PDF已生成，请查看下载目录');
         }
 
         document.addEventListener('click', function(e) {
@@ -351,39 +217,14 @@
             }
         });
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const tab = urlParams.get('tab');
-        const roleParam = urlParams.get('role');
+        renderContractList();
         
-        if (roleParam === 'initiator') {
-            switchPcRole('initiator');
-        } else {
-            const contractOperationNav = document.getElementById('contractOperationNav');
-            const statsRow = document.getElementById('statsRow');
-            if (contractOperationNav) contractOperationNav.style.display = 'none';
-            if (statsRow) statsRow.style.display = 'none';
-            renderContractList('operator');
-            
-            const statusFilter = document.getElementById('statusFilter');
-            if (statusFilter) {
-                statusFilter.innerHTML = `
-                    <option value="">全部状态</option>
-                    <option value="pending_review">合同待审核</option>
-                    <option value="change_review">变更待审核</option>
-                    <option value="reviewed">已审核</option>
-                `;
-            }
+        const statusFilter = document.getElementById('statusFilter');
+        if (statusFilter) {
+            statusFilter.innerHTML = `
+                <option value="">全部状态</option>
+                <option value="pending_review">合同待审核</option>
+                <option value="change_review">变更待审核</option>
+                <option value="reviewed">已审核</option>
+            `;
         }
-        
-        if (tab === 'pending' && roleParam === 'initiator') {
-            document.querySelectorAll('.stat-card')[1].classList.add('active');
-            document.querySelectorAll('.stat-card')[0].classList.remove('active');
-            document.getElementById('statusFilter').value = 'pending_review';
-            filterContracts();
-        } else if (tab === 'completed' && roleParam === 'initiator') {
-            document.querySelectorAll('.stat-card')[4].classList.add('active');
-            document.querySelectorAll('.stat-card')[0].classList.remove('active');
-            document.getElementById('statusFilter').value = 'signed';
-            filterContracts();
-        }
-    

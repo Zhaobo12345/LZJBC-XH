@@ -1,10 +1,10 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>家装平台小程序原型 - 项目资料</title>
-    <link rel="stylesheet" href="../shared/common.css">
+    <link rel="stylesheet" href="common.css">
     <style>
         .page-content {
             height: calc(100% - 44px - 44px);
@@ -20,13 +20,13 @@
         }
 
         .search-bar {
-            background-color: var(--bg-primary);
+            background-color: #ffffff;
             border-radius: 16px;
             padding: 8px 12px;
             display: flex;
             align-items: center;
             margin-bottom: 8px;
-            border: 1px solid var(--border-color);
+            border: 1px solid #f0f0f0;
         }
 
         .search-bar .icon {
@@ -48,9 +48,9 @@
         }
 
         .filter-bar {
-            background-color: var(--bg-primary);
+            background-color: #ffffff;
             padding: 12px 16px;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid #f0f0f0;
             flex-shrink: 0;
         }
 
@@ -99,7 +99,7 @@
             position: absolute;
             top: 44px;
             right: 12px;
-            background-color: var(--bg-primary);
+            background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             z-index: 200;
@@ -117,7 +117,7 @@
             font-size: 13px;
             color: var(--text-primary);
             cursor: pointer;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid #f0f0f0;
         }
 
         .mini-header-menu .menu-item:last-child {
@@ -166,7 +166,7 @@
         }
 
         .file-item {
-            background-color: var(--bg-primary);
+            background-color: #ffffff;
             border-radius: 8px;
             overflow: hidden;
             cursor: pointer;
@@ -301,7 +301,7 @@
             position: absolute;
             bottom: 60px;
             right: 16px;
-            background-color: var(--bg-primary);
+            background-color: #ffffff;
             border-radius: 8px;
             padding: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -363,7 +363,7 @@
         }
 
         .contract-section {
-            background-color: var(--bg-primary);
+            background-color: #ffffff;
             border-radius: 12px;
             padding: 16px;
             margin-bottom: 16px;
@@ -375,7 +375,7 @@
             justify-content: space-between;
             margin-bottom: 16px;
             padding-bottom: 12px;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid #f0f0f0;
         }
 
         .contract-name {
@@ -423,6 +423,85 @@
             opacity: 0.6;
             pointer-events: none;
         }
+    
+
+    
+        /* 标签淡入 */
+        @keyframes tagFadeIn {
+            from { opacity: 0; transform: scale(0.7); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        to { opacity: 0; top: 60px; }
+        }
+
+    
+        /* ===== 搜索行 ===== */
+        .filter-bar { padding: 4px 16px 0; }
+        .search-row { padding: 0 0 4px; }
+        .search-row .search-bar { width: 100%; display: flex; align-items: center; }
+        .search-row .search-bar input { flex: 1; }
+
+        /* ===== 分类网格 ===== */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            padding: 0 0 8px;
+        }
+        .cat-card {
+            background: #f7f8fa;
+            border-radius: 12px;
+            padding: 10px 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all .2s;
+            border: 1.5px solid transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+        .cat-card.active {
+            background: #f0f5ff;
+            border-color: #6366f1;
+        }
+        .cat-card:hover { background: #eef0f8; }
+        .cat-card-icon { font-size: 22px; line-height: 1; }
+        .cat-card-num {
+            font-size: 20px;
+            font-weight: 700;
+            color: #262626;
+            line-height: 1;
+        }
+        .cat-card.active .cat-card-num { color: #6366f1; }
+        .cat-card-label {
+            font-size: 12px;
+            color: #8c8c8c;
+            font-weight: 400;
+        }
+        .cat-card.active .cat-card-label { color: #6366f1; font-weight: 600; }
+
+        /* ===== 文件标签（左侧色条） ===== */
+        .file-category-tag {
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 3px;
+            z-index: 2;
+            border-radius: 3px 0 0 3px;
+            font-size: 0;
+        }
+        .file-category-tag.drawing { background: #1677ff; }
+        .file-category-tag.contract { background: #52c41a; }
+        .file-category-tag.acceptance { background: #fa8c16; }
+        .file-category-tag.photo { background: #722ed1; }
+        .file-category-tag.change { background: #ff4d4f; }
+        .file-category-tag.other { background: transparent; }
+        .file-category-tag.low-confidence { opacity: .4; }
+        .file-item.category-hidden { display: none !important; }
+
+        to { opacity: 1; transform: scale(1); }
+        }
+
     </style>
 </head>
 <body>
@@ -447,17 +526,45 @@
 
         <div class="page-content">
             <div class="filter-bar">
-                <div class="search-bar">
-                    <span class="icon">🔍</span>
-                    <input type="text" placeholder="搜索文件名称">
+                <div class="search-row">
+                    <div class="search-bar">
+                        <span class="icon">🔍</span>
+                        <input type="text" placeholder="搜索文件名称">
+                    </div>
                 </div>
-
-                <div class="tab-bar">
-                    <div class="tab-item active" onclick="switchTab('all')">全部</div>
-                    <div class="tab-item" onclick="switchTab('image')">图片</div>
-                    <div class="tab-item" onclick="switchTab('video')">视频</div>
-                    <div class="tab-item" onclick="switchTab('audio')">音频</div>
-                    <div class="tab-item" onclick="switchTab('doc')">文档</div>
+                <div class="category-grid" id="fileCategoryBar">
+                    <div class="cat-card active" data-category="all" onclick="filterByCategory('all')">
+                        <div class="cat-card-num" id="catCountAll">0</div>
+                        <div class="cat-card-label">全部</div>
+                    </div>
+                    <div class="cat-card" data-category="drawing" onclick="filterByCategory('drawing')">
+                        <div class="cat-card-icon">📐</div>
+                        <div class="cat-card-num" id="catCountDrawing">0</div>
+                        <div class="cat-card-label">图纸</div>
+                    </div>
+                    <div class="cat-card" data-category="contract" onclick="filterByCategory('contract')">
+                        <div class="cat-card-icon">📄</div>
+                        <div class="cat-card-num" id="catCountContract">0</div>
+                        <div class="cat-card-label">合同</div>
+                    </div>
+                    <div class="cat-card" data-category="acceptance" onclick="filterByCategory('acceptance')">
+                        <div class="cat-card-icon">✅</div>
+                        <div class="cat-card-num" id="catCountAcceptance">0</div>
+                        <div class="cat-card-label">验收</div>
+                    </div>
+                    <div class="cat-card" data-category="photo" onclick="filterByCategory('photo')">
+                        <div class="cat-card-icon">📸</div>
+                        <div class="cat-card-num" id="catCountPhoto">0</div>
+                        <div class="cat-card-label">照片</div>
+                    </div>
+                    <div class="cat-card" data-category="change" onclick="filterByCategory('change')">
+                        <div class="cat-card-icon">📝</div>
+                        <div class="cat-card-num" id="catCountChange">0</div>
+                        <div class="cat-card-label">变更</div>
+                    </div>
+                </div>
+                <div class="filter-bottom">
+                    
                 </div>
             </div>
 
@@ -466,7 +573,9 @@
                     找到 <span class="count" id="searchCount">0</span> 个文件
                 </div>
 
-                <div id="allContent">
+                
+
+            <div id="allContent">
                     <div class="category-section">
                         <div class="category-header">
                             <div class="category-title">
@@ -968,6 +1077,8 @@
             showToast('分享给朋友');
             closeMiniMenu();
         }
-    </script>
+    
+
+</script>
 </body>
 </html>

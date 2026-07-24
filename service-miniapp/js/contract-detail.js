@@ -29,15 +29,16 @@ const ContractDetailPage = (function() {
     const contractStatus = {
         draft: {
             text: '拟定中',
-            desc: state.isNewContract ? '合同已创建，请前往电脑端完善合同详细内容' : '合同正在编辑中，编辑完成后可提交确认',
+            desc: '合同正在编辑中，完善合同内容后可提交确认',
             bannerClass: 'draft',
-            showPcGuide: true,
+            showPcGuide: false,
+            showEditForm: true,
             isNew: state.isNewContract,
             hideTabs: true,
             actions: state.isNewContract ? [
-                { text: '提交确认', type: 'success', action: 'submit', disabled: true, disabledReason: '请在电脑端完善合同详细内容后再提交' }
+                { text: '提交确认', type: 'success', action: 'submit', disabled: true, disabledReason: '请完善合同内容后再提交' }
             ] : [
-                { text: '提交确认', type: 'success', action: 'submit', disabled: true, disabledReason: '请在电脑端完善合同详细内容后再提交' }
+                { text: '提交确认', type: 'success', action: 'submit', disabled: true, disabledReason: '请完善合同内容后再提交' }
             ]
         },
         draft_party_a: {
@@ -45,6 +46,7 @@ const ContractDetailPage = (function() {
             desc: '合同正在编辑中，等待对方完善合同内容',
             bannerClass: 'draft',
             showPcGuide: false,
+            showEditForm: false,
             isNew: false,
             isPartyA: true,
             actions: []
@@ -53,7 +55,8 @@ const ContractDetailPage = (function() {
             text: '拟定中',
             desc: '合同内容已完善，可以提交确认',
             bannerClass: 'draft',
-            showPcGuide: true,
+            showPcGuide: false,
+            showEditForm: true,
             isNew: false,
             actions: [
                 { text: '提交确认', type: 'success', action: 'submit' }
@@ -469,6 +472,19 @@ const ContractDetailPage = (function() {
         const pcGuide = document.getElementById('pcEditGuide');
         if (pcGuide) {
             pcGuide.style.display = config.showPcGuide ? 'block' : 'none';
+        }
+        
+        // 编辑表单显示控制
+        const draftEditForm = document.getElementById('draftEditForm');
+        const draftViewContent = document.getElementById('draftViewContent');
+        if (draftEditForm && draftViewContent) {
+            if (config.showEditForm) {
+                draftEditForm.style.display = 'block';
+                draftViewContent.style.display = 'none';
+            } else {
+                draftEditForm.style.display = 'none';
+                draftViewContent.style.display = 'block';
+            }
         }
         
         // 变更相关显示
@@ -1122,8 +1138,7 @@ const ContractDetailPage = (function() {
             return;
         }
         
-        closeModal();
-        
+        // 处理不同的action
         const actions = {
             '提交确认': () => {
                 showCustomToast('提交成功！已提交至平台审核，审核通过后对方将收到确认通知');
@@ -1150,7 +1165,9 @@ const ContractDetailPage = (function() {
                 updateContractStatus('confirmed');
             },
             '发起变更': () => {
+                closeModal();
                 showChangeModal();
+                return; // 不执行后面的closeModal
             },
             '撤回变更': () => {
                 showCustomToast('已撤回变更申请，阶段任务已恢复流转');
@@ -1161,13 +1178,8 @@ const ContractDetailPage = (function() {
                 updateContractStatus('signed');
             },
             '确认变更': () => {
-                if (state.currentModalAction === 'confirm_change') {
-                    showCustomToast('变更已生效！');
-                    updateContractStatus('signed');
-                } else {
-                    showCustomToast('变更已确认！等待上传签约文件后生效。');
-                    updateContractStatus('change_signing_wait');
-                }
+                showCustomToast('变更已生效！');
+                updateContractStatus('signed');
             },
             '撤回变更申请': () => {
                 showCustomToast('已撤回变更申请，可重新编辑变更内容');
@@ -1177,8 +1189,8 @@ const ContractDetailPage = (function() {
                 showCustomToast('重新提交成功！已提交至平台审核');
                 updateContractStatus('change_platform_reviewing');
             },
-            '上传变更签约文件': () => {
-                showCustomToast('变更签约文件已上传！变更已正式生效，系统已生成新的版本记录。');
+            '确认签约': () => {
+                showCustomToast('签约成功！合同已正式生效');
                 updateContractStatus('signed');
             }
         };
@@ -1187,6 +1199,484 @@ const ContractDetailPage = (function() {
             actions[titleText]();
         } else {
             showCustomToast('操作成功！');
+        }
+        
+        closeModal();
+    }
+    
+    // ==================== 模板选择函数 ====================
+    
+    // 模板数据定义
+    const contractTemplates = [
+        {
+            id: 'tpl_001',
+            name: '水电分包标准合同（杭州）',
+            type: '水电工程',
+            city: '杭州',
+            updateTime: '2024-03-15',
+            desc: '杭州市水电分包合同标准范本，包含工程概况、双方权利义务、验收标准、付款方式等完整条款',
+            content: '甲方（发包方）：______________\n乙方（承包方）：______________\n\n根据《中华人民共和国民法典》及相关法律法规，甲乙双方本着平等、自愿、公平、诚实信用的原则，就水电工程分包事宜协商一致，订立本合同。\n\n第一条 工程概况\n1.1 工程名称：XX小区整体装修水电工程\n1.2 工程地点：杭州市XX区XX路XX号\n1.3 工程内容：强电、弱电、给排水等水电工程\n\n第二条 合同金额\n合同总金额为人民币（大写）____________元整（¥__________）。\n\n第三条 工期\n3.1 计划开工日期：____年__月__日\n3.2 计划竣工日期：____年__月__日\n3.3 总工期：____日历天\n\n第四条 付款方式\n4.1 材料进场支付合同总金额的30%\n4.2 布管布线完成支付合同总金额的40%\n4.3 安装调试完成支付合同总金额的25%\n4.4 验收合格后支付剩余5%\n\n第五条 双方权利义务\n（详细条款...）\n\n第六条 质量标准\n（详细条款...）\n\n第七条 验收标准\n（详细条款...）\n\n第八条 违约责任\n（详细条款...）\n\n第九条 争议解决\n本合同履行过程中发生争议，双方应友好协商解决；协商不成的，可向杭州市人民法院提起诉讼。\n\n甲方（签章）：______________    乙方（签章）：______________\n签订日期：____年__月__日        签订日期：____年__月__日'
+        },
+        {
+            id: 'tpl_002',
+            name: '水电分包简约合同（杭州）',
+            type: '水电工程',
+            city: '杭州',
+            updateTime: '2024-02-20',
+            desc: '简约版水电分包合同，仅包含基本条款，适合简单合作',
+            content: '甲方（发包方）：______________\n乙方（承包方）：______________\n\n一、工程名称：XX小区整体装修水电工程\n二、工程地点：杭州市XX区XX路XX号\n三、合同金额：人民币________元整（¥________）\n四、工期：____年__月__日至____年__月__日\n五、付款方式：按阶段付款\n   - 材料进场：30%\n   - 布管布线完成：40%\n   - 验收合格：30%\n六、质量要求：符合国家现行标准\n七、争议解决：协商不成的，向杭州市人民法院起诉\n\n甲方（签章）：______________    乙方（签章）：______________\n日期：____年__月__日'
+        }
+    ];
+    
+    const stageTemplates = [
+        {
+            id: 'stage_tpl_001',
+            name: '水电工程标准阶段模板',
+            type: '水电工程',
+            city: '杭州',
+            updateTime: '2024-03-10',
+            desc: '水电工程标准阶段划分，包含材料进场、布管布线、安装、调试验收4个阶段',
+            stages: [
+                { name: '材料进场阶段', tasks: [{ name: '材料采购', amount: 5000 }, { name: '材料运输', amount: 2000 }, { name: '材料验收', amount: 1000 }] },
+                { name: '布管布线阶段', tasks: [{ name: '开槽施工', amount: 8000 }, { name: '布管布线', amount: 15000 }, { name: '水电检测', amount: 5000 }] },
+                { name: '安装阶段', tasks: [{ name: '开关插座安装', amount: 6000 }, { name: '灯具安装', amount: 8000 }, { name: '面板安装', amount: 4000 }] },
+                { name: '调试验收阶段', tasks: [{ name: '电路调试', amount: 3000 }, { name: '水路调试', amount: 2000 }, { name: '验收整改', amount: 3000 }] }
+            ]
+        },
+        {
+            id: 'stage_tpl_002',
+            name: '水电工程简约阶段模板',
+            type: '水电工程',
+            city: '杭州',
+            updateTime: '2024-02-15',
+            desc: '水电工程简约阶段划分，仅包含主要阶段',
+            stages: [
+                { name: '材料准备', tasks: [{ name: '材料采购运输', amount: 8000 }] },
+                { name: '施工阶段', tasks: [{ name: '布管布线', amount: 20000 }, { name: '安装调试', amount: 15000 }] },
+                { name: '验收阶段', tasks: [{ name: '验收整改', amount: 7000 }] }
+            ]
+        }
+    ];
+    
+    // 当前选中的模板（用于预览后应用）
+    let currentPreviewTemplate = null;
+    let currentTemplateType = '';
+    
+    /**
+     * 显示合同模板选择弹窗
+     */
+    function showTemplatePicker() {
+        const modal = document.getElementById('templatePickerModal');
+        if (modal) {
+            modal.style.display = 'block';
+            modal.classList.add('show');
+            renderContractTemplateList();
+        }
+    }
+    
+    /**
+     * 显示阶段模板选择弹窗
+     */
+    function showStageTemplatePicker() {
+        const modal = document.getElementById('stageTemplateModal');
+        if (modal) {
+            modal.style.display = 'block';
+            modal.classList.add('show');
+            renderStageTemplateList();
+        }
+    }
+    
+    /**
+     * 关闭合同模板选择弹窗
+     */
+    function closeTemplatePicker() {
+        const modal = document.getElementById('templatePickerModal');
+        if (modal) {
+            modal.style.display = 'none';
+            modal.classList.remove('show');
+        }
+    }
+    
+    /**
+     * 关闭阶段模板选择弹窗
+     */
+    function closeStageTemplatePicker() {
+        const modal = document.getElementById('stageTemplateModal');
+        if (modal) {
+            modal.style.display = 'none';
+            modal.classList.remove('show');
+        }
+    }
+    
+    /**
+     * 关闭模板预览弹窗
+     */
+    function closeTemplatePreviewModal() {
+        const modal = document.getElementById('templatePreviewModal');
+        if (modal) {
+            modal.style.display = 'none';
+            modal.classList.remove('show');
+        }
+    }
+    
+    /**
+     * 渲染合同模板列表
+     */
+    function renderContractTemplateList() {
+        const listContainer = document.getElementById('templateSelectList');
+        const emptyContainer = document.getElementById('templateEmpty');
+        if (!listContainer) return;
+        
+        const filteredTemplates = contractTemplates.filter(function(tpl) {
+            return tpl.city === '杭州' && tpl.type === '水电工程';
+        });
+        
+        if (filteredTemplates.length === 0) {
+            listContainer.innerHTML = '';
+            if (emptyContainer) emptyContainer.style.display = 'block';
+            return;
+        }
+        
+        if (emptyContainer) emptyContainer.style.display = 'none';
+        
+        listContainer.innerHTML = filteredTemplates.map(function(tpl) {
+            return '<div class="template-select-item">' +
+                '<div class="item-left"><div class="item-icon">📄</div></div>' +
+                '<div class="item-content">' +
+                    '<div class="item-name">' + tpl.name + '</div>' +
+                    '<div class="item-desc">' + tpl.desc + '</div>' +
+                    '<div class="item-meta">' +
+                        '<span class="meta-tag">' + tpl.type + '</span>' +
+                        '<span class="meta-tag">' + tpl.city + '</span>' +
+                        '<span class="meta-tag">更新于 ' + tpl.updateTime + '</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="item-actions">' +
+                    '<div class="action-btn primary" onclick="ContractDetailPage.applyTemplateDirectly(\'' + tpl.id + '\')">使用</div>' +
+                    '<div class="action-btn secondary" onclick="ContractDetailPage.previewTemplate(\'' + tpl.id + '\')">预览</div>' +
+                '</div>' +
+            '</div>';
+        }).join('');
+    }
+    
+    /**
+     * 渲染阶段模板列表
+     */
+    function renderStageTemplateList() {
+        const listContainer = document.getElementById('stageTemplateSelectList');
+        const emptyContainer = document.getElementById('stageTemplateEmpty');
+        if (!listContainer) return;
+        
+        const filteredTemplates = stageTemplates.filter(function(tpl) {
+            return tpl.city === '杭州' && tpl.type === '水电工程';
+        });
+        
+        if (filteredTemplates.length === 0) {
+            listContainer.innerHTML = '';
+            if (emptyContainer) emptyContainer.style.display = 'block';
+            return;
+        }
+        
+        if (emptyContainer) emptyContainer.style.display = 'none';
+        
+        listContainer.innerHTML = filteredTemplates.map(function(tpl) {
+            const stageCount = tpl.stages.length;
+            const totalAmount = tpl.stages.reduce(function(sum, stage) {
+                return sum + stage.tasks.reduce(function(s, t) { return s + t.amount; }, 0);
+            }, 0);
+            
+            return '<div class="stage-template-select-item">' +
+                '<div class="item-left"><div class="item-icon">📝</div></div>' +
+                '<div class="item-content">' +
+                    '<div class="item-name">' + tpl.name + '</div>' +
+                    '<div class="item-desc">' + tpl.desc + '</div>' +
+                    '<div class="item-meta">' +
+                        '<span class="meta-tag">' + stageCount + '个阶段</span>' +
+                        '<span class="meta-tag">总金额 ¥' + totalAmount.toLocaleString() + '</span>' +
+                        '<span class="meta-tag">' + tpl.city + '</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="item-actions">' +
+                    '<div class="action-btn primary" onclick="ContractDetailPage.applyStageTemplateDirectly(\'' + tpl.id + '\')">使用</div>' +
+                    '<div class="action-btn secondary" onclick="ContractDetailPage.previewStageTemplate(\'' + tpl.id + '\')">预览</div>' +
+                '</div>' +
+            '</div>';
+        }).join('');
+    }
+    
+    /**
+     * 直接应用合同模板
+     */
+    function applyTemplateDirectly(templateId) {
+        const tpl = contractTemplates.find(function(t) { return t.id === templateId; });
+        if (!tpl) return;
+        applyContractTemplate(tpl);
+        closeTemplatePicker();
+    }
+    
+    /**
+     * 直接应用阶段模板
+     */
+    function applyStageTemplateDirectly(templateId) {
+        const tpl = stageTemplates.find(function(t) { return t.id === templateId; });
+        if (!tpl) return;
+        applyStageTemplate(tpl);
+        closeStageTemplatePicker();
+    }
+    
+    /**
+     * 预览合同模板
+     */
+    function previewTemplate(templateId) {
+        const tpl = contractTemplates.find(function(t) { return t.id === templateId; });
+        if (!tpl) return;
+        
+        currentPreviewTemplate = tpl;
+        currentTemplateType = 'contract';
+        
+        document.getElementById('previewTemplateName').textContent = tpl.name;
+        document.getElementById('previewTemplateType').textContent = tpl.type;
+        document.getElementById('previewTemplateCity').textContent = tpl.city;
+        document.getElementById('previewTemplateUpdateTime').textContent = tpl.updateTime;
+        
+        const previewContent = document.getElementById('templatePreviewContent');
+        if (previewContent) {
+            previewContent.innerHTML = '<div class="preview-section">' +
+                '<div class="preview-section-title">合同正文</div>' +
+                '<div class="preview-section-content">' + tpl.content + '</div>' +
+            '</div>';
+        }
+        
+        closeTemplatePicker();
+        const previewModal = document.getElementById('templatePreviewModal');
+        if (previewModal) {
+            previewModal.style.display = 'block';
+            previewModal.classList.add('show');
+        }
+    }
+    
+    /**
+     * 预览阶段模板
+     */
+    function previewStageTemplate(templateId) {
+        const tpl = stageTemplates.find(function(t) { return t.id === templateId; });
+        if (!tpl) return;
+        
+        currentPreviewTemplate = tpl;
+        currentTemplateType = 'stage';
+        
+        document.getElementById('previewTemplateName').textContent = tpl.name;
+        document.getElementById('previewTemplateType').textContent = tpl.type;
+        document.getElementById('previewTemplateCity').textContent = tpl.city;
+        document.getElementById('previewTemplateUpdateTime').textContent = tpl.updateTime;
+        
+        const previewContent = document.getElementById('templatePreviewContent');
+        if (previewContent) {
+            let stagesHtml = '<div class="preview-section">' +
+                '<div class="preview-section-title">阶段任务明细</div>' +
+                '<div class="preview-stage-list">';
+            
+            tpl.stages.forEach(function(stage, idx) {
+                const tasksHtml = stage.tasks.map(function(task) {
+                    return '<div class="preview-task-item">' +
+                        '<span class="preview-task-name">' + task.name + '</span>' +
+                        '<span class="preview-task-amount">¥' + task.amount.toLocaleString() + '</span>' +
+                    '</div>';
+                }).join('');
+                
+                stagesHtml += '<div class="preview-stage-item">' +
+                    '<div class="preview-stage-header">' +
+                        '<span class="preview-stage-num">' + (idx + 1) + '</span>' +
+                        '<span class="preview-stage-name">' + stage.name + '</span>' +
+                    '</div>' +
+                    '<div class="preview-task-list">' + tasksHtml + '</div>' +
+                '</div>';
+            });
+            
+            stagesHtml += '</div></div>';
+            previewContent.innerHTML = stagesHtml;
+        }
+        
+        closeStageTemplatePicker();
+        const previewModal = document.getElementById('templatePreviewModal');
+        if (previewModal) {
+            previewModal.style.display = 'block';
+            previewModal.classList.add('show');
+        }
+    }
+    
+    /**
+     * 从预览弹窗应用模板
+     */
+    function applyTemplateFromPreview() {
+        if (!currentPreviewTemplate) return;
+        
+        if (currentTemplateType === 'contract') {
+            applyContractTemplate(currentPreviewTemplate);
+        } else if (currentTemplateType === 'stage') {
+            applyStageTemplate(currentPreviewTemplate);
+        }
+        
+        closeTemplatePreviewModal();
+    }
+    
+    /**
+     * 应用合同模板到编辑表单
+     */
+    function applyContractTemplate(tpl) {
+        const templateInfo = document.getElementById('contractTemplateInfo');
+        const contentInput = document.getElementById('editContractContent');
+        
+        if (templateInfo) {
+            templateInfo.style.display = 'block';
+            templateInfo.querySelector('.template-tag').textContent = '已选择模板：' + tpl.name;
+        }
+        
+        if (contentInput) {
+            contentInput.value = tpl.content;
+            contentInput.readOnly = true;
+            contentInput.style.backgroundColor = '#f5f5f5';
+        }
+        
+        showCustomToast('已应用模板：' + tpl.name);
+    }
+    
+    /**
+     * 应用阶段模板到编辑表单
+     */
+    function applyStageTemplate(tpl) {
+        const stageList = document.getElementById('editStageList');
+        if (!stageList) return;
+        
+        stageList.innerHTML = tpl.stages.map(function(stage, stageIndex) {
+            const stageNum = stageIndex + 1;
+            const tasksHtml = stage.tasks.map(function(task, taskIndex) {
+                return '<div class="edit-task-item">' +
+                    '<input type="text" class="task-name-input" value="' + task.name + '" placeholder="任务名称">' +
+                    '<input type="number" class="task-amount-input" value="' + task.amount + '" placeholder="金额">' +
+                    '<span class="action-btn delete" onclick="ContractDetailPage.removeEditTask(' + stageIndex + ', ' + taskIndex + ')">删除</span>' +
+                '</div>';
+            }).join('');
+            
+            return '<div class="edit-stage-item">' +
+                '<div class="edit-stage-header">' +
+                    '<div class="stage-num">' + stageNum + '</div>' +
+                    '<input type="text" class="stage-name-input" value="' + stage.name + '" placeholder="阶段名称">' +
+                    '<div class="stage-actions">' +
+                        '<span class="action-btn" onclick="ContractDetailPage.addTaskToStage(' + stageIndex + ')">+ 添加任务</span>' +
+                        '<span class="action-btn delete" onclick="ContractDetailPage.removeEditStage(' + stageIndex + ')">删除阶段</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="edit-task-list">' + tasksHtml + '</div>' +
+            '</div>';
+        }).join('');
+        
+        const templateInfo = document.getElementById('stageTemplateInfo');
+        if (templateInfo) {
+            templateInfo.style.display = 'block';
+            templateInfo.querySelector('.template-tag').textContent = '已选择模板：' + tpl.name;
+        }
+        
+        showCustomToast('已应用模板：' + tpl.name);
+    }
+    
+    /**
+     * 添加任务到阶段
+     */
+    function addTaskToStage(stageIndex) {
+        const stageList = document.getElementById('editStageList');
+        if (!stageList) return;
+        
+        const stages = stageList.querySelectorAll('.edit-stage-item');
+        if (stages[stageIndex]) {
+            const taskList = stages[stageIndex].querySelector('.edit-task-list');
+            if (taskList) {
+                const taskCount = taskList.querySelectorAll('.edit-task-item').length;
+                const taskHtml = '<div class="edit-task-item">' +
+                    '<input type="text" class="task-name-input" placeholder="任务名称">' +
+                    '<input type="number" class="task-amount-input" placeholder="金额">' +
+                    '<span class="action-btn delete" onclick="ContractDetailPage.removeEditTask(' + stageIndex + ', ' + taskCount + ')">删除</span>' +
+                '</div>';
+                taskList.insertAdjacentHTML('beforeend', taskHtml);
+            }
+        }
+    }
+    
+    /**
+     * 删除阶段
+     */
+    function removeEditStage(stageIndex) {
+        const stageList = document.getElementById('editStageList');
+        if (!stageList) return;
+        
+        const stages = stageList.querySelectorAll('.edit-stage-item');
+        if (stages[stageIndex]) {
+            stages[stageIndex].remove();
+            stages.forEach(function(stage, index) {
+                const numEl = stage.querySelector('.stage-num');
+                if (numEl) numEl.textContent = index + 1;
+            });
+        }
+    }
+    
+    /**
+     * 删除任务
+     */
+    function removeEditTask(stageIndex, taskIndex) {
+        const stageList = document.getElementById('editStageList');
+        if (!stageList) return;
+        
+        const stages = stageList.querySelectorAll('.edit-stage-item');
+        if (stages[stageIndex]) {
+            const tasks = stages[stageIndex].querySelectorAll('.edit-task-item');
+            if (tasks[taskIndex]) {
+                tasks[taskIndex].remove();
+            }
+        }
+    }
+    
+    /**
+     * 添加新阶段
+     */
+    function addNewStage() {
+        const stageList = document.getElementById('editStageList');
+        if (!stageList) return;
+        
+        const stageCount = stageList.querySelectorAll('.edit-stage-item').length;
+        const stageNum = stageCount + 1;
+        
+        const stageHtml = '<div class="edit-stage-item">' +
+            '<div class="edit-stage-header">' +
+                '<div class="stage-num">' + stageNum + '</div>' +
+                '<input type="text" class="stage-name-input" placeholder="阶段名称">' +
+                '<div class="stage-actions">' +
+                    '<span class="action-btn" onclick="ContractDetailPage.addTaskToStage(' + stageCount + ')">+ 添加任务</span>' +
+                    '<span class="action-btn delete" onclick="ContractDetailPage.removeEditStage(' + stageCount + ')">删除阶段</span>' +
+                '</div>' +
+            '</div>' +
+            '<div class="edit-task-list"></div>' +
+        '</div>';
+        
+        stageList.insertAdjacentHTML('beforeend', stageHtml);
+    }
+    
+    /**
+     * 上传附件
+     */
+    function uploadAttachment() {
+        showCustomToast('请选择要上传的文件');
+    }
+    
+    /**
+     * 删除附件
+     */
+    function removeAttachment(index) {
+        const attachmentList = document.getElementById('editAttachmentList');
+        if (!attachmentList) return;
+        
+        const attachments = attachmentList.querySelectorAll('.attachment-item');
+        if (attachments[index]) {
+            attachments[index].remove();
         }
     }
     
@@ -1466,6 +1956,14 @@ const ContractDetailPage = (function() {
     }
     
     /**
+     * 预览合同
+     */
+    function previewContract() {
+        const contractId = state.currentContractId || 'contract-001';
+        window.location.href = `contract-preview.html?contractId=${contractId}`;
+    }
+    
+    /**
      * 显示导出弹窗
      */
     function showExportModal() {
@@ -1635,7 +2133,10 @@ const ContractDetailPage = (function() {
      */
     function showChangeModal() {
         const modal = document.getElementById('changeModal');
-        if (modal) modal.classList.add('show');
+        if (modal) {
+            modal.style.display = 'block';
+            modal.classList.add('show');
+        }
         checkChangeContent();
     }
     
@@ -1644,7 +2145,10 @@ const ContractDetailPage = (function() {
      */
     function closeChangeModal() {
         const modal = document.getElementById('changeModal');
-        if (modal) modal.classList.remove('show');
+        if (modal) {
+            modal.style.display = 'none';
+            modal.classList.remove('show');
+        }
     }
     
     /**
@@ -1662,6 +2166,189 @@ const ContractDetailPage = (function() {
     function showPCEditGuide() {
         showCustomToast('请前往电脑端修改合同正文\n\n1. 在电脑浏览器打开平台官网\n2. 使用手机扫码授权登录\n3. 进入合同管理进行编辑\n\n链接已复制到剪贴板');
         copyEditLink();
+    }
+    
+    /**
+     * 切换变更页面Tab
+     */
+    function switchChangeTab(tabEl, tabId) {
+        // 移除所有tab的active状态
+        const tabs = tabEl.parentElement.querySelectorAll('.change-tab');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        
+        // 添加当前tab的active状态
+        tabEl.classList.add('active');
+        
+        // 隐藏所有tab内容
+        const section = tabEl.closest('.change-section');
+        const contents = section.querySelectorAll('.change-tab-content');
+        contents.forEach(content => content.classList.remove('active'));
+        
+        // 显示当前tab内容
+        const targetContent = document.getElementById(tabId);
+        if (targetContent) {
+            targetContent.classList.add('active');
+        }
+        
+        // 更新更换模板按钮文本
+        const templateBtn = document.getElementById('changeTemplateBtn');
+        if (templateBtn) {
+            if (tabId === 'contract-content') {
+                templateBtn.textContent = '📄 更换合同模板';
+            } else if (tabId === 'stage-task') {
+                templateBtn.textContent = '📄 更换任务模板';
+            } else if (tabId === 'attachment') {
+                templateBtn.textContent = '📄 更换附件模板';
+            }
+        }
+        
+        // 保存当前tab状态
+        state.currentChangeTab = tabId;
+    }
+    
+    /**
+     * 显示更换模板弹窗
+     */
+    function showChangeTemplatePicker() {
+        const currentTab = state.currentChangeTab || 'contract-content';
+        
+        if (currentTab === 'contract-content') {
+            showCustomToast('请选择合同正文模板');
+            // 显示合同模板选择
+            showContractTemplatePicker();
+        } else if (currentTab === 'stage-task') {
+            showCustomToast('请选择阶段任务模板');
+            // 显示任务模板选择
+            showTaskTemplatePicker();
+        } else if (currentTab === 'attachment') {
+            showCustomToast('请选择附件模板');
+            // 显示附件模板选择
+            showAttachmentTemplatePicker();
+        }
+    }
+    
+    /**
+     * 显示合同模板选择
+     */
+    function showContractTemplatePicker() {
+        // 复用现有的模板选择功能
+        showTemplatePicker();
+    }
+    
+    /**
+     * 显示任务模板选择
+     */
+    function showTaskTemplatePicker() {
+        // 复用现有的阶段模板选择功能
+        if (typeof window.showStageTemplatePicker === 'function') {
+            window.showStageTemplatePicker();
+        } else {
+            // 直接调用内部函数
+            const modal = document.getElementById('stageTemplateModal');
+            if (modal) {
+                modal.style.display = 'block';
+                modal.classList.add('show');
+            }
+        }
+    }
+    
+    /**
+     * 显示附件模板选择
+     */
+    function showAttachmentTemplatePicker() {
+        showCustomToast('附件模板选择功能开发中...');
+    }
+    
+    /**
+     * 添加新附件
+     */
+    function addNewAttachment() {
+        showCustomToast('请从相册或文件中选择附件');
+    }
+    
+    /**
+     * 拟定中状态 - Tab切换
+     */
+    function switchDraftContentTab(tabEl, tabId) {
+        // 移除所有tab的active状态
+        const tabs = tabEl.parentElement.querySelectorAll('.content-tab');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        
+        // 添加当前tab的active状态
+        tabEl.classList.add('active');
+        
+        // 隐藏所有tab内容
+        const card = tabEl.closest('.card');
+        const panes = card.querySelectorAll('.content-tab-pane');
+        panes.forEach(pane => pane.classList.remove('active'));
+        
+        // 显示当前tab内容
+        const targetPane = document.getElementById(tabId === 'stage-task' ? 'draft-stage-task' : 
+                                                      tabId === 'attachment' ? 'draft-attachment' : 'contract-text');
+        if (targetPane) {
+            targetPane.classList.add('active');
+        }
+        
+        // 更新更换模板按钮文本
+        const templateBtn = document.getElementById('draftTemplateBtn');
+        if (templateBtn) {
+            if (tabId === 'contract-text') {
+                templateBtn.textContent = '📄 更换合同模板';
+            } else if (tabId === 'stage-task') {
+                templateBtn.textContent = '📄 更换任务模板';
+            } else if (tabId === 'attachment') {
+                templateBtn.textContent = '📄 更换附件模板';
+            }
+        }
+        
+        // 保存当前tab状态
+        state.draftContentTab = tabId;
+    }
+    
+    /**
+     * 拟定中状态 - 更换模板
+     */
+    function showDraftTemplatePicker() {
+        const currentTab = state.draftContentTab || 'contract-text';
+        
+        if (currentTab === 'contract-text') {
+            showCustomToast('请选择合同正文模板');
+            showTemplatePicker();
+        } else if (currentTab === 'stage-task') {
+            showCustomToast('请选择阶段任务模板');
+            showStageTemplatePicker();
+        } else if (currentTab === 'attachment') {
+            showCustomToast('请选择附件模板');
+            showAttachmentTemplatePicker();
+        }
+    }
+    
+    /**
+     * 展开/收起合同正文
+     */
+    function toggleContractContent(toggleBtn) {
+        const preview = document.getElementById('changeContractContentPreview');
+        const toggleText = toggleBtn.querySelector('.toggle-text');
+        const toggleIcon = toggleBtn.querySelector('.toggle-icon');
+        
+        if (preview) {
+            if (preview.classList.contains('expanded')) {
+                preview.classList.remove('expanded');
+                if (toggleText) toggleText.textContent = '展开全文';
+                if (toggleIcon) toggleIcon.textContent = '▼';
+            } else {
+                preview.classList.add('expanded');
+                if (toggleText) toggleText.textContent = '收起';
+                if (toggleIcon) toggleIcon.textContent = '▲';
+            }
+        }
+    }
+    
+    /**
+     * 预览附件
+     */
+    function previewAttachment(fileName) {
+        showCustomToast('正在预览：' + fileName);
     }
     
     /**
@@ -2649,6 +3336,7 @@ const ContractDetailPage = (function() {
         
         // 导出
         exportContract,
+        previewContract,
         showExportModal,
         closeExportModal,
         exportToPDF,
@@ -2666,6 +3354,13 @@ const ContractDetailPage = (function() {
         closeChangeModal,
         showMoreOptions,
         showPCEditGuide,
+        switchChangeTab,
+        showChangeTemplatePicker,
+        addNewAttachment,
+        switchDraftContentTab,
+        showDraftTemplatePicker,
+        toggleContractContent,
+        previewAttachment,
         submitChange,
         showChangeConfirmModal,
         closeChangeConfirmModal,
@@ -2715,7 +3410,25 @@ const ContractDetailPage = (function() {
         // PC端打开
         showPcOpenModal,
         closePcOpenModal,
-        copyPcLink
+        copyPcLink,
+        
+        // 模板选择函数
+        showTemplatePicker,
+        showStageTemplatePicker,
+        closeTemplatePicker,
+        closeStageTemplatePicker,
+        closeTemplatePreviewModal,
+        applyTemplateDirectly,
+        applyStageTemplateDirectly,
+        previewTemplate,
+        previewStageTemplate,
+        applyTemplateFromPreview,
+        addNewStage,
+        addTaskToStage,
+        removeEditStage,
+        removeEditTask,
+        uploadAttachment,
+        removeAttachment
     };
 })();
 
@@ -2745,6 +3458,7 @@ window.getRejectReason = ContractDetailPage.getRejectReason;
 window.showVersionModal = ContractDetailPage.showVersionModal;
 window.closeVersionModal = ContractDetailPage.closeVersionModal;
 window.exportContract = ContractDetailPage.exportContract;
+window.previewContract = ContractDetailPage.previewContract;
 window.showExportModal = ContractDetailPage.showExportModal;
 window.closeExportModal = ContractDetailPage.closeExportModal;
 window.exportToPDF = ContractDetailPage.exportToPDF;
@@ -2759,6 +3473,13 @@ window.showChangeModal = ContractDetailPage.showChangeModal;
 window.closeChangeModal = ContractDetailPage.closeChangeModal;
 window.showMoreOptions = ContractDetailPage.showMoreOptions;
 window.showPCEditGuide = ContractDetailPage.showPCEditGuide;
+window.switchChangeTab = ContractDetailPage.switchChangeTab;
+window.showChangeTemplatePicker = ContractDetailPage.showChangeTemplatePicker;
+window.addNewAttachment = ContractDetailPage.addNewAttachment;
+window.switchDraftContentTab = ContractDetailPage.switchDraftContentTab;
+window.showDraftTemplatePicker = ContractDetailPage.showDraftTemplatePicker;
+window.toggleContractContent = ContractDetailPage.toggleContractContent;
+window.previewAttachment = ContractDetailPage.previewAttachment;
 window.submitChange = ContractDetailPage.submitChange;
 window.showChangeConfirmModal = ContractDetailPage.showChangeConfirmModal;
 window.closeChangeConfirmModal = ContractDetailPage.closeChangeConfirmModal;
@@ -2801,6 +3522,24 @@ window.confirmSign = ContractDetailPage.confirmSign;
 window.showPcOpenModal = ContractDetailPage.showPcOpenModal;
 window.closePcOpenModal = ContractDetailPage.closePcOpenModal;
 window.copyPcLink = ContractDetailPage.copyPcLink;
+
+// ==================== 模板选择函数全局别名 ====================
+window.showTemplatePicker = ContractDetailPage.showTemplatePicker;
+window.showStageTemplatePicker = ContractDetailPage.showStageTemplatePicker;
+window.closeTemplatePicker = ContractDetailPage.closeTemplatePicker;
+window.closeStageTemplatePicker = ContractDetailPage.closeStageTemplatePicker;
+window.closeTemplatePreviewModal = ContractDetailPage.closeTemplatePreviewModal;
+window.applyTemplateDirectly = ContractDetailPage.applyTemplateDirectly;
+window.applyStageTemplateDirectly = ContractDetailPage.applyStageTemplateDirectly;
+window.previewTemplate = ContractDetailPage.previewTemplate;
+window.previewStageTemplate = ContractDetailPage.previewStageTemplate;
+window.applyTemplateFromPreview = ContractDetailPage.applyTemplateFromPreview;
+window.addNewStage = ContractDetailPage.addNewStage;
+window.addTaskToStage = ContractDetailPage.addTaskToStage;
+window.removeEditStage = ContractDetailPage.removeEditStage;
+window.removeEditTask = ContractDetailPage.removeEditTask;
+window.uploadAttachment = ContractDetailPage.uploadAttachment;
+window.removeAttachment = ContractDetailPage.removeAttachment;
 
 // ==================== 状态分组折叠/展开 ====================
 window.toggleStatusGroup = function(headerElement) {

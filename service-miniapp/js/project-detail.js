@@ -2,9 +2,7 @@
  * 项目详情页模块
  * 负责层级切换、动态加载、交互处理
  */
-const ProjectDetailPage = (function() {
-    'use strict';
-    
+(function() {
     // 常量定义
     const LOADING_DELAY = 200;
     const SCROLL_THROTTLE_DELAY = 100;
@@ -167,7 +165,6 @@ const ProjectDetailPage = (function() {
      * 缓存 DOM 元素
      */
     function cacheElements() {
-        console.log('开始缓存 DOM 元素');
         elements.pageContent = document.getElementById('pageContent');
         elements.stickyHeader = document.getElementById('stickyHeader');
         elements.quickNav = document.getElementById('quickNav');
@@ -187,10 +184,8 @@ const ProjectDetailPage = (function() {
         elements.toggleArrow = document.getElementById('toggleArrow');
         elements.pinBtn = document.getElementById('pinBtn');
         elements.actionMenu = document.getElementById('actionMenu');
-        console.log('actionMenu 元素:', elements.actionMenu);
         elements.customToastModal = document.getElementById('customToastModal');
         elements.customToastMessage = document.getElementById('customToastMessage');
-        console.log('DOM 元素缓存完成');
     }
     
     /**
@@ -242,7 +237,7 @@ const ProjectDetailPage = (function() {
         elements.breadcrumbInline.innerHTML = parts.map((part, index) => {
             const isLast = index === parts.length - 1;
             const separator = isLast ? '' : '<span class="separator">›</span>';
-            return `<span class="breadcrumb-item ${isLast ? 'active' : ''}" data-level="${part}">${part}</span>${separator}`;
+            return '<span class="breadcrumb-item ' + (isLast ? 'active' : '') + '" data-level="' + part + '">' + part + '</span>' + separator;
         }).join('');
     }
     
@@ -251,7 +246,7 @@ const ProjectDetailPage = (function() {
      */
     function showPartialLoading() {
         const cards = document.querySelectorAll('.card');
-        cards.forEach(card => {
+        cards.forEach(function(card) {
             if (!card.querySelector('.partial-loading')) {
                 const loading = document.createElement('div');
                 loading.className = 'partial-loading show';
@@ -268,7 +263,7 @@ const ProjectDetailPage = (function() {
      * 隐藏局部加载状态
      */
     function hidePartialLoading() {
-        document.querySelectorAll('.partial-loading').forEach(loading => {
+        document.querySelectorAll('.partial-loading').forEach(function(loading) {
             loading.classList.remove('show');
         });
     }
@@ -279,10 +274,7 @@ const ProjectDetailPage = (function() {
     function updatePageData(level) {
         const data = levelData[level];
         
-        if (!data) {
-            console.error('Level data not found:', level);
-            return;
-        }
+        if (!data) return;
         
         const overallTotal = document.getElementById('overallTotal');
         if (overallTotal) overallTotal.textContent = data.tasks.total;
@@ -328,16 +320,15 @@ const ProjectDetailPage = (function() {
         
         const contractSummary = document.querySelector('.contract-summary');
         if (contractSummary) {
-            contractSummary.innerHTML = `
-                <div class="contract-stat">
-                    <div class="value"><span class="current">${data.contract.signed.current}</span><span class="separator">/</span><span class="total">${data.contract.signed.total}</span></div>
-                    <div class="label">合同签约</div>
-                </div>
-                <div class="contract-stat">
-                    <div class="value"><span class="current">${data.contract.progress}</span><span class="total">%</span></div>
-                    <div class="label">总进度</div>
-                </div>
-            `;
+            contractSummary.innerHTML = 
+                '<div class="contract-stat">' +
+                    '<div class="value"><span class="current">' + data.contract.signed.current + '</span><span class="separator">/</span><span class="total">' + data.contract.signed.total + '</span></div>' +
+                    '<div class="label">合同签约</div>' +
+                '</div>' +
+                '<div class="contract-stat">' +
+                    '<div class="value"><span class="current">' + data.contract.progress + '</span><span class="total">%</span></div>' +
+                    '<div class="label">总进度</div>' +
+                '</div>';
         }
         
         const todoBadge = document.getElementById('todoBadge');
@@ -363,7 +354,7 @@ const ProjectDetailPage = (function() {
         
         showPartialLoading();
         
-        setTimeout(() => {
+        setTimeout(function() {
             updatePageData(level);
             updateBreadcrumb(level);
             state.currentLevel = level;
@@ -380,23 +371,21 @@ const ProjectDetailPage = (function() {
         let countText = '';
         
         if (data.type === 'project') {
-            countText = `${childrenCount}个工作组 · ${data.contract.signed.total}份合同`;
+            countText = childrenCount + '个工作组 · ' + data.contract.signed.total + '份合同';
         } else if (data.type === 'workgroup') {
-            countText = `${childrenCount}个施工组 · ${data.contract.signed.total}份合同`;
+            countText = childrenCount + '个施工组 · ' + data.contract.signed.total + '份合同';
         } else if (data.type === 'team') {
-            countText = `${childrenCount}个任务包 · ${data.tasks.total}个任务`;
+            countText = childrenCount + '个任务包 · ' + data.tasks.total + '个任务';
         }
         
-        return `
-            <div class="level-option ${isSelected ? 'selected' : ''}" data-level="${name}">
-                <div class="icon">${icon}</div>
-                <div class="info">
-                    <div class="name">${name}</div>
-                    <div class="count">${countText}</div>
-                </div>
-                <div class="check" style="visibility: ${isSelected ? 'visible' : 'hidden'};">✓</div>
-            </div>
-        `;
+        return '<div class="level-option ' + (isSelected ? 'selected' : '') + '" data-level="' + name + '">' +
+            '<div class="icon">' + icon + '</div>' +
+            '<div class="info">' +
+                '<div class="name">' + name + '</div>' +
+                '<div class="count">' + countText + '</div>' +
+            '</div>' +
+            '<div class="check" style="visibility: ' + (isSelected ? 'visible' : 'hidden') + ';">✓</div>' +
+        '</div>';
     }
     
     /**
@@ -426,7 +415,7 @@ const ProjectDetailPage = (function() {
         
         // 添加子级选项
         if (currentData.children && currentData.children.length > 0) {
-            currentData.children.forEach(child => {
+            currentData.children.forEach(function(child) {
                 const childData = levelData[child];
                 if (childData) {
                     html += createLevelOption(child, childData, false);
@@ -478,7 +467,7 @@ const ProjectDetailPage = (function() {
         toggleLevelDropdown();
         showPartialLoading();
         
-        setTimeout(() => {
+        setTimeout(function() {
             updatePageData(name);
             updateBreadcrumb(name);
             state.currentLevel = name;
@@ -511,13 +500,13 @@ const ProjectDetailPage = (function() {
         const hiddenItems = document.querySelectorAll('.activity-item.hidden');
         
         if (state.activityExpanded) {
-            hiddenItems.forEach(item => item.classList.add('hidden'));
+            hiddenItems.forEach(function(item) { item.classList.add('hidden'); });
             if (elements.activityList) elements.activityList.classList.remove('expanded');
             if (elements.activityMoreText) elements.activityMoreText.textContent = '展开更多';
             if (elements.activityMoreArrow) elements.activityMoreArrow.classList.remove('expanded');
             state.activityExpanded = false;
         } else {
-            document.querySelectorAll('.activity-item').forEach(item => item.classList.remove('hidden'));
+            document.querySelectorAll('.activity-item').forEach(function(item) { item.classList.remove('hidden'); });
             if (elements.activityList) elements.activityList.classList.add('expanded');
             if (elements.activityMoreText) elements.activityMoreText.textContent = '收起';
             if (elements.activityMoreArrow) elements.activityMoreArrow.classList.add('expanded');
@@ -548,15 +537,9 @@ const ProjectDetailPage = (function() {
      * 切换操作菜单
      */
     function toggleActionMenu() {
-        console.log('toggleActionMenu 被调用');
         var actionMenu = document.getElementById('actionMenu');
-        console.log('actionMenu 元素:', actionMenu);
         if (actionMenu) {
-            console.log('当前状态:', actionMenu.classList.contains('show'));
             actionMenu.classList.toggle('show');
-            console.log('新状态:', actionMenu.classList.contains('show'));
-        } else {
-            console.log('未找到 actionMenu 元素');
         }
     }
     
@@ -574,15 +557,8 @@ const ProjectDetailPage = (function() {
      * 分享给朋友
      */
     function shareToFriend() {
-        // 模拟分享功能，显示分享选项
         showCustomToast('分享功能已触发，请选择分享方式');
-        // 实际项目中这里会调用微信分享API
     }
-    
-    // 立即绑定到window对象
-    window.toggleActionMenu = toggleActionMenu;
-    window.closeActionMenu = closeActionMenu;
-    window.shareToFriend = shareToFriend;
     
     /**
      * 跳转到人员档案页面
@@ -597,7 +573,7 @@ const ProjectDetailPage = (function() {
     }
     
     function initProfileClickEvents() {
-        document.querySelectorAll('.activity-avatar, .activity-user').forEach(el => {
+        document.querySelectorAll('.activity-avatar, .activity-user').forEach(function(el) {
             el.addEventListener('click', function(e) {
                 e.stopPropagation();
                 e.preventDefault();
@@ -681,12 +657,6 @@ const ProjectDetailPage = (function() {
             elements.breadcrumbInline.addEventListener('click', handleBreadcrumbClick);
         }
         
-        // 事件委托 - 合同列表
-        const contractListContainer = document.querySelector('.card');
-        if (contractListContainer) {
-            contractListContainer.addEventListener('click', handleCardClick);
-        }
-        
         // 事件委托 - 动态列表
         if (elements.activityList) {
             elements.activityList.addEventListener('click', handleActivityClick);
@@ -716,16 +686,11 @@ const ProjectDetailPage = (function() {
         
         // 导航栏操作按钮
         const actionBtns = document.querySelectorAll('.nav-bar .action-btn');
-        console.log('找到的操作按钮数量:', actionBtns.length);
-        actionBtns.forEach((btn, index) => {
-            console.log('绑定操作按钮点击事件:', index);
+        actionBtns.forEach(function(btn, index) {
             btn.addEventListener('click', function() {
-                console.log('操作按钮被点击:', index);
                 if (index === 0) {
-                    console.log('调用 toggleActionMenu');
                     toggleActionMenu();
                 } else if (index === 1) {
-                    console.log('调用 showCustomToast');
                     showCustomToast('关闭小程序');
                 }
             });
@@ -752,7 +717,7 @@ const ProjectDetailPage = (function() {
         
         // 查看全部链接
         const moreLinks = document.querySelectorAll('.card-title .more');
-        moreLinks.forEach(link => {
+        moreLinks.forEach(function(link) {
             link.addEventListener('click', handleMoreLinkClick);
         });
     }
@@ -853,16 +818,6 @@ const ProjectDetailPage = (function() {
     }
     
     /**
-     * 处理卡片点击
-     */
-    function handleCardClick(e) {
-        const moreBtn = e.target.closest('.card-title .more');
-        if (moreBtn && moreBtn.textContent.includes('查看合同')) {
-            toggleContractList(moreBtn);
-        }
-    }
-    
-    /**
      * 处理动态列表点击
      */
     function handleActivityClick(e) {
@@ -930,23 +885,23 @@ const ProjectDetailPage = (function() {
         // 兼容文本判断
         const text = link.textContent.trim();
         
-        if (text.includes('查看合同')) {
+        if (text.indexOf('查看合同') !== -1) {
             toggleContractList(link);
             e.stopPropagation();
             return;
         }
         
-        if (text.includes('今日动态')) {
+        if (text.indexOf('今日动态') !== -1) {
             location.href = 'activity-list.html?level=' + encodeURIComponent(state.currentLevel);
             return;
         }
         
-        if (text.includes('任务统计')) {
+        if (text.indexOf('任务统计') !== -1) {
             location.href = 'task-list.html';
             return;
         }
         
-        if (text.includes('待办事项')) {
+        if (text.indexOf('待办事项') !== -1) {
             location.href = 'todo-list.html';
             return;
         }
@@ -970,25 +925,11 @@ const ProjectDetailPage = (function() {
         init();
     }
     
+    // 暴露全局函数
     window.showCustomToast = showCustomToast;
     window.closeCustomToast = closeCustomToast;
     window.toggleActionMenu = toggleActionMenu;
     window.closeActionMenu = closeActionMenu;
     window.shareToFriend = shareToFriend;
     window.goToProfile = goToProfile;
-    
-    // 公开 API
-    return {
-        showCustomToast: showCustomToast,
-        closeCustomToast: closeCustomToast,
-        navigateToLevel: navigateToLevel,
-        getCurrentLevel: () => state.currentLevel,
-        toggleQuickNav: toggleQuickNav,
-        toggleActivityList: toggleActivityList,
-        toggleContractList: toggleContractList,
-        toggleActionMenu: toggleActionMenu,
-        closeActionMenu: closeActionMenu,
-        shareToFriend: shareToFriend,
-        goToProfile: goToProfile
-    };
 })();

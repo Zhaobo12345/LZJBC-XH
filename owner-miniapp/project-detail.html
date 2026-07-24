@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -15,16 +15,15 @@
         </div>
 
         <div class="nav-bar">
-            <div class="back">← 返回</div>
-            <div class="title centered">XX小区整体装修</div>
+            <div class="title">XX小区整体装修</div>
             <div class="actions">
-                <div class="action-btn" id="menuBtn">⋯</div>
+                <div class="action-btn" onclick="toggleActionMenu()">⋯</div>
                 <div class="action-btn" id="closeBtn">✕</div>
             </div>
             <div class="action-menu" id="actionMenu">
-                <div class="action-menu-item" id="shareBtn">
-                    <span class="icon">📤</span>
-                    <span>分享给朋友</span>
+                <div class="action-menu-item" onclick="closeActionMenu();">
+                    <span class="icon">📋</span>
+                    <span>项目详情</span>
                 </div>
             </div>
         </div>
@@ -319,23 +318,72 @@
                 </div>
             </div>
         </div>
+
+        <!-- 项目导航组件 -->
+        <div class="project-nav-trigger" id="projectNavTrigger">
+            <span class="nav-arrow">◀</span>
+            <span class="nav-text">项目导航</span>
+        </div>
+
+        <div class="project-nav-overlay" id="projectNavOverlay"></div>
+
+        <div class="project-nav-drawer" id="projectNavDrawer">
+            <div class="drawer-header">
+                <span class="drawer-title">施工路线</span>
+                <span class="drawer-close" id="projectNavClose">×</span>
+            </div>
+            <div class="drawer-content" id="projectNavContent">
+                <!-- 时间轴内容由 JS 动态生成 -->
+            </div>
+        </div>
+        
+        <div class="tab-bar">
+            <div class="tab-item" onclick="location.href='home.html'">
+                <div class="icon">🏠</div>
+                <div class="label">首页</div>
+            </div>
+            <div class="tab-item active">
+                <div class="icon">📋</div>
+                <div class="label">我的家</div>
+            </div>
+            <div class="tab-item" onclick="location.href='message.html'">
+                <div class="icon">💬</div>
+                <div class="label">消息</div>
+            </div>
+            <div class="tab-item" onclick="showToast('个人中心开发中')">
+                <div class="icon">👤</div>
+                <div class="label">我的</div>
+            </div>
+        </div>
     </div>
     
     <div class="page-nav">
         <div class="page-nav-title">原型导航</div>
         <a href="home.html" class="page-nav-item">首页</a>
-        <a href="project-list.html" class="page-nav-item">项目列表</a>
         <a href="project-detail.html" class="page-nav-item active">项目详情</a>
         <a href="project-info.html" class="page-nav-item">项目信息</a>
         <a href="architecture.html" class="page-nav-item">项目架构</a>
-        <a href="create-project.html" class="page-nav-item">创建项目</a>
         <a href="contract-detail.html" class="page-nav-item">合同详情</a>
         <a href="task-detail.html" class="page-nav-item">任务详情</a>
     </div>
 
     <script>
+        // 导航栏菜单功能
+        function toggleActionMenu() {
+            const actionMenu = document.getElementById('actionMenu');
+            if (actionMenu) {
+                actionMenu.classList.toggle('show');
+            }
+        }
+        
+        function closeActionMenu() {
+            const actionMenu = document.getElementById('actionMenu');
+            if (actionMenu) {
+                actionMenu.classList.remove('show');
+            }
+        }
+        
         // 直接在页面中初始化原型导航折叠功能
-        (function() {
             function initPageNav() {
                 var pageNav = document.querySelector('.page-nav');
                 if (!pageNav) return;
@@ -364,8 +412,8 @@
             }
         })();
     </script>
+    <script src="js/project-nav-data.js"></script>
     <script src="js/project-detail.js"></script>
     <!-- 移除内联脚本，避免事件绑定冲突 -->
 </body>
 </html>
-

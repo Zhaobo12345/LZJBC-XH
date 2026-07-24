@@ -138,7 +138,6 @@
     <div class="page-nav">
         <h3>页面导航</h3>
         <a href="prototype-home.html" class="active">首页（工作台）</a>
-        <a href="prototype-project-list.html">项目列表</a>
         <a href="prototype-project-detail.html">项目详情</a>
         <a href="prototype-task-detail.html">任务详情</a>
     </div>
@@ -160,9 +159,9 @@
                 <div class="action-btn">🔔</div>
             </div>
             <div class="action-menu" id="actionMenu">
-                <div class="action-menu-item" onclick="shareToFriend(); closeActionMenu();">
-                    <span class="icon">📤</span>
-                    <span>分享给朋友</span>
+                <div class="action-menu-item" onclick="closeActionMenu();">
+                    <span class="icon">📋</span>
+                    <span>首页</span>
                 </div>
             </div>
         </div>
@@ -284,7 +283,7 @@
                 <div class="icon">🏠</div>
                 <div class="label">首页</div>
             </div>
-            <div class="tab-item" onclick="location.href='prototype-project-list.html'">
+            <div class="tab-item" onclick="location.href='prototype-project-detail.html'">
                 <div class="icon">📋</div>
                 <div class="label">我的家</div>
             </div>

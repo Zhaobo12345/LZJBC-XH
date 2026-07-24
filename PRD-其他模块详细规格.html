@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>良造家管理平台 - 其他模块详细PRD规格</title>
+    <style>
+        :root {
+            --primary-color: #1890FF;
+            --success-color: #52C41A;
+            --warning-color: #FA8C16;
+            --error-color: #FF4D4F;
+            --text-primary: #262626;
+            --text-secondary: #595959;
+            --border-color: #E8E8E8;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #FAFAFA;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: var(--text-primary); background-color: var(--bg-secondary); }
+        .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+        .header { background: linear-gradient(135deg, #FA8C16 0%, #FFA940 100%); color: white; padding: 48px 24px; margin-bottom: 32px; }
+        .header h1 { font-size: 32px; margin-bottom: 8px; }
+        .section { background: var(--bg-primary); border-radius: 8px; padding: 32px; margin-bottom: 24px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .section-title { font-size: 24px; font-weight: 600; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid var(--warning-color); }
+        .subsection { margin-bottom: 32px; }
+        .subsection-title { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+        table th, table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 13px; }
+        table th { background: var(--bg-secondary); font-weight: 600; color: var(--text-secondary); }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .info-item { padding: 16px; background: var(--bg-secondary); border-radius: 6px; }
+        .info-label { font-size: 12px; color: #8C8C8C; margin-bottom: 4px; }
+        .info-value { font-size: 14px; font-weight: 500; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>良造家管理平台 - 其他模块详细PRD规格</h1>
+            <div style="font-size: 14px; opacity: 0.9;">版本：v1.0 | 创建日期：2026-07-17 | 模块：对账单、成员管理、架构管理、项目资料</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 对账单模块 -->
+        <div class="section">
+            <div class="section-title">一、对账单模块</div>
+            
+            <div class="subsection">
+                <div class="subsection-title">1.1 对账单列表页</div>
+                <div class="info-grid">
+                    <div class="info-item"><div class="info-label">页面路径</div><div class="info-value">statement-list.html</div></div>
+                    <div class="info-item"><div class="info-label">适用角色</div><div class="info-value">项目经理</div></div>
+                    <div class="info-item"><div class="info-label">页面入口</div><div class="info-value">项目详情页快捷导航</div></div>
+                </div>
+                <table>
+                    <thead><tr><th>元素</th><th>数据来源</th><th>显示规则</th></tr></thead>
+                    <tbody>
+                        <tr><td>对账单编号</td><td>statements.statement_no</td><td>格式：DZ+yyyyMMdd+4位流水号</td></tr>
+                        <tr><td>对账周期</td><td>period_start ~ period_end</td><td>yyyy-MM-dd ~ yyyy-MM-dd</td></tr>
+                        <tr><td>合同名称</td><td>contracts.name</td><td>关联合同</td></tr>
+                        <tr><td>对账金额</td><td>statements.amount</td><td>¥格式，红色字体</td></tr>
+                        <tr><td>状态</td><td>statements.status</td><td>待确认（橙色）/ 已确认（绿色）</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">1.2 对账单详情页</div>
+                <table>
+                    <thead><tr><th>功能模块</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td>基本信息</td><td>对账单编号、周期、关联合同、金额</td></tr>
+                        <tr><td>费用明细</td><td>按阶段分组显示已完成任务的费用</td></tr>
+                        <tr><td>确认记录</td><td>显示双方确认状态和时间</td></tr>
+                        <tr><td>操作按钮</td><td>确认对账（项目经理+业主双方确认）</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 成员管理模块 -->
+        <div class="section">
+            <div class="section-title">二、成员管理模块</div>
+            
+            <div class="subsection">
+                <div class="subsection-title">2.1 成员列表页</div>
+                <div class="info-grid">
+                    <div class="info-item"><div class="info-label">页面路径</div><div class="info-value">member.html</div></div>
+                    <div class="info-item"><div class="info-label">适用角色</div><div class="info-value">项目经理</div></div>
+                    <div class="info-item"><div class="info-label">功能</div><div class="info-value">查看项目成员、查看成员档案</div></div>
+                </div>
+                <table>
+                    <thead><tr><th>元素</th><th>数据来源</th><th>显示规则</th></tr></thead>
+                    <tbody>
+                        <tr><td>成员姓名</td><td>users.name</td><td>完整显示</td></tr>
+                        <tr><td>角色</td><td>members.role</td><td>项目总/工长/设计师/业主等</td></tr>
+                        <tr><td>所属工作组</td><td>workgroups.name</td><td>标签显示</td></tr>
+                        <tr><td>手机号</td><td>users.phone</td><td>中间4位脱敏</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">2.2 成员档案页</div>
+                <table>
+                    <thead><tr><th>信息类别</th><th>字段</th></tr></thead>
+                    <tbody>
+                        <tr><td>基本信息</td><td>姓名、手机号、身份证（脱敏）</td></tr>
+                        <tr><td>角色信息</td><td>在项目中的角色、所属工作组</td></tr>
+                        <tr><td>任务统计</td><td>参与任务数、完成任务数、平均评分</td></tr>
+                        <tr><td>执行记录</td><td>历史执行记录列表</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 项目资料模块 -->
+        <div class="section">
+            <div class="section-title">三、项目资料模块</div>
+            
+            <div class="subsection">
+                <div class="subsection-title">3.1 项目资料页</div>
+                <div class="info-grid">
+                    <div class="info-item"><div class="info-label">页面路径</div><div class="info-value">project-files.html</div></div>
+                    <div class="info-item"><div class="info-label">适用角色</div><div class="info-value">项目经理、施工组长</div></div>
+                </div>
+                <table>
+                    <thead><tr><th>功能</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td>文件夹结构</td><td>按类型分组：设计图纸、施工方案、验收资料、其他</td></tr>
+                        <tr><td>文件上传</td><td>支持图片、PDF、Word、Excel等格式</td></tr>
+                        <tr><td>文件预览</td><td>图片点击放大，PDF调用小程序预览</td></tr>
+                        <tr><td>文件管理</td><td>重命名、删除、下载（根据权限）</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 架构管理模块 -->
+        <div class="section">
+            <div class="section-title">四、架构管理模块</div>
+            
+            <div class="subsection">
+                <div class="subsection-title">4.1 架构页</div>
+                <table>
+                    <thead><tr><th>元素</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td>架构树</td><td>项目部 → 工作组（如水电工作组、泥瓦工作组）</td></tr>
+                        <tr><td>工作组信息</td><td>工作组名称、负责人、成员数、关联合同</td></tr>
+                        <tr><td>操作</td><td>查看工作组详情、查看成员</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- API接口汇总 -->
+        <div class="section">
+            <div class="section-title">五、其他模块API接口汇总</div>
+            <table>
+                <thead><tr><th>模块</th><th>接口</th><th>方法</th><th>说明</th></tr></thead>
+                <tbody>
+                    <tr><td>对账单</td><td>/api/v1/statements</td><td>GET</td><td>获取对账单列表</td></tr>
+                    <tr><td>对账单</td><td>/api/v1/statements/:id</td><td>GET</td><td>获取对账单详情</td></tr>
+                    <tr><td>对账单</td><td>/api/v1/statements/:id/confirm</td><td>POST</td><td>确认对账单</td></tr>
+                    <tr><td>成员</td><td>/api/v1/projects/:id/members</td><td>GET</td><td>获取项目成员列表</td></tr>
+                    <tr><td>成员</td><td>/api/v1/members/:id</td><td>GET</td><td>获取成员档案</td></tr>
+                    <tr><td>资料</td><td>/api/v1/projects/:id/files</td><td>GET</td><td>获取项目文件列表</td></tr>
+                    <tr><td>资料</td><td>/api/v1/projects/:id/files</td><td>POST</td><td>上传文件</td></tr>
+                    <tr><td>架构</td><td>/api/v1/projects/:id/architecture</td><td>GET</td><td>获取项目架构树</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</body>
+</html>

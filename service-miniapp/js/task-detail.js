@@ -683,8 +683,8 @@ const TaskDetailPage = (function() {
     function confirmUploadRecord() {
         const desc = document.getElementById('recordDescInput').value.trim();
         
-        if (uploadedRecordFiles.length === 0) {
-            showToast('请至少上传一个文件');
+        if (uploadedRecordFiles.length === 0 && !desc) {
+            showToast('请至少上传一个文件或输入执行说明');
             return;
         }
         
@@ -1220,6 +1220,7 @@ const TaskDetailPage = (function() {
                 if (addConfirmerBtn) addConfirmerBtn.style.display = 'none';
                 
                 if (currentUserRole === 'executor') {
+                    var fixedBar=document.getElementById('fixedUploadBar');if(fixedBar)fixedBar.style.display='block'; var fixedBar = document.getElementById('fixedUploadBar'); if (fixedBar) fixedBar.style.display = 'block';
                     const hasConfirmers = currentConfirmers.length > 0;
                     const submitBtnText = hasConfirmers ? '提交确认' : '完成任务';
                     if (actionButtons) actionButtons.innerHTML = `
@@ -1303,6 +1304,7 @@ const TaskDetailPage = (function() {
             }
             
             if (currentUserRole === 'executor') {
+                    var fixedBar=document.getElementById('fixedUploadBar');if(fixedBar)fixedBar.style.display='block'; var fixedBar = document.getElementById('fixedUploadBar'); if (fixedBar) fixedBar.style.display = 'block';
                 if (actionButtons) actionButtons.innerHTML = `
                     <div class="btn secondary disabled" style="width: 100%; opacity: 0.6; cursor: not-allowed;">
                         <span style="margin-right: 6px;">🔒</span> 前置任务未完成
@@ -1413,6 +1415,7 @@ const TaskDetailPage = (function() {
             }
             
             if (currentUserRole === 'executor') {
+                    var fixedBar=document.getElementById('fixedUploadBar');if(fixedBar)fixedBar.style.display='block'; var fixedBar = document.getElementById('fixedUploadBar'); if (fixedBar) fixedBar.style.display = 'block';
                 const hasConfirmers = currentConfirmers.length > 0;
                 const submitBtnText = hasConfirmers ? '提交确认' : '完成任务';
                 if (actionButtons) actionButtons.innerHTML = `
@@ -2463,6 +2466,7 @@ const TaskDetailPage = (function() {
             }
             
             if (currentUserRole === 'executor') {
+                    var fixedBar=document.getElementById('fixedUploadBar');if(fixedBar)fixedBar.style.display='block'; var fixedBar = document.getElementById('fixedUploadBar'); if (fixedBar) fixedBar.style.display = 'block';
                 const hasConfirmers = currentConfirmers.length > 0;
                 const submitBtnText = hasConfirmers ? '重新提交确认' : '完成任务';
                 if (actionButtons) actionButtons.innerHTML = `
@@ -2534,7 +2538,8 @@ const TaskDetailPage = (function() {
     }
     
     function switchUserRole(role) {
-        currentUserRole = role;
+
+        var fb=document.getElementById('fixedUploadBar');if(fb)fb.style.display='none';        currentUserRole = role;
         updateTaskStatus(currentTaskStatus);
         
         document.querySelectorAll('.role-switch-item').forEach(item => {
@@ -2737,6 +2742,14 @@ const TaskDetailPage = (function() {
         return texts[rating] || '';
     }
 
+    /**
+     * 跳转任务报告单页面
+     */
+    function goToTaskReport() {
+        const taskId = state.currentTaskId || 'task-001';
+        window.location.href = `task-report.html?taskId=${taskId}`;
+    }
+
     function showEvaluationListModal() {
         const evaluationListBody = document.getElementById('evaluationListBody');
         
@@ -2858,6 +2871,7 @@ const TaskDetailPage = (function() {
     window.updateTaskStatus = updateTaskStatus;
     window.switchUserRole = switchUserRole;
     window.showToast = showToast;
+    window.TaskStatus = TaskStatus;
     window.toggleActionMenu = toggleActionMenu;
     window.closeActionMenu = closeActionMenu;
     window.shareToFriend = shareToFriend;
@@ -2931,6 +2945,7 @@ const TaskDetailPage = (function() {
     window.handleFileSelect = handleFileSelect;
     window.closeUploadModal = closeUploadModal;
     window.removeRecordFile = removeRecordFile;
+    window.goToTaskReport = goToTaskReport;
     
     return {
         init: initFromUrl,

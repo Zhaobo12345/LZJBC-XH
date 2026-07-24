@@ -194,44 +194,6 @@
             font-size: 12px;
         }
 
-        .share-nav {
-            margin-top: 24px;
-            text-align: center;
-        }
-
-        .share-nav-card {
-            display: inline-flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            padding: 12px 24px;
-            text-decoration: none;
-            color: rgba(255, 255, 255, 0.9);
-            transition: all 0.3s ease;
-        }
-
-        .share-nav-card:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .share-nav-icon {
-            font-size: 20px;
-            margin-right: 10px;
-        }
-
-        .share-nav-text {
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .share-nav-arrow {
-            margin-left: 10px;
-            font-size: 12px;
-            opacity: 0.6;
-        }
-
         @media (max-width: 900px) {
             .nav-grid {
                 grid-template-columns: 1fr;
@@ -253,13 +215,13 @@
         </div>
 
         <div class="nav-grid">
-            <a href="pc/pc-login.html" class="nav-card pc" target="_blank">
+            <a href="pc/pc-contract-list.html" class="nav-card pc" target="_blank">
                 <div class="nav-icon">💻</div>
                 <div class="nav-title">PC管理端</div>
-                <div class="nav-desc">面向平台管理人员与签约方，提供合同配置功能与合同编辑功能</div>
+                <div class="nav-desc">面向平台运营人员，提供合同审核管理与模板配置功能</div>
                 <ul class="nav-features">
-                    <li>合同编辑变更编辑</li>
-                    <li>合同平台审核</li>
+                    <li>合同审核管理</li>
+                    <li>合同详情查看</li>
                     <li>阶段任务模板配置</li>
                     <li>合同文本模板</li>
                 </ul>
@@ -288,19 +250,6 @@
                     <li>验收确认与评价</li>
                 </ul>
                 <span class="nav-btn">进入业主端</span>
-            </a>
-        </div>
-
-        <div class="share-nav">
-            <a href="share-navigation.html" class="share-nav-card" target="_blank">
-                <span class="share-nav-icon">🔗</span>
-                <span class="share-nav-text">分享功能导航</span>
-                <span class="share-nav-arrow">→</span>
-            </a>
-            <a href="demo-miniapp/project-detail.html" class="share-nav-card" target="_blank" style="margin-left: 16px;">
-                <span class="share-nav-icon">📱</span>
-                <span class="share-nav-text">演示页面</span>
-                <span class="share-nav-arrow">→</span>
             </a>
         </div>
 

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>良造家管理平台 - 完整PRD文档</title>
+    <style>
+        :root {
+            --primary-color: #1890FF;
+            --success-color: #52C41A;
+            --warning-color: #FA8C16;
+            --error-color: #FF4D4F;
+            --purple-color: #722ED1;
+            --text-primary: #262626;
+            --text-secondary: #595959;
+            --text-tertiary: #8C8C8C;
+            --border-color: #E8E8E8;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #FAFAFA;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-secondary);
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+        .header {
+            background: linear-gradient(135deg, #1890FF 0%, #722ED1 50%, #52C41A 100%);
+            color: white;
+            padding: 64px 24px;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        .header h1 { font-size: 42px; margin-bottom: 16px; }
+        .header .meta { font-size: 16px; opacity: 0.9; margin-bottom: 24px; }
+        .header .version-info {
+            display: inline-flex;
+            gap: 24px;
+            background: rgba(255,255,255,0.15);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .section {
+            background: var(--bg-primary);
+            border-radius: 8px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .section-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 3px solid var(--primary-color);
+        }
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        .overview-card {
+            background: linear-gradient(135deg, #F0F5FF 0%, #E6F7FF 100%);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+        }
+        .overview-card .number {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+        .overview-card .label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        .module-nav {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+        .module-card {
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+        .module-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 8px 24px rgba(24,144,255,0.15);
+            transform: translateY(-4px);
+        }
+        .module-card.contract { border-left: 4px solid var(--primary-color); }
+        .module-card.task { border-left: 4px solid var(--success-color); }
+        .module-card.project { border-left: 4px solid var(--purple-color); }
+        .module-card.other { border-left: 4px solid var(--warning-color); }
+        .module-card h3 { font-size: 20px; margin-bottom: 12px; }
+        .module-card.contract h3 { color: var(--primary-color); }
+        .module-card.task h3 { color: var(--success-color); }
+        .module-card.project h3 { color: var(--purple-color); }
+        .module-card.other h3 { color: var(--warning-color); }
+        .module-card p { font-size: 14px; color: var(--text-secondary); margin-bottom: 16px; }
+        .module-card .page-count {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+        }
+        .param-table th, .param-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .param-table th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        .status-flow {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .status-node {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        .status-node.draft { background: #F5F5F5; color: #8C8C8C; }
+        .status-node.pending { background: #E6FFFB; color: #13C2C2; }
+        .status-node.in-progress { background: #F9F0FF; color: #722ED1; }
+        .status-node.completed { background: #E6F7FF; color: #1890FF; }
+        .note {
+            background: #FFFBE6;
+            border-left: 4px solid var(--warning-color);
+            padding: 16px;
+            margin-bottom: 24px;
+            border-radius: 0 8px 8px 0;
+        }
+        .note-title { font-weight: 600; color: var(--warning-color); margin-bottom: 8px; }
+        .global-params {
+            background: #F6FFED;
+            border: 1px solid var(--success-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .global-params h4 { color: var(--success-color); margin-bottom: 12px; }
+        .footer {
+            text-align: center;
+            padding: 48px 0;
+            color: var(--text-tertiary);
+            border-top: 1px solid var(--border-color);
+            margin-top: 48px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>良造家管理平台</h1>
+            <h2 style="font-size: 24px; margin-bottom: 16px;">详细PRD规格文档</h2>
+            <div class="meta">研发级别交互规格 · 可直接交付开发团队</div>
+            <div class="version-info">
+                <span>版本：v1.0</span>
+                <span>日期：2026-07-17</span>
+                <span>状态：已完成</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 文档概述 -->
+        <div class="section">
+            <div class="section-title">文档概述</div>
+            
+            <div class="overview-grid">
+                <div class="overview-card">
+                    <div class="number">34</div>
+                    <div class="label">页面规格</div>
+                </div>
+                <div class="overview-card">
+                    <div class="number">4</div>
+                    <div class="label">模块文档</div>
+                </div>
+                <div class="overview-card">
+                    <div class="number">40+</div>
+                    <div class="label">API接口</div>
+                </div>
+                <div class="overview-card">
+                    <div class="number">4</div>
+                    <div class="label">状态机定义</div>
+                </div>
+            </div>
+
+            <p style="margin-bottom: 24px;">本文档包含良造家管理平台全部功能的研发级交互规格，涵盖PC管理端和微信小程序端（服务方、业主），可直接交付研发团队进行开发。</p>
+
+            <div class="global-params">
+                <h4>✅ 已确认的全局参数</h4>
+                <table class="param-table">
+                    <tr>
+                        <th>参数</th>
+                        <th>值</th>
+                        <th>适用范围</th>
+                    </tr>
+                    <tr>
+                        <td>Toast位置</td>
+                        <td>屏幕中部</td>
+                        <td>全部页面</td>
+                    </tr>
+                    <tr>
+                        <td>Toast持续时间</td>
+                        <td>2秒</td>
+                        <td>全部页面</td>
+                    </tr>
+                    <tr>
+                        <td>列表每页条数</td>
+                        <td>10条</td>
+                        <td>全部列表页</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- 状态机定义 -->
+        <div class="section">
+            <div class="section-title">状态机定义（已确认）</div>
+            
+            <h4 style="margin-bottom: 16px;">合同状态机</h4>
+            <div class="status-flow">
+                <div class="status-node draft">拟定中</div>
+                <span>→</span>
+                <div class="status-node pending">待审核</div>
+                <span>→</span>
+                <div class="status-node pending">待确认</div>
+                <span>→</span>
+                <div class="status-node in-progress">待签约</div>
+                <span>→</span>
+                <div class="status-node completed">已签约</div>
+            </div>
+            <div class="note">
+                <div class="note-title">驳回分支</div>
+                待审核 → 拟定中（运营驳回）<br>
+                已签约 → 变更审核中（发起变更）
+            </div>
+
+            <h4 style="margin-bottom: 16px;">任务状态机</h4>
+            <div class="status-flow">
+                <div class="status-node draft">待配置</div>
+                <span>→</span>
+                <div class="status-node draft">待开始</div>
+                <span>→</span>
+                <div class="status-node in-progress">执行中</div>
+                <span>→</span>
+                <div class="status-node pending">确认中</div>
+                <span>→</span>
+                <div class="status-node completed">已完成</div>
+            </div>
+            <div class="note">
+                <div class="note-title">驳回分支</div>
+                确认中 → 已驳回（确认人驳回）→ 执行中（重新执行）
+            </div>
+
+            <h4 style="margin-bottom: 16px;">项目状态机</h4>
+            <div class="status-flow">
+                <div class="status-node in-progress">进行中</div>
+                <span>→</span>
+                <div class="status-node completed">已完成</div>
+            </div>
+        </div>
+
+        <!-- 模块导航 -->
+        <div class="section">
+            <div class="section-title">模块规格文档</div>
+            
+            <div class="module-nav">
+                <a href="PRD-合同模块详细规格.html" class="module-card contract">
+                    <h3>📋 合同模块</h3>
+                    <p>合同全生命周期管理，包括创建、编辑、审核、签约、变更等功能。涵盖PC端和小程序端。</p>
+                    <div class="page-count">4个页面</div>
+                </a>
+
+                <a href="PRD-任务模块详细规格.html" class="module-card task">
+                    <h3>✅ 任务模块</h3>
+                    <p>任务执行与验收流程，包括配置执行人、上传记录、确认验收、评价等功能。</p>
+                    <div class="page-count">6个页面</div>
+                </a>
+
+                <a href="PRD-项目模块详细规格.html" class="module-card project">
+                    <h3>🏗️ 项目模块</h3>
+                    <p>项目管理核心功能，包括项目概览、架构管理、成员管理、资料管理、对账单管理等。涵盖服务方和业主小程序。</p>
+                    <div class="page-count">17个页面</div>
+                </a>
+
+                <a href="PRD-PC端其他模块详细规格.html" class="module-card other">
+                    <h3>⚙️ PC端其他模块</h3>
+                    <p>合同文本模板、阶段任务模板等PC端管理功能。</p>
+                    <div class="page-count">4个页面</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- 页面清单 -->
+        <div class="section">
+            <div class="section-title">页面清单</div>
+            
+            <table class="param-table">
+                <thead>
+                    <tr>
+                        <th>模块</th>
+                        <th>页面名称</th>
+                        <th>端</th>
+                        <th>文档位置</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td rowspan="4">合同模块</td><td>合同列表页</td><td>PC</td><td><a href="PRD-合同模块详细规格.html#page-list">第一章</a></td></tr>
+                    <tr><td>合同详情页</td><td>PC</td><td><a href="PRD-合同模块详细规格.html#page-detail">第二章</a></td></tr>
+                    <tr><td>合同详情页</td><td>服务方小程序</td><td><a href="PRD-合同模块详细规格.html#page-mini-service">第三章</a></td></tr>
+                    <tr><td>合同详情页</td><td>业主小程序</td><td><a href="PRD-合同模块详细规格.html#page-mini-owner">第四章</a></td></tr>
+                    <tr><td rowspan="6">任务模块</td><td>任务列表页</td><td>服务方小程序</td><td><a href="PRD-任务模块详细规格.html#page-task-list-service">第一章</a></td></tr>
+                    <tr><td>任务详情页</td><td>服务方小程序</td><td><a href="PRD-任务模块详细规格.html#page-task-detail-service">第二章</a></td></tr>
+                    <tr><td>任务验收页</td><td>服务方小程序</td><td><a href="PRD-任务模块详细规格.html#page-task-acceptance-service">第三章</a></td></tr>
+                    <tr><td>任务列表页</td><td>业主小程序</td><td><a href="PRD-任务模块详细规格.html#page-task-list-owner">第四章</a></td></tr>
+                    <tr><td>任务详情页</td><td>业主小程序</td><td><a href="PRD-任务模块详细规格.html#page-task-detail-owner">第五章</a></td></tr>
+                    <tr><td>任务验收页</td><td>业主小程序</td><td><a href="PRD-任务模块详细规格.html#page-task-acceptance-owner">第六章</a></td></tr>
+                    <tr><td rowspan="17">项目模块</td><td>首页</td><td>服务方小程序</td><td><a href="PRD-项目模块详细规格.html#page-home-service">第一章</a></td></tr>
+                    <tr><td>项目列表页</td><td>服务方小程序</td><td><a href="PRD-项目模块详细规格.html#page-list-service">第二章</a></td></tr>
+                    <tr><td>项目详情页</td><td>服务方小程序</td><td><a href="PRD-项目模块详细规格.html#page-detail-service">第三章</a></td></tr>
+                    <tr><td>项目信息页</td><td>服务方小程序</td><td><a href="PRD-项目模块详细规格.html#page-info-service">第四章</a></td></tr>
+                    <tr><td>创建项目页</td><td>服务方小程序</td><td><a href="PRD-项目模块详细规格.html#page-create-service">第五章</a></td></tr>
+                    <tr><td>项目架构页</td><td>服务方小程序</td><td><a href="PRD-项目模块详细规格.html#page-architecture-service">第六章</a></td></tr>
+                    <tr><td>项目成员页</td><td>服务方小程序</td><td><a href="PRD-项目模块详细规格.html#page-member-service">第七章</a></td></tr>
+                    <tr><td>项目资料页</td><td>服务方小程序</td><td><a href="PRD-项目模块详细规格.html#page-files-service">第八章</a></td></tr>
+                    <tr><td>对账单列表页</td><td>服务方小程序</td><td><a href="PRD-项目模块详细规格.html#page-statement-list-service">第九章</a></td></tr>
+                    <tr><td>对账单详情页</td><td>服务方小程序</td><td><a href="PRD-项目模块详细规格.html#page-statement-detail-service">第十章</a></td></tr>
+                    <tr><td>项目详情页</td><td>业主小程序</td><td><a href="PRD-项目模块详细规格.html#page-detail-owner">第十一章</a></td></tr>
+                    <tr><td>项目信息页</td><td>业主小程序</td><td><a href="PRD-项目模块详细规格.html#page-info-owner">第十二章</a></td></tr>
+                    <tr><td>项目架构页</td><td>业主小程序</td><td><a href="PRD-项目模块详细规格.html#page-architecture-owner">第十三章</a></td></tr>
+                    <tr><td>项目成员页</td><td>业主小程序</td><td><a href="PRD-项目模块详细规格.html#page-member-owner">第十四章</a></td></tr>
+                    <tr><td>项目资料页</td><td>业主小程序</td><td><a href="PRD-项目模块详细规格.html#page-files-owner">第十五章</a></td></tr>
+                    <tr><td>对账单列表页</td><td>业主小程序</td><td><a href="PRD-项目模块详细规格.html#page-statement-list-owner">第十六章</a></td></tr>
+                    <tr><td>对账单详情页</td><td>业主小程序</td><td><a href="PRD-项目模块详细规格.html#page-statement-detail-owner">第十七章</a></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 设计系统参数 -->
+        <div class="section">
+            <div class="section-title">UI设计系统参数</div>
+            
+            <table class="param-table">
+                <thead>
+                    <tr>
+                        <th>类别</th>
+                        <th>参数名</th>
+                        <th>值</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td rowspan="6">颜色系统</td><td>主色</td><td>#1890FF</td></tr>
+                    <tr><td>成功色</td><td>#52C41A</td></tr>
+                    <tr><td>警告色</td><td>#FA8C16</td></tr>
+                    <tr><td>错误色</td><td>#FF4D4F</td></tr>
+                    <tr><td>文字主色</td><td>#262626</td></tr>
+                    <tr><td>文字次色</td><td>#595959</td></tr>
+                    <tr><td rowspan="3">字体</td><td>字体家族</td><td>-apple-system, PingFang SC, sans-serif</td></tr>
+                    <tr><td>基础字号</td><td>14px</td></tr>
+                    <tr><td>标题字号</td><td>16px-24px</td></tr>
+                    <tr><td rowspan="2">圆角</td><td>卡片圆角</td><td>8px</td></tr>
+                    <tr><td>按钮圆角</td><td>6px</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 使用说明 -->
+        <div class="section">
+            <div class="section-title">研发使用说明</div>
+            
+            <div class="note">
+                <div class="note-title">文档结构说明</div>
+                每个页面规格文档包含以下章节：<br>
+                1. 页面概述（基本信息、业务目标）<br>
+                2. 页面结构（布局图、组件清单）<br>
+                3. 字段定义（数据来源、校验规则、显示规则）<br>
+                4. 组件规格（按钮、表单、卡片等详细规格）<br>
+                5. 交互流程（点击、提交、跳转等流程）<br>
+                6. 状态变化（状态映射表）<br>
+                7. 异常处理（错误提示、空状态）<br>
+                8. API对接（接口调用时机、参数、响应）<br>
+                9. 权限控制（角色权限矩阵）
+            </div>
+
+            <p><strong>建议开发顺序：</strong></p>
+            <ol style="margin-left: 20px; margin-bottom: 16px;">
+                <li>先实现PC端合同模块（登录→列表→详情→编辑）</li>
+                <li>再实现服务方小程序项目模块（首页→项目列表→项目详情）</li>
+                <li>然后实现任务模块（任务列表→任务详情→任务验收）</li>
+                <li>最后实现业主小程序和其他辅助功能</li>
+            </ol>
+
+            <p><strong>联调说明：</strong></p>
+            <ul style="margin-left: 20px;">
+                <li>前端根据文档实现页面，后端根据API规格实现接口</li>
+                <li>字段映射关系已在文档中明确，请严格按照映射实现</li>
+                <li>状态机已确认，请按照状态流转逻辑实现</li>
+            </ul>
+        </div>
+
+        <!-- 文件清单 -->
+        <div class="section">
+            <div class="section-title">交付文件清单</div>
+            
+            <table class="param-table">
+                <thead>
+                    <tr>
+                        <th>文件名</th>
+                        <th>说明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>PRD-完整文档.html</td><td>本文档，总览和导航</td></tr>
+                    <tr><td>PRD-详细规格-模板示例.html</td><td>合同详情页完整规格示例</td></tr>
+                    <tr><td>PRD-合同模块详细规格.html</td><td>合同模块4个页面规格</td></tr>
+                    <tr><td>PRD-任务模块详细规格.html</td><td>任务模块6个页面规格</td></tr>
+                    <tr><td>PRD-项目模块详细规格.html</td><td>项目模块17个页面规格</td></tr>
+                    <tr><td>PRD-PC端其他模块详细规格.html</td><td>PC端其他模块规格</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <p>良造家管理平台 详细PRD规格文档</p>
+        <p style="margin-top: 8px; font-size: 12px;">版本 v1.0 · 2026-07-17 · 共计34个页面规格</p>
+    </div>
+</body>
+</html>

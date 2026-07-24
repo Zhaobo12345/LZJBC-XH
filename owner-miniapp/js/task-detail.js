@@ -2005,6 +2005,7 @@ const TaskDetailPage = (function() {
             }
             
             if (actionButtons) actionButtons.innerHTML = `
+                <div class="btn secondary" onclick="goToTaskReport()">查看报告单</div>
                 <div class="btn primary" onclick="showEvaluationListModal()">查看评价</div>
             `;
             if (addConfirmerBtn) addConfirmerBtn.style.display = 'none';
@@ -2262,6 +2263,7 @@ const TaskDetailPage = (function() {
             }
             
             if (actionButtons) actionButtons.innerHTML = `
+                <div class="btn secondary" onclick="goToTaskReport()">查看报告单</div>
                 <div class="btn primary" onclick="showEvaluationListModal()">查看评价</div>
             `;
             if (addConfirmerBtn) addConfirmerBtn.style.display = 'none';
@@ -2736,6 +2738,13 @@ const TaskDetailPage = (function() {
         return texts[rating] || '';
     }
 
+    /**
+     * 跳转任务报告单页面
+     */
+    function goToTaskReport() {
+        window.location.href = 'task-report.html?taskId=task-001';
+    }
+
     function showEvaluationListModal() {
         const evaluationListBody = document.getElementById('evaluationListBody');
         
@@ -2930,6 +2939,7 @@ const TaskDetailPage = (function() {
     window.handleFileSelect = handleFileSelect;
     window.closeUploadModal = closeUploadModal;
     window.removeRecordFile = removeRecordFile;
+    window.goToTaskReport = goToTaskReport;
     
     return {
         init: initFromUrl,

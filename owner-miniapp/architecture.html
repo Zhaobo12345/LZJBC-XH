@@ -786,9 +786,9 @@
                 <div class="action-btn" onclick="alert('关闭小程序')">✕</div>
             </div>
             <div class="action-menu" id="actionMenu">
-                <div class="action-menu-item" onclick="shareToFriend(); closeActionMenu();">
-                    <span class="icon">📤</span>
-                    <span>分享给朋友</span>
+                <div class="action-menu-item" onclick="closeActionMenu();">
+                    <span class="icon">🏗️</span>
+                    <span>项目架构</span>
                 </div>
             </div>
         </div>
@@ -956,10 +956,6 @@
                             </div>
                             <div class="node-children">
                                 <div class="node-actions">
-                                    <div class="action-item primary" onclick="event.stopPropagation(); showCreateContractModal('木工工作组')">
-                                        <span class="icon">📝</span>
-                                        <span>创建合同</span>
-                                    </div>
                                     <div class="action-item" onclick="event.stopPropagation(); showInviteMemberModal('木工工作组')">
                                         <span class="icon">👥</span>
                                         <span>邀请成员</span>
@@ -987,10 +983,6 @@
                             </div>
                             <div class="node-children">
                                 <div class="node-actions">
-                                    <div class="action-item primary" onclick="event.stopPropagation(); showCreateContractModal('油漆工作组')">
-                                        <span class="icon">📝</span>
-                                        <span>创建合同</span>
-                                    </div>
                                     <div class="action-item" onclick="event.stopPropagation(); showInviteMemberModal('油漆工作组')">
                                         <span class="icon">👥</span>
                                         <span>邀请成员</span>
@@ -1251,90 +1243,12 @@
             </div>
         </div>
         
-        <div class="create-modal" id="createContractModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title">创建合同</div>
-                    <div class="modal-close" onclick="closeCreateContractModal()">✕</div>
-                </div>
-                <div class="modal-body">
-                    <div class="invite-target-info">
-                        <span class="label">所属架构层级：</span>
-                        <span class="value" id="contractTargetName">水电工作组</span>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">
-                            <span class="required">*</span>
-                            <span>合同类型</span>
-                        </label>
-                        <select class="form-select" id="contractType">
-                            <option value="">请选择合同类型</option>
-                            <option value="shuidian">水电工程合同</option>
-                            <option value="niwa">泥瓦工程合同</option>
-                            <option value="mugong">木工工程合同</option>
-                            <option value="youqi">油漆工程合同</option>
-                            <option value="other">其他合同</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">
-                            <span class="required">*</span>
-                            <span>合同名称</span>
-                        </label>
-                        <input type="text" class="form-input" id="contractName" placeholder="请输入合同名称">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">
-                            <span class="required">*</span>
-                            <span>甲方</span>
-                        </label>
-                        <select class="form-select" id="contractPartyA">
-                            <option value="">请选择甲方</option>
-                            <option value="zhangsan">张三（项目经理）</option>
-                            <option value="owner">王业主（业主）</option>
-                            <option value="lisi">李四（业主代表）</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">
-                            <span class="required">*</span>
-                            <span>乙方</span>
-                        </label>
-                        <select class="form-select" id="contractPartyB">
-                            <option value="">请选择乙方</option>
-                            <option value="lisi">李四（水电组长）</option>
-                            <option value="wangwu">王五（强电组长）</option>
-                            <option value="sunba">孙八（弱电组长）</option>
-                            <option value="zhoujiu">周九（泥瓦组长）</option>
-                            <option value="wushi">吴十（木工组长）</option>
-                            <option value="zhengshiyi">郑十一（油漆组长）</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">
-                            <span>合同金额</span>
-                        </label>
-                        <input type="text" class="form-input" id="contractAmount" placeholder="请输入合同金额（选填）">
-                    </div>
-                    <div class="create-contract-notice">
-                        <div class="notice-icon">💡</div>
-                        <div class="notice-text">合同创建后需要前往电脑端编辑详细内容并提交确认</div>
-                    </div>
-                </div>
-                <div class="modal-actions">
-                    <button class="modal-btn cancel" onclick="closeCreateContractModal()">取消</button>
-                    <button class="modal-btn confirm" onclick="createContract()">创建合同</button>
-                </div>
-            </div>
-        </div>
-        
         <div class="app-toast" id="appToast"></div>
     </div>
     
     <div class="page-nav">
         <div class="page-nav-title">原型导航</div>
         <a href="home.html" class="page-nav-item">首页</a>
-        <a href="project-list.html" class="page-nav-item">项目列表</a>
         <a href="project-detail.html" class="page-nav-item">项目详情</a>
         <a href="project-info.html" class="page-nav-item">项目信息</a>
         <a href="architecture.html" class="page-nav-item active">项目架构</a>
@@ -1615,7 +1529,7 @@
             closeExitProjectModal();
             showToast('已退出项目部');
             setTimeout(() => {
-                location.href = 'project-list.html';
+                location.href = 'project-detail.html';
             }, 1500);
         }
         
@@ -1723,107 +1637,9 @@
             }
         }
         
-        let currentContractTarget = '';
-        
-        function showCreateContractModal(targetName) {
-            if (!hasCreatePermission) {
-                showAppModal('提示', '您没有创建合同的权限', null, false);
-                return;
-            }
-            
-            if (groupContracts[targetName]) {
-                showAppModal('提示', '该工作组已存在合同，一个工作组只能有一个合同', null, false);
-                return;
-            }
-            
-            currentContractTarget = targetName;
-            document.getElementById('contractTargetName').textContent = targetName;
-            document.getElementById('contractType').selectedIndex = 0;
-            document.getElementById('contractName').value = '';
-            document.getElementById('contractPartyA').selectedIndex = 0;
-            document.getElementById('contractPartyB').selectedIndex = 0;
-            document.getElementById('contractAmount').value = '';
-            document.getElementById('createContractModal').classList.add('show');
-        }
-        
-        function closeCreateContractModal() {
-            document.getElementById('createContractModal').classList.remove('show');
-        }
-        
-        function createContract() {
-            const typeSelect = document.getElementById('contractType');
-            const name = document.getElementById('contractName').value;
-            const partyASelect = document.getElementById('contractPartyA');
-            const partyBSelect = document.getElementById('contractPartyB');
-            const amount = document.getElementById('contractAmount').value;
-            
-            const type = typeSelect.value;
-            const typeName = typeSelect.options[typeSelect.selectedIndex]?.text || '';
-            const partyA = partyASelect.value;
-            const partyAName = partyASelect.options[partyASelect.selectedIndex]?.text || '';
-            const partyB = partyBSelect.value;
-            const partyBName = partyBSelect.options[partyBSelect.selectedIndex]?.text || '';
-            
-            if (!type) {
-                showAppModal('提示', '请选择合同类型', null, false);
-                return;
-            }
-            if (!name.trim()) {
-                showAppModal('提示', '请输入合同名称', null, false);
-                return;
-            }
-            if (!partyA) {
-                showAppModal('提示', '请选择甲方', null, false);
-                return;
-            }
-            if (!partyB) {
-                showAppModal('提示', '请选择乙方', null, false);
-                return;
-            }
-            
-            showAppModal('创建确认', `确定要为"${currentContractTarget}"创建合同"${name}"吗？`, function() {
-                const contractId = 'contract-new-' + Date.now();
-                groupContracts[currentContractTarget] = {
-                    name: name,
-                    status: '拟定中',
-                    id: contractId,
-                    type: type,
-                    typeName: typeName,
-                    partyA: partyA,
-                    partyAName: partyAName,
-                    partyB: partyB,
-                    partyBName: partyBName,
-                    amount: amount,
-                    group: currentContractTarget
-                };
-                closeCreateContractModal();
-                const params = new URLSearchParams({
-                    id: contractId,
-                    name: name,
-                    type: type,
-                    typeName: typeName,
-                    partyA: partyA,
-                    partyAName: partyAName,
-                    partyB: partyB,
-                    partyBName: partyBName,
-                    amount: amount,
-                    group: currentContractTarget,
-                    status: 'draft',
-                    new: '1'
-                });
-                location.href = 'contract-detail.html?' + params.toString();
-            });
-        }
-        
         document.getElementById('inviteMemberModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeInviteMemberModal();
-            }
-        });
-        
-        document.getElementById('createContractModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeCreateContractModal();
             }
         });
         

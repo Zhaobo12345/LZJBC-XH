@@ -35,16 +35,8 @@ const PcCommon = (function() {
 
     function logout() {
         if (confirm('确定要退出登录吗？')) {
-            window.location.href = 'pc-login.html';
+            window.location.href = 'pc-contract-list.html';
         }
-    }
-
-    function goToProfile() {
-        window.location.href = 'pc-profile.html';
-    }
-
-    function goToAccountSettings() {
-        window.location.href = 'pc-account-settings.html';
     }
 
     function togglePageNav() {
@@ -94,8 +86,6 @@ const PcCommon = (function() {
         showToast: showToast,
         toggleUserDropdown: toggleUserDropdown,
         logout: logout,
-        goToProfile: goToProfile,
-        goToAccountSettings: goToAccountSettings,
         togglePageNav: togglePageNav,
         formatFileSize: formatFileSize
     };
@@ -104,7 +94,5 @@ const PcCommon = (function() {
 window.showToast = PcCommon.showToast;
 window.toggleUserDropdown = PcCommon.toggleUserDropdown;
 window.logout = PcCommon.logout;
-window.goToProfile = PcCommon.goToProfile;
-window.goToAccountSettings = PcCommon.goToAccountSettings;
 window.togglePageNav = PcCommon.togglePageNav;
 window.formatFileSize = PcCommon.formatFileSize;

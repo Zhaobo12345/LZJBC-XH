@@ -15,16 +15,15 @@
         </div>
 
         <div class="nav-bar">
-            <div class="back">← 返回</div>
-            <div class="title centered">XX小区整体装修</div>
+            <div class="title">XX小区整体装修</div>
             <div class="actions">
-                <div class="action-btn" id="menuBtn">⋯</div>
+                <div class="action-btn" onclick="toggleActionMenu()">⋯</div>
                 <div class="action-btn" id="closeBtn">✕</div>
             </div>
             <div class="action-menu" id="actionMenu">
-                <div class="action-menu-item" id="shareBtn">
-                    <span class="icon">📤</span>
-                    <span>分享给朋友</span>
+                <div class="action-menu-item" onclick="closeActionMenu();">
+                    <span class="icon">📋</span>
+                    <span>项目详情</span>
                 </div>
             </div>
         </div>
@@ -318,7 +317,6 @@
     <div class="page-nav">
         <div class="page-nav-title">原型导航</div>
         <a href="prototype-home.html" class="page-nav-item">首页</a>
-        <a href="prototype-project-list.html" class="page-nav-item">项目列表</a>
         <a href="prototype-project-detail.html" class="page-nav-item active">项目详情</a>
         <a href="prototype-project-info.html" class="page-nav-item">项目信息</a>
         <a href="prototype-architecture.html" class="page-nav-item">项目架构</a>

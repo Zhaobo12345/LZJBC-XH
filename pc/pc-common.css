@@ -355,92 +355,12 @@ body {
     text-align: center;
 }
 
-.pc-role-switcher {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    background-color: var(--bg-secondary);
-    border-radius: 6px;
-    padding: 4px;
-}
-
-.pc-role-btn {
-    padding: 6px 16px;
-    border: none;
-    background: transparent;
-    font-size: 13px;
-    color: var(--text-secondary);
-    cursor: pointer;
-    border-radius: 4px;
-    transition: all 0.2s;
-}
-
-.pc-role-btn:hover {
-    color: var(--primary-color);
-}
-
-.pc-role-btn.active {
-    background-color: var(--bg-primary);
-    color: var(--primary-color);
-    font-weight: 500;
-    box-shadow: 0 1px 2px var(--shadow-color);
-}
-
 .pc-sidebar.hidden {
     display: none;
 }
 
 .pc-main.full-width {
     margin-left: 0;
-}
-
-.pc-contract-editor-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 24px;
-    background-color: var(--bg-primary);
-    border-bottom: 1px solid var(--border-color);
-    margin: -24px -24px 24px -24px;
-}
-
-.pc-contract-editor-title {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text-primary);
-}
-
-.pc-contract-editor-status {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.pc-contract-status-tag {
-    padding: 4px 12px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 500;
-}
-
-.pc-contract-status-tag.draft {
-    background-color: var(--bg-secondary);
-    color: var(--text-secondary);
-}
-
-.pc-contract-status-tag.pending {
-    background-color: rgba(19, 194, 194, 0.1);
-    color: #13C2C2;
-}
-
-.pc-contract-status-tag.rejected {
-    background-color: rgba(255, 77, 79, 0.1);
-    color: var(--error-color);
-}
-
-.pc-contract-editor-actions {
-    display: flex;
-    gap: 12px;
 }
 
 /* --------------------------------------------------------------------------

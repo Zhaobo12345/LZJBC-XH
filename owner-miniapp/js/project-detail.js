@@ -1,10 +1,8 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿/**
+/**
  * 项目详情页模块
  * 负责层级切换、动态加载、交互处理
  */
-const ProjectDetailPage = (function() {
-    'use strict';
-    
+(function() {
     // 常量定义
     const LOADING_DELAY = 200;
     const SCROLL_THROTTLE_DELAY = 100;
@@ -187,7 +185,6 @@ const ProjectDetailPage = (function() {
         elements.toggleArrow = document.getElementById('toggleArrow');
         elements.pinBtn = document.getElementById('pinBtn');
         elements.actionMenu = document.getElementById('actionMenu');
-        console.log('actionMenu 元素:', elements.actionMenu);
         elements.customToastModal = document.getElementById('customToastModal');
         elements.customToastMessage = document.getElementById('customToastMessage');
         console.log('DOM 元素缓存完成');
@@ -548,15 +545,9 @@ const ProjectDetailPage = (function() {
      * 切换操作菜单
      */
     function toggleActionMenu() {
-        console.log('toggleActionMenu 被调用');
         var actionMenu = document.getElementById('actionMenu');
-        console.log('actionMenu 元素:', actionMenu);
         if (actionMenu) {
-            console.log('当前状态:', actionMenu.classList.contains('show'));
             actionMenu.classList.toggle('show');
-            console.log('新状态:', actionMenu.classList.contains('show'));
-        } else {
-            console.log('未找到 actionMenu 元素');
         }
     }
     
@@ -574,15 +565,8 @@ const ProjectDetailPage = (function() {
      * 分享给朋友
      */
     function shareToFriend() {
-        // 模拟分享功能，显示分享选项
         showCustomToast('分享功能已触发，请选择分享方式');
-        // 实际项目中这里会调用微信分享API
     }
-    
-    // 立即绑定到window对象
-    window.toggleActionMenu = toggleActionMenu;
-    window.closeActionMenu = closeActionMenu;
-    window.shareToFriend = shareToFriend;
     
     /**
      * 跳转到人员档案页面
@@ -681,12 +665,6 @@ const ProjectDetailPage = (function() {
             elements.breadcrumbInline.addEventListener('click', handleBreadcrumbClick);
         }
         
-        // 事件委托 - 合同列表
-        const contractListContainer = document.querySelector('.card');
-        if (contractListContainer) {
-            contractListContainer.addEventListener('click', handleCardClick);
-        }
-        
         // 事件委托 - 动态列表
         if (elements.activityList) {
             elements.activityList.addEventListener('click', handleActivityClick);
@@ -716,16 +694,11 @@ const ProjectDetailPage = (function() {
         
         // 导航栏操作按钮
         const actionBtns = document.querySelectorAll('.nav-bar .action-btn');
-        console.log('找到的操作按钮数量:', actionBtns.length);
         actionBtns.forEach((btn, index) => {
-            console.log('绑定操作按钮点击事件:', index);
             btn.addEventListener('click', function() {
-                console.log('操作按钮被点击:', index);
                 if (index === 0) {
-                    console.log('调用 toggleActionMenu');
                     toggleActionMenu();
                 } else if (index === 1) {
-                    console.log('调用 showCustomToast');
                     showCustomToast('关闭小程序');
                 }
             });
@@ -853,16 +826,6 @@ const ProjectDetailPage = (function() {
     }
     
     /**
-     * 处理卡片点击
-     */
-    function handleCardClick(e) {
-        const moreBtn = e.target.closest('.card-title .more');
-        if (moreBtn && moreBtn.textContent.includes('查看合同')) {
-            toggleContractList(moreBtn);
-        }
-    }
-    
-    /**
      * 处理动态列表点击
      */
     function handleActivityClick(e) {
@@ -970,25 +933,183 @@ const ProjectDetailPage = (function() {
         init();
     }
     
+    // 暴露全局函数
     window.showCustomToast = showCustomToast;
     window.closeCustomToast = closeCustomToast;
     window.toggleActionMenu = toggleActionMenu;
     window.closeActionMenu = closeActionMenu;
     window.shareToFriend = shareToFriend;
     window.goToProfile = goToProfile;
-    
-    // 公开 API
-    return {
-        showCustomToast: showCustomToast,
-        closeCustomToast: closeCustomToast,
-        navigateToLevel: navigateToLevel,
-        getCurrentLevel: () => state.currentLevel,
-        toggleQuickNav: toggleQuickNav,
-        toggleActivityList: toggleActivityList,
-        toggleContractList: toggleContractList,
-        toggleActionMenu: toggleActionMenu,
-        closeActionMenu: closeActionMenu,
-        shareToFriend: shareToFriend,
-        goToProfile: goToProfile
-    };
 })();
+
+/**
+ * 项目导航模块
+ */
+const ProjectNav = {
+    // 状态
+    isOpen: false,
+    touchStartX: 0,
+    touchStartY: 0,
+    
+    // DOM 元素
+    elements: {
+        trigger: null,
+        overlay: null,
+        drawer: null,
+        close: null,
+        content: null
+    },
+    
+    // 初始化
+    init: function() {
+        this.cacheElements();
+        this.bindEvents();
+        this.renderTimeline();
+    },
+    
+    // 缓存 DOM 元素
+    cacheElements: function() {
+        this.elements.trigger = document.getElementById('projectNavTrigger');
+        this.elements.overlay = document.getElementById('projectNavOverlay');
+        this.elements.drawer = document.getElementById('projectNavDrawer');
+        this.elements.close = document.getElementById('projectNavClose');
+        this.elements.content = document.getElementById('projectNavContent');
+    },
+    
+    // 绑定事件
+    bindEvents: function() {
+        if (!this.elements.trigger) return;
+        
+        this.elements.trigger.addEventListener('click', () => this.open());
+        this.elements.overlay.addEventListener('click', () => this.close());
+        this.elements.close.addEventListener('click', () => this.close());
+        this.elements.drawer.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: true });
+        this.elements.drawer.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: true });
+        this.elements.drawer.addEventListener('touchend', (e) => this.handleTouchEnd(e), { passive: true });
+    },
+    
+    open: function() {
+        this.isOpen = true;
+        this.elements.trigger.classList.add('hidden');
+        this.elements.overlay.classList.add('show');
+        this.elements.drawer.classList.add('open');
+        setTimeout(() => this.scrollToCurrentTask(), 100);
+    },
+    
+    close: function() {
+        this.isOpen = false;
+        this.elements.trigger.classList.remove('hidden');
+        this.elements.overlay.classList.remove('show');
+        this.elements.drawer.classList.remove('open');
+    },
+    
+    handleTouchStart: function(e) {
+        this.touchStartX = e.touches[0].clientX;
+        this.touchStartY = e.touches[0].clientY;
+    },
+    
+    handleTouchMove: function(e) {
+        if (!this.isOpen) return;
+        const deltaX = e.touches[0].clientX - this.touchStartX;
+        const deltaY = e.touches[0].clientY - this.touchStartY;
+        if (Math.abs(deltaX) > Math.abs(deltaY) && deltaX > 50) {
+            this.close();
+        }
+    },
+    
+    handleTouchEnd: function(e) {
+        this.touchStartX = 0;
+        this.touchStartY = 0;
+    },
+    
+    renderTimeline: function() {
+        if (typeof projectNavData === 'undefined' || !projectNavData.stages) return;
+        
+        const html = projectNavData.stages.map((stage, stageIndex) => {
+            let stageStatusClass = stage.status;
+            if (stage.status === 'pending') {
+                const hasInProgress = projectNavData.stages.some(s => s.status === 'in_progress');
+                if (hasInProgress) {
+                    const inProgressIndex = projectNavData.stages.findIndex(s => s.status === 'in_progress');
+                    if (stageIndex === inProgressIndex + 1) {
+                        stageStatusClass = 'pending-soon';
+                    }
+                }
+            }
+            
+            const tasksHtml = stage.tasks.map(task => {
+                let taskStatusClass = task.status;
+                if (task.status === 'pending' && stage.status === 'in_progress') {
+                    const currentTaskIndex = stage.tasks.findIndex(t => t.status === 'in_progress');
+                    const taskIndex = stage.tasks.indexOf(task);
+                    if (taskIndex === currentTaskIndex + 1) {
+                        taskStatusClass = 'pending-soon';
+                    }
+                }
+                
+                const isCurrent = task.status === 'in_progress';
+                const icon = task.status === 'completed' ? '✓' : task.status === 'in_progress' ? '⏳' : '';
+                
+                return `<div class="timeline-task ${taskStatusClass} ${isCurrent ? 'current' : ''}" data-task-id="${task.id}" onclick="ProjectNav.goToTaskDetail('${task.id}')"><span class="timeline-task-icon">${icon}</span><span class="timeline-task-name">${task.name}</span></div>`;
+            }).join('');
+            
+            const taskCount = stage.tasks.length;
+            const tasksHeight = taskCount * 48 + 8;
+            const stageIcon = stage.status === 'completed' ? '✓' : stage.status === 'in_progress' ? '⏳' : '';
+            const stageStatusText = stage.status === 'completed' ? '已完成' : stage.status === 'in_progress' ? '进行中' : '待执行';
+            
+            return `<div class="timeline-stage ${stageStatusClass}" data-stage-id="${stage.id}"><div class="timeline-node">${stageIcon}</div><div class="timeline-line"></div><div class="timeline-stage-header" onclick="ProjectNav.toggleStage('${stage.id}')"><span class="timeline-stage-name">${stage.name}</span><span class="timeline-stage-status">${stageStatusText}</span></div><div class="timeline-tasks" style="max-height: ${tasksHeight}px;">${tasksHtml}</div></div>`;
+        }).join('');
+        
+        this.elements.content.innerHTML = `<div class="timeline">${html}</div>`;
+    },
+    
+    toggleStage: function(stageId) {
+        const stageEl = document.querySelector(`.timeline-stage[data-stage-id="${stageId}"]`);
+        if (!stageEl) return;
+        const tasksEl = stageEl.querySelector('.timeline-tasks');
+        if (!tasksEl) return;
+        
+        if (tasksEl.classList.contains('collapsed')) {
+            const taskCount = stageEl.querySelectorAll('.timeline-task').length;
+            tasksEl.style.maxHeight = (taskCount * 48 + 8) + 'px';
+            tasksEl.classList.remove('collapsed');
+        } else {
+            tasksEl.classList.add('collapsed');
+            tasksEl.style.maxHeight = '0';
+        }
+    },
+    
+    scrollToCurrentTask: function() {
+        const currentTaskEl = document.querySelector('.timeline-task.current');
+        if (!currentTaskEl) return;
+        
+        const stageEl = currentTaskEl.closest('.timeline-stage');
+        if (stageEl) {
+            const tasksEl = stageEl.querySelector('.timeline-tasks');
+            if (tasksEl && tasksEl.classList.contains('collapsed')) {
+                const taskCount = stageEl.querySelectorAll('.timeline-task').length;
+                tasksEl.style.maxHeight = (taskCount * 48 + 8) + 'px';
+                tasksEl.classList.remove('collapsed');
+            }
+        }
+        
+        const contentEl = this.elements.content;
+        const taskTop = currentTaskEl.offsetTop;
+        const contentHeight = contentEl.clientHeight;
+        const scrollTop = taskTop - (contentHeight / 2) + 20;
+        
+        contentEl.scrollTo({ top: Math.max(0, scrollTop), behavior: 'smooth' });
+    },
+    
+    goToTaskDetail: function(taskId) {
+        this.close();
+        setTimeout(() => { window.location.href = `task-detail.html?taskId=${taskId}`; }, 300);
+    }
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof ProjectNav !== 'undefined') {
+        ProjectNav.init();
+    }
+});

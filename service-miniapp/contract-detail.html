@@ -22,6 +22,10 @@
                 <div class="action-btn" onclick="showCustomToast('关闭小程序')">✕</div>
             </div>
             <div class="action-menu" id="actionMenu">
+                <div class="action-menu-item" id="previewContractBtn" onclick="previewContract(); closeActionMenu();">
+                    <span class="icon">👁️</span>
+                    <span>预览合同</span>
+                </div>
                 <div class="action-menu-item" onclick="showVersionModal(); closeActionMenu();">
                     <span class="icon">📋</span>
                     <span>版本记录</span>
@@ -182,7 +186,209 @@
                     </div>
                 </div>
             </div>
-            
+
+            <!-- 拟定中状态编辑表单 -->
+            <div class="draft-edit-form" id="draftEditForm" style="display: none;">
+                <div class="card">
+                    <div class="card-title">
+                        <span>📋 合同基本信息</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">合同类型</label>
+                        <div class="readonly-field">
+                            <span class="readonly-value" id="editContractType">分包合同</span>
+                            <span class="readonly-tag">不可编辑</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">合同编号</label>
+                        <div class="readonly-field">
+                            <span class="readonly-value" id="editContractNo">HT-2024-001234</span>
+                            <span class="readonly-tag">系统生成</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label"><span class="required">*</span> 合同名称</label>
+                        <input type="text" class="form-input" id="editContractName" placeholder="请输入合同名称" value="水电分包合同">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label"><span class="required">*</span> 合同金额</label>
+                        <div class="amount-input-wrap">
+                            <span class="currency">¥</span>
+                            <input type="number" class="form-input amount-input" id="editContractAmount" placeholder="0.00" value="80000">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">
+                        <span>👥 签约双方</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">甲方（发包方）</label>
+                        <select class="form-select" id="editPartyA">
+                            <option value="">请选择甲方</option>
+                            <option value="zhangsan" selected>张三（业主）</option>
+                            <option value="owner_rep">李四（业主代表）</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">乙方（承包方）</label>
+                        <select class="form-select" id="editPartyB">
+                            <option value="">请选择乙方</option>
+                            <option value="lisi" selected>李四（水电组长）</option>
+                            <option value="wangwu">王五（强电组长）</option>
+                            <option value="sunba">孙八（弱电组长）</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="card contract-content-card">
+                    <div class="card-title">
+                        <span>📄 合同内容</span>
+                        <span class="more" id="draftTemplateBtn" onclick="showDraftTemplatePicker()">📄 更换模板</span>
+                    </div>
+                    <div class="content-tabs">
+                        <div class="content-tab active" onclick="switchDraftContentTab(this, 'contract-text')">合同正文</div>
+                        <div class="content-tab" onclick="switchDraftContentTab(this, 'stage-task')">阶段任务</div>
+                        <div class="content-tab" onclick="switchDraftContentTab(this, 'attachment')">附件</div>
+                    </div>
+                    
+                    <!-- 合同正文Tab内容 -->
+                    <div class="content-tab-pane active" id="contract-text">
+                        <div class="template-info" id="contractTemplateInfo" style="display: none;">
+                            <div class="template-tag">已选择模板：标准水电服务合同</div>
+                            <div class="template-hint">模板内容不可编辑，如需修改请重新选择模板</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-label-row">
+                                <label class="form-label">合同正文</label>
+                                <span class="view-full-link" onclick="showFullText()">查看全文 ></span>
+                            </div>
+                            <div class="contract-text-preview" id="contractTextPreview">
+                                <p>根据《中华人民共和国民法典》及相关法律法规的规定，甲乙双方本着平等、自愿、公平、诚实信用的原则，就水电工程分包事宜协商一致，订立本合同。</p>
+                                <p class="text-title">一、工程概况</p>
+                                <p>工程名称：XX小区整体装修水电工程</p>
+                                <p>工程地点：XX市XX区XX路XX号</p>
+                                <p>工程内容：强电、弱电、给排水等水电工程...</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">补充条款</label>
+                            <textarea class="form-textarea" id="editContractExtra" rows="3" placeholder="可输入补充条款内容"></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- 阶段任务Tab内容 -->
+                    <div class="content-tab-pane" id="draft-stage-task">
+                        <div class="template-info" id="stageTemplateInfo" style="display: none;">
+                            <div class="template-tag">已选择模板：水电工程标准阶段</div>
+                            <div class="template-hint">模板内容可编辑调整</div>
+                        </div>
+                        <div id="editStageList">
+                            <div class="stage-card">
+                                <div class="stage-card-header">
+                                    <div class="stage-card-header-row">
+                                        <input type="text" class="stage-name-input" value="材料进场阶段" placeholder="请输入阶段名称">
+                                        <div class="stage-sequential">
+                                            <span>按序执行</span>
+                                            <div class="switch" onclick="toggleStageSequential(this)"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stage-card-header-row">
+                                        <div class="stage-actions">
+                                            <div class="stage-action-btn add" onclick="addTaskToStage(this)">+ 添加任务</div>
+                                            <div class="stage-action-btn delete" onclick="deleteStage(this)">× 删除阶段</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="task-edit-list">
+                                    <div class="task-edit-item" data-executor="李四" data-confirmers="张三,王五">
+                                        <input type="text" class="task-input" value="材料采购" placeholder="任务名称">
+                                        <div class="task-action-btn edit" onclick="editTaskDetail(this)" title="编辑详情">✎</div>
+                                        <div class="task-action-btn" onclick="deleteTask(this)">×</div>
+                                    </div>
+                                    <div class="task-edit-item" data-executor="李四" data-confirmers="张三">
+                                        <input type="text" class="task-input" value="材料运输" placeholder="任务名称">
+                                        <div class="task-action-btn edit" onclick="editTaskDetail(this)" title="编辑详情">✎</div>
+                                        <div class="task-action-btn" onclick="deleteTask(this)">×</div>
+                                    </div>
+                                    <div class="task-edit-item" data-executor="张三" data-confirmers="王五,赵六">
+                                        <input type="text" class="task-input" value="材料确认" placeholder="任务名称">
+                                        <div class="task-action-btn edit" onclick="editTaskDetail(this)" title="编辑详情">✎</div>
+                                        <div class="task-action-btn" onclick="deleteTask(this)">×</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="stage-card">
+                                <div class="stage-card-header">
+                                    <div class="stage-card-header-row">
+                                        <input type="text" class="stage-name-input" value="布管布线阶段" placeholder="请输入阶段名称">
+                                        <div class="stage-sequential">
+                                            <span>按序执行</span>
+                                            <div class="switch active" onclick="toggleStageSequential(this)"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stage-card-header-row">
+                                        <div class="stage-actions">
+                                            <div class="stage-action-btn add" onclick="addTaskToStage(this)">+ 添加任务</div>
+                                            <div class="stage-action-btn delete" onclick="deleteStage(this)">× 删除阶段</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="task-edit-list">
+                                    <div class="task-edit-item" data-executor="李四" data-confirmers="张三,王五">
+                                        <input type="text" class="task-input" value="开槽" placeholder="任务名称">
+                                        <div class="task-action-btn edit" onclick="editTaskDetail(this)" title="编辑详情">✎</div>
+                                        <div class="task-action-btn" onclick="deleteTask(this)">×</div>
+                                    </div>
+                                    <div class="task-edit-item" data-executor="李四" data-confirmers="张三,王五">
+                                        <input type="text" class="task-input" value="布管" placeholder="任务名称">
+                                        <div class="task-action-btn edit" onclick="editTaskDetail(this)" title="编辑详情">✎</div>
+                                        <div class="task-action-btn" onclick="deleteTask(this)">×</div>
+                                    </div>
+                                    <div class="task-edit-item" data-executor="李四" data-confirmers="张三,王五">
+                                        <input type="text" class="task-input" value="穿线" placeholder="任务名称">
+                                        <div class="task-action-btn edit" onclick="editTaskDetail(this)" title="编辑详情">✎</div>
+                                        <div class="task-action-btn" onclick="deleteTask(this)">×</div>
+                                    </div>
+                                    <div class="task-edit-item" data-executor="张三" data-confirmers="王五,赵六">
+                                        <input type="text" class="task-input" value="阶段确认" placeholder="任务名称">
+                                        <div class="task-action-btn edit" onclick="editTaskDetail(this)" title="编辑详情">✎</div>
+                                        <div class="task-action-btn" onclick="deleteTask(this)">×</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="add-stage-btn" onclick="addNewStage()">
+                            <span>+ 添加新阶段</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 附件Tab内容 -->
+                    <div class="content-tab-pane" id="draft-attachment">
+                        <div class="attachment-upload-area" onclick="uploadAttachment()">
+                            <div class="upload-icon">📁</div>
+                            <div class="upload-text">点击上传附件</div>
+                            <div class="upload-hint">支持 PDF、图片、Word、Excel 等格式</div>
+                        </div>
+                        <div class="attachment-list" id="editAttachmentList">
+                            <div class="attachment-item">
+                                <div class="attachment-icon">📄</div>
+                                <div class="attachment-info">
+                                    <div class="attachment-name">户型图.pdf</div>
+                                    <div class="attachment-meta">上传于 2024-02-15 · 2.3MB</div>
+                                </div>
+                                <div class="attachment-action" onclick="previewAttachment('户型图.pdf')">预览</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 原有内容区域（非编辑状态显示） -->
+            <div class="draft-view-content" id="draftViewContent">
             <div class="card">
                 <div class="card-title">
                     <span>📋 合同信息</span>
@@ -251,6 +457,17 @@
                         工程内容：强电、弱电、给排水等水电工程...<br><br>
                         <span class="change-highlight-text" id="changeHighlightText" style="display: none;"><strong>第四条 变更条款（新增）</strong><br>
                         因业主需求变更，新增水电点位安装工程，具体内容详见变更附件。本条款经双方确认后生效。</span>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">
+                        <span>📝 补充条款</span>
+                    </div>
+                    <div class="text-content" id="supplementaryTerms">
+                        1. 乙方应严格按照施工图纸进行施工，如有变更需经甲方书面确认。<br>
+                        2. 材料进场需经甲方或监理方验收合格后方可使用。<br>
+                        3. 隐蔽工程验收合格后方可进行下一道工序。
                     </div>
                 </div>
             </div>
@@ -691,28 +908,6 @@
                     </ul>
                 </div>
                 
-                <div class="change-section">
-                    <div class="section-title">
-                        <span class="icon">📋</span>
-                        <span>变更类型</span>
-                    </div>
-                    <div class="change-type-options">
-                        <div class="change-type-option" onclick="selectChangeType(this, 'stage_only')" data-type="stage_only">
-                            <div class="type-radio checked"></div>
-                            <div class="type-info">
-                                <div class="type-name">仅阶段任务变更</div>
-                                <div class="type-desc">仅修改阶段任务，无需平台审核，双方确认后生效</div>
-                            </div>
-                        </div>
-                        <div class="change-type-option" onclick="selectChangeType(this, 'with_other')" data-type="with_other">
-                            <div class="type-radio"></div>
-                            <div class="type-info">
-                                <div class="type-name">含其他内容变更</div>
-                                <div class="type-desc">包含合同金额、正文或附件变更，需经平台审核、双方确认、重新签约</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 
                 <div class="change-section">
                     <div class="section-title">
@@ -729,102 +924,157 @@
                 <div class="change-section">
                     <div class="section-title">
                         <span class="icon">📄</span>
-                        <span>合同信息变更</span>
-                        <span class="edit-btn" onclick="showPCEditGuide()">💻 前往电脑端修改</span>
+                        <span>合同基本信息</span>
                     </div>
-                    <div class="change-item">
-                        <div class="item-label">合同金额</div>
-                        <div class="item-value">¥80,000.00</div>
-                    </div>
-                    <div class="change-item">
-                        <div class="item-label">合同正文</div>
-                        <div class="item-value" style="color: var(--primary-color); cursor: pointer;" onclick="showFullText(); closeChangeModal();">点击查看</div>
+                    <div class="change-info-grid">
+                        <div class="change-info-item">
+                            <div class="info-label">合同名称</div>
+                            <div class="info-value">水电分包合同</div>
+                        </div>
+                        <div class="change-info-item">
+                            <div class="info-label">合同编号</div>
+                            <div class="info-value">HT-2024-001</div>
+                        </div>
+                        <div class="change-info-item">
+                            <div class="info-label">甲方（发包方）</div>
+                            <div class="info-value">张三（业主）</div>
+                        </div>
+                        <div class="change-info-item">
+                            <div class="info-label">乙方（承包方）</div>
+                            <div class="info-value">李四（水电组长）</div>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="change-section">
                     <div class="section-title">
-                        <span class="icon">📊</span>
-                        <span>阶段任务变更</span>
+                        <span class="icon">💰</span>
+                        <span>合同金额变更</span>
                     </div>
-                    <div id="stageEditContainer">
-                        <div class="stage-edit-item" data-stage="1" data-sequential="false">
-                            <div class="stage-header-row">
-                                <input type="text" class="stage-name-input" value="材料进场阶段" placeholder="请输入阶段名称">
-                                <div class="stage-sequential" onclick="toggleStageSequential(this)">
-                                    <span>按序执行</span>
-                                    <div class="switch"></div>
-                                </div>
-                                <div class="stage-actions">
-                                    <div class="stage-action-btn add" onclick="addTaskToStage(this)"><span class="btn-icon">+</span> 添加任务</div>
-                                    <div class="stage-action-btn delete" onclick="deleteStage(this)"><span class="btn-icon">×</span> 删除阶段</div>
-                                </div>
+                    <div class="change-item">
+                        <div class="item-label">当前合同金额</div>
+                        <div class="item-value">¥80,000.00</div>
+                    </div>
+                    <div class="change-item highlight">
+                        <div class="item-label">变更后金额</div>
+                        <div class="item-value" style="color: var(--primary-color);">¥85,000.00 <span style="font-size: 12px; color: var(--success-color);">(+¥5,000.00)</span></div>
+                    </div>
+                </div>
+                
+                <div class="change-section">
+                    <div class="section-title">
+                        <span class="icon">📋</span>
+                        <span>合同内容</span>
+                        <span class="edit-btn" id="changeTemplateBtn" onclick="showChangeTemplatePicker()">📄 更换模板</span>
+                    </div>
+                    <div class="change-tabs">
+                        <div class="change-tab active" onclick="switchChangeTab(this, 'contract-content')">合同正文</div>
+                        <div class="change-tab" onclick="switchChangeTab(this, 'stage-task')">阶段任务</div>
+                        <div class="change-tab" onclick="switchChangeTab(this, 'attachment')">合同附件</div>
+                    </div>
+                    <div class="change-tab-content active" id="contract-content">
+                        <div class="change-contract-content">
+                            <div class="content-preview" id="changeContractContentPreview">
+                                根据《中华人民共和国民法典》及相关法律法规的规定，甲乙双方本着平等、自愿、公平、诚实信用的原则，就水电工程分包事宜协商一致，订立本合同。
+
+一、工程概况
+工程名称：XX小区整体装修水电工程
+工程地点：杭州市XX区XX路XX号
+工程内容：强电、弱电、给排水等水电工程
+
+二、合同金额
+合同总金额为人民币（大写）捌万元整（¥80,000.00）
+
+三、工期
+计划开工日期：2024年3月1日
+计划竣工日期：2024年4月30日
+总工期：60日历天...
                             </div>
-                            <div class="task-edit-list">
-                                <div class="task-edit-item" data-executor="李四" data-confirmers="张三,王五" data-exec-standard="按照设计图纸要求采购符合国家标准的电线、线管材料，并提供合格证明" data-confirm-standard="材料品牌、规格符合设计要求，质量合格证明齐全" data-liable-standard="材料质量问题导致返工，由采购人承担费用">
-                                    <input type="text" class="task-input" value="材料采购" placeholder="任务名称" onclick="viewTaskDetail(this)" readonly>
-                                    <div class="task-action-btn edit" onclick="editTaskDetail(this)" title="编辑详情">✎</div>
-                                    <div class="task-action-btn" onclick="deleteTask(this)">×</div>
-                                </div>
-                                <div class="task-edit-item" data-executor="李四" data-confirmers="张三" data-exec-standard="确保材料安全运输至施工现场，运输过程中不得有损坏" data-confirm-standard="材料外包装完好，数量准确" data-liable-standard="运输过程中材料损坏，由运输方承担责任">
-                                    <input type="text" class="task-input" value="材料运输" placeholder="任务名称" onclick="viewTaskDetail(this)" readonly>
-                                    <div class="task-action-btn edit" onclick="editTaskDetail(this)" title="编辑详情">✎</div>
-                                    <div class="task-action-btn" onclick="deleteTask(this)">×</div>
-                                </div>
-                                <div class="task-edit-item" data-executor="张三" data-confirmers="王五,赵六" data-exec-standard="核对材料数量、规格、品牌是否与合同一致" data-confirm-standard="材料与合同约定一致，签字确认" data-liable-standard="材料与合同不符，由供应商承担责任">
-                                    <input type="text" class="task-input" value="材料确认" placeholder="任务名称" onclick="viewTaskDetail(this)" readonly>
-                                    <div class="task-action-btn edit" onclick="editTaskDetail(this)" title="编辑详情">✎</div>
-                                    <div class="task-action-btn" onclick="deleteTask(this)">×</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="stage-edit-item" data-stage="2" data-sequential="true">
-                            <div class="stage-header-row">
-                                <input type="text" class="stage-name-input" value="布管布线阶段" placeholder="请输入阶段名称">
-                                <div class="stage-sequential" onclick="toggleStageSequential(this)" style="opacity: 0.5; cursor: not-allowed;" title="当前阶段存在已执行的任务，不支持修改按序执行状态">
-                                    <span>按序执行</span>
-                                    <div class="switch active"></div>
-                                </div>
-                                <div class="stage-actions">
-                                    <div class="stage-action-btn add" onclick="addTaskToStage(this)"><span class="btn-icon">+</span> 添加任务</div>
-                                    <div class="stage-action-btn delete" onclick="deleteStage(this)" style="opacity: 0.3; cursor: not-allowed;" title="当前阶段存在已完成/进行中的任务，不支持删除"><span class="btn-icon">×</span> 删除阶段</div>
-                                </div>
-                            </div>
-                            <div class="task-edit-list">
-                                <div class="task-edit-item" data-executor="李四" data-confirmers="张三,王五" data-exec-standard="按照设计图纸进行开槽，深度和宽度符合规范要求" data-confirm-standard="开槽位置准确，深度宽度符合要求" data-liable-standard="开槽位置错误导致返工，由执行人承担责任" data-completed="true">
-                                    <input type="text" class="task-input" value="✓ 开槽" placeholder="任务名称" onclick="viewTaskDetail(this)" readonly style="color: var(--success-color);">
-                                    <div class="task-action-btn edit" onclick="editTaskDetail(this)" title="编辑详情" style="opacity: 0.3; cursor: not-allowed;">✎</div>
-                                    <div class="task-action-btn" onclick="deleteTask(this)" style="opacity: 0.3; cursor: not-allowed;" title="已完成的任务不支持删除">×</div>
-                                </div>
-                                <div class="task-edit-item" data-executor="李四" data-confirmers="张三,王五" data-exec-standard="按照设计图纸布设线管，固定牢固，走向合理" data-confirm-standard="线管布设符合设计要求，固定牢固" data-liable-standard="线管布设不合格导致返工，由执行人承担责任" data-status="confirming">
-                                    <input type="text" class="task-input" value="⏳ 布管" placeholder="任务名称" onclick="viewTaskDetail(this)" readonly style="color: var(--warning-color);">
-                                    <div class="task-action-btn edit" onclick="editTaskDetail(this)" title="编辑详情" style="opacity: 0.3; cursor: not-allowed;">✎</div>
-                                    <div class="task-action-btn" onclick="deleteTask(this)" style="opacity: 0.3; cursor: not-allowed;" title="进行中的任务不支持删除">×</div>
-                                </div>
-                                <div class="task-edit-item" data-executor="李四" data-confirmers="张三,王五,赵六" data-exec-standard="按照规范要求穿设电线，确保绝缘良好" data-confirm-standard="电线穿设规范，绝缘测试合格" data-liable-standard="穿线不合格导致返工，由执行人承担责任">
-                                    <input type="text" class="task-input" value="穿线" placeholder="任务名称" onclick="viewTaskDetail(this)" readonly>
-                                    <div class="task-action-btn edit" onclick="editTaskDetail(this)" title="编辑详情">✎</div>
-                                    <div class="task-action-btn" onclick="deleteTask(this)">×</div>
-                                </div>
-                                <div class="task-edit-item" data-executor="张三" data-confirmers="王五,赵六,钱七" data-exec-standard="确认布管布线阶段所有任务已完成，质量合格" data-confirm-standard="阶段任务全部完成，质量符合要求" data-liable-standard="阶段确认后发现问题，确认人承担连带责任">
-                                    <input type="text" class="task-input" value="阶段确认" placeholder="任务名称" onclick="viewTaskDetail(this)" readonly>
-                                    <div class="task-action-btn edit" onclick="editTaskDetail(this)" title="编辑详情">✎</div>
-                                    <div class="task-action-btn" onclick="deleteTask(this)">×</div>
-                                </div>
+                            <div class="content-toggle" onclick="toggleContractContent(this)">
+                                <span class="toggle-text">展开全文</span>
+                                <span class="toggle-icon">▼</span>
                             </div>
                         </div>
-                        
-                        <div class="stage-edit-item" data-stage="3" data-sequential="false">
-                            <div class="stage-header-row">
-                                <input type="text" class="stage-name-input" value="安装阶段" placeholder="请输入阶段名称">
-                                <div class="stage-sequential" onclick="toggleStageSequential(this)">
-                                    <span>按序执行</span>
-                                    <div class="switch"></div>
+                    </div>
+                    <div class="change-tab-content" id="stage-task">
+                        <div id="stageEditContainer">
+                            <div class="stage-edit-item" data-stage="1" data-sequential="false">
+                                <div class="stage-header-row">
+                                    <input type="text" class="stage-name-input" value="材料进场阶段" placeholder="请输入阶段名称">
+                                    <div class="stage-sequential" onclick="toggleStageSequential(this)">
+                                        <span>按序执行</span>
+                                        <div class="switch"></div>
+                                    </div>
+                                    <div class="stage-actions">
+                                        <div class="stage-action-btn add" onclick="addTaskToStage(this)"><span class="btn-icon">+</span> 添加任务</div>
+                                        <div class="stage-action-btn delete" onclick="deleteStage(this)"><span class="btn-icon">×</span> 删除阶段</div>
+                                    </div>
                                 </div>
-                                <div class="stage-actions">
-                                    <div class="stage-action-btn add" onclick="addTaskToStage(this)"><span class="btn-icon">+</span> 添加任务</div>
-                                    <div class="stage-action-btn delete" onclick="deleteStage(this)"><span class="btn-icon">×</span> 删除阶段</div>
+                                <div class="task-edit-list">
+                                    <div class="task-edit-item" data-executor="李四" data-confirmers="张三,王五" data-exec-standard="按照设计图纸要求采购符合国家标准的电线、线管材料，并提供合格证明" data-confirm-standard="材料品牌、规格符合设计要求，质量合格证明齐全" data-liable-standard="材料质量问题导致返工，由采购人承担费用">
+                                        <input type="text" class="task-input" value="材料采购" placeholder="任务名称" onclick="viewTaskDetail(this)" readonly>
+                                        <div class="task-action-btn edit" onclick="editTaskDetail(this)" title="编辑详情">✎</div>
+                                        <div class="task-action-btn" onclick="deleteTask(this)">×</div>
+                                    </div>
+                                    <div class="task-edit-item" data-executor="李四" data-confirmers="张三" data-exec-standard="确保材料安全运输至施工现场，运输过程中不得有损坏" data-confirm-standard="材料外包装完好，数量准确" data-liable-standard="运输过程中材料损坏，由运输方承担责任">
+                                        <input type="text" class="task-input" value="材料运输" placeholder="任务名称" onclick="viewTaskDetail(this)" readonly>
+                                        <div class="task-action-btn edit" onclick="editTaskDetail(this)" title="编辑详情">✎</div>
+                                        <div class="task-action-btn" onclick="deleteTask(this)">×</div>
+                                    </div>
+                                    <div class="task-edit-item" data-executor="张三" data-confirmers="王五,赵六" data-exec-standard="核对材料数量、规格、品牌是否与合同一致" data-confirm-standard="材料与合同约定一致，签字确认" data-liable-standard="材料与合同不符，由供应商承担责任">
+                                        <input type="text" class="task-input" value="材料确认" placeholder="任务名称" onclick="viewTaskDetail(this)" readonly>
+                                        <div class="task-action-btn edit" onclick="editTaskDetail(this)" title="编辑详情">✎</div>
+                                        <div class="task-action-btn" onclick="deleteTask(this)">×</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="stage-edit-item" data-stage="2" data-sequential="true">
+                                <div class="stage-header-row">
+                                    <input type="text" class="stage-name-input" value="布管布线阶段" placeholder="请输入阶段名称">
+                                    <div class="stage-sequential" onclick="toggleStageSequential(this)" style="opacity: 0.5; cursor: not-allowed;" title="当前阶段存在已执行的任务，不支持修改按序执行状态">
+                                        <span>按序执行</span>
+                                        <div class="switch active"></div>
+                                    </div>
+                                    <div class="stage-actions">
+                                        <div class="stage-action-btn add" onclick="addTaskToStage(this)"><span class="btn-icon">+</span> 添加任务</div>
+                                        <div class="stage-action-btn delete" onclick="deleteStage(this)" style="opacity: 0.3; cursor: not-allowed;" title="当前阶段存在已完成/进行中的任务，不支持删除"><span class="btn-icon">×</span> 删除阶段</div>
+                                    </div>
+                                </div>
+                                <div class="task-edit-list">
+                                    <div class="task-edit-item" data-executor="李四" data-confirmers="张三,王五" data-exec-standard="按照设计图纸进行开槽，深度和宽度符合规范要求" data-confirm-standard="开槽位置准确，深度宽度符合要求" data-liable-standard="开槽位置错误导致返工，由执行人承担责任" data-completed="true">
+                                        <input type="text" class="task-input" value="✓ 开槽" placeholder="任务名称" onclick="viewTaskDetail(this)" readonly style="color: var(--success-color);">
+                                        <div class="task-action-btn edit" onclick="editTaskDetail(this)" title="编辑详情" style="opacity: 0.3; cursor: not-allowed;">✎</div>
+                                        <div class="task-action-btn" onclick="deleteTask(this)" style="opacity: 0.3; cursor: not-allowed;" title="已完成的任务不支持删除">×</div>
+                                    </div>
+                                    <div class="task-edit-item" data-executor="李四" data-confirmers="张三,王五" data-exec-standard="按照设计图纸布设线管，固定牢固，走向合理" data-confirm-standard="线管布设符合设计要求，固定牢固" data-liable-standard="线管布设不合格导致返工，由执行人承担责任" data-status="confirming">
+                                        <input type="text" class="task-input" value="⏳ 布管" placeholder="任务名称" onclick="viewTaskDetail(this)" readonly style="color: var(--warning-color);">
+                                        <div class="task-action-btn edit" onclick="editTaskDetail(this)" title="编辑详情" style="opacity: 0.3; cursor: not-allowed;">✎</div>
+                                        <div class="task-action-btn" onclick="deleteTask(this)" style="opacity: 0.3; cursor: not-allowed;" title="进行中的任务不支持删除">×</div>
+                                    </div>
+                                    <div class="task-edit-item" data-executor="李四" data-confirmers="张三,王五,赵六" data-exec-standard="按照规范要求穿设电线，确保绝缘良好" data-confirm-standard="电线穿设规范，绝缘测试合格" data-liable-standard="穿线不合格导致返工，由执行人承担责任">
+                                        <input type="text" class="task-input" value="穿线" placeholder="任务名称" onclick="viewTaskDetail(this)" readonly>
+                                        <div class="task-action-btn edit" onclick="editTaskDetail(this)" title="编辑详情">✎</div>
+                                        <div class="task-action-btn" onclick="deleteTask(this)">×</div>
+                                    </div>
+                                    <div class="task-edit-item" data-executor="张三" data-confirmers="王五,赵六,钱七" data-exec-standard="确认布管布线阶段所有任务已完成，质量合格" data-confirm-standard="阶段任务全部完成，质量符合要求" data-liable-standard="阶段确认后发现问题，确认人承担连带责任">
+                                        <input type="text" class="task-input" value="阶段确认" placeholder="任务名称" onclick="viewTaskDetail(this)" readonly>
+                                        <div class="task-action-btn edit" onclick="editTaskDetail(this)" title="编辑详情">✎</div>
+                                        <div class="task-action-btn" onclick="deleteTask(this)">×</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="stage-edit-item" data-stage="3" data-sequential="false">
+                                <div class="stage-header-row">
+                                    <input type="text" class="stage-name-input" value="安装阶段" placeholder="请输入阶段名称">
+                                    <div class="stage-sequential" onclick="toggleStageSequential(this)">
+                                        <span>按序执行</span>
+                                        <div class="switch"></div>
+                                    </div>
+                                    <div class="stage-actions">
+                                        <div class="stage-action-btn add" onclick="addTaskToStage(this)"><span class="btn-icon">+</span> 添加任务</div>
+                                        <div class="stage-action-btn delete" onclick="deleteStage(this)"><span class="btn-icon">×</span> 删除阶段</div>
                                 </div>
                             </div>
                             <div class="task-edit-list">
@@ -876,7 +1126,41 @@
                     <div class="add-stage-btn" onclick="addNewStage()">
                         <span>+ 添加新阶段</span>
                     </div>
+                    </div>
+                    
+                    <div class="change-tab-content" id="attachment">
+                        <div class="change-attachment-list">
+                            <div class="attachment-item">
+                                <div class="attachment-icon">📄</div>
+                                <div class="attachment-info">
+                                    <div class="attachment-name">合同签订通知书.pdf</div>
+                                    <div class="attachment-meta">上传于 2024-02-15 · 156KB</div>
+                                </div>
+                                <div class="attachment-action" onclick="previewAttachment('合同签订通知书.pdf')">预览</div>
+                            </div>
+                            <div class="attachment-item">
+                                <div class="attachment-icon">📄</div>
+                                <div class="attachment-info">
+                                    <div class="attachment-name">水电工程图纸.dwg</div>
+                                    <div class="attachment-meta">上传于 2024-02-15 · 2.3MB</div>
+                                </div>
+                                <div class="attachment-action" onclick="previewAttachment('水电工程图纸.dwg')">预览</div>
+                            </div>
+                            <div class="attachment-item">
+                                <div class="attachment-icon">🖼️</div>
+                                <div class="attachment-info">
+                                    <div class="attachment-name">施工现场照片.jpg</div>
+                                    <div class="attachment-meta">上传于 2024-02-16 · 890KB</div>
+                                </div>
+                                <div class="attachment-action" onclick="previewAttachment('施工现场照片.jpg')">预览</div>
+                            </div>
+                        </div>
+                        <div class="add-attachment-btn" onclick="addNewAttachment()">
+                            <span>+ 添加附件</span>
+                        </div>
+                    </div>
                 </div>
+                
             </div>
             <div class="change-footer">
                 <div class="btn cancel" onclick="closeChangeModal()">取消</div>
@@ -1281,6 +1565,15 @@
                 </div>
                 
                 <div class="contract-article">
+                    <div class="article-title">补充条款</div>
+                    <div class="article-content">
+                        <p>1. 乙方应严格按照施工图纸进行施工，如有变更需经甲方书面确认。</p>
+                        <p>2. 材料进场需经甲方或监理方验收合格后方可使用。</p>
+                        <p>3. 隐蔽工程验收合格后方可进行下一道工序。</p>
+                    </div>
+                </div>
+                
+                <div class="contract-article">
                     <div class="article-title">签署信息</div>
                     <div class="article-content">
                         <p><strong>甲方（发包方）：</strong>张三（业主）</p>
@@ -1516,6 +1809,107 @@
             </div>
         </div>
         
+        <!-- 合同文本模板选择弹窗 -->
+        <div class="template-picker-modal" id="templatePickerModal" style="display: none;">
+            <div class="modal-overlay" onclick="closeTemplatePicker()"></div>
+            <div class="modal-content" style="max-height: 80%;">
+                <div class="modal-header">
+                    <div class="title">📄 选择合同文本模板</div>
+                    <div class="close-btn" onclick="closeTemplatePicker()">✕</div>
+                </div>
+                <div class="template-filter-info">
+                    <div class="filter-row">
+                        <span class="filter-label">当前合同：</span>
+                        <span class="filter-value" id="templateFilterCity">杭州</span>
+                        <span class="filter-sep">·</span>
+                        <span class="filter-value" id="templateFilterType">水电工程</span>
+                    </div>
+                    <div class="filter-tip">
+                        <span class="tip-icon">💡</span>
+                        <span>仅显示与当前合同城市、类型匹配的模板</span>
+                    </div>
+                </div>
+                <div class="modal-body" style="padding: 0 16px 16px;">
+                    <div class="template-select-list" id="templateSelectList">
+                        <!-- 模板列表动态生成 -->
+                    </div>
+                    <div class="template-empty" id="templateEmpty" style="display: none;">
+                        <div class="empty-icon">📭</div>
+                        <div class="empty-text">暂无匹配的模板</div>
+                        <div class="empty-desc">请前往模板管理创建相关模板</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="modal-btn secondary" onclick="closeTemplatePicker()">取消</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 阶段任务模板选择弹窗 -->
+        <div class="stage-template-modal" id="stageTemplateModal" style="display: none;">
+            <div class="modal-overlay" onclick="closeStageTemplatePicker()"></div>
+            <div class="modal-content" style="max-height: 85%;">
+                <div class="modal-header">
+                    <div class="title">📝 选择阶段任务模板</div>
+                    <div class="close-btn" onclick="closeStageTemplatePicker()">✕</div>
+                </div>
+                <div class="template-filter-info">
+                    <div class="filter-row">
+                        <span class="filter-label">当前合同：</span>
+                        <span class="filter-value" id="stageTemplateFilterCity">杭州</span>
+                        <span class="filter-sep">·</span>
+                        <span class="filter-value" id="stageTemplateFilterType">水电工程</span>
+                    </div>
+                </div>
+                <div class="modal-body" style="padding: 0 16px 16px;">
+                    <div class="stage-template-select-list" id="stageTemplateSelectList">
+                        <!-- 阶段模板列表动态生成 -->
+                    </div>
+                    <div class="template-empty" id="stageTemplateEmpty" style="display: none;">
+                        <div class="empty-icon">📭</div>
+                        <div class="empty-text">暂无匹配的模板</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="modal-btn secondary" onclick="closeStageTemplatePicker()">取消</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 模板预览弹窗 -->
+        <div class="template-preview-modal" id="templatePreviewModal" style="display: none;">
+            <div class="modal-overlay" onclick="closeTemplatePreviewModal()"></div>
+            <div class="modal-content" style="max-height: 90%;">
+                <div class="modal-header">
+                    <div class="title" id="previewTemplateName">模板名称</div>
+                    <div class="close-btn" onclick="closeTemplatePreviewModal()">✕</div>
+                </div>
+                <div class="preview-meta">
+                    <div class="preview-meta-item">
+                        <span class="meta-label">类型：</span>
+                        <span class="meta-value" id="previewTemplateType">-</span>
+                    </div>
+                    <div class="preview-meta-item">
+                        <span class="meta-label">城市：</span>
+                        <span class="meta-value" id="previewTemplateCity">-</span>
+                    </div>
+                    <div class="preview-meta-item">
+                        <span class="meta-label">更新时间：</span>
+                        <span class="meta-value" id="previewTemplateUpdateTime">-</span>
+                    </div>
+                </div>
+                <div class="modal-body" style="padding: 0 16px;">
+                    <div class="preview-content" id="templatePreviewContent">
+                        <!-- 预览内容动态生成 -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="modal-btn secondary" onclick="closeTemplatePreviewModal()">取消</div>
+                    <div class="modal-btn primary" onclick="applyTemplateFromPreview()">使用此模板</div>
+                </div>
+            </div>
+        </div>
+        
         <div class="toast" id="toast"></div>
         
         <div class="modal-overlay change-record-modal" id="changeRecordModal">
@@ -1687,7 +2081,7 @@
                     <div class="link-section">
                         <div class="link-label">或复制链接在浏览器中打开：</div>
                         <div class="link-box">
-                            <div class="link-input" id="pcLink">https://zhaobo12345.github.io/LZJPro/pc-login.html</div>
+                            <div class="link-input" id="pcLink">https://zhaobo12345.github.io/LZJPro/pc-contract-list.html</div>
                             <div class="copy-btn" onclick="copyPcLink()">复制链接</div>
                         </div>
                     </div>

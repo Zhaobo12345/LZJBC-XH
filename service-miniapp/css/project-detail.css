@@ -1181,3 +1181,348 @@
     color: var(--primary-color);
     font-weight: 600;
 }
+
+/* ============================================
+   项目导航组件样式
+   ============================================ */
+
+/* 悬浮入口条 - 相对于手机框定位，完全在内部 */
+.project-nav-trigger {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 64px;
+    background: rgba(24, 144, 255, 0.9);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease;
+}
+
+.project-nav-trigger:hover,
+.project-nav-trigger:active {
+    transform: translateY(-50%) scale(1.05);
+}
+
+.project-nav-trigger .nav-arrow {
+    font-size: 12px;
+    color: #FFFFFF;
+    margin-bottom: 2px;
+}
+
+.project-nav-trigger .nav-text {
+    font-size: 10px;
+    color: #FFFFFF;
+    writing-mode: vertical-rl;
+    letter-spacing: 1px;
+}
+
+.project-nav-trigger.hidden {
+    display: none;
+}
+
+/* 背景遮罩 - 相对于手机框定位 */
+.project-nav-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1001;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.project-nav-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* 抽屉面板 - 相对于手机框定位 */
+.project-nav-drawer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 85%;
+    max-width: 375px;
+    height: 100%;
+    background: #FFFFFF;
+    z-index: 1002;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-out;
+    box-shadow: -4px 0 16px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+.project-nav-drawer.open {
+    transform: translateX(0);
+}
+
+/* 抽屉头部 */
+.drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #E8E8E8;
+    background: #F5F5F5;
+    flex-shrink: 0;
+}
+
+.drawer-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.drawer-close {
+    font-size: 24px;
+    color: #999999;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.drawer-close:hover,
+.drawer-close:active {
+    background: #EEEEEE;
+    color: #333333;
+}
+
+/* 抽屉内容区 */
+.drawer-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* 时间轴 */
+.timeline {
+    position: relative;
+    padding-left: 24px;
+}
+
+.timeline-stage {
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.timeline-stage:last-child {
+    margin-bottom: 0;
+}
+
+/* 时间轴节点 */
+.timeline-node {
+    position: absolute;
+    left: -24px;
+    top: 4px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    z-index: 1;
+}
+
+/* 时间轴连接线 */
+.timeline-line {
+    position: absolute;
+    left: -17px;
+    top: 20px;
+    bottom: -16px;
+    width: 2px;
+    background: #E8E8E8;
+}
+
+.timeline-stage:last-child .timeline-line {
+    display: none;
+}
+
+/* 阶段标题 */
+.timeline-stage-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #F5F5F5;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.timeline-stage-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.timeline-stage-status {
+    font-size: 12px;
+    color: #999999;
+}
+
+/* 任务列表 */
+.timeline-tasks {
+    margin-top: 8px;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.timeline-tasks.collapsed {
+    max-height: 0 !important;
+}
+
+.timeline-task {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    margin-top: 4px;
+    background: #FFFFFF;
+    border-radius: 6px;
+    border: 1px solid #E8E8E8;
+    cursor: pointer;
+}
+
+.timeline-task:hover,
+.timeline-task:active {
+    background: #F5F5F5;
+}
+
+.timeline-task-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.timeline-task-name {
+    font-size: 14px;
+    color: #333333;
+    flex: 1;
+}
+
+.timeline-task.current {
+    border-color: #1890FF;
+    background: #E6F7FF;
+}
+
+.timeline-task.current .timeline-task-name {
+    color: #1890FF;
+    font-weight: 500;
+}
+
+.timeline-task.current::after {
+    content: '← 当前';
+    font-size: 12px;
+    color: #1890FF;
+    margin-left: 8px;
+}
+
+/* 已完成状态 */
+.timeline-stage.completed .timeline-node {
+    background: #999999;
+    color: #FFFFFF;
+}
+
+.timeline-stage.completed .timeline-line {
+    background: #999999;
+}
+
+.timeline-stage.completed .timeline-stage-header {
+    opacity: 0.7;
+}
+
+.timeline-task.completed .timeline-task-icon {
+    background: #999999;
+    color: #FFFFFF;
+}
+
+.timeline-task.completed .timeline-task-name {
+    color: #999999;
+}
+
+/* 执行中状态 */
+.timeline-stage.in_progress .timeline-node {
+    background: #1890FF;
+    color: #FFFFFF;
+}
+
+.timeline-stage.in_progress .timeline-line {
+    background: #1890FF;
+}
+
+.timeline-stage.in_progress .timeline-stage-header {
+    background: #E6F7FF;
+}
+
+.timeline-task.in_progress .timeline-task-icon {
+    background: #1890FF;
+    color: #FFFFFF;
+}
+
+.timeline-task.in_progress .timeline-task-name {
+    color: #1890FF;
+    font-weight: 500;
+}
+
+/* 待执行状态 - 即将执行 */
+.timeline-stage.pending-soon .timeline-node {
+    background: #FA8C16;
+    color: #FFFFFF;
+}
+
+.timeline-stage.pending-soon .timeline-line {
+    background: #FA8C16;
+}
+
+.timeline-task.pending-soon .timeline-task-icon {
+    background: transparent;
+    border: 2px solid #FA8C16;
+    color: #FA8C16;
+}
+
+.timeline-task.pending-soon .timeline-task-name {
+    color: #FA8C16;
+}
+
+/* 待执行状态 - 后续 */
+.timeline-stage.pending .timeline-node {
+    background: transparent;
+    border: 2px solid #BFBFBF;
+    color: #BFBFBF;
+}
+
+.timeline-stage.pending .timeline-line {
+    background: #BFBFBF;
+}
+
+.timeline-task.pending .timeline-task-icon {
+    background: transparent;
+    border: 2px solid #BFBFBF;
+    color: #BFBFBF;
+}
+
+.timeline-task.pending .timeline-task-name {
+    color: #BFBFBF;
+}
