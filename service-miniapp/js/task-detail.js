@@ -2882,11 +2882,8 @@ const TaskDetailPage = (function() {
         return avatarToId[avatarText] || '1';
     }
     
-    function goToProfile(id, name, role) {
-        location.href = 'prototype-member-profile.html?id=' + encodeURIComponent(id) + '&name=' + encodeURIComponent(name) + '&role=' + encodeURIComponent(role);
-    }
-    
     function initProfileClickEvents() {
+        // 成员档案功能已下线
     }
     
     document.addEventListener('DOMContentLoaded', function() {

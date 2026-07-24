@@ -560,13 +560,6 @@
         showCustomToast('分享功能已触发，请选择分享方式');
     }
     
-    /**
-     * 跳转到人员档案页面
-     */
-    function goToProfile(id, name, role) {
-        location.href = 'member-profile.html?id=' + encodeURIComponent(id) + '&name=' + encodeURIComponent(name) + '&role=' + encodeURIComponent(role);
-    }
-    
     function getMemberIdByAvatar(avatarText) {
         const avatarToId = { '张': '1', '李': '2', '王': '3', '赵': '4', '孙': '5', '钱': '6', '周': '7', '吴': '8', '郑': '9', '项': '1' };
         return avatarToId[avatarText] || '1';
@@ -577,13 +570,7 @@
             el.addEventListener('click', function(e) {
                 e.stopPropagation();
                 e.preventDefault();
-                const activityItem = this.closest('.activity-item');
-                const avatarEl = activityItem.querySelector('.activity-avatar');
-                const userEl = activityItem.querySelector('.activity-user');
-                const avatarText = avatarEl ? avatarEl.textContent : '';
-                const userText = userEl ? userEl.textContent : '';
-                const memberId = getMemberIdByAvatar(avatarText);
-                goToProfile(memberId, userText || avatarText, '');
+                // 成员档案功能已下线
             });
         });
     }
@@ -868,13 +855,6 @@
         const link = e.target.closest('.more');
         if (!link) return;
         
-        // 优先检查 data-action 属性
-        const action = link.dataset.action;
-        if (action === 'activity-list') {
-            location.href = 'activity-list.html?level=' + encodeURIComponent(state.currentLevel);
-            return;
-        }
-        
         // 检查 data-href 属性
         const href = link.dataset.href;
         if (href) {
@@ -888,11 +868,6 @@
         if (text.indexOf('查看合同') !== -1) {
             toggleContractList(link);
             e.stopPropagation();
-            return;
-        }
-        
-        if (text.indexOf('今日动态') !== -1) {
-            location.href = 'activity-list.html?level=' + encodeURIComponent(state.currentLevel);
             return;
         }
         

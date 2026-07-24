@@ -182,11 +182,10 @@
     <div class="header">
         <div class="container">
             <h1>良造家管理平台</h1>
-            <h2 style="font-size: 24px; margin-bottom: 16px;">详细PRD规格文档</h2>
-            <div class="meta">研发级别交互规格 · 可直接交付开发团队</div>
+            <h2 style="font-size: 24px; margin-bottom: 16px;">产品需求文档</h2>
             <div class="version-info">
                 <span>版本：v1.0</span>
-                <span>日期：2026-07-17</span>
+                <span>日期：2026-07-23</span>
                 <span>状态：已完成</span>
             </div>
         </div>
@@ -199,16 +198,16 @@
             
             <div class="overview-grid">
                 <div class="overview-card">
-                    <div class="number">34</div>
-                    <div class="label">页面规格</div>
+                    <div class="number">39</div>
+                    <div class="label">功能页面</div>
+                </div>
+                <div class="overview-card">
+                    <div class="number">3</div>
+                    <div class="label">终端平台</div>
                 </div>
                 <div class="overview-card">
                     <div class="number">4</div>
-                    <div class="label">模块文档</div>
-                </div>
-                <div class="overview-card">
-                    <div class="number">40+</div>
-                    <div class="label">API接口</div>
+                    <div class="label">角色类型</div>
                 </div>
                 <div class="overview-card">
                     <div class="number">4</div>
@@ -216,7 +215,78 @@
                 </div>
             </div>
 
-            <p style="margin-bottom: 24px;">本文档包含良造家管理平台全部功能的研发级交互规格，涵盖PC管理端和微信小程序端（服务方、业主），可直接交付研发团队进行开发。</p>
+            <p style="margin-bottom: 24px;">本文档包含良造家管理平台全部功能的交互规格，涵盖PC管理端和服务方小程序、业主小程序三个终端平台。</p>
+        </div>
+
+        <!-- 产品概述 -->
+        <div class="section">
+            <div class="section-title">产品概述</div>
+            
+            <div class="subsection" style="margin-bottom: 24px;">
+                <h4 style="margin-bottom: 12px; color: var(--text-primary);">产品背景</h4>
+                <p style="color: var(--text-secondary); line-height: 1.8;">随着家装行业的不断发展，传统的项目管理方式已无法满足现代家装项目的复杂需求。良造家管理平台旨在通过数字化手段，为家装项目提供一站式管理解决方案，实现项目全生命周期的可视化、规范化管理。</p>
+            </div>
+            
+            <div class="subsection" style="margin-bottom: 24px;">
+                <h4 style="margin-bottom: 12px; color: var(--text-primary);">产品定位</h4>
+                <p style="color: var(--text-secondary); line-height: 1.8;">良造家管理平台是一个面向家装行业的数字化管理工具，涵盖PC管理端和小程序端，为平台运营人员、服务方（设计师、施工团队、监理人员等）和业主提供全方位的项目管理功能。</p>
+            </div>
+            
+            <div class="subsection" style="margin-bottom: 24px;">
+                <h4 style="margin-bottom: 12px; color: var(--text-primary);">产品价值</h4>
+                <ul style="color: var(--text-secondary); line-height: 1.8; margin-left: 20px;">
+                    <li><strong>提升效率</strong>：通过数字化流程，减少人工操作，提高项目管理效率</li>
+                    <li><strong>规范管理</strong>：标准化合同流程和任务管理，确保项目质量</li>
+                    <li><strong>信息透明</strong>：实时同步项目进度，确保各方信息对称</li>
+                    <li><strong>便捷协作</strong>：支持多方协作，简化沟通流程</li>
+                    <li><strong>角色清晰</strong>：明确区分不同角色的职能和权限，避免操作混乱</li>
+                </ul>
+            </div>
+            
+            <div class="subsection">
+                <h4 style="margin-bottom: 12px; color: var(--text-primary);">用户角色定义</h4>
+                <table class="param-table">
+                    <tr>
+                        <th>端</th>
+                        <th>角色</th>
+                        <th>职能定位</th>
+                        <th>核心权限</th>
+                    </tr>
+                    <tr>
+                        <td>PC管理端</td>
+                        <td>运营角色</td>
+                        <td>平台运营管理人员，负责合同审核</td>
+                        <td>审核通过/驳回合同、查看合同详情、管理合同文本模板、管理阶段任务模板</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="4">服务方小程序</td>
+                        <td>项目总</td>
+                        <td>项目管理总负责人，负责项目整体管理</td>
+                        <td>创建和管理项目、管理项目成员、查看合同和任务、管理对账单</td>
+                    </tr>
+                    <tr>
+                        <td>设计师</td>
+                        <td>设计服务提供者</td>
+                        <td>参与设计相关任务、查看项目进度、执行/确认任务</td>
+                    </tr>
+                    <tr>
+                        <td>工长</td>
+                        <td>施工负责人，管理施工组</td>
+                        <td>管理施工组任务、执行/确认任务、提交验收、管理对账单</td>
+                    </tr>
+                    <tr>
+                        <td>班组长</td>
+                        <td>工人班长，负责具体施工执行</td>
+                        <td>执行分配的任务、上传执行记录、提交验收</td>
+                    </tr>
+                    <tr>
+                        <td>业主小程序</td>
+                        <td>业主</td>
+                        <td>确认验收角色，负责查看进度和确认</td>
+                        <td>查看项目进度、确认验收任务、确认合同和变更、评价任务执行、确认对账单</td>
+                    </tr>
+                </table>
+            </div>
 
             <div class="global-params">
                 <h4>✅ 已确认的全局参数</h4>
@@ -240,6 +310,105 @@
                         <td>列表每页条数</td>
                         <td>10条</td>
                         <td>全部列表页</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- 关键交互流程 -->
+        <div class="section">
+            <div class="section-title">关键交互流程</div>
+            
+            <div class="subsection" style="margin-bottom: 24px;">
+                <h4 style="margin-bottom: 12px; color: var(--text-primary);">PC端合同审核流程</h4>
+                <div class="note">
+                    <p>1. 运营人员登录后进入合同列表页</p>
+                    <p>2. 点击合同名称或"去审核"按钮进入合同详情页</p>
+                    <p>3. 查看合同基本信息、合同正文、阶段任务、附件</p>
+                    <p>4. 点击"审核通过"或"驳回"按钮</p>
+                    <p>5. 驳回时需填写驳回原因</p>
+                    <p>6. 审核后返回列表页，合同状态更新</p>
+                </div>
+            </div>
+            
+            <div class="subsection" style="margin-bottom: 24px;">
+                <h4 style="margin-bottom: 12px; color: var(--text-primary);">服务方任务执行流程</h4>
+                <div class="note">
+                    <p>1. 服务方用户进入任务列表页，查看待执行任务</p>
+                    <p>2. 点击任务卡片进入任务详情页</p>
+                    <p>3. 查看执行标准、确认标准、担责标准</p>
+                    <p>4. 点击"上传记录"上传执行过程照片/视频</p>
+                    <p>5. 执行完成后点击"提交验收"</p>
+                    <p>6. 等待确认人确认验收</p>
+                </div>
+            </div>
+            
+            <div class="subsection" style="margin-bottom: 24px;">
+                <h4 style="margin-bottom: 12px; color: var(--text-primary);">业主任务确认流程</h4>
+                <div class="note">
+                    <p>1. 业主用户进入首页，查看待确认事项</p>
+                    <p>2. 点击待确认任务进入任务详情页</p>
+                    <p>3. 查看执行人信息、执行记录（照片/视频）</p>
+                    <p>4. 确认合格：点击"确认验收"，可选填评价</p>
+                    <p>5. 不合格：点击"驳回"，填写驳回原因</p>
+                    <p>6. 驳回后任务返回执行中状态，需重新执行</p>
+                </div>
+            </div>
+            
+            <div class="subsection" style="margin-bottom: 24px;">
+                <h4 style="margin-bottom: 12px; color: var(--text-primary);">对账单确认流程</h4>
+                <div class="note">
+                    <p>服务方提交：</p>
+                    <p>1. 服务方进入对账单列表页，点击新增按钮</p>
+                    <p>2. 选择关联合同（自动带出确认人）</p>
+                    <p>3. 选择账单类型、输入金额、填写用途描述</p>
+                    <p>4. 提交后通知业主确认</p>
+                    <p style="margin-top: 12px;">业主确认：</p>
+                    <p>1. 业主进入对账单列表页，查看待确认对账单</p>
+                    <p>2. 点击卡片进入详情页</p>
+                    <p>3. 确认无误：点击"确认无误"</p>
+                    <p>4. 有问题：点击"驳回"，填写驳回原因</p>
+                    <p>5. 确认后状态变为"已生效"，等待服务方上传支付凭证</p>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h4 style="margin-bottom: 12px; color: var(--text-primary);">异常处理规范</h4>
+                <table class="param-table">
+                    <tr>
+                        <th>异常类型</th>
+                        <th>提示文案</th>
+                        <th>适用场景</th>
+                    </tr>
+                    <tr>
+                        <td>必填项为空</td>
+                        <td>请填写XXX</td>
+                        <td>表单提交时校验</td>
+                    </tr>
+                    <tr>
+                        <td>数据格式错误</td>
+                        <td>XXX格式不正确</td>
+                        <td>输入格式校验</td>
+                    </tr>
+                    <tr>
+                        <td>网络错误</td>
+                        <td>加载失败，请稍后重试</td>
+                        <td>API请求失败</td>
+                    </tr>
+                    <tr>
+                        <td>操作失败</td>
+                        <td>操作失败，请稍后重试</td>
+                        <td>提交/保存失败</td>
+                    </tr>
+                    <tr>
+                        <td>空数据</td>
+                        <td>暂无XXX</td>
+                        <td>列表/卡片无数据</td>
+                    </tr>
+                    <tr>
+                        <td>筛选无结果</td>
+                        <td>没有符合条件的XXX</td>
+                        <td>筛选结果为空</td>
                     </tr>
                 </table>
             </div>
@@ -333,37 +502,64 @@
                         <th>模块</th>
                         <th>页面名称</th>
                         <th>端</th>
-                        <th>文档位置</th>
+                        <th>说明</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td rowspan="4">合同模块</td><td>合同列表页</td><td>PC</td><td><a href="PRD-合同模块详细规格.html#page-list">第一章</a></td></tr>
-                    <tr><td>合同详情页</td><td>PC</td><td><a href="PRD-合同模块详细规格.html#page-detail">第二章</a></td></tr>
-                    <tr><td>合同详情页</td><td>服务方小程序</td><td><a href="PRD-合同模块详细规格.html#page-mini-service">第三章</a></td></tr>
-                    <tr><td>合同详情页</td><td>业主小程序</td><td><a href="PRD-合同模块详细规格.html#page-mini-owner">第四章</a></td></tr>
-                    <tr><td rowspan="6">任务模块</td><td>任务列表页</td><td>服务方小程序</td><td><a href="PRD-任务模块详细规格.html#page-task-list-service">第一章</a></td></tr>
-                    <tr><td>任务详情页</td><td>服务方小程序</td><td><a href="PRD-任务模块详细规格.html#page-task-detail-service">第二章</a></td></tr>
-                    <tr><td>任务验收页</td><td>服务方小程序</td><td><a href="PRD-任务模块详细规格.html#page-task-acceptance-service">第三章</a></td></tr>
-                    <tr><td>任务列表页</td><td>业主小程序</td><td><a href="PRD-任务模块详细规格.html#page-task-list-owner">第四章</a></td></tr>
-                    <tr><td>任务详情页</td><td>业主小程序</td><td><a href="PRD-任务模块详细规格.html#page-task-detail-owner">第五章</a></td></tr>
-                    <tr><td>任务验收页</td><td>业主小程序</td><td><a href="PRD-任务模块详细规格.html#page-task-acceptance-owner">第六章</a></td></tr>
-                    <tr><td rowspan="17">项目模块</td><td>首页</td><td>服务方小程序</td><td><a href="PRD-项目模块详细规格.html#page-home-service">第一章</a></td></tr>
-                    <tr><td>项目列表页</td><td>服务方小程序</td><td><a href="PRD-项目模块详细规格.html#page-list-service">第二章</a></td></tr>
-                    <tr><td>项目详情页</td><td>服务方小程序</td><td><a href="PRD-项目模块详细规格.html#page-detail-service">第三章</a></td></tr>
-                    <tr><td>项目信息页</td><td>服务方小程序</td><td><a href="PRD-项目模块详细规格.html#page-info-service">第四章</a></td></tr>
-                    <tr><td>创建项目页</td><td>服务方小程序</td><td><a href="PRD-项目模块详细规格.html#page-create-service">第五章</a></td></tr>
-                    <tr><td>项目架构页</td><td>服务方小程序</td><td><a href="PRD-项目模块详细规格.html#page-architecture-service">第六章</a></td></tr>
-                    <tr><td>项目成员页</td><td>服务方小程序</td><td><a href="PRD-项目模块详细规格.html#page-member-service">第七章</a></td></tr>
-                    <tr><td>项目资料页</td><td>服务方小程序</td><td><a href="PRD-项目模块详细规格.html#page-files-service">第八章</a></td></tr>
-                    <tr><td>对账单列表页</td><td>服务方小程序</td><td><a href="PRD-项目模块详细规格.html#page-statement-list-service">第九章</a></td></tr>
-                    <tr><td>对账单详情页</td><td>服务方小程序</td><td><a href="PRD-项目模块详细规格.html#page-statement-detail-service">第十章</a></td></tr>
-                    <tr><td>项目详情页</td><td>业主小程序</td><td><a href="PRD-项目模块详细规格.html#page-detail-owner">第十一章</a></td></tr>
-                    <tr><td>项目信息页</td><td>业主小程序</td><td><a href="PRD-项目模块详细规格.html#page-info-owner">第十二章</a></td></tr>
-                    <tr><td>项目架构页</td><td>业主小程序</td><td><a href="PRD-项目模块详细规格.html#page-architecture-owner">第十三章</a></td></tr>
-                    <tr><td>项目成员页</td><td>业主小程序</td><td><a href="PRD-项目模块详细规格.html#page-member-owner">第十四章</a></td></tr>
-                    <tr><td>项目资料页</td><td>业主小程序</td><td><a href="PRD-项目模块详细规格.html#page-files-owner">第十五章</a></td></tr>
-                    <tr><td>对账单列表页</td><td>业主小程序</td><td><a href="PRD-项目模块详细规格.html#page-statement-list-owner">第十六章</a></td></tr>
-                    <tr><td>对账单详情页</td><td>业主小程序</td><td><a href="PRD-项目模块详细规格.html#page-statement-detail-owner">第十七章</a></td></tr>
+                    <!-- PC管理端 - 合同模块 -->
+                    <tr><td rowspan="4">PC管理端<br/>合同模块</td><td>合同审核列表页</td><td>PC</td><td>合同状态筛选、关键词搜索、审核操作</td></tr>
+                    <tr><td>合同详情页</td><td>PC</td><td>查看合同信息、阶段任务、附件、审核通过/驳回</td></tr>
+                    <tr><td>合同文本模板管理</td><td>PC</td><td>管理合同正文模板（增删改查）</td></tr>
+                    <tr><td>阶段任务模板管理</td><td>PC</td><td>管理阶段任务模板（增删改查）</td></tr>
+
+                    <!-- 服务方小程序 - 项目模块 -->
+                    <tr><td rowspan="10">服务方小程序<br/>项目模块</td><td>首页</td><td>小程序</td><td>今日动态、快捷入口、我的项目列表</td></tr>
+                    <tr><td>项目列表页</td><td>小程序</td><td>全部项目查看、筛选、搜索</td></tr>
+                    <tr><td>项目详情页</td><td>小程序</td><td>项目概览、合同列表、任务列表、成员入口</td></tr>
+                    <tr><td>项目信息页</td><td>小程序</td><td>项目基本信息编辑</td></tr>
+                    <tr><td>创建项目页</td><td>小程序</td><td>新建项目表单</td></tr>
+                    <tr><td>项目架构页</td><td>小程序</td><td>三级架构管理：项目部→工作组→施工队</td></tr>
+                    <tr><td>项目成员页</td><td>小程序</td><td>成员管理、邀请、权限设置</td></tr>
+                    <tr><td>项目资料页</td><td>小程序</td><td>文件分类管理、上传下载</td></tr>
+                    <tr><td>对账单列表页</td><td>小程序</td><td>对账单查看、新增、筛选</td></tr>
+                    <tr><td>对账单详情页</td><td>小程序</td><td>对账单详情、确认/驳回、上传凭证</td></tr>
+
+                    <!-- 服务方小程序 - 合同模块 -->
+                    <tr><td rowspan="2">服务方小程序<br/>合同模块</td><td>合同详情页</td><td>小程序</td><td>合同信息、阶段任务、附件、补充条款、签约；<strong>含变更功能</strong>：发起变更、变更记录、变更内容高亮、变更确认</td></tr>
+                    <tr><td>合同预览页</td><td>小程序</td><td>合同全文预览、下载</td></tr>
+
+                    <!-- 服务方小程序 - 任务模块 -->
+                    <tr><td rowspan="5">服务方小程序<br/>任务模块</td><td>任务列表页</td><td>小程序</td><td>任务筛选、状态查看、快捷操作</td></tr>
+                    <tr><td>任务详情页</td><td>小程序</td><td>任务信息、执行标准、确认标准、担责标准</td></tr>
+                    <tr><td>任务验收页</td><td>小程序</td><td>上传执行记录、提交验收</td></tr>
+                    <tr><td>任务汇报页</td><td>小程序</td><td>任务执行记录、验收评价</td></tr>
+                    <tr><td>待办列表页</td><td>小程序</td><td>待处理任务汇总</td></tr>
+
+                    <!-- 服务方小程序 - 其他 -->
+                    <tr><td rowspan="2">服务方小程序<br/>其他功能</td><td>消息页</td><td>小程序</td><td>系统消息、通知列表</td></tr>
+                    <tr><td>分享导航页</td><td>小程序</td><td>分享链接导航</td></tr>
+
+                    <!-- 业主小程序 - 项目模块 -->
+                    <tr><td rowspan="10">业主小程序<br/>项目模块</td><td>首页</td><td>小程序</td><td>我的家（项目详情）、快捷入口、待确认事项</td></tr>
+                    <tr><td>项目详情页</td><td>小程序</td><td>项目概览、合同列表、任务列表</td></tr>
+                    <tr><td>项目信息页</td><td>小程序</td><td>项目基本信息查看</td></tr>
+                    <tr><td>项目架构页</td><td>小程序</td><td>项目架构查看、邀请成员</td></tr>
+                    <tr><td>项目成员页</td><td>小程序</td><td>成员查看、邀请、权限设置</td></tr>
+                    <tr><td>项目资料页</td><td>小程序</td><td>项目资料只读查看</td></tr>
+                    <tr><td>对账单列表页</td><td>小程序</td><td>对账单查看、确认</td></tr>
+                    <tr><td>对账单详情页</td><td>小程序</td><td>对账单详情、确认/驳回</td></tr>
+                    <tr><td>消息页</td><td>小程序</td><td>系统消息、通知列表</td></tr>
+                    <tr><td>分享导航页</td><td>小程序</td><td>分享链接导航</td></tr>
+
+                    <!-- 业主小程序 - 合同模块 -->
+                    <tr><td>业主小程序<br/>合同模块</td><td>合同详情页</td><td>小程序</td><td>合同信息查看、确认、签约；<strong>含变更确认功能</strong>：查看变更内容、确认/驳回变更</td></tr>
+
+                    <!-- 业主小程序 - 任务模块 -->
+                    <tr><td rowspan="5">业主小程序<br/>任务模块</td><td>任务列表页</td><td>小程序</td><td>任务查看、筛选</td></tr>
+                    <tr><td>任务详情页</td><td>小程序</td><td>任务信息、执行记录查看</td></tr>
+                    <tr><td>任务验收页</td><td>小程序</td><td>验收确认、驳回、评价</td></tr>
+                    <tr><td>任务汇报页</td><td>小程序</td><td>任务执行记录、验收评价查看</td></tr>
+                    <tr><td>待办列表页</td><td>小程序</td><td>待确认任务汇总</td></tr>
                 </tbody>
             </table>
         </div>
