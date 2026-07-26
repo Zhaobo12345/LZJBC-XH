@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>家装平台小程序原�?- 全部待办</title>
+    <title>家装平台小程序原�?- 全部待办</title>
     <link rel="stylesheet" href="common.css">
     <style>
         .page-content {
@@ -181,27 +181,6 @@
             font-size: 14px;
         }
 
-        .fab {
-            position: fixed;
-            right: 20px;
-            bottom: 80px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #1890FF 0%, #40A9FF 100%);
-            color: #FFFFFF;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            box-shadow: 0 4px 12px rgba(24, 144, 255, 0.4);
-            cursor: pointer;
-            z-index: 100;
-        }
-
-        .fab:hover {
-            transform: scale(1.1);
-        }
     </style>
 </head>
 <body>
@@ -212,16 +191,16 @@
         </div>
         
         <div class="nav-bar">
-            <div class="back" onclick="history.back()">�?返回</div>
+            <div class="back" onclick="history.back()">�?返回</div>
             <div class="title centered">全部待办</div>
             <div class="actions">
-                <div class="action-btn" onclick="toggleActionMenu()">�?/div>
-                <div class="action-btn" onclick="alert('关闭小程�?)">�?/div>
+                <div class="action-btn" onclick="toggleActionMenu()">�?/div>
+                <div class="action-btn" onclick="alert('关闭小程�?)">�?/div>
             </div>
             <div class="action-menu" id="actionMenu">
                 <div class="action-menu-item" onclick="shareToFriend(); closeActionMenu();">
                     <span class="icon">📤</span>
-                    <span>分享给朋�?/span>
+                    <span>分享给朋�?/span>
                 </div>
             </div>
         </div>
@@ -232,10 +211,10 @@
                     全部 <span class="badge">15</span>
                 </div>
                 <div class="todo-filter-btn" onclick="filterTodo('pending', this)">
-                    待处�?<span class="badge">12</span>
+                    待处�?<span class="badge">12</span>
                 </div>
                 <div class="todo-filter-btn" onclick="filterTodo('completed', this)">
-                    已处�?<span class="badge">3</span>
+                    已处�?<span class="badge">3</span>
                 </div>
             </div>
 
@@ -245,11 +224,11 @@
                         <div class="item-icon contract">🔵</div>
                         <div class="item-content">
                             <div class="item-title">
-                                开槽布线确�?                                <span class="task-tag contract">合约</span>
+                                开槽布线确�?                                <span class="task-tag contract">合约</span>
                             </div>
-                            <div class="item-meta">强电施工�?· 确认人：李监�?/div>
+                            <div class="item-meta">强电施工�?· 确认人：李监�?/div>
                         </div>
-                        <div class="item-status confirming">待确�?/div>
+                        <div class="item-status confirming">待确�?/div>
                     </div>
                     <div class="todo-item" data-status="confirming" onclick="location.href='prototype-task-detail.html'">
                         <div class="item-icon contract">🔵</div>
@@ -258,9 +237,9 @@
                                 墙面贴砖确认
                                 <span class="task-tag contract">合约</span>
                             </div>
-                            <div class="item-meta">泥瓦工作�?· 确认人：王监�?/div>
+                            <div class="item-meta">泥瓦工作�?· 确认人：王监�?/div>
                         </div>
-                        <div class="item-status confirming">待确�?/div>
+                        <div class="item-status confirming">待确�?/div>
                     </div>
                     <div class="todo-item" data-status="confirming" onclick="location.href='prototype-task-detail.html'">
                         <div class="item-icon contract">🟡</div>
@@ -269,9 +248,9 @@
                                 瓷砖铺贴确认
                                 <span class="task-tag contract">合约</span>
                             </div>
-                            <div class="item-meta">泥瓦工作�?· 张三执行�?/div>
+                            <div class="item-meta">泥瓦工作�?· 张三执行�?/div>
                         </div>
-                        <div class="item-status confirming">待确�?/div>
+                        <div class="item-status confirming">待确�?/div>
                     </div>
                     <div class="todo-item" data-status="pending" onclick="location.href='prototype-contract-detail.html?status=confirming_receiver'">
                         <div class="item-icon" style="background: linear-gradient(135deg, #13C2C2 0%, #36CFC9 100%);">📄</div>
@@ -280,9 +259,9 @@
                                 泥瓦分包合同确认
                                 <span class="task-tag" style="background-color: #E6FFFB; color: #13C2C2;">合同</span>
                             </div>
-                            <div class="item-meta">泥瓦工作�?· 待确认合同内�?/div>
+                            <div class="item-meta">泥瓦工作�?· 待确认合同内�?/div>
                         </div>
-                        <div class="item-status" style="background-color: #E6FFFB; color: #13C2C2;">待确�?/div>
+                        <div class="item-status" style="background-color: #E6FFFB; color: #13C2C2;">待确�?/div>
                     </div>
                     <div class="todo-item" data-status="pending" onclick="location.href='prototype-contract-detail.html?status=signing'">
                         <div class="item-icon" style="background: linear-gradient(135deg, #722ED1 0%, #9254DE 100%);">📝</div>
@@ -291,9 +270,9 @@
                                 木工分包合同签约
                                 <span class="task-tag" style="background-color: #F9F0FF; color: #722ED1;">合同</span>
                             </div>
-                            <div class="item-meta">木工工作�?· 待上传签约文�?/div>
+                            <div class="item-meta">木工工作�?· 待上传签约文�?/div>
                         </div>
-                        <div class="item-status" style="background-color: #F9F0FF; color: #722ED1;">待签�?/div>
+                        <div class="item-status" style="background-color: #F9F0FF; color: #722ED1;">待签�?/div>
                     </div>
                     <div class="todo-item" data-status="pending" onclick="location.href='prototype-architecture.html'">
                         <div class="item-icon" style="background: linear-gradient(135deg, #FA8C16 0%, #FFA940 100%);">👥</div>
@@ -302,9 +281,9 @@
                                 邀请加入强电施工组
                                 <span class="task-tag" style="background-color: #FFF7E6; color: #FA8C16;">架构</span>
                             </div>
-                            <div class="item-meta">水电工作�?· 邀请李四加�?/div>
+                            <div class="item-meta">水电工作�?· 邀请李四加�?/div>
                         </div>
-                        <div class="item-status" style="background-color: #FFF7E6; color: #FA8C16;">待处�?/div>
+                        <div class="item-status" style="background-color: #FFF7E6; color: #FA8C16;">待处�?/div>
                     </div>
                     <div class="todo-item" data-status="pending" onclick="location.href='prototype-task-detail.html'">
                         <div class="item-icon contract">🟢</div>
@@ -313,42 +292,42 @@
                                 吊顶安装
                                 <span class="task-tag contract">合约</span>
                             </div>
-                            <div class="item-meta">木工工作�?· 待执�?/div>
+                            <div class="item-meta">木工工作�?· 待执�?/div>
                         </div>
-                        <div class="item-status pending">待执�?/div>
+                        <div class="item-status pending">待执�?/div>
                     </div>
                     <div class="todo-item" data-status="completed" onclick="location.href='prototype-task-detail.html'">
-                        <div class="item-icon" style="background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%);">�?/div>
+                        <div class="item-icon" style="background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%);">�?/div>
                         <div class="item-content">
                             <div class="item-title">
                                 材料采购
                                 <span class="task-tag contract">合约</span>
                             </div>
-                            <div class="item-meta">执行人：张三 · 已完�?/div>
+                            <div class="item-meta">执行人：张三 · 已完�?/div>
                         </div>
-                        <div class="item-status" style="background-color: var(--status-success-bg); color: var(--success-color);">已完�?/div>
+                        <div class="item-status" style="background-color: var(--status-success-bg); color: var(--success-color);">已完�?/div>
                     </div>
                     <div class="todo-item" data-status="completed" onclick="location.href='prototype-task-detail.html'">
-                        <div class="item-icon" style="background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%);">�?/div>
+                        <div class="item-icon" style="background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%);">�?/div>
                         <div class="item-content">
                             <div class="item-title">
                                 防水施工
                                 <span class="task-tag contract">合约</span>
                             </div>
-                            <div class="item-meta">执行人：王五 · 已完�?/div>
+                            <div class="item-meta">执行人：王五 · 已完�?/div>
                         </div>
-                        <div class="item-status" style="background-color: var(--status-success-bg); color: var(--success-color);">已完�?/div>
+                        <div class="item-status" style="background-color: var(--status-success-bg); color: var(--success-color);">已完�?/div>
                     </div>
                     <div class="todo-item" data-status="completed" onclick="location.href='prototype-task-detail.html'">
-                        <div class="item-icon" style="background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%);">�?/div>
+                        <div class="item-icon" style="background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%);">�?/div>
                         <div class="item-content">
                             <div class="item-title">
                                 墙面基层处理
                                 <span class="task-tag contract">合约</span>
                             </div>
-                            <div class="item-meta">执行人：李四 · 已完�?/div>
+                            <div class="item-meta">执行人：李四 · 已完�?/div>
                         </div>
-                        <div class="item-status" style="background-color: var(--status-success-bg); color: var(--success-color);">已完�?/div>
+                        <div class="item-status" style="background-color: var(--status-success-bg); color: var(--success-color);">已完�?/div>
                     </div>
                     <div class="todo-item" data-status="pending" onclick="location.href='prototype-contract-detail.html?status=changing'">
                         <div class="item-icon" style="background: linear-gradient(135deg, #FA8C16 0%, #FFA940 100%);">📝</div>
@@ -357,9 +336,9 @@
                                 水电合同变更确认
                                 <span class="task-tag" style="background-color: #FFF7E6; color: #FA8C16;">变更</span>
                             </div>
-                            <div class="item-meta">水电工作�?· 待确认变更内�?/div>
+                            <div class="item-meta">水电工作�?· 待确认变更内�?/div>
                         </div>
-                        <div class="item-status" style="background-color: #FFF7E6; color: #FA8C16;">待确�?/div>
+                        <div class="item-status" style="background-color: #FFF7E6; color: #FA8C16;">待确�?/div>
                     </div>
                     <div class="todo-item" data-status="confirming" onclick="location.href='prototype-task-detail.html'">
                         <div class="item-icon contract">🔵</div>
@@ -368,9 +347,9 @@
                                 水管打压测试确认
                                 <span class="task-tag contract">合约</span>
                             </div>
-                            <div class="item-meta">水电工作�?· 确认人：张监�?/div>
+                            <div class="item-meta">水电工作�?· 确认人：张监�?/div>
                         </div>
-                        <div class="item-status confirming">待确�?/div>
+                        <div class="item-status confirming">待确�?/div>
                     </div>
                     <div class="todo-item" data-status="pending" onclick="location.href='prototype-contract-detail.html?status=platform_reviewing'">
                         <div class="item-icon" style="background: linear-gradient(135deg, #13C2C2 0%, #36CFC9 100%);">📋</div>
@@ -379,9 +358,9 @@
                                 油漆分包合同审核
                                 <span class="task-tag" style="background-color: #E6FFFB; color: #13C2C2;">审核</span>
                             </div>
-                            <div class="item-meta">油漆工作�?· 平台审核�?/div>
+                            <div class="item-meta">油漆工作�?· 平台审核�?/div>
                         </div>
-                        <div class="item-status" style="background-color: #E6FFFB; color: #13C2C2;">待审�?/div>
+                        <div class="item-status" style="background-color: #E6FFFB; color: #13C2C2;">待审�?/div>
                     </div>
                     <div class="todo-item" data-status="pending" onclick="location.href='prototype-task-detail.html'">
                         <div class="item-icon temp">🟣</div>
@@ -390,9 +369,9 @@
                                 临时修补墙面裂缝
                                 <span class="task-tag temp">临时</span>
                             </div>
-                            <div class="item-meta">泥瓦工作�?· 待接受任�?/div>
+                            <div class="item-meta">泥瓦工作�?· 待接受任�?/div>
                         </div>
-                        <div class="item-status pending">待接�?/div>
+                        <div class="item-status pending">待接�?/div>
                     </div>
                     <div class="todo-item" data-status="confirming" onclick="location.href='prototype-task-detail.html'">
                         <div class="item-icon contract">🟡</div>
@@ -401,20 +380,19 @@
                                 木门安装验收
                                 <span class="task-tag contract">合约</span>
                             </div>
-                            <div class="item-meta">木工工作�?· 执行人：赵六</div>
+                            <div class="item-meta">木工工作�?· 执行人：赵六</div>
                         </div>
-                        <div class="item-status confirming">待确�?/div>
+                        <div class="item-status confirming">待确�?/div>
                     </div>
                 </div>
             </div>
 
             <div class="empty-state" id="emptyState" style="display: none;">
                 <div class="icon">📋</div>
-                <div class="text">暂无符合条件的待办事�?/div>
+                <div class="text">暂无符合条件的待办事�?/div>
             </div>
         </div>
 
-        <div class="fab" onclick="location.href='prototype-project-detail.html'">+</div>
     </div>
     
     <div class="page-nav">
@@ -485,7 +463,7 @@
         }
         
         function shareToFriend() {
-            alert('分享给朋�?);
+            alert('分享给朋�?);
             closeActionMenu();
         }
     </script>
