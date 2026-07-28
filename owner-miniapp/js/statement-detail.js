@@ -187,10 +187,14 @@ function hideRejectDrawer() {
 }
 
 function submitReject() {
-    const reason = document.getElementById('rejectReasonInput').value.trim();
+    const reasonInput = document.getElementById('rejectReasonInput');
+    const reason = reasonInput.value.trim();
     
-    if (!reason) {
-        showToast('请输入驳回原因');
+    // 校验驳回原因（使用validation.js）
+    const result = Validation.validate.textLength(reason, 500, true, '驳回原因');
+    if (!result.valid) {
+        showToast(result.message);
+        reasonInput.focus();
         return;
     }
     

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>家装平台小程序原型 - 项目成员（初始状态）</title>
+    <link rel="stylesheet" href="common.css">
+    <style>
+        .page-content {
+            height: calc(100% - 44px);
+            background-color: var(--bg-secondary);
+            overflow-y: auto;
+        }
+
+        .member-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            padding: 16px;
+            color: #FFFFFF;
+        }
+
+        .member-header .header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .member-header .project-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .member-header .member-count {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .invite-btn-inline {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            background-color: rgba(255,255,255,0.2);
+            color: #FFFFFF;
+            border-radius: 14px;
+            font-size: 12px;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.2s;
+        }
+
+        .invite-btn-inline:hover {
+            background-color: rgba(255,255,255,0.3);
+        }
+
+        .member-list {
+            padding: 12px 16px 80px;
+        }
+
+        .member-group {
+            margin-bottom: 16px;
+        }
+
+        .member-group .group-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            margin-bottom: 8px;
+        }
+
+        .member-group .group-name {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .member-group .group-name .icon {
+            font-size: 14px;
+        }
+
+        .member-group .group-count {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            background-color: var(--bg-secondary);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .member-card {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background-color: var(--bg-primary);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .member-card:hover {
+            background-color: #E6F7FF;
+        }
+
+        .member-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .member-card .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            font-size: 16px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .member-card .info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .member-card .name-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .member-card .name {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .member-card .role-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            background-color: #F9F0FF;
+            color: #722ED1;
+        }
+
+        .member-card .meta {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .member-card .creator-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            background-color: #FFF7E6;
+            color: #FA8C16;
+        }
+
+        .empty-hint {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 16px;
+            color: var(--text-tertiary);
+        }
+
+        .empty-hint .hint-icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+
+        .empty-hint .hint-text {
+            font-size: 13px;
+            text-align: center;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <div class="time">9:41</div>
+            <div class="icons">📶 🔋</div>
+        </div>
+
+        <div class="nav-bar">
+            <div class="back" onclick="location.href='project-detail-new.html'">← 返回</div>
+            <div class="title centered">项目成员</div>
+            <div class="actions"></div>
+        </div>
+
+        <div class="page-content">
+            <div class="member-header">
+                <div class="project-name">XX小区整体装修</div>
+                <div class="header-row">
+                    <div class="member-count">1位成员</div>
+                    <div class="invite-btn-inline" onclick="alert('邀请成员')">
+                        <span>+</span>
+                        <span>邀请成员</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="member-list">
+                <div class="member-group">
+                    <div class="group-header">
+                        <div class="group-name"><span class="icon">🏢</span> 项目部</div>
+                        <div class="group-count">1人</div>
+                    </div>
+                    <div class="member-card">
+                        <div class="avatar">张</div>
+                        <div class="info">
+                            <div class="name-row">
+                                <span class="name">张经理</span>
+                                <span class="role-tag">超级管理员</span>
+                            </div>
+                            <div class="meta">所属层级：项目部</div>
+                        </div>
+                        <span class="creator-tag">创建人</span>
+                    </div>
+                </div>
+
+                <div class="empty-hint">
+                    <div class="hint-icon">👥</div>
+                    <div class="hint-text">暂无其他成员，邀请团队加入</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

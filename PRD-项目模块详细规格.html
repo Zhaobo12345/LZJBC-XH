@@ -213,26 +213,29 @@
             <li><a href="#page-files-service">八、项目资料页</a></li>
             <li><a href="#page-statement-list-service">九、对账单列表页</a></li>
             <li><a href="#page-statement-detail-service">十、对账单详情页</a></li>
+            <li><a href="#page-activity-service">十一、项目动态页</a></li>
         </ul>
         
         <div class="nav-divider"></div>
         
         <div class="nav-title">业主小程序</div>
         <ul class="nav-list">
-            <li><a href="#page-detail-owner">十一、项目详情页</a></li>
-            <li><a href="#page-info-owner">十二、项目信息页</a></li>
-            <li><a href="#page-architecture-owner">十三、项目架构页</a></li>
-            <li><a href="#page-member-owner">十四、项目成员页</a></li>
-            <li><a href="#page-files-owner">十五、项目资料页</a></li>
-            <li><a href="#page-statement-list-owner">十六、对账单列表页</a></li>
-            <li><a href="#page-statement-detail-owner">十七、对账单详情页</a></li>
+            <li><a href="#page-detail-owner">十二、项目详情页</a></li>
+            <li><a href="#page-activity-owner">十三、项目动态页</a></li>
+            <li><a href="#page-info-owner">十四、项目信息页</a></li>
+            <li><a href="#page-architecture-owner">十五、项目架构页</a></li>
+            <li><a href="#page-member-owner">十六、项目成员页</a></li>
+            <li><a href="#page-files-owner">十七、项目资料页</a></li>
+            <li><a href="#page-statement-list-owner">十八、对账单列表页</a></li>
+            <li><a href="#page-statement-detail-owner">十九、对账单详情页</a></li>
         </ul>
         
         <div class="nav-divider"></div>
         
         <div class="nav-title">其他</div>
         <ul class="nav-list">
-            <li><a href="#api-summary">十八、API接口汇总</a></li>
+            <li><a href="#validation-rules">二十、字段校验规则</a></li>
+            <li><a href="#api-summary">二十一、API接口汇总</a></li>
         </ul>
     </nav>
 
@@ -380,7 +383,7 @@
                             <td>创建项目</td>
                             <td>➕</td>
                             <td>create-project.html</td>
-                            <td>项目经理角色</td>
+                            <td>默认展示，已角色认证的用户可创建</td>
                         </tr>
                         <tr>
                             <td>扫码签约</td>
@@ -425,7 +428,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
-                        <div class="info-value">项目经理、施工组长</div>
+                        <div class="info-value">全部</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面入口</div>
@@ -435,17 +438,44 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">2.2 页面结构</div>
+                <div class="subsection-title">2.2 数据展示规则</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>属性</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>数据范围</td>
+                            <td>展示当前用户自己创建的项目和已加入的项目数据</td>
+                        </tr>
+                        <tr>
+                            <td>自己创建的项目</td>
+                            <td>当前用户作为项目发起人创建的项目，拥有项目管理权限</td>
+                        </tr>
+                        <tr>
+                            <td>已加入的项目</td>
+                            <td>当前用户被邀请加入的项目，根据默认或配置的权限展示对应内容</td>
+                        </tr>
+                        <tr>
+                            <td>排序规则</td>
+                            <td>按项目最后操作时间倒序排列</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">2.3 页面结构</div>
                 <div class="code-block">
 ┌─────────────────────────────────────┐
 │  导航栏                              │
 │  - 标题：我的项目                    │
 ├─────────────────────────────────────┤
 │  状态Tab栏                           │
-│  - 全部 | 进行中 | 已完成            │
-├─────────────────────────────────────┤
-│  搜索栏                              │
-│  - 搜索框（项目名称模糊搜索）         │
+│  - 全部 | 进行中 | 已完工            │
 ├─────────────────────────────────────┤
 │  项目卡片列表                        │
 │  - 项目名称 + 状态标签               │
@@ -457,13 +487,67 @@
 │  - 点击跳转创建项目页                │
 ├─────────────────────────────────────┤
 │  底部TabBar                           │
-│  - 首页 | 我的项目（激活）| 我的任务 │
+│  - 首页 | 我的项目（激活）| 消息     │
 └─────────────────────────────────────┘
                 </div>
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">2.3 项目卡片规格</div>
+                <div class="subsection-title">2.4 状态Tab切换规则</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>属性</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Tab项</td>
+                            <td>全部、进行中、已完工，共3个Tab</td>
+                        </tr>
+                        <tr>
+                            <td>默认选中</td>
+                            <td>默认选中"全部"Tab</td>
+                        </tr>
+                        <tr>
+                            <td>选中状态</td>
+                            <td>文字颜色为主色（#1890FF）、字体加粗，底部显示2px高的主色下划线（宽度与文字等宽）</td>
+                        </tr>
+                        <tr>
+                            <td>未选中状态</td>
+                            <td>文字颜色为次级文字色（#595959）、常规字重，无下划线</td>
+                        </tr>
+                        <tr>
+                            <td>切换方式</td>
+                            <td>点击Tab项即时切换，无需二次确认</td>
+                        </tr>
+                        <tr>
+                            <td>切换动画</td>
+                            <td>下划线滑块平滑过渡，过渡时长200ms</td>
+                        </tr>
+                        <tr>
+                            <td>全部Tab</td>
+                            <td>展示所有状态的项目（进行中 + 已完工），按最后操作时间倒序</td>
+                        </tr>
+                        <tr>
+                            <td>进行中Tab</td>
+                            <td>筛选状态为"进行中"的项目，按最后操作时间倒序</td>
+                        </tr>
+                        <tr>
+                            <td>已完工Tab</td>
+                            <td>筛选状态为"已完工"的项目，按完工时间倒序</td>
+                        </tr>
+                        <tr>
+                            <td>筛选无数据</td>
+                            <td>当前Tab筛选后无匹配项目时，显示筛选空状态（详见 2.7 项目列表空状态规格）</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">2.5 项目卡片规格</div>
                 <table>
                     <thead>
                         <tr>
@@ -498,12 +582,17 @@
                             <td>已完成任务数/总任务数</td>
                             <td>进度条（蓝色）</td>
                         </tr>
+                        <tr>
+                            <td>点击行为</td>
+                            <td>—</td>
+                            <td>点击项目卡片，跳转到<a href="#page-detail-service">项目详情页（服务方小程序）</a>，携带项目ID参数</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">2.4 悬浮创建按钮（FAB）</div>
+                <div class="subsection-title">2.6 悬浮创建按钮（FAB）</div>
                 <table>
                     <thead>
                         <tr>
@@ -514,7 +603,7 @@
                     <tbody>
                         <tr>
                             <td>位置</td>
-                            <td>右下角固定，距离底部70px（TabBar高度+边距）</td>
+                            <td>默认展示，右下角固定，距离底部70px（TabBar高度+边距）</td>
                         </tr>
                         <tr>
                             <td>尺寸</td>
@@ -534,10 +623,60 @@
                         </tr>
                         <tr>
                             <td>点击行为</td>
-                            <td>跳转到创建项目页</td>
+                            <td>点击创建入口后，若用户未认证角色，弹出轻提示弹窗，提示文案“当前操作需先完成角色认证；
+认证通过后方可继续创建；”，弹窗提供两个操作：“立即认证”：跳转至认证页面；“取消”：关闭提示，返回原页面；若用户已认证则跳转到<a href="#page-create-service">创建项目页</a>。</td>
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">2.7 项目列表空状态规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>状态类型</th>
+                            <th>触发条件</th>
+                            <th>展示内容</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>加载中</td>
+                            <td>页面首次加载、下拉刷新、切换筛选Tab数据请求中</td>
+                            <td>居中显示加载动画（旋转圆环），下方显示"加载中..."文字</td>
+                        </tr>
+                        <tr>
+                            <td>全局空状态</td>
+                            <td>当前用户尚无任何项目数据</td>
+                            <td>居中显示<code>empty-project</code>类型SVG插图（100x100px），标题"暂无项目"，描述"您还没有创建任何项目，点击下方按钮开始创建"，底部操作按钮"创建项目"（点击跳转创建项目页）</td>
+                        </tr>
+                        <tr>
+                            <td>筛选空状态</td>
+                            <td>切换筛选Tab后当前条件无匹配项目（如"已完工"Tab下无数据）</td>
+                            <td>居中显示<code>empty-project</code>类型SVG插图，标题"暂无相关项目"，描述根据筛选条件动态变化（如"当前筛选条件下没有进行中的项目"）</td>
+                        </tr>
+                        <tr>
+                            <td>无网络</td>
+                            <td>网络断开或请求超时</td>
+                            <td>居中显示<code>no-network</code>类型SVG插图，标题"网络连接失败"，描述"请检查网络设置后重试"，底部操作按钮"重试"（点击重新发起数据请求）</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="note" style="margin-top: 16px;">
+                    <div class="note-title">悬浮创建按钮（FAB）可见性规则</div>
+                    <p><strong>有数据状态：</strong>FAB按钮正常显示，点击跳转创建项目页</p>
+                    <p><strong>全局空状态：</strong>FAB按钮保持显示，同时空状态提供"创建项目"操作按钮，两者均可触发创建</p>
+                    <p><strong>加载中状态：</strong>FAB按钮隐藏，避免用户在加载过程中误操作</p>
+                    <p><strong>无网络状态：</strong>FAB按钮隐藏，引导用户先解决网络问题</p>
+                    <p><strong>筛选空状态：</strong>筛选条件产生的空状态，FAB按钮保持显示</p>
+                </div>
+
+                <div class="note" style="margin-top: 16px; background: #E6F7FF; border-left-color: var(--primary-color);">
+                    <div class="note-title" style="color: var(--primary-color);">空状态SVG插图说明</div>
+                    <p>空状态插图统一使用项目内置的<code>shared/empty-state.js</code>组件，包含10种内置SVG插图。项目列表页使用的类型为<code>empty-project</code>（空项目）和<code>no-network</code>（无网络），详见 <a href="../shared/empty-state-demo.html" target="_blank" style="color: var(--primary-color);">空状态组件演示页</a>。</p>
+                </div>
             </div>
         </div>
 
@@ -849,7 +988,7 @@
                         </tr>
                         <tr>
                             <td>默认显示条数</td>
-                            <td>最新3条，点击"展开更多"查看全部</td>
+                            <td>最新3条</td>
                         </tr>
                         <tr>
                             <td>动态内容</td>
@@ -863,8 +1002,19 @@
                             <td>时间显示</td>
                             <td>今日显示"今天 HH:mm"，昨日显示"昨天"，更早显示"MM-dd"</td>
                         </tr>
+                        <tr>
+                            <td>查看全部动态</td>
+                            <td>点击"查看全部动态"按钮，跳转到项目动态页（activity-list.html），传递当前层级参数（level=项目部/工作组/施工组）</td>
+                        </tr>
                     </tbody>
                 </table>
+                <div class="note" style="margin-top: 12px;">
+                    <div class="note-title">跳转逻辑说明</div>
+                    <p><strong>跳转条件：</strong>点击"查看全部动态"按钮时触发跳转</p>
+                    <p><strong>跳转目标：</strong>activity-list.html</p>
+                    <p><strong>参数传递：</strong>携带当前选择的层级参数（level），用于筛选显示对应层级的动态记录</p>
+                    <p><strong>页面逻辑：</strong>项目动态页接收层级参数后，自动筛选该层级下的全部动态，详见"十一、项目动态页（服务方小程序）"</p>
+                </div>
             </div>
         </div>
 
@@ -972,10 +1122,28 @@
                             <td>请输入项目名称</td>
                         </tr>
                         <tr>
+                            <td>业主姓名</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>1-50字符</td>
+                            <td>请输入业主姓名</td>
+                        </tr>
+                        <tr>
+                            <td>业主手机</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>11位手机号</td>
+                            <td>请输入正确的手机号</td>
+                        </tr>
+                        <tr>
                             <td>项目地址</td>
                             <td><span class="tag tag-required">必填</span></td>
                             <td>省市区选择 + 详细地址输入</td>
                             <td>请选择省市区并填写详细地址</td>
+                        </tr>
+                        <tr>
+                            <td>房屋面积</td>
+                             <td><span class="tag tag-required">必填</span></td>
+                            <td>正数，最大9999</td>
+                            <td>请输入正确的房屋面积</td>
                         </tr>
                         <tr>
                             <td>房屋类别</td>
@@ -984,14 +1152,8 @@
                             <td>请选择房屋类别</td>
                         </tr>
                         <tr>
-                            <td>房屋面积</td>
-                            <td><span class="tag tag-optional">选填</span></td>
-                            <td>正数，最大9999</td>
-                            <td>请输入正确的房屋面积</td>
-                        </tr>
-                        <tr>
                             <td>房型</td>
-                            <td><span class="tag tag-optional">选填</span></td>
+                             <td><span class="tag tag-required">必填</span></td>
                             <td>单选：别墅/复式/平层</td>
                             <td>请选择房型</td>
                         </tr>
@@ -1013,17 +1175,64 @@
                             <td>支持图片、文档，最多上传9个</td>
                             <td>请上传有效的附件文件</td>
                         </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">5.1.1 附件上传规则</div>
+                <table>
+                    <thead>
                         <tr>
-                            <td>业主姓名</td>
-                            <td><span class="tag tag-required">必填</span></td>
-                            <td>1-50字符</td>
-                            <td>请输入业主姓名</td>
+                            <th>规则项</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>字段属性</td>
+                            <td>选填</td>
                         </tr>
                         <tr>
-                            <td>业主手机</td>
-                            <td><span class="tag tag-required">必填</span></td>
-                            <td>11位手机号</td>
-                            <td>请输入正确的手机号</td>
+                            <td>允许文件类型</td>
+                            <td>图片：jpg / jpeg / png / gif / bmp / webp<br>文档：pdf / doc / docx / xls / xlsx / ppt / pptx<br>不支持其他类型文件</td>
+                        </tr>
+                        <tr>
+                            <td>单文件大小限制</td>
+                            <td>最大 10MB，超过限制时提示"文件大小不能超过10MB"，该文件不被添加到列表</td>
+                        </tr>
+                        <tr>
+                            <td>数量上限</td>
+                            <td>最多 9 个文件。达到上限后隐藏上传入口区域，不再允许添加</td>
+                        </tr>
+                        <tr>
+                            <td>重复文件检测</td>
+                            <td>按文件名 + 文件大小联合判断。如已存在相同文件名且相同大小的文件，提示"该文件已上传，请勿重复上传"，该文件不被添加到列表</td>
+                        </tr>
+                        <tr>
+                            <td>上传方式</td>
+                            <td>点击上传区域弹出底部 ActionSheet 操作菜单，提供三个选项：<br>
+                                • <strong>拍照</strong>：调起系统相机拍照，获取图片<br>
+                                • <strong>从相册选择</strong>：调起系统相册，支持多选图片<br>
+                                • <strong>选择文档</strong>：调起系统文件选择器，支持多选文档（PDF/Word/Excel/PPT）<br>
+                                选择文件后逐一校验通过后添加到文件列表。点击遮罩层或"取消"按钮关闭 ActionSheet</td>
+                        </tr>
+                        <tr>
+                            <td>文件列表展示</td>
+                            <td>图片文件：显示文件缩略图预览<br>文档文件：按类型显示对应文档图标（PDF 📕、Word 📘、Excel 📗、PPT 📙、其他 📄）<br>每个文件下方显示文件名（超长截断省略）</td>
+                        </tr>
+                        <tr>
+                            <td>文件删除</td>
+                            <td>点击文件缩略图/图标右上角的"×"按钮，弹出确认弹窗"确定删除该附件吗？"，确认后从列表移除，取消则关闭弹窗。删除后如数量低于上限，恢复上传入口显示</td>
+                        </tr>
+                        <tr>
+                            <td>上传入口显示规则</td>
+                            <td>文件数量 &lt; 9：显示上传区域<br>文件数量 ≥ 9：隐藏上传区域<br>删除文件后数量恢复到 &lt; 9：重新显示上传区域</td>
+                        </tr>
+                        <tr>
+                            <td>错误提示方式</td>
+                            <td>类型不符、超限、重复等均通过 Toast 提示，不阻塞表单其他操作</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1041,33 +1250,36 @@
                     <tbody>
                         <tr>
                             <td>定义</td>
-                            <td>项目发起人是项目的创建者，享有项目分利权益</td>
+                            <td>项目发起人是指通过平台认证、享有项目分利权益的独立角色身份。用户需主动完成发起人认证流程，获得发起人身份标识后方可享受分利权益。发起人与项目创建者无必然关联。</td>
                         </tr>
                         <tr>
-                            <td>认证状态</td>
-                            <td>通过URL参数 <code>?promoter=certified</code> 标识已认证状态</td>
+                            <td>发起人标识规则</td>
+                            <td>用户通过认证流程后，系统将 <code>users.is_promoter</code> 字段标记为 <code>true</code>，表示该用户已具备发起人身份。发起人身份一经认证，在用户维度持久生效，不随项目变更而变动。</td>
                         </tr>
                         <tr>
-                            <td>认证入口</td>
-                            <td>创建项目页顶部显示"成为项目发起人可享受项目分利"Banner，点击跳转认证流程</td>
+                            <td>数据来源</td>
+                            <td><code>users.is_promoter</code> 字段（布尔值），通过API <code>GET /api/v1/users/promoter-status</code> 获取当前登录用户的发起人认证状态</td>
                         </tr>
                         <tr>
-                            <td>认证后显示</td>
-                            <td>显示"您已是认证项目发起人，可享受项目分利权益"提示条</td>
+                            <td>认证入口展示规则</td>
+                            <td>进入创建项目页时，根据 <code>users.is_promoter</code> 值判断：
+                                <br>• <strong>未认证（is_promoter = false）</strong>：在页面顶部展示"成为项目发起人可享受项目分利"Banner入口，引导用户完成认证
+                                <br>• <strong>已认证（is_promoter = true）</strong>：Banner入口隐藏，不再展示。页面上方显示"您已是认证项目发起人，可享受项目分利权益"提示条，同时在页面标题右侧显示"项目发起人"角标
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>认证流程</td>
+                            <td>点击Banner入口 → 跳转发起人认证页面 → 完成认证信息提交 → 系统审核通过 → <code>users.is_promoter</code> 标记为 <code>true</code> → 返回创建项目页，展示已认证状态</td>
                         </tr>
                         <tr>
                             <td>权益说明</td>
                             <td>认证发起人可获得项目利润分成，具体比例由平台规则确定</td>
                         </tr>
-                        <tr>
-                            <td>数据来源</td>
-                            <td><code>users.is_promoter</code> 字段，通过API <code>GET /api/v1/users/promoter-status</code> 获取</td>
-                        </tr>
                     </tbody>
                 </table>
                 <div class="note" style="margin-top: 16px;">
-                    <div class="note-title">发起人标识规则</div>
-                    <p>创建项目时，系统自动将创建者标记为项目发起人，记录在 <code>projects.promoter_id</code> 字段。</p>
+                    <div class="note-title">发起人身份与项目创建的关系</div>
+                    <p>发起人身份是用户级别的独立认证状态，与是否创建项目无关。用户可以在未认证发起人身份的情况下创建项目，但无法享受分利权益。发起人认证后，创建的所有项目均自动关联发起人身份。</p>
                 </div>
             </div>
 
@@ -1087,7 +1299,63 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">5.4 创建成功后跳转规则</div>
+                <div class="subsection-title">5.4 提交校验与二次确认</div>
+                <div class="note">
+                    <div class="note-title">交互说明</div>
+                    <p>当用户点击"创建项目"按钮时，需进行前置校验与二次确认流程，确保数据完整性与用户操作确认。</p>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>触发时机</th>
+                            <th>处理逻辑</th>
+                            <th>UI表现</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="2">点击"创建项目"按钮</td>
+                            <td><strong>校验不通过</strong>：按字段校验规则逐项检查（详见 <a href="#validation-rules">二十、字段校验规则</a>）</td>
+                            <td>
+                                <ul>
+                                    <li>错误字段下方显示气泡式错误提示（红色背景 #FFF1F0 + 边框 #FFCCC7 + 小三角指向）</li>
+                                    <li>错误字段输入框/选择框高亮标记（红色边框）</li>
+                                    <li>自动滚动定位到第一个错误字段</li>
+                                    <li>支持的校验规则：
+                                        <ul>
+                                            <li>项目名称：必填，1-100字符</li>
+                                            <li>业主姓名：必填，1-50字符</li>
+                                            <li>业主手机：必填，11位手机号格式（/^1[3-9]\d{9}$/）</li>
+                                            <li>项目地址：必填，省市区+详细地址</li>
+                                            <li>房屋面积：必填，0-9999平方米</li>
+                                            <li>房屋类别：必填，单选</li>
+                                            <li>房型：必填，单选</li>
+                                            <li>计划工期：开工日期 ≤ 入住日期</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>校验通过</strong>：所有字段符合校验规则</td>
+                            <td>
+                                <ul>
+                                    <li>弹出二次确认弹窗，标题"确认提交"，内容"确认要提交项目信息吗？确认后将为你创建项目并跳转到项目详情页面。"</li>
+                                    <li>提供两个操作按钮：
+                                        <ul>
+                                            <li>"取消"：关闭弹窗，返回当前页面继续编辑</li>
+                                            <li>"确认提交"：关闭弹窗，Toast提示"创建成功" → 1.5秒后跳转</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">5.5 创建成功后跳转规则</div>
                 <table>
                     <thead>
                         <tr>
@@ -1138,6 +1406,58 @@
                     <div class="note-title">新建项目特殊提示</div>
                     <p>新创建的项目在项目详情页顶部显示"项目创建成功，请添加合同和任务"的引导提示条，引导用户进行下一步操作。</p>
                 </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">5.6 创建成功后系统生成信息</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>生成项</th>
+                            <th>生成规则</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>项目ID（project_id）</td>
+                            <td>系统自动生成全局唯一ID</td>
+                            <td>用于项目唯一标识，前端不可见，接口调用时使用</td>
+                        </tr>
+                        <tr>
+                            <td>项目编号（project_no）</td>
+                            <td>格式：LZJ + yyyyMMdd + 4位流水号</td>
+                            <td>示例：LZJ202607280001，在项目详情页展示</td>
+                        </tr>
+                        <tr>
+                            <td>项目架构</td>
+                            <td>初始化默认架构模板</td>
+                            <td>自动生成基础施工阶段框架（拆改 → 水电 → 泥瓦 → 木作 → 油漆 → 安装 → 保洁 → 验收）</td>
+                        </tr>
+                        <tr>
+                            <td>项目成员</td>
+                            <td>创建人自动加入项目成员列表</td>
+                            <td>
+                                <ul>
+                                    <li>创建人作为项目成员第一人</li>
+                                    <li>默认分配最高权限（超级管理员）</li>
+                                    <li>可管理项目所有模块（合同、任务、成员、架构等）</li>
+                                    <li>在"项目成员"页显示在列表首位，标注"创建人"标识</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>项目状态</td>
+                            <td>默认为"筹备中"</td>
+                            <td>项目创建后的初始状态，可在项目详情页查看并流转</td>
+                        </tr>
+                        <tr>
+                            <td>创建时间</td>
+                            <td>系统当前时间</td>
+                            <td>记录项目创建的精确时间，在项目详情页"基本信息"区域展示</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -2029,15 +2349,244 @@
             </div>
         </div>
 
-        <!-- ==================== 11. 项目详情页（业主小程序） ==================== -->
-        <div class="section" id="page-detail-owner">
+        <!-- ==================== 11. 项目动态页（服务方小程序） ==================== -->
+        <div class="section" id="page-activity-service">
             <div class="section-title">
-                十一、项目详情页（业主小程序）
-                <span class="badge">owner-miniapp/project-detail.html</span>
+                十一、项目动态页（服务方小程序）
+                <span class="badge">service-miniapp/activity-list.html</span>
             </div>
 
             <div class="subsection">
                 <div class="subsection-title">11.1 页面概述</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">页面名称</div>
+                        <div class="info-value">项目动态页</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面路径</div>
+                        <div class="info-value">/pages/project/activity-list</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">适用角色</div>
+                        <div class="info-value">项目经理、施工组长、设计师</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面入口</div>
+                        <div class="info-value">项目详情页"今日动态"卡片点击"查看全部动态"</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">11.2 页面结构</div>
+                <div class="code-block">
+┌─────────────────────────────────────┐
+│  导航栏                              │
+│  - 标题：项目动态                    │
+│  - 返回按钮                          │
+├─────────────────────────────────────┤
+│  层级筛选器（可选）                   │
+│  - 项目部/工作组/施工组下拉选择       │
+├─────────────────────────────────────┤
+│  动态时间线列表                      │
+│  ┌─────────────────────────────────┐│
+│  │ 日期分组标题                     ││
+│  ├─────────────────────────────────┤│
+│  │ ● 动态内容      操作人 时间 ││
+│  │   操作描述                       ││
+│  │   [媒体缩略图]（如有）           ││
+│  └─────────────────────────────────┘│
+│  ┌─────────────────────────────────┐│
+│  │ ● 动态内容      操作人 时间 ││
+│  │   操作描述                       ││
+│  └─────────────────────────────────┘│
+│  ...更多动态                         │
+└─────────────────────────────────────┘
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">11.3 动态类型规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>动态类型</th>
+                            <th>动态内容模板</th>
+                            <th>图标</th>
+                            <th>跳转目标</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>任务完成</td>
+                            <td>【任务名称】已完成验收</td>
+                            <td>✅</td>
+                            <td>跳转任务详情页</td>
+                        </tr>
+                        <tr>
+                            <td>任务提交</td>
+                            <td>【任务名称】已提交验收申请</td>
+                            <td>📤</td>
+                            <td>跳转任务详情页</td>
+                        </tr>
+                        <tr>
+                            <td>合同签署</td>
+                            <td>【合同名称】已签署完成</td>
+                            <td>📝</td>
+                            <td>跳转合同详情页</td>
+                        </tr>
+                        <tr>
+                            <td>合同审核</td>
+                            <td>【合同名称】审核通过/已驳回</td>
+                            <td>📋</td>
+                            <td>跳转合同详情页</td>
+                        </tr>
+                        <tr>
+                            <td>文件上传</td>
+                            <td>【操作人】上传了【文件数量】个文件</td>
+                            <td>📁</td>
+                            <td>跳转项目资料页</td>
+                        </tr>
+                        <tr>
+                            <td>成员加入</td>
+                            <td>【成员姓名】加入了项目</td>
+                            <td>👥</td>
+                            <td>跳转项目成员页</td>
+                        </tr>
+                        <tr>
+                            <td>对账单确认</td>
+                            <td>【对账单编号】业主已确认</td>
+                            <td>💰</td>
+                            <td>跳转对账单详情页</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">11.4 数据加载规则</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>属性</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>数据来源</td>
+                            <td><code>GET /api/v1/projects/:id/activities?level=xxx&page=1&size=20</code></td>
+                        </tr>
+                        <tr>
+                            <td>分页方式</td>
+                            <td>上拉加载更多，每页20条</td>
+                        </tr>
+                        <tr>
+                            <td>排序规则</td>
+                            <td>按时间倒序，最新动态在最上方</td>
+                        </tr>
+                        <tr>
+                            <td>层级筛选</td>
+                            <td>通过URL参数level传递，可选值：项目部/工作组/施工组</td>
+                        </tr>
+                        <tr>
+                            <td>空状态</td>
+                            <td>显示空状态插图，提示"暂无动态记录"</td>
+                        </tr>
+                        <tr>
+                            <td>下拉刷新</td>
+                            <td>支持下拉刷新，重新加载第一页数据</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">11.5 交互规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>交互元素</th>
+                            <th>触发条件</th>
+                            <th>交互效果</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>动态项点击</td>
+                            <td>点击单条动态记录</td>
+                            <td>根据动态类型跳转到对应的详情页（任务/合同/资料等）</td>
+                        </tr>
+                        <tr>
+                            <td>层级筛选</td>
+                            <td>切换层级选择器</td>
+                            <td>重新加载数据，筛选显示对应层级的动态</td>
+                        </tr>
+                        <tr>
+                            <td>媒体缩略图</td>
+                            <td>点击图片/视频缩略图</td>
+                            <td>全屏预览图片或播放视频</td>
+                        </tr>
+                        <tr>
+                            <td>上拉加载</td>
+                            <td>滚动到底部触发</td>
+                            <td>加载下一页数据，追加到列表末尾</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">11.6 时间显示规则</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>时间类型</th>
+                            <th>显示格式</th>
+                            <th>示例</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>今天</td>
+                            <td>今天 HH:mm</td>
+                            <td>今天 14:30</td>
+                        </tr>
+                        <tr>
+                            <td>昨天</td>
+                            <td>昨天 HH:mm</td>
+                            <td>昨天 09:15</td>
+                        </tr>
+                        <tr>
+                            <td>本周内</td>
+                            <td>周X HH:mm</td>
+                            <td>周二 16:20</td>
+                        </tr>
+                        <tr>
+                            <td>今年内</td>
+                            <td>MM-dd HH:mm</td>
+                            <td>07-25 10:00</td>
+                        </tr>
+                        <tr>
+                            <td>去年及更早</td>
+                            <td>yyyy-MM-dd</td>
+                            <td>2025-12-01</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ==================== 12. 项目详情页（业主小程序） ==================== -->
+        <div class="section" id="page-detail-owner">
+            <div class="section-title">
+                十二、项目详情页（业主小程序）
+                <span class="badge">owner-miniapp/project-detail.html</span>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">12.1 页面概述</div>
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">页面名称</div>
@@ -2063,7 +2612,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">11.2 页面结构</div>
+                <div class="subsection-title">12.2 页面结构</div>
                 <div class="code-block">
 ┌─────────────────────────────────────┐
 │  导航栏                              │
@@ -2096,7 +2645,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">11.3 功能差异（与服务方对比）</div>
+                <div class="subsection-title">12.3 功能差异（与服务方对比）</div>
                 <table>
                     <thead>
                         <tr>
@@ -2131,10 +2680,104 @@
             </div>
         </div>
 
-        <!-- ==================== 12. 项目信息页（业主小程序） ==================== -->
+        <!-- ==================== 13. 项目动态页（业主小程序） ==================== -->
+        <div class="section" id="page-activity-owner">
+            <div class="section-title">
+                十三、项目动态页（业主小程序）
+                <span class="badge">owner-miniapp/activity-list.html</span>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">13.1 页面概述</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">页面名称</div>
+                        <div class="info-value">项目动态页</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面路径</div>
+                        <div class="info-value">/pages/project/activity-list</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">适用角色</div>
+                        <div class="info-value">业主</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面入口</div>
+                        <div class="info-value">项目详情页"今日动态"卡片点击"查看全部动态"</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">13.2 功能说明</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>功能项</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>功能定位</td>
+                            <td>业主查看项目全部动态记录，了解项目进展</td>
+                        </tr>
+                        <tr>
+                            <td>页面跳转</td>
+                            <td>从项目详情页"今日动态"卡片点击"查看全部动态"进入</td>
+                        </tr>
+                        <tr>
+                            <td>层级筛选</td>
+                            <td>业主可查看项目部、工作组、施工组各层级的动态</td>
+                        </tr>
+                        <tr>
+                            <td>动态点击</td>
+                            <td>点击动态项跳转到对应详情页（任务/合同等），业主仅有查看权限</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="note" style="margin-top: 12px;">
+                    <div class="note-title">权限说明</div>
+                    <p>业主端项目动态页为纯查看模式，不支持发起任何操作。动态内容展示规则与服务方一致，但跳转目标页面仅展示业主可见内容。</p>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">13.3 功能差异（与服务方对比）</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>功能</th>
+                            <th>服务方</th>
+                            <th>业主</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>层级筛选</td>
+                            <td>✅ 可筛选项目部/工作组/施工组</td>
+                            <td>✅ 可筛选，但仅查看自己所在层级的动态</td>
+                        </tr>
+                        <tr>
+                            <td>动态点击</td>
+                            <td>跳转后可进行操作（如任务验收、合同签署）</td>
+                            <td>跳转后仅查看，无操作权限</td>
+                        </tr>
+                        <tr>
+                            <td>动态类型</td>
+                            <td>显示全部动态类型</td>
+                            <td>显示全部动态类型</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ==================== 14. 项目信息页（业主小程序） ==================== -->
         <div class="section" id="page-info-owner">
             <div class="section-title">
-                十二、项目信息页（业主小程序）
+                十四、项目信息页（业主小程序）
                 <span class="badge">owner-miniapp/project-info.html</span>
             </div>
 
@@ -2161,7 +2804,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">12.2 信息展示规格</div>
+                <div class="subsection-title">14.2 信息展示规格</div>
                 <table>
                     <thead>
                         <tr>
@@ -2211,7 +2854,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">12.3 字段限制说明</div>
+                <div class="subsection-title">14.3 字段限制说明</div>
                 <div class="note">
                     <div class="note-title">不显示字段</div>
                     <p>根据产品约束，项目信息页不显示：预算金额、项目类型（整体装修/局改/翻新）、项目负责人。</p>
@@ -2219,7 +2862,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">12.4 功能说明</div>
+                <div class="subsection-title">14.4 功能说明</div>
                 <p>业主端项目信息页为只读模式，业主可查看项目基本信息，不支持编辑修改。</p>
             </div>
         </div>
@@ -2227,12 +2870,12 @@
         <!-- ==================== 13. 项目架构页（业主小程序） ==================== -->
         <div class="section" id="page-architecture-owner">
             <div class="section-title">
-                十三、项目架构页（业主小程序）
+                十五、项目架构页（业主小程序）
                 <span class="badge">owner-miniapp/architecture.html</span>
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">11.1 页面概述</div>
+                <div class="subsection-title">15.1 页面概述</div>
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">页面名称</div>
@@ -2254,7 +2897,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">13.2 功能差异（与服务方对比）</div>
+                <div class="subsection-title">15.2 功能差异（与服务方对比）</div>
                 <table>
                     <thead>
                         <tr>
@@ -2302,12 +2945,12 @@
         <!-- ==================== 14. 项目成员页（业主小程序） ==================== -->
         <div class="section" id="page-member-owner">
             <div class="section-title">
-                十四、项目成员页（业主小程序）
+                十六、项目成员页（业主小程序）
                 <span class="badge">owner-miniapp/member.html</span>
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">12.1 页面概述</div>
+                <div class="subsection-title">16.1 页面概述</div>
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">页面名称</div>
@@ -2342,12 +2985,12 @@
         <!-- ==================== 15. 项目资料页（业主小程序） ==================== -->
         <div class="section" id="page-files-owner">
             <div class="section-title">
-                十五、项目资料页（业主小程序）
+                十七、项目资料页（业主小程序）
                 <span class="badge">owner-miniapp/project-files.html</span>
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">13.1 页面概述</div>
+                <div class="subsection-title">17.1 页面概述</div>
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">页面名称</div>
@@ -2369,7 +3012,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">15.2 功能说明</div>
+                <div class="subsection-title">17.2 功能说明</div>
                 <p>业主端项目资料页为只读模式，可查看项目相关资料文件，但不支持上传、编辑、删除操作。</p>
             </div>
         </div>
@@ -2377,7 +3020,7 @@
         <!-- ==================== 16. 对账单列表页（业主小程序） ==================== -->
         <div class="section" id="page-statement-list-owner">
             <div class="section-title">
-                十六、对账单列表页（业主小程序）
+                十八、对账单列表页（业主小程序）
                 <span class="badge">owner-miniapp/statement-list.html</span>
             </div>
 
@@ -2404,7 +3047,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">16.2 功能差异（与服务方对比）</div>
+                <div class="subsection-title">18.2 页面结构</div>
                 <table>
                     <thead>
                         <tr>
@@ -2439,7 +3082,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">16.3 状态筛选说明</div>
+                <div class="subsection-title">18.3 状态筛选说明</div>
                 <div class="note">
                     <div class="note-title">业主视角状态</div>
                     <p>业主端状态筛选显示"待我确认"，而非服务端的"待确认"，便于业主快速定位需要处理的对账单。</p>
@@ -2450,7 +3093,7 @@
         <!-- ==================== 17. 对账单详情页（业主小程序） ==================== -->
         <div class="section" id="page-statement-detail-owner">
             <div class="section-title">
-                十七、对账单详情页（业主小程序）
+                十九、对账单详情页（业主小程序）
                 <span class="badge">owner-miniapp/statement-detail.html</span>
             </div>
 
@@ -2477,7 +3120,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">17.2 底部操作按钮</div>
+                <div class="subsection-title">19.2 底部操作按钮</div>
                 <table>
                     <thead>
                         <tr>
@@ -2512,7 +3155,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">17.3 确认操作</div>
+                <div class="subsection-title">19.3 确认操作</div>
                 <table>
                     <thead>
                         <tr>
@@ -2537,7 +3180,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">17.4 驳回规则</div>
+                <div class="subsection-title">19.4 驳回规则</div>
                 <table>
                     <thead>
                         <tr>
@@ -2563,14 +3206,343 @@
             </div>
         </div>
 
-        <!-- ==================== API接口汇总 ==================== -->
-        <div class="section" id="api-summary">
+        <!-- ==================== 字段校验规则 ==================== -->
+        <div class="section" id="validation-rules">
             <div class="section-title">
-                十八、API接口汇总
+                二十、字段校验规则
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">18.1 项目列表接口</div>
+                <div class="subsection-title">20.1 项目基本信息字段</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>字段</th>
+                            <th>类型</th>
+                            <th>必填</th>
+                            <th>校验规则</th>
+                            <th>错误提示</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>项目编号（project_no）</td>
+                            <td>String(20)</td>
+                            <td><span class="tag tag-system">系统生成</span></td>
+                            <td>格式：LZJ + yyyyMMdd + 4位流水号</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>项目名称（name）</td>
+                            <td>String(100)</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>1-100字符，非空</td>
+                            <td>请输入项目名称 / 项目名称不能超过100个字符</td>
+                        </tr>
+                        <tr>
+                            <td>项目类型（type）</td>
+                            <td>Enum</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>枚举值：decoration（家装）、partial（局部改造）、repair（维修）</td>
+                            <td>请选择项目类型</td>
+                        </tr>
+                        <tr>
+                            <td>项目地址（address）</td>
+                            <td>String(200)</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>1-200字符，非空</td>
+                            <td>请输入项目地址 / 项目地址不能超过200个字符</td>
+                        </tr>
+                        <tr>
+                            <td>城市编码（city_code）</td>
+                            <td>String(6)</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>省市区级联选择，仅支持北京（11xxxx）、河南-南阳（41xxxx）、陕西-西安（61xxxx）</td>
+                            <td>请选择所在城市</td>
+                        </tr>
+                        <tr>
+                            <td>项目预算（budget）</td>
+                            <td>Decimal(12,2)</td>
+                            <td><span class="tag tag-optional">选填</span></td>
+                            <td>正数，≤99,999,999.99，最多2位小数</td>
+                            <td>请输入正确的金额 / 金额不能超过99,999,999.99元</td>
+                        </tr>
+                        <tr>
+                            <td>计划开工日期（start_date）</td>
+                            <td>Date</td>
+                            <td><span class="tag tag-optional">选填</span></td>
+                            <td>日期格式 YYYY-MM-DD</td>
+                            <td>请选择正确的日期</td>
+                        </tr>
+                        <tr>
+                            <td>计划入住日期（end_date）</td>
+                            <td>Date</td>
+                            <td><span class="tag tag-optional">选填</span></td>
+                            <td>日期格式 YYYY-MM-DD，须晚于开工日期</td>
+                            <td>请选择正确的日期 / 入住日期须晚于开工日期</td>
+                        </tr>
+                        <tr>
+                            <td>项目描述（description）</td>
+                            <td>Text</td>
+                            <td><span class="tag tag-optional">选填</span></td>
+                            <td>1-500字符</td>
+                            <td>项目描述不能超过500个字符</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">20.2 成员模块字段</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>字段</th>
+                            <th>类型</th>
+                            <th>必填</th>
+                            <th>校验规则</th>
+                            <th>错误提示</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>项目角色（role）</td>
+                            <td>Enum</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>枚举值：project_manager（项目经理）、foreman（工长）、worker（工人）、supervisor（监理）、owner（业主）</td>
+                            <td>请选择角色</td>
+                        </tr>
+                        <tr>
+                            <td>加入方式（join_method）</td>
+                            <td>Enum</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>枚举值：invite（邀请加入）、scan（扫码加入）、assign（管理员分配）</td>
+                            <td>—</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">20.3 对账单模块字段</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>字段</th>
+                            <th>类型</th>
+                            <th>必填</th>
+                            <th>校验规则</th>
+                            <th>错误提示</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>对账单编号（statement_no）</td>
+                            <td>String(30)</td>
+                            <td><span class="tag tag-system">系统生成</span></td>
+                            <td>格式：DZ + yyyyMMdd + 4位流水号</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>对账单类型（bill_type）</td>
+                            <td>Enum</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>枚举值：worker_wage（工友工资）、material（辅料费）、measure（措施费）、insurance（保险费）、foreman_wage（工长工资）</td>
+                            <td>请选择对账单类型</td>
+                        </tr>
+                        <tr>
+                            <td>金额（amount）</td>
+                            <td>Decimal(12,2)</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>-9,999,999.99 ~ 9,999,999.99，最多2位小数；正数表示支出，负数表示冲销/退款</td>
+                            <td>请输入正确的金额 / 金额不能超过9,999,999.99元</td>
+                        </tr>
+                        <tr>
+                            <td>用途描述（purpose）</td>
+                            <td>String(200)</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>1-200字符，非空</td>
+                            <td>请输入用途描述 / 用途描述不能超过200个字符</td>
+                        </tr>
+                        <tr>
+                            <td>驳回原因（reject_reason）</td>
+                            <td>String(500)</td>
+                            <td><span class="tag tag-required">驳回时必填</span></td>
+                            <td>1-500字符</td>
+                            <td>请输入驳回原因 / 驳回原因不能超过500个字符</td>
+                        </tr>
+                        <tr>
+                            <td>支付凭证（voucher_files）</td>
+                            <td>JSON</td>
+                            <td><span class="tag tag-optional">选填</span></td>
+                            <td>最多9张，单张≤10MB，格式：jpg/jpeg/png/webp</td>
+                            <td>请上传图片格式的文件 / 单张图片不能超过10MB / 最多上传9张凭证</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">20.4 评价模块字段</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>字段</th>
+                            <th>类型</th>
+                            <th>必填</th>
+                            <th>校验规则</th>
+                            <th>错误提示</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>星级评分（rating）</td>
+                            <td>Decimal(2,1)</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>0.5的倍数，范围0.5-5.0（支持半星）</td>
+                            <td>请选择评分</td>
+                        </tr>
+                        <tr>
+                            <td>评价标签（tags）</td>
+                            <td>JSON</td>
+                            <td><span class="tag tag-required">至少1个</span></td>
+                            <td>可选值：on_time、good_quality、professional、clean_site、good_attitude、needs_improvement、delayed、quality_issue、messy_site、poor_communication</td>
+                            <td>请至少选择一个标签</td>
+                        </tr>
+                        <tr>
+                            <td>文字评价（comment）</td>
+                            <td>Text</td>
+                            <td><span class="tag tag-optional">选填</span></td>
+                            <td>1-300字符</td>
+                            <td>评价内容不能超过300个字符</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">20.5 项目动态表字段（project_activities）</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>字段</th>
+                            <th>类型</th>
+                            <th>必填</th>
+                            <th>校验规则</th>
+                            <th>错误提示</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>动态类型（type）</td>
+                            <td>Enum</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>枚举值：contract_signed（合同签约）、task_completed（任务完成）、task_rejected（任务驳回）、member_joined（成员加入）、member_removed（成员移除）、statement_created（对账单创建）</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>操作人（operator_id）</td>
+                            <td>String(UUID)</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>UUID格式</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>目标类型（target_type）</td>
+                            <td>Enum</td>
+                            <td><span class="tag tag-optional">选填</span></td>
+                            <td>枚举值：contract、task、statement、member</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>动态描述（description）</td>
+                            <td>String(500)</td>
+                            <td><span class="tag tag-system">系统生成</span></td>
+                            <td>1-500字符</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>创建时间（created_at）</td>
+                            <td>DateTime</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>日期时间格式</td>
+                            <td>—</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">20.6 待办事项表字段（todos）</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>字段</th>
+                            <th>类型</th>
+                            <th>必填</th>
+                            <th>校验规则</th>
+                            <th>错误提示</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>待办类型（type）</td>
+                            <td>Enum</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>枚举值：task_confirm（任务确认）、contract_review（合同审核）、statement_confirm（对账单确认）</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>目标ID（target_id）</td>
+                            <td>String(UUID)</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>UUID格式</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>待办状态（status）</td>
+                            <td>Enum</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>枚举值：pending（待处理）、completed（已完成）、expired（已过期）</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>处理人（handler_id）</td>
+                            <td>String(UUID)</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>UUID格式</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>处理时间（handled_at）</td>
+                            <td>DateTime</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>日期时间格式</td>
+                            <td>—</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="font-size: 13px; color: var(--text-tertiary); margin-top: 12px;">注：动态表和待办事项表字段均为系统自动生成，无用户输入校验场景。</p>
+            </div>
+
+            <div class="note">
+                <div class="note-title">交互规格</div>
+                <p><strong>城市选择</strong>：三级级联选择器，仅支持北京、河南（南阳）、陕西（西安）三省市</p>
+                <p><strong>金额输入</strong>：失焦时自动格式化为两位小数，大额显示"X.X万"</p>
+                <p><strong>负数金额</strong>：对账单负数金额在列表和详情页显示为红色</p>
+                <p><strong>星级评分</strong>：支持半星点击，点击星星左半边为x.0分，右半边为x.5分</p>
+                <p><strong>评价标签</strong>：正面标签和负面标签分组显示，至少选择1个</p>
+            </div>
+        </div>
+
+        <!-- ==================== API接口汇总 ==================== -->
+        <div class="section" id="api-summary">
+            <div class="section-title">
+                二十一、API接口汇总
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">21.1 项目列表接口</div>
                 <table>
                     <thead>
                         <tr>
@@ -2598,7 +3570,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">18.2 项目详情接口</div>
+                <div class="subsection-title">21.2 项目详情接口</div>
                 <table>
                     <thead>
                         <tr>
@@ -2644,7 +3616,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">18.3 项目架构接口</div>
+                <div class="subsection-title">21.3 项目架构接口</div>
                 <table>
                     <thead>
                         <tr>
@@ -2684,7 +3656,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">18.4 项目成员接口</div>
+                <div class="subsection-title">21.4 项目成员接口</div>
                 <table>
                     <thead>
                         <tr>
@@ -2724,7 +3696,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">18.5 项目资料接口</div>
+                <div class="subsection-title">21.5 项目资料接口</div>
                 <table>
                     <thead>
                         <tr>
@@ -2764,7 +3736,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">18.6 对账单接口</div>
+                <div class="subsection-title">21.6 对账单接口</div>
                 <table>
                     <thead>
                         <tr>

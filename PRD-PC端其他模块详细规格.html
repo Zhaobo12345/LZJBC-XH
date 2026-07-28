@@ -24,6 +24,90 @@
             color: var(--text-primary);
             background-color: var(--bg-secondary);
         }
+
+        /* 左右布局 */
+        .page-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 左侧目录 */
+        .sidebar-toc {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            z-index: 100;
+            flex-shrink: 0;
+        }
+
+        .sidebar-toc::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-toc::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        .sidebar-toc::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        .sidebar-toc-title {
+            padding: 24px 24px 16px;
+            font-size: 18px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background: var(--bg-primary);
+            z-index: 1;
+        }
+
+        .sidebar-toc-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-toc-list li {
+            border-bottom: none;
+        }
+
+        .sidebar-toc-list a {
+            display: block;
+            padding: 12px 24px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-toc-list a:hover {
+            background: var(--bg-secondary);
+            color: var(--warning-color);
+            text-decoration: none;
+        }
+
+        .sidebar-toc-list a.active {
+            background: #FFF7E6;
+            color: var(--warning-color);
+            border-left-color: var(--warning-color);
+            font-weight: 500;
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            background: var(--bg-secondary);
+        }
+
         .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
         .header {
             background: linear-gradient(135deg, #FA8C16 0%, #FAAD14 100%);
@@ -79,14 +163,27 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="container">
-            <h1>良造家管理平台 - PC端其他模块详细PRD规格</h1>
-            <div style="font-size: 14px; opacity: 0.9;">版本：v1.0 | 创建日期：2026-07-17 | 模块：模板管理、用户管理</div>
-        </div>
-    </div>
+    <!-- 左侧目录 -->
+    <nav class="sidebar-toc" id="sidebarToc">
+        <div class="sidebar-toc-title">页面导航</div>
+        <ul class="sidebar-toc-list">
+            <li><a href="#page-contract-template">一、合同文本模板页</a></li>
+            <li><a href="#page-stage-template">二、阶段任务模板页</a></li>
+            <li><a href="#pc-other-api-summary">三、API接口汇总</a></li>
+        </ul>
+    </nav>
 
-    <div class="container">
+    <!-- 主内容区域 -->
+    <div class="main-content">
+        <!-- 文档头部 -->
+        <div class="header">
+            <div class="container">
+                <h1>良造家管理平台 - PC端其他模块详细PRD规格</h1>
+                <div style="font-size: 14px; opacity: 0.9;">版本：v1.0 | 创建日期：2026-07-17 | 模块：模板管理、用户管理</div>
+            </div>
+        </div>
+
+        <div class="container">
         <!-- ==================== 1. 合同文本模板页 ==================== -->
         <div class="section" id="page-contract-template">
             <div class="section-title">一、合同文本模板页（PC端）</div>
@@ -263,7 +360,7 @@
         </div>
 
         <!-- API接口汇总 -->
-        <div class="section">
+        <div class="section" id="pc-other-api-summary">
             <div class="section-title">三、API接口汇总</div>
             <table>
                 <thead><tr><th>模块</th><th>接口</th><th>方法</th><th>说明</th></tr></thead>
@@ -284,7 +381,63 @@
             <p>— PC端其他模块规格结束 —</p>
             <p style="font-size: 12px; margin-top: 8px;">返回 <a href="PRD-完整文档.html" style="color: var(--warning-color);">完整文档</a></p>
         </div>
-
+        </div>
     </div>
+
+    <!-- 滚动高亮脚本 -->
+    <script>
+        const sections = [
+            'page-contract-template',
+            'page-stage-template',
+            'pc-other-api-summary'
+        ];
+        
+        const tocLinks = document.querySelectorAll('.sidebar-toc-list a');
+        
+        window.addEventListener('scroll', function() {
+            const scrollPos = window.scrollY || window.pageYOffset;
+            let currentSection = sections[0];
+            
+            for (let i = 0; i < sections.length; i++) {
+                const section = document.getElementById(sections[i]);
+                if (section) {
+                    const sectionTop = section.offsetTop - 100;
+                    const sectionBottom = sectionTop + section.offsetHeight;
+                    
+                    if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
+                        currentSection = sections[i];
+                        break;
+                    } else if (scrollPos >= sectionTop) {
+                        currentSection = sections[i];
+                    }
+                }
+            }
+            
+            tocLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + currentSection) {
+                    link.classList.add('active');
+                }
+            });
+        });
+        
+        tocLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    const offsetTop = targetElement.offsetTop - 20;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        window.dispatchEvent(new Event('scroll'));
+    </script>
 </body>
 </html>

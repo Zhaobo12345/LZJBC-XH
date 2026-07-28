@@ -24,6 +24,90 @@
             color: var(--text-primary);
             background-color: var(--bg-secondary);
         }
+
+        /* 左右布局 */
+        .page-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 左侧目录 */
+        .sidebar-toc {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            z-index: 100;
+            flex-shrink: 0;
+        }
+
+        .sidebar-toc::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-toc::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        .sidebar-toc::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        .sidebar-toc-title {
+            padding: 24px 24px 16px;
+            font-size: 18px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background: var(--bg-primary);
+            z-index: 1;
+        }
+
+        .sidebar-toc-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-toc-list li {
+            border-bottom: none;
+        }
+
+        .sidebar-toc-list a {
+            display: block;
+            padding: 12px 24px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-toc-list a:hover {
+            background: var(--bg-secondary);
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .sidebar-toc-list a.active {
+            background: #E6F7FF;
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            background: var(--bg-secondary);
+        }
+
         .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
         .header {
             background: linear-gradient(135deg, #1890FF 0%, #40A9FF 100%);
@@ -64,25 +148,7 @@
             margin-bottom: 16px;
             color: var(--text-primary);
         }
-        .page-nav {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 24px;
-            margin-bottom: 32px;
-        }
-        .page-nav-title { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
-        .page-nav-list { list-style: none; display: flex; flex-wrap: wrap; gap: 12px; }
-        .page-nav-list a {
-            display: inline-block;
-            padding: 8px 16px;
-            background: var(--bg-secondary);
-            border-radius: 6px;
-            text-decoration: none;
-            color: var(--primary-color);
-            font-size: 14px;
-        }
-        .page-nav-list a:hover { background: var(--primary-color); color: white; }
+
         table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
         table th, table td {
             padding: 12px 16px;
@@ -133,26 +199,32 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="container">
-            <h1>良造家管理平台 - 合同模块详细PRD规格</h1>
-            <div class="meta">
-                版本：v1.0 | 创建日期：2026-07-17 | 模块：合同管理
+    <!-- 左侧目录 -->
+    <nav class="sidebar-toc" id="sidebarToc">
+        <div class="sidebar-toc-title">页面导航</div>
+        <ul class="sidebar-toc-list">
+            <li><a href="#page-list">一、合同列表页（PC）</a></li>
+            <li><a href="#page-detail">二、合同详情页（PC）</a></li>
+            <li><a href="#page-mini-service">三、合同详情页（服务方）</a></li>
+            <li><a href="#page-mini-owner">四、合同详情页（业主）</a></li>
+            <li><a href="#change-function">五、发起变更功能详细规格</a></li>
+            <li><a href="#global-spec">六、全局规格参数</a></li>
+        </ul>
+    </nav>
+
+    <!-- 主内容区域 -->
+    <div class="main-content">
+        <!-- 文档头部 -->
+        <div class="header">
+            <div class="container">
+                <h1>良造家管理平台 - 合同模块详细PRD规格</h1>
+                <div class="meta">
+                    版本：v1.0 | 创建日期：2026-07-17 | 模块：合同管理
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="container">
-        <!-- 页面导航 -->
-        <div class="page-nav">
-            <div class="page-nav-title">页面导航</div>
-            <ul class="page-nav-list">
-                    <li><a href="#page-list">1. 合同列表页（PC）</a></li>
-                    <li><a href="#page-detail">2. 合同详情页（PC）</a></li>
-                    <li><a href="#page-mini-service">3. 合同详情页（服务方小程序）</a></li>
-                    <li><a href="#page-mini-owner">4. 合同详情页（业主小程序）</a></li>
-                </ul>
-        </div>
+        <div class="container">
 
         <!-- ==================== 1. 合同列表页 ==================== -->
         <div class="section" id="page-list">
@@ -371,47 +443,390 @@
             </div>
         </div>
 
-        <!-- ==================== 2. 合同详情页（已在模板示例中详细说明） ==================== -->
+        <!-- ==================== 2. 合同详情页（PC端）完整规格 ==================== -->
         <div class="section" id="page-detail">
             <div class="section-title">
                 二、合同详情页（PC端）
                 <span class="badge">pc-contract-detail.html</span>
             </div>
             
-            <div class="note">
-                <div class="note-title">参考模板示例</div>
-                <p>合同详情页的完整规格已在"PRD-详细规格-模板示例.html"中详细说明，包含：页面结构、字段定义、组件规格、交互流程、状态变化、异常处理、API对接、权限控制等全部内容。此处仅补充关键规格摘要。</p>
-            </div>
-
+            <!-- 2.1 页面概述 -->
             <div class="subsection">
-                <div class="subsection-title">2.1 关键规格摘要</div>
+                <div class="subsection-title">2.1 基本信息</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">页面名称</div>
+                        <div class="info-value">合同详情页</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面文件</div>
+                        <div class="info-value">pc-contract-detail.html</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">适用角色</div>
+                        <div class="info-value">运营</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面入口</div>
+                        <div class="info-value">合同列表页点击"去审核"或合同名称</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面类型</div>
+                        <div class="info-value">详情展示页（含操作）</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面状态</div>
+                        <div class="info-value">根据合同状态动态变化</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title">2.2 业务目标</div>
+                <p>运营角色查看合同详情并执行审核操作（通过/驳回）。</p>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title">2.3 功能范围</div>
                 <table>
                     <thead>
                         <tr>
-                            <th>规格项</th>
-                            <th>值</th>
+                            <th>功能项</th>
+                            <th>状态</th>
+                            <th>说明</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>状态横幅</td>
-                            <td>根据合同状态显示不同颜色和文案</td>
+                            <td>基本信息展示</td>
+                            <td><span class="tag tag-required">保留</span></td>
+                            <td>合同名称、编号、类型、金额、签约日期等</td>
                         </tr>
                         <tr>
-                            <td>审核面板</td>
-                            <td>仅运营角色+待审核状态显示</td>
+                            <td>合同正文展示</td>
+                            <td><span class="tag tag-required">保留</span></td>
+                            <td>富文本内容展示</td>
                         </tr>
                         <tr>
-                            <td>Tab组件</td>
-                            <td>概览、合同正文、阶段任务、变更记录</td>
+                            <td>阶段任务展示</td>
+                            <td><span class="tag tag-required">保留</span></td>
+                            <td>阶段列表、任务列表、执行进度</td>
                         </tr>
                         <tr>
-                            <td>导出功能</td>
-                            <td>导出PDF，文件名：合同名称_合同编号.pdf</td>
+                            <td>版本记录Tab</td>
+                            <td><span class="tag tag-required">保留</span></td>
+                            <td>合同版本历史</td>
+                        </tr>
+                        <tr>
+                            <td>变更记录Tab</td>
+                            <td><span class="tag tag-required">保留</span></td>
+                            <td>合同变更历史</td>
+                        </tr>
+                        <tr>
+                            <td>导出合同</td>
+                            <td><span class="tag tag-required">保留</span></td>
+                            <td>导出PDF格式</td>
                         </tr>
                         <tr>
                             <td>分享功能</td>
-                            <td>分享给微信好友、复制链接</td>
+                            <td><span class="tag tag-required">保留</span></td>
+                            <td>分享给微信好友或生成链接</td>
+                        </tr>
+                        <tr>
+                            <td>审核操作（运营角色）</td>
+                            <td><span class="tag tag-required">保留</span></td>
+                            <td>审核通过/驳回</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 2.4 页面结构 -->
+            <div class="subsection">
+                <div class="subsection-title">2.4 页面结构</div>
+                <div class="code-block">
+┌─────────────────────────────────────────────────────────────────────┐
+│  Header: 面包屑导航 + 用户信息 + 用户下拉菜单                          │
+├─────────────────────────────────────────────────────────────────────┤
+│  Status Banner: 合同状态横幅（根据状态显示不同颜色和文案）              │
+├─────────────────────────────────────────────────────────────────────┤
+│  Review Panel: 审核面板（仅运营角色+待审核状态显示）                   │
+├─────────────────────────────────────────────────────────────────────┤
+│  ┌─────────────────────────────────┬───────────────────────────────┐│
+│  │  Main Content Area              │  Sidebar                      ││
+│  │  ┌─────────────────────────────┐│  ┌───────────────────────────┐││
+│  │  │ Tab: 概览 | 合同正文 |      ││  │ 签约双方                  │││
+│  │  │      阶段任务 | 变更记录    ││  ├───────────────────────────┤││
+│  │  ├─────────────────────────────┤│  │ 附件文件                  │││
+│  │  │ Tab Content Area            ││  ├───────────────────────────┤││
+│  │  │                             ││  │ 操作记录                  │││
+│  │  │                             ││  └───────────────────────────┘││
+│  │  └─────────────────────────────┘│                               ││
+│  └─────────────────────────────────┴───────────────────────────────┘│
+└─────────────────────────────────────────────────────────────────────┘
+                </div>
+            </div>
+
+            <!-- 2.5 字段定义 -->
+            <div class="subsection">
+                <div class="subsection-title">2.5 字段定义与校验规则</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>字段名</th>
+                            <th>标签</th>
+                            <th>数据来源</th>
+                            <th>校验规则</th>
+                            <th>显示规则</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>contract_name</td>
+                            <td>合同名称</td>
+                            <td>contracts.name</td>
+                            <td>必填，1-200字符</td>
+                            <td>完整显示，超长换行</td>
+                        </tr>
+                        <tr>
+                            <td>contract_no</td>
+                            <td>合同编号</td>
+                            <td>contracts.contract_no</td>
+                            <td>格式：HT+yyyyMMdd+4位流水号</td>
+                            <td>完整显示</td>
+                        </tr>
+                        <tr>
+                            <td>contract_type</td>
+                            <td>合同类型</td>
+                            <td>contracts.type</td>
+                            <td>枚举值（见数据字典）</td>
+                            <td>显示中文标签</td>
+                        </tr>
+                        <tr>
+                            <td>amount</td>
+                            <td>合同金额</td>
+                            <td>contracts.amount</td>
+                            <td>Decimal(12,2)，正数</td>
+                            <td>红色字体，¥+千分位格式</td>
+                        </tr>
+                        <tr>
+                            <td>signed_at</td>
+                            <td>签约日期</td>
+                            <td>contracts.signed_at</td>
+                            <td>日期格式</td>
+                            <td>未签约显示"-"，已签约显示yyyy-MM-dd</td>
+                        </tr>
+                        <tr>
+                            <td>project_name</td>
+                            <td>关联项目</td>
+                            <td>projects.name</td>
+                            <td>—</td>
+                            <td>可点击跳转到项目详情</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 2.6 状态横幅规格 -->
+            <div class="subsection">
+                <div class="subsection-title">2.6 状态横幅规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>状态值</th>
+                            <th>背景色</th>
+                            <th>标题文案</th>
+                            <th>显示条件</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>drafting</td>
+                            <td>#8C8C8C渐变</td>
+                            <td>📝 合同拟定中</td>
+                            <td>所有角色</td>
+                        </tr>
+                        <tr>
+                            <td>pending_review</td>
+                            <td>#13C2C2渐变</td>
+                            <td>⏳ 合同待审核</td>
+                            <td>运营角色</td>
+                        </tr>
+                        <tr>
+                            <td>pending_confirm</td>
+                            <td>#13C2C2渐变</td>
+                            <td>⏳ 合同待确认</td>
+                            <td>业主可见"确认合同"按钮</td>
+                        </tr>
+                        <tr>
+                            <td>pending_sign</td>
+                            <td>#722ED1渐变</td>
+                            <td>✍️ 合同待签约</td>
+                            <td>甲乙双方可见"确认签约"按钮</td>
+                        </tr>
+                        <tr>
+                            <td>signed</td>
+                            <td>#1890FF渐变</td>
+                            <td>✅ 合同已签约</td>
+                            <td>可发起变更</td>
+                        </tr>
+                        <tr>
+                            <td>changing</td>
+                            <td>#FA8C16渐变</td>
+                            <td>🔄 合同变更待审核</td>
+                            <td>运营可见审核变更按钮</td>
+                        </tr>
+                        <tr>
+                            <td>platform_rejected</td>
+                            <td>#FF4D4F渐变</td>
+                            <td>❌ 合同已驳回</td>
+                            <td>显示驳回横幅</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 2.7 按钮规格 -->
+            <div class="subsection">
+                <div class="subsection-title">2.7 按钮规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>按钮</th>
+                            <th>样式</th>
+                            <th>显示条件</th>
+                            <th>点击触发</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>审核通过</td>
+                            <td>主按钮，背景#1890FF</td>
+                            <td>运营角色 + pending_review状态</td>
+                            <td>POST /api/v1/contracts/:id/approve</td>
+                        </tr>
+                        <tr>
+                            <td>审核驳回</td>
+                            <td>次按钮，白底边框#D9D9D9</td>
+                            <td>运营角色 + pending_review状态</td>
+                            <td>POST /api/v1/contracts/:id/reject（需填写驳回原因）</td>
+                        </tr>
+                        <tr>
+                            <td>导出合同</td>
+                            <td>图标按钮📥</td>
+                            <td>pending_confirm及以后状态</td>
+                            <td>GET /api/v1/contracts/:id/export</td>
+                        </tr>
+                        <tr>
+                            <td>分享</td>
+                            <td>图标按钮📤</td>
+                            <td>已签约状态（业主不可见）</td>
+                            <td>分享给微信好友或复制链接</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 2.8 交互流程 -->
+            <div class="subsection">
+                <div class="subsection-title">2.8 交互流程</div>
+                <div class="code-block" style="font-size: 12px;">
+审核通过流程：
+1. 运营用户点击"审核通过"按钮
+2. 弹出确认弹窗，标题"确认审核通过？"
+3. 用户点击"确定"，按钮显示加载状态"处理中..."
+4. 调用接口 POST /api/v1/contracts/:id/approve
+5. 成功：Toast显示"审核成功"，页面刷新，状态横幅变为"待确认"
+6. 失败：Toast显示错误信息
+
+审核驳回流程：
+1. 运营用户点击"驳回"按钮
+2. 驳回输入框展开
+3. 用户输入驳回原因（必填，1-500字符）
+4. 按钮文案变为"确认驳回"
+5. 调用接口 POST /api/v1/contracts/:id/reject
+6. 成功：Toast显示"驳回成功"，显示驳回横幅
+                </div>
+            </div>
+
+            <!-- 2.9 权限控制 -->
+            <div class="subsection">
+                <div class="subsection-title">2.9 权限控制</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>操作/元素</th>
+                            <th>运营（PC端）</th>
+                            <th>服务方</th>
+                            <th>业主</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>查看合同详情</td>
+                            <td>✅ 待审核合同</td>
+                            <td>✅ 项目相关合同</td>
+                            <td>✅ 自己的合同</td>
+                        </tr>
+                        <tr>
+                            <td>审核通过/驳回</td>
+                            <td>✅</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                        </tr>
+                        <tr>
+                            <td>导出合同</td>
+                            <td>✅ 已审核合同</td>
+                            <td>✅ 项目相关合同</td>
+                            <td>✅ 自己的合同</td>
+                        </tr>
+                        <tr>
+                            <td>分享合同</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                            <td>❌</td>
+                        </tr>
+                        <tr>
+                            <td>发起变更</td>
+                            <td>❌</td>
+                            <td>✅ 已签约合同</td>
+                            <td>❌</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 2.10 异常处理 -->
+            <div class="subsection">
+                <div class="subsection-title">2.10 异常处理</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>错误场景</th>
+                            <th>错误码</th>
+                            <th>用户提示</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>合同不存在</td>
+                            <td>40401</td>
+                            <td>Toast"合同不存在"，跳转列表页</td>
+                        </tr>
+                        <tr>
+                            <td>无权限查看</td>
+                            <td>40301</td>
+                            <td>Toast"无权限查看此合同"，跳转列表页</td>
+                        </tr>
+                        <tr>
+                            <td>驳回原因为空</td>
+                            <td>—</td>
+                            <td>Toast"请输入驳回原因"</td>
+                        </tr>
+                        <tr>
+                            <td>网络错误/超时</td>
+                            <td>—</td>
+                            <td>页面中央"加载失败，请刷新重试"</td>
                         </tr>
                     </tbody>
                 </table>
@@ -556,15 +971,15 @@
             </div>
         </div>
 
-        <!-- ==================== 7. 业主小程序合同详情页 ==================== -->
+        <!-- ==================== 4. 业主小程序合同详情页 ==================== -->
         <div class="section" id="page-mini-owner">
             <div class="section-title">
-                七、合同详情页（业主小程序）
+                四、合同详情页（业主小程序）
                 <span class="badge">owner-miniapp/contract-detail.html</span>
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">7.1 页面概述</div>
+                <div class="subsection-title">4.1 页面概述</div>
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">页面名称</div>
@@ -590,7 +1005,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">7.2 功能差异（与PC端、服务方对比）</div>
+                <div class="subsection-title">4.2 功能差异（与PC端、服务方对比）</div>
                 <table>
                     <thead>
                         <tr>
@@ -654,7 +1069,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">7.3 确认合同按钮规格</div>
+                <div class="subsection-title">4.3 确认合同按钮规格</div>
                 <table>
                     <thead>
                         <tr>
@@ -688,7 +1103,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">7.4 确认签约按钮规格</div>
+                <div class="subsection-title">4.4 确认签约按钮规格</div>
                 <table>
                     <thead>
                         <tr>
@@ -718,521 +1133,417 @@
             </div>
         </div>
 
-        <!-- ==================== 5. 对账单列表页（服务方小程序） ==================== -->
-        <div class="section" id="page-statement-list">
+        <!-- ==================== 5. 发起变更功能详细规格 ==================== -->
+        <div class="section" id="change-function">
             <div class="section-title">
-                五、对账单列表页（服务方小程序）
-                <span class="badge">service-miniapp/statement-list.html</span>
+                五、发起变更功能详细规格
+                <span class="badge">service-miniapp/contract-detail.html</span>
             </div>
 
-            <div class="subsection">
-                <div class="subsection-title">5.1 页面概述</div>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <div class="info-label">页面名称</div>
-                        <div class="info-value">对账单列表页</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">页面路径</div>
-                        <div class="info-value">service-miniapp/statement-list.html</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">适用角色</div>
-                        <div class="info-value">项目经理、施工组长、工长</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">页面入口</div>
-                        <div class="info-value">项目详情页 → 对账单入口</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">页面类型</div>
-                        <div class="info-value">列表页 + 表单</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">业务目标</div>
-                        <div class="info-value">管理项目对账单，查看账单状态，发起新账单，确认/驳回账单</div>
-                    </div>
-                </div>
+            <div class="note">
+                <div class="note-title">功能说明</div>
+                本章节详细描述服务方小程序合同详情页的"发起变更"功能交互规格，包括变更弹窗UI、字段校验、提交流程、状态流转等完整规则。
             </div>
 
+            <!-- 5.1 功能入口 -->
             <div class="subsection">
-                <div class="subsection-title">5.2 页面结构</div>
+                <div class="subsection-title">5.1 功能入口</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>属性</th>
+                            <th>值</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>入口位置</td>
+                            <td>合同详情页状态卡片底部操作按钮区</td>
+                        </tr>
+                        <tr>
+                            <td>按钮文案</td>
+                            <td>发起变更</td>
+                        </tr>
+                        <tr>
+                            <td>按钮样式</td>
+                            <td>主按钮，背景#1890FF，宽度100%</td>
+                        </tr>
+                        <tr>
+                            <td>显示条件</td>
+                            <td>服务方角色 + 合同状态为"已签约"（signed）</td>
+                        </tr>
+                        <tr>
+                            <td>点击行为</td>
+                            <td>打开发起变更弹窗（全屏模态框）</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 5.2 变更弹窗UI结构 -->
+            <div class="subsection">
+                <div class="subsection-title">5.2 变更弹窗UI结构</div>
                 <div class="code-block">
 ┌─────────────────────────────────────┐
 │  导航栏                              │
-│  - 返回按钮                          │
-│  - 标题：对账单                      │
-│  - 关闭按钮                          │
+│  - 返回按钮：← 返回                  │
+│  - 标题：发起变更                    │
+│  - 更多按钮：⋯  ✕                    │
 ├─────────────────────────────────────┤
-│  筛选器                              │
-│  - 合同筛选：全部/基础施工服务合同/设计服务合同 │
-│  - 类型筛选：全部/工友工资/辅料费/措施费/保险费/工长工资 │
-│  - 状态筛选：全部/待我确认/已生效/已支付/已驳回 │
+│  变更须知卡片                        │
+│  ⚠️ 变更须知                         │
+│  • 发起变更后需要双方确认后生效       │
+│  • 如果涉及阶段任务变更，双方确认前   │
+│    阶段任务将停止流转                 │
+│  • 合同正文修改请前往电脑端操作       │
+│  • 变更生效后将生成新的版本记录       │
 ├─────────────────────────────────────┤
-│  汇总统计卡片                         │
-│  - 合同总额                          │
-│  - 已支付金额                        │
-│  - 待支付金额（高亮）                  │
+│  变更原因输入区（必填）               │
+│  📝 变更原因 *                        │
+│  [多行文本输入框]                     │
+│  变更原因将展示给对方和平台审核人员   │
+│  字符计数：0/500                      │
 ├─────────────────────────────────────┤
-│  对账单列表（可滚动）                  │
-│  - 卡片：类型标签 + 状态标签          │
-│    + 金额 + 合同名称 + 描述           │
-│    + 提交人/确认人信息                │
-│    + 驳回原因（已驳回状态）            │
+│  合同基本信息展示                     │
+│  📄 合同基本信息                      │
+│  - 合同名称                          │
+│  - 合同编号                          │
+│  - 甲方（发包方）                     │
+│  - 乙方（承包方）                     │
 ├─────────────────────────────────────┤
-│  悬浮新增按钮（FAB）                  │
-│  - 点击弹出新增对账单抽屉              │
+│  合同金额变更展示（可选）             │
+│  💰 合同金额变更                      │
+│  当前合同金额：¥80,000.00             │
+│  变更后金额：¥85,000.00 (+¥5,000.00)  │
 ├─────────────────────────────────────┤
-│  底部操作区（根据角色显示）             │
-│  - 确认按钮/驳回按钮                  │
+│  合同内容编辑区                       │
+│  📋 合同内容                          │
+│  [Tab: 合同正文 | 阶段任务 | 合同附件]│
+│                                      │
+│  合同正文Tab：                        │
+│  - 显示合同正文预览                   │
+│  - 更换模板按钮                       │
+│                                      │
+│  阶段任务Tab：                        │
+│  - 添加/删除阶段                      │
+│  - 编辑阶段名称                       │
+│  - 添加/删除任务                      │
+│  - 编辑任务详情（执行人、确认人等）   │
+│                                      │
+│  合同附件Tab：                        │
+│  - 上传/删除附件                      │
+├─────────────────────────────────────┤
+│  底部操作栏（固定）                   │
+│  [取消] [提交变更]（主按钮）          │
 └─────────────────────────────────────┘
                 </div>
             </div>
 
+            <!-- 5.3 变更类型自动检测机制 -->
             <div class="subsection">
-                <div class="subsection-title">5.3 筛选条件规格</div>
+                <div class="subsection-title">5.3 变更类型自动检测机制</div>
+                <div class="note">
+                    <div class="note-title">重要说明</div>
+                    系统根据变更内容自动判断审核流程，无需用户手动选择变更类型。
+                </div>
                 <table>
                     <thead>
                         <tr>
-                            <th>筛选项</th>
-                            <th>类型</th>
-                            <th>选项</th>
-                            <th>默认值</th>
+                            <th>变更类型</th>
+                            <th>判断条件</th>
+                            <th>审核流程</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>合同</td>
-                            <td>下拉选择</td>
-                            <td>全部、基础施工服务合同、设计服务合同</td>
-                            <td>全部</td>
+                            <td><span class="tag tag-optional">仅阶段任务变更</span></td>
+                            <td>
+                                仅修改阶段任务内容，未涉及：<br>
+                                • 合同金额变更<br>
+                                • 合同正文变更<br>
+                                • 合同附件变更
+                            </td>
+                            <td>无需平台审核，直接通知对方确认</td>
                         </tr>
                         <tr>
-                            <td>类型</td>
-                            <td>下拉选择</td>
-                            <td>全部、工友工资、辅料费、措施费、保险费、工长工资</td>
-                            <td>全部</td>
-                        </tr>
-                        <tr>
-                            <td>状态</td>
-                            <td>下拉选择</td>
-                            <td>全部、待我确认、已生效、已支付、已驳回</td>
-                            <td>全部</td>
+                            <td><span class="tag tag-required">含其他内容变更</span></td>
+                            <td>
+                                变更内容包含以下任意一项：<br>
+                                • 合同金额变更（hasAmountChange = true）<br>
+                                • 合同正文变更（hasContentChange = true）<br>
+                                • 合同附件变更（hasAttachmentChange = true）
+                            </td>
+                            <td>需先提交平台审核，审核通过后通知对方确认</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
+            <!-- 5.4 字段校验规则 -->
             <div class="subsection">
-                <div class="subsection-title">5.4 汇总统计规格</div>
+                <div class="subsection-title">5.4 字段校验规则</div>
                 <table>
                     <thead>
                         <tr>
-                            <th>统计项</th>
-                            <th>数据来源/API</th>
-                            <th>统计规则</th>
-                            <th>显示样式</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>合同总额</td>
-                            <td>GET /api/v1/projects/:id/statements/summary</td>
-                            <td>当前项目下所有合同的对账单金额总和</td>
-                            <td>¥+千分位格式，黑色字体</td>
-                        </tr>
-                        <tr>
-                            <td>已支付</td>
-                            <td>statements.status = 'paid'</td>
-                            <td>状态为"已支付"的对账单金额总和</td>
-                            <td>¥+千分位格式，黑色字体</td>
-                        </tr>
-                        <tr>
-                            <td>待支付</td>
-                            <td>statements.status = 'effective'</td>
-                            <td>状态为"已生效"的对账单金额总和</td>
-                            <td>¥+千分位格式，红色字体高亮</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="subsection">
-                <div class="subsection-title">5.5 对账单卡片规格</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>展示区域</th>
-                            <th>字段项</th>
-                            <th>数据来源</th>
-                            <th>显示规则</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td rowspan="2">卡片头部</td>
-                            <td>类型标签</td>
-                            <td>statements.type</td>
-                            <td>中文标签，不同类型不同颜色：工友工资/辅料费/措施费/保险费/工长工资</td>
-                        </tr>
-                        <tr>
-                            <td>状态标签</td>
-                            <td>statements.status</td>
-                            <td>中文标签，不同状态不同颜色：待确认（黄色）/已生效（绿色）/已支付（蓝色）/已驳回（红色）</td>
-                        </tr>
-                        <tr>
-                            <td rowspan="3">卡片主体</td>
-                            <td>金额</td>
-                            <td>statements.amount</td>
-                            <td>¥+千分位格式，正数显示绿色，负数显示红色（冲销/退款）</td>
-                        </tr>
-                        <tr>
-                            <td>合同名称</td>
-                            <td>contracts.name</td>
-                            <td>关联合同名称</td>
-                        </tr>
-                        <tr>
-                            <td>用途描述</td>
-                            <td>statements.description</td>
-                            <td>详细描述款项用途，超长省略</td>
-                        </tr>
-                        <tr>
-                            <td rowspan="2">卡片底部</td>
-                            <td>提交人信息</td>
-                            <td>statements.creator</td>
-                            <td>提交人头像 + 姓名 + 提交时间（待确认状态）</td>
-                        </tr>
-                        <tr>
-                            <td>确认人信息</td>
-                            <td>statements.confirmer</td>
-                            <td>确认人头像 + "业主 XXX 已于 XX时间确认"（已生效状态）</td>
-                        </tr>
-                        <tr>
-                            <td>驳回原因区域</td>
-                            <td>驳回原因</td>
-                            <td>statements.reject_reason</td>
-                            <td>仅已驳回状态显示，显示驳回原因内容 + 驳回人 + 驳回时间</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="subsection">
-                <div class="subsection-title">5.6 新增对账单表单规格</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>字段</th>
-                            <th>类型</th>
+                            <th>字段名</th>
                             <th>必填</th>
+                            <th>校验规则</th>
+                            <th>错误提示</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>变更原因</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>
+                                • 不能为空<br>
+                                • 长度限制：1-500字符<br>
+                                • 实时字符计数显示
+                            </td>
+                            <td>
+                                • 为空时：Toast"请填写变更原因"<br>
+                                • 超长时：自动截断至500字符
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>变更内容</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>
+                                • 至少有一个阶段或任务变更<br>
+                                • 阶段名称不为空<br>
+                                • 任务名称不为空
+                            </td>
+                            <td>
+                                • 无变更内容时：Toast"请添加变更内容后再提交"
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 5.5 变更原因输入规格 -->
+            <div class="subsection">
+                <div class="subsection-title">5.5 变更原因输入规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>属性</th>
+                            <th>值</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>输入框类型</td>
+                            <td>多行文本框（textarea）</td>
+                        </tr>
+                        <tr>
+                            <td>占位提示</td>
+                            <td>"请详细说明变更原因，如：因业主需求变更、现场实际情况调整等..."</td>
+                        </tr>
+                        <tr>
+                            <td>最大长度</td>
+                            <td>500字符</td>
+                        </tr>
+                        <tr>
+                            <td>字符计数显示</td>
+                            <td>右下角显示"当前字数/500"，实时更新</td>
+                        </tr>
+                        <tr>
+                            <td>超长处理</td>
+                            <td>自动截断至500字符，计数显示"500/500"</td>
+                        </tr>
+                        <tr>
+                            <td>提示信息</td>
+                            <td>下方提示"变更原因将展示给对方和平台审核人员"</td>
+                        </tr>
+                        <tr>
+                            <td>输入事件</td>
+                            <td>oninput事件实时触发checkChangeReason()，更新state.changeReason和字符计数</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 5.6 阶段任务编辑功能 -->
+            <div class="subsection">
+                <div class="subsection-title">5.6 阶段任务编辑功能</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>操作</th>
+                            <th>交互方式</th>
                             <th>说明</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>关联合同</td>
-                            <td>下拉选择</td>
-                            <td>✅</td>
-                            <td>选择关联的合同，选择后自动带出确认人信息</td>
+                            <td>添加阶段</td>
+                            <td>点击"+ 添加阶段"按钮</td>
+                            <td>在阶段列表末尾添加新的空白阶段卡片</td>
                         </tr>
                         <tr>
-                            <td>确认人</td>
-                            <td>展示</td>
-                            <td>—</td>
-                            <td>选择合同后自动显示，格式：角色标签 + 姓名（如：业主 李先生）</td>
+                            <td>删除阶段</td>
+                            <td>点击阶段卡片内"× 删除阶段"按钮</td>
+                            <td>删除整个阶段及其下的所有任务，弹出确认提示</td>
                         </tr>
                         <tr>
-                            <td>账单类型</td>
-                            <td>胶囊选择</td>
-                            <td>✅</td>
-                            <td>单选：工友工资、辅料费、措施费、保险费、工长工资</td>
+                            <td>编辑阶段名称</td>
+                            <td>阶段名称输入框直接编辑</td>
+                            <td>支持修改阶段名称，为空时提示"请输入阶段名称"</td>
                         </tr>
                         <tr>
-                            <td>本次金额</td>
-                            <td>数字输入</td>
-                            <td>✅</td>
-                            <td>支持输入负数用于冲销/退款</td>
+                            <td>阶段按序执行开关</td>
+                            <td>点击"按序执行"开关按钮</td>
+                            <td>开启后阶段内任务按顺序执行，前置任务未完成时后续任务不可开始</td>
                         </tr>
                         <tr>
-                            <td>用途描述</td>
-                            <td>文本输入</td>
-                            <td>✅</td>
-                            <td>最大200字，实时字数统计</td>
+                            <td>添加任务</td>
+                            <td>点击阶段内"+ 添加任务"按钮</td>
+                            <td>打开添加任务弹窗，填写任务名称、执行人、确认人、执行标准等</td>
+                        </tr>
+                        <tr>
+                            <td>编辑任务</td>
+                            <td>点击任务右侧"✎"图标</td>
+                            <td>打开编辑任务弹窗，修改任务详情</td>
+                        </tr>
+                        <tr>
+                            <td>删除任务</td>
+                            <td>点击任务右侧"×"图标</td>
+                            <td>删除该任务，无需二次确认</td>
                         </tr>
                     </tbody>
                 </table>
-                <div class="note" style="margin-top: 16px;">
-                    <div class="note-title">表单提交规则</div>
-                    <p>1. 所有必填字段填写完整后方可提交</p>
-                    <p>2. 金额支持负数，用于冲销错误账单或退款场景</p>
-                    <p>3. 提交后对账单状态变为"待确认"，并通知确认人</p>
+            </div>
+
+            <!-- 5.7 提交变更流程 -->
+            <div class="subsection">
+                <div class="subsection-title">5.7 提交变更流程</div>
+                <div class="code-block" style="font-size: 12px;">
+提交变更流程：
+1. 用户点击"提交变更"按钮
+2. 系统校验：
+   - 变更原因是否填写（必填）
+   - 是否有变更内容（至少一个阶段或任务变更）
+3. 校验失败：Toast提示错误信息
+4. 校验成功：系统自动检测变更类型
+   检测逻辑：needPlatformReview = hasAmountChange || hasContentChange || hasAttachmentChange
+   
+5a. 仅阶段任务变更（needPlatformReview = false）：
+   - 弹出二次确认弹窗
+     标题："提交变更"
+     内容："确定要提交变更申请吗？\n\n提交后将通知对方进行确认，确认前阶段任务将暂停流转。"
+     按钮：["取消", "确认提交"]
+   - 用户确认后：
+     • 关闭变更弹窗
+     • Toast提示："变更申请已提交！\n\n系统已发送消息通知对方，请等待对方确认。"
+     • 合同状态更新为"changing"（变更中-发起方）
+     • 阶段任务暂停流转
+
+5b. 含其他内容变更（needPlatformReview = true）：
+   - 弹出二次确认弹窗
+     标题："提交变更"
+     内容："确定要提交变更申请吗？\n\n本次变更包含合同金额、正文或附件变更，提交后将由平台运营人员进行审核，审核通过后通知对方确认。"
+     按钮：["取消", "确认提交"]
+   - 用户确认后：
+     • 关闭变更弹窗
+     • Toast提示："变更申请已提交！\n\n已提交至平台审核，审核通过后将通知对方确认。"
+     • 合同状态更新为"change_platform_reviewing"（变更审核中）
+
+6. 平台审核通过后（仅含其他内容变更）：
+   - 状态更新为"change_confirming_sender"（变更确认中-发起方）
+   - 通知对方确认变更
                 </div>
             </div>
 
+            <!-- 5.8 提交按钮状态控制 -->
             <div class="subsection">
-                <div class="subsection-title">5.7 状态流转规则</div>
-                <div class="code-block">
-待确认(pending) → [确认人确认] → 已生效(effective) → [服务方上传支付凭证] → 已支付(paid)
-                    ↓
-            [确认人驳回] → 已驳回(rejected)
-                </div>
+                <div class="subsection-title">5.8 提交按钮状态控制</div>
                 <table>
                     <thead>
                         <tr>
                             <th>状态</th>
-                            <th>状态值</th>
-                            <th>说明</th>
-                            <th>可执行操作</th>
+                            <th>触发条件</th>
+                            <th>按钮样式</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>待确认</td>
-                            <td>pending</td>
-                            <td>服务方提交后，等待确认人确认</td>
-                            <td>确认人：确认/驳回；提交人：无操作</td>
+                            <td>禁用状态</td>
+                            <td>变更原因为空 OR 无变更内容</td>
+                            <td>灰色背景#D9D9D9，文字颜色#8C8C8C，不可点击</td>
                         </tr>
                         <tr>
-                            <td>已生效</td>
-                            <td>effective</td>
-                            <td>确认人已确认，等待服务方上传支付凭证</td>
-                            <td>服务方：上传支付凭证</td>
-                        </tr>
-                        <tr>
-                            <td>已支付</td>
-                            <td>paid</td>
-                            <td>服务方已上传支付凭证，账单完成</td>
-                            <td>查看详情</td>
-                        </tr>
-                        <tr>
-                            <td>已驳回</td>
-                            <td>rejected</td>
-                            <td>确认人驳回，需要修改后重新提交</td>
-                            <td>提交人：重新编辑提交</td>
+                            <td>启用状态</td>
+                            <td>变更原因已填写 AND 存在变更内容</td>
+                            <td>主按钮背景#1890FF，白色文字，可点击</td>
                         </tr>
                     </tbody>
                 </table>
-            </div>
-
-            <div class="subsection">
-                <div class="subsection-title">5.8 驳回功能规格</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>属性</th>
-                            <th>值</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>触发条件</td>
-                            <td>确认人角色 + 账单状态为"待确认"</td>
-                        </tr>
-                        <tr>
-                            <td>操作入口</td>
-                            <td>对账单详情页底部操作按钮</td>
-                        </tr>
-                        <tr>
-                            <td>表单要求</td>
-                            <td>驳回原因必填，最大200字</td>
-                        </tr>
-                        <tr>
-                            <td>提交后</td>
-                            <td>账单状态变为"已驳回"，通知提交人</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- ==================== 6. 对账单详情页（服务方小程序） ==================== -->
-        <div class="section" id="page-statement-detail">
-            <div class="section-title">
-                六、对账单详情页（服务方小程序）
-                <span class="badge">service-miniapp/statement-detail.html</span>
-            </div>
-
-            <div class="subsection">
-                <div class="subsection-title">3.1 页面概述</div>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <div class="info-label">页面名称</div>
-                        <div class="info-value">对账单详情页</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">页面路径</div>
-                        <div class="info-value">service-miniapp/statement-detail.html</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">适用角色</div>
-                        <div class="info-value">项目经理、施工组长、工长、业主</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">页面入口</div>
-                        <div class="info-value">对账单列表页 → 点击卡片</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">页面类型</div>
-                        <div class="info-value">详情展示页</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">业务目标</div>
-                        <div class="info-value">查看对账单详情，确认/驳回账单，上传支付凭证</div>
-                    </div>
+                <div class="note">
+                    <div class="note-title">状态判断逻辑</div>
+                    每次变更原因输入或阶段任务编辑时，实时调用checkChangeContent()函数检查：<br>
+                    1. state.changeReason.length > 0（变更原因不为空）<br>
+                    2. hasChangeContent === true（阶段或任务有变更）<br>
+                    满足两个条件时，移除按钮.disabled类；否则添加.disabled类。
                 </div>
             </div>
 
+            <!-- 5.9 变更后状态流转 -->
             <div class="subsection">
-                <div class="subsection-title">6.2 页面结构</div>
-                <div class="code-block">
-┌─────────────────────────────────────┐
-│  导航栏                              │
-│  - 返回按钮                          │
-│  - 标题：对账单详情                   │
-│  - 关闭按钮                          │
-├─────────────────────────────────────┤
-│  状态横幅（根据状态显示）               │
-│  - 状态图标 + 状态文字 + 状态描述       │
-│  - 驳回原因横幅（已驳回状态）            │
-├─────────────────────────────────────┤
-│  详情卡片                            │
-│  - 类型标签 + 金额                    │
-│  - 关联合同（可点击跳转合同详情）        │
-│  - 账单类型                          │
-│  - 提交人 + 提交时间                   │
-│  - 确认人（角色标签 + 姓名）            │
-├─────────────────────────────────────┤
-│  用途描述卡片                         │
-│  - 详细用途描述（支持换行）             │
-├─────────────────────────────────────┤
-│  确认信息卡片（已生效状态）             │
-│  - 确认人头像 + 姓名 + 确认时间         │
-├─────────────────────────────────────┤
-│  支付凭证卡片（已支付状态）             │
-│  - 上传人信息 + 上传时间               │
-│  - 凭证图片网格（最多9张）              │
-├─────────────────────────────────────┤
-│  操作记录卡片                         │
-│  - 时间线展示操作记录                   │
-├─────────────────────────────────────┤
-│  底部操作按钮（根据角色/状态显示）        │
-│  - 确认/驳回按钮（待确认状态）           │
-│  - 上传支付凭证按钮（已生效状态）        │
-└─────────────────────────────────────┘
-                </div>
-            </div>
-
-            <div class="subsection">
-                <div class="subsection-title">6.3 详情字段规格</div>
+                <div class="subsection-title">5.9 变更后合同状态流转</div>
                 <table>
                     <thead>
                         <tr>
-                            <th>字段</th>
-                            <th>数据来源</th>
-                            <th>显示规则</th>
-                            <th>交互</th>
+                            <th>原状态</th>
+                            <th>变更类型</th>
+                            <th>变更后状态</th>
+                            <th>状态说明</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>类型标签</td>
-                            <td>statements.type</td>
-                            <td>中文标签，不同类型不同颜色</td>
-                            <td>无</td>
+                            <td>已签约（signed）</td>
+                            <td>仅阶段任务变更</td>
+                            <td>变更中（changing）</td>
+                            <td>发起方视角：等待对方确认，阶段任务已暂停流转</td>
                         </tr>
                         <tr>
-                            <td>金额</td>
-                            <td>statements.amount</td>
-                            <td>¥+千分位格式，正数绿色，负数红色</td>
-                            <td>无</td>
+                            <td>已签约（signed）</td>
+                            <td>含其他内容变更</td>
+                            <td>变更审核中（change_platform_reviewing）</td>
+                            <td>提交至平台审核，审核通过后进入确认流程</td>
                         </tr>
                         <tr>
-                            <td>关联合同</td>
-                            <td>contracts.name</td>
-                            <td>合同名称，蓝色下划线</td>
-                            <td>点击跳转合同详情页</td>
+                            <td>变更审核中</td>
+                            <td>平台审核通过</td>
+                            <td>变更确认中（change_confirming_sender）</td>
+                            <td>发起方视角：平台审核通过，等待对方确认变更</td>
                         </tr>
                         <tr>
-                            <td>账单类型</td>
-                            <td>statements.type</td>
-                            <td>中文全称</td>
-                            <td>无</td>
+                            <td>变更审核中</td>
+                            <td>平台审核驳回</td>
+                            <td>变更审核驳回（change_platform_rejected）</td>
+                            <td>可查看驳回原因，重新发起变更</td>
                         </tr>
                         <tr>
-                            <td>提交人</td>
-                            <td>statements.creator</td>
-                            <td>提交人姓名</td>
-                            <td>无</td>
+                            <td>变更确认中</td>
+                            <td>对方确认变更</td>
+                            <td>变更签约中（change_signing_wait）</td>
+                            <td>需上传线下已签约的合同变更文件</td>
                         </tr>
                         <tr>
-                            <td>提交时间</td>
-                            <td>statements.created_at</td>
-                            <td>yyyy-MM-dd HH:mm</td>
-                            <td>无</td>
-                        </tr>
-                        <tr>
-                            <td>确认人</td>
-                            <td>statements.confirmer</td>
-                            <td>角色标签（业主）+ 姓名</td>
-                            <td>无</td>
-                        </tr>
-                        <tr>
-                            <td>用途描述</td>
-                            <td>statements.description</td>
-                            <td>完整展示，支持换行</td>
-                            <td>无</td>
+                            <td>变更签约中</td>
+                            <td>上传签约文件</td>
+                            <td>已签约（signed）</td>
+                            <td>变更生效，生成新版本（V2），阶段任务恢复流转</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
+            <!-- 5.10 阶段任务暂停流转机制 -->
             <div class="subsection">
-                <div class="subsection-title">6.4 状态横幅规格</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>状态</th>
-                            <th>图标</th>
-                            <th>状态文字</th>
-                            <th>状态描述</th>
-                            <th>横幅样式</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>待确认</td>
-                            <td>⏳</td>
-                            <td>待确认</td>
-                            <td>请确认此对账单</td>
-                            <td>黄色背景</td>
-                        </tr>
-                        <tr>
-                            <td>已生效</td>
-                            <td>✓</td>
-                            <td>已生效</td>
-                            <td>对方已确认，请上传支付凭证</td>
-                            <td>绿色背景</td>
-                        </tr>
-                        <tr>
-                            <td>已支付</td>
-                            <td>✓</td>
-                            <td>已支付</td>
-                            <td>已完成支付流程</td>
-                            <td>蓝色背景</td>
-                        </tr>
-                        <tr>
-                            <td>已驳回</td>
-                            <td>✕</td>
-                            <td>已驳回</td>
-                            <td>请修改后重新提交</td>
-                            <td>红色背景 + 驳回原因横幅</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="subsection">
-                <div class="subsection-title">6.5 支付凭证上传规格</div>
+                <div class="subsection-title">5.10 阶段任务暂停流转机制</div>
                 <table>
                     <thead>
                         <tr>
@@ -1242,31 +1553,37 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>触发条件</td>
-                            <td>服务方角色 + 账单状态为"已生效"</td>
+                            <td>暂停时机</td>
+                            <td>变更提交后立即暂停（状态为changing或change_confirming时）</td>
                         </tr>
                         <tr>
-                            <td>操作入口</td>
-                            <td>详情页底部"传支付凭证"按钮</td>
+                            <td>暂停范围</td>
+                            <td>该合同下所有阶段任务，包括进行中、待确认、待开始状态的任务</td>
                         </tr>
                         <tr>
-                            <td>上传限制</td>
-                            <td>最多上传9张图片</td>
+                            <td>暂停效果</td>
+                            <td>
+                                • 执行人无法提交任务完成<br>
+                                • 确认人无法确认任务<br>
+                                • 任务状态保持不变<br>
+                                • 任务详情页显示"变更中，任务暂停流转"提示
+                            </td>
                         </tr>
                         <tr>
-                            <td>图片预览</td>
-                            <td>点击图片可预览大图</td>
+                            <td>恢复时机</td>
+                            <td>变更生效（变更签约文件上传完成）或变更被驳回/撤回</td>
                         </tr>
                         <tr>
-                            <td>提交后</td>
-                            <td>账单状态变为"已支付"，通知确认人</td>
+                            <td>恢复效果</td>
+                            <td>任务恢复流转，可正常执行和确认</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
+            <!-- 5.11 变更记录生成 -->
             <div class="subsection">
-                <div class="subsection-title">6.6 操作记录规格</div>
+                <div class="subsection-title">5.11 变更记录生成</div>
                 <table>
                     <thead>
                         <tr>
@@ -1276,51 +1593,174 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>展示方式</td>
-                            <td>时间线形式，按时间倒序排列</td>
+                            <td>记录触发</td>
+                            <td>变更提交成功后自动生成</td>
                         </tr>
                         <tr>
-                            <td>记录内容</td>
-                            <td>操作人 + 操作内容 + 操作时间</td>
+                            <td>记录标题</td>
+                            <td>"发起变更"</td>
+                        </tr>
+                        <tr>
+                            <td>记录描述</td>
+                            <td>
+                                • 仅阶段任务变更："变更类型：仅阶段任务变更"<br>
+                                • 含其他内容变更："变更类型：含其他内容变更"
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>记录时间</td>
+                            <td>变更提交的系统时间，格式：YYYY-MM-DD HH:mm</td>
                         </tr>
                         <tr>
                             <td>记录类型</td>
-                            <td>提交对账单、确认对账单、驳回对账单、上传支付凭证</td>
+                            <td>
+                                • 仅阶段任务变更：primary（蓝色标签）<br>
+                                • 含其他内容变更：warning（橙色标签）
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>显示位置</td>
+                            <td>合同详情页"变更记录"Tab页，按时间倒序排列</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
+            <!-- 5.12 权限控制 -->
             <div class="subsection">
-                <div class="subsection-title">6.7 底部操作按钮规格</div>
+                <div class="subsection-title">5.12 权限控制</div>
                 <table>
                     <thead>
                         <tr>
-                            <th>状态</th>
-                            <th>服务方角色</th>
-                            <th>业主角色（确认人）</th>
+                            <th>操作/元素</th>
+                            <th>服务方（项目经理、施工组长）</th>
+                            <th>业主</th>
+                            <th>平台运营</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>待确认</td>
-                            <td>无操作按钮</td>
-                            <td>确认、驳回</td>
+                            <td>发起变更按钮</td>
+                            <td>✅ 已签约状态可见</td>
+                            <td>❌ 不可见</td>
+                            <td>❌ 不可见</td>
                         </tr>
                         <tr>
-                            <td>已生效</td>
-                            <td>传支付凭证</td>
-                            <td>无操作按钮</td>
+                            <td>填写变更原因</td>
+                            <td>✅ 发起方</td>
+                            <td>❌</td>
+                            <td>❌</td>
                         </tr>
                         <tr>
-                            <td>已支付</td>
-                            <td>无操作按钮</td>
-                            <td>无操作按钮</td>
+                            <td>编辑阶段任务</td>
+                            <td>✅ 发起方</td>
+                            <td>❌</td>
+                            <td>❌</td>
                         </tr>
                         <tr>
-                            <td>已驳回</td>
-                            <td>重新提交（需先编辑）</td>
-                            <td>无操作按钮</td>
+                            <td>提交变更</td>
+                            <td>✅ 发起方</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                        </tr>
+                        <tr>
+                            <td>审核变更（含其他内容变更）</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                        </tr>
+                        <tr>
+                            <td>确认变更</td>
+                            <td>✅ 待确认方（被通知方）</td>
+                            <td>✅ 待确认方（业主）</td>
+                            <td>❌</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 5.13 异常处理 -->
+            <div class="subsection">
+                <div class="subsection-title">5.13 异常处理</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>错误场景</th>
+                            <th>校验规则</th>
+                            <th>用户提示</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>变更原因为空</td>
+                            <td>state.changeReason.length === 0</td>
+                            <td>Toast"请填写变更原因"</td>
+                        </tr>
+                        <tr>
+                            <td>无变更内容</td>
+                            <td>state.hasChangeContent === false</td>
+                            <td>Toast"请添加变更内容后再提交"</td>
+                        </tr>
+                        <tr>
+                            <td>阶段名称为空</td>
+                            <td>阶段名称输入框值为空字符串</td>
+                            <td>输入框下方红色提示"请输入阶段名称"</td>
+                        </tr>
+                        <tr>
+                            <td>任务名称为空</td>
+                            <td>任务名称输入框值为空字符串</td>
+                            <td>输入框下方红色提示"请输入任务名称"</td>
+                        </tr>
+                        <tr>
+                            <td>网络错误/提交失败</td>
+                            <td>API调用返回错误</td>
+                            <td>Toast显示后端返回的错误信息</td>
+                        </tr>
+                        <tr>
+                            <td>变更原因超长</td>
+                            <td>输入字符数 > 500</td>
+                            <td>自动截断至500字符，无Toast提示</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 5.14 相关API接口 -->
+            <div class="subsection">
+                <div class="subsection-title">5.14 相关API接口</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>接口名称</th>
+                            <th>请求方法</th>
+                            <th>接口路径</th>
+                            <th>触发场景</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>提交变更申请</td>
+                            <td>POST</td>
+                            <td>/api/v1/contracts/:id/change</td>
+                            <td>点击"提交变更"按钮并确认后</td>
+                        </tr>
+                        <tr>
+                            <td>获取合同详情</td>
+                            <td>GET</td>
+                            <td>/api/v1/contracts/:id</td>
+                            <td>进入合同详情页时</td>
+                        </tr>
+                        <tr>
+                            <td>获取阶段任务列表</td>
+                            <td>GET</td>
+                            <td>/api/v1/contracts/:id/stages</td>
+                            <td>加载阶段任务Tab时</td>
+                        </tr>
+                        <tr>
+                            <td>保存变更草稿</td>
+                            <td>POST</td>
+                            <td>/api/v1/contracts/:id/change-draft</td>
+                            <td>点击"更多 → 保存草稿"（可选功能）</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1328,13 +1768,13 @@
         </div>
 
         <!-- ==================== 全局规格 ==================== -->
-        <div class="section">
+        <div class="section" id="global-spec">
             <div class="section-title">
-                五、全局规格参数（已确认）
+                六、全局规格参数（已确认）
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">5.1 Toast规格</div>
+                <div class="subsection-title">6.1 Toast规格</div>
                 <table>
                     <thead>
                         <tr>
@@ -1360,7 +1800,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">5.2 列表分页规格</div>
+                <div class="subsection-title">6.2 列表分页规格</div>
                 <table>
                     <thead>
                         <tr>
@@ -1382,7 +1822,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">5.3 状态机（已确认）</div>
+                <div class="subsection-title">6.3 状态机（已确认）</div>
                 <h4>合同状态机</h4>
                 <div class="code-block">
 拟定中(drafting) → 待审核(pending_review) → 待确认(pending_confirm) → 待签约(pending_sign) → 已签约(signed)
@@ -1397,6 +1837,196 @@
 待开始(pending) → 执行中(in_progress) → 确认中(confirming) → 已完成(completed)
                 </div>
             </div>
+
+            <div class="subsection">
+                <div class="subsection-title">6.4 字段校验规则</div>
+                
+                <h4 style="margin-bottom: 12px;">合同基本信息字段</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>字段</th>
+                            <th>类型</th>
+                            <th>必填</th>
+                            <th>校验规则</th>
+                            <th>错误提示</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>合同编号（contract_no）</td>
+                            <td>String(30)</td>
+                            <td><span class="tag tag-system">系统生成</span></td>
+                            <td>格式：HT + yyyyMMdd + 4位流水号</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>合同名称（name）</td>
+                            <td>String(200)</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>1-200字符，非空</td>
+                            <td>请输入合同名称 / 合同名称不能超过200个字符</td>
+                        </tr>
+                        <tr>
+                            <td>合同类型（type）</td>
+                            <td>Enum</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>枚举值：base_construction（基础施工合同）、hydropower（水电分包合同）、carpentry（木工分包合同）、masonry（泥瓦分包合同）、painting（油漆分包合同）、overall（整体项目）</td>
+                            <td>请选择合同类型</td>
+                        </tr>
+                        <tr>
+                            <td>合同金额（amount）</td>
+                            <td>Decimal(12,2)</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>正数，≤99,999,999.99，最多2位小数</td>
+                            <td>请输入正确的金额 / 金额不能超过99,999,999.99元</td>
+                        </tr>
+                        <tr>
+                            <td>合同正文（contract_body）</td>
+                            <td>JSON</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>最大50,000字（含格式标记）</td>
+                            <td>合同正文超出长度限制</td>
+                        </tr>
+                        <tr>
+                            <td>合同附件（attachments）</td>
+                            <td>JSON</td>
+                            <td><span class="tag tag-optional">选填</span></td>
+                            <td>最多20张，单张≤10MB，格式：jpg/jpeg/png/webp</td>
+                            <td>请上传图片格式的文件 / 单张图片不能超过10MB / 最多上传20张附件</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4 style="margin-bottom: 12px; margin-top: 24px;">合同审核字段</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>字段</th>
+                            <th>类型</th>
+                            <th>必填</th>
+                            <th>校验规则</th>
+                            <th>错误提示</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>合同发起方（submitter_id）</td>
+                            <td>String(UUID)</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>UUID格式</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>审核人（reviewed_by）</td>
+                            <td>String(UUID)</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>UUID格式</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>审核时间（reviewed_at）</td>
+                            <td>DateTime</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>日期时间格式</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>审核通过备注（approve_remark）</td>
+                            <td>String(500)</td>
+                            <td><span class="tag tag-optional">选填</span></td>
+                            <td>1-500字符</td>
+                            <td>备注不能超过500个字符</td>
+                        </tr>
+                        <tr>
+                            <td>审核驳回原因（reject_reason）</td>
+                            <td>String(500)</td>
+                            <td><span class="tag tag-required">驳回时必填</span></td>
+                            <td>1-500字符，驳回时必填</td>
+                            <td>请输入驳回原因 / 驳回原因不能超过500个字符</td>
+                        </tr>
+                        <tr>
+                            <td>业主确认时间（confirmed_at）</td>
+                            <td>DateTime</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>日期时间格式</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>签约时间（signed_at）</td>
+                            <td>DateTime</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>日期时间格式</td>
+                            <td>—</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4 style="margin-bottom: 12px; margin-top: 24px;">合同变更审核字段</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>字段</th>
+                            <th>类型</th>
+                            <th>必填</th>
+                            <th>校验规则</th>
+                            <th>错误提示</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>变更类型（change_type）</td>
+                            <td>Enum</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>枚举值：content（正文变更）、amount（金额变更）、party（甲乙方变更）、other（其他）</td>
+                            <td>请选择变更类型</td>
+                        </tr>
+                        <tr>
+                            <td>变更原因（change_reason）</td>
+                            <td>Text</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>1-500字符</td>
+                            <td>请输入变更原因 / 变更原因不能超过500个字符</td>
+                        </tr>
+                        <tr>
+                            <td>变更内容快照（change_content）</td>
+                            <td>JSON</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>非空JSON，包含变更前+变更后</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>审核人（reviewer_id）</td>
+                            <td>String(UUID)</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>UUID格式</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>审核通过备注（approve_remark）</td>
+                            <td>String(500)</td>
+                            <td><span class="tag tag-optional">选填</span></td>
+                            <td>1-500字符</td>
+                            <td>备注不能超过500个字符</td>
+                        </tr>
+                        <tr>
+                            <td>审核驳回原因（reviewer_remark）</td>
+                            <td>String(500)</td>
+                            <td><span class="tag tag-required">驳回时必填</span></td>
+                            <td>1-500字符</td>
+                            <td>请输入驳回原因 / 驳回原因不能超过500个字符</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="note">
+                    <div class="note-title">交互规格</div>
+                    <p><strong>实时校验</strong>：输入时显示字数统计，失焦时校验格式，提交前全字段校验</p>
+                    <p><strong>错误显示</strong>：输入框边框变红（#FF4D4F），下方显示红色提示文字</p>
+                    <p><strong>金额输入</strong>：失焦时自动格式化为两位小数，大额显示"X.X万"</p>
+                    <p><strong>驳回操作</strong>：点击驳回按钮弹出输入框，必填驳回原因后方可提交</p>
+                </div>
+            </div>
         </div>
 
         <!-- 文档结束 -->
@@ -1404,6 +2034,71 @@
             <p>— 合同模块规格结束 —</p>
             <p style="font-size: 12px; margin-top: 8px;">继续查看 <a href="PRD-任务模块详细规格.html" style="color: var(--primary-color);">任务模块规格</a></p>
         </div>
+        </div>
     </div>
+
+    <!-- 滚动高亮脚本 -->
+    <script>
+        // 监听滚动,高亮当前章节
+        const sections = [
+            'page-list',
+            'page-detail',
+            'page-mini-service',
+            'page-mini-owner'
+        ];
+        
+        const tocLinks = document.querySelectorAll('.sidebar-toc-list a');
+        
+        // 滚动监听
+        window.addEventListener('scroll', function() {
+            const scrollPos = window.scrollY || window.pageYOffset;
+            
+            // 找到当前滚动位置对应的章节
+            let currentSection = sections[0];
+            
+            for (let i = 0; i < sections.length; i++) {
+                const section = document.getElementById(sections[i]);
+                if (section) {
+                    const sectionTop = section.offsetTop - 100;
+                    const sectionBottom = sectionTop + section.offsetHeight;
+                    
+                    if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
+                        currentSection = sections[i];
+                        break;
+                    } else if (scrollPos >= sectionTop) {
+                        currentSection = sections[i];
+                    }
+                }
+            }
+            
+            // 更新目录高亮
+            tocLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + currentSection) {
+                    link.classList.add('active');
+                }
+            });
+        });
+        
+        // 平滑滚动
+        tocLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    const offsetTop = targetElement.offsetTop - 20;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // 页面加载时触发一次滚动监听
+        window.dispatchEvent(new Event('scroll'));
+    </script>
 </body>
 </html>

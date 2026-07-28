@@ -25,6 +25,90 @@
             color: var(--text-primary);
             background-color: var(--bg-secondary);
         }
+
+        /* 左右布局 */
+        .page-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 左侧目录 */
+        .sidebar-toc {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            z-index: 100;
+            flex-shrink: 0;
+        }
+
+        .sidebar-toc::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-toc::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        .sidebar-toc::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        .sidebar-toc-title {
+            padding: 24px 24px 16px;
+            font-size: 18px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background: var(--bg-primary);
+            z-index: 1;
+        }
+
+        .sidebar-toc-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-toc-list li {
+            border-bottom: none;
+        }
+
+        .sidebar-toc-list a {
+            display: block;
+            padding: 12px 24px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-toc-list a:hover {
+            background: var(--bg-secondary);
+            color: var(--success-color);
+            text-decoration: none;
+        }
+
+        .sidebar-toc-list a.active {
+            background: #F6FFED;
+            color: var(--success-color);
+            border-left-color: var(--success-color);
+            font-weight: 500;
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            background: var(--bg-secondary);
+        }
+
         .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
         .header {
             background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%);
@@ -65,25 +149,7 @@
             margin-bottom: 16px;
             color: var(--text-primary);
         }
-        .page-nav {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 24px;
-            margin-bottom: 32px;
-        }
-        .page-nav-title { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
-        .page-nav-list { list-style: none; display: flex; flex-wrap: wrap; gap: 12px; }
-        .page-nav-list a {
-            display: inline-block;
-            padding: 8px 16px;
-            background: var(--bg-secondary);
-            border-radius: 6px;
-            text-decoration: none;
-            color: var(--success-color);
-            font-size: 14px;
-        }
-        .page-nav-list a:hover { background: var(--success-color); color: white; }
+
         table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
         table th, table td {
             padding: 12px 16px;
@@ -156,33 +222,40 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="container">
-            <h1>良造家管理平台 - 任务模块详细PRD规格</h1>
-            <div class="meta">
-                版本：v1.0 | 创建日期：2026-07-17 | 模块：任务管理
+    <!-- 左侧目录 -->
+    <nav class="sidebar-toc" id="sidebarToc">
+        <div class="sidebar-toc-title">页面导航</div>
+        <ul class="sidebar-toc-list">
+            <li><a href="#task-status-machine">一、任务状态机</a></li>
+            <li><a href="#page-task-list-service">二、任务列表页（服务方）</a></li>
+            <li><a href="#page-task-detail-service">三、任务详情页（服务方）</a></li>
+            <li><a href="#page-task-acceptance-service">四、任务验收页（服务方）</a></li>
+            <li><a href="#page-task-list-owner">五、任务列表页（业主）</a></li>
+            <li><a href="#page-task-detail-owner">六、任务详情页（业主）</a></li>
+            <li><a href="#page-task-acceptance-owner">七、任务验收页（业主）</a></li>
+            <li><a href="#validation-rules">八、字段校验规则</a></li>
+            <li><a href="#task-api-summary">九、API接口汇总</a></li>
+        </ul>
+    </nav>
+
+    <!-- 主内容区域 -->
+    <div class="main-content">
+        <!-- 文档头部 -->
+        <div class="header">
+            <div class="container">
+                <h1>良造家管理平台 - 任务模块详细PRD规格</h1>
+                <div class="meta">
+                    版本：v1.0 | 创建日期：2026-07-17 | 模块：任务管理
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="container">
-        <!-- 页面导航 -->
-        <div class="page-nav">
-            <div class="page-nav-title">页面导航</div>
-            <ul class="page-nav-list">
-                <li><a href="#page-task-list-service">1. 任务列表页（服务方小程序）</a></li>
-                <li><a href="#page-task-detail-service">2. 任务详情页（服务方小程序）</a></li>
-                <li><a href="#page-task-acceptance-service">3. 任务验收页（服务方小程序）</a></li>
-                <li><a href="#page-task-list-owner">4. 任务列表页（业主小程序）</a></li>
-                <li><a href="#page-task-detail-owner">5. 任务详情页（业主小程序）</a></li>
-                <li><a href="#page-task-acceptance-owner">6. 任务验收页（业主小程序）</a></li>
-            </ul>
-        </div>
+        <div class="container">
 
         <!-- ==================== 任务状态机 ==================== -->
-        <div class="section">
+        <div class="section" id="task-status-machine">
             <div class="section-title">
-                任务状态机（已确认）
+                一、任务状态机（已确认）
             </div>
 
             <div class="flow-diagram">
@@ -268,12 +341,12 @@
         <!-- ==================== 1. 任务列表页（服务方） ==================== -->
         <div class="section" id="page-task-list-service">
             <div class="section-title">
-                一、任务列表页（服务方小程序）
+                二、任务列表页（服务方小程序）
                 <span class="badge">service-miniapp/task-list.html</span>
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">1.1 页面概述</div>
+                <div class="subsection-title">2.1 页面概述</div>
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">页面名称</div>
@@ -303,7 +376,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">1.2 页面结构</div>
+                <div class="subsection-title">2.2 页面结构</div>
                 <div class="code-block">
 ┌─────────────────────────────────────┐
 │  导航栏                              │
@@ -336,7 +409,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">1.3 状态Tab规格</div>
+                <div class="subsection-title">2.3 状态Tab规格</div>
                 <table>
                     <thead>
                         <tr>
@@ -381,7 +454,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">1.4 任务卡片规格</div>
+                <div class="subsection-title">2.4 任务卡片规格</div>
                 <table>
                     <thead>
                         <tr>
@@ -426,7 +499,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">1.5 筛选规格</div>
+                <div class="subsection-title">2.5 筛选规格</div>
                 <table>
                     <thead>
                         <tr>
@@ -456,7 +529,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">1.6 分页规格</div>
+                <div class="subsection-title">2.6 分页规格</div>
                 <table>
                     <thead>
                         <tr>
@@ -485,12 +558,12 @@
         <!-- ==================== 2. 任务详情页（服务方） ==================== -->
         <div class="section" id="page-task-detail-service">
             <div class="section-title">
-                二、任务详情页（服务方小程序）
+                三、任务详情页（服务方小程序）
                 <span class="badge">service-miniapp/task-detail.html</span>
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">2.1 页面概述</div>
+                <div class="subsection-title">3.1 页面概述</div>
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">页面名称</div>
@@ -516,7 +589,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">2.2 页面结构</div>
+                <div class="subsection-title">3.2 页面结构</div>
                 <div class="code-block">
 ┌─────────────────────────────────────┐
 │  导航栏                              │
@@ -562,7 +635,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">2.3 人员配置规格</div>
+                <div class="subsection-title">3.3 人员配置规格</div>
                 <table>
                     <thead>
                         <tr>
@@ -593,7 +666,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">2.4 三段标准显示规格</div>
+                <div class="subsection-title">3.4 三段标准显示规格</div>
                 <table>
                     <thead>
                         <tr>
@@ -627,7 +700,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">2.5 执行记录上传规格</div>
+                <div class="subsection-title">3.5 执行记录上传规格</div>
                 <table>
                     <thead>
                         <tr>
@@ -669,7 +742,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">2.6 确认通过/驳回规格</div>
+                <div class="subsection-title">3.6 确认通过/驳回规格</div>
                 <h4>确认通过</h4>
                 <table>
                     <thead>
@@ -736,7 +809,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">2.7 操作按钮矩阵（服务方）</div>
+                <div class="subsection-title">3.7 操作按钮矩阵（服务方）</div>
                 <table>
                     <thead>
                         <tr>
@@ -788,7 +861,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">2.8 前置任务阻塞</div>
+                <div class="subsection-title">3.8 前置任务阻塞</div>
                 <table>
                     <thead>
                         <tr>
@@ -821,12 +894,12 @@
         <!-- ==================== 3. 任务验收页（服务方） ==================== -->
         <div class="section" id="page-task-acceptance-service">
             <div class="section-title">
-                三、任务验收页（服务方小程序）
+                四、任务验收页（服务方小程序）
                 <span class="badge">service-miniapp/task-acceptance.html</span>
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">3.1 页面概述</div>
+                <div class="subsection-title">4.1 页面概述</div>
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">页面名称</div>
@@ -860,12 +933,12 @@
         <!-- ==================== 4. 任务列表页（业主） ==================== -->
         <div class="section" id="page-task-list-owner">
             <div class="section-title">
-                四、任务列表页（业主小程序）
+                五、任务列表页（业主小程序）
                 <span class="badge">owner-miniapp/task-list.html</span>
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">4.1 页面概述</div>
+                <div class="subsection-title">5.1 页面概述</div>
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">页面名称</div>
@@ -887,7 +960,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">4.2 与服务方差异</div>
+                <div class="subsection-title">5.2 与服务方差异</div>
                 <table>
                     <thead>
                         <tr>
@@ -930,12 +1003,12 @@
         <!-- ==================== 5. 任务详情页（业主） ==================== -->
         <div class="section" id="page-task-detail-owner">
             <div class="section-title">
-                五、任务详情页（业主小程序）
+                六、任务详情页（业主小程序）
                 <span class="badge">owner-miniapp/task-detail.html</span>
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">5.1 与服务方差异</div>
+                <div class="subsection-title">6.1 与服务方差异</div>
                 <table>
                     <thead>
                         <tr>
@@ -975,7 +1048,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">5.2 业主确认按钮规格</div>
+                <div class="subsection-title">6.2 业主确认按钮规格</div>
                 <table>
                     <thead>
                         <tr>
@@ -1012,12 +1085,12 @@
         <!-- ==================== 6. 任务验收页（业主） ==================== -->
         <div class="section" id="page-task-acceptance-owner">
             <div class="section-title">
-                六、任务验收页（业主小程序）
+                七、任务验收页（业主小程序）
                 <span class="badge">owner-miniapp/task-acceptance.html</span>
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">6.1 页面概述</div>
+                <div class="subsection-title">7.1 页面概述</div>
                 <p>业主任务验收页与服务方验收页功能类似，主要差异：</p>
                 <ul style="margin-top: 12px; padding-left: 20px;">
                     <li>确认通过后<strong>必须</strong>进行星级评价</li>
@@ -1027,14 +1100,192 @@
             </div>
         </div>
 
-        <!-- ==================== API接口汇总 ==================== -->
-        <div class="section">
+        <!-- ==================== 字段校验规则 ==================== -->
+        <div class="section" id="validation-rules">
             <div class="section-title">
-                七、API接口汇总
+                八、字段校验规则
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">7.1 任务列表接口</div>
+                <div class="subsection-title">8.1 任务基本信息字段</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>字段</th>
+                            <th>类型</th>
+                            <th>必填</th>
+                            <th>校验规则</th>
+                            <th>错误提示</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>任务编号（task_no）</td>
+                            <td>String(30)</td>
+                            <td><span class="tag tag-system">系统生成</span></td>
+                            <td>格式：TK + yyyyMMdd + 4位流水号（临时任务前缀TK-T）</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>任务名称（name）</td>
+                            <td>String(200)</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>1-200字符，非空</td>
+                            <td>请输入任务名称 / 任务名称不能超过200个字符</td>
+                        </tr>
+                        <tr>
+                            <td>执行标准（execution_standard）</td>
+                            <td>Text</td>
+                            <td><span class="tag tag-optional">选填</span></td>
+                            <td>无字数限制</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>确认标准（confirmation_standard）</td>
+                            <td>Text</td>
+                            <td><span class="tag tag-optional">选填</span></td>
+                            <td>无字数限制</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>担责标准（responsibility_standard）</td>
+                            <td>Text</td>
+                            <td><span class="tag tag-optional">选填</span></td>
+                            <td>无字数限制</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>驳回原因（reject_reason）</td>
+                            <td>String(500)</td>
+                            <td><span class="tag tag-required">驳回时必填</span></td>
+                            <td>1-500字符</td>
+                            <td>请输入驳回原因 / 驳回原因不能超过500个字符</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">8.2 执行记录表字段（execution_records）</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>字段</th>
+                            <th>类型</th>
+                            <th>必填</th>
+                            <th>校验规则</th>
+                            <th>错误提示</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>任务ID（task_id）</td>
+                            <td>String(UUID)</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>UUID格式</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>上传人（uploader_id）</td>
+                            <td>String(UUID)</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>UUID格式</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>说明文字（content）</td>
+                            <td>Text</td>
+                            <td><span class="tag tag-optional">选填</span></td>
+                            <td>1-1000字符</td>
+                            <td>说明文字不能超过1000个字符</td>
+                        </tr>
+                        <tr>
+                            <td>媒体文件（media_files）</td>
+                            <td>JSON</td>
+                            <td><span class="tag tag-optional">选填</span></td>
+                            <td>图片：jpg/jpeg/png/webp，单张≤10MB；视频：mp4/mov，单个≤100MB</td>
+                            <td>请上传正确格式的文件 / 图片不能超过10MB / 视频不能超过100MB</td>
+                        </tr>
+                        <tr>
+                            <td>上传轮次（upload_round）</td>
+                            <td>Integer</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>≥1</td>
+                            <td>—</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">8.3 确认记录表字段（task_confirmations）</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>字段</th>
+                            <th>类型</th>
+                            <th>必填</th>
+                            <th>校验规则</th>
+                            <th>错误提示</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>任务ID（task_id）</td>
+                            <td>String(UUID)</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>UUID格式</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>确认人（confirmer_id）</td>
+                            <td>String(UUID)</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>UUID格式</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>确认结果（status）</td>
+                            <td>Enum</td>
+                            <td><span class="tag tag-required">必填</span></td>
+                            <td>枚举值：confirmed（已确认）、rejected（已驳回）</td>
+                            <td>请选择确认结果</td>
+                        </tr>
+                        <tr>
+                            <td>确认备注（remark）</td>
+                            <td>String(500)</td>
+                            <td><span class="tag tag-optional">选填</span></td>
+                            <td>1-500字符</td>
+                            <td>备注不能超过500个字符</td>
+                        </tr>
+                        <tr>
+                            <td>确认时间（confirmed_at）</td>
+                            <td>DateTime</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>日期时间格式</td>
+                            <td>—</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="note">
+                <div class="note-title">交互规格</div>
+                <p><strong>执行记录上传</strong>：选择文件时校验格式和大小，上传前拦截超限文件</p>
+                <p><strong>说明文字</strong>：输入时实时显示字数统计（如"120/1000"）</p>
+                <p><strong>驳回操作</strong>：点击驳回按钮弹出输入框，必填驳回原因后方可提交</p>
+                <p><strong>上传轮次</strong>：首次上传为1，被驳回后重新上传为2，依此类推</p>
+            </div>
+        </div>
+
+        <!-- ==================== API接口汇总 ==================== -->
+        <div class="section" id="task-api-summary">
+            <div class="section-title">
+                九、API接口汇总
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">8.1 任务列表接口</div>
                 <table>
                     <thead>
                         <tr>
@@ -1062,7 +1313,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">7.2 任务详情接口</div>
+                <div class="subsection-title">8.2 任务详情接口</div>
                 <table>
                     <thead>
                         <tr>
@@ -1131,6 +1382,68 @@
             <p>— 任务模块规格结束 —</p>
             <p style="font-size: 12px; margin-top: 8px;">继续查看 <a href="PRD-项目模块详细规格.html" style="color: var(--success-color);">项目模块规格</a></p>
         </div>
+        </div>
     </div>
+
+    <!-- 滚动高亮脚本 -->
+    <script>
+        const sections = [
+            'task-status-machine',
+            'page-task-list-service',
+            'page-task-detail-service',
+            'page-task-acceptance-service',
+            'page-task-list-owner',
+            'page-task-detail-owner',
+            'page-task-acceptance-owner',
+            'task-api-summary'
+        ];
+        
+        const tocLinks = document.querySelectorAll('.sidebar-toc-list a');
+        
+        window.addEventListener('scroll', function() {
+            const scrollPos = window.scrollY || window.pageYOffset;
+            let currentSection = sections[0];
+            
+            for (let i = 0; i < sections.length; i++) {
+                const section = document.getElementById(sections[i]);
+                if (section) {
+                    const sectionTop = section.offsetTop - 100;
+                    const sectionBottom = sectionTop + section.offsetHeight;
+                    
+                    if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
+                        currentSection = sections[i];
+                        break;
+                    } else if (scrollPos >= sectionTop) {
+                        currentSection = sections[i];
+                    }
+                }
+            }
+            
+            tocLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + currentSection) {
+                    link.classList.add('active');
+                }
+            });
+        });
+        
+        tocLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    const offsetTop = targetElement.offsetTop - 20;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        window.dispatchEvent(new Event('scroll'));
+    </script>
 </body>
 </html>

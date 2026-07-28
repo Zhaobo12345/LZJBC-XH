@@ -180,10 +180,14 @@ function hideRejectDrawer() {
 }
 
 function submitReject() {
-    const reason = document.getElementById('rejectReasonInput').value.trim();
+    const reasonInput = document.getElementById('rejectReasonInput');
+    const reason = reasonInput.value.trim();
     
-    if (!reason) {
-        showToast('请输入驳回原因');
+    // 校验驳回原因
+    const result = Validation.validate.textLength(reason, 500, true, '驳回原因');
+    if (!result.valid) {
+        showToast(result.message);
+        reasonInput.focus();
         return;
     }
     
@@ -253,18 +257,21 @@ function renderUploadGrid() {
 }
 
 function addImage() {
+    // 校验数量限制
     if (uploadedImages.length >= 9) {
         showToast('最多上传9张图片');
         return;
     }
     
+    // 模拟文件选择（实际项目中会触发文件选择器）
+    // 校验规则：jpg/jpeg/png/webp，单张≤10MB
     uploadedImages.push({
         id: Date.now(),
-        url: ''
+        url: '',
+        name: '凭证图片_' + (uploadedImages.length + 1) + '.jpg'
     });
     
     renderUploadGrid();
-    showToast('已添加1张图片');
 }
 
 function deleteImage(index) {

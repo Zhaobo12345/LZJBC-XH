@@ -890,8 +890,22 @@
                 <div class="back" onclick="closeChangeModal()">← 返回</div>
                 <div class="title">发起变更</div>
                 <div class="actions">
-                    <div class="nav-action-btn" onclick="showMoreOptions(event)">⋯</div>
+                    <div class="nav-action-btn" onclick="toggleChangeActionMenu()">⋯</div>
                     <div class="nav-action-btn" onclick="closeChangeModal()">✕</div>
+                </div>
+                <div class="action-menu" id="changeActionMenu">
+                    <div class="action-menu-item" onclick="showVersionModal(); closeChangeActionMenu();">
+                        <span class="icon">📋</span>
+                        <span>版本记录</span>
+                    </div>
+                    <div class="action-menu-item" onclick="showChangeRecordModal(); closeChangeActionMenu();">
+                        <span class="icon">📜</span>
+                        <span>变更记录</span>
+                    </div>
+                    <div class="action-menu-item" onclick="showCustomToast('分享给朋友'); closeChangeActionMenu();">
+                        <span class="icon">📤</span>
+                        <span>分享给朋友</span>
+                    </div>
                 </div>
             </div>
             <div class="change-content">
@@ -903,7 +917,6 @@
                     <ul class="notice-list">
                         <li>发起变更后需要双方确认后生效</li>
                         <li>如果涉及到阶段任务变更，双方确认前阶段任务将停止流转</li>
-                        <li>合同正文修改请前往电脑端操作</li>
                         <li>变更生效后将生成新的版本记录</li>
                     </ul>
                 </div>

@@ -647,11 +647,17 @@ const TaskDetailPage = (function() {
     }
     
     function rejectTask() {
-        const reason = document.getElementById('rejectDescInput').value;
-        if (!reason.trim()) {
-            showToast('请输入驳回原因');
+        const reasonInput = document.getElementById('rejectDescInput');
+        const reason = reasonInput.value.trim();
+        
+        // 校验驳回原因（使用validation.js）
+        const result = Validation.validate.textLength(reason, 500, true, '驳回原因');
+        if (!result.valid) {
+            showToast(result.message);
+            reasonInput.focus();
             return;
         }
+        
         closeRejectModal();
         showToast('已驳回！系统已通知执行人重新执行。');
         updateTaskStatus(TaskStatus.REJECTED_PENDING);
@@ -2869,12 +2875,16 @@ const TaskDetailPage = (function() {
     window.toggleActionMenu = toggleActionMenu;
     window.closeActionMenu = closeActionMenu;
     window.shareToFriend = shareToFriend;
-    window.goToProfile = goToProfile;
     
     function getMemberIdByAvatar(avatarText) {
         const avatarToId = { '张': '1', '李': '2', '王': '3', '赵': '4', '孙': '5', '钱': '6', '周': '7', '吴': '8', '郑': '9', '项': '1' };
         return avatarToId[avatarText] || '1';
     }
+    
+    function goToProfile(id, name, role) {
+        location.href = 'prototype-member-profile.html?id=' + encodeURIComponent(id) + '&name=' + encodeURIComponent(name) + '&role=' + encodeURIComponent(role);
+    }
+    window.goToProfile = goToProfile;
     
     function initProfileClickEvents() {
         // 成员档案功能已下线

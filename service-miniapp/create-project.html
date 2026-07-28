@@ -74,6 +74,31 @@
             color: var(--text-tertiary);
         }
 
+        .input-with-count {
+            position: relative;
+        }
+
+        .input-with-count .form-input {
+            padding-right: 60px;
+        }
+
+        .char-count {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .char-count.warning {
+            color: var(--warning-color);
+        }
+
+        .char-count.error {
+            color: var(--error-color);
+        }
+
         .form-textarea {
             width: 100%;
             min-height: 80px;
@@ -98,14 +123,33 @@
         }
 
         .error-message {
+            position: relative;
             font-size: 12px;
-            color: var(--error-color);
-            margin-top: 4px;
+            color: #F5222D;
+            margin-top: 6px;
+            padding: 6px 10px;
+            background-color: #FFF1F0;
+            border: 1px solid #FFCCC7;
+            border-radius: 6px;
+            line-height: 1.4;
             display: none;
         }
 
         .error-message.show {
             display: block;
+        }
+
+        .error-message::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 12px;
+            width: 8px;
+            height: 8px;
+            background-color: #FFF1F0;
+            border-left: 1px solid #FFCCC7;
+            border-top: 1px solid #FFCCC7;
+            transform: rotate(45deg);
         }
 
         .region-select {
@@ -213,6 +257,13 @@
         }
 
         .upload-item {
+            width: 72px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .upload-item .thumb-wrap {
             width: 60px;
             height: 60px;
             border-radius: 8px;
@@ -221,6 +272,29 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            overflow: hidden;
+        }
+
+        .upload-item .thumb-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .upload-item .thumb-wrap .doc-icon {
+            font-size: 28px;
+        }
+
+        .upload-item .file-name {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            margin-top: 4px;
+            max-width: 72px;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .upload-item .remove {
@@ -237,6 +311,90 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            z-index: 1;
+        }
+
+        .upload-count-tip {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin-top: 8px;
+        }
+
+        /* ActionSheet - 底部操作菜单 */
+        .action-sheet-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            display: none;
+        }
+
+        .action-sheet-mask.show {
+            display: block;
+        }
+
+        .action-sheet {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #F7F7F7;
+            border-radius: 12px 12px 0 0;
+            z-index: 10001;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            padding-bottom: env(safe-area-inset-bottom, 0);
+        }
+
+        .action-sheet.show {
+            transform: translateY(0);
+        }
+
+        .action-sheet-title {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-tertiary);
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .action-sheet-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+            font-size: 16px;
+            color: var(--text-primary);
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            transition: background 0.15s;
+        }
+
+        .action-sheet-item:active {
+            background: var(--bg-secondary);
+        }
+
+        .action-sheet-item .as-icon {
+            font-size: 20px;
+        }
+
+        .action-sheet-cancel {
+            margin-top: 8px;
+            text-align: center;
+            padding: 16px;
+            font-size: 16px;
+            color: var(--text-primary);
+            cursor: pointer;
+            background: var(--bg-primary);
+        }
+
+        .action-sheet-cancel:active {
+            background: var(--bg-secondary);
         }
 
         .submit-section {
@@ -451,6 +609,123 @@
 
         .promoter-tip .tip-icon {
             font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .promoter-tip .tip-text {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .promoter-tip .inline-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            background: linear-gradient(135deg, #FF9F43 0%, #FFA726 100%);
+            color: #FFFFFF;
+            padding: 1px 6px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+            margin-left: 4px;
+        }
+
+        .promoter-tip .inline-badge .badge-icon {
+            font-size: 10px;
+        }
+
+        /* 演示控制面板 - 贴近手机框外右侧，与发起人提示区域同行 */
+        .demo-control-panel {
+            position: fixed;
+            top: 130px;
+            left: calc(50% + 198px + 16px);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            z-index: 9999;
+            min-width: 180px;
+        }
+
+        .demo-control-panel .panel-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .demo-control-panel .control-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .demo-control-panel .control-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .demo-control-panel .control-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 40px;
+            height: 22px;
+            background-color: #d9d9d9;
+            border-radius: 11px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch.active {
+            background-color: var(--success-color);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            background-color: #fff;
+            border-radius: 50%;
+            transition: transform 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(18px);
+        }
+
+        .demo-control-panel .status-text {
+            font-size: 11px;
+            margin-top: 8px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .demo-control-panel .status-text.uncertified {
+            background: #FFF7E6;
+            color: #D48806;
+        }
+
+        .demo-control-panel .status-text.certified {
+            background: #E6F7FF;
+            color: #0050B3;
         }
     </style>
 </head>
@@ -463,13 +738,7 @@
 
         <div class="nav-bar">
             <div class="back" onclick="history.back()">← 返回</div>
-            <div class="title centered">
-                创建项目
-                <span class="promoter-badge" id="promoterBadge" style="display: none;">
-                    <span class="badge-icon">⭐</span>
-                    <span>项目发起人</span>
-                </span>
-            </div>
+            <div class="title centered">创建项目</div>
             <div class="actions">
                 <div class="action-btn" onclick="alert('关闭小程序')">✕</div>
             </div>
@@ -488,8 +757,12 @@
             </div>
 
             <div class="promoter-tip" id="promoterTip">
-                <span class="tip-icon">✓</span>
-                <span>您已是认证项目发起人，可享受项目分利权益</span>
+                <span class="tip-text">
+                    <span>您已是 <span class="inline-badge">
+                        <span class="badge-icon">⭐</span>
+                        <span>项目发起人</span>
+                    </span> 可享受项目分利权益</span>
+                </span>
             </div>
 
             <form id="createForm">
@@ -499,7 +772,10 @@
                             <span class="required">*</span>
                             <span>项目名称</span>
                         </label>
-                        <input type="text" class="form-input" id="projectName" placeholder="请输入项目名称" maxlength="50">
+                        <div class="input-with-count">
+                            <input type="text" class="form-input" id="projectName" placeholder="请输入项目名称" maxlength="100">
+                            <span class="char-count" id="projectNameCount">0/100</span>
+                        </div>
                         <div class="error-message" id="projectNameError">请输入项目名称</div>
                     </div>
                 </div>
@@ -512,7 +788,10 @@
                             <span class="required">*</span>
                             <span>客户姓名</span>
                         </label>
-                        <input type="text" class="form-input" id="customerName" placeholder="请输入客户姓名" maxlength="20">
+                        <div class="input-with-count">
+                            <input type="text" class="form-input" id="customerName" placeholder="请输入客户姓名" maxlength="50">
+                            <span class="char-count" id="customerNameCount">0/50</span>
+                        </div>
                         <div class="error-message" id="customerNameError">请输入客户姓名</div>
                     </div>
 
@@ -521,7 +800,7 @@
                             <span class="required">*</span>
                             <span>联系方式</span>
                         </label>
-                        <input type="tel" class="form-input" id="customerPhone" placeholder="请输入手机号码" maxlength="11">
+                        <input type="tel" class="form-input" id="customerPhone" placeholder="请输入手机号码" maxlength="11" inputmode="numeric">
                         <div class="error-message" id="customerPhoneError">请输入正确的手机号码</div>
                     </div>
                 </div>
@@ -537,25 +816,21 @@
                         <div class="region-select">
                             <select class="form-select" id="province">
                                 <option value="">请选择省</option>
-                                <option value="浙江省">浙江省</option>
-                                <option value="江苏省">江苏省</option>
-                                <option value="上海市">上海市</option>
                                 <option value="北京市">北京市</option>
+                                <option value="河南省">河南省</option>
+                                <option value="陕西省">陕西省</option>
                             </select>
                             <select class="form-select" id="city">
                                 <option value="">请选择市</option>
-                                <option value="杭州市">杭州市</option>
-                                <option value="宁波市">宁波市</option>
-                                <option value="温州市">温州市</option>
                             </select>
                             <select class="form-select" id="district">
                                 <option value="">请选择区</option>
-                                <option value="西湖区">西湖区</option>
-                                <option value="余杭区">余杭区</option>
-                                <option value="滨江区">滨江区</option>
                             </select>
                         </div>
-                        <input type="text" class="form-input" id="address" placeholder="请输入详细地址（街道、小区、楼栋号等）">
+                        <div class="input-with-count" style="margin-top: 8px;">
+                            <input type="text" class="form-input" id="address" placeholder="请输入详细地址（街道、小区、楼栋号等）" maxlength="200">
+                            <span class="char-count" id="addressCount">0/200</span>
+                        </div>
                         <div class="error-message" id="regionError">请选择完整的区域信息</div>
                     </div>
 
@@ -629,6 +904,7 @@
                             <input type="date" class="form-input" id="endDate">
                         </div>
                     </div>
+                    <div class="error-message" id="dateRangeError">入住日期不能早于开工日期</div>
                 </div>
 
                 <div class="form-section">
@@ -653,12 +929,16 @@
 
                     <div class="form-group">
                         <label class="form-label">上传相关附件</label>
-                        <div class="upload-area" onclick="uploadFile()">
+                        <div class="upload-area" id="uploadArea" onclick="showUploadActionSheet()">
                             <div class="icon">📎</div>
                             <div class="text">点击上传附件</div>
-                            <div class="hint">支持图片、PDF、Word等格式</div>
+                            <div class="hint">支持图片、PDF、Word等格式，单个文件不超过10MB</div>
                         </div>
+                        <input type="file" id="cameraInput" style="display:none;" accept="image/*" capture="environment">
+                        <input type="file" id="albumInput" style="display:none;" accept="image/*" multiple>
+                        <input type="file" id="docInput" style="display:none;" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" multiple>
                         <div class="upload-list" id="uploadList"></div>
+                        <div class="upload-count-tip" id="uploadCountTip"></div>
                     </div>
                 </div>
 
@@ -667,7 +947,7 @@
         </div>
 
         <div class="submit-section">
-            <button type="button" class="submit-btn" onclick="submitForm()">创建项目</button>
+            <button type="button" class="submit-btn" id="submitBtn" onclick="submitForm()" disabled>创建项目</button>
         </div>
 
         <div class="app-modal" id="appModal">
@@ -684,6 +964,35 @@
         <div class="app-toast" id="appToast"></div>
     </div>
 
+    <!-- 附件上传 ActionSheet -->
+    <div class="action-sheet-mask" id="actionSheetMask" onclick="hideUploadActionSheet()"></div>
+    <div class="action-sheet" id="uploadActionSheet">
+        <div class="action-sheet-title">选择附件来源</div>
+        <div class="action-sheet-item" onclick="selectFromCamera()">
+            <span class="as-icon">📷</span>
+            <span>拍照</span>
+        </div>
+        <div class="action-sheet-item" onclick="selectFromAlbum()">
+            <span class="as-icon">🖼️</span>
+            <span>从相册选择</span>
+        </div>
+        <div class="action-sheet-item" onclick="selectFromDocument()">
+            <span class="as-icon">📄</span>
+            <span>选择文档</span>
+        </div>
+        <div class="action-sheet-cancel" onclick="hideUploadActionSheet()">取消</div>
+    </div>
+
+    <!-- 演示控制面板：发起人认证状态切换 -->
+    <div class="demo-control-panel" id="demoControlPanel">
+        <div class="panel-title">演示控制</div>
+        <div class="control-item">
+            <span class="control-label">发起人认证</span>
+            <div class="toggle-switch" id="promoterToggle" onclick="togglePromoterStatus()"></div>
+        </div>
+        <div class="status-text uncertified" id="promoterStatusText">未认证：展示Banner入口</div>
+    </div>
+
     <div class="page-nav">
         <div class="page-nav-title">原型导航</div>
         <a href="home.html" class="page-nav-item">首页</a>
@@ -695,10 +1004,10 @@
         <a href="task-list.html" class="page-nav-item">任务列表</a>
         <a href="contract-detail.html" class="page-nav-item">合同详情</a>
         <a href="task-detail.html" class="page-nav-item">任务详情</a>
-        <a href="temp-task-detail.html" class="page-nav-item">临时任务详情</a>
     </div>
 
     <script src="js/page-nav.js"></script>
+    <script src="../shared/validation.js"></script>
     <script>
         let selectedCategory = '';
         let selectedHouseType = '';
@@ -706,25 +1015,244 @@
         let uploadedFiles = [];
         let isPromoter = false;
 
-        function checkPromoterStatus() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const promoterStatus = urlParams.get('promoter');
-
-            if (promoterStatus === 'certified' || localStorage.getItem('isPromoter') === 'true') {
-                isPromoter = true;
-                localStorage.setItem('isPromoter', 'true');
-                showPromoterStatus();
+        // 初始化默认选项值（DOM中已有默认选中项）
+        function initDefaultSelections() {
+            const defaultCategory = document.querySelector('#categoryOptions .category-option.selected');
+            const defaultHouseType = document.querySelector('#houseTypeOptions .house-type-option.selected');
+            if (defaultCategory) {
+                selectedCategory = defaultCategory.dataset.value;
+            }
+            if (defaultHouseType) {
+                selectedHouseType = defaultHouseType.dataset.value;
             }
         }
 
-        function showPromoterStatus() {
-            document.getElementById('promoterBanner').style.display = 'none';
-            document.getElementById('promoterTip').classList.add('show');
-            document.getElementById('promoterBadge').style.display = 'inline-flex';
+        // 实时校验表单完整性（仅控制按钮高亮，不展示错误提示）
+        function checkFormValidity() {
+            const projectName = document.getElementById('projectName').value.trim();
+            const customerName = document.getElementById('customerName').value.trim();
+            const customerPhone = document.getElementById('customerPhone').value.trim();
+            const province = document.getElementById('province').value;
+            const city = document.getElementById('city').value;
+            const district = document.getElementById('district').value;
+            const address = document.getElementById('address').value.trim();
+            const area = document.getElementById('area').value;
+
+            const phoneReg = /^1[3-9]\d{9}$/;
+
+            const isValid = projectName &&
+                customerName &&
+                phoneReg.test(customerPhone) &&
+                province && city && district &&
+                address &&
+                area && parseFloat(area) > 0 &&
+                selectedCategory &&
+                selectedHouseType;
+
+            document.getElementById('submitBtn').disabled = !isValid;
+            return isValid;
+        }
+
+        // 绑定实时校验事件
+        function initRealTimeValidation() {
+            const fields = ['projectName', 'customerName', 'customerPhone', 'address', 'area'];
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', checkFormValidity);
+                    el.addEventListener('blur', checkFormValidity);
+                }
+            });
+
+            ['province', 'city', 'district'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('change', checkFormValidity);
+                }
+            });
+        }
+
+        // 省市区数据（仅支持北京、河南、陕西）
+        const regionData = {
+            '北京市': {
+                cities: ['北京市'],
+                districts: ['东城区', '西城区', '朝阳区', '丰台区', '石景山区', '海淀区', '门头沟区', '房山区', '通州区', '顺义区', '昌平区', '大兴区', '怀柔区', '平谷区', '密云区', '延庆区']
+            },
+            '河南省': {
+                cities: [ '南阳市'],
+                districts: ['宛城区', '卧龙区']
+            },
+            '陕西省': {
+                cities: ['西安市'],
+                districts: ['新城区', '碑林区','莲湖区', '灞桥区', '未央区','雁塔区', '阎良区', '临潼区', '长安区','高陵区', '鄠邑区']
+            }
+        };
+
+        // 初始化省市区联动
+        function initRegionSelect() {
+            const province = document.getElementById('province');
+            const city = document.getElementById('city');
+            const district = document.getElementById('district');
+
+            province.addEventListener('change', function() {
+                city.innerHTML = '<option value="">请选择市</option>';
+                district.innerHTML = '<option value="">请选择区</option>';
+                
+                if (this.value && regionData[this.value]) {
+                    const cities = regionData[this.value].cities;
+                    cities.forEach(c => {
+                        const opt = document.createElement('option');
+                        opt.value = c;
+                        opt.textContent = c;
+                        city.appendChild(opt);
+                    });
+                }
+                clearError('province');
+            });
+
+            city.addEventListener('change', function() {
+                district.innerHTML = '<option value="">请选择区</option>';
+                
+                if (this.value) {
+                    const districts = regionData[province.value]?.districts || [];
+                    districts.forEach(d => {
+                        const opt = document.createElement('option');
+                        opt.value = d;
+                        opt.textContent = d;
+                        district.appendChild(opt);
+                    });
+                }
+                clearError('city');
+            });
+
+            district.addEventListener('change', function() {
+                clearError('district');
+            });
+        }
+
+        // 初始化字数统计
+        function initCharCount() {
+            const fields = [
+                { id: 'projectName', max: 100 },
+                { id: 'customerName', max: 50 },
+                { id: 'address', max: 200 }
+            ];
+
+            fields.forEach(field => {
+                const input = document.getElementById(field.id);
+                const count = document.getElementById(field.id + 'Count');
+                if (input && count) {
+                    input.addEventListener('input', function() {
+                        const len = this.value.length;
+                        count.textContent = len + '/' + field.max;
+                        
+                        if (len >= field.max) {
+                            count.classList.add('error');
+                            count.classList.remove('warning');
+                        } else if (len >= field.max * 0.9) {
+                            count.classList.add('warning');
+                            count.classList.remove('error');
+                        } else {
+                            count.classList.remove('warning', 'error');
+                        }
+                        
+                        if (this.value.trim()) {
+                            clearError(field.id);
+                        }
+                    });
+                }
+            });
+        }
+
+        // 初始化手机号实时校验
+        function initPhoneValidation() {
+            const phoneInput = document.getElementById('customerPhone');
+            phoneInput.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '').slice(0, 11);
+            });
+            phoneInput.addEventListener('blur', function() {
+                if (this.value && !Validation.REGEX.PHONE.test(this.value)) {
+                    showError('customerPhone', '请输入正确的手机号码');
+                } else {
+                    clearError('customerPhone');
+                }
+            });
+        }
+
+        // 显示错误
+        function showError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            const errorEl = document.getElementById(fieldId + 'Error');
+            if (field) {
+                field.classList.add('error');
+            }
+            if (errorEl) {
+                errorEl.textContent = message;
+                errorEl.classList.add('show');
+            }
+        }
+
+        // 清除错误
+        function clearError(fieldId) {
+            const field = document.getElementById(fieldId);
+            const errorEl = document.getElementById(fieldId + 'Error');
+            if (field) {
+                field.classList.remove('error');
+            }
+            if (errorEl) {
+                errorEl.classList.remove('show');
+            }
+        }
+
+        function checkPromoterStatus() {
+            // 从localStorage读取认证状态
+            const storedStatus = localStorage.getItem('isPromoter');
+            isPromoter = storedStatus === 'true';
+
+            // 同步更新演示控制面板状态
+            updatePromoterUI();
+        }
+
+        function togglePromoterStatus() {
+            // 切换认证状态
+            isPromoter = !isPromoter;
+            localStorage.setItem('isPromoter', isPromoter ? 'true' : 'false');
+            updatePromoterUI();
+        }
+
+        function updatePromoterUI() {
+            const toggleEl = document.getElementById('promoterToggle');
+            const statusText = document.getElementById('promoterStatusText');
+            const banner = document.getElementById('promoterBanner');
+            const tip = document.getElementById('promoterTip');
+
+            if (isPromoter) {
+                // 已认证状态
+                toggleEl.classList.add('active');
+                statusText.textContent = '已认证：隐藏Banner，展示提示条和角标';
+                statusText.className = 'status-text certified';
+
+                // 页面内区域切换
+                banner.style.display = 'none';
+                tip.classList.add('show');
+            } else {
+                // 未认证状态
+                toggleEl.classList.remove('active');
+                statusText.textContent = '未认证：展示Banner入口';
+                statusText.className = 'status-text uncertified';
+
+                // 页面内区域切换
+                banner.style.display = 'flex';
+                tip.classList.remove('show');
+            }
         }
 
         function goToPromoterAuth() {
-            location.href = 'promoter-auth.html';
+            // 演示模式下，点击Banner直接切换为已认证状态
+            isPromoter = true;
+            localStorage.setItem('isPromoter', 'true');
+            updatePromoterUI();
+            showToast('发起人认证成功！');
         }
 
         function showModal(title, content, onConfirm, showCancel = true) {
@@ -757,6 +1285,7 @@
             element.classList.add('selected');
             selectedCategory = element.dataset.value;
             document.getElementById('categoryError').classList.remove('show');
+            checkFormValidity();
         }
 
         function selectHouseType(element) {
@@ -764,6 +1293,7 @@
             element.classList.add('selected');
             selectedHouseType = element.dataset.value;
             document.getElementById('houseTypeError').classList.remove('show');
+            checkFormValidity();
         }
 
         function toggleStyle(element) {
@@ -776,25 +1306,170 @@
             }
         }
 
-        function uploadFile() {
-            const fileName = '附件_' + (uploadedFiles.length + 1) + '.pdf';
-            uploadedFiles.push(fileName);
-            renderUploadList();
+        // 附件上传相关配置
+        const UPLOAD_CONFIG = {
+            maxCount: 9,
+            maxSize: 10 * 1024 * 1024, // 10MB
+            allowedImageTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/webp'],
+            allowedDocExt: ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx']
+        };
+
+        // 显示上传 ActionSheet
+        function showUploadActionSheet() {
+            if (uploadedFiles.length >= UPLOAD_CONFIG.maxCount) {
+                showToast('最多上传9个附件');
+                return;
+            }
+            document.getElementById('actionSheetMask').classList.add('show');
+            document.getElementById('uploadActionSheet').classList.add('show');
         }
 
+        // 隐藏上传 ActionSheet
+        function hideUploadActionSheet() {
+            document.getElementById('actionSheetMask').classList.remove('show');
+            document.getElementById('uploadActionSheet').classList.remove('show');
+        }
+
+        // 拍照
+        function selectFromCamera() {
+            hideUploadActionSheet();
+            document.getElementById('cameraInput').click();
+        }
+
+        // 从相册选择
+        function selectFromAlbum() {
+            hideUploadActionSheet();
+            document.getElementById('albumInput').click();
+        }
+
+        // 选择文档
+        function selectFromDocument() {
+            hideUploadActionSheet();
+            document.getElementById('docInput').click();
+        }
+
+        // 获取文档类型图标
+        function getDocIcon(fileName) {
+            const ext = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
+            if (ext === '.pdf') return '📕';
+            if (ext === '.doc' || ext === '.docx') return '📘';
+            if (ext === '.xls' || ext === '.xlsx') return '📗';
+            if (ext === '.ppt' || ext === '.pptx') return '📙';
+            return '📄';
+        }
+
+        // 判断是否为图片
+        function isImageFile(file) {
+            return UPLOAD_CONFIG.allowedImageTypes.includes(file.type);
+        }
+
+        // 判断是否为允许的文档
+        function isAllowedDoc(fileName) {
+            const ext = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
+            return UPLOAD_CONFIG.allowedDocExt.includes(ext);
+        }
+
+        // 文件选择处理
+        function handleFileSelect(event) {
+            const files = Array.from(event.target.files);
+
+            files.forEach(file => {
+                // 数量上限校验
+                if (uploadedFiles.length >= UPLOAD_CONFIG.maxCount) {
+                    showToast('最多上传9个附件');
+                    return;
+                }
+
+                // 文件类型校验
+                if (!isImageFile(file) && !isAllowedDoc(file.name)) {
+                    showToast('不支持的文件类型：' + file.name);
+                    return;
+                }
+
+                // 文件大小校验
+                if (file.size > UPLOAD_CONFIG.maxSize) {
+                    showToast('文件大小不能超过10MB：' + file.name);
+                    return;
+                }
+
+                // 重复文件检测（文件名 + 大小）
+                const isDuplicate = uploadedFiles.some(f => f.name === file.name && f.size === file.size);
+                if (isDuplicate) {
+                    showToast('该文件已上传，请勿重复上传：' + file.name);
+                    return;
+                }
+
+                // 添加到列表
+                uploadedFiles.push({
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                    isImage: isImageFile(file)
+                });
+
+                // 如果是图片，生成缩略图预览
+                if (isImageFile(file)) {
+                    const reader = new FileReader();
+                    const idx = uploadedFiles.length - 1;
+                    reader.onload = function(e) {
+                        uploadedFiles[idx].preview = e.target.result;
+                        renderUploadList();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            renderUploadList();
+            // 清空 input 的 value，允许重复选择同一文件
+            event.target.value = '';
+        }
+
+        // 删除文件（带确认弹窗）
         function removeFile(index) {
-            uploadedFiles.splice(index, 1);
-            renderUploadList();
+            showModal('确认删除', '确定删除该附件吗？', function() {
+                uploadedFiles.splice(index, 1);
+                renderUploadList();
+            });
         }
 
+        // 渲染文件列表
         function renderUploadList() {
             const list = document.getElementById('uploadList');
-            list.innerHTML = uploadedFiles.map((file, index) => `
-                <div class="upload-item">
-                    <span>📄</span>
-                    <span class="remove" onclick="removeFile(${index})">×</span>
-                </div>
-            `).join('');
+            const countTip = document.getElementById('uploadCountTip');
+            const uploadArea = document.getElementById('uploadArea');
+
+            list.innerHTML = uploadedFiles.map((file, index) => {
+                let thumbContent;
+                if (file.isImage && file.preview) {
+                    thumbContent = `<img src="${file.preview}" alt="${file.name}">`;
+                } else {
+                    thumbContent = `<span class="doc-icon">${getDocIcon(file.name)}</span>`;
+                }
+
+                return `
+                    <div class="upload-item">
+                        <div class="thumb-wrap">
+                            ${thumbContent}
+                            <span class="remove" onclick="removeFile(${index})">×</span>
+                        </div>
+                        <div class="file-name" title="${file.name}">${file.name}</div>
+                    </div>
+                `;
+            }).join('');
+
+            // 更新数量提示
+            if (uploadedFiles.length > 0) {
+                countTip.textContent = `已上传 ${uploadedFiles.length}/${UPLOAD_CONFIG.maxCount} 个文件`;
+            } else {
+                countTip.textContent = '';
+            }
+
+            // 上传入口显示/隐藏
+            if (uploadedFiles.length >= UPLOAD_CONFIG.maxCount) {
+                uploadArea.style.display = 'none';
+            } else {
+                uploadArea.style.display = 'block';
+            }
         }
 
         function validateForm() {
@@ -856,8 +1531,10 @@
 
             const area = document.getElementById('area');
             const areaError = document.getElementById('areaError');
-            if (!area.value || parseFloat(area.value) <= 0) {
+            const areaVal = parseFloat(area.value);
+            if (!area.value || isNaN(areaVal) || areaVal <= 0 || areaVal > 9999) {
                 area.classList.add('error');
+                areaError.textContent = areaVal > 9999 ? '房屋面积不能超过9999平方米' : '请输入正确的房屋面积';
                 areaError.classList.add('show');
                 isValid = false;
             } else {
@@ -881,55 +1558,31 @@
                 houseTypeError.classList.remove('show');
             }
 
+            const startDate = document.getElementById('startDate');
+            const endDate = document.getElementById('endDate');
+            const dateRangeError = document.getElementById('dateRangeError');
+            if (startDate.value && endDate.value && new Date(endDate.value) < new Date(startDate.value)) {
+                startDate.classList.add('error');
+                endDate.classList.add('error');
+                dateRangeError.classList.add('show');
+                isValid = false;
+            } else {
+                startDate.classList.remove('error');
+                endDate.classList.remove('error');
+                dateRangeError.classList.remove('show');
+            }
+
             return isValid;
         }
 
         function submitForm() {
             if (validateForm()) {
-                const styleNames = {
-                    'zhongshi': '中式',
-                    'fashi': '法式',
-                    'xiandai': '现代',
-                    'qingshe': '轻奢',
-                    'jianyue': '简约',
-                    'gongye': '工业',
-                    'meishi': '美式'
-                };
-
-                const categoryNames = {
-                    'maopi': '毛坯房',
-                    'jingzhuang': '精装房',
-                    'gaizao': '旧房改造'
-                };
-
-                const houseTypeNames = {
-                    'bieshu': '别墅',
-                    'fushi': '复式',
-                    'pingceng': '平层'
-                };
-
-                const formData = {
-                    projectName: document.getElementById('projectName').value.trim(),
-                    customerName: document.getElementById('customerName').value.trim(),
-                    customerPhone: document.getElementById('customerPhone').value.trim(),
-                    province: document.getElementById('province').value,
-                    city: document.getElementById('city').value,
-                    district: document.getElementById('district').value,
-                    address: document.getElementById('address').value.trim(),
-                    area: document.getElementById('area').value,
-                    category: categoryNames[selectedCategory],
-                    houseType: houseTypeNames[selectedHouseType],
-                    startDate: document.getElementById('startDate').value,
-                    endDate: document.getElementById('endDate').value,
-                    styles: selectedStyles.map(s => styleNames[s]),
-                    attachments: uploadedFiles
-                };
-
-                console.log('提交数据:', formData);
-
-                showModal('创建成功', '项目创建成功！即将跳转到项目详情页面。', function() {
-                    location.href = 'project-detail.html';
-                }, false);
+                showModal('确认提交', '确认要提交项目信息吗？确认后将为你创建项目并跳转到项目详情页面。', function() {
+                    showToast('创建成功');
+                    setTimeout(function() {
+                        location.href = 'project-detail-new.html';
+                    }, 1500);
+                }, true);
             } else {
                 const firstError = document.querySelector('.error-message.show, .form-input.error, .form-select.error');
                 if (firstError) {
@@ -938,51 +1591,19 @@
             }
         }
 
-        document.getElementById('projectName').addEventListener('input', function() {
-            if (this.value.trim()) {
-                this.classList.remove('error');
-                document.getElementById('projectNameError').classList.remove('show');
-            }
-        });
-
-        document.getElementById('customerName').addEventListener('input', function() {
-            if (this.value.trim()) {
-                this.classList.remove('error');
-                document.getElementById('customerNameError').classList.remove('show');
-            }
-        });
-
-        document.getElementById('customerPhone').addEventListener('input', function() {
-            const phoneReg = /^1[3-9]\d{9}$/;
-            if (phoneReg.test(this.value.trim())) {
-                this.classList.remove('error');
-                document.getElementById('customerPhoneError').classList.remove('show');
-            }
-        });
-
-        document.getElementById('area').addEventListener('input', function() {
-            if (this.value && parseFloat(this.value) > 0) {
-                this.classList.remove('error');
-                document.getElementById('areaError').classList.remove('show');
-            }
-        });
-
-        document.getElementById('address').addEventListener('input', function() {
-            if (this.value.trim()) {
-                this.classList.remove('error');
-                document.getElementById('regionError').classList.remove('show');
-            }
-        });
-
-        ['province', 'city', 'district'].forEach(id => {
-            document.getElementById(id).addEventListener('change', function() {
-                if (this.value) {
-                    this.classList.remove('error');
-                }
-            });
-        });
-
+        // 初始化
+        initDefaultSelections();
         checkPromoterStatus();
+        initRegionSelect();
+        initCharCount();
+        initPhoneValidation();
+        initRealTimeValidation();
+        checkFormValidity(); // 初始校验按钮状态
+
+        // 附件上传事件绑定
+        document.getElementById('cameraInput').addEventListener('change', handleFileSelect);
+        document.getElementById('albumInput').addEventListener('change', handleFileSelect);
+        document.getElementById('docInput').addEventListener('change', handleFileSelect);
     </script>
 </body>
 </html>

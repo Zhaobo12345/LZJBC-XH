@@ -1,10 +1,11 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>家装平台小程序原型 - 项目列表</title>
     <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="../shared/empty-state.css">
     <style>
         /* ── 页面内容区高度（status 44 + nav 44 + tabbar 50） */
         .page-content {
@@ -180,11 +181,11 @@
             color: var(--text-secondary);
         }
 
-        /* ── 悬浮创建按钮（FAB） */
+        /* ── 悬浮创建按钮（FAB） - 在手机框内右下角 */
         .create-btn {
-            position: fixed;
-            bottom: 70px;
-            right: calc(50% - 375px / 2 + 16px);
+            position: absolute;
+            bottom: 66px;
+            right: 16px;
             width: 56px;
             height: 56px;
             background-color: var(--primary-color);
@@ -197,10 +198,200 @@
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(24, 144, 255, 0.4);
             transition: all 0.2s;
+            z-index: 100;
+            border: none;
+            outline: none;
         }
 
         .create-btn:hover {
             transform: scale(1.1);
+        }
+
+        .create-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* 列表容器 */
+        .list-container {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        /* 空状态适配 */
+        .empty-state {
+            padding: 48px 24px;
+        }
+
+        .empty-state .illustration {
+            width: 120px;
+            height: 120px;
+        }
+
+        /* 认证状态演示开关（手机框右侧，与创建按钮同行） */
+        .auth-demo-switch {
+            position: fixed;
+            left: calc(50% + 207px);
+            top: calc(50% + 250px);
+            transform: translateY(-50%);
+            background: #FFFFFF;
+            border: 1px solid #FFE7BA;
+            border-radius: 12px;
+            padding: 12px 14px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            width: 120px;
+        }
+
+        .auth-demo-switch .switch-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .switch-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .switch-status {
+            color: #FA8C16;
+            font-weight: 500;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .switch-status.certified {
+            color: #52C41A;
+        }
+
+        .switch-hint {
+            font-size: 10px;
+            color: #999;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 36px;
+            height: 20px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .3s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #52C41A;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(16px);
+        }
+
+        /* 认证提示弹窗 */
+        .app-modal {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+        }
+
+        .app-modal.show {
+            display: flex;
+        }
+
+        .modal-box {
+            width: 280px;
+            background-color: #FFFFFF;
+            border-radius: 12px;
+            padding: 24px 20px 16px;
+            text-align: center;
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 16px;
+        }
+
+        .modal-content {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .modal-content p {
+            margin: 0;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            height: 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            line-height: 1;
+            padding: 0;
+            appearance: none;
+            -webkit-appearance: none;
+            font-family: inherit;
+            font-weight: 500;
+        }
+
+        .modal-btn.cancel {
+            background-color: #F5F5F5;
+            color: #666;
+        }
+
+        .modal-btn.confirm {
+            background-color: #1890FF;
+            color: #FFFFFF !important;
         }
     </style>
 </head>
@@ -244,6 +435,8 @@
                 <div class="filter-tab" data-status="completed">已完工</div>
             </div>
             
+            <!-- 列表容器 -->
+            <div class="list-container" id="listContainer">
             <div class="project-card" data-status="in-progress" onclick="location.href='project-detail.html'">
                 <div class="project-header">
                     <div class="project-name">XX小区整体装修</div>
@@ -357,9 +550,10 @@
                     </div>
                 </div>
             </div>
+            </div><!-- 列表容器结束 -->
         </div>
         
-        <div class="create-btn" onclick="location.href='create-project.html'">+</div>
+        <button class="create-btn" id="createProjectBtn">+</button>
         
         <div class="tab-bar">
             <div class="tab-item" onclick="location.href='home.html'">
@@ -379,13 +573,43 @@
                 <div class="label">我的</div>
             </div>
         </div>
+
+        <!-- 角色认证提示弹窗 -->
+        <div class="app-modal" id="authRequiredModal">
+            <div class="modal-box">
+                <div class="modal-title">创建项目需先完成认证</div>
+                <div class="modal-content">
+                    <p>当前操作需先完成角色认证；</p>
+                    <p>认证通过后方可继续创建；</p>
+                </div>
+                <div class="modal-actions">
+                    <div class="modal-btn cancel" onclick="closeAuthModal()">取消</div>
+                    <div class="modal-btn confirm" onclick="goToAuthPage()">立即认证</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 认证状态演示开关（手机框右侧，与创建按钮同行） -->
+    <div class="auth-demo-switch">
+        <div class="switch-title">演示开关</div>
+        <div class="switch-item">
+            <span class="switch-status" id="switchStatus">未认证</span>
+            <label class="switch">
+                <input type="checkbox" id="authSwitch" onchange="toggleAuthStatus(this.checked)">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="switch-hint">切换后点击+按钮测试</div>
     </div>
     
     <div class="page-nav">
         <div class="page-nav-title">原型导航</div>
         <a href="home.html" class="page-nav-item">首页</a>
         <a href="project-list.html" class="page-nav-item active">项目列表</a>
+        <a href="project-list-empty-demo.html" class="page-nav-item">项目列表（空状态演示）</a>
         <a href="project-detail.html" class="page-nav-item">项目详情</a>
+        <a href="project-detail-new.html" class="page-nav-item">初始项目详情页</a>
         <a href="project-info.html" class="page-nav-item">项目信息</a>
         <a href="architecture.html" class="page-nav-item">项目架构</a>
         <a href="create-project.html" class="page-nav-item">创建项目</a>
@@ -394,7 +618,80 @@
     </div>
     
     <script src="js/page-nav.js"></script>
+    <script src="../shared/empty-state.js"></script>
     <script>
+        // 模拟用户认证状态（原型演示：false-未认证，true-已认证）
+        let isUserCertified = false;
+
+        // 筛选Tab切换逻辑
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                const status = this.dataset.status;
+                let visibleCount = 0;
+                
+                document.querySelectorAll('.project-card').forEach(card => {
+                    if (status === 'all') {
+                        card.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        const show = card.dataset.status === status;
+                        card.style.display = show ? 'block' : 'none';
+                        if (show) visibleCount++;
+                    }
+                });
+                
+                // 筛选结果为空时显示空状态
+                if (visibleCount === 0) {
+                    const container = document.getElementById('listContainer');
+                    EmptyState.show(container, {
+                        type: 'empty-project',
+                        title: '暂无相关项目',
+                        desc: status === 'in-progress' 
+                            ? '当前没有进行中的项目' 
+                            : '当前没有已完工的项目'
+                    });
+                }
+            });
+        });
+
+        // 创建项目按钮点击（含认证检查）
+        document.getElementById('createProjectBtn').addEventListener('click', function() {
+            if (isUserCertified) {
+                // 已认证，直接跳转
+                location.href = 'create-project.html';
+            } else {
+                // 未认证，弹出提示
+                document.getElementById('authRequiredModal').classList.add('show');
+            }
+        });
+
+        // 关闭认证提示弹窗
+        function closeAuthModal() {
+            document.getElementById('authRequiredModal').classList.remove('show');
+        }
+
+        // 跳转到认证页面
+        function goToAuthPage() {
+            closeAuthModal();
+            location.href = 'promoter-auth.html';
+        }
+
+        // 切换认证状态（演示用）
+        function toggleAuthStatus(certified) {
+            isUserCertified = certified;
+            const statusEl = document.getElementById('switchStatus');
+            if (certified) {
+                statusEl.textContent = '已认证';
+                statusEl.classList.add('certified');
+            } else {
+                statusEl.textContent = '未认证';
+                statusEl.classList.remove('certified');
+            }
+        }
+
         function showToast(message, duration = 2000) {
             const existingToast = document.querySelector('.app-toast');
             if (existingToast) {
@@ -423,22 +720,6 @@
                 toast.remove();
             }, duration);
         }
-
-        document.querySelectorAll('.filter-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                
-                const status = this.dataset.status;
-                document.querySelectorAll('.project-card').forEach(card => {
-                    if (status === 'all') {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = card.dataset.status === status ? 'block' : 'none';
-                    }
-                });
-            });
-        });
         
         function toggleActionMenu() {
             const actionMenu = document.getElementById('actionMenu');

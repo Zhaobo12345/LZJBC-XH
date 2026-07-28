@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全部待办</title>
+    <link rel="stylesheet" href="common.css">
+    <style>
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-top: 40%;
+        }
+        .empty-state .icon {
+            font-size: 56px;
+            opacity: 0.3;
+            margin-bottom: 16px;
+        }
+        .empty-state .title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #999;
+            margin-bottom: 8px;
+        }
+        .empty-state .desc {
+            font-size: 13px;
+            color: #bbb;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <div class="time">9:41</div>
+            <div class="icons">📶 🔋</div>
+        </div>
+        <div class="nav-bar">
+            <div class="back" onclick="location.href='project-detail-new.html'">← 返回</div>
+            <div class="title centered">全部待办</div>
+            <div class="actions"></div>
+        </div>
+        <div class="page-content">
+            <div class="empty-state">
+                <div class="icon">📌</div>
+                <div class="title">暂无待办</div>
+                <div class="desc">项目启动后，待办事项将在此处展示</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

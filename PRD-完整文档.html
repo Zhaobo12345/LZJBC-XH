@@ -25,6 +25,105 @@
             color: var(--text-primary);
             background-color: var(--bg-secondary);
         }
+
+        /* 左右布局 */
+        .page-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 左侧目录 */
+        .sidebar-toc {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            z-index: 100;
+            flex-shrink: 0;
+        }
+
+        .sidebar-toc::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-toc::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        .sidebar-toc::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        .sidebar-toc-title {
+            padding: 24px 24px 16px;
+            font-size: 18px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background: var(--bg-primary);
+            z-index: 1;
+        }
+
+        .sidebar-toc-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-toc-list li {
+            border-bottom: none;
+        }
+
+        .sidebar-toc-list a {
+            display: block;
+            padding: 12px 24px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+            font-size: 14px;
+        }
+
+        .sidebar-toc-list a:hover {
+            background: var(--bg-secondary);
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .sidebar-toc-list a.active {
+            background: #E6F7FF;
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .toc-group {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .toc-group-title {
+            padding: 8px 24px;
+            font-size: 12px;
+            color: var(--text-tertiary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            background: var(--bg-secondary);
+        }
+
         .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
         .header {
             background: linear-gradient(135deg, #1890FF 0%, #722ED1 50%, #52C41A 100%);
@@ -179,22 +278,56 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="container">
-            <h1>良造家管理平台</h1>
-            <h2 style="font-size: 24px; margin-bottom: 16px;">产品需求文档</h2>
-            <div class="version-info">
-                <span>版本：v1.0</span>
-                <span>日期：2026-07-23</span>
-                <span>状态：已完成</span>
+    <!-- 左侧目录 -->
+    <nav class="sidebar-toc" id="sidebarToc">
+        <div class="sidebar-toc-title">文档目录</div>
+        <ul class="sidebar-toc-list">
+            <div class="toc-group">
+                <div class="toc-group-title">概览</div>
+                <li><a href="#overview">一、文档概述</a></li>
+                <li><a href="#product">二、产品概述</a></li>
+                <li><a href="#flow">三、关键交互流程</a></li>
+                <li><a href="#state-machine">四、状态机定义</a></li>
+                <li><a href="#validation">五、字段校验规则</a></li>
+            </div>
+            <div class="toc-group">
+                <div class="toc-group-title">模块文档</div>
+                <li><a href="#module-contract">📋 合同模块</a></li>
+                <li><a href="#module-task">✅ 任务模块</a></li>
+                <li><a href="#module-project">🏗️ 项目模块</a></li>
+                <li><a href="#module-other">⚙️ PC端其他模块</a></li>
+            </div>
+            <div class="toc-group">
+                <div class="toc-group-title">功能清单</div>
+                <li><a href="#feature-list">六、功能清单</a></li>
+            </div>
+            <div class="toc-group">
+                <div class="toc-group-title">设计规格</div>
+                <li><a href="#ui-design">七、UI设计系统参数</a></li>
+                <li><a href="#dev-guide">八、研发使用说明</a></li>
+                <li><a href="#file-list">九、交付文件清单</a></li>
+            </div>
+        </ul>
+    </nav>
+
+    <!-- 主内容区域 -->
+    <div class="main-content">
+        <div class="header">
+            <div class="container">
+                <h1>良造家管理平台</h1>
+                <h2 style="font-size: 24px; margin-bottom: 16px;">产品需求文档</h2>
+                <div class="version-info">
+                    <span>版本：v1.0</span>
+                    <span>日期：2026-07-23</span>
+                    <span>状态：已完成</span>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="container">
-        <!-- 文档概述 -->
-        <div class="section">
-            <div class="section-title">文档概述</div>
+        <div class="container">
+            <!-- 文档概述 -->
+            <div class="section" id="overview">
+                <div class="section-title">一、文档概述</div>
             
             <div class="overview-grid">
                 <div class="overview-card">
@@ -219,8 +352,8 @@
         </div>
 
         <!-- 产品概述 -->
-        <div class="section">
-            <div class="section-title">产品概述</div>
+        <div class="section" id="product">
+            <div class="section-title">二、产品概述</div>
             
             <div class="subsection" style="margin-bottom: 24px;">
                 <h4 style="margin-bottom: 12px; color: var(--text-primary);">产品背景</h4>
@@ -316,8 +449,8 @@
         </div>
 
         <!-- 关键交互流程 -->
-        <div class="section">
-            <div class="section-title">关键交互流程</div>
+        <div class="section" id="flow">
+            <div class="section-title">三、关键交互流程</div>
             
             <div class="subsection" style="margin-bottom: 24px;">
                 <h4 style="margin-bottom: 12px; color: var(--text-primary);">PC端合同审核流程</h4>
@@ -415,8 +548,8 @@
         </div>
 
         <!-- 状态机定义 -->
-        <div class="section">
-            <div class="section-title">状态机定义（已确认）</div>
+        <div class="section" id="state-machine">
+            <div class="section-title">四、状态机定义</div>
             
             <h4 style="margin-bottom: 16px;">合同状态机</h4>
             <div class="status-flow">
@@ -461,30 +594,137 @@
             </div>
         </div>
 
+        <!-- 字段校验规则 -->
+        <div class="section" id="validation">
+            <div class="section-title">五、字段校验规则</div>
+            
+            <p style="margin-bottom: 24px; color: var(--text-secondary);">本章节定义表单字段的通用校验规则和前端交互规格。各模块特定校验规则（项目、合同、任务、对账单、评价等）详见对应模块PRD文档。</p>
+
+            <div class="module-nav" style="margin-bottom: 24px;">
+                <a href="PRD-合同模块详细规格.html#validation-rules" target="_blank" class="module-card contract" style="padding: 16px;">
+                    <h3 style="font-size: 16px; margin-bottom: 8px;">合同模块校验规则</h3>
+                    <p style="font-size: 13px; margin: 0;">合同名称、金额、附件、审核备注、驳回原因等</p>
+                </a>
+                <a href="PRD-任务模块详细规格.html#validation-rules" target="_blank" class="module-card task" style="padding: 16px;">
+                    <h3 style="font-size: 16px; margin-bottom: 8px;">任务模块校验规则</h3>
+                    <p style="font-size: 13px; margin: 0;">任务名称、执行记录、媒体文件、确认备注、驳回原因等</p>
+                </a>
+                <a href="PRD-项目模块详细规格.html#validation-rules" target="_blank" class="module-card project" style="padding: 16px;">
+                    <h3 style="font-size: 16px; margin-bottom: 8px;">项目模块校验规则</h3>
+                    <p style="font-size: 13px; margin: 0;">项目名称、地址、成员、对账单、评价等</p>
+                </a>
+            </div>
+            
+            <h4 style="margin-bottom: 16px;">通用校验规则</h4>
+            <table class="param-table" style="margin-bottom: 24px;">
+                <thead>
+                    <tr>
+                        <th>字段类型</th>
+                        <th>校验规则</th>
+                        <th>正则表达式</th>
+                        <th>错误提示</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>手机号</td>
+                        <td>1开头，第二位3-9，共11位</td>
+                        <td><code>^1[3-9]\d{9}$</code></td>
+                        <td>请输入正确的手机号</td>
+                    </tr>
+                    <tr>
+                        <td>金额（正数）</td>
+                        <td>最多2位小数，≤99,999,999.99</td>
+                        <td><code>^(\d{1,10})(\.\d{1,2})?$</code></td>
+                        <td>请输入正确的金额</td>
+                    </tr>
+                    <tr>
+                        <td>金额（可负）</td>
+                        <td>支持负数，最多2位小数</td>
+                        <td><code>^-?(\d{1,8})(\.\d{1,2})?$</code></td>
+                        <td>请输入正确的金额</td>
+                    </tr>
+                    <tr>
+                        <td>星级评分</td>
+                        <td>0.5的倍数，范围0.5-5.0</td>
+                        <td><code>^[0-5]\.0$|^[1-4]\.5$|^0\.5$</code></td>
+                        <td>请选择评分</td>
+                    </tr>
+                    <tr>
+                        <td>日期</td>
+                        <td>YYYY-MM-DD格式</td>
+                        <td><code>^\d{4}-\d{2}-\d{2}$</code></td>
+                        <td>请选择正确的日期</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4 style="margin-bottom: 16px;">文件上传规则</h4>
+            <table class="param-table" style="margin-bottom: 24px;">
+                <thead>
+                    <tr>
+                        <th>文件类型</th>
+                        <th>支持格式</th>
+                        <th>大小限制</th>
+                        <th>数量限制</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>通用图片</td>
+                        <td>jpg, jpeg, png, webp</td>
+                        <td>≤10MB</td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td>视频</td>
+                        <td>mp4, mov</td>
+                        <td>≤100MB</td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td>文档</td>
+                        <td>pdf, doc, docx</td>
+                        <td>≤20MB</td>
+                        <td>—</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="note">
+                <div class="note-title">交互规格说明</div>
+                <p><strong>实时校验</strong>：输入时显示字数统计，失焦时校验格式，提交前全字段校验</p>
+                <p><strong>错误显示</strong>：输入框边框变红（#FF4D4F），下方显示红色提示文字</p>
+                <p><strong>金额输入</strong>：失焦时自动格式化为两位小数，大额显示"X.X万"</p>
+                <p><strong>星级评分</strong>：支持半星点击，点击星星左半边为x.0分，右半边为x.5分</p>
+                <p><strong>省市区选择</strong>：三级级联，仅支持北京、河南（南阳）、陕西（西安）三省市</p>
+            </div>
+        </div>
+
         <!-- 模块导航 -->
-        <div class="section">
+        <div class="section" id="module-docs">
             <div class="section-title">模块规格文档</div>
             
             <div class="module-nav">
-                <a href="PRD-合同模块详细规格.html" class="module-card contract">
+                <a href="PRD-合同模块详细规格.html" class="module-card contract" id="module-contract">
                     <h3>📋 合同模块</h3>
                     <p>合同全生命周期管理，包括创建、编辑、审核、签约、变更等功能。涵盖PC端和小程序端。</p>
                     <div class="page-count">4个页面</div>
                 </a>
 
-                <a href="PRD-任务模块详细规格.html" class="module-card task">
+                <a href="PRD-任务模块详细规格.html" class="module-card task" id="module-task">
                     <h3>✅ 任务模块</h3>
                     <p>任务执行与验收流程，包括配置执行人、上传记录、确认验收、评价等功能。</p>
                     <div class="page-count">6个页面</div>
                 </a>
 
-                <a href="PRD-项目模块详细规格.html" class="module-card project">
+                <a href="PRD-项目模块详细规格.html" class="module-card project" id="module-project">
                     <h3>🏗️ 项目模块</h3>
                     <p>项目管理核心功能，包括项目概览、架构管理、成员管理、资料管理、对账单管理等。涵盖服务方和业主小程序。</p>
                     <div class="page-count">17个页面</div>
                 </a>
 
-                <a href="PRD-PC端其他模块详细规格.html" class="module-card other">
+                <a href="PRD-PC端其他模块详细规格.html" class="module-card other" id="module-other">
                     <h3>⚙️ PC端其他模块</h3>
                     <p>合同文本模板、阶段任务模板等PC端管理功能。</p>
                     <div class="page-count">4个页面</div>
@@ -493,8 +733,8 @@
         </div>
 
         <!-- 功能清单 -->
-        <div class="section">
-            <div class="section-title">功能清单</div>
+        <div class="section" id="feature-list">
+            <div class="section-title">六、功能清单</div>
             
             <table class="param-table">
                 <thead>
@@ -508,43 +748,47 @@
                 </thead>
                 <tbody>
                     <!-- 合同管理 -->
-                    <tr><td rowspan="7">合同管理</td><td>合同审核</td><td>PC管理端</td><td>合同审核列表页、合同详情页</td><td>合同状态筛选、关键词搜索、审核通过/驳回</td></tr>
-                    <tr><td>合同查看</td><td>服务方小程序、业主小程序</td><td>合同详情页</td><td>查看合同信息、阶段任务、附件、补充条款</td></tr>
-                    <tr><td>合同签约</td><td>服务方小程序、业主小程序</td><td>合同详情页</td><td>确认合同、签约操作</td></tr>
-                    <tr><td>合同预览</td><td>服务方小程序</td><td>合同预览页</td><td>合同全文预览、下载</td></tr>
-                    <tr><td><strong>合同变更</strong></td><td>服务方小程序、业主小程序</td><td>合同详情页</td><td>服务方发起变更、变更记录、变更内容高亮；业主查看变更内容、确认/驳回变更</td></tr>
-                    <tr><td>合同文本模板管理</td><td>PC管理端</td><td>合同文本模板管理页</td><td>合同正文模板增删改查</td></tr>
-                    <tr><td>阶段任务模板管理</td><td>PC管理端</td><td>阶段任务模板管理页</td><td>阶段任务模板增删改查</td></tr>
+                    <tr><td rowspan="7">合同管理</td><td>合同审核</td><td><a href="PRD-合同模块详细规格.html#page-list" target="_blank">PC管理端</a></td><td>合同审核列表页、合同详情页</td><td>合同状态筛选、关键词搜索、审核通过/驳回</td></tr>
+                    <tr><td>合同查看</td><td><a href="PRD-合同模块详细规格.html#page-mini-service" target="_blank">服务方小程序</a>、<a href="PRD-合同模块详细规格.html#page-mini-owner" target="_blank">业主小程序</a></td><td>合同详情页</td><td>查看合同信息、阶段任务、附件、补充条款</td></tr>
+                    <tr><td>合同签约</td><td><a href="PRD-合同模块详细规格.html#page-mini-service" target="_blank">服务方小程序</a>、<a href="PRD-合同模块详细规格.html#page-mini-owner" target="_blank">业主小程序</a></td><td>合同详情页</td><td>确认合同、签约操作</td></tr>
+                    <tr><td>合同预览</td><td><a href="PRD-合同模块详细规格.html#page-mini-service" target="_blank">服务方小程序</a></td><td>合同预览页</td><td>合同全文预览、下载</td></tr>
+                    <tr><td><strong>合同变更</strong></td><td><a href="PRD-合同模块详细规格.html#page-mini-service" target="_blank">服务方小程序</a>、<a href="PRD-合同模块详细规格.html#page-mini-owner" target="_blank">业主小程序</a></td><td>合同详情页</td><td>服务方发起变更、变更记录、变更内容高亮；业主查看变更内容、确认/驳回变更</td></tr>
+                    <tr><td>合同文本模板管理</td><td><a href="PRD-PC端其他模块详细规格.html#page-contract-template" target="_blank">PC管理端</a></td><td>合同文本模板管理页</td><td>合同正文模板增删改查</td></tr>
+                    <tr><td>阶段任务模板管理</td><td><a href="PRD-PC端其他模块详细规格.html#page-stage-template" target="_blank">PC管理端</a></td><td>阶段任务模板管理页</td><td>阶段任务模板增删改查</td></tr>
 
                     <!-- 任务管理 -->
-                    <tr><td rowspan="5">任务管理</td><td>任务查看</td><td>服务方小程序、业主小程序</td><td>任务列表页、任务详情页</td><td>任务筛选、状态查看、任务信息查看（含执行标准、确认标准、担责标准）</td></tr>
-                    <tr><td>任务执行</td><td>服务方小程序</td><td>任务详情页、任务验收页</td><td>配置执行人、上传执行记录（照片/视频）、提交验收</td></tr>
-                    <tr><td>任务验收</td><td>服务方小程序、业主小程序</td><td>任务验收页</td><td>验收确认、驳回（需填原因）、评价</td></tr>
-                    <tr><td>任务报告</td><td>服务方小程序、业主小程序</td><td>任务报告页</td><td>任务执行记录、验收评价查看</td></tr>
-                    <tr><td>待办管理</td><td>服务方小程序、业主小程序</td><td>待办列表页</td><td>待处理/待确认任务汇总</td></tr>
+                    <tr><td rowspan="5">任务管理</td><td>任务查看</td><td><a href="PRD-任务模块详细规格.html#page-task-list-service" target="_blank">服务方小程序</a>、<a href="PRD-任务模块详细规格.html#page-task-list-owner" target="_blank">业主小程序</a></td><td>任务列表页、任务详情页</td><td>任务筛选、状态查看、任务信息查看（含执行标准、确认标准、担责标准）</td></tr>
+                    <tr><td>任务执行</td><td><a href="PRD-任务模块详细规格.html#page-task-detail-service" target="_blank">服务方小程序</a></td><td>任务详情页、任务验收页</td><td>配置执行人、上传执行记录（照片/视频）、提交验收</td></tr>
+                    <tr><td>任务验收</td><td><a href="PRD-任务模块详细规格.html#page-task-acceptance-service" target="_blank">服务方小程序</a>、<a href="PRD-任务模块详细规格.html#page-task-acceptance-owner" target="_blank">业主小程序</a></td><td>任务验收页</td><td>验收确认、驳回（需填原因）、评价</td></tr>
+                    <tr><td>任务报告</td><td><a href="PRD-任务模块详细规格.html#page-task-detail-service" target="_blank">服务方小程序</a>、<a href="PRD-任务模块详细规格.html#page-task-detail-owner" target="_blank">业主小程序</a></td><td>任务报告页</td><td>任务执行记录、验收评价查看</td></tr>
+                    <tr><td>待办管理</td><td><a href="PRD-任务模块详细规格.html#page-task-list-service" target="_blank">服务方小程序</a>、<a href="PRD-任务模块详细规格.html#page-task-list-owner" target="_blank">业主小程序</a></td><td>待办列表页</td><td>待处理/待确认任务汇总</td></tr>
 
                     <!-- 项目管理 -->
-                    <tr><td rowspan="6">项目管理</td><td>项目概览</td><td>服务方小程序、业主小程序</td><td>首页、项目列表页、项目详情页</td><td>今日动态、快捷入口、项目列表查看筛选搜索、项目概览信息</td></tr>
-                    <tr><td>项目创建</td><td>服务方小程序</td><td>创建项目页</td><td>新建项目表单</td></tr>
-                    <tr><td>项目信息</td><td>服务方小程序、业主小程序</td><td>项目信息页</td><td>服务方编辑/业主查看项目基本信息</td></tr>
-                    <tr><td>项目架构</td><td>服务方小程序、业主小程序</td><td>项目架构页</td><td>服务方管理/业主查看三级架构（项目部→工作组→施工队）</td></tr>
-                    <tr><td>项目成员</td><td>服务方小程序、业主小程序</td><td>项目成员页</td><td>成员管理/查看、邀请、权限设置</td></tr>
-                    <tr><td>项目资料</td><td>服务方小程序、业主小程序</td><td>项目资料页</td><td>服务方文件分类管理及上传下载/业主只读查看</td></tr>
+                    <tr><td rowspan="7">项目管理</td><td>项目概览</td><td><a href="PRD-项目模块详细规格.html#page-home-service" target="_blank">服务方小程序</a>、<a href="PRD-项目模块详细规格.html#page-detail-owner" target="_blank">业主小程序</a></td><td>首页、项目列表页、项目详情页</td><td>今日动态、快捷入口、项目列表查看筛选搜索、项目概览信息</td></tr>
+                    <tr><td>项目创建</td><td><a href="PRD-项目模块详细规格.html#page-create-service" target="_blank">服务方小程序</a></td><td>创建项目页</td><td>新建项目表单</td></tr>
+                    <tr><td>项目信息</td><td><a href="PRD-项目模块详细规格.html#page-info-service" target="_blank">服务方小程序</a>、<a href="PRD-项目模块详细规格.html#page-info-owner" target="_blank">业主小程序</a></td><td>项目信息页</td><td>服务方编辑/业主查看项目基本信息</td></tr>
+                    <tr><td>项目架构</td><td><a href="PRD-项目模块详细规格.html#page-architecture-service" target="_blank">服务方小程序</a>、<a href="PRD-项目模块详细规格.html#page-architecture-owner" target="_blank">业主小程序</a></td><td>项目架构页</td><td>服务方管理/业主查看三级架构（项目部→工作组→施工队）</td></tr>
+                    <tr><td>项目成员</td><td><a href="PRD-项目模块详细规格.html#page-member-service" target="_blank">服务方小程序</a>、<a href="PRD-项目模块详细规格.html#page-member-owner" target="_blank">业主小程序</a></td><td>项目成员页</td><td>成员管理/查看、邀请、权限设置</td></tr>
+                    <tr><td>项目资料</td><td><a href="PRD-项目模块详细规格.html#page-files-service" target="_blank">服务方小程序</a>、<a href="PRD-项目模块详细规格.html#page-files-owner" target="_blank">业主小程序</a></td><td>项目资料页</td><td>服务方文件分类管理及上传下载/业主只读查看</td></tr>
+                    <tr><td>项目动态</td><td><a href="PRD-项目模块详细规格.html#page-activity-service" target="_blank">服务方小程序</a>、<a href="PRD-项目模块详细规格.html#page-activity-owner" target="_blank">业主小程序</a></td><td>项目动态页</td><td>查看项目全部动态记录，按时间线展示任务、合同、文件等操作记录</td></tr>
+
+                    <!-- 待办管理 -->
+                    <tr><td rowspan="1">待办管理</td><td>待办事项</td><td><a href="PRD-任务模块详细规格.html#page-task-list-service" target="_blank">服务方小程序</a>、<a href="PRD-任务模块详细规格.html#page-task-list-owner" target="_blank">业主小程序</a></td><td>待办列表页</td><td>待处理/待确认任务汇总，快速跳转处理</td></tr>
 
                     <!-- 对账单管理 -->
-                    <tr><td rowspan="2">对账单管理</td><td>对账单查看与新增</td><td>服务方小程序、业主小程序</td><td>对账单列表页</td><td>服务方新增对账单、筛选查看；业主查看待确认对账单</td></tr>
-                    <tr><td>对账单确认与凭证</td><td>服务方小程序、业主小程序</td><td>对账单详情页</td><td>业主确认/驳回对账单；服务方上传支付凭证</td></tr>
+                    <tr><td rowspan="2">对账单管理</td><td>对账单查看与新增</td><td><a href="PRD-项目模块详细规格.html#page-statement-list-service" target="_blank">服务方小程序</a>、<a href="PRD-项目模块详细规格.html#page-statement-list-owner" target="_blank">业主小程序</a></td><td>对账单列表页</td><td>服务方新增对账单、筛选查看；业主查看待确认对账单</td></tr>
+                    <tr><td>对账单确认与凭证</td><td><a href="PRD-项目模块详细规格.html#page-statement-detail-service" target="_blank">服务方小程序</a>、<a href="PRD-项目模块详细规格.html#page-statement-detail-owner" target="_blank">业主小程序</a></td><td>对账单详情页</td><td>业主确认/驳回对账单；服务方上传支付凭证</td></tr>
 
                     <!-- 其他功能 -->
-                    <tr><td rowspan="2">其他功能</td><td>消息通知</td><td>服务方小程序、业主小程序</td><td>消息页</td><td>系统消息、通知列表</td></tr>
+                    <tr><td rowspan="2">其他功能</td><td>消息通知</td><td><a href="PRD-项目模块详细规格.html#page-home-service" target="_blank">服务方小程序</a>、<a href="PRD-项目模块详细规格.html#page-detail-owner" target="_blank">业主小程序</a></td><td>消息页</td><td>系统消息、通知列表</td></tr>
                     <tr><td>分享导航</td><td>服务方小程序、业主小程序</td><td>分享导航页</td><td>分享链接导航</td></tr>
                 </tbody>
             </table>
         </div>
 
         <!-- 设计系统参数 -->
-        <div class="section">
-            <div class="section-title">UI设计系统参数</div>
+        <div class="section" id="ui-design">
+            <div class="section-title">七、UI设计系统参数</div>
             
             <table class="param-table">
                 <thead>
@@ -571,8 +815,8 @@
         </div>
 
         <!-- 使用说明 -->
-        <div class="section">
-            <div class="section-title">研发使用说明</div>
+        <div class="section" id="dev-guide">
+            <div class="section-title">八、研发使用说明</div>
             
             <div class="note">
                 <div class="note-title">文档结构说明</div>
@@ -605,8 +849,8 @@
         </div>
 
         <!-- 文件清单 -->
-        <div class="section">
-            <div class="section-title">交付文件清单</div>
+        <div class="section" id="file-list">
+            <div class="section-title">九、交付文件清单</div>
             
             <table class="param-table">
                 <thead>
@@ -617,8 +861,7 @@
                 </thead>
                 <tbody>
                     <tr><td>PRD-完整文档.html</td><td>本文档，总览和导航</td></tr>
-                    <tr><td>PRD-详细规格-模板示例.html</td><td>合同详情页完整规格示例</td></tr>
-                    <tr><td>PRD-合同模块详细规格.html</td><td>合同模块4个页面规格</td></tr>
+                    <tr><td>PRD-合同模块详细规格.html</td><td>合同模块页面规格（列表/详情PC完整规格/服务方/业主）</td></tr>
                     <tr><td>PRD-任务模块详细规格.html</td><td>任务模块6个页面规格</td></tr>
                     <tr><td>PRD-项目模块详细规格.html</td><td>项目模块17个页面规格</td></tr>
                     <tr><td>PRD-PC端其他模块详细规格.html</td><td>PC端其他模块规格</td></tr>
@@ -632,5 +875,46 @@
         <p>良造家管理平台 详细PRD规格文档</p>
         <p style="margin-top: 8px; font-size: 12px;">版本 v1.0 · 2026-07-17 · 共计34个页面规格</p>
     </div>
+    </div><!-- main-content结束 -->
+
+    <!-- 滚动高亮脚本 -->
+    <script>
+        // 滚动时高亮当前章节
+        const tocLinks = document.querySelectorAll('.sidebar-toc-list a');
+        const sections = document.querySelectorAll('.section[id]');
+
+        function updateActiveLink() {
+            let currentSection = '';
+            
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 150) {
+                    currentSection = section.id;
+                }
+            });
+
+            tocLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + currentSection) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveLink);
+        updateActiveLink(); // 初始化
+
+        // 点击目录项平滑滚动
+        tocLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').slice(1);
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
 </body>
 </html>

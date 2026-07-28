@@ -233,25 +233,35 @@ function updateCharCount() {
 }
 
 function submitStatement() {
+    // 校验关联合同
     if (!selectedContract) {
         showToast('请选择关联合同');
         return;
     }
     
+    // 校验账单类型
     if (!selectedBillType) {
         showToast('请选择账单类型');
         return;
     }
     
-    const amount = document.getElementById('amountInput').value;
-    if (!amount || parseFloat(amount) === 0) {
-        showToast('请输入金额');
+    // 校验金额（使用validation.js）
+    const amountInput = document.getElementById('amountInput');
+    const amountValue = amountInput.value.trim();
+    const amountResult = Validation.validate.amountNegative(amountValue, 9999999.99);
+    if (!amountResult.valid) {
+        showToast(amountResult.message);
+        amountInput.focus();
         return;
     }
     
-    const desc = document.getElementById('descInput').value.trim();
-    if (!desc) {
-        showToast('请输入用途描述');
+    // 校验用途描述
+    const descInput = document.getElementById('descInput');
+    const descValue = descInput.value.trim();
+    const descResult = Validation.validate.textLength(descValue, 200, true, '用途描述');
+    if (!descResult.valid) {
+        showToast(descResult.message);
+        descInput.focus();
         return;
     }
     
@@ -290,10 +300,14 @@ function hideRejectDrawer() {
 }
 
 function confirmReject() {
-    const reason = document.getElementById('rejectReasonInput').value.trim();
+    const reasonInput = document.getElementById('rejectReasonInput');
+    const reason = reasonInput.value.trim();
     
-    if (!reason) {
-        showToast('请输入驳回原因');
+    // 校验驳回原因（使用validation.js）
+    const result = Validation.validate.textLength(reason, 500, true, '驳回原因');
+    if (!result.valid) {
+        showToast(result.message);
+        reasonInput.focus();
         return;
     }
     

@@ -2115,84 +2115,13 @@
     padding-left: 8px;
 }
 
-/* 变更类型选项 */
-.change-type-options {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.change-type-option {
-    display: flex;
-    align-items: flex-start;
-    padding: 12px;
-    background-color: var(--bg-primary);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.change-type-option:hover {
-    border-color: var(--color-primary);
-    background-color: #F0F5FF;
-}
-
-.change-type-option.selected {
-    border-color: var(--color-primary);
-    background-color: #E6F7FF;
-}
-
-.change-type-option .type-radio {
-    width: 18px;
-    height: 18px;
-    border: 2px solid var(--border-color);
-    border-radius: 50%;
-    margin-right: 12px;
-    margin-top: 2px;
-    position: relative;
-    flex-shrink: 0;
-}
-
-.change-type-option .type-radio.checked {
-    border-color: var(--color-primary);
-}
-
-.change-type-option .type-radio.checked::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 10px;
-    height: 10px;
-    background-color: var(--color-primary);
-    border-radius: 50%;
-}
-
-.change-type-option .type-info {
-    flex: 1;
-}
-
-.change-type-option .type-name {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 4px;
-}
-
-.change-type-option .type-desc {
-    font-size: 12px;
-    color: var(--text-tertiary);
-    line-height: 1.5;
-}
-
 /* 变更区块 */
 .change-section {
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-primary);
     border-radius: 8px;
     padding: 16px;
     margin-bottom: 16px;
+    border: 1px solid var(--border-color);
 }
 
 .change-section .section-title {

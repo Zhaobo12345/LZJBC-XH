@@ -384,9 +384,14 @@ let currentStatus = 'draft';
         }
 
         function rejectContract() {
-            const reason = document.getElementById('rejectReason').value.trim();
-            if (!reason) {
-                showToast('请输入驳回原因');
+            const reasonInput = document.getElementById('rejectReason');
+            const reason = reasonInput.value.trim();
+            
+            // 校验驳回原因（使用validation.js）
+            const result = Validation.validate.textLength(reason, 500, true, '驳回原因');
+            if (!result.valid) {
+                showToast(result.message);
+                reasonInput.focus();
                 return;
             }
             

@@ -13,7 +13,9 @@ const ContractDetailPage = (function() {
         currentStatus: 'draft',
         isReadonly: false,
         hasChangeContent: false,
-        changeType: 'stage_only',
+        hasAmountChange: false,  // 是否有金额变更
+        hasContentChange: false,  // 是否有正文变更
+        hasAttachmentChange: false,  // 是否有附件变更
         changeReason: '',
         currentStageItem: null,
         newTaskConfirmPersonList: [],
@@ -2074,21 +2076,6 @@ const ContractDetailPage = (function() {
     }
     
     /**
-     * 选择变更类型
-     * @param {HTMLElement} element - 元素
-     * @param {string} type - 类型
-     */
-    function selectChangeType(element, type) {
-        state.changeType = type;
-        document.querySelectorAll('.change-type-option').forEach(opt => {
-            opt.classList.remove('selected');
-            opt.querySelector('.type-radio').classList.remove('checked');
-        });
-        element.classList.add('selected');
-        element.querySelector('.type-radio').classList.add('checked');
-    }
-    
-    /**
      * 检查变更内容
      */
     function checkChangeContent() {
@@ -2158,6 +2145,22 @@ const ContractDetailPage = (function() {
     function showMoreOptions(event) {
         event.stopPropagation();
         showCustomToast('更多选项\n\n• 保存草稿\n• 查看历史变更\n• 导出变更记录');
+    }
+    
+    /**
+     * 切换发起变更页面的操作菜单
+     */
+    function toggleChangeActionMenu() {
+        const actionMenu = document.getElementById('changeActionMenu');
+        if (actionMenu) actionMenu.classList.toggle('show');
+    }
+    
+    /**
+     * 关闭发起变更页面的操作菜单
+     */
+    function closeChangeActionMenu() {
+        const actionMenu = document.getElementById('changeActionMenu');
+        if (actionMenu) actionMenu.classList.remove('show');
     }
     
     /**
@@ -2365,13 +2368,18 @@ const ContractDetailPage = (function() {
             return;
         }
         
-        if (state.changeType === 'stage_only') {
+        // 自动检测变更类型：如果有金额、正文或附件变更，需要平台审核
+        const needPlatformReview = state.hasAmountChange || state.hasContentChange || state.hasAttachmentChange;
+        
+        if (!needPlatformReview) {
+            // 仅阶段任务变更，无需平台审核
             showCustomConfirm('提交变更', '确定要提交变更申请吗？\n\n提交后将通知对方进行确认，确认前阶段任务将暂停流转。', function() {
                 closeChangeModal();
                 showCustomToast('变更申请已提交！\n\n系统已发送消息通知对方，请等待对方确认。');
                 updateContractStatus('changing');
             });
         } else {
+            // 含其他内容变更，需平台审核
             showCustomConfirm('提交变更', '确定要提交变更申请吗？\n\n本次变更包含合同金额、正文或附件变更，提交后将由平台运营人员进行审核，审核通过后通知对方确认。', function() {
                 closeChangeModal();
                 showCustomToast('变更申请已提交！\n\n已提交至平台审核，审核通过后将通知对方确认。');
@@ -3349,10 +3357,11 @@ const ContractDetailPage = (function() {
         
         // 变更操作
         checkChangeReason,
-        selectChangeType,
         showChangeModal,
         closeChangeModal,
         showMoreOptions,
+        toggleChangeActionMenu,
+        closeChangeActionMenu,
         showPCEditGuide,
         switchChangeTab,
         showChangeTemplatePicker,
@@ -3468,10 +3477,11 @@ window.showChangeRecordModal = ContractDetailPage.showChangeRecordModal;
 window.closeChangeRecordModal = ContractDetailPage.closeChangeRecordModal;
 window.viewChangeVersion = ContractDetailPage.viewChangeVersion;
 window.checkChangeReason = ContractDetailPage.checkChangeReason;
-window.selectChangeType = ContractDetailPage.selectChangeType;
 window.showChangeModal = ContractDetailPage.showChangeModal;
 window.closeChangeModal = ContractDetailPage.closeChangeModal;
 window.showMoreOptions = ContractDetailPage.showMoreOptions;
+window.toggleChangeActionMenu = ContractDetailPage.toggleChangeActionMenu;
+window.closeChangeActionMenu = ContractDetailPage.closeChangeActionMenu;
 window.showPCEditGuide = ContractDetailPage.showPCEditGuide;
 window.switchChangeTab = ContractDetailPage.switchChangeTab;
 window.showChangeTemplatePicker = ContractDetailPage.showChangeTemplatePicker;
