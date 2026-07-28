@@ -500,6 +500,20 @@
             }
         }
 
+        function loadProjectData() {
+            var rawData = localStorage.getItem('newProjectData');
+            if (!rawData) return;
+            try {
+                var data = JSON.parse(rawData);
+                if (data.projectName) {
+                    var titleEl = document.querySelector('.nav-bar .title.centered');
+                    if (titleEl) titleEl.textContent = data.projectName;
+                }
+            } catch (e) {
+                console.warn('加载项目数据失败', e);
+            }
+        }
+
         // 绑定事件
         function bindEvents() {
             // 滚动事件
@@ -595,6 +609,7 @@
         // 初始化
         function init() {
             cacheElements();
+            loadProjectData();
             bindEvents();
         }
 

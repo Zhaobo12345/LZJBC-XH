@@ -322,7 +322,7 @@
 
         /* ActionSheet - 底部操作菜单 */
         .action-sheet-mask {
-            position: fixed;
+            position: absolute;
             top: 0;
             left: 0;
             right: 0;
@@ -337,10 +337,12 @@
         }
 
         .action-sheet {
-            position: fixed;
+            display: none;
+            position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
+            width: 100%;
             background: #F7F7F7;
             border-radius: 12px 12px 0 0;
             z-index: 10001;
@@ -350,6 +352,7 @@
         }
 
         .action-sheet.show {
+            display: block;
             transform: translateY(0);
         }
 
@@ -962,25 +965,25 @@
         </div>
 
         <div class="app-toast" id="appToast"></div>
-    </div>
 
-    <!-- 附件上传 ActionSheet -->
-    <div class="action-sheet-mask" id="actionSheetMask" onclick="hideUploadActionSheet()"></div>
-    <div class="action-sheet" id="uploadActionSheet">
-        <div class="action-sheet-title">选择附件来源</div>
-        <div class="action-sheet-item" onclick="selectFromCamera()">
-            <span class="as-icon">📷</span>
-            <span>拍照</span>
+        <!-- 附件上传 ActionSheet -->
+        <div class="action-sheet-mask" id="actionSheetMask" onclick="hideUploadActionSheet()"></div>
+        <div class="action-sheet" id="uploadActionSheet">
+            <div class="action-sheet-title">选择附件来源</div>
+            <div class="action-sheet-item" onclick="selectFromCamera()">
+                <span class="as-icon">📷</span>
+                <span>拍照</span>
+            </div>
+            <div class="action-sheet-item" onclick="selectFromAlbum()">
+                <span class="as-icon">🖼️</span>
+                <span>从相册选择</span>
+            </div>
+            <div class="action-sheet-item" onclick="selectFromDocument()">
+                <span class="as-icon">📄</span>
+                <span>选择文档</span>
+            </div>
+            <div class="action-sheet-cancel" onclick="hideUploadActionSheet()">取消</div>
         </div>
-        <div class="action-sheet-item" onclick="selectFromAlbum()">
-            <span class="as-icon">🖼️</span>
-            <span>从相册选择</span>
-        </div>
-        <div class="action-sheet-item" onclick="selectFromDocument()">
-            <span class="as-icon">📄</span>
-            <span>选择文档</span>
-        </div>
-        <div class="action-sheet-cancel" onclick="hideUploadActionSheet()">取消</div>
     </div>
 
     <!-- 演示控制面板：发起人认证状态切换 -->
@@ -1577,6 +1580,21 @@
 
         function submitForm() {
             if (validateForm()) {
+                const projectData = {
+                    projectName: document.getElementById('projectName').value.trim(),
+                    customerName: document.getElementById('customerName').value.trim(),
+                    customerPhone: document.getElementById('customerPhone').value.trim(),
+                    province: document.getElementById('province').value,
+                    city: document.getElementById('city').value,
+                    district: document.getElementById('district').value,
+                    address: document.getElementById('address').value.trim(),
+                    area: document.getElementById('area').value.trim(),
+                    category: selectedCategory,
+                    houseType: selectedHouseType,
+                    styles: selectedStyles
+                };
+                localStorage.setItem('newProjectData', JSON.stringify(projectData));
+
                 showModal('确认提交', '确认要提交项目信息吗？确认后将为你创建项目并跳转到项目详情页面。', function() {
                     showToast('创建成功');
                     setTimeout(function() {

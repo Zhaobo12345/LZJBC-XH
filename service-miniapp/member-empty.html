@@ -155,6 +155,22 @@
             font-size: 12px;
             color: var(--text-tertiary);
         }
+        /* 权限角标右侧箭头 */
+        .permission-tag {
+            position: relative;
+            padding-right: 18px;
+            cursor: pointer;
+        }
+
+        .permission-tag::after {
+            content: '›';
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+            font-size: 12px;
+        }
 
         .member-card .creator-tag {
             display: inline-flex;
@@ -220,16 +236,19 @@
                         <div class="group-name"><span class="icon">🏢</span> 项目部</div>
                         <div class="group-count">1人</div>
                     </div>
-                    <div class="member-card">
-                        <div class="avatar">张</div>
+                    <div class="member-card" id="creatorCard">
+                        <div class="avatar" id="creatorAvatar">张</div>
                         <div class="info">
                             <div class="name-row">
-                                <span class="name">张经理</span>
-                                <span class="role-tag">超级管理员</span>
+                                <span class="name" id="creatorName">张经理</span>
+                                <span class="creator-tag">创建人</span>
                             </div>
-                            <div class="meta">所属层级：项目部</div>
+                            <div class="meta" id="creatorRoles">角色：全部</div>
                         </div>
-                        <span class="creator-tag">创建人</span>
+                        <div class="permission-badge">
+                            <div class="permission-tag data" onclick="showPermission('数据')">数据：全部</div>
+                            <div class="permission-tag manage" onclick="showPermission('治理')">治理：全部</div>
+                        </div>
                     </div>
                 </div>
 
@@ -240,5 +259,30 @@
             </div>
         </div>
     </div>
+    <script>
+        // 填充创建人信息：优先使用 newProjectData.customerName，回退到'创建人'
+        (function() {
+            try {
+                var raw = localStorage.getItem('newProjectData');
+                var project = raw ? JSON.parse(raw) : {};
+                var creator = (project.customerName && project.customerName.trim()) ? project.customerName : (project.projectName || '创建人');
+                var avatar = creator.charAt(0) || '创';
+                var nameEl = document.getElementById('creatorName');
+                var avatarEl = document.getElementById('creatorAvatar');
+                var rolesEl = document.getElementById('creatorRoles');
+                if (avatarEl) avatarEl.textContent = avatar;
+                if (nameEl) nameEl.textContent = creator;
+                if (rolesEl) {
+                    // 从 project.creatorRoles 获取角色数组；若无则默认展示 ['项目总','工长']
+                    var roles = (project.creatorRoles && Array.isArray(project.creatorRoles) && project.creatorRoles.length) ? project.creatorRoles : ['项目总','工长'];
+                    rolesEl.innerHTML = roles.map(function(r){ return '<span class="role-tag">' + (r ? r : '') + '</span>'; }).join(' ');
+                }
+            } catch (e) { }
+        })();
+
+        function showPermission(type) {
+            alert(type + ' 权限：全部\n点击此处可进入权限设置（演示）');
+        }
+    </script>
 </body>
 </html>

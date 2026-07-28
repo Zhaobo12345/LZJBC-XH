@@ -1016,6 +1016,49 @@
                     <p><strong>页面逻辑：</strong>项目动态页接收层级参数后，自动筛选该层级下的全部动态，详见"十一、项目动态页（服务方小程序）"</p>
                 </div>
             </div>
+
+            <div class="subsection" id="subsection-3-8">
+                <div class="subsection-title">3.8 初始项目详情页逻辑（原型/演示）</div>
+                <p>说明：原型页面在创建项目后使用浏览器端临时持久化（`localStorage.newProjectData`）作为演示数据源，以下规则适用于“初始项目详情页”及其关联页面（架构页、成员页、项目信息页）。正式产品请以后端接口为准。</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>场景</th>
+                            <th>规则</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>数据写入</td>
+                            <td>创建项目页面提交时，将表单组装为 `newProjectData` 对象并写入 `localStorage`，字段包括 `projectName, customerName, customerPhone, province, city, district, address, area, category, houseType, styles`。演示中新增工作组保存在 `newProjectData.groups` 数组。</td>
+                        </tr>
+                        <tr>
+                            <td>页面读取</td>
+                            <td>初始项目详情页（及架构/成员/项目信息页）在加载时优先读取 `localStorage.newProjectData`，不存在时显示默认演示文案。</td>
+                        </tr>
+                        <tr>
+                            <td>成员页 - 创建人显示</td>
+                            <td>成员页中“创建人”应从 `newProjectData.customerName` / `projectName` 回退填充，头像显示姓名首字母。创建人下方展示角色标签：若 `newProjectData.creatorRoles` 为数组则按数组渲染标签；否则默认渲染两个标签：`项目总`、`工长`。标签使用 `role-tag` 样式。</td>
+                        </tr>
+                        <tr>
+                            <td>成员页 - 权限入口</td>
+                            <td>创建人卡片右侧展示两个权限角标：`数据：全部` 和 `治理：全部`，右侧带可点击箭头（›）。点击触发演示弹窗/模态进入权限设置（原型使用 `alert` 或演示模态）。</td>
+                        </tr>
+                        <tr>
+                            <td>架构页 - 项目部展示</td>
+                            <td>初始架构页在顶部项目部卡片展示“项目经理 &lt;姓名&gt;”与“X个工作组”，其中姓名来自 `newProjectData.customerName`（或 `projectManager` 字段）；若无数据显示默认示例（张三）。去除初始“进度 0%”展示以保持简洁。</td>
+                        </tr>
+                        <tr>
+                            <td>架构页 - 创建工作组</td>
+                            <td>架构页将“添加子层级”文案改为“创建工作组”，打开底部弹窗包含字段：工作组名称、组长、备注。创建时追加对象到 `newProjectData.groups` 并更新页面显示与头部工作组计数（仅原型演示，正式请调用后端 API）。</td>
+                        </tr>
+                        <tr>
+                            <td>不影响现有功能</td>
+                            <td>以上改动仅限原型前端演示逻辑与样式调整，不改变其他页面流程或后端交互调用。正式联调时应替换 `localStorage` 逻辑为后端接口。</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- ==================== 4. 项目信息页 ==================== -->
@@ -1368,7 +1411,7 @@
                         <tr>
                             <td>跳转页面</td>
                             <td>project-detail.html?id={new_project_id}</td>
-                            <td>跳转到新创建项目的详情页</td>
+                            <td>跳转到新创建项目的详情页 <a href="#subsection-3-8">’初始项目详情页‘</a></td>
                         </tr>
                         <tr>
                             <td>页面滚动位置</td>
@@ -3570,48 +3613,8 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">21.2 项目详情接口</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>接口</th>
-                            <th>方法</th>
-                            <th>调用时机</th>
-                            <th>说明</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>/api/v1/projects/:id</td>
-                            <td>GET</td>
-                            <td>页面加载</td>
-                            <td>获取项目详情</td>
-                        </tr>
-                        <tr>
-                            <td>/api/v1/projects/:id/contracts</td>
-                            <td>GET</td>
-                            <td>页面加载</td>
-                            <td>获取项目下的合同列表</td>
-                        </tr>
-                        <tr>
-                            <td>/api/v1/projects/:id/tasks/stats</td>
-                            <td>GET</td>
-                            <td>页面加载</td>
-                            <td>获取任务统计</td>
-                        </tr>
-                        <tr>
-                            <td>/api/v1/projects/:id/todos</td>
-                            <td>GET</td>
-                            <td>页面加载</td>
-                            <td>获取待办事项</td>
-                        </tr>
-                        <tr>
-                            <td>/api/v1/projects/:id/activities</td>
-                            <td>GET</td>
-                            <td>页面加载</td>
-                            <td>获取今日动态列表</td>
-                        </tr>
-                    </tbody>
+                <!-- 已移至“三、项目详情页”下的 3.8 节 -->
+            </div>
                 </table>
             </div>
 

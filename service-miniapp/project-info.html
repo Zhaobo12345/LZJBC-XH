@@ -799,6 +799,72 @@
         let selectedStyles = ['zhongshi', 'xiandai'];
         let isEditingProjectName = false;
         
+        function loadProjectData() {
+            var rawData = localStorage.getItem('newProjectData');
+            if (!rawData) return;
+            try {
+                var data = JSON.parse(rawData);
+                if (data.projectName) {
+                    document.getElementById('projectName').value = data.projectName;
+                }
+                if (data.customerName) {
+                    document.getElementById('customerName').value = data.customerName;
+                }
+                if (data.customerPhone) {
+                    document.getElementById('customerPhone').value = data.customerPhone;
+                }
+                if (data.province) {
+                    ensureSelectOption('province', data.province);
+                    document.getElementById('province').value = data.province;
+                }
+                if (data.city) {
+                    ensureSelectOption('city', data.city);
+                    document.getElementById('city').value = data.city;
+                }
+                if (data.district) {
+                    ensureSelectOption('district', data.district);
+                    document.getElementById('district').value = data.district;
+                }
+                if (data.address) {
+                    document.getElementById('address').value = data.address;
+                }
+                if (data.area) {
+                    document.getElementById('area').value = data.area;
+                }
+                if (data.category) {
+                    selectedCategory = data.category;
+                    document.querySelectorAll('#categoryOptions .category-option').forEach(function(opt) {
+                        opt.classList.toggle('selected', opt.dataset.value === data.category);
+                    });
+                }
+                if (data.houseType) {
+                    selectedHouseType = data.houseType;
+                    document.querySelectorAll('#houseTypeOptions .house-type-option').forEach(function(opt) {
+                        opt.classList.toggle('selected', opt.dataset.value === data.houseType);
+                    });
+                }
+                if (Array.isArray(data.styles)) {
+                    selectedStyles = data.styles;
+                    document.querySelectorAll('#styleOptions .style-option').forEach(function(opt) {
+                        opt.classList.toggle('selected', data.styles.includes(opt.dataset.value));
+                    });
+                }
+            } catch (e) {
+                console.warn('加载项目数据失败', e);
+            }
+        }
+
+        function ensureSelectOption(selectId, value) {
+            var select = document.getElementById(selectId);
+            if (!select) return;
+            if (![...select.options].some(function(opt) { return opt.value === value; })) {
+                var option = document.createElement('option');
+                option.value = value;
+                option.textContent = value;
+                select.appendChild(option);
+            }
+        }
+
         function toggleProjectNameEdit() {
             const projectNameInput = document.getElementById('projectName');
             const editBtn = document.getElementById('editProjectNameBtn');
@@ -890,6 +956,8 @@
                 isEditing = false;
             }
         }
+        
+        loadProjectData();
         
         function validateForm() {
             let isValid = true;
