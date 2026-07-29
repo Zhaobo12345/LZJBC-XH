@@ -969,6 +969,607 @@
                     </tbody>
                 </table>
             </div>
+
+            <div class="subsection">
+                <div class="subsection-title">3.7 拟定中状态-编辑交互规格</div>
+                <p>服务方小程序合同详情页在"拟定中"和"审核驳回"状态下，提供合同内容编辑功能。因手机端编辑体验有限，提供"推荐使用电脑端编辑"引导。</p>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">3.7.1 电脑端编辑引导（pcEditGuide）</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>属性</th>
+                            <th>规格</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>显示条件</td>
+                            <td>拟定中/审核驳回状态，且合同内容包含多条款和附件时显示</td>
+                        </tr>
+                        <tr>
+                            <td>引导卡片</td>
+                            <td>蓝色背景卡片，标题"推荐使用电脑端编辑"，副标题"合同内容较多，电脑端编辑体验更佳"</td>
+                        </tr>
+                        <tr>
+                            <td>步骤说明</td>
+                            <td>①在电脑浏览器打开平台官网 → ②使用手机扫码授权登录 → ③进入合同管理进行编辑</td>
+                        </tr>
+                        <tr>
+                            <td>操作按钮</td>
+                            <td>"复制链接到电脑端编辑"（guide-btn primary样式），点击后Toast提示"链接已复制"</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">3.7.2 拟定中编辑表单（draftEditForm）</div>
+                <p>点击"编辑合同"按钮后，页面切换为编辑模式，隐藏只读内容区域（draftViewContent），显示编辑表单（draftEditForm）。</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>编辑分区</th>
+                            <th>字段</th>
+                            <th>控件</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="5">合同基本信息</td>
+                            <td>合同类型</td>
+                            <td>只读+不可编辑标签</td>
+                            <td>创建时已确定，不可修改</td>
+                        </tr>
+                        <tr>
+                            <td>合同编号</td>
+                            <td>只读+系统生成标签</td>
+                            <td>系统自动生成，不可修改</td>
+                        </tr>
+                        <tr>
+                            <td>合同名称</td>
+                            <td>文本输入框</td>
+                            <td>必填*</td>
+                        </tr>
+                        <tr>
+                            <td>合同金额</td>
+                            <td>数字输入框+¥前缀</td>
+                            <td>必填*，货币格式</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="text-align: left; padding-left: 8px;">注：合同类型和编号为只读字段，右侧显示"不可编辑"/"系统生成"灰色标签（readonly-tag样式）</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">签约双方</td>
+                            <td>甲方（发包方）</td>
+                            <td>下拉选择</td>
+                            <td>选项从项目成员中筛选具有甲方身份的人</td>
+                        </tr>
+                        <tr>
+                            <td>乙方（承包方）</td>
+                            <td>下拉选择</td>
+                            <td>选项从项目成员中筛选具有乙方身份的人</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">3.7.3 合同内容编辑Tab</div>
+                <p>编辑模式下，合同内容区域使用独立Tab导航（content-tabs样式），包含3个Tab：</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tab名称</th>
+                            <th>内容</th>
+                            <th>交互</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>合同正文</td>
+                            <td>合同正文预览区（contract-text-preview，不可编辑）+ 查看全文链接 + 补充条款textarea（可编辑）</td>
+                            <td>点击"查看全文 >"弹出全文预览；点击"更换模板"可重新选择合同文本模板</td>
+                        </tr>
+                        <tr>
+                            <td>阶段任务</td>
+                            <td>阶段卡片列表，每个阶段含名称输入框+按序执行开关+任务列表</td>
+                            <td>支持添加/删除阶段、添加/删除/编辑任务详情（执行人、确认人、执行/验收/担责标准）、拖拽排序</td>
+                        </tr>
+                        <tr>
+                            <td>附件</td>
+                            <td>上传区域+已上传附件列表</td>
+                            <td>点击上传→触发文件选择（支持PDF/图片/Word/Excel）；已上传项显示文件名+大小+时间+预览/删除操作</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">3.7.4 合同模板选择</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>模板类型</th>
+                            <th>选择入口</th>
+                            <th>选择后行为</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>合同文本模板</td>
+                            <td>合同正文Tab右上角"更换模板"链接</td>
+                            <td>选择后正文内容替换为模板内容，显示"已选择模板：XX"标签+"模板内容不可编辑，如需修改请重新选择模板"提示</td>
+                        </tr>
+                        <tr>
+                            <td>阶段任务模板</td>
+                            <td>阶段任务Tab右上角"选择模板"链接</td>
+                            <td>选择后阶段和任务列表替换为模板内容，显示"已选择模板：XX"标签+"模板内容可编辑调整"提示（模板内容仍可修改）</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">3.8 状态横幅与驳回处理</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>状态</th>
+                            <th>横幅样式</th>
+                            <th>横幅内容</th>
+                            <th>特殊交互</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>拟定中（draft）</td>
+                            <td>灰色渐变（draft样式）</td>
+                            <td>"拟定中 - 合同正在编辑中，编辑完成后可提交确认"</td>
+                            <td>显示编辑引导卡片</td>
+                        </tr>
+                        <tr>
+                            <td>审核驳回（review_rejected）</td>
+                            <td>红色渐变（rejected样式）</td>
+                            <td>"审核驳回 - 合同内容不符合要求，请修改后重新提交"</td>
+                            <td>显示驳回原因区域（rejectReasonBox）+修改引导区域（editGuideBox），引导包含5步操作指引+复制电脑端链接按钮</td>
+                        </tr>
+                        <tr>
+                            <td>合同待审核（platform_reviewing）</td>
+                            <td>青色渐变</td>
+                            <td>"待平台审核"</td>
+                            <td>无编辑入口</td>
+                        </tr>
+                        <tr>
+                            <td>审核已通过（reviewed_pass）</td>
+                            <td>绿色渐变（pass样式）</td>
+                            <td>"审核已通过 - 合同已通过审核，等待双方确认"</td>
+                            <td>显示签约双方确认状态标签</td>
+                        </tr>
+                        <tr>
+                            <td>双方已确认（confirmed）</td>
+                            <td>绿色渐变</td>
+                            <td>"双方已确认 - 请上传签约后的合同附件"</td>
+                            <td>显示上传签约文件入口</td>
+                        </tr>
+                        <tr>
+                            <td>待确认签约（signing）</td>
+                            <td>紫色渐变</td>
+                            <td>"待确认签约 - 对方已上传签约文件，请确认"</td>
+                            <td>显示确认签约入口</td>
+                        </tr>
+                        <tr>
+                            <td>已签约（signed）</td>
+                            <td>蓝色渐变（signed样式）</td>
+                            <td>"合同已签约"</td>
+                            <td>可发起变更</td>
+                        </tr>
+                        <tr>
+                            <td>变更待审核（change_reviewing）</td>
+                            <td>橙色渐变</td>
+                            <td>"变更待审核"</td>
+                            <td>显示变更原因横幅+变更内容摘要卡片+变更提示横幅</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">3.9 合同状态流程图规格</div>
+                <p>合同详情页顶部显示状态流程图卡片（statusFlowCard），标注当前所处阶段。</p>
+                <div class="code-block" style="font-size: 12px;">
+状态流程5步骤：
+📝拟定中 → ⏳平台审核 → ✓确认中 → ✓已确认 → ✓已签约
+
+当前状态步骤：
+- 实心圆形+emoji图标+蓝色标签文字
+- 步骤之间用横线连接
+
+非当前状态步骤：
+- 空心圆形+灰色标签文字
+
+流程图仅在拟定中/待审核/审核已通过/确认中/已确认状态时显示，已签约后隐藏。
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">3.10 变更内容展示规格</div>
+                <p>当合同处于"变更审核中"或"变更已通过"状态时，合同详情页显示变更相关内容。</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>变更展示元素</th>
+                            <th>显示条件</th>
+                            <th>内容</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>变更原因横幅（changeReasonDisplay）</td>
+                            <td>变更审核中/已通过</td>
+                            <td>📝变更原因 + 变更原因文本内容</td>
+                        </tr>
+                        <tr>
+                            <td>变更摘要卡片（changeSummaryCard）</td>
+                            <td>变更审核中/已通过</td>
+                            <td>📊变更内容摘要，包含：金额变更（删除线旧值→红色新值）、新增阶段（绿色added标签）、新增任务（绿色标签）、修改任务（普通文字描述）</td>
+                        </tr>
+                        <tr>
+                            <td>变更提示横幅（changeHighlightBanner）</td>
+                            <td>变更审核中</td>
+                            <td>🔄变更提示 + "以下内容为变更后的最新内容，变更部分已高亮标识。请仔细核对变更内容后确认。"</td>
+                        </tr>
+                        <tr>
+                            <td>金额变更高亮（change-highlight）</td>
+                            <td>变更涉及金额</td>
+                            <td>合同信息中金额行显示旧值（删除线）→新值（红色）对比</td>
+                        </tr>
+                        <tr>
+                            <td>正文变更高亮（change-highlight-text）</td>
+                            <td>变更涉及正文条款</td>
+                            <td>合同正文中新增条款以蓝色加粗文字高亮标识</td>
+                        </tr>
+                        <tr>
+                            <td>阶段任务变更标签</td>
+                            <td>变更涉及阶段/任务</td>
+                            <td>已修改阶段/任务显示"已修改"标签，新增阶段/任务显示"新增"标签</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">3.11 导航菜单规格</div>
+                <p>合同详情页导航栏右侧"⋯"按钮展开操作菜单，包含以下菜单项：</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>菜单项</th>
+                            <th>图标</th>
+                            <th>显示条件</th>
+                            <th>点击行为</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>预览合同</td>
+                            <td>👁️</td>
+                            <td>所有状态</td>
+                            <td>跳转合同预览页（contract-preview.html）</td>
+                        </tr>
+                        <tr>
+                            <td>版本记录</td>
+                            <td>📋</td>
+                            <td>所有状态</td>
+                            <td>弹出版本记录弹窗</td>
+                        </tr>
+                        <tr>
+                            <td>变更记录</td>
+                            <td>📜</td>
+                            <td>已签约状态</td>
+                            <td>弹出变更记录弹窗</td>
+                        </tr>
+                        <tr>
+                            <td>导出合同文件</td>
+                            <td>📄</td>
+                            <td>审核已通过/已签约</td>
+                            <td>触发PDF导出</td>
+                        </tr>
+                        <tr>
+                            <td>在电脑端打开</td>
+                            <td>💻</td>
+                            <td>所有状态</td>
+                            <td>弹出电脑端打开提示弹窗</td>
+                        </tr>
+                        <tr>
+                            <td>分享给朋友</td>
+                            <td>📤</td>
+                            <td>所有状态</td>
+                            <td>触发微信分享</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="subsection">
+                <div class="subsection-title">3.12 各状态页面效果与功能规格（发起方 vs 确认方）</div>
+                <p>合同详情页根据当前用户是合同发起方还是确认方，在不同状态下展示不同的页面效果和操作按钮。以下按合同生命周期阶段逐一说明。</p>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 20px;">3.12.1 拟定中阶段</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:140px">状态</th>
+                            <th>适用方</th>
+                            <th>横幅内容</th>
+                            <th>内容区域</th>
+                            <th>底部操作按钮</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>draft（新创建）</td>
+                            <td>发起方</td>
+                            <td>灰色横幅"拟定中 - 合同正在编辑中，完善合同内容后可提交确认"</td>
+                            <td>显示编辑表单（draftEditForm），隐藏只读内容区域；隐藏SectionTab（内容/阶段/附件切换Tab），直接展开编辑模式</td>
+                            <td>"提交确认"按钮（禁用态，disabledReason："请完善合同内容后再提交"）</td>
+                        </tr>
+                        <tr>
+                            <td>draft_party_a</td>
+                            <td>确认方（甲方）</td>
+                            <td>灰色横幅"拟定中 - 合同正在编辑中，等待对方完善合同内容"</td>
+                            <td>只读内容区域（draftViewContent），无编辑表单；显示合同信息+签约双方+SectionTab</td>
+                            <td>无操作按钮</td>
+                        </tr>
+                        <tr>
+                            <td>draft_submittable</td>
+                            <td>发起方</td>
+                            <td>灰色横幅"拟定中 - 合同内容已完善，可以提交确认"</td>
+                            <td>显示编辑表单，可继续编辑修改</td>
+                            <td>"提交确认"按钮（可用态）</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 20px;">3.12.2 审核阶段</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:140px">状态</th>
+                            <th>适用方</th>
+                            <th>横幅内容</th>
+                            <th>内容区域</th>
+                            <th>底部操作按钮</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>platform_reviewing</td>
+                            <td>发起方</td>
+                            <td>青色横幅"待平台审核 - 已提交确认申请，平台运营人员正在审核中，审核通过后对方将收到确认通知"</td>
+                            <td>只读内容区域，状态流程图高亮"平台审核"步骤</td>
+                            <td>"撤回申请"按钮（secondary样式）</td>
+                        </tr>
+                        <tr>
+                            <td>reviewed_pass</td>
+                            <td>双方</td>
+                            <td>绿色横幅"已通过 - 平台审核已通过，合同已进入确认流程"</td>
+                            <td>只读内容区域，签约双方卡片显示确认状态标签</td>
+                            <td>"查看详情"按钮（primary样式）</td>
+                        </tr>
+                        <tr>
+                            <td>reviewed_reject</td>
+                            <td>确认方（甲方视角）</td>
+                            <td>红色横幅"已驳回 - 平台审核未通过，请查看驳回原因"+驳回原因区域</td>
+                            <td>只读内容区域，驳回原因区域显示</td>
+                            <td>"查看详情"按钮（primary样式）</td>
+                        </tr>
+                        <tr>
+                            <td>platform_rejected</td>
+                            <td>发起方</td>
+                            <td>红色横幅"平台审核驳回 - 平台审核未通过，请根据驳回原因修改合同内容后重新提交"+驳回原因区域+修改引导（5步操作+复制电脑端链接按钮）</td>
+                            <td>只读内容区域，编辑引导区域显示（editGuideBox），状态流程图高亮回到"拟定中"</td>
+                            <td>"重新提交"按钮（禁用态，disabledReason："请修改合同内容后再重新提交"）</td>
+                        </tr>
+                        <tr>
+                            <td>platform_rejected_modified</td>
+                            <td>发起方</td>
+                            <td>红色横幅"平台审核驳回 - 合同内容已修改，可以重新提交审核"+驳回原因区域+"已修改"标签</td>
+                            <td>只读内容区域</td>
+                            <td>"重新提交"按钮（可用态，success样式）</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 20px;">3.12.3 确认阶段</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:140px">状态</th>
+                            <th>适用方</th>
+                            <th>横幅内容</th>
+                            <th>内容区域</th>
+                            <th>底部操作按钮</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>confirming_sender</td>
+                            <td>发起方</td>
+                            <td>青色横幅"待对方确认 - 平台审核已通过，等待对方确认合同内容（仅支持查看）"</td>
+                            <td>只读内容区域，签约双方卡片甲方显示"已确认"标签、乙方显示"待确认"标签</td>
+                            <td>"撤回确认"按钮（warning样式）</td>
+                        </tr>
+                        <tr>
+                            <td>confirming_receiver</td>
+                            <td>确认方</td>
+                            <td>青色横幅"待我方确认 - 对方已确认合同内容，请我方进行最终确认或驳回修改"</td>
+                            <td>只读内容区域，签约双方卡片甲方显示"已确认"标签、乙方显示"待确认"标签</td>
+                            <td>"驳回修改"按钮（secondary样式）+ "确认合同"按钮（primary样式）</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 20px;">3.12.4 签约阶段</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:140px">状态</th>
+                            <th>适用方</th>
+                            <th>横幅内容</th>
+                            <th>内容区域</th>
+                            <th>底部操作按钮</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>confirmed</td>
+                            <td>乙方（上传方）</td>
+                            <td>绿色横幅"已确认 - 双方已确认，请上传签约后的合同附件，上传后合同正式生效"</td>
+                            <td>只读内容区域+签约文件上传卡片（支持上传多个文件），签约双方卡片双方均显示"已确认"标签</td>
+                            <td>"上传签约文件"按钮（primary样式）</td>
+                        </tr>
+                        <tr>
+                            <td>confirmed_party_a</td>
+                            <td>甲方（等待方）</td>
+                            <td>绿色横幅"已确认 - 双方已确认，等待乙方上传签约附件"</td>
+                            <td>只读内容区域，签约文件卡片显示"等待上传"状态</td>
+                            <td>"待乙方上传签约附件"按钮（禁用态，灰色）</td>
+                        </tr>
+                        <tr>
+                            <td>signed</td>
+                            <td>双方</td>
+                            <td>蓝色横幅"已签约 - 合同已正式生效，可发起变更申请"</td>
+                            <td>只读内容区域，阶段任务Tab显示进度百分比和任务状态，签约文件卡片显示已上传文件；变更记录Tab可见</td>
+                            <td>"发起变更"按钮（primary样式，fullWidth）</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 20px;">3.12.5 变更阶段</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:140px">状态</th>
+                            <th>适用方</th>
+                            <th>横幅内容</th>
+                            <th>内容区域</th>
+                            <th>底部操作按钮</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>changing</td>
+                            <td>变更发起方</td>
+                            <td>橙色横幅"变更中 - 变更申请已发起，等待对方确认（阶段任务已暂停流转）"</td>
+                            <td>只读内容区域+变更原因横幅+阶段任务新增/修改标签；仅显示变更原因，不显示变更摘要卡片和变更提示横幅</td>
+                            <td>"撤回变更"按钮（warning样式）</td>
+                        </tr>
+                        <tr>
+                            <td>change_confirming</td>
+                            <td>变更确认方</td>
+                            <td>橙色横幅"待确认变更 - 对方发起变更申请，请确认或驳回（阶段任务已暂停流转）"</td>
+                            <td>只读内容区域+变更原因横幅+阶段任务新增/修改标签；仅显示变更原因，不显示变更摘要卡片和变更提示横幅</td>
+                            <td>"驳回变更"按钮（secondary样式）+ "确认变更"按钮（primary样式）</td>
+                        </tr>
+                        <tr>
+                            <td>change_platform_reviewing</td>
+                            <td>双方</td>
+                            <td>青色横幅"变更审核中 - 变更申请已提交，平台运营人员正在审核中，审核通过后将通知合约方确认"</td>
+                            <td>只读内容区域+变更原因横幅+变更摘要卡片+变更提示横幅+金额变更高亮+正文变更高亮+阶段任务变更标签</td>
+                            <td>"撤回变更申请"按钮（secondary样式）</td>
+                        </tr>
+                        <tr>
+                            <td>change_platform_rejected</td>
+                            <td>变更发起方</td>
+                            <td>红色横幅"变更审核驳回 - 变更申请审核未通过，请根据驳回原因修改后重新提交"+驳回原因区域</td>
+                            <td>只读内容区域+变更原因横幅+变更摘要卡片</td>
+                            <td>"重新发起变更"按钮（primary样式）</td>
+                        </tr>
+                        <tr>
+                            <td>change_confirming_sender</td>
+                            <td>变更发起方</td>
+                            <td>青色横幅"变更确认中 - 平台审核已通过，等待对方确认变更内容（阶段任务已暂停流转）"</td>
+                            <td>只读内容区域+变更原因横幅+变更摘要卡片+变更提示横幅+全部变更高亮展示</td>
+                            <td>"撤回变更"按钮（warning样式）</td>
+                        </tr>
+                        <tr>
+                            <td>change_confirming_receiver</td>
+                            <td>变更确认方</td>
+                            <td>青色横幅"待确认变更 - 对方发起变更申请，平台审核已通过，请确认或驳回（阶段任务已暂停流转）"</td>
+                            <td>只读内容区域+变更原因横幅+变更摘要卡片+变更提示横幅+全部变更高亮展示</td>
+                            <td>"驳回变更"按钮（secondary样式）+ "确认变更"按钮（primary样式）</td>
+                        </tr>
+                        <tr>
+                            <td>change_signing_wait</td>
+                            <td>变更上传方</td>
+                            <td>绿色横幅"变更签约中 - 变更已确认，请上传线下已签约的合同变更文件，上传后变更正式生效"</td>
+                            <td>只读内容区域+变更原因横幅+变更摘要卡片</td>
+                            <td>"上传变更签约文件"按钮（primary样式）</td>
+                        </tr>
+                        <tr>
+                            <td>change_confirmed</td>
+                            <td>双方</td>
+                            <td>蓝色横幅"变更已确认 - 合同变更已生效，可继续执行任务"</td>
+                            <td>只读内容区域+变更原因横幅+变更摘要卡片；阶段任务恢复流转，新增阶段/任务可执行</td>
+                            <td>"发起变更"按钮（primary样式，fullWidth）</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 20px;">3.12.6 阶段任务显示规则</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>合同状态</th>
+                            <th>进度百分比</th>
+                            <th>任务状态图标</th>
+                            <th>任务描述文字</th>
+                            <th>阶段meta信息</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>已签约前（draft~confirmed）</td>
+                            <td>隐藏</td>
+                            <td>隐藏</td>
+                            <td>隐藏</td>
+                            <td>仅显示"X个任务"，隐藏完成/进行中状态</td>
+                        </tr>
+                        <tr>
+                            <td>已签约及之后（signed~变更完成）</td>
+                            <td>显示（颜色按阶段）</td>
+                            <td>显示（✓/⋯/○）</td>
+                            <td>显示（已完成/确认中/待开始+日期）</td>
+                            <td>显示"X个任务 · 状态"</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 20px;">3.12.7 状态流程图高亮规则</div>
+                <div class="code-block" style="font-size: 12px;">
+拟定中阶段（draft/draft_party_a/draft_submittable/platform_rejected/platform_rejected_modified）：
+  → 高亮步骤1："拟定中"
+
+审核阶段（platform_reviewing）：
+  → 高亮步骤2："平台审核"
+
+确认阶段（reviewed_pass/confirming_sender/confirming_receiver）：
+  → 高亮步骤3："确认中"
+
+签约阶段（confirmed/confirmed_party_a）：
+  → 高亮步骤4："已确认"
+
+已签约（signed）及变更阶段：
+  → 隐藏状态流程图
+                </div>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 20px;">3.12.8 变更记录Tab显示规则</div>
+                <div class="code-block" style="font-size: 12px;">
+变更记录Tab仅在以下状态显示：
+- signed（已签约）
+- changing / change_confirming（变更确认中）
+- change_platform_reviewing / change_platform_rejected（变更审核）
+- change_confirming_sender / change_confirming_receiver（变更确认）
+- change_signing_wait / change_confirmed（变更签约）
+
+拟定中及审核状态：隐藏变更记录Tab
+                </div>
+            </div>
         </div>
 
         <!-- ==================== 4. 业主小程序合同详情页 ==================== -->
@@ -1127,6 +1728,249 @@
                         <tr>
                             <td>成功后</td>
                             <td>若甲乙双方都确认，合同状态变为"已签约"；否则显示"等待对方确认签约"</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">4.5 各状态页面效果与功能规格</div>
+                <p>业主端合同详情页始终为只读查看模式（不可编辑合同内容），根据合同状态展示不同的横幅、内容区域和操作按钮。业主作为合同的甲方（发包方），在确认流程中具有确认权。</p>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 20px;">4.5.1 拟定中阶段</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:140px">状态</th>
+                            <th>横幅内容</th>
+                            <th>内容区域</th>
+                            <th>底部操作按钮</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>draft</td>
+                            <td>灰色横幅"拟定中 - 合同正在编辑中，等待对方完善合同内容"</td>
+                            <td>只读内容区域，隐藏SectionTab；合同信息+签约双方卡片</td>
+                            <td>无操作按钮</td>
+                        </tr>
+                        <tr>
+                            <td>draft_party_a</td>
+                            <td>灰色横幅"拟定中 - 合同正在编辑中，等待对方完善合同内容"</td>
+                            <td>只读内容区域，显示合同信息+签约双方+SectionTab（合同内容/阶段任务/附件）</td>
+                            <td>无操作按钮</td>
+                        </tr>
+                        <tr>
+                            <td>draft_submittable</td>
+                            <td>灰色横幅"拟定中 - 合同已完善，等待对方提交确认"</td>
+                            <td>只读内容区域，隐藏SectionTab</td>
+                            <td>无操作按钮</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 20px;">4.5.2 审核阶段</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:140px">状态</th>
+                            <th>横幅内容</th>
+                            <th>内容区域</th>
+                            <th>底部操作按钮</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>platform_reviewing</td>
+                            <td>青色横幅"待平台审核 - 乙方已提交确认申请，平台运营人员正在审核中，审核通过后您将收到去确认通知"</td>
+                            <td>只读内容区域，状态流程图高亮"平台审核"步骤</td>
+                            <td>无操作按钮（业主不参与审核）</td>
+                        </tr>
+                        <tr>
+                            <td>reviewed_pass</td>
+                            <td>绿色横幅"已通过 - 平台审核已通过，合同已进入确认流程"</td>
+                            <td>只读内容区域，签约双方卡片显示确认状态标签</td>
+                            <td>"查看详情"按钮（primary样式）</td>
+                        </tr>
+                        <tr>
+                            <td>reviewed_reject</td>
+                            <td>红色横幅"已驳回 - 平台审核未通过，请查看驳回原因"+驳回原因区域</td>
+                            <td>只读内容区域，驳回原因区域显示</td>
+                            <td>"查看详情"按钮（primary样式）</td>
+                        </tr>
+                        <tr>
+                            <td>platform_rejected</td>
+                            <td>红色横幅"平台审核驳回 - 平台审核未通过，乙方会根据驳回原因修改合同内容后重新提交"+驳回原因区域</td>
+                            <td>只读内容区域，驳回原因区域显示（业主视角无需修改，由乙方修改后重新提交）</td>
+                            <td>无操作按钮</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 20px;">4.5.3 确认阶段</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:140px">状态</th>
+                            <th>横幅内容</th>
+                            <th>内容区域</th>
+                            <th>底部操作按钮</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>confirming_sender</td>
+                            <td>青色横幅"待对方确认 - 平台审核已通过，等待对方确认合同内容"</td>
+                            <td>只读内容区域，签约双方卡片甲方显示"已确认"标签、乙方显示"待确认"标签</td>
+                            <td>无操作按钮（业主已确认，等待乙方确认）</td>
+                        </tr>
+                        <tr>
+                            <td>confirming_receiver</td>
+                            <td>青色横幅"待我方确认 - 对方已确认合同内容，请我方进行最终确认或驳回修改"</td>
+                            <td>只读内容区域，签约双方卡片乙方显示"已确认"标签、甲方显示"待确认"标签</td>
+                            <td>"驳回修改"按钮（secondary样式）+ "确认合同"按钮（primary样式）</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 20px;">4.5.4 签约阶段</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:140px">状态</th>
+                            <th>横幅内容</th>
+                            <th>内容区域</th>
+                            <th>底部操作按钮</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>confirmed</td>
+                            <td>绿色横幅"已确认 - 双方已确认，请上传签约后的合同附件，上传后合同正式生效"</td>
+                            <td>只读内容区域+签约文件上传卡片（支持上传多个文件），签约双方卡片双方均显示"已确认"标签</td>
+                            <td>"上传签约文件"按钮（primary样式）</td>
+                        </tr>
+                        <tr>
+                            <td>confirmed_party_a</td>
+                            <td>绿色横幅"已确认 - 双方已确认，等待乙方上传签约附件"</td>
+                            <td>只读内容区域，签约文件卡片显示"等待上传"状态</td>
+                            <td>"待乙方上传签约附件"按钮（禁用态，灰色）</td>
+                        </tr>
+                        <tr>
+                            <td>signed</td>
+                            <td>蓝色横幅"已签约 - 合同已正式生效"</td>
+                            <td>只读内容区域，阶段任务Tab显示进度百分比和任务状态，签约文件卡片显示已上传文件；变更记录Tab可见</td>
+                            <td>无操作按钮（业主不可发起变更）</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 20px;">4.5.5 变更阶段</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:140px">状态</th>
+                            <th>横幅内容</th>
+                            <th>内容区域</th>
+                            <th>底部操作按钮</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>changing</td>
+                            <td>橙色横幅"变更中 - 变更申请已发起，等待对方确认"</td>
+                            <td>只读内容区域+变更原因横幅+阶段任务新增/修改标签</td>
+                            <td>无操作按钮（业主作为甲方等待乙方确认）</td>
+                        </tr>
+                        <tr>
+                            <td>change_confirming</td>
+                            <td>橙色横幅"待确认变更 - 对方发起变更申请，请确认或驳回（阶段任务已暂停流转）"</td>
+                            <td>只读内容区域+变更原因横幅+阶段任务新增/修改标签</td>
+                            <td>"驳回变更"按钮（secondary样式）+ "确认变更"按钮（primary样式）</td>
+                        </tr>
+                        <tr>
+                            <td>change_platform_reviewing</td>
+                            <td>青色横幅"变更审核中 - 乙方已提交变更申请，平台审核中，审核通过后将通知甲方进行确认"</td>
+                            <td>只读内容区域+变更原因横幅+变更摘要卡片+变更提示横幅+金额变更高亮+正文变更高亮+阶段任务变更标签</td>
+                            <td>无操作按钮（业主不参与平台审核）</td>
+                        </tr>
+                        <tr>
+                            <td>change_platform_rejected</td>
+                            <td>蓝色横幅"已签约 - 合同已正式生效，可发起变更申请"</td>
+                            <td>只读内容区域，变更驳回后恢复到已签约状态，阶段任务恢复流转</td>
+                            <td>无操作按钮</td>
+                        </tr>
+                        <tr>
+                            <td>change_confirming_sender</td>
+                            <td>青色横幅"变更确认中 - 平台审核已通过，等待对方确认变更内容"</td>
+                            <td>只读内容区域+变更原因横幅+变更摘要卡片+变更提示横幅+全部变更高亮展示</td>
+                            <td>无操作按钮（业主已确认，等待乙方确认）</td>
+                        </tr>
+                        <tr>
+                            <td>change_confirming_receiver</td>
+                            <td>青色横幅"待确认变更 - 对方发起变更申请，平台审核已通过，请确认或驳回（阶段任务已暂停流转）"</td>
+                            <td>只读内容区域+变更原因横幅+变更摘要卡片+变更提示横幅+全部变更高亮展示</td>
+                            <td>"驳回变更"按钮（secondary样式）+ "确认变更"按钮（primary样式）</td>
+                        </tr>
+                        <tr>
+                            <td>change_signing_wait</td>
+                            <td>绿色横幅"变更签约中 - 变更已确认，等待乙方上传线下已签约的合同变更文件，上传后变更正式生效"</td>
+                            <td>只读内容区域+变更原因横幅+变更摘要卡片</td>
+                            <td>无操作按钮（等待乙方上传签约文件）</td>
+                        </tr>
+                        <tr>
+                            <td>change_confirmed</td>
+                            <td>蓝色横幅"变更已确认 - 合同变更已生效，可继续执行任务"</td>
+                            <td>只读内容区域+变更原因横幅+变更摘要卡片；阶段任务恢复流转</td>
+                            <td>无操作按钮</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 20px;">4.5.6 业主端与服务方差异说明</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>差异项</th>
+                            <th>服务方小程序</th>
+                            <th>业主小程序</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>编辑功能</td>
+                            <td>拟定中可编辑合同内容</td>
+                            <td>所有状态均为只读，不可编辑</td>
+                        </tr>
+                        <tr>
+                            <td>发起变更</td>
+                            <td>已签约状态可发起变更</td>
+                            <td>不可发起变更，仅可确认/驳回变更</td>
+                        </tr>
+                        <tr>
+                            <td>上传签约文件</td>
+                            <td>乙方视角可上传</td>
+                            <td>甲方视角等待乙方上传</td>
+                        </tr>
+                        <tr>
+                            <td>平台审核驳回后</td>
+                            <td>可修改后重新提交</td>
+                            <td>仅查看驳回原因，等待乙方重新提交</td>
+                        </tr>
+                        <tr>
+                            <td>变更审核驳回后</td>
+                            <td>可重新发起变更</td>
+                            <td>合同恢复已签约状态，无操作按钮</td>
+                        </tr>
+                        <tr>
+                            <td>导航菜单</td>
+                            <td>含"预览合同""分享给朋友"</td>
+                            <td>含"版本记录""变更记录""导出""电脑端打开""分享给朋友"，无"预览合同"</td>
+                        </tr>
+                        <tr>
+                            <td>状态流程图</td>
+                            <td>拟定中/审核/确认/已确认阶段显示</td>
+                            <td>与服务方一致</td>
                         </tr>
                     </tbody>
                 </table>

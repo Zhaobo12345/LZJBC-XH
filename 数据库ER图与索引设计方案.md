@@ -90,6 +90,8 @@ erDiagram
         String project_id FK "关联projects.id"
         String user_id FK "关联users.id"
         Enum role "project_manager/foreman/worker/supervisor/owner"
+        Enum member_category "service(服务人员)/owner(业主及家人)"
+        Enum relationship "self/spouse/parent/child/other"
         Enum join_method "invite/scan/assign"
         Enum status "active/removed"
         DateTime joined_at "加入时间"
@@ -307,6 +309,8 @@ erDiagram
         Enum invite_type "qrcode/link/phone"
         String invite_code UK "邀请码/分享码"
         Enum target_role "project_manager/foreman/worker/supervisor"
+        Enum target_category "service(服务人员)/owner(业主及家人)"
+        Enum relationship "self/spouse/parent/child/other"
         String target_node_id FK "关联架构节点ID(扫码加入时)"
         DateTime expire_at "过期时间(默认7天)"
         Enum status "pending/used/expired/cancelled"
@@ -621,6 +625,8 @@ erDiagram
 | invite_type | Enum | 是 | — | 枚举：`qrcode`（二维码邀请）、`link`（链接邀请）、`phone`（手机号邀请） |
 | invite_code | String(32) | 是 | — | 邀请码/分享码，唯一 |
 | target_role | Enum | 是 | — | 枚举：`project_manager`、`foreman`、`worker`、`supervisor` |
+| target_category | Enum | 是 | — | 枚举：`service`（服务人员）、`owner`（业主及家人）；与 target_role 配合——`service` 时填写 target_role，`owner` 时 target_role 置空 |
+| relationship | Enum | 否 | null | 枚举：`self`（业主本人）、`spouse`（配偶）、`parent`（父母）、`child`（子女）、`other`（其他）；仅 target_category=owner 时填写，用于区分"业主本人"与"业主家人" |
 | target_node_id | String(UUID) | 否 | null | 关联 project_architecture.id（扫码加入指定架构节点时使用） |
 | expire_at | DateTime | 是 | — | 过期时间（二维码/链接默认7天，手机号邀请不过期） |
 | status | Enum | 是 | `pending` | 枚举：`pending`（待使用）、`used`（已使用）、`expired`（已过期）、`cancelled`（已取消） |

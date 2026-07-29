@@ -233,8 +233,10 @@
             <li><a href="#page-task-list-owner">五、任务列表页（业主）</a></li>
             <li><a href="#page-task-detail-owner">六、任务详情页（业主）</a></li>
             <li><a href="#page-task-acceptance-owner">七、任务验收页（业主）</a></li>
-            <li><a href="#validation-rules">八、字段校验规则</a></li>
-            <li><a href="#task-api-summary">九、API接口汇总</a></li>
+            <li><a href="#page-todo-list-service">八、全部待办页（服务方）</a></li>
+            <li><a href="#page-todo-list-owner">九、全部待办页（业主）</a></li>
+            <li><a href="#validation-rules">十、字段校验规则</a></li>
+            <li><a href="#task-api-summary">十一、API接口汇总</a></li>
         </ul>
     </nav>
 
@@ -1100,14 +1102,394 @@
             </div>
         </div>
 
-        <!-- ==================== 字段校验规则 ==================== -->
-        <div class="section" id="validation-rules">
+        <!-- ==================== 待办管理（服务方） ==================== -->
+        <div class="section" id="page-todo-list-service">
             <div class="section-title">
-                八、字段校验规则
+                八、全部待办页（服务方小程序）
+                <span class="badge">service-miniapp/todo-list.html</span>
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">8.1 任务基本信息字段</div>
+                <div class="subsection-title">8.1 页面概述</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">页面名称</div>
+                        <div class="info-value">全部待办页</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面路径</div>
+                        <div class="info-value">service-miniapp/todo-list.html</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">适用角色</div>
+                        <div class="info-value">全部</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面入口</div>
+                        <div class="info-value">首页待办卡片"查看全部"、项目详情页待办卡片"查看全部"</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面类型</div>
+                        <div class="info-value">列表页</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">业务目标</div>
+                        <div class="info-value">跨项目汇总待办事项，按状态筛选并快速跳转处理</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">8.2 页面结构</div>
+                <div class="code-block">
+┌─────────────────────────────────────┐
+│  导航栏                              │
+│  - 返回 | 标题：全部待办 | ⋯更多     │
+├─────────────────────────────────────┤
+│  筛选栏                              │
+│  - 全部 | 待处理 | 已处理            │
+│  - 每个Tab显示数量角标               │
+├─────────────────────────────────────┤
+│  待办列表                            │
+│  - 待办卡片列表                      │
+│    * 类型图标 + 待办标题 + 类型标签  │
+│    * 工作组/执行人信息               │
+│    * 状态标签                        │
+│  - 空状态：暂无符合条件的待办事项     │
+└─────────────────────────────────────┘
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">8.3 待办类型与来源</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>待办类型</th>
+                            <th>标签</th>
+                            <th>数据来源</th>
+                            <th>状态值</th>
+                            <th>跳转目标</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>合约任务确认</td>
+                            <td>合约</td>
+                            <td>任务状态为"确认中"且当前用户为确认人</td>
+                            <td>confirming</td>
+                            <td>task-detail.html?status=confirming</td>
+                        </tr>
+                        <tr>
+                            <td>合约任务执行</td>
+                            <td>合约</td>
+                            <td>任务状态为"待开始"且当前用户为执行人</td>
+                            <td>pending</td>
+                            <td>task-detail.html?status=pending</td>
+                        </tr>
+                        <tr>
+                            <td>合同内容确认</td>
+                            <td>合同</td>
+                            <td>合同状态为"待确认合同内容"</td>
+                            <td>pending</td>
+                            <td>contract-detail.html?status=confirming_receiver</td>
+                        </tr>
+                        <tr>
+                            <td>合同签约</td>
+                            <td>合同</td>
+                            <td>合同状态为"待签约"</td>
+                            <td>pending</td>
+                            <td>contract-detail.html?status=signing</td>
+                        </tr>
+                        <tr>
+                            <td>合同变更确认</td>
+                            <td>变更</td>
+                            <td>合同状态为"待确认变更内容"</td>
+                            <td>pending</td>
+                            <td>contract-detail.html?status=changing</td>
+                        </tr>
+                        <tr>
+                            <td>合同平台审核</td>
+                            <td>审核</td>
+                            <td>合同状态为"平台审核中"</td>
+                            <td>pending</td>
+                            <td>contract-detail.html?status=platform_reviewing</td>
+                        </tr>
+                        <tr>
+                            <td>架构邀请处理</td>
+                            <td>架构</td>
+                            <td>存在待处理的成员邀请</td>
+                            <td>pending</td>
+                            <td>architecture.html</td>
+                        </tr>
+                        <tr>
+                            <td>临时任务接受</td>
+                            <td>临时</td>
+                            <td>临时任务状态为"待接受"</td>
+                            <td>pending</td>
+                            <td>task-detail.html?status=pending</td>
+                        </tr>
+                        <tr>
+                            <td>已完成任务</td>
+                            <td>合约/临时</td>
+                            <td>任务状态为"已完成"</td>
+                            <td>completed</td>
+                            <td>task-detail.html?status=completed</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">8.4 筛选规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>筛选Tab</th>
+                            <th>筛选逻辑</th>
+                            <th>角标说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>全部</td>
+                            <td>显示所有待办事项</td>
+                            <td>显示待办总数</td>
+                        </tr>
+                        <tr>
+                            <td>待处理</td>
+                            <td>显示 data-status 不为 completed 的待办（包括 confirming 和 pending）</td>
+                            <td>显示待处理数量（橙色角标）</td>
+                        </tr>
+                        <tr>
+                            <td>已处理</td>
+                            <td>仅显示 data-status 为 completed 的待办</td>
+                            <td>显示已处理数量</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">8.5 待办卡片规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>卡片元素</th>
+                            <th>显示规则</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>类型图标</td>
+                            <td>左侧圆形/圆角图标，按待办类型显示不同颜色背景和图标 emoji</td>
+                        </tr>
+                        <tr>
+                            <td>待办标题</td>
+                            <td>主标题，如"开槽布线确认"、"泥瓦分包合同确认"</td>
+                        </tr>
+                        <tr>
+                            <td>类型标签</td>
+                            <td>标题右侧小标签：合约（蓝色）、合同（青色）、变更（橙色）、审核（青色）、架构（橙色）、临时（紫色）</td>
+                        </tr>
+                        <tr>
+                            <td>元信息</td>
+                            <td>工作组名称 + 当前处理节点描述，如"泥瓦工作组 · 确认人：王监理"</td>
+                        </tr>
+                        <tr>
+                            <td>状态标签</td>
+                            <td>右侧状态标签：待确认（蓝色）、待执行（绿色）、待签约（紫色）、待处理（橙色）、待审核（青色）、待接受（绿色）、已完成（绿色）</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">8.6 交互流程</div>
+                <div class="code-block">
+1. 进入页面
+   - 默认选中"全部"Tab，展示所有待办事项
+   - 各Tab角标显示对应数量
+2. 切换筛选Tab
+   - 点击"待处理"：隐藏已完成项，仅显示待处理项
+   - 点击"已处理"：仅显示已完成项
+   - 点击"全部"：恢复显示全部
+   - 无匹配项时显示空状态"暂无符合条件的待办事项"
+3. 点击待办卡片
+   - 根据待办类型跳转到对应详情页
+   - 跳转URL携带status参数，目标页面据此高亮对应操作区
+4. 返回页面
+   - 从详情页返回后，刷新待办列表数据
+   - 已处理的事项状态实时更新
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">8.7 交互效果</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>交互动作</th>
+                            <th>触发效果</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>点击筛选Tab</td>
+                            <td>选中Tab高亮（主题色背景 + 白色文字），其他Tab恢复默认样式；列表平滑切换显示对应数据</td>
+                        </tr>
+                        <tr>
+                            <td>Hover待办卡片</td>
+                            <td>卡片背景色微变（浅蓝），提示可点击</td>
+                        </tr>
+                        <tr>
+                            <td>点击待办卡片</td>
+                            <td>跳转到对应详情页，URL携带status参数</td>
+                        </tr>
+                        <tr>
+                            <td>筛选结果为空</td>
+                            <td>隐藏列表区域，显示空状态图标和文案"暂无符合条件的待办事项"</td>
+                        </tr>
+                        <tr>
+                            <td>导航栏⋯按钮</td>
+                            <td>弹出操作菜单（分享给朋友）</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ==================== 待办管理（业主方） ==================== -->
+        <div class="section" id="page-todo-list-owner">
+            <div class="section-title">
+                九、全部待办页（业主小程序）
+                <span class="badge">owner-miniapp/todo-list.html</span>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">9.1 页面概述</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">页面名称</div>
+                        <div class="info-value">全部待办页</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面路径</div>
+                        <div class="info-value">owner-miniapp/todo-list.html</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">适用角色</div>
+                        <div class="info-value">业主</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面入口</div>
+                        <div class="info-value">首页待办卡片"查看全部"、项目详情页待办卡片"查看全部"</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面类型</div>
+                        <div class="info-value">列表页</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">业务目标</div>
+                        <div class="info-value">查看需业主确认/处理的待办事项，快速跳转完成确认</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">9.2 与服务方差异</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>对比项</th>
+                            <th>服务方</th>
+                            <th>业主方</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>待办来源范围</td>
+                            <td>包含任务执行、合同签约、合同变更、架构邀请等全部类型</td>
+                            <td>仅包含需业主确认的类型（任务确认、合同确认、合同变更确认），不包含任务执行和架构邀请</td>
+                        </tr>
+                        <tr>
+                            <td>任务确认跳转</td>
+                            <td>跳转 task-detail.html 查看执行详情并操作</td>
+                            <td>跳转 task-detail.html 进入业主确认视角，仅可确认通过或驳回</td>
+                        </tr>
+                        <tr>
+                            <td>已完成任务跳转</td>
+                            <td>跳转 task-detail.html?status=completed</td>
+                            <td>跳转 task-detail.html?status=confirming（业主查看已确认记录）</td>
+                        </tr>
+                        <tr>
+                            <td>合同变更跳转参数</td>
+                            <td>contract-detail.html?status=changing</td>
+                            <td>contract-detail.html?status=change_confirming</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">9.3 筛选规格</div>
+                <p>业主端筛选逻辑与服务方完全一致：全部 / 待处理 / 已处理三个Tab，各Tab角标显示对应数量，切换时按 data-status 过滤显示。</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>筛选Tab</th>
+                            <th>筛选逻辑</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>全部</td>
+                            <td>显示所有待办事项</td>
+                        </tr>
+                        <tr>
+                            <td>待处理</td>
+                            <td>显示 data-status 不为 completed 的待办</td>
+                        </tr>
+                        <tr>
+                            <td>已处理</td>
+                            <td>仅显示 data-status 为 completed 的待办</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">9.4 交互流程</div>
+                <div class="code-block">
+1. 进入页面
+   - 默认选中"全部"Tab，展示所有待办事项
+   - 各Tab角标显示对应数量
+2. 切换筛选Tab
+   - 与服务方一致，按状态过滤显示
+   - 无匹配项时显示空状态
+3. 点击待办卡片
+   - 任务类待办：跳转业主端 task-detail.html 进入确认视角
+   - 合同类待办：跳转业主端 contract-detail.html 进入对应确认状态
+   - 变更类待办：跳转业主端 contract-detail.html?status=change_confirming
+4. 返回页面
+   - 从详情页返回后刷新数据，已确认事项移至"已处理"
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">9.5 交互效果</div>
+                <p>业主端交互效果与服务方完全一致：Tab切换高亮、卡片Hover效果、空状态显示、导航栏菜单等，详见 <a href="#page-todo-list-service">8.7 交互效果</a>。</p>
+            </div>
+        </div>
+
+        <!-- ==================== 字段校验规则 ==================== -->
+        <div class="section" id="validation-rules">
+            <div class="section-title">
+                十、字段校验规则
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">10.1 任务基本信息字段</div>
                 <table>
                     <thead>
                         <tr>
@@ -1166,7 +1548,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">8.2 执行记录表字段（execution_records）</div>
+                <div class="subsection-title">10.2 执行记录表字段（execution_records）</div>
                 <table>
                     <thead>
                         <tr>
@@ -1218,7 +1600,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">8.3 确认记录表字段（task_confirmations）</div>
+                <div class="subsection-title">10.3 确认记录表字段（task_confirmations）</div>
                 <table>
                     <thead>
                         <tr>
@@ -1281,11 +1663,11 @@
         <!-- ==================== API接口汇总 ==================== -->
         <div class="section" id="task-api-summary">
             <div class="section-title">
-                九、API接口汇总
+                十一、API接口汇总
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">8.1 任务列表接口</div>
+                <div class="subsection-title">11.1 任务列表接口</div>
                 <table>
                     <thead>
                         <tr>
@@ -1313,7 +1695,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">8.2 任务详情接口</div>
+                <div class="subsection-title">11.2 任务详情接口</div>
                 <table>
                     <thead>
                         <tr>
@@ -1395,6 +1777,9 @@
             'page-task-list-owner',
             'page-task-detail-owner',
             'page-task-acceptance-owner',
+            'page-todo-list-service',
+            'page-todo-list-owner',
+            'validation-rules',
             'task-api-summary'
         ];
         

@@ -985,8 +985,6 @@
             <div class="action-sheet-cancel" onclick="hideUploadActionSheet()">取消</div>
         </div>
     </div>
-
-    <!-- 演示控制面板：发起人认证状态切换 -->
     <div class="demo-control-panel" id="demoControlPanel">
         <div class="panel-title">演示控制</div>
         <div class="control-item">
@@ -1591,7 +1589,8 @@
                     area: document.getElementById('area').value.trim(),
                     category: selectedCategory,
                     houseType: selectedHouseType,
-                    styles: selectedStyles
+                    styles: selectedStyles,
+                    created_at: new Date().toISOString().slice(0, 16).replace('T', ' ')
                 };
                 localStorage.setItem('newProjectData', JSON.stringify(projectData));
 

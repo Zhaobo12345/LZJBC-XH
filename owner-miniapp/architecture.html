@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -672,30 +672,97 @@
             font-weight: 500;
         }
 
-        .link-preview {
+        .wechat-invite-preview {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            padding: 12px;
+            padding: 20px 16px;
             background-color: var(--bg-secondary);
             border-radius: 8px;
+        }
+
+        .wechat-share-card {
+            width: 100%;
+            background-color: #FFFFFF;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
             gap: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            margin-bottom: 16px;
         }
 
-        .link-preview .link-text {
-            flex: 1;
-            font-size: 12px;
-            color: var(--text-secondary);
-            word-break: break-all;
-        }
-
-        .link-preview .copy-btn {
-            padding: 6px 12px;
-            background-color: var(--primary-color);
+        .wechat-share-card .card-thumb {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #07C160 0%, #06AD56 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
             color: #FFFFFF;
-            border-radius: 4px;
-            font-size: 12px;
-            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .wechat-share-card .card-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .wechat-share-card .card-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
             white-space: nowrap;
+        }
+
+        .wechat-share-card .card-desc {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .wechat-share-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            height: 44px;
+            background-color: #07C160;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .wechat-share-btn:hover {
+            background-color: #06AD56;
+        }
+
+        .wechat-share-btn:active {
+            background-color: #06AD56;
+        }
+
+        .wechat-share-btn .btn-icon {
+            font-size: 18px;
+        }
+
+        .wechat-invite-tip {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-top: 12px;
+            text-align: center;
         }
 
         .link-expire, .qrcode-expire {
@@ -798,7 +865,7 @@
                 <div class="header-top">
                     <div class="header-left">
                         <div class="project-name">XX小区整体装修</div>
-                        <div class="project-desc">创建时间：2024-01-15 · 项目经理：张三</div>
+                        <div class="project-desc">创建人：张三   项目总   工长</div>
                     </div>
                 </div>
                 <div class="header-stats">
@@ -1202,13 +1269,13 @@
                                 <div class="method-icon">📱</div>
                                 <div class="method-name">手机号邀请</div>
                             </div>
-                            <div class="invite-method" onclick="selectInviteMethod(this, 'link')">
-                                <div class="method-icon">🔗</div>
-                                <div class="method-name">链接邀请</div>
-                            </div>
                             <div class="invite-method" onclick="selectInviteMethod(this, 'qrcode')">
                                 <div class="method-icon">📷</div>
                                 <div class="method-name">二维码邀请</div>
+                            </div>
+                            <div class="invite-method" onclick="selectInviteMethod(this, 'wechat')">
+                                <div class="method-icon">💚</div>
+                                <div class="method-name">微信好友</div>
                             </div>
                         </div>
                     </div>
@@ -1221,19 +1288,28 @@
                             <input type="tel" class="form-input" id="invitePhone" placeholder="请输入手机号码">
                         </div>
                     </div>
-                    <div id="linkInviteForm" style="display: none;">
-                        <div class="link-preview">
-                            <div class="link-text">https://app.example.com/invite/abc123</div>
-                            <div class="copy-btn" onclick="copyInviteLink()">复制链接</div>
-                        </div>
-                        <div class="link-expire">链接有效期：7天</div>
-                    </div>
                     <div id="qrcodeInviteForm" style="display: none;">
                         <div class="qrcode-preview">
                             <div class="qrcode-placeholder">二维码</div>
                             <div class="qrcode-text">扫码加入工作组</div>
                         </div>
                         <div class="qrcode-expire">二维码有效期：7天</div>
+                    </div>
+                    <div id="wechatInviteForm" style="display: none;">
+                        <div class="wechat-invite-preview">
+                            <div class="wechat-share-card">
+                                <div class="card-thumb">🏠</div>
+                                <div class="card-info">
+                                    <div class="card-title" id="wechatCardTitle">家装项目协作邀请</div>
+                                    <div class="card-desc" id="wechatCardDesc">点击加入项目，开始协作</div>
+                                </div>
+                            </div>
+                            <button class="wechat-share-btn" onclick="shareToWechat()">
+                                <span class="btn-icon">💬</span>
+                                <span>发送给微信好友</span>
+                            </button>
+                            <div class="wechat-invite-tip">点击后将调起微信分享面板，选择好友发送邀请卡片</div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-actions">
@@ -1589,7 +1665,19 @@
             currentInviteTarget = targetName;
             document.getElementById('inviteTargetName').textContent = targetName;
             document.getElementById('invitePhone').value = '';
-            selectInviteMethod(document.querySelector('.invite-method.active'), 'phone');
+
+            document.querySelectorAll('.invite-method').forEach(m => m.classList.remove('active'));
+            document.querySelector('.invite-method[onclick*="\'phone\'"]').classList.add('active');
+            document.getElementById('phoneInviteForm').style.display = 'block';
+            document.getElementById('qrcodeInviteForm').style.display = 'none';
+            document.getElementById('wechatInviteForm').style.display = 'none';
+
+            const confirmBtn = document.querySelector('#inviteMemberModal .modal-actions .modal-btn.confirm');
+            if (confirmBtn) {
+                confirmBtn.style.display = 'inline-block';
+                confirmBtn.textContent = '发送邀请';
+            }
+
             document.getElementById('inviteMemberModal').classList.add('show');
         }
         
@@ -1603,12 +1691,18 @@
             element.classList.add('active');
             
             document.getElementById('phoneInviteForm').style.display = method === 'phone' ? 'block' : 'none';
-            document.getElementById('linkInviteForm').style.display = method === 'link' ? 'block' : 'none';
             document.getElementById('qrcodeInviteForm').style.display = method === 'qrcode' ? 'block' : 'none';
-        }
-        
-        function copyInviteLink() {
-            showToast('链接已复制到剪贴板');
+            document.getElementById('wechatInviteForm').style.display = method === 'wechat' ? 'block' : 'none';
+
+            const confirmBtn = document.querySelector('#inviteMemberModal .modal-actions .modal-btn.confirm');
+            if (confirmBtn) {
+                confirmBtn.style.display = method === 'wechat' ? 'none' : 'inline-block';
+                if (method === 'qrcode') {
+                    confirmBtn.textContent = '下载二维码';
+                } else {
+                    confirmBtn.textContent = '发送邀请';
+                }
+            }
         }
         
         function sendInvite() {
@@ -1628,12 +1722,31 @@
                     showToast('邀请已发送');
                     closeInviteMemberModal();
                 });
-            } else if (currentInviteMethod === 'link') {
-                showToast('链接已复制到剪贴板');
-                closeInviteMemberModal();
-            } else {
+            } else if (currentInviteMethod === 'qrcode') {
                 showToast('二维码已生成');
                 closeInviteMemberModal();
+            }
+        }
+
+        function shareToWechat() {
+            const targetName = currentInviteTarget;
+            const cardTitle = document.getElementById('wechatCardTitle');
+            const cardDesc = document.getElementById('wechatCardDesc');
+            if (cardTitle) cardTitle.textContent = `邀请你加入"${targetName}"`;
+            if (cardDesc) cardDesc.textContent = '点击卡片加入项目，开始团队协作';
+
+            if (typeof wx !== 'undefined' && wx.miniProgram && wx.miniProgram.shareAppMessage) {
+                wx.miniProgram.shareAppMessage({
+                    title: `邀请你加入"${targetName}"`,
+                    path: '/pages/project-detail/index?invite=1'
+                });
+            } else {
+                showToast('正在调起微信分享面板...');
+                setTimeout(function() {
+                    showAppModal('分享成功', `已调起微信分享，选择好友发送邀请卡片即可邀请其加入"${targetName}"`, function() {
+                        closeInviteMemberModal();
+                    });
+                }, 1500);
             }
         }
         

@@ -51,12 +51,159 @@
             cursor: default;
         }
 
+        .project-name-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #FFFFFF;
+            display: none;
+        }
+
+        .project-meta {
+            margin-top: 6px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.85);
+        }
+
+        .view-only {
+            display: none;
+        }
+
+        .view-mode .view-only {
+            display: block !important;
+        }
+
+        .view-mode .edit-only {
+            display: none !important;
+        }
+
+        .view-mode .project-name-input,
+        .view-mode .form-input,
+        .view-mode .form-select,
+        .view-mode .category-option,
+        .view-mode .house-type-option,
+        .view-mode .style-option,
+        .view-mode #uploadArea,
+        .view-mode #attachmentList,
+        .view-mode .area-unit {
+            display: none !important;
+        }
+
+        .view-mode .attachment-item {
+            display: block;
+        }
+
+        .view-mode .attachment-item .delete-btn {
+            display: none !important;
+        }
+
+        .project-info-page.view-mode .project-name-input {
+            display: none !important;
+        }
+
+        .project-info-page.view-mode .project-name-text {
+            display: block !important;
+        }
+
         .info-header .edit-btn {
             font-size: 12px;
             color: rgba(255, 255, 255, 0.9);
             padding: 3px 10px;
             border: 1px solid rgba(255, 255, 255, 0.4);
             border-radius: 12px;
+        }
+
+        .project-name-row .action-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .demo-control-panel {
+            position: fixed;
+            top: 130px;
+            left: calc(50% + 198px + 16px);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            z-index: 9999;
+            min-width: 180px;
+        }
+
+        .demo-control-panel .panel-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .demo-control-panel .control-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .demo-control-panel .control-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .demo-control-panel .control-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 40px;
+            height: 22px;
+            background-color: #d9d9d9;
+            border-radius: 11px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch.active {
+            background-color: var(--success-color);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            background-color: #fff;
+            border-radius: 50%;
+            transition: transform 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(18px);
+        }
+
+        .demo-control-panel .status-text {
+            font-size: 11px;
+            margin-top: 8px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .demo-control-panel .status-text.uncertified {
+            background: #FFF7E6;
+            color: #D48806;
+        }
+
+        .demo-control-panel .status-text.certified {
+            background: #E6F7FF;
+            color: #0050B3;
         }
 
         .info-header .edit-btn:hover {
@@ -98,8 +245,9 @@
 
         .info-row {
             display: flex;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border-color);
+            align-items: flex-start;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
         }
 
         .info-row:last-child {
@@ -107,9 +255,11 @@
         }
 
         .info-label {
-            width: 80px;
+            width: 90px;
+            min-width: 90px;
             font-size: 13px;
             color: var(--text-tertiary);
+            line-height: 1.6;
             flex-shrink: 0;
         }
 
@@ -117,6 +267,84 @@
             flex: 1;
             font-size: 14px;
             color: var(--text-primary);
+            line-height: 1.8;
+            word-break: break-word;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .view-mode .form-group {
+            margin-bottom: 22px;
+        }
+
+        .view-mode .info-value {
+            margin-top: 10px;
+        }
+
+        .view-mode .area-input-wrapper {
+            display: none !important;
+        }
+
+        .view-mode .area-unit {
+            display: none !important;
+        }
+
+        .date-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .date-row .form-group {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .view-mode .info-value {
+            background-color: transparent;
+            padding: 0;
+            border: none;
+            min-height: auto;
+            display: block;
+            align-items: stretch;
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        .view-mode .form-section {
+            background-color: #FFFFFF;
+            border-radius: 14px;
+            border: 1px solid rgba(0,0,0,0.08);
+        }
+
+        .view-mode .form-group {
+            margin-bottom: 14px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+        }
+
+        .view-mode .form-group:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .view-mode .info-value {
+            margin-top: 6px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .view-mode .form-section-title {
+            background-color: transparent;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .form-section + .form-section {
+            margin-top: 10px;
         }
 
         .style-tags {
@@ -126,36 +354,47 @@
         }
 
         .style-tag {
-            padding: 4px 10px;
-            background-color: var(--status-primary-bg);
-            border-radius: 12px;
+            padding: 6px 12px;
+            background-color: rgba(240, 242, 245, 0.9);
+            border-radius: 999px;
             font-size: 12px;
-            color: var(--primary-color);
+            color: var(--text-primary);
+            border: 1px solid rgba(0,0,0,0.08);
         }
 
         .attachment-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
         }
 
         .attachment-item {
             display: flex;
             align-items: center;
-            padding: 10px 12px;
-            background-color: var(--bg-secondary);
-            border-radius: 8px;
+            justify-content: space-between;
+            padding: 12px 14px;
+            background-color: #F7F8FA;
+            border-radius: 12px;
+            border: 1px solid rgba(0,0,0,0.05);
+            cursor: default;
+        }
+
+        .attachment-item:hover {
+            background-color: #F2F4F7;
         }
 
         .attachment-item .icon {
-            font-size: 20px;
+            font-size: 18px;
             margin-right: 10px;
         }
 
         .attachment-item .name {
             flex: 1;
-            font-size: 13px;
+            font-size: 14px;
             color: var(--text-primary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .attachment-item .action {
@@ -163,6 +402,150 @@
             color: var(--primary-color);
             margin-right: 8px;
             cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .attachment-item .action:hover {
+            text-decoration: underline;
+        }
+
+        .attachments-view {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .attachment-preview {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .attachment-preview a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            background: #F7F8FA;
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 10px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 13px;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .attachment-preview .attachment-download {
+            font-size: 12px;
+            color: var(--primary-color);
+            cursor: pointer;
+            white-space: nowrap;
+            padding: 8px 10px;
+            background: rgba(255,255,255,0.9);
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 8px;
+        }
+
+        .attachment-preview:hover {
+            background: #F2F4F7;
+        }
+
+        .attachments-view a:hover {
+            background: #F2F4F7;
+        }
+
+        .attachments-view a .icon {
+            font-size: 16px;
+        }
+
+        .attachment-item .delete-btn {
+            font-size: 12px;
+            color: var(--error-color);
+            cursor: pointer;
+            display: none;
+        }
+
+        .attachment-item.editable .delete-btn {
+            display: inline;
+        }
+
+        .view-mode .attachment-item {
+            cursor: pointer;
+        }
+
+        .view-mode .attachment-item .action {
+            color: var(--primary-color);
+        }
+
+        .view-mode .attachment-item .delete-btn {
+            display: none !important;
+        }
+
+        .view-mode #uploadArea {
+            display: none !important;
+        }
+
+        .attachment-empty {
+            color: var(--text-tertiary);
+            font-size: 13px;
+            padding: 10px 12px;
+            background: #FBFBFB;
+            border: 1px dashed rgba(0,0,0,0.08);
+            border-radius: 10px;
+        }
+
+        .attachment-preview {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 10px 12px;
+            background: #F7F8FA;
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 10px;
+            gap: 12px;
+        }
+
+        .attachment-preview a {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .attachment-preview .attachment-download {
+            margin-left: 12px;
+            flex-shrink: 0;
+        }
+
+        .view-mode .attachment-preview {
+            flex-wrap: wrap;
+        }
+
+        .attachment-preview a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+        }
+
+        .attachment-preview .attachment-download {
+            font-size: 12px;
+            color: var(--primary-color);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .attachment-preview:hover {
+            background: #F2F4F7;
         }
 
         .attachment-item .delete-btn {
@@ -553,6 +936,99 @@
         .modal-btn:hover {
             background-color: var(--primary-light);
         }
+
+        .preview-modal {
+            display: none;
+            position: absolute;
+            inset: 0;
+            z-index: 1100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .preview-modal.show {
+            display: flex;
+        }
+
+        .preview-modal .modal-mask {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0,0,0,0.55);
+        }
+
+        .preview-modal .preview-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #FFFFFF;
+            border-radius: 0;
+            padding: 20px 16px 16px;
+            z-index: 1;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .preview-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .preview-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1F1F1F;
+        }
+
+        .preview-close-icon {
+            font-size: 20px;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .preview-file-name {
+            font-size: 16px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            word-break: break-all;
+        }
+
+        .preview-file-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .preview-actions button {
+            flex: 1;
+            height: 42px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .preview-actions {
+            margin-top: auto;
+        }
+
+        .preview-actions .preview-download {
+            background-color: var(--primary-color);
+            color: #FFFFFF;
+        }
+
+        .preview-actions .preview-close {
+            background-color: #F5F5F5;
+            color: var(--text-primary);
+        }
     </style>
 </head>
 <body>
@@ -577,12 +1053,16 @@
             </div>
         </div>
         
-        <div class="page-content">
+        <div class="page-content project-info-page">
             <div class="info-header">
                 <div class="project-name-row">
+                    <span class="project-name-text view-only" id="projectNameText">XX小区整体装修</span>
                     <input type="text" class="project-name-input" id="projectName" value="XX小区整体装修" disabled>
-                    <span class="edit-btn" id="editProjectNameBtn" onclick="toggleProjectNameEdit()">编辑</span>
+                    <div class="action-group">
+                        <span class="edit-btn" id="editModeBtn" onclick="toggleFullEditMode(event)">编辑</span>
+                    </div>
                 </div>
+                <div class="project-meta" id="projectCreatedAtView">创建时间：2024-01-15 10:00</div>
                 <div class="project-status">进行中</div>
             </div>
             
@@ -590,7 +1070,6 @@
                 <div class="form-section">
                     <div class="form-section-title">
                         <span>客户信息</span>
-                        <span class="edit-btn" id="editBtn1" onclick="toggleEdit('customer')">编辑</span>
                     </div>
                     
                     <div class="form-group">
@@ -599,7 +1078,8 @@
                             <span>客户姓名</span>
                         </label>
                         <input type="text" class="form-input" id="customerName" value="张先生" disabled>
-                        <div class="error-message" id="customerNameError">请输入客户姓名</div>
+                    <div class="view-only info-value" id="customerNameView">张先生</div>
+                    <div class="error-message" id="customerNameError">请输入客户姓名</div>
                     </div>
                     
                     <div class="form-group">
@@ -607,15 +1087,15 @@
                             <span class="required">*</span>
                             <span>联系方式</span>
                         </label>
-                        <input type="tel" class="form-input" id="customerPhone" value="138****5678" disabled>
-                        <div class="error-message" id="customerPhoneError">请输入正确的手机号码</div>
+                        <input type="tel" class="form-input" id="customerPhone" value="13812345678" disabled>
+                    <div class="view-only info-value" id="customerPhoneView">13812345678</div>
+                    <div class="error-message" id="customerPhoneError">请输入正确的手机号码</div>
                     </div>
                 </div>
                 
                 <div class="form-section">
                     <div class="form-section-title">
                         <span>房屋信息</span>
-                        <span class="edit-btn" id="editBtn2" onclick="toggleEdit('house')">编辑</span>
                     </div>
                     
                     <div class="form-group">
@@ -623,7 +1103,7 @@
                             <span class="required">*</span>
                             <span>所在区域</span>
                         </label>
-                        <div class="region-select">
+                        <div class="region-select edit-only">
                             <select class="form-select" id="province" disabled>
                                 <option value="浙江省" selected>浙江省</option>
                             </select>
@@ -634,7 +1114,9 @@
                                 <option value="西湖区" selected>西湖区</option>
                             </select>
                         </div>
+                        <div class="view-only info-value" id="regionView">浙江省 / 杭州市 / 西湖区</div>
                         <input type="text" class="form-input" id="address" value="XX街道XX小区*栋***室" disabled>
+                        <div class="view-only info-value" id="addressView">XX街道XX小区*栋***室</div>
                         <div class="error-message" id="regionError">请选择完整的区域信息</div>
                     </div>
                     
@@ -643,10 +1125,11 @@
                             <span class="required">*</span>
                             <span>房屋面积</span>
                         </label>
-                        <div style="position: relative;">
+                        <div class="area-input-wrapper" style="position: relative;">
                             <input type="number" class="form-input" id="area" value="120" style="padding-right: 40px;" disabled>
-                            <span style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-tertiary);">㎡</span>
+                            <span class="area-unit" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-tertiary);">㎡</span>
                         </div>
+                        <div class="view-only info-value" id="areaView">120㎡</div>
                         <div class="error-message" id="areaError">请输入房屋面积</div>
                     </div>
                     
@@ -655,7 +1138,7 @@
                             <span class="required">*</span>
                             <span>房屋类别</span>
                         </label>
-                        <div class="category-options" id="categoryOptions">
+                        <div class="category-options edit-only" id="categoryOptions">
                             <div class="category-option selected" data-value="maopi">
                                 <div class="icon">🏠</div>
                                 <div class="text">毛坯房</div>
@@ -669,6 +1152,7 @@
                                 <div class="text">旧房改造</div>
                             </div>
                         </div>
+                        <div class="view-only info-value" id="categoryView">毛坯房</div>
                         <div class="error-message" id="categoryError">请选择房屋类别</div>
                     </div>
                     
@@ -677,7 +1161,7 @@
                             <span class="required">*</span>
                             <span>房型</span>
                         </label>
-                        <div class="house-type-options" id="houseTypeOptions">
+                        <div class="house-type-options edit-only" id="houseTypeOptions">
                             <div class="house-type-option disabled" data-value="bieshu">
                                 <div class="icon">🏰</div>
                                 <div class="text">别墅</div>
@@ -691,6 +1175,7 @@
                                 <div class="text">平层</div>
                             </div>
                         </div>
+                        <div class="view-only info-value" id="houseTypeView">平层</div>
                         <div class="error-message" id="houseTypeError">请选择房型</div>
                     </div>
                 </div>
@@ -698,17 +1183,18 @@
                 <div class="form-section">
                     <div class="form-section-title">
                         <span>计划时间</span>
-                        <span class="edit-btn" id="editBtn3" onclick="toggleEdit('time')">编辑</span>
                     </div>
                     
                     <div class="date-row">
                         <div class="form-group">
                             <label class="form-label">计划开工日期</label>
                             <input type="date" class="form-input" id="startDate" value="2024-01-15" disabled>
+                            <div class="view-only info-value" id="startDateView">2024-01-15</div>
                         </div>
                         <div class="form-group">
                             <label class="form-label">计划入住日期</label>
                             <input type="date" class="form-input" id="endDate" value="2024-04-15" disabled>
+                            <div class="view-only info-value" id="endDateView">2024-04-15</div>
                         </div>
                     </div>
                 </div>
@@ -716,12 +1202,11 @@
                 <div class="form-section">
                     <div class="form-section-title">
                         <span>装修风格</span>
-                        <span class="edit-btn" id="editBtn4" onclick="toggleEdit('style')">编辑</span>
                     </div>
                     
                     <div class="form-group">
-                        <label class="form-label">选择喜欢的装修风格（可多选）</label>
-                        <div class="style-options" id="styleOptions">
+                        <label class="form-label edit-only">选择喜欢的装修风格（可多选）</label>
+                        <div class="style-options edit-only" id="styleOptions">
                             <div class="style-option selected disabled" data-value="zhongshi">中式</div>
                             <div class="style-option disabled" data-value="fashi">法式</div>
                             <div class="style-option selected disabled" data-value="xiandai">现代</div>
@@ -730,16 +1215,16 @@
                             <div class="style-option disabled" data-value="gongye">工业</div>
                             <div class="style-option disabled" data-value="meishi">美式</div>
                         </div>
+                        <div class="style-tags view-only" id="styleView"></div>
                     </div>
                 </div>
                 
                 <div class="form-section">
                     <div class="form-section-title">
                         <span>附件</span>
-                        <span class="edit-btn" id="editBtn5" onclick="toggleEdit('attachment')">编辑</span>
                     </div>
                     
-                    <div class="attachment-list" id="attachmentList">
+                    <div class="attachment-list edit-only" id="attachmentList">
                         <div class="attachment-item" id="attachment1">
                             <span class="icon">📄</span>
                             <span class="name">户型图.pdf</span>
@@ -753,8 +1238,9 @@
                             <span class="delete-btn" onclick="deleteAttachment('attachment2')">删除</span>
                         </div>
                     </div>
+                    <div class="view-only info-value" id="attachmentsView"></div>
                     
-                    <div class="upload-area" id="uploadArea" onclick="selectFile()">
+                    <div class="upload-area edit-only" id="uploadArea" onclick="selectFile()">
                         <div class="icon">📁</div>
                         <div class="text">点击上传附件</div>
                         <div class="hint">支持 PDF、图片、Word、Excel、ZIP 等格式</div>
@@ -778,8 +1264,35 @@
                 <div class="modal-btn" onclick="closeModal()">确定</div>
             </div>
         </div>
+
+        <div class="preview-modal" id="attachmentPreviewModal">
+            <div class="modal-mask" onclick="closePreviewModal()"></div>
+            <div class="preview-content">
+                <div class="preview-header">
+                    <div class="preview-back" onclick="closePreviewModal()">← 返回</div>
+                    <div class="preview-title">附件预览</div>
+                    <div></div>
+                </div>
+                <div class="preview-file-name" id="previewFilename">文件名</div>
+                <div class="preview-file-desc">在此页面中查看附件内容摘要。如需保存，可点击下载按钮。</div>
+                <div class="preview-placeholder">附件内容预览区，当前仅演示页面结构。</div>
+                <div class="preview-actions">
+                    <button class="preview-download" onclick="confirmDownload()">下载</button>
+                    <button class="preview-close" onclick="closePreviewModal()">关闭</button>
+                </div>
+            </div>
+        </div>
     </div>
-    
+
+    <div class="demo-control-panel" id="permissionControlPanel">
+        <div class="panel-title">权限演示</div>
+        <div class="control-item">
+            <span class="control-label">有权限编辑</span>
+            <div class="toggle-switch" id="permissionToggle" onclick="togglePermissionStatus()"></div>
+        </div>
+        <div class="status-text uncertified" id="permissionStatusText">无权限：客户信息部分脱敏</div>
+    </div>
+
     <div class="page-nav">
         <div class="page-nav-title">原型导航</div>
         <a href="home.html" class="page-nav-item">首页</a>
@@ -794,9 +1307,11 @@
     
     <script>
         let isEditing = false;
+        let hasPermission = false;
         let selectedCategory = 'maopi';
         let selectedHouseType = 'pingceng';
         let selectedStyles = ['zhongshi', 'xiandai'];
+        let projectCreatedAt = '2024-01-15 10:00';
         let isEditingProjectName = false;
         
         function loadProjectData() {
@@ -806,6 +1321,7 @@
                 var data = JSON.parse(rawData);
                 if (data.projectName) {
                     document.getElementById('projectName').value = data.projectName;
+                    document.getElementById('projectNameText').textContent = data.projectName;
                 }
                 if (data.customerName) {
                     document.getElementById('customerName').value = data.customerName;
@@ -825,30 +1341,44 @@
                     ensureSelectOption('district', data.district);
                     document.getElementById('district').value = data.district;
                 }
+                if (data.province && data.city && data.district) {
+                    document.getElementById('regionView').textContent = data.province + ' / ' + data.city + ' / ' + data.district;
+                }
                 if (data.address) {
                     document.getElementById('address').value = data.address;
+                    document.getElementById('addressView').textContent = data.address;
                 }
                 if (data.area) {
                     document.getElementById('area').value = data.area;
+                    document.getElementById('areaView').textContent = data.area + '㎡';
                 }
                 if (data.category) {
                     selectedCategory = data.category;
                     document.querySelectorAll('#categoryOptions .category-option').forEach(function(opt) {
                         opt.classList.toggle('selected', opt.dataset.value === data.category);
                     });
+                    document.getElementById('categoryView').textContent = optText(data.category);
                 }
                 if (data.houseType) {
                     selectedHouseType = data.houseType;
                     document.querySelectorAll('#houseTypeOptions .house-type-option').forEach(function(opt) {
                         opt.classList.toggle('selected', opt.dataset.value === data.houseType);
                     });
+                    document.getElementById('houseTypeView').textContent = optText(data.houseType);
                 }
                 if (Array.isArray(data.styles)) {
                     selectedStyles = data.styles;
                     document.querySelectorAll('#styleOptions .style-option').forEach(function(opt) {
                         opt.classList.toggle('selected', data.styles.includes(opt.dataset.value));
                     });
+                    renderStyleView();
                 }
+                if (Array.isArray(data.attachments)) {
+                    renderAttachmentList(data.attachments);
+                    renderAttachmentsView(data.attachments);
+                }
+                loadCreatedAt(data);
+                renderViewFields();
             } catch (e) {
                 console.warn('加载项目数据失败', e);
             }
@@ -898,12 +1428,14 @@
         function toggleEdit(section) {
             const form = document.getElementById('infoForm');
             const submitSection = document.getElementById('submitSection');
+            const editModeBtn = document.getElementById('editModeBtn');
             
             if (isEditing) {
                 form.classList.add('view-mode');
                 submitSection.classList.remove('show');
                 disableAllFields();
                 document.querySelectorAll('.edit-btn').forEach(btn => btn.textContent = '编辑');
+                editModeBtn.textContent = '编辑';
                 isEditing = false;
             } else {
                 form.classList.remove('view-mode');
@@ -911,8 +1443,44 @@
                 enableSection(section);
                 document.querySelectorAll('.edit-btn').forEach(btn => btn.textContent = '编辑');
                 event.target.textContent = '取消';
+                editModeBtn.textContent = '取消';
                 isEditing = true;
             }
+        }
+
+        function toggleFullEditMode() {
+            const form = document.getElementById('infoForm');
+            const submitSection = document.getElementById('submitSection');
+            const editModeBtn = document.getElementById('editModeBtn');
+            const allButtons = document.querySelectorAll('.edit-btn');
+            const pageContainer = document.querySelector('.project-info-page');
+
+            if (isEditing) {
+                form.classList.add('view-mode');
+                if (pageContainer) pageContainer.classList.add('view-mode');
+                submitSection.classList.remove('show');
+                disableAllFields();
+                allButtons.forEach(btn => btn.textContent = '编辑');
+                editModeBtn.textContent = '编辑';
+                isEditing = false;
+                renderViewFields();
+            } else {
+                form.classList.remove('view-mode');
+                if (pageContainer) pageContainer.classList.remove('view-mode');
+                submitSection.classList.add('show');
+                enableAllFields();
+                allButtons.forEach(btn => btn.textContent = '取消');
+                editModeBtn.textContent = '取消';
+                isEditing = true;
+            }
+        }
+
+        function enableAllFields() {
+            document.querySelectorAll('.form-input').forEach(input => input.disabled = false);
+            document.querySelectorAll('.form-select').forEach(select => select.disabled = false);
+            document.querySelectorAll('.category-option, .house-type-option, .style-option').forEach(opt => opt.classList.remove('disabled'));
+            document.querySelectorAll('#attachmentList .attachment-item').forEach(item => item.classList.add('editable'));
+            document.getElementById('uploadArea').style.display = 'block';
         }
         
         function enableSection(section) {
@@ -946,18 +1514,227 @@
         
         function saveForm() {
             if (validateForm()) {
-                alert('保存成功！');
                 const form = document.getElementById('infoForm');
                 const submitSection = document.getElementById('submitSection');
+                const pageContainer = document.querySelector('.project-info-page');
                 form.classList.add('view-mode');
+                if (pageContainer) pageContainer.classList.add('view-mode');
                 submitSection.classList.remove('show');
                 disableAllFields();
                 document.querySelectorAll('.edit-btn').forEach(btn => btn.textContent = '编辑');
+                document.getElementById('editModeBtn').textContent = '编辑';
+                saveProjectData();
+                renderViewFields();
                 isEditing = false;
+                showModal('保存成功', '已保存项目修改，您可以继续查看或关闭该弹窗。');
             }
         }
         
+        function saveProjectData() {
+            const data = {
+                projectName: document.getElementById('projectName').value,
+                customerName: document.getElementById('customerName').value,
+                customerPhone: document.getElementById('customerPhone').value,
+                province: document.getElementById('province').value,
+                city: document.getElementById('city').value,
+                district: document.getElementById('district').value,
+                address: document.getElementById('address').value,
+                area: document.getElementById('area').value,
+                category: selectedCategory,
+                houseType: selectedHouseType,
+                styles: selectedStyles,
+                attachments: Array.from(document.querySelectorAll('#attachmentList .attachment-item')).map(item => {
+                    return item.querySelector('.name')?.textContent || '';
+                })
+            };
+            data.created_at = projectCreatedAt;
+            localStorage.setItem('newProjectData', JSON.stringify(data));
+        }
+
+        function renderStyleView() {
+            const styleView = document.getElementById('styleView');
+            if (!styleView) return;
+            styleView.innerHTML = '';
+            selectedStyles.forEach(function(style) {
+                const tag = document.createElement('span');
+                tag.className = 'style-tag';
+                tag.textContent = optText(style);
+                styleView.appendChild(tag);
+            });
+        }
+
+        function renderAttachmentsView(attachments) {
+            const view = document.getElementById('attachmentsView');
+            if (!view) return;
+            view.innerHTML = '';
+            if (!Array.isArray(attachments) || attachments.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'attachment-empty';
+                empty.textContent = '暂无附件';
+                view.appendChild(empty);
+                return;
+            }
+            const container = document.createElement('div');
+            container.className = 'attachments-view';
+            attachments.forEach(function(name) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'attachment-preview';
+                wrapper.onclick = function() {
+                    openPreview(name);
+                };
+                wrapper.innerHTML = '<span class="icon">📄</span><span class="attachment-name">' + name + '</span>';
+                container.appendChild(wrapper);
+            });
+            view.appendChild(container);
+        }
+
+        function renderAttachmentList(attachments) {
+            const list = document.getElementById('attachmentList');
+            if (!list) return;
+            list.innerHTML = '';
+            if (!Array.isArray(attachments) || attachments.length === 0) {
+                list.innerHTML = '<div class="attachment-item"><span class="icon">📄</span><span class="name">无附件</span></div>';
+                return;
+            }
+            attachments.forEach(function(name, index) {
+                const item = document.createElement('div');
+                item.className = 'attachment-item';
+                item.id = 'attachment' + (index + 1);
+                item.innerHTML = '<span class="icon">📄</span>' +
+                    '<span class="name">' + name + '</span>' +
+                    '<span class="action" onclick="viewAttachment(\'' + name + '\')">查看</span>' +
+                    '<span class="delete-btn" onclick="deleteAttachment(\'attachment' + (index + 1) + '\')">删除</span>';
+                list.appendChild(item);
+            });
+        }
+
+        function renderCreatedAt() {
+            const view = document.getElementById('projectCreatedAtView');
+            if (view) {
+                view.textContent = '创建时间：' + projectCreatedAt;
+            }
+        }
+
+        function renderViewFields() {
+            const projectName = document.getElementById('projectName').value || '';
+            const projectNameText = document.getElementById('projectNameText');
+            if (projectNameText) {
+                projectNameText.textContent = projectName;
+            }
+
+            const customerNameView = document.getElementById('customerNameView');
+            const customerPhoneView = document.getElementById('customerPhoneView');
+            if (customerNameView) {
+                customerNameView.textContent = document.getElementById('customerName').value || '';
+            }
+            if (customerPhoneView) {
+                customerPhoneView.textContent = document.getElementById('customerPhone').value || '';
+            }
+
+            const address = document.getElementById('address').value || '';
+            const area = document.getElementById('area').value || '';
+            const startDate = document.getElementById('startDate').value || '';
+            const endDate = document.getElementById('endDate').value || '';
+            const region = [document.getElementById('province').value, document.getElementById('city').value, document.getElementById('district').value].filter(Boolean).join(' / ');
+            const category = optText(selectedCategory);
+            const houseType = optText(selectedHouseType);
+
+            const regionView = document.getElementById('regionView');
+            const addressView = document.getElementById('addressView');
+            const areaView = document.getElementById('areaView');
+            const startDateView = document.getElementById('startDateView');
+            const endDateView = document.getElementById('endDateView');
+            const categoryView = document.getElementById('categoryView');
+            const houseTypeView = document.getElementById('houseTypeView');
+
+            if (regionView) regionView.textContent = region;
+            if (addressView) addressView.textContent = address;
+            if (areaView) areaView.textContent = area ? area + '㎡' : '';
+            if (startDateView) startDateView.textContent = startDate;
+            if (endDateView) endDateView.textContent = endDate;
+            if (categoryView) categoryView.textContent = category;
+            if (houseTypeView) houseTypeView.textContent = houseType;
+
+            renderStyleView();
+            renderAttachmentsView(Array.from(document.querySelectorAll('#attachmentList .attachment-item')).map(item => item.querySelector('.name')?.textContent || '').filter(Boolean));
+            renderCreatedAt();
+        }
+
+        function optText(value) {
+            const map = {
+                maopi: '毛坯房',
+                jingzhuang: '精装房',
+                gaizao: '旧房改造',
+                bieshu: '别墅',
+                fushi: '复式',
+                pingceng: '平层',
+                zhongshi: '中式',
+                fashi: '法式',
+                xiandai: '现代',
+                qingshe: '轻奢',
+                jianyue: '简约',
+                gongye: '工业',
+                meishi: '美式'
+            };
+            return map[value] || value;
+        }
+
+        function loadPermissionStatus() {
+            hasPermission = localStorage.getItem('projectInfoHasPermission') === 'true';
+            updatePermissionUI();
+        }
+
+        function loadCreatedAt(data) {
+            if (data && data.created_at) {
+                projectCreatedAt = data.created_at;
+            }
+            renderCreatedAt();
+        }
+
+        function togglePermissionStatus() {
+            hasPermission = !hasPermission;
+            localStorage.setItem('projectInfoHasPermission', hasPermission ? 'true' : 'false');
+            updatePermissionUI();
+        }
+
+        function updatePermissionUI() {
+            const toggleEl = document.getElementById('permissionToggle');
+            const statusText = document.getElementById('permissionStatusText');
+            const editButtons = document.querySelectorAll('.edit-btn');
+            const editModeBtn = document.getElementById('editModeBtn');
+
+            const submitSection = document.getElementById('submitSection');
+            const pageContainer = document.querySelector('.project-info-page');
+            document.getElementById('infoForm').classList.add('view-mode');
+            if (pageContainer) pageContainer.classList.add('view-mode');
+            submitSection.classList.remove('show');
+            disableAllFields();
+            isEditing = false;
+
+            if (hasPermission) {
+                toggleEl.classList.add('active');
+                statusText.textContent = '有权限：显示编辑入口';
+                statusText.className = 'status-text certified';
+                editButtons.forEach(btn => btn.style.display = 'inline-flex');
+                editModeBtn.style.display = 'inline-flex';
+                editModeBtn.textContent = '编辑';
+                loadProjectData();
+            } else {
+                toggleEl.classList.remove('active');
+                statusText.textContent = '无权限：只读展示';
+                statusText.className = 'status-text uncertified';
+                editButtons.forEach(btn => btn.style.display = 'none');
+                editModeBtn.style.display = 'none';
+                renderViewFields();
+            }
+        }
+
+        function applyPermissionMasking() {
+            renderViewFields();
+        }
+
         loadProjectData();
+        loadPermissionStatus();
         
         function validateForm() {
             let isValid = true;
@@ -1039,10 +1816,40 @@
             closeActionMenu();
         }
         
+        let currentPreviewFilename = '';
+
         function viewAttachment(filename) {
-            alert('查看附件: ' + filename);
+            openPreview(filename);
         }
-        
+
+        function openPreview(filename) {
+            currentPreviewFilename = filename;
+            const modal = document.getElementById('attachmentPreviewModal');
+            const filenameEl = document.getElementById('previewFilename');
+            if (modal && filenameEl) {
+                filenameEl.textContent = filename;
+                modal.classList.add('show');
+            }
+        }
+
+        function confirmDownload() {
+            if (currentPreviewFilename) {
+                downloadAttachment(currentPreviewFilename);
+            }
+        }
+
+        function closePreviewModal() {
+            const modal = document.getElementById('attachmentPreviewModal');
+            if (modal) {
+                modal.classList.remove('show');
+            }
+        }
+
+        function downloadAttachment(filename) {
+            const message = filename ? '开始下载：' + filename : '开始下载附件';
+            alert(message);
+        }
+
         function deleteAttachment(attachmentId) {
             if (confirm('确定要删除这个附件吗？')) {
                 const item = document.getElementById(attachmentId);

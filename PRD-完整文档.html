@@ -392,15 +392,15 @@
                         <td>审核通过/驳回合同、查看合同详情、管理合同文本模板、管理阶段任务模板</td>
                     </tr>
                     <tr>
-                        <td rowspan="4">服务方小程序</td>
+                        <td rowspan="9">服务方小程序</td>
+                        <td>设计师</td>
+                        <td>设计服务提供者，负责设计方案</td>
+                        <td>参与设计相关任务、查看项目进度、执行/确认任务</td>
+                    </tr>
+                    <tr>
                         <td>项目总</td>
                         <td>项目管理总负责人，负责项目整体管理</td>
                         <td>创建和管理项目、管理项目成员、查看合同和任务、管理对账单</td>
-                    </tr>
-                    <tr>
-                        <td>设计师</td>
-                        <td>设计服务提供者</td>
-                        <td>参与设计相关任务、查看项目进度、执行/确认任务</td>
                     </tr>
                     <tr>
                         <td>工长</td>
@@ -408,9 +408,34 @@
                         <td>管理施工组任务、执行/确认任务、提交验收、管理对账单</td>
                     </tr>
                     <tr>
-                        <td>班组长</td>
-                        <td>工人班长，负责具体施工执行</td>
-                        <td>执行分配的任务、上传执行记录、提交验收</td>
+                        <td>拆除工</td>
+                        <td>拆改阶段施工人员</td>
+                        <td>执行拆除相关任务、上传执行记录、提交验收</td>
+                    </tr>
+                    <tr>
+                        <td>水电工</td>
+                        <td>水电阶段施工人员</td>
+                        <td>执行水电相关任务、上传执行记录、提交验收</td>
+                    </tr>
+                    <tr>
+                        <td>木作工</td>
+                        <td>木作阶段施工人员</td>
+                        <td>执行木作相关任务、上传执行记录、提交验收</td>
+                    </tr>
+                    <tr>
+                        <td>泥瓦工</td>
+                        <td>泥瓦阶段施工人员</td>
+                        <td>执行泥瓦相关任务、上传执行记录、提交验收</td>
+                    </tr>
+                    <tr>
+                        <td>油漆工</td>
+                        <td>油漆阶段施工人员</td>
+                        <td>执行油漆相关任务、上传执行记录、提交验收</td>
+                    </tr>
+                    <tr>
+                        <td>小零工</td>
+                        <td>零散施工人员</td>
+                        <td>执行零散任务、上传执行记录、提交验收</td>
                     </tr>
                     <tr>
                         <td>业主小程序</td>
@@ -761,7 +786,7 @@
                     <tr><td>任务执行</td><td><a href="PRD-任务模块详细规格.html#page-task-detail-service" target="_blank">服务方小程序</a></td><td>任务详情页、任务验收页</td><td>配置执行人、上传执行记录（照片/视频）、提交验收</td></tr>
                     <tr><td>任务验收</td><td><a href="PRD-任务模块详细规格.html#page-task-acceptance-service" target="_blank">服务方小程序</a>、<a href="PRD-任务模块详细规格.html#page-task-acceptance-owner" target="_blank">业主小程序</a></td><td>任务验收页</td><td>验收确认、驳回（需填原因）、评价</td></tr>
                     <tr><td>任务报告</td><td><a href="PRD-任务模块详细规格.html#page-task-detail-service" target="_blank">服务方小程序</a>、<a href="PRD-任务模块详细规格.html#page-task-detail-owner" target="_blank">业主小程序</a></td><td>任务报告页</td><td>任务执行记录、验收评价查看</td></tr>
-                    <tr><td>待办管理</td><td><a href="PRD-任务模块详细规格.html#page-task-list-service" target="_blank">服务方小程序</a>、<a href="PRD-任务模块详细规格.html#page-task-list-owner" target="_blank">业主小程序</a></td><td>待办列表页</td><td>待处理/待确认任务汇总</td></tr>
+                    <tr><td>待办管理</td><td><a href="PRD-任务模块详细规格.html#page-todo-list-service" target="_blank">服务方小程序</a>、<a href="PRD-任务模块详细规格.html#page-todo-list-owner" target="_blank">业主小程序</a></td><td>全部待办页</td><td>待处理/待确认任务汇总</td></tr>
 
                     <!-- 项目管理 -->
                     <tr><td rowspan="7">项目管理</td><td>项目概览</td><td><a href="PRD-项目模块详细规格.html#page-home-service" target="_blank">服务方小程序</a>、<a href="PRD-项目模块详细规格.html#page-detail-owner" target="_blank">业主小程序</a></td><td>首页、项目列表页、项目详情页</td><td>今日动态、快捷入口、项目列表查看筛选搜索、项目概览信息</td></tr>
@@ -773,7 +798,7 @@
                     <tr><td>项目动态</td><td><a href="PRD-项目模块详细规格.html#page-activity-service" target="_blank">服务方小程序</a>、<a href="PRD-项目模块详细规格.html#page-activity-owner" target="_blank">业主小程序</a></td><td>项目动态页</td><td>查看项目全部动态记录，按时间线展示任务、合同、文件等操作记录</td></tr>
 
                     <!-- 待办管理 -->
-                    <tr><td rowspan="1">待办管理</td><td>待办事项</td><td><a href="PRD-任务模块详细规格.html#page-task-list-service" target="_blank">服务方小程序</a>、<a href="PRD-任务模块详细规格.html#page-task-list-owner" target="_blank">业主小程序</a></td><td>待办列表页</td><td>待处理/待确认任务汇总，快速跳转处理</td></tr>
+                    <tr><td rowspan="1">待办管理</td><td>待办事项</td><td><a href="PRD-任务模块详细规格.html#page-todo-list-service" target="_blank">服务方小程序</a>、<a href="PRD-任务模块详细规格.html#page-todo-list-owner" target="_blank">业主小程序</a></td><td>全部待办页</td><td>待处理/待确认任务汇总，快速跳转处理</td></tr>
 
                     <!-- 对账单管理 -->
                     <tr><td rowspan="2">对账单管理</td><td>对账单查看与新增</td><td><a href="PRD-项目模块详细规格.html#page-statement-list-service" target="_blank">服务方小程序</a>、<a href="PRD-项目模块详细规格.html#page-statement-list-owner" target="_blank">业主小程序</a></td><td>对账单列表页</td><td>服务方新增对账单、筛选查看；业主查看待确认对账单</td></tr>

@@ -175,6 +175,86 @@
             padding: 12px 16px 80px;
         }
 
+        /* Demo control panel for permission management simulation */
+        .demo-control-panel {
+            position: fixed;
+            top: 160px;
+            left: calc(50% + 198px + 16px);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+            z-index: 9999;
+            min-width: 220px;
+        }
+
+        .demo-control-panel .panel-title { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+        .demo-control-panel .control-item { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; gap: 8px; }
+        .demo-control-panel .control-label { font-size: 12px; color: var(--text-secondary); }
+        .demo-control-panel .status-text { font-size:12px; margin-top:6px; padding: 4px 8px; border-radius: 4px; text-align: center; }
+        .demo-control-panel .status-text.uncertified { background: #FFF7E6; color: #D48806; }
+        .demo-control-panel .status-text.certified { background: #E6F7FF; color: #0050B3; }
+        .demo-control-panel .status-text.partial { background: #F9F0FF; color: #722ED1; }
+        .demo-control-panel .segmented-control {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 8px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 3px;
+        }
+        .demo-control-panel .segment {
+            flex: 1;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-secondary);
+            padding: 6px 2px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            white-space: nowrap;
+        }
+        .demo-control-panel .segment.active {
+            background: var(--bg-primary);
+            color: var(--primary-color);
+            font-weight: 600;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 40px;
+            height: 22px;
+            background-color: #d9d9d9;
+            border-radius: 11px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch.active { background-color: var(--success-color); }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            background-color: #fff;
+            border-radius: 50%;
+            transition: transform 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .toggle-switch.active::after { transform: translateX(18px); }
+
+        .member-list.no-manage .arrow { display: none; }
+        .member-list.no-manage .permission-badge { pointer-events: none; opacity: 0.7; }
+        .member-list.no-manage .member-card { cursor: default; }
+
         .member-group {
             margin-bottom: 16px;
         }
@@ -963,32 +1043,6 @@
             font-weight: 500;
         }
 
-        .link-preview {
-            display: flex;
-            align-items: center;
-            padding: 12px;
-            background-color: var(--bg-secondary);
-            border-radius: 8px;
-            gap: 12px;
-        }
-
-        .link-preview .link-text {
-            flex: 1;
-            font-size: 12px;
-            color: var(--text-secondary);
-            word-break: break-all;
-        }
-
-        .link-preview .copy-btn {
-            padding: 6px 12px;
-            background-color: var(--primary-color);
-            color: #FFFFFF;
-            border-radius: 4px;
-            font-size: 12px;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
         .link-expire, .qrcode-expire {
             font-size: 12px;
             color: var(--text-tertiary);
@@ -1022,6 +1076,166 @@
             font-size: 13px;
             color: var(--text-secondary);
         }
+
+        .wechat-invite-preview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 16px;
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+        }
+
+        .wechat-share-card {
+            width: 100%;
+            background-color: #FFFFFF;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            margin-bottom: 16px;
+        }
+
+        .wechat-share-card .card-thumb {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #07C160 0%, #06AD56 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #FFFFFF;
+            flex-shrink: 0;
+        }
+
+        .wechat-share-card .card-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .wechat-share-card .card-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .wechat-share-card .card-desc {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .wechat-share-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            height: 44px;
+            background-color: #07C160;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .wechat-share-btn:hover {
+            background-color: #06AD56;
+        }
+
+        .wechat-share-btn:active {
+            background-color: #06AD56;
+        }
+
+        .wechat-share-btn .btn-icon {
+            font-size: 18px;
+        }
+
+        .wechat-invite-tip {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        /* 邀请身份分段：服务人员 / 业主及家人 */
+        .invite-category {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 3px;
+            margin-bottom: 16px;
+        }
+        .invite-category .cat-seg {
+            flex: 1;
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+            padding: 8px 2px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            white-space: nowrap;
+        }
+        .invite-category .cat-seg.active {
+            background: var(--bg-primary);
+            color: var(--primary-color);
+            font-weight: 600;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+
+        /* 与业主关系选择 */
+        .relationship-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .relationship-option {
+            display: flex;
+            align-items: center;
+            padding: 8px 14px;
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+            font-size: 13px;
+        }
+        .relationship-option:hover { background-color: #E6F7FF; }
+        .relationship-option.selected {
+            border-color: var(--primary-color);
+            background-color: var(--status-primary-bg);
+            color: var(--primary-color);
+        }
+
+        /* 落地端提示 */
+        .invite-target-app {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 4px;
+            padding: 8px 12px;
+            background-color: var(--status-primary-bg);
+            border-radius: 8px;
+            font-size: 12px;
+            color: var(--primary-color);
+        }
+        .invite-target-app .app-icon { font-size: 14px; }
+        .invite-target-app b { font-weight: 600; }
 
         .form-group {
             margin-bottom: 16px;
@@ -1376,7 +1590,7 @@
             
             <div class="search-result-info" id="searchResultInfo"></div>
             
-            <div class="member-list" id="memberList">
+            <div class="member-list no-manage" id="memberList">
             </div>
             
             <div class="invite-fab" onclick="showInviteModal()">+</div>
@@ -1389,6 +1603,12 @@
                     <div class="modal-close" onclick="closeInviteModal()">✕</div>
                 </div>
                 <div class="modal-body">
+                    <div class="invite-category" id="inviteCategory">
+                        <div class="cat-seg active" data-cat="service" onclick="selectInviteCategory(this, 'service')">服务人员</div>
+                        <div class="cat-seg" data-cat="owner" onclick="selectInviteCategory(this, 'owner')">业主/业主家人</div>
+                    </div>
+
+                    <div id="serviceInviteFields">
                     <div class="form-group">
                         <label class="form-label">
                             <span class="required">*</span>
@@ -1471,6 +1691,26 @@
                             </div>
                         </div>
                     </div>
+                    </div><!-- /serviceInviteFields -->
+                    
+                    <div class="form-group" id="ownerRelationshipField" style="display: none;">
+                        <label class="form-label">
+                            <span class="required">*</span>
+                            <span>与业主关系</span>
+                        </label>
+                        <div class="relationship-options" id="relationshipOptions">
+                            <div class="relationship-option selected" data-rel="self" onclick="selectRelationship(this, 'self')">本人</div>
+                            <div class="relationship-option" data-rel="spouse" onclick="selectRelationship(this, 'spouse')">配偶</div>
+                            <div class="relationship-option" data-rel="parent" onclick="selectRelationship(this, 'parent')">父母</div>
+                            <div class="relationship-option" data-rel="child" onclick="selectRelationship(this, 'child')">子女</div>
+                            <div class="relationship-option" data-rel="other" onclick="selectRelationship(this, 'other')">其他</div>
+                        </div>
+                    </div>
+
+                    <div class="invite-target-app" id="inviteTargetApp">
+                        <span class="app-icon">🛠️</span>
+                        <span>被邀请人将进入 <b>服务端小程序</b></span>
+                    </div>
                     
                     <div class="form-group">
                         <label class="form-label">
@@ -1482,13 +1722,13 @@
                                 <div class="method-icon">📱</div>
                                 <div class="method-name">手机号邀请</div>
                             </div>
-                            <div class="invite-method" onclick="selectInviteMethod(this, 'link')">
-                                <div class="method-icon">🔗</div>
-                                <div class="method-name">链接邀请</div>
-                            </div>
                             <div class="invite-method" onclick="selectInviteMethod(this, 'qrcode')">
                                 <div class="method-icon">📷</div>
                                 <div class="method-name">二维码邀请</div>
+                            </div>
+                            <div class="invite-method" onclick="selectInviteMethod(this, 'wechat')">
+                                <div class="method-icon">💚</div>
+                                <div class="method-name">微信好友</div>
                             </div>
                         </div>
                     </div>
@@ -1503,20 +1743,29 @@
                         </div>
                     </div>
                     
-                    <div id="linkInviteForm" style="display: none;">
-                        <div class="link-preview">
-                            <div class="link-text">https://app.example.com/invite/abc123</div>
-                            <div class="copy-btn" onclick="copyInviteLink()">复制链接</div>
-                        </div>
-                        <div class="link-expire">链接有效期：7天</div>
-                    </div>
-                    
                     <div id="qrcodeInviteForm" style="display: none;">
                         <div class="qrcode-preview">
                             <div class="qrcode-placeholder">二维码</div>
                             <div class="qrcode-text">扫码加入工作组</div>
                         </div>
                         <div class="qrcode-expire">二维码有效期：7天</div>
+                    </div>
+
+                    <div id="wechatInviteForm" style="display: none;">
+                        <div class="wechat-invite-preview">
+                            <div class="wechat-share-card">
+                                <div class="card-thumb">🏠</div>
+                                <div class="card-info">
+                                    <div class="card-title" id="wechatCardTitle">家装项目协作邀请</div>
+                                    <div class="card-desc" id="wechatCardDesc">点击加入项目，开始协作</div>
+                                </div>
+                            </div>
+                            <button class="wechat-share-btn" onclick="shareToWechat()">
+                                <span class="btn-icon">💬</span>
+                                <span>发送给微信好友</span>
+                            </button>
+                            <div class="wechat-invite-tip">点击后将调起微信分享面板，选择好友发送邀请卡片</div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-actions">
@@ -1589,7 +1838,7 @@
                             <div class="checkbox">✓</div>
                             <div class="option-content">
                                 <div class="option-title">全部权限</div>
-                                <div class="option-desc">拥有项目的全部管理权限</div>
+                                <div class="option-desc">拥有项目的全部管理权限-含权限配置</div>
                             </div>
                         </div>
                         <div class="permission-checkbox" onclick="toggleManagePermission(this, 'edit')">
@@ -1626,7 +1875,31 @@
                 </div>
             </div>
         </div>
-        
+
+        <!-- 人员操作模态框：当前登录用户仅有“移出人员”权限时弹出，仅含“移出项目”操作，无权限配置项 -->
+        <div class="permission-modal" id="memberActionModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">人员操作</div>
+                    <div class="modal-close" onclick="closeMemberActionModal()">✕</div>
+                </div>
+                <div class="member-info-card">
+                    <div class="avatar" id="actionModalAvatar">张</div>
+                    <div class="info">
+                        <div class="name" id="actionModalName">张三</div>
+                        <div class="role" id="actionModalRole">项目部 · 项目经理</div>
+                    </div>
+                </div>
+                <div class="permission-warning" id="actionWarning" style="display: none;">
+                    <div class="warning-icon">⚠️</div>
+                    <div class="warning-text">该成员是项目中唯一拥有全部权限的管理者，无法移出。</div>
+                </div>
+                <div class="remove-member-section" id="actionRemoveSection">
+                    <button class="remove-btn" id="actionRemoveBtn" onclick="showRemoveConfirm()">移出项目</button>
+                </div>
+            </div>
+        </div>
+
         <div class="app-modal" id="confirmModal">
             <div class="modal-box">
                 <div class="modal-title" id="confirmTitle">确认移出</div>
@@ -1649,6 +1922,16 @@
         </div>
         
         <div class="app-toast" id="appToast"></div>
+    </div>
+    
+    <div class="demo-control-panel" id="permissionControlPanel">
+        <div class="panel-title">当前用户权限演示</div>
+        <div class="segmented-control" id="permissionSegment">
+            <div class="segment active" data-perm="none" onclick="setDemoPermission('none')">无权限</div>
+            <div class="segment" data-perm="remove" onclick="setDemoPermission('remove')">仅移出人员</div>
+            <div class="segment" data-perm="all" onclick="setDemoPermission('all')">全部权限</div>
+        </div>
+        <div class="status-text uncertified" id="permissionStatusText">无权限：区域不可点击</div>
     </div>
     
     <div class="page-nav">
@@ -1786,6 +2069,7 @@
         let currentMemberId = '';
         let currentDataPermission = 'all';
         let currentManagePermissions = [];
+        let currentUserPermission = 'none'; // 当前登录用户权限：none（无）/ remove（仅移出人员）/ all（全部权限）
 
         function renderMemberList(filter) {
             const memberList = document.getElementById('memberList');
@@ -1872,11 +2156,11 @@
                         </div>
                         <div class="meta">${member.role}</div>
                     </div>
-                    <div class="permission-badge" onclick="event.stopPropagation(); showPermissionModal('${member.id}')">
+                    <div class="permission-badge" onclick="event.stopPropagation(); showPermissionModalIfAllowed('${member.id}')">
                         ${dataPermTag}
                         ${managePermTag}
                     </div>
-                    <div class="arrow" onclick="event.stopPropagation(); showPermissionModal('${member.id}')">›</div>
+                    <div class="arrow" onclick="event.stopPropagation(); showPermissionModalIfAllowed('${member.id}')">›</div>
                 </div>
             `;
         }
@@ -1968,6 +2252,60 @@
             document.getElementById('permissionModal').classList.add('show');
         }
 
+        function showPermissionModalIfAllowed(memberId) {
+            if (currentUserPermission === 'none') return; // 无权限：箭头已隐藏、区域不可点击
+            if (currentUserPermission === 'remove') {
+                openMemberActionModal(memberId);
+                return;
+            }
+            showPermissionModal(memberId); // 全部权限：完整权限设置模态框
+        }
+
+        function openMemberActionModal(memberId) {
+            currentMemberId = memberId;
+            const member = members[memberId];
+            document.getElementById('actionModalAvatar').textContent = member.avatar;
+            document.getElementById('actionModalName').textContent = member.name;
+            document.getElementById('actionModalRole').textContent = member.role;
+
+            const warning = document.getElementById('actionWarning');
+            const removeBtn = document.getElementById('actionRemoveBtn');
+            if (member.isOnlyAdmin) {
+                warning.style.display = 'flex';
+                removeBtn.disabled = true;
+            } else {
+                warning.style.display = 'none';
+                removeBtn.disabled = false;
+            }
+            document.getElementById('memberActionModal').classList.add('show');
+        }
+
+        function closeMemberActionModal() {
+            document.getElementById('memberActionModal').classList.remove('show');
+        }
+
+        function setDemoPermission(level) {
+            currentUserPermission = level;
+            document.querySelectorAll('#permissionSegment .segment').forEach(seg => {
+                seg.classList.toggle('active', seg.dataset.perm === level);
+            });
+            const statusText = document.getElementById('permissionStatusText');
+            const memberList = document.getElementById('memberList');
+            if (level === 'none') {
+                statusText.textContent = '无权限：区域不可点击';
+                statusText.className = 'status-text uncertified';
+                memberList.classList.add('no-manage');
+            } else if (level === 'remove') {
+                statusText.textContent = '仅移出人员：仅可移出，无权限配置入口';
+                statusText.className = 'status-text partial';
+                memberList.classList.remove('no-manage');
+            } else {
+                statusText.textContent = '全部权限：可查看与配置权限';
+                statusText.className = 'status-text certified';
+                memberList.classList.remove('no-manage');
+            }
+        }
+
         function closePermissionModal() {
             document.getElementById('permissionModal').classList.remove('show');
         }
@@ -2054,6 +2392,7 @@
         function confirmRemove() {
             closeConfirmModal();
             closePermissionModal();
+            closeMemberActionModal();
             showToast('成员已移出项目');
         }
 
@@ -2196,8 +2535,16 @@
             }
         });
 
+        document.getElementById('memberActionModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeMemberActionModal();
+            }
+        });
+
         let currentInviteGroup = 'project';
         let currentInviteMethod = 'phone';
+        let currentInviteCategory = 'service'; // service（服务人员） / owner（业主及家人）
+        let currentRelationship = 'self'; // self/spouse/parent/child/other，仅 owner 类有效
 
         function toggleGroupSelect() {
             const select = document.getElementById('groupSelect');
@@ -2289,8 +2636,28 @@
             document.querySelectorAll('.invite-method').forEach(m => m.classList.remove('active'));
             document.querySelector('.invite-method[onclick*="\'phone\'"]').classList.add('active');
             document.getElementById('phoneInviteForm').style.display = 'block';
-            document.getElementById('linkInviteForm').style.display = 'none';
             document.getElementById('qrcodeInviteForm').style.display = 'none';
+            document.getElementById('wechatInviteForm').style.display = 'none';
+
+            const confirmBtn = document.querySelector('.modal-actions .modal-btn.confirm');
+            if (confirmBtn) {
+                confirmBtn.style.display = 'inline-block';
+                confirmBtn.textContent = '发送邀请';
+            }
+
+            currentInviteCategory = 'service';
+            currentRelationship = 'self';
+            document.querySelectorAll('#inviteCategory .cat-seg').forEach(s => s.classList.toggle('active', s.dataset.cat === 'service'));
+            document.getElementById('serviceInviteFields').style.display = 'block';
+            document.getElementById('ownerRelationshipField').style.display = 'none';
+            document.querySelectorAll('#relationshipOptions .relationship-option').forEach(o => o.classList.toggle('selected', o.dataset.rel === 'self'));
+            const appHint = document.getElementById('inviteTargetApp');
+            if (appHint) {
+                appHint.querySelector('.app-icon').textContent = '🛠️';
+                appHint.querySelector('span:last-child').innerHTML = '被邀请人将进入 <b>服务端小程序</b>';
+            }
+            const qrText = document.querySelector('#qrcodeInviteForm .qrcode-text');
+            if (qrText) qrText.textContent = '扫码加入工作组';
 
             document.getElementById('inviteModal').classList.add('show');
         }
@@ -2303,20 +2670,58 @@
             currentInviteMethod = method;
             document.querySelectorAll('.invite-method').forEach(m => m.classList.remove('active'));
             element.classList.add('active');
-            
+
             document.getElementById('phoneInviteForm').style.display = method === 'phone' ? 'block' : 'none';
-            document.getElementById('linkInviteForm').style.display = method === 'link' ? 'block' : 'none';
             document.getElementById('qrcodeInviteForm').style.display = method === 'qrcode' ? 'block' : 'none';
+            document.getElementById('wechatInviteForm').style.display = method === 'wechat' ? 'block' : 'none';
+
+            const confirmBtn = document.querySelector('.modal-actions .modal-btn.confirm');
+            if (confirmBtn) {
+                confirmBtn.style.display = method === 'wechat' ? 'none' : 'inline-block';
+                if (method === 'qrcode') {
+                    confirmBtn.textContent = '下载二维码';
+                } else {
+                    confirmBtn.textContent = '发送邀请';
+                }
+            }
         }
 
-        function copyInviteLink() {
-            showToast('链接已复制到剪贴板');
+        function selectInviteCategory(element, category) {
+            currentInviteCategory = category;
+            document.querySelectorAll('#inviteCategory .cat-seg').forEach(s => s.classList.remove('active'));
+            element.classList.add('active');
+
+            const isService = category === 'service';
+            document.getElementById('serviceInviteFields').style.display = isService ? 'block' : 'none';
+            document.getElementById('ownerRelationshipField').style.display = isService ? 'none' : 'block';
+
+            const appHint = document.getElementById('inviteTargetApp');
+            if (appHint) {
+                appHint.querySelector('.app-icon').textContent = isService ? '🛠️' : '🏠';
+                appHint.querySelector('span:last-child').innerHTML = isService
+                    ? '被邀请人将进入 <b>服务端小程序</b>'
+                    : '被邀请人将进入 <b>业主端小程序</b>（仅查看/确认，不进入施工组）';
+            }
+
+            const qrText = document.querySelector('#qrcodeInviteForm .qrcode-text');
+            if (qrText) qrText.textContent = isService ? '扫码加入工作组' : '扫码进入业主端小程序';
+        }
+
+        function selectRelationship(element, rel) {
+            currentRelationship = rel;
+            document.querySelectorAll('#relationshipOptions .relationship-option').forEach(o => o.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        function getRelationshipName(rel) {
+            const names = { self: '业主本人', spouse: '配偶', parent: '父母', child: '子女', other: '其他' };
+            return names[rel] || rel;
         }
 
         function sendInvite() {
             if (currentInviteMethod === 'phone') {
                 const phone = document.getElementById('invitePhone').value;
-                
+
                 if (!phone.trim()) {
                     showAlert('提示', '请输入手机号码');
                     return;
@@ -2325,16 +2730,50 @@
                     showAlert('提示', '请输入正确的手机号码');
                     return;
                 }
-                
-                const groupName = document.getElementById('selectedGroupName').textContent;
-                showAlert('邀请成功', `已向 ${phone} 发送加入"${groupName}"的邀请，被邀请人将在消息中心收到通知`);
+
+                if (currentInviteCategory === 'service') {
+                    const groupName = document.getElementById('selectedGroupName').textContent;
+                    showAlert('邀请成功', `已向 ${phone} 发送加入"${groupName}"（服务端小程序）的邀请，被邀请人将在消息中心收到通知`);
+                } else {
+                    const relName = getRelationshipName(currentRelationship);
+                    showAlert('邀请成功', `已向 ${phone} 发送（业主端小程序）的邀请，关系：${relName}。被邀请人将在业主端小程序收到通知`);
+                }
                 closeInviteModal();
-            } else if (currentInviteMethod === 'link') {
-                showToast('链接已复制到剪贴板');
-                closeInviteModal();
-            } else {
+            } else if (currentInviteMethod === 'qrcode') {
                 showToast('二维码已生成');
                 closeInviteModal();
+            }
+        }
+
+        function shareToWechat() {
+            const cardTitle = document.getElementById('wechatCardTitle');
+            const cardDesc = document.getElementById('wechatCardDesc');
+            let title, desc, toastMsg;
+            if (currentInviteCategory === 'service') {
+                const groupName = document.getElementById('selectedGroupName').textContent;
+                title = `邀请你加入"${groupName}"`;
+                desc = '点击卡片进入服务端小程序，开始团队协作';
+                toastMsg = `已调起微信分享，选择好友发送邀请卡片即可邀请其加入"${groupName}"`;
+            } else {
+                const relName = getRelationshipName(currentRelationship);
+                title = '邀请你加入我的家装项目';
+                desc = `点击卡片进入业主端小程序（${relName}），查看项目进度`;
+                toastMsg = '已调起微信分享，选择好友发送邀请卡片即可邀请其进入业主端查看项目';
+            }
+            if (cardTitle) cardTitle.textContent = title;
+            if (cardDesc) cardDesc.textContent = desc;
+
+            if (typeof wx !== 'undefined' && wx.miniProgram && wx.miniProgram.shareAppMessage) {
+                wx.miniProgram.shareAppMessage({
+                    title: title,
+                    path: '/pages/project-detail/index?invite=1'
+                });
+            } else {
+                showToast('正在调起微信分享面板...');
+                setTimeout(function() {
+                    showAlert('分享成功', toastMsg);
+                    closeInviteModal();
+                }, 1500);
             }
         }
 

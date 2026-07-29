@@ -271,7 +271,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
-                        <div class="info-value">项目经理、施工组长</div>
+                        <div class="info-value">全部</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面入口</div>
@@ -428,7 +428,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
-                        <div class="info-value">全部</div>
+                        <div class="info-value">已加入的全部用户</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面入口</div>
@@ -700,7 +700,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
-                        <div class="info-value">项目经理、施工组长</div>
+                        <div class="info-value">已加入的全部用户</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面入口</div>
@@ -891,7 +891,7 @@
                         <tr>
                             <td>显示条数</td>
                             <td>前端分页</td>
-                            <td>默认显示5条，点击"查看全部"跳转列表页</td>
+                            <td>默认显示5条，点击"查看全部"跳转列表页，规格详见 <a href="PRD-任务模块详细规格.html#page-todo-list-service" target="_blank">全部待办页（服务方）</a></td>
                         </tr>
                         <tr>
                             <td rowspan="5">快捷导航栏</td>
@@ -1018,7 +1018,163 @@
             </div>
 
             <div class="subsection" id="subsection-3-8">
-                <div class="subsection-title">3.8 初始项目详情页逻辑（原型/演示）</div>
+                <div class="subsection-title">3.8 交互逻辑规格</div>
+                <p>以下为服务方项目详情页（进行中状态）的交互逻辑规格，描述各组件的用户操作与响应行为。</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>交互区域</th>
+                            <th>交互元素</th>
+                            <th>触发操作</th>
+                            <th>响应行为</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="4">导航栏</td>
+                            <td>左侧"返回"按钮</td>
+                            <td>点击</td>
+                            <td>返回上一页（<code>history.back</code>）</td>
+                        </tr>
+                        <tr>
+                            <td>中间标题区域</td>
+                            <td>—</td>
+                            <td>显示当前项目名称</td>
+                        </tr>
+                        <tr>
+                            <td>右侧"⋯"按钮</td>
+                            <td>点击</td>
+                            <td>弹出操作菜单，菜单项含"分享给朋友"</td>
+                        </tr>
+                        <tr>
+                            <td>右侧"✕"按钮</td>
+                            <td>点击</td>
+                            <td>关闭小程序，显示Toast提示</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="5">快捷导航</td>
+                            <td>快捷入口（项目信息、架构、成员、资料、对账单）</td>
+                            <td>点击</td>
+                            <td>跳转对应页面</td>
+                        </tr>
+                        <tr>
+                            <td>"固定"按钮</td>
+                            <td>点击</td>
+                            <td>切换固定状态；固定后快捷导航在滚动时不收起，状态通过<code>localStorage</code>持久化</td>
+                        </tr>
+                        <tr>
+                            <td>页面向下滚动</td>
+                            <td>滚动超过50px</td>
+                            <td>快捷导航自动收起（用户手动展开的除外）</td>
+                        </tr>
+                        <tr>
+                            <td>页面向上滚动</td>
+                            <td>滚回顶部</td>
+                            <td>快捷导航自动展开</td>
+                        </tr>
+                        <tr>
+                            <td>展开/收起按钮</td>
+                            <td>点击</td>
+                            <td>切换快捷导航显示状态，文案随状态变化（"展开快捷入口"/"收起快捷入口"）</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="5">层级选择器</td>
+                            <td>层级选择器区域</td>
+                            <td>点击</td>
+                            <td>展开下拉选项列表</td>
+                        </tr>
+                        <tr>
+                            <td>选项列表</td>
+                            <td>展示</td>
+                            <td>显示当前层级、父级、子级；当前层级有勾选标记；每个选项显示层级图标+层级名称+概要信息（如"4个工作组 · 8份合同"）</td>
+                        </tr>
+                        <tr>
+                            <td>选项项</td>
+                            <td>点击</td>
+                            <td>关闭下拉，更新面包屑导航，触发局部刷新（200ms延迟+loading动画）</td>
+                        </tr>
+                        <tr>
+                            <td>面包屑中的层级名称</td>
+                            <td>点击</td>
+                            <td>导航到对应层级</td>
+                        </tr>
+                        <tr>
+                            <td>选择器以外区域</td>
+                            <td>点击</td>
+                            <td>关闭下拉菜单</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">合同概览</td>
+                            <td>"查看合同"按钮</td>
+                            <td>点击</td>
+                            <td>切换合同列表的展开/折叠</td>
+                        </tr>
+                        <tr>
+                            <td>合同项</td>
+                            <td>点击</td>
+                            <td>跳转到对应合同详情页</td>
+                        </tr>
+                        <tr>
+                            <td>任务统计</td>
+                            <td>"查看全部"链接</td>
+                            <td>点击</td>
+                            <td>跳转到任务列表页（task-list.html）</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3">待办事项</td>
+                            <td>待办角标</td>
+                            <td>—</td>
+                            <td>显示当前待办数量</td>
+                        </tr>
+                        <tr>
+                            <td>"查看全部"链接</td>
+                            <td>点击</td>
+                            <td>跳转到全部待办页（todo-list.html），规格详见 <a href="PRD-任务模块详细规格.html#page-todo-list-service" target="_blank">全部待办页（服务方）</a></td>
+                        </tr>
+                        <tr>
+                            <td>待办项</td>
+                            <td>点击</td>
+                            <td>跳转到对应的合同详情或任务详情页</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3">今日动态</td>
+                            <td>"展开更多"按钮</td>
+                            <td>点击</td>
+                            <td>展开/收起隐藏的动态项；文案随状态变化（"展开更多"/"收起"），箭头旋转</td>
+                        </tr>
+                        <tr>
+                            <td>"查看全部"链接</td>
+                            <td>点击</td>
+                            <td>跳转到项目动态页（activity-list.html），携带当前层级参数</td>
+                        </tr>
+                        <tr>
+                            <td>动态项</td>
+                            <td>点击</td>
+                            <td>跳转到对应的任务详情或合同详情页</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">操作菜单</td>
+                            <td>"分享给朋友"菜单项</td>
+                            <td>点击</td>
+                            <td>显示分享提示Toast</td>
+                        </tr>
+                        <tr>
+                            <td>菜单外部区域</td>
+                            <td>点击</td>
+                            <td>关闭操作菜单</td>
+                        </tr>
+                        <tr>
+                            <td>页面加载</td>
+                            <td>初始状态</td>
+                            <td>—</td>
+                            <td>显示loading遮罩（加载中...），数据加载完成后隐藏</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection" id="subsection-3-9">
+                <div class="subsection-title">3.9 初始项目详情页逻辑（原型/演示）</div>
                 <p>说明：原型页面在创建项目后使用浏览器端临时持久化（`localStorage.newProjectData`）作为演示数据源，以下规则适用于“初始项目详情页”及其关联页面（架构页、成员页、项目信息页）。正式产品请以后端接口为准。</p>
                 <table>
                     <thead>
@@ -1046,7 +1202,7 @@
                         </tr>
                         <tr>
                             <td>架构页 - 项目部展示</td>
-                            <td>初始架构页在顶部项目部卡片展示“项目经理 &lt;姓名&gt;”与“X个工作组”，其中姓名来自 `newProjectData.customerName`（或 `projectManager` 字段）；若无数据显示默认示例（张三）。去除初始“进度 0%”展示以保持简洁。</td>
+                            <td>初始架构页在顶部项目部卡片展示“项目总 &lt;姓名&gt;”与“X个工作组”，其中姓名来自 `newProjectData.customerName`（或 `projectManager` 字段）；若无数据显示默认示例（张三）。去除初始“进度 0%”展示以保持简洁。</td>
                         </tr>
                         <tr>
                             <td>架构页 - 创建工作组</td>
@@ -1055,6 +1211,114 @@
                         <tr>
                             <td>不影响现有功能</td>
                             <td>以上改动仅限原型前端演示逻辑与样式调整，不改变其他页面流程或后端交互调用。正式联调时应替换 `localStorage` 逻辑为后端接口。</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">3.10 已完成状态 - 页面概述</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">页面名称</div>
+                        <div class="info-value">项目详情页-已完成</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面路径</div>
+                        <div class="info-value">/pages/project-detail-completed/index</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">适用角色</div>
+                        <div class="info-value">项目总、施工组长</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面入口</div>
+                        <div class="info-value">项目列表中状态为"已完成"的项目卡片</div>
+                    </div>
+                </div>
+                <div class="note" style="margin-top: 12px;">
+                    <div class="note-title">状态说明</div>
+                    <p>本页面与"项目详情页（进行中）"共享相同的页面结构和交互逻辑，差异仅在于数据状态。项目状态为"completed"时展示本页面效果。</p>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">3.11 已完成状态 - 与进行中状态的差异</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>展示区域</th>
+                            <th>进行中状态</th>
+                            <th>已完成状态</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>合同概览-签约进度</td>
+                            <td>已签约X/总数Y（部分签约）</td>
+                            <td>已签约数/总数（全部签约，如8/8）</td>
+                        </tr>
+                        <tr>
+                            <td>合同概览-总进度</td>
+                            <td>X%（进行中百分比）</td>
+                            <td>100%</td>
+                        </tr>
+                        <tr>
+                            <td>合同概览-合同列表</td>
+                            <td>各合同进度不同，状态各异</td>
+                            <td>所有合同进度100%，状态标签显示"已完成"</td>
+                        </tr>
+                        <tr>
+                            <td>任务统计-全部任务</td>
+                            <td>已完成X/总数Y</td>
+                            <td>总数/总数（全部完成，如24/24）</td>
+                        </tr>
+                        <tr>
+                            <td>任务统计-确认中任务</td>
+                            <td>X（可能有值）</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>任务统计-执行中任务</td>
+                            <td>X（可能有值）</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>待办事项</td>
+                            <td>显示待办列表，角标显示数量</td>
+                            <td>无待办，角标为0，显示空状态"暂无待办事项"</td>
+                        </tr>
+                        <tr>
+                            <td>今日动态</td>
+                            <td>任务验收、合同签署等动态</td>
+                            <td>项目完成相关动态（竣工验收、结算签署等），动态较少时无"展开更多"按钮</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">3.12 已完成状态 - 交互逻辑</div>
+                <p>与服务方项目详情页（进行中）交互逻辑一致，详见3.8节。差异点：</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>交互区域</th>
+                            <th>差异说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>合同概览-查看合同</td>
+                            <td>合同列表默认展开，所有合同项点击跳转合同详情页（已完成状态）</td>
+                        </tr>
+                        <tr>
+                            <td>待办事项</td>
+                            <td>无待办项可点击，"查看全部"链接仍可跳转全部待办页</td>
+                        </tr>
+                        <tr>
+                            <td>今日动态-展开更多</td>
+                            <td>动态少于3条时不显示"展开更多"按钮</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1069,7 +1333,29 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">4.1 信息展示</div>
+                <div class="subsection-title">4.1 页面概述</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">页面名称</div>
+                        <div class="info-value">项目信息页</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面路径</div>
+                        <div class="info-value">service-miniapp/project-info.html</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">适用角色</div>
+                        <div class="info-value">全部（根据’编辑项目‘权限控制编辑能力）</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面入口</div>
+                        <div class="info-value">项目详情页快捷导航"项目信息"</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">4.2 信息展示</div>
                 <table>
                     <thead>
                         <tr>
@@ -1082,57 +1368,197 @@
                         <tr>
                             <td>项目名称</td>
                             <td>projects.name</td>
-                            <td>完整显示，支持编辑</td>
+                            <td>只读态：纯文本显示；编辑态：输入框可修改</td>
                         </tr>
                         <tr>
-                            <td>项目地址</td>
-                            <td>projects.address</td>
-                            <td>省市区 + 详细地址</td>
-                        </tr>
-                        <tr>
-                            <td>房屋类别</td>
-                            <td>projects.house_type</td>
-                            <td>毛坯房/精装房/旧房改造</td>
-                        </tr>
-                        <tr>
-                            <td>房屋面积</td>
-                            <td>projects.area</td>
-                            <td>数值 + 平方米</td>
-                        </tr>
-                        <tr>
-                            <td>房型</td>
-                            <td>projects.room_type</td>
-                            <td>别墅/复式/平层</td>
-                        </tr>
-                        <tr>
-                            <td>工期</td>
-                            <td>start_date ~ end_date</td>
-                            <td>开工日期 ~ 入住日期</td>
+                            <td>创建时间</td>
+                            <td>projects.created_at</td>
+                            <td>yyyy-MM-dd HH:mm格式，在info-header中展示，只读</td>
                         </tr>
                         <tr>
                             <td>项目状态</td>
                             <td>projects.status</td>
-                            <td>进行中/已完成</td>
+                            <td>进行中/已完成，在info-header中标签展示</td>
                         </tr>
                         <tr>
-                            <td>业主信息</td>
-                            <td>owner.name</td>
-                            <td>姓名 + 手机号（脱敏）</td>
+                            <td>客户姓名</td>
+                            <td>users.name</td>
+                            <td>只读态：纯文本（无权限时脱敏如"张**"）；编辑态：输入框</td>
                         </tr>
                         <tr>
-                            <td>创建时间</td>
-                            <td>created_at</td>
-                            <td>yyyy-MM-dd HH:mm</td>
+                            <td>联系方式</td>
+                            <td>users.phone</td>
+                            <td>只读态：纯文本（无权限时脱敏如"138****5678"）；编辑态：输入框+手机号校验</td>
+                        </tr>
+                        <tr>
+                            <td>所在区域</td>
+                            <td>projects.city_code + projects.address</td>
+                            <td>只读态：纯文本"省/市/区 + 详细地址"分行显示；编辑态：省市区三级下拉+详细地址输入框</td>
+                        </tr>
+                        <tr>
+                            <td>房屋面积</td>
+                            <td>projects.area</td>
+                            <td>只读态：纯文本"XXX㎡"；编辑态：数字输入框+单位后缀</td>
+                        </tr>
+                        <tr>
+                            <td>房屋类别</td>
+                            <td>projects.house_type</td>
+                            <td>只读态：纯文本（如"毛坯房"）；编辑态：三选一卡片选项（毛坯房/精装房/旧房改造）</td>
+                        </tr>
+                        <tr>
+                            <td>房型</td>
+                            <td>projects.room_type</td>
+                            <td>只读态：纯文本（如"平层"）；编辑态：三选一卡片选项（别墅/复式/平层）</td>
+                        </tr>
+                        <tr>
+                            <td>计划开工日期</td>
+                            <td>projects.start_date</td>
+                            <td>只读态：纯文本；编辑态：日期选择器</td>
+                        </tr>
+                        <tr>
+                            <td>计划入住日期</td>
+                            <td>projects.end_date</td>
+                            <td>只读态：纯文本；编辑态：日期选择器</td>
                         </tr>
                         <tr>
                             <td>装修风格</td>
                             <td>projects.styles</td>
-                            <td>多选项标签展示（中式/法式/现代等）</td>
+                            <td>只读态：多选标签展示（圆角标签样式）；编辑态：可多选标签组（含提示"选择喜欢的装修风格(可多选)"），选项：中式/法式/现代/轻奢/简约/工业/美式</td>
                         </tr>
                         <tr>
                             <td>附件</td>
                             <td>projects.attachments</td>
-                            <td>文件列表，支持上传和预览</td>
+                            <td>只读态：双列网格布局，每个附件显示文件名+图标，点击进入全屏预览页；编辑态：列表布局，每项含"查看"+"删除"按钮+上传区域</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">4.3 编辑与权限演示</div>
+                <p>项目信息页提供单一编辑入口和统一保存操作，权限展示采用与 <code>service-miniapp/create-project.html</code> 相同的演示控制方式。</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>规则</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>编辑入口</td>
+                            <td>info-header中项目名称右侧“编辑”按钮，点击后进入全局编辑模式，所有表单分区同时变为可编辑状态</td>
+                        </tr>
+                        <tr>
+                            <td>编辑/取消切换</td>
+                            <td>点击“编辑”→按钮文字变为“取消”，表单切换为编辑态；点击“取消”→按钮文字恢复“编辑”，表单恢复只读态，未保存的修改丢弃</td>
+                        </tr>
+                        <tr>
+                            <td>保存按钮</td>
+                            <td>底部“保存修改”按钮仅在编辑态下展示，点击后校验必填字段，通过后保存并恢复只读态</td>
+                        </tr>
+                        <tr>
+                            <td>编辑权限</td>
+                            <td>只有有权限的用户才显示“编辑”按钮；无权限用户仅可查看，不能进入编辑</td>
+                        </tr>
+                        <tr>
+                            <td>权限演示开关</td>
+                            <td>手机框外右侧演示控制面板，含“有权限编辑”开关，切换时同步显示/隐藏编辑按钮，和 create-project.html 演示方式一致</td>
+                        </tr>
+                        <tr>
+                            <td>无权限-客户信息</td>
+                            <td>客户姓名部分脱敏（如“张**”），手机号中间4位脱敏（如“138****5678”）</td>
+                        </tr>
+                        <tr>
+                            <td>有权限-客户信息</td>
+                            <td>客户姓名、手机号完整显示，可编辑修改</td>
+                        </tr>
+                        <tr>
+                            <td>只读态-表单控件</td>
+                            <td>所有输入框、下拉选择器、卡片选项、多选标签组均隐藏，改为纯文本(info-value)展示，表单分区显示为卡片圆角边框样式</td>
+                        </tr>
+                        <tr>
+                            <td>附件预览</td>
+                            <td>点击附件“查看”→打开全屏预览页（含←返回、标题“附件预览”、文件名、描述、内容预览区、下载+关闭按钮）</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="subsection">
+                <div class="subsection-title">4.4 交互逻辑规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>交互区域</th>
+                            <th>交互元素</th>
+                            <th>触发操作</th>
+                            <th>响应行为</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="2">导航栏</td>
+                            <td>← 返回</td>
+                            <td>点击</td>
+                            <td>返回上一页</td>
+                        </tr>
+                        <tr>
+                            <td>⋯ 菜单</td>
+                            <td>点击</td>
+                            <td>弹出操作菜单（分享给朋友）</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">info-header编辑按钮</td>
+                            <td>“编辑”按钮</td>
+                            <td>点击</td>
+                            <td>切换为全局编辑模式：按钮变“取消”，表单隐藏只读文本/显示输入控件，底部出现“保存修改”</td>
+                        </tr>
+                        <tr>
+                            <td>“取消”按钮</td>
+                            <td>点击</td>
+                            <td>切换回只读模式：按钮变“编辑”，表单隐藏输入控件/显示只读文本，底部“保存修改”隐藏，未保存修改丢弃</td>
+                        </tr>
+                        <tr>
+                            <td>保存按钮</td>
+                            <td>“保存修改”</td>
+                            <td>点击</td>
+                            <td>校验必填字段→通过则保存+恢复只读态+弹窗“保存成功”→不通过则标红错误字段+显示错误提示</td>
+                        </tr>
+                        <tr>
+                            <td>附件-查看</td>
+                            <td>“查看”链接</td>
+                            <td>点击</td>
+                            <td>打开全屏附件预览页</td>
+                        </tr>
+                        <tr>
+                            <td>附件-删除</td>
+                            <td>“删除”链接</td>
+                            <td>点击</td>
+                            <td>弹出确认弹窗→确认后移除附件项（仅编辑态显示）</td>
+                        </tr>
+                        <tr>
+                            <td>附件-上传</td>
+                            <td>上传区域</td>
+                            <td>点击</td>
+                            <td>触发文件选择（仅编辑态显示）</td>
+                        </tr>
+                        <tr>
+                            <td>附件预览-返回</td>
+                            <td>← 返回</td>
+                            <td>点击</td>
+                            <td>关闭预览页</td>
+                        </tr>
+                        <tr>
+                            <td>附件预览-下载</td>
+                            <td>“下载”按钮</td>
+                            <td>点击</td>
+                            <td>触发附件下载</td>
+                        </tr>
+                        <tr>
+                            <td>附件预览-关闭</td>
+                            <td>“关闭”按钮</td>
+                            <td>点击</td>
+                            <td>关闭预览页</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1147,7 +1573,29 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">5.1 表单字段</div>
+                <div class="subsection-title">5.1 页面概述</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">页面名称</div>
+                        <div class="info-value">创建项目页</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面路径</div>
+                        <div class="info-value">service-miniapp/create-project.html</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">适用角色</div>
+                        <div class="info-value">已角色认证的用户</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面入口</div>
+                        <div class="info-value">首页快捷操作"创建项目"、项目列表页悬浮按钮</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">5.2 表单字段</div>
                 <table>
                     <thead>
                         <tr>
@@ -1224,7 +1672,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">5.1.1 附件上传规则</div>
+                <div class="subsection-title">5.2.1 附件上传规则</div>
                 <table>
                     <thead>
                         <tr>
@@ -1282,7 +1730,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">5.2 项目发起人机制</div>
+                <div class="subsection-title">5.3 项目发起人机制</div>
                 <table>
                     <thead>
                         <tr>
@@ -1327,7 +1775,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">5.3 创建流程</div>
+                <div class="subsection-title">5.4 创建流程</div>
                 <div class="code-block">
 1. 填写项目信息
 2. 点击"创建项目"
@@ -1342,7 +1790,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">5.4 提交校验与二次确认</div>
+                <div class="subsection-title">5.5 提交校验与二次确认</div>
                 <div class="note">
                     <div class="note-title">交互说明</div>
                     <p>当用户点击"创建项目"按钮时，需进行前置校验与二次确认流程，确保数据完整性与用户操作确认。</p>
@@ -1398,7 +1846,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">5.5 创建成功后跳转规则</div>
+                <div class="subsection-title">5.6 创建成功后跳转规则</div>
                 <table>
                     <thead>
                         <tr>
@@ -1447,12 +1895,12 @@
                 </table>
                 <div class="note" style="margin-top: 16px;">
                     <div class="note-title">新建项目特殊提示</div>
-                    <p>新创建的项目在项目详情页顶部显示"项目创建成功，请添加合同和任务"的引导提示条，引导用户进行下一步操作。</p>
+                    <p>新创建的项目在项目详情页顶部显示"项目创建成功，请添加架构层级后创建合同"的引导提示条，引导用户进行下一步操作。</p>
                 </div>
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">5.6 创建成功后系统生成信息</div>
+                <div class="subsection-title">5.7 创建成功后系统生成信息</div>
                 <table>
                     <thead>
                         <tr>
@@ -1524,7 +1972,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
-                        <div class="info-value">项目经理、施工组长</div>
+                        <div class="info-value">全部（根据数据权限）</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面入口</div>
@@ -1536,7 +1984,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">业务目标</div>
-                        <div class="info-value">管理项目组织架构，查看各层级合同和成员</div>
+                        <div class="info-value">管理项目组织架构，查看各层级合同</div>
                     </div>
                 </div>
             </div>
@@ -1549,7 +1997,7 @@
 │  - 返回 | 项目架构 | ⋯更多           │
 ├─────────────────────────────────────┤
 │  项目架构头部                         │
-│  - 项目名称 + 创建时间 + 项目经理      │
+│  - 项目名称 + 创建人 + 角色标签（多个用空格分隔）     │
 │  - 工作组数量统计 + 成员数量统计       │
 ├─────────────────────────────────────┤
 │  权限提示条（无权限时显示）            │
@@ -1568,7 +2016,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">6.3 架构层级规格</div>
+                <div class="subsection-title">6.3 架构层级规格示例</div>
                 <table>
                     <thead>
                         <tr>
@@ -1584,7 +2032,7 @@
                             <td>项目部（Level 0）</td>
                             <td>蓝色渐变</td>
                             <td>🏢</td>
-                            <td>项目经理</td>
+                            <td>项目总</td>
                             <td>邀请成员、添加工作组、退出项目部</td>
                         </tr>
                         <tr>
@@ -1620,25 +2068,20 @@
                         <tr>
                             <td>邀请成员</td>
                             <td>所有层级</td>
-                            <td>有邀请权限</td>
-                            <td>支持手机号/链接/二维码三种方式</td>
+                            <td>-</td>
+                            <td>支持手机号/二维码/微信好友"三种方式 （详见 <a href="#subsection-7-5" style="color: var(--primary-color);">7.5 邀请方式规格</a>）</td>
                         </tr>
                         <tr>
                             <td>添加工作组</td>
                             <td>项目部</td>
-                            <td>项目经理权限</td>
+                            <td>有添加工作组权限</td>
                             <td>创建新的工作组，需填写名称和组长</td>
                         </tr>
-                        <tr>
-                            <td>添加施工组</td>
-                            <td>工作组</td>
-                            <td>工作组组长权限</td>
-                            <td>在工作组下创建施工组</td>
-                        </tr>
+                       
                         <tr>
                             <td>查看合同</td>
                             <td>工作组</td>
-                            <td>已签约</td>
+                            <td>有数据权限</td>
                             <td>查看该工作组的合同列表</td>
                         </tr>
                         <tr>
@@ -1648,10 +2091,16 @@
                             <td>为工作组创建新合同</td>
                         </tr>
                         <tr>
-                            <td>退出/删除</td>
+                            <td>退出</td>
                             <td>所有层级</td>
-                            <td>当前用户不是唯一管理者</td>
-                            <td>退出当前层级或删除节点</td>
+                            <td>当前用户不是唯一管理者、非合同的任一方</td>
+                            <td>退出加入的全部层级</td>
+                        </tr>
+                        <tr>
+                            <td>删除</td>
+                            <td>所有层级</td>
+                            <td>当前层级下方子层级、除创建人员外没有其他人员、没有合同</td>
+                            <td>删除当前层级</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1684,6 +2133,548 @@
                     </tbody>
                 </table>
             </div>
+
+            <div class="subsection">
+                <div class="subsection-title">6.6 创建合同功能</div>
+                <p>项目架构页的工作组节点中，当工作组尚未创建合同时（显示"待创建合同"标签），点击"创建合同"操作按钮可创建新合同。</p>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">6.6.1 创建合同弹窗</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>属性</th>
+                            <th>规格</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>弹窗类型</td>
+                            <td>底部滑出弹窗（create-modal），最大高度70%</td>
+                        </tr>
+                        <tr>
+                            <td>触发入口</td>
+                            <td>工作组节点操作区域"📝 创建合同"按钮（primary样式）</td>
+                        </tr>
+                        <tr>
+                            <td>前置校验1</td>
+                            <td>无创建权限→弹窗提示"您没有创建合同的权限"</td>
+                        </tr>
+                        <tr>
+                            <td>前置校验2</td>
+                            <td>工作组已存在合同→弹窗提示"该工作组已存在合同，一个工作组只能有一个合同"</td>
+                        </tr>
+                        <tr>
+                            <td>所属架构层级</td>
+                            <td>顶部蓝色信息条显示当前工作组名称（invite-target-info样式），不可编辑</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">6.6.2 表单字段规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>字段</th>
+                            <th>必填</th>
+                            <th>控件类型</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>合同类型</td>
+                            <td>是*</td>
+                            <td>下拉选择（form-select）</td>
+                            <td>选项：水电工程合同、泥瓦工程合同、木工工程合同、油漆工程合同、其他合同；空值提交时提示"请选择合同类型"</td>
+                        </tr>
+                        <tr>
+                            <td>合同名称</td>
+                            <td>是*</td>
+                            <td>文本输入（form-input）</td>
+                            <td>placeholder："请输入合同名称"；空值提交时提示"请输入合同名称"</td>
+                        </tr>
+                        <tr>
+                            <td>甲方</td>
+                            <td>否</td>
+                            <td>下拉选择（form-select）</td>
+                            <td>选项：项目成员中具有甲方身份的人（项目经理、业主、业主代表），placeholder："请选择甲方（选填）"</td>
+                        </tr>
+                        <tr>
+                            <td>乙方</td>
+                            <td>否</td>
+                            <td>下拉选择（form-select）</td>
+                            <td>选项：项目成员中具有乙方身份的人（各组长），placeholder："请选择乙方（选填）"</td>
+                        </tr>
+                        <tr>
+                            <td>合同金额</td>
+                            <td>否</td>
+                            <td>文本输入（form-input）</td>
+                            <td>placeholder："请输入合同金额（选填）"</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">6.6.3 提示信息</div>
+                <div class="code-block" style="font-size: 12px;">
+弹窗底部黄色提示条（create-contract-notice样式）：
+💡 合同创建后需要前往电脑端编辑详细内容并提交确认
+                </div>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">6.6.4 操作按钮</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>按钮</th>
+                            <th>样式</th>
+                            <th>行为</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>取消</td>
+                            <td>灰色背景（modal-btn cancel）</td>
+                            <td>关闭弹窗，不创建</td>
+                        </tr>
+                        <tr>
+                            <td>创建合同</td>
+                            <td>主色背景（modal-btn confirm）</td>
+                            <td>校验必填字段→弹出确认弹窗"确定要为'XX工作组'创建合同'XX'吗？"→确认后创建合同→跳转合同详情页</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">6.6.5 创建后跳转</div>
+                <div class="code-block" style="font-size: 12px;">
+创建成功后跳转到合同详情页（contract-detail.html），携带以下URL参数：
+- id: 新合同ID
+- name: 合同名称
+- type: 合同类型编码
+- typeName: 合同类型名称
+- partyA / partyAName: 甲方信息
+- partyB / partyBName: 乙方信息
+- amount: 合同金额
+- group: 所属工作组名称
+- status: 'draft'（拟定中）
+- new: '1'（标记为新创建）
+
+跳转后合同详情页以"拟定中"状态展示，引导用户前往PC端编辑详细内容。
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">6.7 查看合同功能</div>
+                <p>项目架构页的工作组节点中，当工作组已签约时（显示"已签约"标签），点击"查看合同"操作按钮可查看关联合同。</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>属性</th>
+                            <th>规格</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>弹窗类型</td>
+                            <td>居中弹窗（app-modal），最大高度70%</td>
+                        </tr>
+                        <tr>
+                            <td>弹窗标题</td>
+                            <td>查看合同</td>
+                        </tr>
+                        <tr>
+                            <td>合同列表</td>
+                            <td>每个合同显示图标📄+合同名称+状态，点击跳转合同详情页</td>
+                        </tr>
+                        <tr>
+                            <td>无合同</td>
+                            <td>居中显示"暂无关联合同"灰色提示文字</td>
+                        </tr>
+                        <tr>
+                            <td>关闭按钮</td>
+                            <td>弹窗底部"关闭"按钮</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">6.8 退出/删除限制规则</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>操作</th>
+                            <th>限制条件</th>
+                            <th>限制提示</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>退出工作组</td>
+                            <td>工作组已签约合同</td>
+                            <td>"该工作组已签订合同，无法退出"</td>
+                        </tr>
+                        <tr>
+                            <td>退出工作组</td>
+                            <td>当前用户是该工作组任务的执行人或确认人</td>
+                            <td>"您是该工作组任务的执行人或确认人，无法退出"</td>
+                        </tr>
+                        <tr>
+                            <td>退出项目部</td>
+                            <td>已加入的工作组中存在已签约合同</td>
+                            <td>"您加入的'XX工作组'已签订合同，无法退出项目部"</td>
+                        </tr>
+                        <tr>
+                            <td>退出项目部</td>
+                            <td>当前用户是项目任务的执行人或确认人</td>
+                            <td>"您是项目任务的执行人或确认人，无法退出项目部"</td>
+                        </tr>
+                        <tr>
+                            <td>删除工作组</td>
+                            <td>工作组已创建合同</td>
+                            <td>"该工作组已创建合同，无法删除。如需删除请先删除合同。"</td>
+                        </tr>
+                        <tr>
+                            <td>添加子级工作组</td>
+                            <td>所属工作组未创建合同</td>
+                            <td>"该工作组尚未创建合同，请先创建合同后再添加子级工作组"</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">6.9 交互逻辑规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>交互区域</th>
+                            <th>交互元素</th>
+                            <th>触发操作</th>
+                            <th>响应行为</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>架构树节点</td>
+                            <td>节点头部</td>
+                            <td>点击</td>
+                            <td>展开/收起子节点（node-expand旋转180°，node-children显示/隐藏）</td>
+                        </tr>
+                        <tr>
+                            <td>项目部操作</td>
+                            <td>"邀请成员"</td>
+                            <td>点击</td>
+                            <td>打开邀请成员弹窗（详见 <a href="#subsection-7-5" style="color: var(--primary-color);">7.5 邀请方式规格</a>）</td>
+                        </tr>
+                        <tr>
+                            <td>项目部操作</td>
+                            <td>"添加工作组"</td>
+                            <td>点击</td>
+                            <td>校验权限→打开创建工作组弹窗（名称*+组长*+备注选填）</td>
+                        </tr>
+                        <tr>
+                            <td>项目部操作</td>
+                            <td>"退出项目部"</td>
+                            <td>点击</td>
+                            <td>校验退出条件→弹出确认弹窗→确认后退出并跳转项目列表页</td>
+                        </tr>
+                        <tr>
+                            <td>工作组操作</td>
+                            <td>"查看合同"</td>
+                            <td>点击</td>
+                            <td>打开合同列表弹窗→点击合同项跳转合同详情页</td>
+                        </tr>
+                        <tr>
+                            <td>工作组操作</td>
+                            <td>"创建合同"</td>
+                            <td>点击</td>
+                            <td>校验权限+是否已有合同→打开创建合同弹窗→填写→确认→跳转合同详情页</td>
+                        </tr>
+                        <tr>
+                            <td>工作组操作</td>
+                            <td>"添加施工组"</td>
+                            <td>点击</td>
+                            <td>校验权限+工作组是否已有合同→打开创建施工组弹窗</td>
+                        </tr>
+                        <tr>
+                            <td>工作组操作</td>
+                            <td>"退出工作组"</td>
+                            <td>点击</td>
+                            <td>校验退出条件→弹出确认弹窗→确认后退出</td>
+                        </tr>
+                        <tr>
+                            <td>工作组操作</td>
+                            <td>"删除"</td>
+                            <td>点击</td>
+                            <td>校验权限+是否已有合同→弹出删除确认弹窗→确认后删除</td>
+                        </tr>
+                        <tr>
+                            <td>子级工作组操作</td>
+                            <td>"邀请成员"</td>
+                            <td>点击</td>
+                            <td>打开邀请成员弹窗（详见 <a href="#subsection-7-5" style="color: var(--primary-color);">7.5 邀请方式规格</a>）</td>
+                        </tr>
+                        <tr>
+                            <td>子级工作组操作</td>
+                            <td>"退出子级工作组"</td>
+                            <td>点击</td>
+                            <td>校验退出条件→弹出确认弹窗→确认后退出</td>
+                        </tr>
+                        <tr>
+                            <td>子级工作组操作</td>
+                            <td>"删除"</td>
+                            <td>点击</td>
+                            <td>校验权限→弹出删除确认弹窗→确认后删除</td>
+                        </tr>
+                        <tr>
+                            <td>邀请成员弹窗</td>
+                            <td>手机号方式</td>
+                            <td>发送邀请</td>
+                            <td>校验手机号格式（1[3-9]开头的11位数字）→弹出确认弹窗→确认后Toast"邀请已发送"</td>
+                        </tr>
+                        <tr>
+                            <td>邀请成员弹窗</td>
+                            <td>二维码方式</td>
+                            <td>下载二维码</td>
+                            <td>底部按钮显示"下载二维码"，点击后Toast"二维码已生成"（二维码有效期7天）</td>
+                        </tr>
+                        <tr>
+                            <td>邀请成员弹窗</td>
+                            <td>微信好友方式</td>
+                            <td>发送给微信好友</td>
+                            <td>显示微信分享卡片预览（标题动态为"邀请你加入{架构层名称}"），点击绿色"发送给微信好友"按钮调起微信分享面板，选择好友发送邀请卡片，底部通用按钮隐藏</td>
+                        </tr>
+                        <tr>
+                            <td>创建工作组/施工组</td>
+                            <td>"选择组长"</td>
+                            <td>点击</td>
+                            <td>打开组长选择弹窗→选中后显示头像+姓名+删除按钮</td>
+                        </tr>
+                        <tr>
+                            <td>创建工作组/施工组</td>
+                            <td>"确认创建"</td>
+                            <td>点击</td>
+                            <td>校验名称+组长→弹出确认弹窗→确认后Toast"创建成功！"</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">6.10 添加工作组功能规格</div>
+                <p>项目架构页项目部层级点击"添加工作组"操作按钮，可创建新的工作组。工作组创建后自动归属当前项目部下。</p>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">6.10.1 弹窗规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>属性</th>
+                            <th>规格</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>弹窗类型</td>
+                            <td>底部滑出弹窗（create-modal），最大高度70%</td>
+                        </tr>
+                        <tr>
+                            <td>触发入口</td>
+                            <td>项目部节点操作区域"➕ 添加工作组"按钮</td>
+                        </tr>
+                        <tr>
+                            <td>弹窗标题</td>
+                            <td>"创建工作组"（动态显示）</td>
+                        </tr>
+                        <tr>
+                            <td>关闭方式</td>
+                            <td>右上角✕按钮 / 底部"取消"按钮</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">6.10.2 表单字段规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>字段</th>
+                            <th>必填</th>
+                            <th>控件类型</th>
+                            <th>字段值规范</th>
+                            <th>校验逻辑</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>工作组名称</td>
+                            <td>是*</td>
+                            <td>文本输入（form-input）</td>
+                            <td>中英文、数字，1~20个字符</td>
+                            <td>为空时提示"请输入工作组名称"；超过20字符截断提示"名称不能超过20个字符"；不可与同项目部下已有工作组重名</td>
+                        </tr>
+                        <tr>
+                            <td>组长</td>
+                            <td>是*</td>
+                            <td>成员选择器（member-select-wrap）</td>
+                            <td>从项目成员中选择，仅可选1人；选中后显示头像+姓名+删除按钮</td>
+                            <td>未选择时提示"请选择组长"；点击"选择组长"打开组长选择弹窗，列表展示项目成员（头像+姓名+角色），点击选中</td>
+                        </tr>
+                        <tr>
+                            <td>备注</td>
+                            <td>否</td>
+                            <td>文本输入（form-input）</td>
+                            <td>中英文、数字，最多50个字符</td>
+                            <td>超过50字符截断提示"备注不能超过50个字符"</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">6.10.3 组长选择弹窗</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>属性</th>
+                            <th>规格</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>弹窗类型</td>
+                            <td>居中弹窗（app-modal）</td>
+                        </tr>
+                        <tr>
+                            <td>弹窗标题</td>
+                            <td>"选择组长"</td>
+                        </tr>
+                        <tr>
+                            <td>成员列表</td>
+                            <td>每个成员显示：头像（48px圆形）+ 姓名 + 角色标签（如"项目经理""水电组长"）</td>
+                        </tr>
+                        <tr>
+                            <td>选择方式</td>
+                            <td>点击成员行即选中，关闭弹窗，回到创建弹窗显示已选组长（头像+姓名+删除按钮）</td>
+                        </tr>
+                        <tr>
+                            <td>取消选择</td>
+                            <td>点击已选组长右侧删除按钮，清除选择</td>
+                        </tr>
+                        <tr>
+                            <td>关闭按钮</td>
+                            <td>底部"关闭"按钮（flex:1全宽）</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">6.10.4 确认创建按钮逻辑</div>
+                <div class="code-block" style="font-size: 12px;">
+步骤1：前端校验
+  - 工作组名称为空 → Toast提示"请输入工作组名称"，中断
+  - 组长未选择 → Toast提示"请选择组长"，中断
+  - 名称超长 → Toast提示"名称不能超过20个字符"，中断
+  - 与已有工作组重名 → Toast提示"该工作组名称已存在"，中断
+
+步骤2：二次确认
+  - 弹出确认弹窗"确定要创建工作组'XX'吗？"
+  - 确认 → 调用API创建
+  - 取消 → 关闭确认弹窗，保留创建表单数据
+
+步骤3：创建成功
+  - Toast提示"创建成功！"
+  - 关闭创建弹窗
+  - 刷新架构树，新工作组节点显示在列表中
+  - 新工作组默认状态：无合同（显示"待创建合同"标签）
+
+步骤4：创建失败
+  - Toast提示具体错误信息
+  - 保留创建弹窗和表单数据，允许修改后重试
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">6.11 添加施工组功能规格</div>
+                <p>项目架构页工作组层级点击"添加施工组"操作按钮，可创建新的施工组。施工组创建后自动归属当前工作组下。</p>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">6.11.1 弹窗规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>属性</th>
+                            <th>规格</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>弹窗类型</td>
+                            <td>底部滑出弹窗（create-modal），与添加工作组共用弹窗组件</td>
+                        </tr>
+                        <tr>
+                            <td>触发入口</td>
+                            <td>工作组节点操作区域"➕ 添加施工组"按钮 / 工作组末尾的"添加施工组"按钮</td>
+                        </tr>
+                        <tr>
+                            <td>前置校验</td>
+                            <td>工作组未创建合同→弹窗提示"该工作组尚未创建合同，请先创建合同后再添加施工组"</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">6.11.2 表单字段规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>字段</th>
+                            <th>必填</th>
+                            <th>控件类型</th>
+                            <th>字段值规范</th>
+                            <th>校验逻辑</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>施工组名称</td>
+                            <td>是*</td>
+                            <td>文本输入（form-input）</td>
+                            <td>中英文、数字，1~20个字符</td>
+                            <td>为空时提示"请输入施工组名称"；超过20字符截断；不可与同工作组下已有施工组重名</td>
+                        </tr>
+                        <tr>
+                            <td>组长</td>
+                            <td>是*</td>
+                            <td>成员选择器（同添加工作组）</td>
+                            <td>从项目成员中选择，仅可选1人；选中后显示头像+姓名+删除按钮</td>
+                            <td>未选择时提示"请选择组长"</td>
+                        </tr>
+                        <tr>
+                            <td>所属工作组</td>
+                            <td>是（自动填充）</td>
+                            <td>下拉选择（form-select）</td>
+                            <td>默认为当前工作组，可切换到同项目部下其他工作组</td>
+                            <td>必须选择一个工作组</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">6.11.3 确认创建按钮逻辑</div>
+                <div class="code-block" style="font-size: 12px;">
+步骤1：前端校验
+  - 施工组名称为空 → Toast提示"请输入施工组名称"，中断
+  - 组长未选择 → Toast提示"请选择组长"，中断
+  - 与已有施工组重名 → Toast提示"该施工组名称已存在"，中断
+
+步骤2：二次确认
+  - 弹出确认弹窗"确定要在'XX工作组'下创建施工组'XX'吗？"
+  - 确认 → 调用API创建
+  - 取消 → 关闭确认弹窗
+
+步骤3：创建成功
+  - Toast提示"创建成功！"
+  - 关闭创建弹窗
+  - 刷新架构树，新施工组节点显示在对应工作组下
+  - 新施工组默认：显示组长姓名+0人
+
+步骤4：创建失败
+  - Toast提示具体错误信息
+  - 保留创建弹窗和表单数据
+                </div>
+            </div>
         </div>
 
         <!-- ==================== 7. 项目成员页 ==================== -->
@@ -1706,7 +2697,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
-                        <div class="info-value">项目经理、施工组长</div>
+                        <div class="info-value">全部（根据数据权限）</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面入口</div>
@@ -1766,7 +2757,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>项目经理</td>
+                            <td>项目总</td>
                             <td>紫色背景</td>
                             <td>#F9F0FF</td>
                             <td>#722ED1</td>
@@ -1790,10 +2781,40 @@
                             <td>#FA8C16</td>
                         </tr>
                         <tr>
-                            <td>工人</td>
+                            <td>拆除工</td>
                             <td>红色背景</td>
                             <td>#FFF0F0</td>
                             <td>#F5222D</td>
+                        </tr>
+                        <tr>
+                            <td>水电工</td>
+                            <td>青色背景</td>
+                            <td>#E6FFFB</td>
+                            <td>#13C2C2</td>
+                        </tr>
+                        <tr>
+                            <td>木作工</td>
+                            <td>棕色背景</td>
+                            <td>#FFF7E6</td>
+                            <td>#D48806</td>
+                        </tr>
+                        <tr>
+                            <td>泥瓦工</td>
+                            <td>灰色背景</td>
+                            <td>#FAFAFA</td>
+                            <td>#595959</td>
+                        </tr>
+                        <tr>
+                            <td>油漆工</td>
+                            <td>青色背景</td>
+                            <td>#E6FFFB</td>
+                            <td>#13C2C2</td>
+                        </tr>
+                        <tr>
+                            <td>小零工</td>
+                            <td>灰色背景</td>
+                            <td>#FAFAFA</td>
+                            <td>#595959</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1834,7 +2855,7 @@
                 </table>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="subsection-7-5">
                 <div class="subsection-title">7.5 邀请方式规格</div>
                 <table>
                     <thead>
@@ -1853,19 +2874,610 @@
                             <td>-</td>
                         </tr>
                         <tr>
-                            <td>链接邀请</td>
-                            <td>🔗</td>
-                            <td>生成链接，复制分享</td>
-                            <td>7天</td>
-                        </tr>
-                        <tr>
                             <td>二维码邀请</td>
                             <td>📷</td>
                             <td>生成二维码，扫码加入</td>
                             <td>7天</td>
                         </tr>
+                        <tr>
+                            <td>微信好友</td>
+                            <td>💚</td>
+                            <td>调起微信分享面板，选择微信好友发送邀请卡片，好友点击卡片进入小程序完成加入</td>
+                            <td>7天</td>
+                        </tr>
                     </tbody>
                 </table>
+                <div class="note" style="margin-top: 16px;">
+                    <div class="note-title">微信好友邀请说明</div>
+                    <p>微信好友邀请方式通过小程序原生分享能力实现。邀请人点击"发送给微信好友"按钮后，调起微信分享面板选择好友，被邀请人收到邀请卡片后点击进入小程序，自动跳转至项目详情页并弹出加入确认。分享卡片标题动态显示"邀请你加入{架构层名称}"，并附带项目入口路径。正式产品需在小程序管理后台配置分享权限及落地页。</p>
+                    <p style="margin-top: 8px;"><strong>按钮显隐规则：</strong>选择"微信好友"方式时，弹窗底部通用的"发送邀请"按钮自动隐藏，仅保留微信方式自身的"发送给微信好友"绿色按钮，避免重复操作入口。</p>
+                </div>
+            </div>
+
+            <div class="subsection" id="subsection-7-6">
+                <div class="subsection-title">7.6 邀请身份区分规格</div>
+                <p>邀请成员时，需先明确<strong>被邀请人的身份</strong>，不同身份对应不同的字段填写、落地终端小程序与项目内归属。邀请弹窗顶部以分段控件 <code>invite-category</code> 提供两类选择：</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>身份分段</th>
+                            <th>显示字段</th>
+                            <th>落地终端</th>
+                            <th>项目内归属</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>服务人员</td>
+                            <td>邀请到架构层（选择所属工作组 / 角色，同原逻辑）</td>
+                            <td>🛠️ 服务端小程序</td>
+                            <td>进入对应工作组，参与施工协作</td>
+                        </tr>
+                        <tr>
+                            <td>业主 / 业主家人</td>
+                            <td>隐藏"邀请到架构层"；改为选择"与业主关系"（本人 / 配偶 / 父母 / 子女 / 其他）</td>
+                            <td>🏠 业主端小程序（仅查看 / 确认，不进入施工组）</td>
+                            <td>作为项目成员展示，<code>user_type</code> 仍为 owner</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 16px;"><strong>交互规则</strong></p>
+                <ul>
+                    <li><strong>身份分段默认</strong>：弹窗打开时默认选中"服务人员"；每次打开弹窗重置为默认状态。</li>
+                    <li><strong>字段联动</strong>：选择"服务人员"时显示"邀请到架构层"表单，隐藏"与业主关系"；选择"业主 / 业主家人"时反向显隐。</li>
+                    <li><strong>邀请方式</strong>：手机号 / 二维码 / 微信好友三种方式在两类身份下均保留；二维码提示文案随身份变化（服务人员："扫码加入工作组"；业主及家人："扫码进入业主端小程序"）。</li>
+                    <li><strong>落地端提示</strong>：弹窗底部以 <code>invite-target-app</code> 实时提示"被邀请人将进入 服务端小程序 / 业主端小程序"，避免误邀。</li>
+                    <li><strong>邀请结果</strong>：服务人员邀请提示加入"架构层（服务端小程序）"；业主及家人邀请提示"（业主端小程序）邀请，关系：XXX"。</li>
+                </ul>
+                <p style="margin-top: 16px;"><strong>与数据模型的对应</strong></p>
+                <ul>
+                    <li><code>project_members.member_category</code>：枚举 service / owner，决定成员进入哪端小程序（必填，默认 service）。</li>
+                    <li><code>project_members.relationship</code>：枚举 self / spouse / parent / child / other，仅 owner 类成员填写，标识与业主关系（可空）。</li>
+                    <li><code>invite_records.target_category</code>：枚举 service / owner，service 时填写 <code>target_role</code>、owner 时 <code>target_role</code> 置空。</li>
+                    <li><code>invite_records.relationship</code>：枚举 self / spouse / parent / child / other，仅 owner 类邀请填写。</li>
+                    <li>业主及家人虽不进入施工组，但其账户 <code>user_type</code> 仍为 owner，仅通过 <code>member_category=owner</code> 与 <code>relationship</code> 标注家庭关系。</li>
+                </ul>
+                <div class="note" style="margin-top: 16px;">
+                    <div class="note-title">说明</div>
+                    <p>业主端小程序（owner-miniapp）邀请弹窗同样提供该身份分段，逻辑与服务端一致；当邀请人为业主本人时，选择"业主 / 业主家人"并填写关系即可将家人纳入项目。三端（PC 管理端、服务方小程序、业主小程序）邀请落库字段保持一致。</p>
+                </div>
+            </div>
+
+            <div class="subsection" id="subsection-7-7">
+                <div class="subsection-title">7.7 搜索功能规则</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>项</th>
+                            <th>规则说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>触发入口</td>
+                            <td>筛选栏右侧的"🔍"搜索按钮，点击后展开搜索栏，同时原筛选栏隐藏</td>
+                        </tr>
+                        <tr>
+                            <td>搜索范围</td>
+                            <td>成员姓名、角色（role字段）、所属工作组名称（groupName）、角色标签名（roleTag）</td>
+                        </tr>
+                        <tr>
+                            <td>匹配规则</td>
+                            <td>实时模糊匹配，忽略大小写；输入关键字后立即筛选，无需点击确认</td>
+                        </tr>
+                        <tr>
+                            <td>结果展示</td>
+                            <td>顶部显示"找到 N 个匹配'关键字'的成员"提示信息，成员列表按工作组分组展示；成员数量同步更新为"共 N 位成员"</td>
+                        </tr>
+                        <tr>
+                            <td>空结果</td>
+                            <td>显示空状态提示："未找到匹配'关键字'的成员"，配"🔍"图标</td>
+                        </tr>
+                        <tr>
+                            <td>清空/取消</td>
+                            <td>搜索框支持一键清空（×按钮）恢复全量列表；点击右侧"取消"按钮关闭搜索栏并还原筛选栏显示</td>
+                        </tr>
+                        <tr>
+                            <td>与筛选联动</td>
+                            <td>搜索结果仅在当前架构筛选范围内进行匹配（currentFilter !== 'all' 时仅搜索所选工作组）</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection" id="subsection-7-8">
+                <div class="subsection-title">7.8 权限配置规则</div>
+                <p>点击成员卡片右侧的"权限"标签或箭头，弹出权限设置模态框，可配置该成员的数据权限与治理权限。</p>
+
+                <p><strong>7.7.1 触发入口</strong></p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>入口位置</th>
+                            <th>触发方式</th>
+                            <th>前置条件</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>成员卡片右侧"权限"标签</td>
+                            <td>点击后弹出权限设置模态框</td>
+                            <td>当前操作用户拥有"全部权限"或"移出人员/编辑项目"等治理权限</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="margin-top: 16px;"><strong>7.7.2 模态框结构</strong></p>
+                <div class="code-block">
+┌─────────────────────────────────────┐
+│  ✕  权限设置                        │
+├─────────────────────────────────────┤
+│  成员信息卡：头像 + 姓名 + 角色      │
+│  ⚠️ 唯一管理者警示（仅当 isOnlyAdmin）│
+├─────────────────────────────────────┤
+│  📊 数据权限（单选）                 │
+│    ○ 全部数据                       │
+│    ○ 所在架构层级                   │
+│    ○ 所在架构及下属层级权限（含合同）│
+│    ○ 仅基础公开数据                 │
+├─────────────────────────────────────┤
+│  ⚙️ 治理权限（多选）                │
+│    ☑ 全部权限 / ☐ 编辑项目          │
+│    ☐ 移出人员 / ☐ 添加工作组        │
+├─────────────────────────────────────┤
+│  [移出项目] 独立按钮                 │
+├─────────────────────────────────────┤
+│  [取消]          [保存]              │
+└─────────────────────────────────────┘
+                </div>
+
+                <p style="margin-top: 16px;"><strong>7.7.3 数据权限（单选）</strong></p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>选项值</th>
+                            <th>说明</th>
+                            <th>展示文案</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>all</td>
+                            <td>可查看项目内所有层级的数据</td>
+                            <td>全部数据</td>
+                        </tr>
+                        <tr>
+                            <td>level</td>
+                            <td>仅可查看所属工作组及下级的数据</td>
+                            <td>所在架构层级</td>
+                        </tr>
+                        <tr>
+                            <td>level_with_contract</td>
+                            <td>可查看所属工作组及下级的数据，包含合同相关内容</td>
+                            <td>所在架构及下属层级权限（含合同）</td>
+                        </tr>
+                        <tr>
+                            <td>none</td>
+                            <td>仅可查看基础的公开数据（默认）</td>
+                            <td>仅基础公开数据</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="margin-top: 16px;"><strong>7.7.4 治理权限（多选，复选框）</strong></p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>权限值</th>
+                            <th>说明</th>
+                            <th>交互规则</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>all（全部权限）</td>
+                            <td>拥有项目的全部管理权限</td>
+                            <td>勾选后自动选中所有其他治理权限；取消勾选则全部清空</td>
+                        </tr>
+                        <tr>
+                            <td>edit（编辑项目）</td>
+                            <td>可编辑项目信息、创建架构和合同</td>
+                            <td>选中时自动取消"全部权限"勾选</td>
+                        </tr>
+                        <tr>
+                            <td>remove（移出人员）</td>
+                            <td>可将成员从项目中移出</td>
+                            <td>选中时自动取消"全部权限"勾选</td>
+                        </tr>
+                        <tr>
+                            <td>add_group（添加工作组）</td>
+                            <td>可在项目中创建新的工作组</td>
+                            <td>选中时自动取消"全部权限"勾选</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="margin-top: 16px;"><strong>7.7.5 保存校验规则</strong></p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>场景</th>
+                            <th>校验规则</th>
+                            <th>反馈</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>唯一管理者降级</td>
+                            <td>目标成员为项目中唯一拥有"全部权限"的管理者（isOnlyAdmin=true）时，不允许移除其"全部权限"</td>
+                            <td>保存时弹窗提示"无法修改：该成员是项目中唯一拥有全部权限的管理者，请先为其他成员设置全部权限后再修改。"</td>
+                        </tr>
+                        <tr>
+                            <td>移出项目</td>
+                            <td>点击"移出项目"按钮弹出二次确认弹窗（标题"确认移出"，内容"确定要将'XXX'移出项目吗？移出后该成员将无法访问项目数据。"，按钮"取消"/"确认移出"）</td>
+                            <td>确认后提示"成员已移出项目"，关闭权限弹窗并刷新列表</td>
+                        </tr>
+                        <tr>
+                            <td>保存成功</td>
+                            <td>数据权限与治理权限均通过校验</td>
+                            <td>Toast 提示"权限设置已保存"，1.5秒后关闭弹窗并刷新列表</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection" id="subsection-7-9">
+                <div class="subsection-title">7.9 退出项目规则</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>项</th>
+                            <th>规则说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>触发入口</td>
+                            <td>成员页头部右上角"退出项目"按钮（红色描边样式，x-btn-header）</td>
+                        </tr>
+                        <tr>
+                            <td>前置校验</td>
+                            <td>若当前用户是项目唯一全部权限管理者（isOnlyAdmin=true），或在已签订合同的工作组中、或是任务执行人/确认人，则不允许退出，弹出阻止提示</td>
+                        </tr>
+                        <tr>
+                            <td>确认弹窗</td>
+                            <td>点击按钮弹出确认弹窗：标题"退出项目"，内容"确定要退出当前项目吗？退出后将无法访问项目数据。"，按钮"取消"/"确认退出"</td>
+                        </tr>
+                        <tr>
+                            <td>确认后反馈</td>
+                            <td>Toast 提示"已成功退出项目"，1.5秒后自动跳转至项目列表页（project-list.html）</td>
+                        </tr>
+                        <tr>
+                            <td>取消/关闭</td>
+                            <td>点击"取消"或点击弹窗外遮罩区域，关闭弹窗不执行退出操作</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection" id="subsection-7-10">
+                <div class="subsection-title">7.10 移出指定成员规则</div>
+                <p>在成员权限设置模态框内，管理者可将指定成员从项目中移出。移出后该成员将无法访问项目数据。</p>
+
+                <p><strong>7.9.1 触发入口与前置条件</strong></p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>项</th>
+                            <th>规则说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>触发入口</td>
+                            <td>成员卡片 → 点击"权限"标签或箭头 → 权限模态框底部"移出项目"红色按钮</td>
+                        </tr>
+                        <tr>
+                            <td>操作权限要求</td>
+                            <td>当前操作用户必须拥有"全部权限"（managePermissions 含 'all'）或"移出人员"（managePermissions 含 'remove'）治理权限，否则"移出项目"按钮不显示或置灰不可点击</td>
+                        </tr>
+                        <tr>
+                            <td>不可移出自己</td>
+                            <td>当目标成员为当前登录用户自身时（member.id === currentUserId），"移出项目"按钮自动隐藏，不允许执行移出操作；本人退出项目请使用"7.8 退出项目规则"的自退出流程</td>
+                        </tr>
+                        <tr>
+                            <td>唯一管理者保护</td>
+                            <td>当目标成员是项目中唯一拥有"全部权限"的管理者（isOnlyAdmin=true）时，"移出项目"按钮置灰（disabled=true），并在模态框顶部显示警示条："⚠️ 该成员是项目中唯一拥有全部权限的管理者，修改权限后可能导致项目无人管理。"</td>
+                        </tr>
+                        <tr>
+                            <td>合同/任务关联保护</td>
+                            <td>若目标成员所在工作组已签订合同、或是项目任务的执行人或确认人，不允许移出，弹出阻止提示</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="margin-top: 16px;"><strong>7.9.2 移出按钮状态矩阵</strong></p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>场景</th>
+                            <th>按钮状态</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>操作用户无"移出人员"权限</td>
+                            <td>按钮不显示</td>
+                            <td>移除整个"移出项目"区块（removeMemberSection），普通成员不可见</td>
+                        </tr>
+                        <tr>
+                            <td>目标成员为当前用户自己</td>
+                            <td>按钮不显示</td>
+                            <td>防止误操作，自身需通过"退出项目"流程离开</td>
+                        </tr>
+                        <tr>
+                            <td>目标成员为唯一全权限管理者</td>
+                            <td>按钮置灰（disabled）</td>
+                            <td>显示黄色警示条，hover 时提示"该成员是项目中唯一拥有全部权限的管理者"</td>
+                        </tr>
+                        <tr>
+                            <td>目标成员有合同/任务关联</td>
+                            <td>按钮置灰或点击时弹窗阻止</td>
+                            <td>提示"该成员在已签订合同的工作组中，无法移出项目"</td>
+                        </tr>
+                        <tr>
+                            <td>满足所有条件（正常可移出）</td>
+                            <td>按钮正常可点击</td>
+                            <td>红色描边样式，文字"移出项目"</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="margin-top: 16px;"><strong>7.9.3 交互流程</strong></p>
+                <div class="code-block">
+步骤1：点击成员卡片"权限"标签
+  ↓
+步骤2：弹出权限设置模态框（显示成员信息、权限配置、移出按钮）
+  ↓
+步骤3：系统判断是否可移出
+  ├─ 无权限 → 不显示移出按钮
+  ├─ 是自己 → 不显示移出按钮
+  ├─ 唯一管理者 → 按钮置灰 + 警示条
+  ├─ 有合同/任务关联 → 按钮置灰 + 关联提示
+  └─ 正常 → 按钮可点击
+  ↓
+步骤4：点击"移出项目"按钮
+  ↓
+步骤5：弹出二次确认弹窗
+  ├─ 标题："确认移出"
+  ├─ 内容："确定要将'{成员姓名}'移出项目吗？移出后该成员将无法访问项目数据。"
+  ├─ 按钮："取消" / "确认移出"（红色危险按钮）
+  ↓
+步骤6：点击"确认移出"
+  ├─ Toast 提示"成员已移出项目"（2秒）
+  ├─ 关闭确认弹窗
+  ├─ 关闭权限设置模态框
+  └─ 刷新成员列表（从列表中移除该成员卡片）
+  ↓
+步骤7：点击"取消"或点击遮罩 → 关闭确认弹窗，返回权限设置模态框
+                </div>
+
+                <p style="margin-top: 16px;"><strong>7.9.4 确认弹窗规格</strong></p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>元素</th>
+                            <th>内容</th>
+                            <th>样式</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>弹窗标题</td>
+                            <td>确认移出</td>
+                            <td>黑色加粗 17px</td>
+                        </tr>
+                        <tr>
+                            <td>弹窗内容</td>
+                            <td>"确定要将'XXX'移出项目吗？移出后该成员将无法访问项目数据。"</td>
+                            <td>灰色 14px，成员姓名以单引号包裹</td>
+                        </tr>
+                        <tr>
+                            <td>取消按钮</td>
+                            <td>取消</td>
+                            <td>白色背景灰色描边，点击关闭弹窗</td>
+                        </tr>
+                        <tr>
+                            <td>确认按钮</td>
+                            <td>确认移出</td>
+                            <td>红色背景白色文字（danger 样式），点击执行移出</td>
+                        </tr>
+                        <tr>
+                            <td>遮罩关闭</td>
+                            <td>点击弹窗外半透明遮罩</td>
+                            <td>关闭弹窗，不执行移出操作</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="margin-top: 16px;"><strong>7.9.5 反馈与结果</strong></p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>场景</th>
+                            <th>反馈方式</th>
+                            <th>后续动作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>移出成功</td>
+                            <td>顶部 Toast 提示"成员已移出项目"（2秒自动消失）</td>
+                            <td>自动关闭确认弹窗和权限模态框，成员列表刷新，被移出的成员卡片不再显示</td>
+                        </tr>
+                        <tr>
+                            <td>无权限操作</td>
+                            <td>"移出项目"按钮不展示</td>
+                            <td>成员无感知，需通过权限配置后重新进入</td>
+                        </tr>
+                        <tr>
+                            <td>唯一管理者不可移出</td>
+                            <td>按钮置灰 + 黄色警示条提示</td>
+                            <td>需先为其他成员授予"全部权限"，确保至少有两名全权限管理者后再操作</td>
+                        </tr>
+                        <tr>
+                            <td>合同/任务关联不可移出</td>
+                            <td>点击按钮弹出阻止提示弹窗（标题"提示"，内容"该成员在已签订合同的工作组中，无法移出项目"，按钮"确定"）</td>
+                            <td>需先解除成员的合同关联或完成相关任务后再操作</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection" id="subsection-7-11">
+                <div class="subsection-title">7.11 权限管理入口可见性规则</div>
+                <p>项目成员页中"成员权限管理"入口（成员卡片右侧"›"箭头及"权限"标签区域）的<strong>可见性与可点击性</strong>，由当前登录用户自身拥有的治理权限决定，共三种状态：</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>当前用户权限状态</th>
+                            <th>"›"箭头</th>
+                            <th>权限标签区域可点击</th>
+                            <th>点击后弹窗</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>无权限（不含任何治理权限）</td>
+                            <td>隐藏</td>
+                            <td>否（置灰、不可点击）</td>
+                            <td>无</td>
+                            <td>区域整体不可点；头像/姓名仍可跳电子名片</td>
+                        </tr>
+                        <tr>
+                            <td>仅移出人员（含 'remove'，不含 'all'）</td>
+                            <td>显示</td>
+                            <td>是</td>
+                            <td>"人员操作"模态框（仅移出项目）</td>
+                            <td>不可查看或配置权限；仅可执行移出</td>
+                        </tr>
+                        <tr>
+                            <td>全部权限（含 'all'）</td>
+                            <td>显示</td>
+                            <td>是</td>
+                            <td>"权限设置"模态框（完整）</td>
+                            <td>可配置数据权限与治理权限</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="margin-top: 16px;"><strong>原型"当前用户权限演示"控制面板规格</strong></p>
+                <ul>
+                    <li><strong>位置</strong>：手机框外右侧、临近手机框（与创建项目页"演示控制"面板位置一致）。</li>
+                    <li><strong>形态</strong>：三档分段控件 —— "无权限 / 仅移出人员 / 全部权限"。</li>
+                    <li><strong>默认状态</strong>：无权限（列表默认带 <code>no-manage</code> 类，箭头隐藏）。</li>
+                    <li><strong>切换行为</strong>：切换时同步更新成员列表 <code>no-manage</code> 类、状态文字与配色。</li>
+                    <li><strong>配色</strong>：无权限 = 黄底（#FFF7E6 / #D48806）；仅移出人员 = 紫底（#F9F0FF / #722ED1）；全部权限 = 蓝底（#E6F7FF / #0050B3）。</li>
+                    <li><strong>正式产品说明</strong>：该分段控件为原型演示专用；正式产品依据后端返回的 <code>managePermissions</code> 决定入口可见性，不展示此面板。</li>
+                </ul>
+            </div>
+
+            <div class="subsection" id="subsection-7-12">
+                <div class="subsection-title">7.12 成员个人电子名片跳转规则</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>项</th>
+                            <th>规则说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>触发入口</td>
+                            <td>点击任意成员卡片的<strong>头像</strong>或<strong>姓名</strong>（三种权限状态下均可触发，与权限入口相互独立）</td>
+                        </tr>
+                        <tr>
+                            <td>跳转目标</td>
+                            <td><code>member-profile.html?id={成员id}&amp;name={姓名}&amp;role={角色}</code>（个人电子名片页）</td>
+                        </tr>
+                        <tr>
+                            <td>点击反馈</td>
+                            <td>头像/姓名轻微高亮（<code>.clickable</code>），并带有轻微按压反馈</td>
+                        </tr>
+                        <tr>
+                            <td>事件隔离</td>
+                            <td>点击头像/姓名时调用 <code>event.stopPropagation()</code>，不触发权限弹窗（"人员操作"或"权限设置"），避免误触</td>
+                        </tr>
+                        <tr>
+                            <td>权限无关性</td>
+                            <td>名片跳转不受"当前用户权限"状态影响，所有成员均可查看他人电子名片</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="note" style="margin-top: 16px;">
+                    <div class="note-title">说明</div>
+                    <p>个人电子名片页（<code>member-profile.html</code>）为成员信息的集中展示页，包含联系方式、所属工作组、负责任务等；原型当前已打通跳转链路，页面内容可后续补充。</p>
+                </div>
+            </div>
+
+            <div class="subsection" id="subsection-7-13">
+                <div class="subsection-title">7.13 人员操作模态框规则（当前用户仅拥有"移出人员"权限）</div>
+                <p>当当前登录用户仅拥有"移出人员"治理权限（<code>managePermissions</code> 含 'remove' 但不含 'all'）时，点击成员卡片"›"箭头或"权限"标签，弹出<strong>人员操作</strong>模态框，而非完整"权限设置"模态框。</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>对比项</th>
+                            <th>权限设置（全部权限）</th>
+                            <th>人员操作（仅移出人员）</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>弹窗标题</td>
+                            <td>权限设置</td>
+                            <td>人员操作</td>
+                        </tr>
+                        <tr>
+                            <td>成员信息卡</td>
+                            <td>有</td>
+                            <td>有</td>
+                        </tr>
+                        <tr>
+                            <td>数据权限配置区</td>
+                            <td>有（4 项可选）</td>
+                            <td>无（不展示）</td>
+                        </tr>
+                        <tr>
+                            <td>治理权限配置区</td>
+                            <td>有（全部/编辑/移出/添加工作组）</td>
+                            <td>无（不展示、不可操作）</td>
+                        </tr>
+                        <tr>
+                            <td>"移出项目"按钮</td>
+                            <td>有</td>
+                            <td>有（唯一可操作项）</td>
+                        </tr>
+                        <tr>
+                            <td>"保存"按钮</td>
+                            <td>有</td>
+                            <td>无</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 16px;"><strong>交互要点</strong></p>
+                <ul>
+                    <li><strong>触发条件</strong>：当前用户处于"仅移出人员"权限状态，点击成员卡片的"›"箭头或"权限"标签。</li>
+                    <li><strong>可见内容</strong>：仅展示成员信息卡与"移出项目"按钮；<strong>不展示也无法操作</strong>任何权限配置项。</li>
+                    <li><strong>移出项目行为</strong>：复用 7.10 移出流程 —— 点击"移出项目" → 二次确认弹窗（标题"确认移出"）→ 确认后 Toast "成员已移出项目" 并刷新列表。</li>
+                    <li><strong>唯一管理者保护</strong>：目标成员为唯一全权限管理者（<code>isOnlyAdmin=true</code>）时，"移出项目"按钮置灰（disabled）并显示警示条"⚠️ 该成员是项目中唯一拥有全部权限的管理者，无法移出。"</li>
+                    <li><strong>关闭方式</strong>：点击右上角"✕"或点击弹窗外遮罩区域关闭。</li>
+                </ul>
+                <div class="note" style="margin-top: 16px;">
+                    <div class="note-title">说明</div>
+                    <p>本场景强调"只能看到移出项目项"——即当前用户在该弹窗内唯一可感知、可操作的功能是"移出项目"，权限配置相关入口对其完全不可见。若业务上希望"仅移出人员"状态下也禁止实际执行移出（仅展示），可在正式产品中对该按钮做置灰处理，原型默认按"拥有该权限即可操作"实现。</p>
+                </div>
             </div>
         </div>
 
@@ -1889,7 +3501,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
-                        <div class="info-value">项目经理、施工组长、工人</div>
+                        <div class="info-value">项目总、施工组长、工人</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面入口</div>
@@ -2072,7 +3684,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
-                        <div class="info-value">项目经理、工长</div>
+                        <div class="info-value">项目总、工长</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面入口</div>
@@ -2283,7 +3895,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
-                        <div class="info-value">项目经理、工长</div>
+                        <div class="info-value">项目总、工长</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面入口</div>
@@ -2412,7 +4024,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
-                        <div class="info-value">项目经理、施工组长、设计师</div>
+                        <div class="info-value">项目总、施工组长、设计师</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面入口</div>
@@ -2721,6 +4333,430 @@
                     </tbody>
                 </table>
             </div>
+
+            <div class="subsection">
+                <div class="subsection-title">12.4 交互逻辑规格</div>
+                <p>以下为业主端项目详情页（进行中状态）的交互逻辑规格，描述各组件的用户操作与响应行为。</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>交互区域</th>
+                            <th>交互元素</th>
+                            <th>触发操作</th>
+                            <th>响应行为</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="3">导航栏</td>
+                            <td>中间标题区域</td>
+                            <td>—</td>
+                            <td>显示当前项目名称</td>
+                        </tr>
+                        <tr>
+                            <td>右侧"⋯"按钮</td>
+                            <td>点击</td>
+                            <td>弹出操作菜单，菜单项含"项目详情"（仅菜单框架，无分享功能）</td>
+                        </tr>
+                        <tr>
+                            <td>右侧"✕"按钮</td>
+                            <td>点击</td>
+                            <td>关闭小程序</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="5">快捷导航</td>
+                            <td>快捷入口（项目信息、架构、成员、资料、对账单）</td>
+                            <td>点击</td>
+                            <td>跳转对应页面</td>
+                        </tr>
+                        <tr>
+                            <td>"固定"按钮</td>
+                            <td>点击</td>
+                            <td>切换固定状态；固定后快捷导航在滚动时不收起，状态通过<code>localStorage</code>持久化</td>
+                        </tr>
+                        <tr>
+                            <td>页面向下滚动</td>
+                            <td>滚动超过50px</td>
+                            <td>快捷导航自动收起（用户手动展开的除外）</td>
+                        </tr>
+                        <tr>
+                            <td>页面向上滚动</td>
+                            <td>滚回顶部</td>
+                            <td>快捷导航自动展开</td>
+                        </tr>
+                        <tr>
+                            <td>展开/收起按钮</td>
+                            <td>点击</td>
+                            <td>切换快捷导航显示状态，文案随状态变化（"展开快捷入口"/"收起快捷入口"）</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="5">层级选择器</td>
+                            <td>层级选择器区域</td>
+                            <td>点击</td>
+                            <td>展开下拉选项列表</td>
+                        </tr>
+                        <tr>
+                            <td>选项列表</td>
+                            <td>展示</td>
+                            <td>显示当前层级、父级、子级；当前层级有勾选标记；每个选项显示层级图标+层级名称+概要信息（如"4个工作组 · 8份合同"）</td>
+                        </tr>
+                        <tr>
+                            <td>选项项</td>
+                            <td>点击</td>
+                            <td>关闭下拉，更新面包屑导航，触发局部刷新（200ms延迟+loading动画）</td>
+                        </tr>
+                        <tr>
+                            <td>面包屑中的层级名称</td>
+                            <td>点击</td>
+                            <td>导航到对应层级</td>
+                        </tr>
+                        <tr>
+                            <td>选择器以外区域</td>
+                            <td>点击</td>
+                            <td>关闭下拉菜单</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="5">项目导航（施工路线）</td>
+                            <td>右侧悬浮入口条</td>
+                            <td>展示</td>
+                            <td>显示"◀ 项目导航"文字条</td>
+                        </tr>
+                        <tr>
+                            <td>右侧悬浮入口条</td>
+                            <td>点击</td>
+                            <td>从右侧滑出抽屉面板</td>
+                        </tr>
+                        <tr>
+                            <td>施工路线时间轴</td>
+                            <td>展示</td>
+                            <td>展示阶段→任务列表的时间轴结构；已完成阶段/任务显示灰色，执行中显示蓝色高亮，即将执行显示橙色，待执行显示灰色边框</td>
+                        </tr>
+                        <tr>
+                            <td>执行中任务</td>
+                            <td>展示</td>
+                            <td>显示"← 当前"标签标记当前任务</td>
+                        </tr>
+                        <tr>
+                            <td>任务项</td>
+                            <td>点击</td>
+                            <td>关闭抽屉面板，跳转到对应任务详情页</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3">今日动态</td>
+                            <td>"展开更多"按钮</td>
+                            <td>点击</td>
+                            <td>展开/收起隐藏的动态项；文案随状态变化（"展开更多"/"收起"），箭头旋转</td>
+                        </tr>
+                        <tr>
+                            <td>"查看全部"链接</td>
+                            <td>点击</td>
+                            <td>跳转到业主端项目动态页</td>
+                        </tr>
+                        <tr>
+                            <td>动态项</td>
+                            <td>点击</td>
+                            <td>跳转到对应的任务详情或合同详情页</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">合同概览</td>
+                            <td>合同列表</td>
+                            <td>展示</td>
+                            <td>默认展开，每项显示：合同名称 + 工作组 + 金额 + 状态标签（如"拟定中""待我确认"）</td>
+                        </tr>
+                        <tr>
+                            <td>合同项</td>
+                            <td>点击</td>
+                            <td>跳转到业主端合同详情页</td>
+                        </tr>
+                        <tr>
+                            <td>任务统计</td>
+                            <td>"查看全部"链接</td>
+                            <td>点击</td>
+                            <td>跳转到业主端任务列表页</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">待办事项</td>
+                            <td>"查看全部"链接</td>
+                            <td>点击</td>
+                            <td>跳转到业主端全部待办页，规格详见 <a href="PRD-任务模块详细规格.html#page-todo-list-owner" target="_blank">全部待办页（业主）</a></td>
+                        </tr>
+                        <tr>
+                            <td>待办项</td>
+                            <td>展示</td>
+                            <td>仅显示业主需要确认的待办（合同确认 + 任务确认），不包含执行相关待办</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4">底部TabBar</td>
+                            <td>"首页"Tab</td>
+                            <td>点击</td>
+                            <td>跳转业主端首页</td>
+                        </tr>
+                        <tr>
+                            <td>"我的家"Tab</td>
+                            <td>展示</td>
+                            <td>当前页面，显示为激活态</td>
+                        </tr>
+                        <tr>
+                            <td>"消息"Tab</td>
+                            <td>点击</td>
+                            <td>跳转业主端消息页</td>
+                        </tr>
+                        <tr>
+                            <td>"我的"Tab</td>
+                            <td>点击</td>
+                            <td>显示"个人中心开发中"提示</td>
+                        </tr>
+                        <tr>
+                            <td>页面加载</td>
+                            <td>初始状态</td>
+                            <td>—</td>
+                            <td>显示loading遮罩（加载中...），数据加载完成后隐藏</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">12.5 展示字段项及数量统计规则</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>展示区域</th>
+                            <th>字段项</th>
+                            <th>数据来源/API</th>
+                            <th>统计规则</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="4">合同概览卡片</td>
+                            <td>签约进度</td>
+                            <td><code>GET /api/v1/projects/:id/contracts</code></td>
+                            <td>已签约合同数 / 总合同数</td>
+                        </tr>
+                        <tr>
+                            <td>总进度百分比</td>
+                            <td><code>projects.progress</code></td>
+                            <td>所有任务完成进度加权平均</td>
+                        </tr>
+                        <tr>
+                            <td>合同数量</td>
+                            <td><code>contracts.total</code></td>
+                            <td>项目下所有合同总数（含各级子项目）</td>
+                        </tr>
+                        <tr>
+                            <td>合同状态标签</td>
+                            <td><code>contracts.status</code></td>
+                            <td>每项合同额外显示状态标签（如"拟定中""待我确认"），业主视角专属</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3">任务统计卡片</td>
+                            <td>全部任务</td>
+                            <td><code>GET /api/v1/projects/:id/tasks/stats</code></td>
+                            <td>已完成任务数 / 总任务数</td>
+                        </tr>
+                        <tr>
+                            <td>确认中任务</td>
+                            <td><code>tasks.status = 'confirming'</code></td>
+                            <td>状态为"确认中"的任务数量</td>
+                        </tr>
+                        <tr>
+                            <td>执行中任务</td>
+                            <td><code>tasks.status = 'in_progress'</code></td>
+                            <td>状态为"执行中"的任务数量</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">待办事项卡片</td>
+                            <td>待办数量</td>
+                            <td><code>GET /api/v1/projects/:id/todos</code></td>
+                            <td>仅统计业主需要确认的待办（合同确认 + 任务确认），不包含执行相关待办</td>
+                        </tr>
+                        <tr>
+                            <td>显示条数</td>
+                            <td>前端分页</td>
+                            <td>默认显示5条，点击"查看全部"跳转业主端全部待办页，规格详见 <a href="PRD-任务模块详细规格.html#page-todo-list-owner" target="_blank">全部待办页（业主）</a></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="5">快捷导航栏</td>
+                            <td>入口数量</td>
+                            <td>前端固定配置</td>
+                            <td>固定5个入口：项目信息、架构、成员、资料、对账单</td>
+                        </tr>
+                        <tr>
+                            <td>项目信息入口</td>
+                            <td>固定链接</td>
+                            <td>跳转业主端项目信息详情页</td>
+                        </tr>
+                        <tr>
+                            <td>架构入口</td>
+                            <td>固定链接</td>
+                            <td>跳转业主端项目架构树页</td>
+                        </tr>
+                        <tr>
+                            <td>成员入口</td>
+                            <td>固定链接</td>
+                            <td>跳转业主端项目成员列表页</td>
+                        </tr>
+                        <tr>
+                            <td>资料入口</td>
+                            <td>固定链接</td>
+                            <td>跳转业主端项目文件库页</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="note" style="margin-top: 16px;">
+                    <div class="note-title">业主端与服务方差异说明</div>
+                    <p><strong>待办事项：</strong>业主端仅显示业主需要确认的待办（合同确认 + 任务确认），不包含执行相关待办；服务方则包含全部待办类型。</p>
+                    <p><strong>合同状态标签：</strong>业主端合同列表项额外显示状态标签（如"拟定中""待我确认"），便于业主快速了解合同当前状态；服务方不显示此标签。</p>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">12.6 初始项目详情页逻辑（原型/演示）</div>
+                <p>说明：业主端不主动创建项目，项目由服务方创建后通过后端同步至业主端。原型演示中使用浏览器端临时持久化（<code>localStorage.newProjectData</code>）作为数据源，以下规则适用于"初始项目详情页"及其关联页面（架构页、成员页、项目信息页）。正式产品请以后端接口为准。</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>场景</th>
+                            <th>规则</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>数据来源</td>
+                            <td>业主端项目数据由服务方创建项目后同步。原型演示中，<code>localStorage.newProjectData</code> 由服务方创建项目页写入（含 <code>projectName, customerName, customerPhone, province, city, district, address, area, category, houseType, styles</code> 等字段），业主端直接读取该数据；若不存在则显示默认演示文案。工作组数据保存在 <code>newProjectData.groups</code> 数组。</td>
+                        </tr>
+                        <tr>
+                            <td>页面读取</td>
+                            <td>初始项目详情页（及架构/成员/项目信息页）在加载时优先读取 <code>localStorage.newProjectData</code>，不存在时显示默认演示文案。</td>
+                        </tr>
+                        <tr>
+                            <td>成员页 - 业主信息显示</td>
+                            <td>成员页中"业主"信息应从 <code>newProjectData.customerName</code> 回退填充，头像显示姓名首字母。业主卡片下方展示角色标签：若 <code>newProjectData.creatorRoles</code> 为数组则按数组渲染标签；否则默认渲染一个标签：<code>业主</code>。标签使用 <code>role-tag</code> 样式。</td>
+                        </tr>
+                        <tr>
+                            <td>成员页 - 权限入口</td>
+                            <td>业主卡片右侧展示两个权限角标：<code>数据：全部</code> 和 <code>治理：全部</code>，右侧带可点击箭头（›）。点击触发演示弹窗/模态进入权限设置（原型使用 <code>alert</code> 或演示模态）。</td>
+                        </tr>
+                        <tr>
+                            <td>架构页 - 项目部展示</td>
+                            <td>初始架构页在顶部项目部卡片展示"项目总 &lt;姓名&gt;"与"X个工作组"，其中姓名来自 <code>newProjectData.customerName</code>（或 <code>projectManager</code> 字段）；若无数据显示默认示例（张三）。去除初始"进度 0%"展示以保持简洁。</td>
+                        </tr>
+                        <tr>
+                            <td>架构页 - 添加施工组</td>
+                            <td>业主端架构页支持添加施工组，点击"添加子层级"打开底部弹窗包含字段：工作组名称、组长、备注。添加时追加对象到 <code>newProjectData.groups</code> 并更新页面显示与头部工作组计数（仅原型演示，正式请调用后端 API）。</td>
+                        </tr>
+                        <tr>
+                            <td>不影响现有功能</td>
+                            <td>以上改动仅限原型前端演示逻辑与样式调整，不改变其他页面流程或后端交互调用。正式联调时应替换 <code>localStorage</code> 逻辑为后端接口。</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">12.7 已完成状态 - 页面概述</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">页面名称</div>
+                        <div class="info-value">项目详情页-已完成（我的家）</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面路径</div>
+                        <div class="info-value">owner-miniapp/project-detail-completed.html</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">适用角色</div>
+                        <div class="info-value">业主</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面入口</div>
+                        <div class="info-value">底部TabBar"我的家"直接进入（项目已完成状态）</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">12.8 已完成状态 - 与进行中状态的差异</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>展示区域</th>
+                            <th>进行中状态</th>
+                            <th>已完成状态</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>合同概览-签约进度</td>
+                            <td>部分签约</td>
+                            <td>全部签约（如8/8）</td>
+                        </tr>
+                        <tr>
+                            <td>合同概览-总进度</td>
+                            <td>X%</td>
+                            <td>100%</td>
+                        </tr>
+                        <tr>
+                            <td>合同概览-合同列表</td>
+                            <td>各合同进度不同，含状态标签（拟定中/待我确认等）</td>
+                            <td>所有合同进度100%，状态标签显示"已完成"</td>
+                        </tr>
+                        <tr>
+                            <td>任务统计-全部任务</td>
+                            <td>已完成X/总数Y</td>
+                            <td>总数/总数（全部完成）</td>
+                        </tr>
+                        <tr>
+                            <td>任务统计-确认中/执行中</td>
+                            <td>可能有值</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>待办事项</td>
+                            <td>显示业主需确认的待办列表</td>
+                            <td>无待办，显示空状态"暂无待办事项"</td>
+                        </tr>
+                        <tr>
+                            <td>今日动态</td>
+                            <td>验收/确认等动态</td>
+                            <td>项目完成相关动态（竣工验收、结算签署等）</td>
+                        </tr>
+                        <tr>
+                            <td>项目导航（施工路线）</td>
+                            <td>时间轴含执行中（蓝色高亮）和待执行节点</td>
+                            <td>所有节点均为"已完成"状态（灰色），当前任务标记消失</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">12.9 已完成状态 - 交互逻辑</div>
+                <p>与业主端项目详情页（进行中）交互逻辑一致，详见12.4节。差异点：</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>交互区域</th>
+                            <th>差异说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>合同概览</td>
+                            <td>合同列表默认展开，所有合同项点击跳转业主端合同详情页（已完成状态）</td>
+                        </tr>
+                        <tr>
+                            <td>待办事项</td>
+                            <td>无待办项可点击，"查看全部"链接仍可跳转</td>
+                        </tr>
+                        <tr>
+                            <td>项目导航（施工路线）</td>
+                            <td>所有阶段和任务均为已完成状态，点击任务项跳转到已完成状态的任务详情页</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- ==================== 13. 项目动态页（业主小程序） ==================== -->
@@ -2860,53 +4896,151 @@
                         <tr>
                             <td>项目名称</td>
                             <td>projects.name</td>
-                            <td>完整显示，只读</td>
+                            <td>只读态：禁用输入框展示；编辑态：输入框可修改</td>
                         </tr>
                         <tr>
                             <td>项目状态</td>
                             <td>projects.status</td>
-                            <td>进行中（蓝色）/ 已完成（绿色）</td>
+                            <td>进行中（info-header中标签展示）</td>
                         </tr>
                         <tr>
-                            <td>项目地址</td>
-                            <td>projects.address</td>
-                            <td>区域+详细地址</td>
+                            <td>客户姓名</td>
+                            <td>users.name</td>
+                            <td>完整显示，编辑态：输入框+必填校验</td>
+                        </tr>
+                        <tr>
+                            <td>联系方式</td>
+                            <td>users.phone</td>
+                            <td>完整显示（不脱敏），编辑态：输入框+手机号格式校验</td>
+                        </tr>
+                        <tr>
+                            <td>所在区域</td>
+                            <td>projects.city_code + projects.address</td>
+                            <td>只读态：禁用下拉框+禁用输入框；编辑态：省市区三级下拉+详细地址输入框</td>
+                        </tr>
+                        <tr>
+                            <td>房屋面积</td>
+                            <td>projects.area</td>
+                            <td>只读态：禁用输入框+㎡后缀；编辑态：数字输入框+单位后缀+必填校验</td>
                         </tr>
                         <tr>
                             <td>房屋类别</td>
                             <td>projects.house_type</td>
-                            <td>住宅/公寓/别墅等</td>
+                            <td>只读态：仅显示选中项（如"毛坯房"）；编辑态：三选一卡片选项（毛坯房/精装房/旧房改造）</td>
                         </tr>
                         <tr>
-                            <td>业主信息</td>
-                            <td>projects.owner</td>
-                            <td>业主姓名、联系方式完整显示</td>
+                            <td>房型</td>
+                            <td>projects.room_type</td>
+                            <td>只读态：仅显示选中项（如"平层"）；编辑态：三选一卡片选项（别墅/复式/平层）</td>
+                        </tr>
+                        <tr>
+                            <td>计划开工日期</td>
+                            <td>projects.start_date</td>
+                            <td>只读态：禁用日期选择器；编辑态：日期选择器</td>
+                        </tr>
+                        <tr>
+                            <td>计划入住日期</td>
+                            <td>projects.end_date</td>
+                            <td>只读态：禁用日期选择器；编辑态：日期选择器</td>
                         </tr>
                         <tr>
                             <td>装修风格</td>
-                            <td>projects.style</td>
-                            <td>现代简约/中式/欧式等</td>
+                            <td>projects.styles</td>
+                            <td>只读态：仅显示已选标签（隐藏"选择喜欢的装修风格(可多选)"提示）；编辑态：可多选标签组+提示文案，选项：中式/法式/现代/轻奢/简约/工业/美式</td>
                         </tr>
                         <tr>
-                            <td>创建时间</td>
-                            <td>projects.created_at</td>
-                            <td>YYYY-MM-DD格式</td>
+                            <td>附件</td>
+                            <td>projects.attachments</td>
+                            <td>只读态：列表布局，每项显示文件名+图标+"查看"链接，无删除按钮和上传区域；编辑态：每项含"查看"+"删除"按钮+上传区域</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">14.3 字段限制说明</div>
-                <div class="note">
-                    <div class="note-title">不显示字段</div>
-                    <p>根据产品约束，项目信息页不显示：预算金额、项目类型（整体装修/局改/翻新）、项目负责人。</p>
-                </div>
+                <div class="subsection-title">14.3 交互逻辑规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>交互区域</th>
+                            <th>交互元素</th>
+                            <th>触发操作</th>
+                            <th>响应行为</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>编辑按钮</td>
+                            <td>项目名称右侧"编辑"</td>
+                            <td>点击</td>
+                            <td>切换为全局编辑模式：按钮变"取消"，所有表单分区同时变为可编辑，底部出现"保存修改"</td>
+                        </tr>
+                        <tr>
+                            <td>取消按钮</td>
+                            <td>项目名称右侧"取消"</td>
+                            <td>点击</td>
+                            <td>切换回只读模式：按钮变"编辑"，所有字段恢复禁用态，底部"保存修改"隐藏，未保存修改丢弃</td>
+                        </tr>
+                        <tr>
+                            <td>保存按钮</td>
+                            <td>"保存修改"</td>
+                            <td>点击</td>
+                            <td>校验必填字段（客户姓名非空+手机号格式）→通过则保存+恢复只读态+弹窗"项目信息已保存"→不通过则标红错误字段+显示错误提示</td>
+                        </tr>
+                        <tr>
+                            <td>附件-查看</td>
+                            <td>"查看"链接</td>
+                            <td>点击</td>
+                            <td>打开全屏附件预览页</td>
+                        </tr>
+                        <tr>
+                            <td>附件-删除</td>
+                            <td>"删除"链接</td>
+                            <td>点击</td>
+                            <td>弹出确认弹窗→确认后移除附件项（仅编辑态显示）</td>
+                        </tr>
+                        <tr>
+                            <td>附件-上传</td>
+                            <td>上传区域</td>
+                            <td>点击</td>
+                            <td>触发文件选择（仅编辑态显示）</td>
+                        </tr>
+                        <tr>
+                            <td>附件预览-返回</td>
+                            <td>← 返回</td>
+                            <td>点击</td>
+                            <td>关闭预览页</td>
+                        </tr>
+                        <tr>
+                            <td>附件预览-下载</td>
+                            <td>"下载"按钮</td>
+                            <td>点击</td>
+                            <td>触发附件下载</td>
+                        </tr>
+                        <tr>
+                            <td>附件预览-关闭</td>
+                            <td>"关闭"按钮</td>
+                            <td>点击</td>
+                            <td>关闭预览页</td>
+                        </tr>
+                        <tr>
+                            <td>导航栏菜单</td>
+                            <td>⋯ 按钮</td>
+                            <td>点击</td>
+                            <td>弹出操作菜单（仅含"项目信息"项，无分享功能）</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <div class="subsection">
                 <div class="subsection-title">14.4 功能说明</div>
-                <p>业主端项目信息页为只读模式，业主可查看项目基本信息，不支持编辑修改。</p>
+                <p>业主端项目信息页仅有一个编辑入口——项目名称右侧的"编辑"按钮。进入页面后各字段默认展示为只读文本形式，选项类字段（房屋类别、房型、装修风格）只显示当前选中项，不显示未选中选项。点击"编辑"按钮进入全局编辑状态，所有表单分区（项目名称、客户信息、房屋信息、计划时间、装修风格、附件）同时变为可编辑，选项类字段展开所有可选项，装修风格显示"选择喜欢的装修风格（可多选）"提示文案。编辑状态下"编辑"按钮变为"取消"按钮，页面底部出现"保存修改"按钮。修改后根据表单字段规则校验通过则保存生效，校验不通过则提示错误信息。附件点击"查看"打开全屏预览页，含文件名、内容预览区、下载和关闭按钮。</p>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">14.5 权限说明</div>
+                <p>业主端项目信息页无需权限区分，默认展示全部内容。所有字段信息（除创建时间外）均对业主可见且可编辑，不做任何脱敏或隐藏处理。</p>
             </div>
         </div>
 
@@ -2958,12 +5092,17 @@
                         <tr>
                             <td>创建工作组</td>
                             <td>✅</td>
-                            <td>❌</td>
+                            <td>✅</td>
                         </tr>
                         <tr>
                             <td>创建合同</td>
                             <td>✅</td>
                             <td>❌ 不支持</td>
+                        </tr>
+                        <tr>
+                            <td>查看合同</td>
+                            <td>✅</td>
+                            <td>✅</td>
                         </tr>
                         <tr>
                             <td>邀请成员</td>
@@ -2979,6 +5118,153 @@
                             <td>删除工作组</td>
                             <td>✅</td>
                             <td>✅</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">15.6 节点操作规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>操作</th>
+                            <th>适用层级</th>
+                            <th>触发条件</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>添加工作组</td>
+                            <td>项目部</td>
+                            <td>有添加权限</td>
+                            <td>创建工作组，需填写名称和组长，可添加备注</td>
+                        </tr>
+                        <tr>
+                            <td>查看合同</td>
+                            <td>工作组</td>
+                            <td>工作组已签约</td>
+                            <td>打开合同详情弹窗，查看关联合同信息</td>
+                        </tr>
+                        <tr>
+                            <td>邀请成员</td>
+                            <td>所有层级</td>
+                            <td>有邀请权限</td>
+                            <td>支持手机号/二维码/微信好友三种方式（与服务方一致）</td>
+                        </tr>
+                        <tr>
+                            <td>添加施工组</td>
+                            <td>工作组</td>
+                            <td>有添加权限</td>
+                            <td>创建施工组，需填写名称和组长</td>
+                        </tr>
+                        <tr>
+                            <td>退出</td>
+                            <td>项目部/工作组</td>
+                            <td>未签订合同且非任务执行人/确认人</td>
+                            <td>校验条件（已签约不可退出、任务角色不可退出）→弹出确认弹窗→确认后退出</td>
+                        </tr>
+                        <tr>
+                            <td>删除</td>
+                            <td>工作组</td>
+                            <td>有删除权限且无合同</td>
+                            <td>删除工作组及其下所有施工组，需二次确认</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 8px; color: var(--text-secondary); font-size: 13px;">说明：业主端架构页可查看已签约工作组的合同详情，不支持创建合同。施工组层级仅支持邀请成员操作。</p>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">15.7 交互逻辑规格</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>交互区域</th>
+                            <th>交互元素</th>
+                            <th>触发操作</th>
+                            <th>响应行为</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>架构树节点</td>
+                            <td>节点头部</td>
+                            <td>点击</td>
+                            <td>展开/收起子节点</td>
+                        </tr>
+                        <tr>
+                            <td>项目部操作</td>
+                            <td>"邀请成员"</td>
+                            <td>点击</td>
+                            <td>打开邀请成员弹窗（详见 <a href="#page-member-owner" style="color: var(--primary-color);">16.5 邀请方式规格</a>）</td>
+                        </tr>
+                        <tr>
+                            <td>项目部操作</td>
+                            <td>"添加工作组"</td>
+                            <td>点击</td>
+                            <td>校验权限→打开创建工作组弹窗（填写名称+组长+备注）</td>
+                        </tr>
+                        <tr>
+                            <td>项目部操作</td>
+                            <td>"退出项目部"</td>
+                            <td>点击</td>
+                            <td>校验退出条件→弹出确认弹窗→确认后退出</td>
+                        </tr>
+                        <tr>
+                            <td>工作组操作</td>
+                            <td>"查看合同"</td>
+                            <td>点击</td>
+                            <td>校验是否已签约→打开合同详情弹窗展示关联合同</td>
+                        </tr>
+                        <tr>
+                            <td>工作组操作</td>
+                            <td>"邀请成员"</td>
+                            <td>点击</td>
+                            <td>打开邀请成员弹窗（详见 <a href="#page-member-owner" style="color: var(--primary-color);">16.5 邀请方式规格</a>）</td>
+                        </tr>
+                        <tr>
+                            <td>工作组操作</td>
+                            <td>"添加施工组"</td>
+                            <td>点击</td>
+                            <td>校验权限→打开创建施工组弹窗</td>
+                        </tr>
+                        <tr>
+                            <td>工作组操作</td>
+                            <td>"退出工作组"</td>
+                            <td>点击</td>
+                            <td>校验退出条件（已签约不可退出、任务角色不可退出）→弹出确认弹窗→确认后退出</td>
+                        </tr>
+                        <tr>
+                            <td>工作组操作</td>
+                            <td>"删除"</td>
+                            <td>点击</td>
+                            <td>校验权限+是否已有合同→弹出确认弹窗→确认后删除</td>
+                        </tr>
+                        <tr>
+                            <td>施工组操作</td>
+                            <td>"邀请成员"</td>
+                            <td>点击</td>
+                            <td>打开邀请成员弹窗（详见 <a href="#page-member-owner" style="color: var(--primary-color);">16.5 邀请方式规格</a>）</td>
+                        </tr>
+                        <tr>
+                            <td>邀请成员弹窗</td>
+                            <td>手机号方式</td>
+                            <td>发送邀请</td>
+                            <td>校验手机号格式（1[3-9]开头的11位数字）→弹出确认弹窗→确认后Toast"邀请已发送"</td>
+                        </tr>
+                        <tr>
+                            <td>邀请成员弹窗</td>
+                            <td>二维码方式</td>
+                            <td>下载二维码</td>
+                            <td>底部按钮显示"下载二维码"，点击后Toast"二维码已生成"（二维码有效期7天）</td>
+                        </tr>
+                        <tr>
+                            <td>邀请成员弹窗</td>
+                            <td>微信好友方式</td>
+                            <td>发送给微信好友</td>
+                            <td>显示微信分享卡片预览（标题动态为"邀请你加入{架构层名称}"），点击绿色"发送给微信好友"按钮调起微信分享面板，选择好友发送邀请卡片，底部通用按钮隐藏</td>
                         </tr>
                     </tbody>
                 </table>
@@ -3015,13 +5301,23 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title">14.2 功能说明</div>
-                <p>业主端项目成员页与服务方功能一致，支持：</p>
+                <div class="subsection-title">16.2 功能说明</div>
+                <p>业主端项目成员页与服务方功能一致，支持以下核心能力：</p>
                 <ul>
-                    <li>查看成员列表</li>
-                    <li>邀请新成员</li>
-                    <li>设置成员权限</li>
+                    <li>查看成员列表（按工作组分组展示）</li>
+                    <li>邀请新成员（弹窗顶部区分「服务人员 / 业主及家人」身份，决定落地<strong>服务端</strong>或<strong>业主端</strong>小程序；身份区分规则详见"<a href="#subsection-7-6" style="color: var(--primary-color);">服务方项目成员页 7.6 邀请身份区分规格</a>"，邀请方式三种详见 <a href="#subsection-7-5" style="color: var(--primary-color);">7.5 邀请方式规格</a>）</li>
+                    <li>成员搜索（筛选栏"🔍"按钮展开搜索栏，支持姓名/角色/工作组/标签实时模糊匹配，详见"<a href="#subsection-7-7" style="color: var(--primary-color);">7.7 搜索功能规则</a>"）</li>
+                    <li>成员权限配置（点击成员卡片权限标签弹出权限模态框，配置数据权限与治理权限，详见"<a href="#subsection-7-8" style="color: var(--primary-color);">7.8 权限配置规则</a>"）</li>
+                    <li>移入成员（权限模态框内"移出项目"按钮，受权限/自身/唯一管理者/合同关联等保护，详见"<a href="#subsection-7-10" style="color: var(--primary-color);">7.10 移出指定成员规则</a>"）</li>
+                    <li>退出项目（头部右上角"退出项目"按钮，确认弹窗后跳转至项目列表页，详见"<a href="#subsection-7-9" style="color: var(--primary-color);">7.9 退出项目规则</a>"）</li>
+                    <li>权限管理入口可见性（"›"箭头与权限区域按当前用户权限三态展示：无权限隐藏、仅移出人员/全部权限显示，详见"<a href="#subsection-7-11" style="color: var(--primary-color);">7.11 权限管理入口可见性规则</a>"）</li>
+                    <li>成员个人电子名片（点击成员头像/姓名跳转 <code>member-profile.html</code>，权限无关，详见"<a href="#subsection-7-12" style="color: var(--primary-color);">7.12 成员个人电子名片跳转规则</a>"）</li>
+                    <li>人员操作模态框（当前用户仅拥有"移出人员"权限时，点击成员弹出"人员操作"模态框，仅可移出，详见"<a href="#subsection-7-13" style="color: var(--primary-color);">7.13 人员操作模态框规则</a>"）</li>
                 </ul>
+                <div class="note" style="margin-top: 16px;">
+                    <div class="note-title">说明</div>
+                    <p>业主端搜索、权限配置、移出成员、退出项目的交互流程、触发入口、校验规则与服务方一致，具体规则请参考"服务方小程序 → 七、项目成员页"下的 <a href="#subsection-7-6" style="color: var(--primary-color);">7.6 邀请身份区分规格</a> / <a href="#subsection-7-7" style="color: var(--primary-color);">7.7 搜索功能规则</a> / <a href="#subsection-7-8" style="color: var(--primary-color);">7.8 权限配置规则</a> / <a href="#subsection-7-9" style="color: var(--primary-color);">7.9 退出项目规则</a> / <a href="#subsection-7-10" style="color: var(--primary-color);">7.10 移出指定成员规则</a> / <a href="#subsection-7-11" style="color: var(--primary-color);">7.11 权限管理入口可见性规则</a> / <a href="#subsection-7-12" style="color: var(--primary-color);">7.12 成员个人电子名片跳转规则</a> / <a href="#subsection-7-13" style="color: var(--primary-color);">7.13 人员操作模态框规则</a> 小节。业主角色作为项目成员之一，受相同的数据权限与治理权限约束。</p>
+                </div>
             </div>
         </div>
 
@@ -3352,7 +5648,7 @@
                             <td>项目角色（role）</td>
                             <td>Enum</td>
                             <td><span class="tag tag-required">必填</span></td>
-                            <td>枚举值：project_manager（项目经理）、foreman（工长）、worker（工人）、supervisor（监理）、owner（业主）</td>
+                            <td>枚举值：project_manager（项目总）、foreman（工长）、worker（工人）、supervisor（监理）、owner（业主）</td>
                             <td>请选择角色</td>
                         </tr>
                         <tr>

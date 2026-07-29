@@ -685,6 +685,22 @@
     display: block;
 }
 
+.todo-empty {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.todo-empty .empty-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.todo-empty .empty-text {
+    font-size: 16px;
+    color: var(--color-text-secondary, #8C8C8C);
+}
+
 .todo-item {
     display: flex;
     align-items: center;
