@@ -59,6 +59,7 @@ erDiagram
         Enum user_type "service/owner/admin"
         Boolean promoter_verified "推广人认证"
         String promoter_code "推广人码"
+        Int certified_role_count "已认证角色数(>=1方可被邀请匹配)"
         Enum status "active/disabled"
         DateTime last_login_at "最后登录"
         DateTime created_at "创建时间"
@@ -91,7 +92,7 @@ erDiagram
         String user_id FK "关联users.id"
         Enum role "project_manager/foreman/worker/supervisor/owner"
         Enum member_category "service(服务人员)/owner(业主及家人)"
-        Enum relationship "self/spouse/parent/child/other"
+        Enum permission_level "basic(仅基础公开数据无治理)/full(全部权限)"
         Enum join_method "invite/scan/assign"
         Enum status "active/removed"
         DateTime joined_at "加入时间"
@@ -306,11 +307,11 @@ erDiagram
         String id PK "UUID主键"
         String project_id FK "关联projects.id"
         String inviter_id FK "邀请人用户ID"
-        Enum invite_type "qrcode/link/phone"
+        Enum invite_type "qrcode/link/platform"
         String invite_code UK "邀请码/分享码"
         Enum target_role "project_manager/foreman/worker/supervisor"
         Enum target_category "service(服务人员)/owner(业主及家人)"
-        Enum relationship "self/spouse/parent/child/other"
+        Enum target_permission "basic(仅基础公开数据无治理)/full(全部权限)"
         String target_node_id FK "关联架构节点ID(扫码加入时)"
         DateTime expire_at "过期时间(默认7天)"
         Enum status "pending/used/expired/cancelled"
@@ -615,25 +616,27 @@ erDiagram
 
 ### 2.3 invite_records 表字段定义
 
-> 来源：原型中成员页/架构页的邀请功能（二维码7天有效、链接分享、手机号邀请）
+> 来源：原型中成员页/架构页的邀请功能（二维码/链接7天有效、平台内选择邀请）
 
 | 字段名 | 类型 | 必填 | 默认值 | 说明 |
 |--------|------|------|--------|------|
 | id | String(UUID) | 是 | — | 主键 |
 | project_id | String(UUID) | 是 | — | 关联 projects.id |
 | inviter_id | String(UUID) | 是 | — | 邀请人用户ID |
-| invite_type | Enum | 是 | — | 枚举：`qrcode`（二维码邀请）、`link`（链接邀请）、`phone`（手机号邀请） |
+| invite_type | Enum | 是 | — | 枚举：`qrcode`（二维码邀请）、`link`（链接邀请）、`platform`（平台内选择邀请） |
 | invite_code | String(32) | 是 | — | 邀请码/分享码，唯一 |
 | target_role | Enum | 是 | — | 枚举：`project_manager`、`foreman`、`worker`、`supervisor` |
 | target_category | Enum | 是 | — | 枚举：`service`（服务人员）、`owner`（业主及家人）；与 target_role 配合——`service` 时填写 target_role，`owner` 时 target_role 置空 |
-| relationship | Enum | 否 | null | 枚举：`self`（业主本人）、`spouse`（配偶）、`parent`（父母）、`child`（子女）、`other`（其他）；仅 target_category=owner 时填写，用于区分"业主本人"与"业主家人" |
+| target_permission | Enum | 是 | 由 target_category 推导 | 被邀请人接受邀请后将获得的默认权限等级：`basic`（仅基础公开数据，无治理权限）、`full`（全部权限）。推导规则——`target_category=service`→`basic`；`target_category=owner`→`full` |
 | target_node_id | String(UUID) | 否 | null | 关联 project_architecture.id（扫码加入指定架构节点时使用） |
-| expire_at | DateTime | 是 | — | 过期时间（二维码/链接默认7天，手机号邀请不过期） |
+| expire_at | DateTime | 是 | — | 过期时间（二维码/链接默认7天，平台内选择邀请即时生效不过期） |
 | status | Enum | 是 | `pending` | 枚举：`pending`（待使用）、`used`（已使用）、`expired`（已过期）、`cancelled`（已取消） |
 | used_by | String(UUID) | 否 | null | 使用人用户ID |
 | used_at | DateTime | 否 | null | 使用时间 |
 | created_at | DateTime | 是 | now() | 创建时间 |
 | updated_at | DateTime | 是 | now() | 更新时间 |
+
+> **平台内选择匹配标准（补充）**：当 `invite_type=platform`（平台内选择）且 `target_category=service`（服务人员）时，被邀请人候选池仅包含 `users.certified_role_count >= 1`（已认证至少一个服务角色）的服务方人员；未认证任何角色者不可被匹配选择。业主及家人（`target_category=owner`）不受此限，均可被选择。该标准仅在"服务人员"身份下生效，不影响业主端邀请，亦不影响二维码 / 微信好友邀请方式。
 
 ---
 

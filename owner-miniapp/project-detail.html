@@ -328,12 +328,41 @@
         <div class="project-nav-overlay" id="projectNavOverlay"></div>
 
         <div class="project-nav-drawer" id="projectNavDrawer">
-            <div class="drawer-header">
-                <span class="drawer-title">施工路线</span>
-                <span class="drawer-close" id="projectNavClose">×</span>
+            <!-- 深色顶部导航栏 -->
+            <div class="drawer-header-bar">
+                <div class="drawer-header-left">
+                    <span class="drawer-header-icon">ⓘ</span>
+                    <span class="drawer-header-title">项目导航</span>
+                    <span class="drawer-header-tag">施工路线</span>
+                </div>
+                <div class="drawer-header-right">
+                    <span class="drawer-expand-btn" id="projectNavExpandAll" onclick="ProjectNav.toggleExpandAll()">全部展开</span>
+                    <span class="drawer-close" id="projectNavClose">×</span>
+                </div>
             </div>
+
+            <!-- 统计信息栏 -->
+            <div class="drawer-info-bar">
+                <div class="info-badge">
+                    <span class="info-badge-value" id="totalStageCount">5大阶段</span>
+                    <span class="info-badge-slash">/</span>
+                    <span class="info-badge-value" id="totalTaskCount">18项工程节点</span>
+                </div>
+                <span class="locate-btn" onclick="ProjectNav.scrollToCurrentTask()">
+                    <span class="locate-icon">📍</span>
+                    定位施工项
+                </span>
+            </div>
+
+            <!-- 阶段+任务列表内容区 -->
             <div class="drawer-content" id="projectNavContent">
-                <!-- 时间轴内容由 JS 动态生成 -->
+                <!-- 内容由 JS 动态生成 -->
+            </div>
+
+            <!-- 底部提示 -->
+            <div class="drawer-footer-tip">
+                <span class="footer-tip-icon">💡</span>
+                <span>点击阶段行可展开/收起；点击任务直达详情</span>
             </div>
         </div>
         
@@ -385,33 +414,29 @@
         }
         
         // 直接在页面中初始化原型导航折叠功能
-            function initPageNav() {
-                var pageNav = document.querySelector('.page-nav');
-                if (!pageNav) return;
+        function initPageNav() {
+            var pageNav = document.querySelector('.page-nav');
+            if (!pageNav) return;
 
-                var navTitle = pageNav.querySelector('.page-nav-title');
-                if (!navTitle) return;
+            var navTitle = pageNav.querySelector('.page-nav-title');
+            if (!navTitle) return;
 
-                // 添加切换按钮
-                var toggleBtn = document.createElement('span');
-                toggleBtn.className = 'toggle-btn';
-                toggleBtn.textContent = '▼';
-                navTitle.appendChild(toggleBtn);
+            var toggleBtn = document.createElement('span');
+            toggleBtn.className = 'toggle-btn';
+            toggleBtn.textContent = '▼';
+            navTitle.appendChild(toggleBtn);
 
-                // 点击标题切换折叠/展开状态
-                navTitle.addEventListener('click', function() {
-                    pageNav.classList.toggle('collapsed');
-                    toggleBtn.classList.toggle('collapsed');
-                });
-            }
+            navTitle.addEventListener('click', function() {
+                pageNav.classList.toggle('collapsed');
+                toggleBtn.classList.toggle('collapsed');
+            });
+        }
 
-            // 页面加载完成后初始化
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', initPageNav);
-            } else {
-                initPageNav();
-            }
-        })();
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initPageNav);
+        } else {
+            initPageNav();
+        }
     </script>
     <script src="js/project-nav-data.js"></script>
     <script src="js/project-detail.js"></script>

@@ -430,6 +430,75 @@
             color: var(--text-tertiary);
             margin-top: 2px;
         }
+    
+        /* 角色选择弹窗 */
+        .role-select-list {
+            margin: 8px 0 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .role-select-item {
+            padding: 12px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--bg-primary);
+            font-size: 14px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .role-select-item:hover,
+        .role-select-item:active {
+            border-color: var(--primary-color);
+            background-color: var(--bg-secondary);
+            color: var(--primary-color);
+        }
+
+        /* 接受邀请演示控制面板（仅原型演示，参考服务端消息页形式） */
+        .demo-control-panel {
+            position: fixed;
+            top: 130px;
+            left: calc(50% + 198px + 16px);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            z-index: 9999;
+            min-width: 190px;
+        }
+        .demo-control-panel .panel-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .demo-control-panel .demo-extra-nav { margin-top: 0; }
+        .demo-control-panel .extra-nav-title {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        .demo-control-panel .extra-nav-item {
+            display: block;
+            padding: 7px 10px;
+            margin-bottom: 6px;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .demo-control-panel .extra-nav-item:last-child { margin-bottom: 0; }
+        .demo-control-panel .extra-nav-item:hover {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
     </style>
 </head>
 <body>
@@ -510,6 +579,17 @@
                 </div>
             </div>
         </div>
+
+        <div class="app-modal" id="roleSelectModal">
+            <div class="modal-box">
+                <div class="modal-title">选择加入角色</div>
+                <div class="modal-content">您已认证多个角色，请选择加入该项目时使用的角色：</div>
+                <div class="role-select-list" id="roleSelectList"></div>
+                <div class="modal-actions">
+                    <button class="modal-btn cancel" onclick="closeRoleSelectModal()">取消</button>
+                </div>
+            </div>
+        </div>
         
         <div class="app-toast" id="appToast"></div>
     </div>
@@ -522,6 +602,15 @@
         <a href="message.html" class="page-nav-item active">消息</a>
         <a href="architecture.html" class="page-nav-item">项目架构</a>
         <a href="task-list.html" class="page-nav-item">任务列表</a>
+    </div>
+
+    <div class="demo-control-panel" id="acceptDemoPanel">
+        <div class="panel-title">接受邀请演示控制</div>
+        <div class="demo-extra-nav">
+            <div class="extra-nav-title">扫码 / 卡片邀请演示</div>
+            <a class="extra-nav-item" href="invite-join.html?source=qrcode">二维码邀请加入项目</a>
+            <a class="extra-nav-item" href="invite-join.html?source=wechat">微信好友邀请加入项目</a>
+        </div>
     </div>
     
     <script>
@@ -701,6 +790,8 @@
         let currentTab = 'invite';
         let currentActionMessageId = '';
         let currentActionType = '';
+
+        const currentUser = { name: '当前用户', verifiedRoles: [] };
 
         function renderMessages(tab) {
             const messageList = document.getElementById('messageList');
@@ -884,14 +975,40 @@
                 msg.unread = false;
                 
                 if (currentActionType === 'accept') {
-                    showAlert('接受成功', `您已成功加入"${msg.project.name}"项目，快去查看吧！`);
+                    updateBadge();
+                    renderMessages(currentTab);
+                    if (currentUser.verifiedRoles && currentUser.verifiedRoles.length > 1) {
+                        openRoleSelectModal(msg);
+                    } else {
+                        showToast(`已加入"${msg.project.name}"项目，正在进入...`);
+                        setTimeout(() => { goToProject(msg.project.name); }, 600);
+                    }
                 } else {
                     showToast('已拒绝邀请');
+                    updateBadge();
+                    renderMessages(currentTab);
                 }
-                
-                updateBadge();
-                renderMessages(currentTab);
             }
+        }
+
+        function openRoleSelectModal(msg) {
+            const list = document.getElementById('roleSelectList');
+            list.innerHTML = currentUser.verifiedRoles.map(role =>
+                `<div class="role-select-item" onclick="selectJoinRole('${msg.id}','${role}')">${role}</div>`
+            ).join('');
+            document.getElementById('roleSelectModal').classList.add('show');
+        }
+
+        function selectJoinRole(messageId, role) {
+            closeRoleSelectModal();
+            const msg = messages.invite.find(m => m.id === messageId);
+            const projectName = msg ? msg.project.name : '项目';
+            showToast(`已以「${role}」身份加入，正在进入...`);
+            setTimeout(() => { goToProject(projectName); }, 600);
+        }
+
+        function closeRoleSelectModal() {
+            document.getElementById('roleSelectModal').classList.remove('show');
         }
 
         function closeConfirmModal() {

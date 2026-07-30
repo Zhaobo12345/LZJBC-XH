@@ -142,6 +142,14 @@ function filterStatements() {
     }
 }
 
+function goToDetail(status, type, role) {
+    let url = 'statement-detail.html?status=' + encodeURIComponent(status) + '&type=' + encodeURIComponent(type);
+    if (role) {
+        url += '&role=' + encodeURIComponent(role);
+    }
+    window.location.href = url;
+}
+
 function showAddDrawer() {
     document.getElementById('addDrawerOverlay').classList.add('show');
     document.getElementById('addDrawer').classList.add('show');

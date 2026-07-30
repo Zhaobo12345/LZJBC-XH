@@ -760,12 +760,46 @@
     }
     
     /**
+     * 对账单无权限轻提示（气泡，无需弹窗，自动消失）
+     */
+    function showStatementTip(anchorEl) {
+        // 气泡定位在手机框（phone-frame）内、顶部标题（title）正下方居中，
+        // 不脱离框架，避免出现在框外
+        var frame = document.querySelector('.phone-frame');
+        if (!frame) frame = document.body;
+        var bubble = document.getElementById('statementTipBubble');
+        if (!bubble) {
+            bubble = document.createElement('div');
+            bubble.id = 'statementTipBubble';
+            bubble.className = 'light-bubble';
+        }
+        frame.appendChild(bubble); // 确保气泡挂载在手机框内
+        bubble.textContent = '您暂无查看对账单的权限';
+        var navBar = frame.querySelector('.nav-bar');
+        var top = 96; // 默认：状态栏(44)+导航栏(44)+间距
+        if (navBar) {
+            top = navBar.offsetTop + navBar.offsetHeight + 8;
+        }
+        bubble.style.top = top + 'px';
+        bubble.classList.add('show');
+        clearTimeout(window.__stmtTipTimer);
+        window.__stmtTipTimer = setTimeout(function () {
+            bubble.classList.remove('show');
+        }, 1800);
+    }
+
+    /**
      * 处理快捷入口点击
      */
     function handleQuickNavClick(e) {
         const item = e.target.closest('.quick-nav-item');
         if (item) {
             const href = item.dataset.href;
+            // 对账单权限演示控制：未开启全部权限时拦截，气泡轻提示，不进入列表页
+            if (href === 'statement-list.html' && window.statementDemoEnabled && !window.hasFullPermission) {
+                showStatementTip(item);
+                return;
+            }
             if (href) location.href = href;
             return;
         }

@@ -6,6 +6,89 @@
     <title>家装平台小程序原型 - 项目详情</title>
     <link rel="stylesheet" href="common.css">
     <link rel="stylesheet" href="css/project-detail.css">
+    <style>
+    /* 对账单权限演示控制面板（参考创建项目演示控制形式） */
+    .demo-control-panel {
+        position: fixed;
+        top: 130px;
+        left: calc(50% + 198px + 16px);
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        z-index: 9999;
+        min-width: 190px;
+    }
+    .demo-control-panel .panel-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    .demo-control-panel .control-label {
+        font-size: 12px;
+        color: var(--text-secondary);
+        margin-bottom: 8px;
+    }
+    .demo-control-panel .segmented-control {
+        display: flex;
+        background: var(--bg-secondary);
+        border-radius: 8px;
+        padding: 3px;
+        gap: 3px;
+    }
+    .demo-control-panel .segment {
+        flex: 1;
+        text-align: center;
+        padding: 6px 10px;
+        font-size: 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        color: var(--text-secondary);
+        transition: all 0.2s;
+    }
+    .demo-control-panel .segment.active {
+        background: var(--primary-color);
+        color: #fff;
+    }
+    .demo-control-panel .status-text {
+        font-size: 11px;
+        margin-top: 10px;
+        padding: 6px 8px;
+        border-radius: 4px;
+        text-align: center;
+        line-height: 1.4;
+    }
+    .demo-control-panel .status-text.granted { background: #F6FFED; color: #389E0D; }
+    .demo-control-panel .status-text.denied { background: #FFF1F0; color: #CF1322; }
+    /* 对账单无权限轻提示气泡（非弹窗） */
+    .light-bubble {
+        position: absolute;
+        left: 50%;
+        top: 96px;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        font-size: 12px;
+        padding: 8px 12px;
+        border-radius: 8px;
+        max-width: 220px;
+        text-align: center;
+        line-height: 1.4;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        z-index: 10000;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .light-bubble.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-4px);
+    }
+    </style>
 </head>
 <body>
     <div class="phone-frame">
@@ -321,6 +404,36 @@
         </div>
     </div>
     
+    <div class="demo-control-panel" id="statementDemoPanel">
+        <div class="panel-title">对账单演示控制</div>
+        <div class="control-label">是否有全部权限</div>
+        <div class="segmented-control" id="permSeg">
+            <div class="segment active" data-perm="no" onclick="setStatementPermission(false)">否</div>
+            <div class="segment" data-perm="yes" onclick="setStatementPermission(true)">是</div>
+        </div>
+        <div class="status-text denied" id="permStatus">否：无权限查看对账单</div>
+    </div>
+    <script>
+        // 对账单权限演示控制：默认无全部权限
+        window.statementDemoEnabled = true;
+        window.hasFullPermission = false;
+        function setStatementPermission(hasAll) {
+            window.hasFullPermission = hasAll;
+            var segs = document.querySelectorAll('#permSeg .segment');
+            for (var i = 0; i < segs.length; i++) {
+                segs[i].classList.toggle('active', (segs[i].dataset.perm === 'yes') === hasAll);
+            }
+            var status = document.getElementById('permStatus');
+            if (hasAll) {
+                status.textContent = '是：可查看对账单';
+                status.className = 'status-text granted';
+            } else {
+                status.textContent = '否：无权限查看对账单';
+                status.className = 'status-text denied';
+            }
+        }
+    </script>
+
     <div class="page-nav">
         <div class="page-nav-title">原型导航</div>
         <a href="home.html" class="page-nav-item">首页</a>

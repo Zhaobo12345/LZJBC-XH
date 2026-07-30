@@ -300,12 +300,13 @@
             <div class="toc-group">
                 <div class="toc-group-title">功能清单</div>
                 <li><a href="#feature-list">六、功能清单</a></li>
+                <li><a href="#message-feature">七、消息功能</a></li>
             </div>
             <div class="toc-group">
                 <div class="toc-group-title">设计规格</div>
-                <li><a href="#ui-design">七、UI设计系统参数</a></li>
-                <li><a href="#dev-guide">八、研发使用说明</a></li>
-                <li><a href="#file-list">九、交付文件清单</a></li>
+                <li><a href="#ui-design">八、UI设计系统参数</a></li>
+                <li><a href="#dev-guide">九、研发使用说明</a></li>
+                <li><a href="#file-list">十、交付文件清单</a></li>
             </div>
         </ul>
     </nav>
@@ -339,7 +340,7 @@
                     <div class="label">终端平台</div>
                 </div>
                 <div class="overview-card">
-                    <div class="number">4</div>
+                    <div class="number">11</div>
                     <div class="label">角色类型</div>
                 </div>
                 <div class="overview-card">
@@ -442,6 +443,57 @@
                         <td>业主</td>
                         <td>确认验收角色，负责查看进度和确认</td>
                         <td>查看项目进度、确认验收任务、确认合同和变更、评价任务执行、确认对账单</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="subsection" style="margin-top: 24px;">
+                <h4 style="margin-bottom: 12px; color: var(--text-primary);">合同类型</h4>
+                <table class="param-table">
+                    <tr>
+                        <th>合同类型</th>
+                        <th>说明</th>
+                        <th>对应角色</th>
+                    </tr>
+                    <tr>
+                        <td>基础施工服务合同</td>
+                        <td>涵盖项目基础施工服务的总合同</td>
+                        <td>项目总或工长</td>
+                    </tr>
+                    <tr>
+                        <td>设计服务合同</td>
+                        <td>提供设计方案及相关设计服务</td>
+                        <td>设计师</td>
+                    </tr>
+                    <tr>
+                        <td>拆除班组服务合同</td>
+                        <td>拆除阶段施工服务合同</td>
+                        <td>拆除工</td>
+                    </tr>
+                    <tr>
+                        <td>水电班组服务合同</td>
+                        <td>水电阶段施工服务合同</td>
+                        <td>水电工</td>
+                    </tr>
+                    <tr>
+                        <td>木作班组服务合同</td>
+                        <td>木作阶段施工服务合同</td>
+                        <td>木作工</td>
+                    </tr>
+                    <tr>
+                        <td>泥瓦工班组服务合同</td>
+                        <td>泥瓦阶段施工服务合同</td>
+                        <td>泥瓦工</td>
+                    </tr>
+                    <tr>
+                        <td>油漆工班组服务合同</td>
+                        <td>油漆阶段施工服务合同</td>
+                        <td>油漆工</td>
+                    </tr>
+                    <tr>
+                        <td>小零工服务合同</td>
+                        <td>零散施工任务服务合同</td>
+                        <td>小零工</td>
                     </tr>
                 </table>
             </div>
@@ -805,15 +857,50 @@
                     <tr><td>对账单确认与凭证</td><td><a href="PRD-项目模块详细规格.html#page-statement-detail-service" target="_blank">服务方小程序</a>、<a href="PRD-项目模块详细规格.html#page-statement-detail-owner" target="_blank">业主小程序</a></td><td>对账单详情页</td><td>业主确认/驳回对账单；服务方上传支付凭证</td></tr>
 
                     <!-- 其他功能 -->
-                    <tr><td rowspan="2">其他功能</td><td>消息通知</td><td><a href="PRD-项目模块详细规格.html#page-home-service" target="_blank">服务方小程序</a>、<a href="PRD-项目模块详细规格.html#page-detail-owner" target="_blank">业主小程序</a></td><td>消息页</td><td>系统消息、通知列表</td></tr>
+                    <tr><td rowspan="2">其他功能</td><td>消息通知</td><td><a href="PRD-项目模块详细规格.html#page-home-service" target="_blank">服务方小程序</a>、<a href="PRD-项目模块详细规格.html#page-detail-owner" target="_blank">业主小程序</a></td><td>消息页</td><td>系统消息、通知列表；邀请接收与角色确认规则详见 <a href="#message-feature">七、消息功能</a></td></tr>
                     <tr><td>分享导航</td><td>服务方小程序、业主小程序</td><td>分享导航页</td><td>分享链接导航</td></tr>
                 </tbody>
             </table>
         </div>
 
+        <!-- 消息功能（独立功能，跨模块） -->
+        <div class="section" id="message-feature">
+            <div class="section-title">七、消息功能</div>
+            <p>消息是平台内<strong>跨功能模块的独立能力</strong>，承载系统通知与各类业务提醒（加入项目邀请、任务指派、合同变更、对账单确认等），可联动全部其他功能项。本说明聚焦"加入项目类邀请"的<strong>接收与角色确认规则</strong>；其余消息类型的交互遵循各对应功能模块的处理约定。</p>
+            <div class="subsection" style="margin-bottom: 24px;">
+                <div class="subsection-title">邀请接收与角色确认规则（type=invite）</div>
+                <p>消息中心收到的"加入项目"类邀请（type=invite），无论其发起方式为<strong>平台内选择 / 二维码 / 微信好友</strong>，被邀请人点击"接受邀请"后的处理统一遵循本规则。本规则是"邀请链路"在接收侧的闭环，与《PRD-项目模块详细规格》7.5（邀请方式）、7.6（邀请身份区分与默认权限）同源。</p>
+                <table class="param-table">
+                    <thead><tr><th>步骤</th><th>行为</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td>1. 触发确认</td><td>点击消息卡片"接受邀请"</td><td>弹出确认弹窗"确认接受邀请"（文案含项目名称）；"拒绝"则置为已拒绝，流程结束。</td></tr>
+                        <tr><td>2. 状态更新</td><td>确认接受</td><td>消息状态置为"已接受"，卡片更新为可点击进入项目（与 7.6 落地端一致）。</td></tr>
+                        <tr><td>3. 角色判断</td><td>读取被邀请人已认证角色数 <code>currentUser.verifiedRoles</code></td><td>依据 <code>users.certified_role_count</code> / 已认证角色列表判断分支（详见下方"角色分支"）。</td></tr>
+                        <tr><td>4. 进入项目</td><td>调用 <code>goToProject(projectName)</code></td><td>统一跳转项目详情页。</td></tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 16px;"><strong>角色分支（核心规则）</strong></p>
+                <ul>
+                    <li><strong>多个已认证角色（≥2）</strong>：弹出"选择加入角色"弹窗，列出被邀请人全部已认证角色；用户选择其一后，以<strong>该角色身份</strong>加入项目并进入项目详情页（Toast 提示"已以「角色」身份加入，正在进入..."）。</li>
+                    <li><strong>单一或无已认证角色（≤1）</strong>：无需选择，<strong>直接以默认身份加入并进入项目详情页</strong>（Toast 提示"已加入项目，正在进入..."）。</li>
+                </ul>
+                <p style="margin-top: 16px;"><strong>交互要点</strong></p>
+                <ul>
+                    <li><strong>取消选择</strong>：角色选择弹窗可"取消"，取消后停留在消息列表，消息仍为"已接受"状态，可后续从卡片再次进入项目。</li>
+                    <li><strong>身份归属与默认权限</strong>：被邀请人若为服务人员（member_category=service），接受后落库成员记录默认权限 <code>permission_level=basic</code>（仅基础公开数据、无治理权限），与 7.6 默认权限规则一致。</li>
+                    <li><strong>业主类不受限</strong>：被邀请人为业主 / 业主家人（member_category=owner）时，不受"多角色选择"约束，直接进入项目且默认获得<strong>全部权限</strong>（permission_level=full）。</li>
+                    <li><strong>一致性</strong>：本规则与 7.5（平台内选择需已认证至少一个角色方可被匹配）、7.6（身份分段与默认权限）共同构成完整的邀请能力，三端（服务方 / 业主小程序、PC 管理端）接收逻辑保持一致。</li>
+                </ul>
+                <div class="note" style="margin-top: 16px;">
+                    <div class="note-title">说明</div>
+                    <p>"已认证角色"指用户在平台已完成认证的角色（如水电工、木工、项目经理等），数量来源于 <code>users.certified_role_count</code>。仅当数量 ≥ 2 时触发角色选择，避免单角色 / 无角色用户产生多余操作步骤。</p>
+                </div>
+            </div>
+        </div>
+
         <!-- 设计系统参数 -->
         <div class="section" id="ui-design">
-            <div class="section-title">七、UI设计系统参数</div>
+            <div class="section-title">八、UI设计系统参数</div>
             
             <table class="param-table">
                 <thead>
@@ -841,7 +928,7 @@
 
         <!-- 使用说明 -->
         <div class="section" id="dev-guide">
-            <div class="section-title">八、研发使用说明</div>
+            <div class="section-title">九、研发使用说明</div>
             
             <div class="note">
                 <div class="note-title">文档结构说明</div>
@@ -875,7 +962,7 @@
 
         <!-- 文件清单 -->
         <div class="section" id="file-list">
-            <div class="section-title">九、交付文件清单</div>
+            <div class="section-title">十、交付文件清单</div>
             
             <table class="param-table">
                 <thead>
