@@ -415,12 +415,12 @@
                     <li><a href="#sub-9-5">9.5 对账单类型</a></li>
                     <li><a href="#sub-9-6">9.6 对账单状态流转</a></li>
                     <li><a href="#sub-9-7">9.7 新增对账单功能</a></li>
-                    <li><a href="#sub-9-7-1">　9.7.1 表单字段规格</a></li>
-                    <li><a href="#sub-9-7-2">　9.7.2 操作流程</a></li>
-                    <li><a href="#sub-9-7-3">　9.7.3 交互规则</a></li>
-                    <li><a href="#sub-9-7-4">　9.7.4 提交校验与确认流程</a></li>
-                    <li><a href="#sub-9-7-5">　9.7.5 创建成功后跳转规则</a></li>
-                    <li><a href="#sub-9-7-6">　9.7.6 创建成功后系统生成的信息</a></li>
+                    <li><a href="#sub-9-7">　9.7.1 表单字段规格</a></li>
+                    <li><a href="#sub-9-7">　9.7.2 操作流程</a></li>
+                    <li><a href="#sub-9-7">　9.7.3 交互规则</a></li>
+                    <li><a href="#sub-9-7">　9.7.4 提交校验与确认流程</a></li>
+                    <li><a href="#sub-9-7">　9.7.5 创建成功后跳转规则</a></li>
+                    <li><a href="#sub-9-7">　9.7.6 创建成功后系统生成的信息</a></li>
                 </ul>
             </li>
             <li class="nav-item collapsed" id="nav-page-statement-detail-service">
@@ -430,8 +430,6 @@
                     <li><a href="#sub-10-2">10.2 页面结构</a></li>
                     <li><a href="#sub-10-3">10.3 底部操作按钮</a></li>
                     <li><a href="#sub-10-4">10.4 上传支付凭证</a></li>
-                    <li><a href="#sub-10-5">10.5 状态展示规则（依据已实现代码）</a></li>
-                    <li><a href="#sub-10-6">10.6 交互流程规格（依据已实现代码）</a></li>
                 </ul>
             </li>
             <li class="nav-item collapsed" id="nav-page-activity-service">
@@ -488,8 +486,8 @@
                 <ul class="nav-sub">
                     <li><a href="#sub-15-1">15.1 页面概述</a></li>
                     <li><a href="#sub-15-2">15.2 功能差异</a></li>
-                    <li><a href="#sub-15-3">15.3 节点操作规格</a></li>
-                    <li><a href="#sub-15-4">15.4 交互逻辑规格</a></li>
+                    <li><a href="#sub-15-3">15.6 节点操作规格</a></li>
+                    <li><a href="#sub-15-4">15.7 交互逻辑规格</a></li>
                 </ul>
             </li>
             <li class="nav-item collapsed" id="nav-page-member-owner">
@@ -522,8 +520,6 @@
                     <li><a href="#sub-19-2">19.2 底部操作按钮</a></li>
                     <li><a href="#sub-19-3">19.3 确认操作</a></li>
                     <li><a href="#sub-19-4">19.4 驳回规则</a></li>
-                    <li><a href="#sub-19-5">19.5 状态展示规则（依据已实现代码）</a></li>
-                    <li><a href="#sub-19-6">19.6 交互流程规格（依据已实现代码）</a></li>
                 </ul>
             </li>
         </ul>
@@ -538,20 +534,12 @@
                     <li><a href="#sub-20-1">20.1 项目基本信息字段</a></li>
                     <li><a href="#sub-20-2">20.2 成员模块字段</a></li>
                     <li><a href="#sub-20-3">20.3 对账单模块字段</a></li>
-                    <li><a href="#sub-20-4">20.4 评价模块字段</a></li>
-                    <li><a href="#sub-20-5">20.5 项目动态表字段（project_activities）</a></li>
-                    <li><a href="#sub-20-6">20.6 待办事项表字段（todos）</a></li>
                 </ul>
             </li>
             <li class="nav-item collapsed" id="nav-api-summary">
                 <a href="#api-summary"><span class="nav-toggle">▼</span>二十一、API接口汇总</a>
                 <ul class="nav-sub">
-                    <li><a href="#sub-21-1">21.1 项目列表接口</a></li>
-                    <li><a href="#sub-21-2">21.2 项目详情接口（已移至 3.8）</a></li>
-                    <li><a href="#sub-21-3">21.3 项目架构接口</a></li>
-                    <li><a href="#sub-21-4">21.4 项目成员接口</a></li>
-                    <li><a href="#sub-21-5">21.5 项目资料接口</a></li>
-                    <li><a href="#sub-21-6">21.6 对账单接口</a></li>
+                    <li><a href="#sub-21-1">21.1 接口列表</a></li>
                 </ul>
             </li>
         </ul>
@@ -569,7 +557,7 @@
         </div>
 
         <div class="container">
-        <!-- ==================== 1. 首页（服务方小程序） ==================== -->
+            <!-- ==================== 1. 首页（服务方） ==================== -->
         <div class="section" id="page-home-service">
             <div class="section-title">
                 一、首页（服务方小程序）
@@ -606,7 +594,7 @@
          
         </div>
 
-        <!-- ==================== 2. 项目列表页（服务方小程序） ==================== -->
+        <!-- ==================== 2. 项目列表页（服务方） ==================== -->
         <div class="section" id="page-list-service">
             <div class="section-title">
                 二、项目列表页（服务方小程序）
@@ -878,7 +866,7 @@
             </div>
         </div>
 
-        <!-- ==================== 3. 项目详情页（服务方小程序） ==================== -->
+        <!-- ==================== 3. 项目详情页（服务方） ==================== -->
         <div class="section" id="page-detail-service">
             <div class="section-title">
                 三、项目详情页（服务方小程序）
@@ -1523,7 +1511,7 @@
             </div>
         </div>
 
-        <!-- ==================== 4. 项目信息页（服务方小程序） ==================== -->
+        <!-- ==================== 4. 项目信息页 ==================== -->
         <div class="section" id="page-info-service">
             <div class="section-title">
                 四、项目信息页（服务方小程序）
@@ -1763,7 +1751,7 @@
             </div>
         </div>
 
-        <!-- ==================== 5. 创建项目页（服务方小程序） ==================== -->
+        <!-- ==================== 5. 创建项目页 ==================== -->
         <div class="section" id="page-create-service">
             <div class="section-title">
                 五、创建项目页（服务方小程序）
@@ -2150,7 +2138,7 @@
             </div>
         </div>
 
-        <!-- ==================== 6. 项目架构页（服务方小程序） ==================== -->
+        <!-- ==================== 6. 项目架构页 ==================== -->
         <div class="section" id="page-architecture-service">
             <div class="section-title">
                 六、项目架构页（服务方小程序）
@@ -2896,7 +2884,7 @@
             </div>
         </div>
 
-        <!-- ==================== 7. 项目成员页（服务方小程序） ==================== -->
+        <!-- ==================== 7. 项目成员页 ==================== -->
         <div class="section" id="page-member-service">
             <div class="section-title">
                 七、项目成员页（服务方小程序）
@@ -3779,7 +3767,7 @@
             </div>
         </div>
 
-        <!-- ==================== 8. 项目资料页（服务方小程序） ==================== -->
+        <!-- ==================== 8. 项目资料页 ==================== -->
         <div class="section" id="page-files-service">
             <div class="section-title">
                 八、项目资料页（服务方小程序）
@@ -4191,7 +4179,7 @@
                     <p>服务方（项目总 / 工长）在对账单列表页通过右下角"+"悬浮按钮唤起底部"新增对账单"抽屉，填写并提交对账单；提交后系统校验字段、生成对账单记录并通知业主确认。入口见 <a href="#sub-9-1">9.1 页面概述</a>，提交后的校验与通知流程见 9.7.4，列表展示与排序见 9.2 数据展示规则。</p>
                 </div>
 
-                <div class="subsection-title" id="sub-9-7-1" style="font-size: 14px; margin-top: 16px;">9.7.1 表单字段规格</div>
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">9.7.1 表单字段规格</div>
                 <table>
                     <thead>
                         <tr>
@@ -4241,7 +4229,7 @@
                     </tbody>
                 </table>
 
-                <div class="subsection-title" id="sub-9-7-2" style="font-size: 14px; margin-top: 16px;">9.7.2 操作流程</div>
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">9.7.2 操作流程</div>
                 <div class="code-block">
 1. 在对账单列表页点击右下角"+"悬浮按钮
 2. 底部滑出"新增对账单"抽屉
@@ -4255,7 +4243,7 @@
    点"取消"：关闭弹窗、保留表单数据
                 </div>
 
-                <div class="subsection-title" id="sub-9-7-3" style="font-size: 14px; margin-top: 16px;">9.7.3 交互规则</div>
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">9.7.3 交互规则</div>
                 <ul>
                     <li>抽屉由底部滑出，点击遮罩或"取消"关闭；关闭时重置表单（resetAddForm：清空合同 / 类型 / 金额 / 描述、隐藏确认人、重置字数）。</li>
                     <li>关联合同选择后，确认人信息块（业主·李先生）自动显示；切换合同实时更新。</li>
@@ -4265,7 +4253,7 @@
                     <li>提交后弹出"二次确认"弹窗（与创建项目 5.5 一致）：校验通过即弹出标题"确认提交"的确认弹窗，确认后才提交并以 Toast 反馈（详见 9.7.4）。</li>
                 </ul>
 
-                <div class="subsection-title" id="sub-9-7-4" style="font-size: 14px; margin-top: 16px;">9.7.4 提交校验与确认流程</div>
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">9.7.4 提交校验与确认流程</div>
                 <table>
                     <thead>
                         <tr>
@@ -4323,7 +4311,7 @@
                     <p>已与"创建项目"（5.5 提交校验与二次确认）保持一致：点击"提交并通知对方"先执行必填与格式校验，校验通过才弹出<strong>二次确认弹窗</strong>（标题"确认提交"）；点击"确认提交"关闭弹窗并执行提交（Toast + 关闭抽屉 + 1.5 秒刷新列表），点击"取消"仅关闭弹窗并保留表单数据。校验不通过时仍按上述 Toast 提示、停留表单。</p>
                 </div>
 
-                <div class="subsection-title" id="sub-9-7-5" style="font-size: 14px; margin-top: 16px;">9.7.5 创建成功后跳转规则</div>
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">9.7.5 创建成功后跳转规则</div>
                 <table>
                     <thead>
                         <tr>
@@ -4356,7 +4344,7 @@
                     </tbody>
                 </table>
 
-                <div class="subsection-title" id="sub-9-7-6" style="font-size: 14px; margin-top: 16px;">9.7.6 创建成功后系统生成的信息</div>
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">9.7.6 创建成功后系统生成的信息</div>
                 <ul>
                     <li><strong>对账单记录</strong>：系统生成一条新对账单数据，包含关联合同、账单类型、本次金额、用途描述、提交人、提交时间。</li>
                     <li><strong>初始状态</strong>：新账单初始状态为"待确认"（服务方视角）/ "待我确认"（业主视角）。</li>
@@ -4366,8 +4354,7 @@
                 </ul>
             </div>
         </div>
-
-        <!-- ==================== 10. 对账单详情页（服务方小程序） ==================== -->
+       
         <div class="section" id="page-statement-detail-service">
             <div class="section-title">
                 十、对账单详情页（服务方小程序）
@@ -5783,7 +5770,7 @@
             </div>
         </div>
 
-        <!-- ==================== 15. 项目架构页（业主小程序） ==================== -->
+        <!-- ==================== 13. 项目架构页（业主小程序） ==================== -->
         <div class="section" id="page-architecture-owner">
             <div class="section-title">
                 十五、项目架构页（业主小程序）
@@ -5863,7 +5850,7 @@
             </div>
 
             <div class="subsection" id="sub-15-3">
-                <div class="subsection-title">15.3 节点操作规格</div>
+                <div class="subsection-title">15.6 节点操作规格</div>
                 <table>
                     <thead>
                         <tr>
@@ -5916,7 +5903,7 @@
             </div>
 
             <div class="subsection" id="sub-15-4">
-                <div class="subsection-title">15.4 交互逻辑规格</div>
+                <div class="subsection-title">15.7 交互逻辑规格</div>
                 <table>
                     <thead>
                         <tr>
@@ -6010,7 +5997,7 @@
             </div>
         </div>
 
-        <!-- ==================== 16. 项目成员页（业主小程序） ==================== -->
+        <!-- ==================== 14. 项目成员页（业主小程序） ==================== -->
         <div class="section" id="page-member-owner">
             <div class="section-title">
                 十六、项目成员页（业主小程序）
@@ -6061,7 +6048,7 @@
             </div>
         </div>
 
-        <!-- ==================== 17. 项目资料页（业主小程序） ==================== -->
+        <!-- ==================== 15. 项目资料页（业主小程序） ==================== -->
         <div class="section" id="page-files-owner">
             <div class="section-title">
                 十七、项目资料页（业主小程序）
@@ -6096,7 +6083,7 @@
             </div>
         </div>
 
-        <!-- ==================== 18. 对账单列表页（业主小程序） ==================== -->
+        <!-- ==================== 16. 对账单列表页（业主小程序） ==================== -->
         <div class="section" id="page-statement-list-owner">
             <div class="section-title">
                 十八、对账单列表页（业主小程序）
@@ -6104,7 +6091,7 @@
             </div>
 
             <div class="subsection" id="sub-18-1">
-                <div class="subsection-title">18.1 页面概述</div>
+                <div class="subsection-title">16.1 页面概述</div>
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">页面名称</div>
@@ -6167,6 +6154,8 @@
                     <p>业主端状态筛选显示"待我确认"，而非服务端的"待确认"，便于业主快速定位需要处理的对账单。</p>
                 </div>
             </div>
+        </div>
+
 
             <div class="subsection" id="sub-18-4">
                 <div class="subsection-title">18.4 数据展示规则</div>
@@ -6221,9 +6210,7 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-
-        <!-- ==================== 19. 对账单详情页（业主小程序） ==================== -->
+        <!-- ==================== 17. 对账单详情页（业主小程序） ==================== -->
         <div class="section" id="page-statement-detail-owner">
             <div class="section-title">
                 十九、对账单详情页（业主小程序）
@@ -6231,7 +6218,7 @@
             </div>
 
             <div class="subsection" id="sub-19-1">
-                <div class="subsection-title">19.1 页面概述</div>
+                <div class="subsection-title">17.1 页面概述</div>
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">页面名称</div>
@@ -6536,7 +6523,7 @@
             </div>
         </div>
 
-        <!-- ==================== 20. 字段校验规则 ==================== -->
+        <!-- ==================== 字段校验规则 ==================== -->
         <div class="section" id="validation-rules">
             <div class="section-title">
                 二十、字段校验规则
@@ -6712,7 +6699,7 @@
                 </table>
             </div>
 
-            <div class="subsection" id="sub-20-4">
+            <div class="subsection">
                 <div class="subsection-title">20.4 评价模块字段</div>
                 <table>
                     <thead>
@@ -6750,7 +6737,7 @@
                 </table>
             </div>
 
-            <div class="subsection" id="sub-20-5">
+            <div class="subsection">
                 <div class="subsection-title">20.5 项目动态表字段（project_activities）</div>
                 <table>
                     <thead>
@@ -6802,7 +6789,7 @@
                 </table>
             </div>
 
-            <div class="subsection" id="sub-20-6">
+            <div class="subsection">
                 <div class="subsection-title">20.6 待办事项表字段（todos）</div>
                 <table>
                     <thead>
@@ -6865,7 +6852,7 @@
             </div>
         </div>
 
-        <!-- ==================== 21. API接口汇总 ==================== -->
+        <!-- ==================== API接口汇总 ==================== -->
         <div class="section" id="api-summary">
             <div class="section-title">
                 二十一、API接口汇总
@@ -6899,11 +6886,13 @@
                 </table>
             </div>
 
-            <div class="subsection" id="sub-21-2">
-                <!-- 21.2 项目详情接口：已移至“三、项目详情页”下的 3.8 节 -->
+            <div class="subsection">
+                <!-- 已移至“三、项目详情页”下的 3.8 节 -->
+            </div>
+                </table>
             </div>
 
-            <div class="subsection" id="sub-21-3">
+            <div class="subsection">
                 <div class="subsection-title">21.3 项目架构接口</div>
                 <table>
                     <thead>
@@ -6943,7 +6932,7 @@
                 </table>
             </div>
 
-            <div class="subsection" id="sub-21-4">
+            <div class="subsection">
                 <div class="subsection-title">21.4 项目成员接口</div>
                 <table>
                     <thead>
@@ -6983,7 +6972,7 @@
                 </table>
             </div>
 
-            <div class="subsection" id="sub-21-5">
+            <div class="subsection">
                 <div class="subsection-title">21.5 项目资料接口</div>
                 <table>
                     <thead>
@@ -7023,7 +7012,7 @@
                 </table>
             </div>
 
-            <div class="subsection" id="sub-21-6">
+            <div class="subsection">
                 <div class="subsection-title">21.6 对账单接口</div>
                 <table>
                     <thead>
