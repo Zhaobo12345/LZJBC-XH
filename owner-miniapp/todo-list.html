@@ -133,6 +133,15 @@
             color: #722ED1;
         }
 
+        .todo-item .task-tag.bill {
+            background-color: #FFFBE6;
+            color: #D48806;
+        }
+
+        .todo-item .item-icon.bill {
+            background: linear-gradient(135deg, #FAAD14 0%, #FFC53D 100%);
+        }
+
         .todo-item .item-meta {
             font-size: 12px;
             color: var(--text-tertiary);
@@ -468,8 +477,75 @@
             }
         }
 
+        renderOwnerTodos();
         filterTodo('all', document.querySelector('.todo-filter-btn.active'));
-        
+
+        // 渲染由服务方提交对账单后自动生成的「对账单确认」待办
+        function renderOwnerTodos() {
+            var KEY = 'lzj_owner_todos';
+            var list = [];
+            try { list = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { list = []; }
+            var todoList = document.getElementById('todoList');
+            if (!todoList) return;
+
+            var frag = document.createDocumentFragment();
+            list.forEach(function(todo) {
+                var item = document.createElement('div');
+                item.className = 'todo-item';
+                item.dataset.status = todo.status || 'confirming';
+                item.dataset.todoId = todo.id;
+                item.onclick = function() { location.href = todo.target; };
+
+                var icon = document.createElement('div');
+                icon.className = 'item-icon bill';
+                icon.textContent = '💰';
+
+                var content = document.createElement('div');
+                content.className = 'item-content';
+                var title = document.createElement('div');
+                title.className = 'item-title';
+                title.textContent = todo.title;
+                var tag = document.createElement('span');
+                tag.className = 'task-tag bill';
+                tag.textContent = '对账单';
+                title.appendChild(tag);
+                var meta = document.createElement('div');
+                meta.className = 'item-meta';
+                meta.textContent = todo.meta || '';
+                content.appendChild(title);
+                content.appendChild(meta);
+
+                var status = document.createElement('div');
+                status.className = 'item-status confirming';
+                status.textContent = '待确认';
+
+                item.appendChild(icon);
+                item.appendChild(content);
+                item.appendChild(status);
+                frag.appendChild(item);
+            });
+
+            todoList.insertBefore(frag, todoList.firstChild);
+            updateTodoBadges();
+        }
+
+        // 根据当前待办项（含动态生成项）重新计算筛选角标数量
+        function updateTodoBadges() {
+            var items = document.querySelectorAll('#todoList .todo-item');
+            var all = items.length;
+            var pending = 0;
+            items.forEach(function(it) {
+                if (it.dataset.status !== 'completed') pending++;
+            });
+            var completed = all - pending;
+            var badges = document.querySelectorAll('.todo-filter-btn .badge');
+            if (badges.length >= 3) {
+                badges[0].textContent = all;
+                badges[1].textContent = pending;
+                badges[2].textContent = completed;
+            }
+        }
+
         function toggleActionMenu() {
             const actionMenu = document.getElementById('actionMenu');
             if (actionMenu) {

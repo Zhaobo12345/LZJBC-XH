@@ -4238,8 +4238,9 @@
 5. 输入本次金额（必填，支持负数冲销）
 6. 填写用途描述（必填，≤200字，实时字数统计）
 7. 点击"提交并通知对方"
-8. 系统校验字段 → 通过：提示成功并通知对方、关闭抽屉、刷新列表；
-   不通过：气泡提示具体错误，停留在表单
+8. 系统先校验字段 → 不通过：气泡提示具体错误，停留在表单；
+   通过：弹出"确认提交"二次确认弹窗（详见 9.7.4）→ 点"确认提交"：提示成功并通知对方、关闭抽屉、刷新列表；
+   点"取消"：关闭弹窗、保留表单数据
                 </div>
 
                 <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">9.7.3 交互规则</div>
@@ -4249,7 +4250,7 @@
                     <li>账单类型为单选胶囊，选中态高亮，点击其他项切换选中。</li>
                     <li>金额输入实时格式化：仅允许数字与单个负号、最多两位小数。</li>
                     <li>用途描述实时字数统计（0/200）。</li>
-                    <li>提交后无独立"二次确认"弹窗：校验通过即直接提交并以 Toast 反馈（详见 9.7.4）。</li>
+                    <li>提交后弹出"二次确认"弹窗（与创建项目 5.5 一致）：校验通过即弹出标题"确认提交"的确认弹窗，确认后才提交并以 Toast 反馈（详见 9.7.4）。</li>
                 </ul>
 
                 <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">9.7.4 提交校验与确认流程</div>
@@ -4273,8 +4274,18 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>点击"提交并通知对方"</td>
-                            <td><strong>校验通过</strong>：所有必填字段合法</td>
+                            <td>点击"提交并通知对方"（字段校验通过）</td>
+                            <td><strong>校验通过</strong>：所有必填字段合法 → 弹出<strong>二次确认弹窗</strong></td>
+                            <td>
+                                <ul>
+                                    <li>弹出确认弹窗，标题"确认提交"，内容"确认要提交该对账单吗？提交后将通知「确认人」确认账单。"（确认人取新增表单中的确认人姓名，如"李先生"）</li>
+                                    <li>按钮："取消" / "确认提交"；点击遮罩或"取消"可关闭弹窗</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>二次确认弹窗内点击"确认提交"</td>
+                            <td>关闭确认弹窗，执行真实提交</td>
                             <td>
                                 <ul>
                                     <li>Toast 提示"提交成功，已通知对方确认"</li>
@@ -4284,11 +4295,20 @@
                                 </ul>
                             </td>
                         </tr>
+                        <tr>
+                            <td>二次确认弹窗内点击"取消"</td>
+                            <td>关闭确认弹窗，不提交</td>
+                            <td>
+                                <ul>
+                                    <li>返回新增对账单抽屉，保留已填写的表单数据，用户可修正后再次提交</li>
+                                </ul>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
                 <div class="note">
                     <div class="note-title">说明</div>
-                    <p>当前版本点击提交后直接校验并提交，<strong>未设置独立的"二次确认"弹窗</strong>；如需要与"创建项目"（5.5 提交校验与二次确认）一致增加确认弹窗，可后续在代码与本文档同步补充。</p>
+                    <p>已与"创建项目"（5.5 提交校验与二次确认）保持一致：点击"提交并通知对方"先执行必填与格式校验，校验通过才弹出<strong>二次确认弹窗</strong>（标题"确认提交"）；点击"确认提交"关闭弹窗并执行提交（Toast + 关闭抽屉 + 1.5 秒刷新列表），点击"取消"仅关闭弹窗并保留表单数据。校验不通过时仍按上述 Toast 提示、停留表单。</p>
                 </div>
 
                 <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">9.7.5 创建成功后跳转规则</div>
@@ -4334,7 +4354,7 @@
                 </ul>
             </div>
         </div>
-        <!-- ==================== 10. 对账单详情页（服务方小程序） ==================== --> 对账单详情页（服务方小程序） ==================== -->
+       
         <div class="section" id="page-statement-detail-service">
             <div class="section-title">
                 十、对账单详情页（服务方小程序）
@@ -4448,11 +4468,11 @@
                         </tr>
                         <tr>
                             <td>图片格式</td>
-                            <td>JPG、PNG</td>
+                            <td>jpg / jpeg / png / webp（与 20.3 字段规则及 <code>shared/validation.js</code> 实现一致）</td>
                         </tr>
                         <tr>
                             <td>单张大小</td>
-                            <td>≤5MB</td>
+                            <td>≤10MB（与 20.3 字段规则及 <code>shared/validation.js</code> 实现一致）</td>
                         </tr>
                         <tr>
                             <td>提交后状态</td>
@@ -4460,6 +4480,253 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="subsection" id="sub-10-5">
+                <div class="subsection-title">10.5 状态展示规则（依据已实现代码）</div>
+                <p><strong>10.5.1 状态横幅规格</strong>（页面顶部通栏，白字 + 32px 状态图标）</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>状态（status）</th>
+                            <th>横幅配色</th>
+                            <th>图标</th>
+                            <th>状态文字</th>
+                            <th>描述文案</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>待确认（pending）</td>
+                            <td>橙色渐变 #FA8C16 → #FAAD14</td>
+                            <td>⏳</td>
+                            <td>待确认</td>
+                            <td>等待业主确认</td>
+                        </tr>
+                        <tr>
+                            <td>已生效（effective）</td>
+                            <td>绿色渐变 #52C41A → #73D13D</td>
+                            <td>✅</td>
+                            <td>已生效</td>
+                            <td>账单已确认生效</td>
+                        </tr>
+                        <tr>
+                            <td>已支付（paid）</td>
+                            <td>蓝色渐变 #1890FF → #40A9FF</td>
+                            <td>💳</td>
+                            <td>已支付</td>
+                            <td>账单已完成支付</td>
+                        </tr>
+                        <tr>
+                            <td>已驳回（rejected）</td>
+                            <td>红色渐变 #FF4D4F → #FF7875</td>
+                            <td>❌</td>
+                            <td>已驳回</td>
+                            <td>账单已被业主驳回</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 16px;"><strong>10.5.2 各状态分区显隐矩阵</strong>（✓ 显示 / ✕ 不显示）</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>展示区块</th>
+                            <th>待确认</th>
+                            <th>已生效</th>
+                            <th>已支付</th>
+                            <th>已驳回</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>驳回原因横幅（❌ 标题"驳回原因"，内容格式"确认人（业主）：驳回原因全文"）</td>
+                            <td>✕</td>
+                            <td>✕</td>
+                            <td>✕</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td>详情卡片（类型标签 + 金额 + 基础信息行）</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td>用途描述卡片</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td>确认信息卡片（确认人头像 + 姓名（业主）+ "已于 YYYY-MM-DD HH:mm 确认"）</td>
+                            <td>✕</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✕</td>
+                        </tr>
+                        <tr>
+                            <td>支付凭证卡片（上传人信息 + 凭证图片宫格）</td>
+                            <td>✕</td>
+                            <td>✕</td>
+                            <td>✓</td>
+                            <td>✕</td>
+                        </tr>
+                        <tr>
+                            <td>操作记录卡片（时间线）</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td>底部操作区</td>
+                            <td>✕</td>
+                            <td>✓ 传支付凭证</td>
+                            <td>✕</td>
+                            <td>✕</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 16px;"><strong>10.5.3 操作记录条目规则</strong>（按操作时间正序追加）</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>状态</th>
+                            <th>时间线条目</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>待确认</td>
+                            <td>① {提交人} 提交了对账单</td>
+                        </tr>
+                        <tr>
+                            <td>已生效</td>
+                            <td>① {提交人} 提交了对账单 → ② {确认人} 确认了对账单</td>
+                        </tr>
+                        <tr>
+                            <td>已支付</td>
+                            <td>① {提交人} 提交了对账单 → ② {确认人} 确认了对账单 → ③ {提交人} 上传了支付凭证</td>
+                        </tr>
+                        <tr>
+                            <td>已驳回</td>
+                            <td>① {提交人} 提交了对账单 → ② {确认人} 驳回了对账单</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 16px;"><strong>10.5.4 通用展示字段规则</strong>（各状态均展示）</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>区块</th>
+                            <th>字段</th>
+                            <th>展示规则</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="2">详情卡片头部</td>
+                            <td>类型标签</td>
+                            <td>按 <code>bill_type</code> 展示（工友工资 / 辅料费 / 措施费 / 保险费 / 工长工资），每类独立配色标签（<code>type-tag.{type}</code>）</td>
+                        </tr>
+                        <tr>
+                            <td>金额</td>
+                            <td>格式"¥ 1,234.56"：千分位 + 固定 2 位小数；负数金额显示"-"前缀（表示冲销 / 退款）</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="5">详情卡片信息行</td>
+                            <td>关联合同</td>
+                            <td>蓝色链接样式（<code>contract-link</code>），展示合同名称</td>
+                        </tr>
+                        <tr>
+                            <td>账单类型</td>
+                            <td>与类型标签同源的中文类型名</td>
+                        </tr>
+                        <tr>
+                            <td>提交人</td>
+                            <td>提交人姓名</td>
+                        </tr>
+                        <tr>
+                            <td>提交时间</td>
+                            <td>格式 YYYY-MM-DD HH:mm</td>
+                        </tr>
+                        <tr>
+                            <td>确认人</td>
+                            <td>"业主"角色标签 + 确认人姓名</td>
+                        </tr>
+                        <tr>
+                            <td>用途描述卡片</td>
+                            <td>用途描述</td>
+                            <td>展示 <code>purpose</code> 全文，支持多行</td>
+                        </tr>
+                        <tr>
+                            <td>支付凭证卡片（仅已支付）</td>
+                            <td>上传人 / 时间 / 凭证图</td>
+                            <td>上传人头像（姓名首字）+ "服务方 {姓名} 已于 {时间} 上传" + 凭证图片宫格，点击图片可预览</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection" id="sub-10-6">
+                <div class="subsection-title">10.6 交互流程规格（依据已实现代码）</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>交互元素</th>
+                            <th>触发条件</th>
+                            <th>交互效果</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>"传支付凭证"按钮</td>
+                            <td>状态为"已生效"时显示于底部操作区</td>
+                            <td>底部弹出"上传支付凭证"抽屉（图片宫格 + "添加图片"入口 + 提示"最多上传9张图片"），打开时清空上次未提交的图片</td>
+                        </tr>
+                        <tr>
+                            <td>添加图片</td>
+                            <td>抽屉内点击"+ 添加图片"</td>
+                            <td>调起图片选择；已满 9 张时 Toast"最多上传9张图片"；格式 / 大小按 20.3 字段规则校验（jpg / jpeg / png / webp，单张 ≤10MB，<code>shared/validation.js</code>）</td>
+                        </tr>
+                        <tr>
+                            <td>已选图片项</td>
+                            <td>点击缩略图 / 点击右上角 ×</td>
+                            <td>点击缩略图预览；点击 × 删除该图（事件隔离，不触发预览），宫格实时刷新，未满 9 张时保留"添加图片"入口</td>
+                        </tr>
+                        <tr>
+                            <td>"提交凭证"按钮</td>
+                            <td>抽屉底部</td>
+                            <td>0 张时 Toast"请至少上传1张凭证图片"并阻断；成功后 Toast"凭证上传成功"→ 关闭抽屉 → 1.5s 后返回对账单列表页，状态变更为"已支付"</td>
+                        </tr>
+                        <tr>
+                            <td>"取消"按钮 / 点击遮罩</td>
+                            <td>抽屉打开时</td>
+                            <td>关闭抽屉，不保存已选图片</td>
+                        </tr>
+                        <tr>
+                            <td>凭证图片（已支付状态）</td>
+                            <td>点击支付凭证卡片内缩略图</td>
+                            <td>全屏预览凭证图片（原型以 Toast 模拟）</td>
+                        </tr>
+                        <tr>
+                            <td>关联合同</td>
+                            <td>点击详情卡片"关联合同"值</td>
+                            <td>跳转对应<a href="service-miniapp/contract-detail.html" target="_blank">合同详情页</a></td>
+                        </tr>
+                        <tr>
+                            <td>导航栏"← 返回" / "✕"</td>
+                            <td>任意状态</td>
+                            <td>返回上一页 / 关闭页面回到项目详情</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="note" style="margin-top: 16px;">
+                    <div class="note-title">原型演示参数</div>
+                    <p>原型页支持 URL 参数直达各状态：<code>?status=pending|effective|paid|rejected</code>（默认 pending）、<code>?type=worker_wage|material|measure|insurance|foreman_wage</code>（默认 material）、<code>?role=creator</code>（提交人视角）。正式产品中状态与视角由对账单数据及当前登录用户身份决定。</p>
+                </div>
             </div>
         </div>
 
@@ -6056,6 +6323,203 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="subsection" id="sub-19-5">
+                <div class="subsection-title">19.5 状态展示规则（依据已实现代码）</div>
+                <p><strong>19.5.1 状态横幅规格</strong>（页面顶部通栏，白字 + 32px 状态图标）</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>状态（status）</th>
+                            <th>横幅配色</th>
+                            <th>图标</th>
+                            <th>状态文字</th>
+                            <th>描述文案</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>待确认（pending）</td>
+                            <td>橙色渐变 #FA8C16 → #FFA940</td>
+                            <td>⏳</td>
+                            <td>待确认</td>
+                            <td>请确认此对账单</td>
+                        </tr>
+                        <tr>
+                            <td>已生效（effective）</td>
+                            <td>绿色渐变 #52C41A → #73D13D</td>
+                            <td>✅</td>
+                            <td>已生效</td>
+                            <td>账单已确认生效</td>
+                        </tr>
+                        <tr>
+                            <td>已支付（paid）</td>
+                            <td>蓝色渐变 #1890FF → #40A9FF</td>
+                            <td>💳</td>
+                            <td>已支付</td>
+                            <td>账单已完成支付</td>
+                        </tr>
+                        <tr>
+                            <td>已驳回（rejected）</td>
+                            <td>灰色渐变 #8C8C8C → #BFBFBF（与服务方红色横幅区分：驳回由业主发起，业主端为中性回顾态）</td>
+                            <td>❌</td>
+                            <td>已驳回</td>
+                            <td>账单已被驳回</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 16px;"><strong>19.5.2 各状态分区显隐矩阵</strong>（✓ 显示 / ✕ 不显示）</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>展示区块</th>
+                            <th>待确认</th>
+                            <th>已生效</th>
+                            <th>已支付</th>
+                            <th>已驳回</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>驳回原因横幅（❌ 标题"驳回原因" + 原因全文）</td>
+                            <td>✕</td>
+                            <td>✕</td>
+                            <td>✕</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td>详情卡片（类型标签 + 金额 + 关联合同 / 账单类型 / 提交人 / 提交时间 / 确认人）</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td>用途描述卡片</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td>确认信息卡片（头像"我" + "我（业主）" + "已于 YYYY-MM-DD HH:mm 确认"）</td>
+                            <td>✕</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✕</td>
+                        </tr>
+                        <tr>
+                            <td>支付凭证卡片（"服务方 {姓名} 已于 {时间} 上传" + 凭证图片宫格，可预览）</td>
+                            <td>✕</td>
+                            <td>✕</td>
+                            <td>✓</td>
+                            <td>✕</td>
+                        </tr>
+                        <tr>
+                            <td>操作记录卡片（时间线）</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td>底部操作栏（驳回 | 确认无误）</td>
+                            <td>✓（仅确认人视角，见 19.5.4）</td>
+                            <td>✕</td>
+                            <td>✕</td>
+                            <td>✕</td>
+                        </tr>
+                        <tr>
+                            <td>底部等待提示条"等待服务方上传线下支付凭证"（灰字白底通栏）</td>
+                            <td>✕</td>
+                            <td>✓</td>
+                            <td>✕</td>
+                            <td>✕</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 16px;"><strong>19.5.3 操作记录条目规则</strong>（按操作时间正序追加，业主本人以"我"展示）</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>状态</th>
+                            <th>时间线条目</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>待确认</td>
+                            <td>① {提交人} 提交了对账单</td>
+                        </tr>
+                        <tr>
+                            <td>已生效</td>
+                            <td>① {提交人} 提交了对账单 → ② 我 确认了对账单</td>
+                        </tr>
+                        <tr>
+                            <td>已支付</td>
+                            <td>① {提交人} 提交了对账单 → ② 我 确认了对账单 → ③ {提交人} 上传了支付凭证</td>
+                        </tr>
+                        <tr>
+                            <td>已驳回</td>
+                            <td>① {提交人} 提交了对账单 → ② 我 驳回了对账单</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 16px;"><strong>19.5.4 底部操作栏可见性规则</strong></p>
+                <ul style="line-height: 2;">
+                    <li>仅当状态为"待确认"<strong>且当前用户为该对账单确认人</strong>时，展示底部操作栏：左"驳回"（灰底次要按钮，宽度占 1/3）+ 右"确认无误"（蓝色渐变主按钮，宽度占 2/3）。</li>
+                    <li>当前用户非确认人（如以提交人视角查看）时，底部操作栏整体隐藏，页面为纯查看态。</li>
+                    <li>通用字段展示规则（类型标签配色、金额"¥ 千分位 + 2 位小数、负数带 - 前缀"、时间格式 YYYY-MM-DD HH:mm 等）与服务方一致，见"<a href="#sub-10-5" style="color: var(--primary-color);">10.5.4 通用展示字段规则</a>"。</li>
+                </ul>
+            </div>
+
+            <div class="subsection" id="sub-19-6">
+                <div class="subsection-title">19.6 交互流程规格（依据已实现代码）</div>
+                <p><strong>19.6.1 确认流程</strong></p>
+                <ul style="line-height: 2;">
+                    <li>点击"确认无误"→ 弹出居中确认弹窗：标题"确认对账单"，内容"确认后账单将生效，确定确认无误吗？"，按钮"取消 / 确认"。</li>
+                    <li>点击"确认"→ 关闭弹窗 → Toast"确认成功，账单已生效"→ 1.5s 后自动返回对账单列表页；状态变更为"已生效"，后续等待服务方上传支付凭证。</li>
+                    <li>点击"取消"或弹窗遮罩 → 关闭弹窗，状态不变。</li>
+                </ul>
+                <p style="margin-top: 12px;"><strong>19.6.2 驳回流程</strong></p>
+                <ul style="line-height: 2;">
+                    <li>点击"驳回"→ 底部弹出"驳回原因"抽屉：多行输入框（占位文案"请输入驳回原因，将通知提交人进行修改"，输入上限 200 字）+ 提示"驳回原因必填，否则无法提交"+ 按钮"取消 / 确认驳回"，抽屉弹出即聚焦输入框。</li>
+                    <li>点击"确认驳回"→ 校验驳回原因（去除首尾空格后非空，超长阻断，规则见 20.3 字段"驳回原因"）；不通过时 Toast 校验提示并重新聚焦输入框。</li>
+                    <li>校验通过 → Toast"已驳回，工长将收到通知"→ 关闭抽屉 → 1.5s 后自动返回对账单列表页；状态变更为"已驳回"，服务方可修改后重新提交。</li>
+                    <li>点击"取消"或抽屉遮罩 → 关闭抽屉并清空已输入内容。</li>
+                </ul>
+                <p style="margin-top: 12px;"><strong>19.6.3 其他交互</strong></p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>交互元素</th>
+                            <th>触发条件</th>
+                            <th>交互效果</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>凭证图片</td>
+                            <td>已支付状态，点击支付凭证卡片内缩略图</td>
+                            <td>全屏预览凭证图片（原型以 Toast 模拟）</td>
+                        </tr>
+                        <tr>
+                            <td>关联合同</td>
+                            <td>点击详情卡片"关联合同"值（蓝色链接样式）</td>
+                            <td>跳转对应合同详情页</td>
+                        </tr>
+                        <tr>
+                            <td>导航栏"← 返回" / "✕"</td>
+                            <td>任意状态</td>
+                            <td>返回上一页 / 关闭页面回到项目详情</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="note" style="margin-top: 16px;">
+                    <div class="note-title">原型演示参数</div>
+                    <p>原型页支持 URL 参数直达各状态与视角：<code>?status=pending|effective|paid|rejected</code>（默认 pending）、<code>?type=worker_wage|material|measure|insurance|foreman_wage</code>（默认 material）、<code>?role=confirmer|creator</code>（默认 confirmer；creator 视角下待确认状态隐藏底部操作栏）。正式产品中状态与视角由对账单数据及当前登录用户身份决定。</p>
+                </div>
             </div>
         </div>
 

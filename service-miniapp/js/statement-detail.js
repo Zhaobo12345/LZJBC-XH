@@ -33,9 +33,6 @@ const typeMap = {
 const urlParams = new URLSearchParams(window.location.search);
 const status = urlParams.get('status') || 'pending';
 const type = urlParams.get('type') || 'material';
-const isConfirmer = urlParams.get('role') !== 'creator';
-const currentUserRole = 'service';
-
 document.addEventListener('DOMContentLoaded', function() {
     initPageData();
     updatePageByStatus();
@@ -146,61 +143,6 @@ function addLogItem(text, time) {
         </div>
     `;
     logList.appendChild(logItem);
-}
-
-function showConfirmModal() {
-    document.getElementById('confirmModalOverlay').classList.add('show');
-    document.getElementById('confirmModal').classList.add('show');
-}
-
-function hideConfirmModal() {
-    document.getElementById('confirmModalOverlay').classList.remove('show');
-    document.getElementById('confirmModal').classList.remove('show');
-}
-
-function submitConfirm() {
-    hideConfirmModal();
-    showToast('确认成功，账单已生效');
-    
-    setTimeout(() => {
-        window.location.href = 'statement-list.html';
-    }, 1500);
-}
-
-function showRejectDrawer() {
-    document.getElementById('rejectDrawerOverlay').classList.add('show');
-    document.getElementById('rejectDrawer').classList.add('show');
-    document.getElementById('rejectReasonInput').focus();
-}
-
-function hideRejectDrawer() {
-    document.getElementById('rejectDrawerOverlay').classList.remove('show');
-    document.getElementById('rejectDrawer').classList.remove('show');
-    document.getElementById('rejectReasonInput').value = '';
-}
-
-function submitReject() {
-    const reasonInput = document.getElementById('rejectReasonInput');
-    const reason = reasonInput.value.trim();
-    
-    // 校验驳回原因
-    const result = Validation.validate.textLength(reason, 500, true, '驳回原因');
-    if (!result.valid) {
-        showToast(result.message);
-        reasonInput.focus();
-        return;
-    }
-    
-    showToast('已驳回，对方将收到通知');
-    hideRejectDrawer();
-    
-    setTimeout(() => {
-        window.location.href = 'statement-list.html';
-    }, 1500);
-}
-
-function confirmStatement() {
-    showConfirmModal();
 }
 
 function previewAttachment(name) {

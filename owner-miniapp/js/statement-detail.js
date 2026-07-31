@@ -32,6 +32,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const status = urlParams.get('status') || 'pending';
 const type = urlParams.get('type') || 'material';
 const role = urlParams.get('role') || 'confirmer';
+const todoId = urlParams.get('id') || '';
 
 document.addEventListener('DOMContentLoaded', function() {
     initPageData();
@@ -168,6 +169,7 @@ function hideConfirmModal() {
 function submitConfirm() {
     hideConfirmModal();
     showToast('确认成功，账单已生效');
+    removeOwnerTodo(todoId);
     
     setTimeout(() => {
         window.location.href = 'statement-list.html';
@@ -200,6 +202,7 @@ function submitReject() {
     
     showToast('已驳回，工长将收到通知');
     hideRejectDrawer();
+    removeOwnerTodo(todoId);
     
     setTimeout(() => {
         window.location.href = 'statement-list.html';
@@ -208,6 +211,18 @@ function submitReject() {
 
 function confirmStatement() {
     showConfirmModal();
+}
+
+// 业主确认/驳回后，将对应的「对账单确认」待办从业主端待办列表移除
+function removeOwnerTodo(id) {
+    if (!id) return;
+    try {
+        const KEY = 'lzj_owner_todos';
+        let list = [];
+        try { list = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { list = []; }
+        list = list.filter(function(t) { return String(t.id) !== String(id); });
+        localStorage.setItem(KEY, JSON.stringify(list));
+    } catch (e) {}
 }
 
 function previewAttachment(name) {

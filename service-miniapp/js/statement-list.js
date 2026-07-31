@@ -273,12 +273,70 @@ function submitStatement() {
         return;
     }
     
-    showToast('提交成功，已通知对方确认');
-    hideAddDrawer();
-    
-    setTimeout(function() {
-        location.reload();
-    }, 1500);
+    // 所有字段校验通过 → 弹出「确认提交」二次确认弹窗（与创建项目 5.5 一致）
+    const confirmerName = (document.getElementById('confirmerName') || {}).textContent || '对方';
+    showModal(
+        '确认提交',
+        '确认要提交该对账单吗？提交后将通知「' + confirmerName + '」确认账单。',
+        function() {
+            generateOwnerStatementTodo();
+            showToast('提交成功，已通知对方确认');
+            hideAddDrawer();
+            setTimeout(function() {
+                location.reload();
+            }, 1500);
+        },
+        true
+    );
+}
+
+// 二次确认弹窗（与 create-project.html 的 showModal 保持一致）
+function showModal(title, content, onConfirm, showCancel = true) {
+    const modal = document.getElementById('appModal');
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalContent').textContent = content;
+    document.getElementById('modalCancel').style.display = showCancel ? 'flex' : 'none';
+    modal.classList.add('show');
+    document.getElementById('modalConfirm').onclick = function() {
+        closeModal();
+        if (onConfirm) onConfirm();
+    };
+}
+
+function closeModal() {
+    document.getElementById('appModal').classList.remove('show');
+}
+
+// 提交成功后，为业主（确认人）生成一条「对账单确认」待办项
+// 原型演示使用浏览器端临时持久化（localStorage.lzj_owner_todos），业主端待办页读取
+function generateOwnerStatementTodo() {
+    try {
+        var contractName = selectedContract || '关联合同';
+        var typeKey = selectedBillType || 'material';
+        var typeLabel = (typeNames[typeKey] || '对账单');
+        var amountVal = (document.getElementById('amountInput') || {}).value || '';
+        var id = 'ST' + Date.now();
+
+        var todo = {
+            id: id,
+            type: 'bill',
+            title: typeLabel + '对账单确认',
+            meta: contractName + ' · 待确认账单' + (amountVal ? ' · ¥' + amountVal : ''),
+            status: 'confirming',
+            target: 'statement-detail.html?status=pending&role=confirmer&id=' + id,
+            createdAt: Date.now()
+        };
+
+        var KEY = 'lzj_owner_todos';
+        var list = [];
+        try { list = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { list = []; }
+        // 去重：同一对账单只保留一条待办
+        list = list.filter(function(t) { return String(t.id) !== String(id); });
+        list.unshift(todo);
+        localStorage.setItem(KEY, JSON.stringify(list));
+    } catch (e) {
+        // 生成待办失败不影响提交主流程
+    }
 }
 
 function showToast(message) {
