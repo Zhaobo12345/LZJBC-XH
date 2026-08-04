@@ -330,6 +330,10 @@
             color: var(--color-primary);
             font-weight: 600;
         }
+        .status-switch-divider {
+            height: 1px; background-color: var(--border-color, #E5E6EB);
+            margin: 8px 0; border-radius: 1px;
+        }
 
         /* 拟定中：预览合同按钮 */
         .wc-preview-btn {
@@ -776,7 +780,7 @@
                 <div class="status-group-header" onclick="WCP.toggleStatusGroup(this)">
                     <span class="status-group-icon">▼</span>
                     <span class="status-group-title">演示数据</span>
-                    <span class="status-group-count">7</span>
+                    <span class="status-group-count">9</span>
                 </div>
                 <div class="status-group-content">
                     <div class="status-switch-item" onclick="WCP.createDemo('demolition')">拆除班组服务合同</div>
@@ -786,6 +790,11 @@
                     <div class="status-switch-item" onclick="WCP.createDemo('youqi')">油漆工班组服务合同</div>
                     <div class="status-switch-item" onclick="WCP.createDemo('xiaolingong')">小零工服务合同</div>
                     <div class="status-switch-item" onclick="WCP.resetDemo()" style="color:var(--warning-color);">重置演示数据</div>
+
+                    <!-- 合同邀约方案演示入口（独立页面） -->
+                    <div class="status-switch-divider"></div>
+                    <a class="status-switch-item" href="wechat-service-notice.html" style="text-decoration:none;">微信服务通知（C方案）</a>
+                    <a class="status-switch-item" href="invite-banner-demo.html" style="text-decoration:none;">应用内顶部通知条（A方案）</a>
                 </div>
             </div>
         </div>

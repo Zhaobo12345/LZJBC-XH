@@ -26,4 +26,5 @@
 - 「微信服务通知（订阅消息）」演示（C方案）= **微信客户端层**，必须是**独立页面** `service-miniapp/wechat-service-notice.html`（绿色微信外壳模拟「服务通知」会话，点开直达 `worker-contract-detail.html?viewer=receiver`），**不可放在小程序内消息页**（违反层级逻辑）。该详情页无 id 时会 `ensureDemoSeed` 播种水电示例并以 receiver 视角渲染，跳转用 `?viewer=receiver` 即安全。
 - 「应用内顶部邀约通知条」（A方案）= 独立页面 `service-miniapp/invite-banner-demo.html`（phone-frame 小程序外壳，进入时顶部滑出通知条，参考滴滴抢单实时提醒、不阻断操作）。
 - 两页面入口挂在 **原型导航 `service-miniapp/share-navigation.html`**：A 与 C 同归入新增的「消息通知」section，该 section 位于「工人合同详情（新流程）」（含其下「合同状态切换（工人合同）」）section 之后。因项目已取消分享（改原生胶囊内分享），该导航页内的「分享接收页面」section 已于 2026-08-04 移除，现仅含「工人合同详情（新流程）」与「消息通知」两个 section，页面标题/页头/页脚也不再含「分享」字样。
+- A/C 两页面的**二级入口**同时挂在 `worker-contract-detail.html` 右侧原型导航「演示数据」分组底部（以 `<a>` 链接形式，配 `status-switch-divider` 分隔线，与合同类型/重置项区分；该分组计数已由 7 改为 9）。
 - 2026-08-04 曾误将 C 方案演示卡放进 message.html「合同邀约」Tab，按用户指令已撤销并改为独立页面；后续**勿再在 message.html 内置该演示**。
