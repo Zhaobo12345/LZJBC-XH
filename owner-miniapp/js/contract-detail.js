@@ -2493,39 +2493,7 @@ const ContractDetailPage = (function() {
         updateContractStatus('signed');
     }
     
-    // ==================== PC端打开函数 ====================
-    
-    /**
-     * 显示PC端打开弹窗
-     */
-    function showPcOpenModal() {
-        const modal = document.getElementById('pcOpenModal');
-        if (modal) modal.classList.add('show');
-    }
-    
-    /**
-     * 关闭PC端打开弹窗
-     */
-    function closePcOpenModal() {
-        const modal = document.getElementById('pcOpenModal');
-        if (modal) modal.classList.remove('show');
-    }
-    
-    /**
-     * 复制PC端链接
-     */
-    function copyPcLink() {
-        const pcLink = document.getElementById('pcLink');
-        if (!pcLink) return;
-        
-        const link = pcLink.textContent;
-        navigator.clipboard.writeText(link).then(() => {
-            showCustomToast('链接已复制到剪贴板');
-            closePcOpenModal();
-        }).catch(() => {
-            showCustomToast('复制失败，请手动复制');
-        });
-    }
+
     
     // ==================== 事件绑定 ====================
     
@@ -2675,10 +2643,7 @@ const ContractDetailPage = (function() {
         rejectSign,
         confirmSign,
         
-        // PC端打开
-        showPcOpenModal,
-        closePcOpenModal,
-        copyPcLink
+
     };
 })();
 
@@ -2761,9 +2726,6 @@ window.closeSignConfirmModal = ContractDetailPage.closeSignConfirmModal;
 window.previewSignFile = ContractDetailPage.previewSignFile;
 window.rejectSign = ContractDetailPage.rejectSign;
 window.confirmSign = ContractDetailPage.confirmSign;
-window.showPcOpenModal = ContractDetailPage.showPcOpenModal;
-window.closePcOpenModal = ContractDetailPage.closePcOpenModal;
-window.copyPcLink = ContractDetailPage.copyPcLink;
 
 // ==================== 状态分组折叠/展开 ====================
 window.toggleStatusGroup = function(headerElement) {

@@ -232,6 +232,42 @@
             text-align: center;
         }
 
+        /* 邀请人员（工人合同多选） */
+        .invite-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .invite-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background-color: var(--status-primary-bg, #E6F7FF);
+            color: var(--primary-color, #1677FF);
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .invite-chip .x {
+            cursor: pointer;
+            font-weight: 600;
+            margin-left: 2px;
+        }
+
+        .member-picker-item .check {
+            margin-left: auto;
+            color: var(--primary-color, #1677FF);
+            font-weight: 600;
+        }
+
+        .member-picker-item.disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
         /* 底部提交栏 */
         .app-bar {
             position: absolute;
@@ -289,6 +325,59 @@
             opacity: 1;
         }
     </style>
+<style>
+/* 微信原生胶囊占位（样式参考真机效果，由微信客户端实际渲染） */
+.nav-bar .native-capsule {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 56px;
+    height: 28px;
+    padding: 0 10px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.7);
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 12px;
+    line-height: 1;
+    user-select: none;
+    box-sizing: border-box;
+}
+.nav-bar .native-capsule .nc-left,
+.nav-bar .native-capsule .nc-right {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-width: 16px;
+}
+.nav-bar .native-capsule .nc-right {
+    font-size: 10px;
+}
+.nav-bar .native-capsule .nc-divider {
+    width: 1px;
+    height: 14px;
+    background: rgba(0, 0, 0, 0.1);
+    margin: 0 4px;
+}
+    .nav-bar .native-capsule .nc-left,
+    .nav-bar .native-capsule .nc-right {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        min-width: 16px;
+    }
+    .nav-bar .native-capsule .nc-right {
+        font-size: 10px;
+    }
+    .nav-bar .native-capsule .nc-divider {
+        width: 1px;
+        height: 14px;
+        background: rgba(0, 0, 0, 0.1);
+        margin: 0 4px;
+    }
+</style>
 </head>
 <body>
     <div class="phone-frame">
@@ -301,7 +390,11 @@
             <div class="back" onclick="location.href='architecture.html'">‹ 返回</div>
             <div class="title centered">创建合同</div>
             <div style="width:32px;"></div>
+        
+            <div class="actions"><div class="native-capsule" title="微信原生胶囊：由微信客户端渲染，开发者不可自定义其内容"><span class="nc-left">⋯</span><span class="nc-divider"></span><span class="nc-right">○</span></div></div>
         </div>
+            
+
 
         <div class="page-content">
             <div class="form-section">
@@ -354,7 +447,7 @@
                     <div class="error-message" id="partyAError">甲方与乙方不能相同</div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" id="partyBGroup">
                     <label class="form-label">
                         <span>乙方</span>
                     </label>
@@ -370,6 +463,29 @@
                         </div>
                     </div>
                     <div class="error-message" id="partyBError">甲方与乙方不能相同</div>
+                </div>
+            </div>
+
+            <div class="form-section" id="inviteSection" style="display:none;">
+                <div class="form-section-title">意向乙方（邀请 1-3 人）</div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="required">*</span>
+                        <span>邀请人员</span>
+                    </label>
+                    <div class="member-picker" id="invitePicker">
+                        <div class="member-picker-control" id="inviteControl" onclick="toggleInvitePanel()">
+                            <span class="member-picker-value" id="inviteValue">请邀请 1-3 名意向乙方</span>
+                            <span class="member-picker-arrow">▾</span>
+                        </div>
+                        <div class="member-picker-panel" id="invitePanel">
+                            <input type="text" class="member-picker-search" id="inviteSearch" placeholder="搜索姓名或角色" oninput="filterInvite()">
+                            <div class="member-picker-list" id="inviteList"></div>
+                            <div class="member-picker-empty" id="inviteEmpty" style="display:none;">未找到匹配人员</div>
+                        </div>
+                    </div>
+                    <div class="invite-chips" id="inviteChips"></div>
+                    <div class="error-message" id="inviteError">请邀请 1-3 名意向乙方</div>
                 </div>
             </div>
 
@@ -394,6 +510,7 @@
         <div class="light-bubble" id="tipBubble"></div>
     </div>
 
+    <script src="contract-store.js"></script>
     <script>
         'use strict';
 
@@ -424,6 +541,8 @@
         ];
 
         var currentGroup = '';
+        var invitedList = [];   // 工人合同：被邀请的意向乙方（最多 3 人）
+        var editId = '';        // 工人合同：编辑（撤回后重新提交）时的合约库 id
 
         // 甲乙方选择状态（自定义可搜索选择框）
         var pickerState = {
@@ -440,6 +559,35 @@
             renderTypeOptions();
             initMemberPicker('partyA');
             initMemberPicker('partyB');
+
+            // 工人合同：撤回后「重新提交邀约」回到本页预填
+            editId = params.get('editId') || '';
+            if (editId && ContractStore.getContract(editId)) {
+                var c = ContractStore.getContract(editId);
+                document.getElementById('contractName').value = c.name || '';
+                document.getElementById('contractAmount').value = c.amount || '';
+                document.getElementById('contractType').value = c.type || '';
+                if (c.group) {
+                    currentGroup = c.group;
+                    document.getElementById('groupDisplay').textContent = c.group;
+                }
+                if (c.partyA) {
+                    pickerState.partyA.value = c.partyA;
+                    var pa = PROJECT_MEMBERS.filter(function (m) { return m.id === c.partyA; })[0];
+                    if (pa) {
+                        var paVal = document.getElementById('partyAValue');
+                        paVal.textContent = pa.name + '（' + pa.role + '）';
+                        paVal.classList.add('filled');
+                    }
+                }
+                invitedList = (c.invitations || []).map(function (i) {
+                    return { userId: i.userId, name: i.name, role: i.role };
+                });
+                onContractTypeChange();
+                renderInviteChips();
+                return;
+            }
+            onContractTypeChange();
         }
 
         function renderTypeOptions() {
@@ -451,7 +599,7 @@
                 sel.appendChild(opt);
             });
             sel.addEventListener('change', function () {
-                clearError('type');
+                onContractTypeChange();
             });
         }
 
@@ -531,7 +679,172 @@
             if (!e.target.closest('.member-picker')) {
                 closeAllPickers();
             }
+            if (!e.target.closest('#invitePicker')) {
+                var ip = document.getElementById('invitePanel');
+                if (ip) ip.classList.remove('open');
+            }
         });
+
+        // ============== 工人合同：邀请 1-3 人（意向乙方） ==============
+        function onContractTypeChange() {
+            var typeValue = document.getElementById('contractType').value;
+            var isWorker = ContractStore.isWorkerType(typeValue);
+            var inviteSection = document.getElementById('inviteSection');
+            var partyBGroup = document.getElementById('partyBGroup');
+            if (isWorker) {
+                if (inviteSection) inviteSection.style.display = 'block';
+                if (partyBGroup) partyBGroup.style.display = 'none';
+            } else {
+                if (inviteSection) inviteSection.style.display = 'none';
+                if (partyBGroup) partyBGroup.style.display = 'block';
+            }
+            clearError('type');
+        }
+
+        function toggleInvitePanel() {
+            var panel = document.getElementById('invitePanel');
+            if (!panel) return;
+            var isOpen = panel.classList.contains('open');
+            if (isOpen) {
+                panel.classList.remove('open');
+                return;
+            }
+            closeAllPickers();
+            panel.classList.add('open');
+            var search = document.getElementById('inviteSearch');
+            search.value = '';
+            renderInviteList();
+            search.focus();
+            clearError('invite');
+        }
+
+        function filterInvite() {
+            renderInviteList();
+        }
+
+        function renderInviteList() {
+            var listEl = document.getElementById('inviteList');
+            var keyword = (document.getElementById('inviteSearch').value || '').trim().toLowerCase();
+            listEl.innerHTML = '';
+            var matched = PROJECT_MEMBERS.filter(function (m) {
+                if (!keyword) return true;
+                return m.name.toLowerCase().indexOf(keyword) > -1 ||
+                    m.role.toLowerCase().indexOf(keyword) > -1;
+            });
+            var emptyEl = document.getElementById('inviteEmpty');
+            if (matched.length === 0) {
+                emptyEl.style.display = 'block';
+                return;
+            }
+            emptyEl.style.display = 'none';
+            var full = invitedList.length >= 3;
+            matched.forEach(function (m) {
+                var selected = invitedList.some(function (x) { return x.userId === m.id; });
+                var item = document.createElement('div');
+                item.className = 'member-picker-item' + (selected ? ' selected' : '') + (full && !selected ? ' disabled' : '');
+                item.setAttribute('data-id', m.id);
+                item.innerHTML = '<span class="mp-name">' + escapeHtml(m.name) + '</span>' +
+                    '<span class="mp-role">' + escapeHtml(m.role) + '</span>' +
+                    (selected ? '<span class="check">✓</span>' : '');
+                item.onclick = function () { toggleInvite(m); };
+                listEl.appendChild(item);
+            });
+        }
+
+        function toggleInvite(m) {
+            var idx = invitedList.map(function (x) { return x.userId; }).indexOf(m.id);
+            if (idx > -1) {
+                invitedList.splice(idx, 1);
+            } else {
+                if (invitedList.length >= 3) {
+                    showTip('最多邀请 3 名意向乙方');
+                    return;
+                }
+                invitedList.push({ userId: m.id, name: m.name, role: m.role });
+            }
+            renderInviteList();
+            renderInviteChips();
+            clearError('invite');
+        }
+
+        function renderInviteChips() {
+            var valueEl = document.getElementById('inviteValue');
+            var chipsEl = document.getElementById('inviteChips');
+            if (invitedList.length === 0) {
+                valueEl.textContent = '请邀请 1-3 名意向乙方';
+                valueEl.classList.remove('filled');
+            } else {
+                valueEl.textContent = '已选 ' + invitedList.length + ' / 3 人';
+                valueEl.classList.add('filled');
+            }
+            chipsEl.innerHTML = '';
+            invitedList.forEach(function (m) {
+                var chip = document.createElement('span');
+                chip.className = 'invite-chip';
+                chip.innerHTML = escapeHtml(m.name) + '（' + escapeHtml(m.role) + '）<span class="x" data-id="' + m.id + '">✕</span>';
+                chip.querySelector('.x').onclick = function (ev) {
+                    ev.stopPropagation();
+                    toggleInvite(m);
+                };
+                chipsEl.appendChild(chip);
+            });
+        }
+
+        // 工人合同提交（方案 B）
+        function handleWorkerSubmit(typeValue) {
+            ['invite', 'contractName', 'contractAmount'].forEach(clearError);
+            var nameVal = document.getElementById('contractName').value;
+            var nameErr = validateName(nameVal);
+            if (nameErr) { showError('contractName', nameErr); showTip(nameErr); return; }
+            if (invitedList.length < 1 || invitedList.length > 3) {
+                showError('invite', '请邀请 1-3 名意向乙方');
+                showTip('请邀请 1-3 名意向乙方');
+                return;
+            }
+            var amountVal = document.getElementById('contractAmount').value;
+            var amountErr = '';
+            if (amountVal.trim()) { amountErr = validateAmount(amountVal); }
+            if (amountErr) { showError('contractAmount', amountErr); showTip(amountErr); return; }
+
+            var selectedType = CONTRACT_TYPES.filter(function (t) { return t.value === typeValue; })[0];
+            var partyA = pickerState.partyA.value;
+            var partyAName = '';
+            if (partyA) {
+                var pa = PROJECT_MEMBERS.filter(function (m) { return m.id === partyA; })[0];
+                if (pa) partyAName = pa.name;
+            }
+            var amountNormalized = amountVal.trim() ? amountVal.replace(/,/g, '') : '';
+
+            if (editId) {
+                var existing = ContractStore.getContract(editId);
+                if (existing) {
+                    existing.name = nameVal.trim();
+                    existing.type = selectedType.value;
+                    existing.typeName = selectedType.typeName;
+                    existing.group = currentGroup;
+                    existing.partyA = partyA;
+                    existing.partyAName = partyAName;
+                    existing.amount = amountNormalized;
+                    ContractStore.saveContract(existing);
+                    ContractStore.submitInvite(editId, invitedList);
+                    window.location.href = 'worker-contract-detail.html?id=' + encodeURIComponent(editId) + '&viewer=sender';
+                    return;
+                }
+            }
+            var id = 'contract-' + Date.now();
+            ContractStore.createContract({
+                id: id,
+                name: nameVal.trim(),
+                type: selectedType.value,
+                typeName: selectedType.typeName,
+                group: currentGroup,
+                partyA: partyA,
+                partyAName: partyAName,
+                amount: amountNormalized,
+                invited: invitedList
+            });
+            window.location.href = 'worker-contract-detail.html?id=' + encodeURIComponent(id) + '&viewer=sender';
+        }
 
         function escapeHtml(s) {
             return String(s).replace(/[&<>"']/g, function (c) {
@@ -601,6 +914,13 @@
             // 1. 合同类型（必选，下拉单选）
             var typeSelect = document.getElementById('contractType');
             var typeValue = typeSelect.value;
+
+            // 工人合同新流程（方案 B）：创建时邀请 1-3 人，走独立提交分支
+            if (ContractStore.isWorkerType(typeValue)) {
+                handleWorkerSubmit(typeValue);
+                return;
+            }
+
             if (!typeValue) {
                 showError('type');
                 firstError = firstError || '请选择合同类型';

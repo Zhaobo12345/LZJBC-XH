@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>家装平台小程序原型 - 工人合同详情（新流程）</title>
+    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="css/contract-detail.css">
+
+    <style>
+        .page-content {
+            height: calc(100% - 88px);
+            background-color: var(--bg-secondary);
+            overflow-y: auto;
+            padding-bottom: 76px;
+        }
+
+        /* 状态横幅 */
+        .wc-banner {
+            margin: 12px;
+            border-radius: 12px;
+            padding: 16px;
+            color: #fff;
+        }
+        .wc-banner.draft { background: linear-gradient(135deg, #8c8c8c 0%, #a6a6a6 100%); }
+        .wc-banner.confirming { background: linear-gradient(135deg, #1890FF 0%, #40A9FF 100%); }
+        .wc-banner.confirmed { background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%); }
+        .wc-banner.signed { background: linear-gradient(135deg, #722ED1 0%, #9254DE 100%); }
+        .wc-banner.rejected { background: linear-gradient(135deg, #F5222D 0%, #FF4D4F 100%); }
+        .wc-banner-text { font-size: 18px; font-weight: 700; }
+        .wc-banner-desc { font-size: 12px; margin-top: 6px; line-height: 1.5; opacity: 0.95; }
+
+        /* 邀约卡片 */
+        .worker-invite-card {
+            margin: 0 12px 12px;
+            background-color: var(--bg-primary);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .worker-invite-card .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+        .meta-row {
+            display: flex;
+            padding: 7px 0;
+            border-bottom: 1px dashed var(--border-color);
+            font-size: 13px;
+        }
+        .meta-row:last-child { border-bottom: none; }
+        .meta-label { color: var(--text-tertiary); width: 96px; flex-shrink: 0; }
+        .meta-value { color: var(--text-primary); flex: 1; font-weight: 500; }
+        .meta-party-a { margin-right: 8px; }
+        .meta-phone {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 26px; height: 26px; margin-left: 4px; border-radius: 50%;
+            background: var(--brand-color, #4A90E2); color: #fff; font-size: 14px;
+            cursor: pointer; vertical-align: middle; transition: opacity .15s;
+        }
+        .meta-phone:active { opacity: 0.8; }
+
+        /* 三步流程 */
+        .worker-flow { display: flex; align-items: center; margin: 4px 0 14px; }
+        .wf-step { display: flex; flex-direction: column; align-items: center; width: 64px; flex-shrink: 0; }
+        .wf-circle {
+            width: 38px; height: 38px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; background: var(--bg-secondary);
+            border: 2px solid var(--border-color); color: var(--text-tertiary);
+        }
+        .wf-step.current .wf-circle { border-color: var(--primary-color); color: var(--primary-color); }
+        .wf-step.done .wf-circle { background: var(--status-success-bg); border-color: var(--success-color); color: var(--success-color); }
+        .wf-label { font-size: 11px; margin-top: 5px; color: var(--text-secondary); }
+        .wf-step.current .wf-label { color: var(--primary-color); font-weight: 600; }
+        .wf-line { flex: 1; height: 2px; background: var(--border-color); margin: 0 -4px 18px; }
+        .wf-line.done { background: var(--success-color); }
+
+        /* 邀请名单 */
+        .invite-row {
+            display: flex; align-items: center; padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .invite-row:last-child { border-bottom: none; }
+        .invite-row.is-me { background: var(--status-primary-bg); border-radius: 8px; padding-left: 8px; padding-right: 8px; }
+        .invite-avatar {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: #fff; display: flex; align-items: center; justify-content: center;
+            font-size: 14px; margin-right: 10px; flex-shrink: 0;
+        }
+        .invite-info { flex: 1; }
+        .invite-name { font-size: 13px; color: var(--text-primary); font-weight: 500; }
+        .invite-role { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+        .invite-status { font-size: 12px; padding: 3px 8px; border-radius: 10px; }
+        .invite-status.pending { background: var(--status-warning-bg); color: var(--warning-color); }
+        .invite-status.confirmed { background: var(--status-success-bg); color: var(--success-color); font-weight: 600; }
+        .invite-status.rejected { background: var(--status-error-bg); color: var(--error-color); }
+        .invite-status.taken { background: var(--bg-secondary); color: var(--text-tertiary); }
+        .invite-status.lost {
+            background: #FFF3E0; color: #D4690E; border: 1px solid #FFD591; font-weight: 600;
+        }
+
+        .arch-note {
+            margin-top: 12px; padding: 10px 12px; border-radius: 8px;
+            background: var(--status-success-bg); color: var(--success-color); font-size: 12px; line-height: 1.5;
+        }
+
+        /* 签约文件区（附件区内） */
+        .sign-file-drop {
+            border: 1px dashed var(--border-color); border-radius: 8px; padding: 16px;
+            text-align: center; color: var(--text-tertiary); font-size: 12px;
+        }
+        .sign-file-drop .sf-btn {
+            display: inline-block; margin-top: 8px; padding: 7px 16px; border-radius: 6px;
+            background: var(--primary-color); color: #fff; font-size: 13px; cursor: pointer;
+        }
+        .sign-file-wait { font-size: 12px; color: var(--text-tertiary); }
+        .sign-file-done { font-size: 12px; color: var(--success-color); }
+
+        /* 拟定中内联编辑面板 */
+        .invite-edit-panel {
+            margin-top: 6px; border: 1px solid var(--primary-light);
+            border-radius: 10px; padding: 12px; background: var(--status-primary-bg);
+        }
+        .form-section-title { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+        .form-section-title .muted { color: var(--text-tertiary); font-weight: 400; font-size: 12px; margin-left: 6px; }
+        .edit-field { margin-bottom: 12px; }
+        .edit-label { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; }
+        .edit-input {
+            width: 100%; box-sizing: border-box; border: 1px solid var(--border-color);
+            border-radius: 8px; padding: 10px 12px; font-size: 13px; color: var(--text-primary);
+            background: var(--bg-primary); outline: none; font-family: inherit;
+        }
+        .edit-input:focus { border-color: var(--primary-color); }
+        .invite-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+        .invite-chip {
+            display: inline-flex; align-items: center; gap: 4px;
+            background: var(--bg-primary); border: 1px solid var(--border-color);
+            border-radius: 14px; padding: 4px 10px; font-size: 12px; color: var(--text-primary);
+        }
+        .invite-chip .x { color: var(--error-color); cursor: pointer; font-weight: 700; }
+
+        /* 乙方头像（拟定中选择乙方时展示，避免重名） */
+        .member-avatar {
+            flex: 0 0 auto; width: 34px; height: 34px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 14px; font-weight: 600; user-select: none;
+        }
+        .member-avatar.clickable { cursor: pointer; }
+        .member-main { display: flex; flex-direction: column; flex: 1; margin-left: 10px; line-height: 1.35; }
+        .member-name { font-size: 14px; color: var(--text-primary); }
+        .member-role { font-size: 11px; color: var(--text-tertiary); }
+        .invite-chip .member-avatar { width: 22px; height: 22px; font-size: 11px; }
+        .invite-chip .chip-text { margin-left: 4px; }
+
+        /* 个人电子名片（开发中） */
+        .business-card-box { width: 78%; max-width: 280px; text-align: center; }
+        .bc-badge {
+            display: inline-block; margin: 14px auto 0; padding: 2px 10px; font-size: 11px;
+            color: #fff; background: var(--text-tertiary); border-radius: 10px;
+        }
+        .bc-avatar {
+            width: 64px; height: 64px; border-radius: 50%; margin: 16px auto 10px;
+            display: flex; align-items: center; justify-content: center; color: #fff; font-size: 26px; font-weight: 600;
+        }
+        .bc-name { font-size: 17px; font-weight: 600; color: var(--text-primary); }
+        .bc-role { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+        .bc-id { font-size: 11px; color: var(--text-tertiary); margin-top: 4px; }
+        .bc-tip { font-size: 12px; color: var(--text-tertiary); margin: 14px 16px 18px; line-height: 1.5; }
+
+        .member-picker { position: relative; }
+        .member-picker-control {
+            border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 12px;
+            background: var(--bg-primary); font-size: 13px; color: var(--text-secondary); cursor: pointer;
+        }
+        .member-picker-panel {
+            display: none; margin-top: 6px; border: 1px solid var(--border-color);
+            border-radius: 8px; background: var(--bg-primary); max-height: 220px; overflow-y: auto;
+        }
+        .member-picker-panel.open { display: block; }
+        .member-picker-search {
+            width: 100%; box-sizing: border-box; border: none; border-bottom: 1px solid var(--border-color);
+            padding: 10px 12px; font-size: 13px; outline: none; background: var(--bg-primary);
+        }
+        .member-picker-list { padding: 4px 0; }
+        .member-picker-item {
+            display: flex; align-items: center; justify-content: flex-start;
+            padding: 10px 12px; font-size: 13px; cursor: pointer; color: var(--text-primary);
+        }
+        .member-picker-item:hover { background: var(--bg-secondary); }
+        .member-picker-item.selected { color: var(--primary-color); font-weight: 600; }
+        .member-picker-item.disabled { color: var(--text-tertiary); cursor: not-allowed; opacity: 0.6; }
+        .member-picker-item .check { color: var(--primary-color); font-weight: 700; margin-left: auto; }
+        .member-picker-empty { padding: 14px; text-align: center; color: var(--text-tertiary); font-size: 12px; }
+        .wc-primary-btn {
+            margin-top: 12px; width: 100%; height: 42px; border: none; border-radius: 8px;
+            background: var(--primary-color); color: #fff; font-size: 15px; font-weight: 600; cursor: pointer;
+        }
+        .wc-primary-btn:hover { background: var(--primary-light); }
+
+        /* 底部操作 */
+        .wc-bottom-actions {
+            position: absolute; left: 0; right: 0; bottom: 0;
+            display: flex; gap: 12px; padding: 10px 16px;
+            background: var(--bg-primary); border-top: 1px solid var(--border-color);
+        }
+        .wc-action-btn {
+            flex: 1; height: 42px; border-radius: 8px; font-size: 14px; font-weight: 600;
+            border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+        .wc-action-btn.primary { background: var(--primary-color); color: #fff; }
+        .wc-action-btn.success { background: var(--success-color); color: #fff; }
+        .wc-action-btn.warning { background: var(--bg-primary); color: var(--warning-color); border: 1px solid var(--warning-color); }
+        .wc-action-btn.secondary { background: var(--bg-primary); color: var(--text-secondary); border: 1px solid var(--border-color); }
+        .wc-action-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .wc-toast {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.7); color: #fff; padding: 12px 20px; border-radius: 8px;
+            font-size: 14px; z-index: 300; display: none; text-align: center; max-width: 220px;
+        }
+        .wc-toast.show { display: block; }
+
+        .wc-modal {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 400; display: none;
+            align-items: center; justify-content: center;
+        }
+        .wc-modal.show { display: flex; }
+        .wc-modal .modal-box {
+            width: 85%; max-width: 300px; background: var(--bg-primary);
+            border-radius: 12px; overflow: hidden;
+        }
+        .wc-modal .modal-title { font-size: 16px; font-weight: 600; text-align: center; padding: 20px 16px 12px; color: var(--text-primary); }
+        .wc-modal .modal-content { font-size: 14px; color: var(--text-secondary); text-align: center; padding: 0 16px 20px; line-height: 1.5; }
+        .wc-modal .modal-actions { display: flex; border-top: 1px solid var(--border-color); }
+        .wc-modal .modal-btn { flex: 1; height: 48px; border: none; background: none; cursor: pointer; font-size: 16px; font-family: inherit; }
+        .wc-modal .modal-btn.cancel { color: var(--text-secondary); border-right: 1px solid var(--border-color); }
+        .wc-modal .modal-btn.confirm { color: var(--primary-color); font-weight: 600; }
+        .wc-modal .modal-btn.danger { color: var(--error-color); font-weight: 600; }
+
+        /* 拒绝原因弹窗 */
+        #rejectReasonModal .modal-content { text-align: left; }
+        .modal-tip { font-size: 13px; color: var(--text-tertiary); margin: 0 0 10px; line-height: 1.5; }
+        .reject-reason-input {
+            width: 100%; box-sizing: border-box; border: 1px solid var(--border-color);
+            border-radius: 8px; padding: 10px; font-size: 14px; font-family: inherit;
+            color: var(--text-primary); background: var(--bg-secondary); resize: none; line-height: 1.5;
+        }
+        .reject-reason-input:focus { outline: none; border-color: var(--brand-color, #4A90E2); }
+        .reject-reason-err { color: var(--error-color); font-size: 12px; margin-top: 6px; }
+
+        .wc-notfound { padding: 40px 16px; text-align: center; color: var(--text-tertiary); font-size: 14px; }
+        .wc-nf-card { text-align: left; max-width: 340px; margin: 0 auto; }
+        .wc-nf-title { font-size: 15px; color: var(--text-secondary); margin-bottom: 8px; }
+        .wc-nf-desc { font-size: 13px; color: var(--text-tertiary); line-height: 1.7; margin-bottom: 18px; }
+
+        /* ===== 以下样式对齐「合同详情（合规版）」原型导航与导航栏 ===== */
+        /* 微信原生胶囊占位（由微信客户端实际渲染，原型仅作占位） */
+        .nav-bar .native-capsule {
+            display: inline-flex; align-items: center; justify-content: space-between;
+            min-width: 56px; height: 28px; padding: 0 10px;
+            border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 14px;
+            background: rgba(255, 255, 255, 0.7); color: rgba(0, 0, 0, 0.6);
+            font-size: 12px; line-height: 1; user-select: none; box-sizing: border-box;
+        }
+        .nav-bar .native-capsule .nc-left,
+        .nav-bar .native-capsule .nc-right {
+            display: inline-flex; align-items: center; justify-content: center;
+            flex: 1; min-width: 16px;
+        }
+        .nav-bar .native-capsule .nc-right { font-size: 10px; }
+        .nav-bar .native-capsule .nc-divider { width: 1px; height: 14px; background: rgba(0, 0, 0, 0.1); margin: 0 4px; }
+
+        /* 页内文字版「更多」按钮（合规：菜单平移至页内，不在导航栏仿冒） */
+        .content-toolbar {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 4px 0;
+        }
+        .content-toolbar .tb-hint { font-size: 12px; color: var(--text-tertiary, #C0C4CC); }
+        .text-more-btn {
+            display: inline-flex; align-items: center; gap: 4px;
+            font-size: 13px; color: var(--primary-color, #1677FF);
+            padding: 4px 8px; border-radius: 6px; cursor: pointer;
+        }
+        .text-more-btn:active { background-color: var(--bg-secondary, #F7F8FA); }
+        .text-more-btn .caret { font-size: 10px; transition: transform 0.2s; }
+        .text-more-btn.open .caret { transform: rotate(180deg); }
+        .more-ops-panel {
+            display: none; margin-top: 8px;
+            background-color: var(--bg-primary, #FFFFFF);
+            border: 1px solid var(--border-color, #E5E6EB);
+            border-radius: 10px; overflow: hidden;
+        }
+        .more-ops-panel.show { display: block; }
+        .more-ops-panel .op-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 11px 14px; font-size: 14px; color: var(--text-primary, #1D2129);
+            border-bottom: 1px solid var(--border-color, #F2F3F5); cursor: pointer;
+        }
+        .more-ops-panel .op-item:last-child { border-bottom: none; }
+        .more-ops-panel .op-item:active { background-color: var(--bg-secondary, #F7F8FA); }
+        .more-ops-panel .op-item .op-icon { font-size: 15px; }
+
+        /* 原型导航：状态分组（与合规版一致） */
+        .status-group { margin-bottom: 8px; }
+        .status-group-header {
+            display: flex; align-items: center; padding: 8px 12px;
+            background-color: #F5F5F5; border-radius: 6px; cursor: pointer;
+            transition: all 0.2s; user-select: none;
+        }
+        .status-group-header:hover { background-color: #E8E8E8; }
+        .status-group-icon { font-size: 10px; color: #8C8C8C; margin-right: 8px; width: 12px; text-align: center; }
+        .status-group-title { flex: 1; font-size: 13px; font-weight: 500; color: #262626; }
+        .status-group-count {
+            font-size: 11px; color: #8C8C8C; background-color: #E8E8E8;
+            padding: 2px 6px; border-radius: 10px;
+        }
+        .status-group-content { padding-left: 12px; }
+        .status-switch-item {
+            padding: 8px 12px; font-size: 13px; color: var(--text-secondary);
+            border-radius: 4px; cursor: pointer; transition: all 0.2s;
+        }
+        .status-switch-item:hover { background-color: var(--bg-secondary); }
+        .status-switch-item.active {
+            background-color: var(--status-primary-bg);
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* 拟定中：预览合同按钮 */
+        .wc-preview-btn {
+            margin-top: 14px; display: flex; align-items: center; justify-content: center; gap: 6px;
+            height: 44px; border-radius: 8px; background: var(--primary-color); color: #fff;
+            font-size: 15px; font-weight: 600; cursor: pointer;
+        }
+        .wc-preview-btn:active { opacity: 0.85; }
+
+        /* 受邀方终态（抢单失败/已拒绝）轻量「邀约已结束」视图 */
+        .receiver-ended-view { padding: 36px 16px 24px; text-align: center; }
+        .re-ended-icon {
+            width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 16px;
+            display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 700;
+        }
+        .re-ended-icon.lost { background: #FFF3E0; color: #D4690E; }
+        .re-ended-icon.rejected { background: var(--status-error-bg); color: var(--error-color); }
+        .re-ended-status {
+            display: inline-block; font-size: 16px; font-weight: 700; padding: 6px 18px; border-radius: 16px; margin-bottom: 18px;
+        }
+        .re-ended-status.lost { background: #FFF3E0; color: #D4690E; border: 1px solid #FFD591; }
+        .re-ended-status.rejected { background: var(--status-error-bg); color: var(--error-color); }
+        .re-ended-card {
+            text-align: left; background: var(--bg-primary); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 16px;
+        }
+        .re-ended-contract { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 10px; }
+        .re-ended-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+        .re-ended-reason {
+            margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border-color);
+            font-size: 13px; color: var(--text-secondary); line-height: 1.6;
+        }
+        .re-ended-reason .rr-label { color: var(--text-tertiary); margin-right: 6px; }
+        .invite-reason { font-size: 11px; color: var(--text-tertiary); margin-top: 3px; line-height: 1.5; }
+
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <div class="time">9:41</div>
+            <div class="icons">📶 🔋</div>
+        </div>
+
+        <div class="nav-bar">
+            <div class="back" onclick="history.back()">← 返回</div>
+            <div class="title centered">工人合同详情</div>
+            <div class="actions"><div class="native-capsule" title="微信原生胶囊：由微信客户端渲染，开发者不可自定义其内容"><span class="nc-left">⋯</span><span class="nc-divider"></span><span class="nc-right">○</span></div></div>
+        </div>
+
+        <div class="page-content" id="pageContent">
+            <div class="content-toolbar" id="contentToolbar">
+                <span class="tb-hint">合同操作</span>
+                <span class="text-more-btn" id="moreOpsBtn" onclick="WCP.toggleMoreOps()">更多<span class="caret">▾</span></span>
+            </div>
+            <div class="more-ops-panel" id="moreOpsPanel">
+                <div class="op-item" onclick="WCP.showVersionModal(); WCP.closeMoreOps();"><span class="op-icon">📋</span><span>版本记录</span></div>
+                <div class="op-item" onclick="WCP.showChangeRecordModal(); WCP.closeMoreOps();"><span class="op-icon">📜</span><span>变更记录</span></div>
+                <div class="op-item" onclick="WCP.exportContract(); WCP.closeMoreOps();"><span class="op-icon">📄</span><span>导出合同文件</span></div>
+            </div>
+
+            <div id="notFound" class="wc-notfound" style="display:none;">
+                <div class="wc-nf-card">
+                    <div class="wc-nf-title">工人合同数据暂不可用</div>
+                    <div class="wc-nf-desc">
+                        本页服务于「拆除 / 水电 / 木作 / 泥瓦 / 油漆 / 小零工」六类工人合同。<br>
+                        请通过右侧「原型导航 → 演示数据」切换一类，或返回合同列表重新进入。
+                    </div>
+                </div>
+            </div>
+
+            <div id="mainView" style="display:none;">
+                <div class="wc-banner draft" id="statusBanner">
+                    <div class="wc-banner-text" id="bannerText"></div>
+                    <div class="wc-banner-desc" id="bannerDesc"></div>
+                </div>
+
+                <!-- 合同邀约与乙方（工人合同特有） -->
+                <div class="worker-invite-card" id="invitationCard">
+                    <div class="card-title">🤝 合同邀约与乙方（意向乙方 · 首位确认者成乙方）</div>
+                    <div id="workerFlowBox"></div>
+                    <div class="worker-contract-meta" id="workerContractMeta"></div>
+
+                    <!-- 非草稿：邀请名单 -->
+                    <div id="inviteListBox"></div>
+
+                    <!-- 草稿：内联编辑面板（拟定中 / 拟定中撤回后，统一由底部「提交邀请」控制） -->
+                    <div id="inviteEditPanel" class="invite-edit-panel" style="display:none;">
+                        <div class="form-section-title">合同信息（拟定中可修改）</div>
+                        <div class="edit-field">
+                            <label class="edit-label" for="editNameInput">合同名称</label>
+                            <input type="text" id="editNameInput" class="edit-input" placeholder="请输入合同名称">
+                        </div>
+                        <div class="edit-field">
+                            <label class="edit-label" for="editAmountInput">合同金额（元）</label>
+                            <input type="number" id="editAmountInput" class="edit-input" placeholder="请输入合同金额">
+                        </div>
+                        <div class="form-section-title" id="inviteRoleTitle">意向乙方（仅各工种，邀请 1-3 人）<span class="muted" id="inviteCount"></span></div>
+                        <div class="invite-chips" id="inviteEditChips"></div>
+                        <div class="member-picker" id="editInvitePicker">
+                            <div class="member-picker-control" onclick="WCP.toggleEditPanel()">
+                                <span id="editInviteValue">点击添加意向乙方</span>
+                            </div>
+                            <div class="member-picker-panel" id="editInvitePanelBox">
+                                <input type="text" class="member-picker-search" id="editInviteSearch" placeholder="搜索工种，如 水电 / 拆除" oninput="WCP.filterEdit()">
+                                <div class="member-picker-list" id="editInviteList"></div>
+                                <div class="member-picker-empty" id="editInviteEmpty" style="display:none;">未找到匹配工种</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="arch-note" id="workerArchNote" style="display:none;"></div>
+                </div>
+
+                <!-- 非草稿：只读合同内容 / 阶段任务 / 附件（对齐合规版） -->
+                <div id="readOnlySections">
+                <div class="section-tabs section-tabs-wrap">
+                    <div class="section-tab active" onclick="WCP.switchSection(this, 'content')">合同内容</div>
+                    <div class="section-tab" onclick="WCP.switchSection(this, 'stages')">阶段任务</div>
+                    <div class="section-tab" onclick="WCP.switchSection(this, 'attachments')">附件</div>
+                </div>
+
+                <div class="section-content show" id="contentSection"></div>
+                <div class="section-content" id="stagesSection"></div>
+                <div class="section-content" id="attachmentsSection"></div>
+                </div>
+
+                <!-- 拟定中：可编辑合同内容（参考「合同详情（合规版）」） -->
+                <div id="draftContentWrap" style="display:none;">
+                    <div class="card contract-content-card">
+                        <div class="card-title">
+                            <span>📄 合同内容（拟定中可编辑）</span>
+                            <span class="more" style="color:var(--primary-color);font-size:13px;cursor:pointer;" onclick="WCP.showDraftTemplatePicker()">📄 更换模板</span>
+                        </div>
+                        <div class="content-tabs">
+                            <div class="content-tab active" onclick="WCP.switchDraftContentTab(this, 'contract-text')">合同正文</div>
+                            <div class="content-tab" onclick="WCP.switchDraftContentTab(this, 'stage-task')">阶段任务</div>
+                            <div class="content-tab" onclick="WCP.switchDraftContentTab(this, 'attachment')">附件</div>
+                        </div>
+
+                        <!-- 合同正文 -->
+                        <div class="content-tab-pane active" id="wcDraftContractText">
+                            <div class="template-info" id="draftTemplateInfo" style="display:none;">
+                                <div class="template-tag" id="draftTemplateTag"></div>
+                                <div class="template-hint">模板内容不可编辑，如需修改请重新选择模板</div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-label-row">
+                                    <label class="form-label">合同正文</label>
+                                    <span class="view-full-link" onclick="WCP.showFullText()">查看全文 ></span>
+                                </div>
+                                <div class="contract-text-preview" id="draftContractTextPreview"></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-label-row"><label class="form-label">补充条款</label></div>
+                                <textarea class="form-textarea" id="editContractExtra" rows="3" placeholder="可输入补充条款内容" oninput="WCP.updateDraftExtra(this.value)"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- 阶段任务 -->
+                        <div class="content-tab-pane" id="wcDraftStageTask">
+                            <div class="template-info" id="draftStageInfo" style="display:none;">
+                                <div class="template-tag" id="draftStageTag"></div>
+                                <div class="template-hint">模板内容可编辑调整</div>
+                            </div>
+                            <div id="draftStageList"></div>
+                            <div class="add-stage-btn" onclick="WCP.addDraftStage()"><span>+ 添加新阶段</span></div>
+                        </div>
+
+                        <!-- 附件 -->
+                        <div class="content-tab-pane" id="wcDraftAttachment">
+                            <div class="template-info" id="draftAttInfo" style="display:none;">
+                                <div class="template-tag" id="draftAttTag"></div>
+                                <div class="template-hint">模板内容可编辑调整</div>
+                            </div>
+                            <div class="attachment-upload-area" onclick="WCP.addDraftAttachment()">
+                                <div class="upload-icon">📁</div>
+                                <div class="upload-text">点击上传附件</div>
+                                <div class="upload-hint">支持 PDF、图片、Word、Excel 等格式</div>
+                            </div>
+                            <div class="attachment-list" id="draftAttList"></div>
+                        </div>
+
+                        <div class="wc-preview-btn" onclick="WCP.previewContract()">👁️ 预览合同</div>
+                    </div>
+                </div>
+
+                <!-- 受邀方终态（抢单失败/已拒绝）：轻量「邀约已结束」视图，隐藏完整详情 -->
+                <div id="receiverEndedView" class="receiver-ended-view" style="display:none;"></div>
+            </div>
+        </div>
+
+        <div class="wc-bottom-actions" id="bottomActions" style="display:none;"></div>
+
+        <div class="wc-toast" id="appToast"></div>
+
+        <div class="wc-modal" id="confirmModal">
+            <div class="modal-box">
+                <div class="modal-title" id="confirmTitle">确认操作</div>
+                <div class="modal-content" id="confirmContent"></div>
+                <div class="modal-actions">
+                    <button class="modal-btn cancel" onclick="WCP.closeConfirm()">取消</button>
+                    <button class="modal-btn danger" id="confirmBtn" onclick="WCP.runConfirm()">确认</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 拒绝原因弹窗 -->
+        <div class="wc-modal" id="rejectReasonModal">
+            <div class="modal-box">
+                <div class="modal-title">填写拒绝原因</div>
+                <div class="modal-content">
+                    <p class="modal-tip">请说明拒绝该合同邀约的原因，方便发起方（工长）了解。</p>
+                    <textarea id="rejectReasonInput" class="reject-reason-input" rows="4" maxlength="200" placeholder="例如：近期已有其他工作安排，无法承接本项目"></textarea>
+                    <div class="reject-reason-err" id="rejectReasonErr" style="display:none;"></div>
+                </div>
+                <div class="modal-actions">
+                    <button class="modal-btn cancel" onclick="WCP.closeRejectReason()">取消</button>
+                    <button class="modal-btn danger" onclick="WCP.submitRejectReason()">提交拒绝</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 个人电子名片（开发中） -->
+        <div class="wc-modal" id="businessCardModal">
+            <div class="modal-box business-card-box">
+                <div class="bc-badge">开发中</div>
+                <div class="bc-avatar" id="bcAvatar"></div>
+                <div class="bc-name" id="bcName"></div>
+                <div class="bc-role" id="bcRole"></div>
+                <div class="bc-id" id="bcId"></div>
+                <div class="bc-tip">个人电子名片功能开发中，敬请期待</div>
+                <div class="modal-actions">
+                    <button class="modal-btn cancel" onclick="WCP.closeBusinessCard()">关闭</button>
+                </div>
+            </div>
+        </div>
+
+        <input type="file" id="signFileInput" style="display:none;" onchange="WCP.onSignFilePicked(event)">
+        <input type="file" id="draftAttInput" style="display:none;" onchange="WCP.onDraftAttPicked(event)">
+
+        <!-- 更换模板弹窗 -->
+        <div class="wc-modal" id="wcTemplatePicker">
+            <div class="modal-box">
+                <div class="modal-title" id="wcTplTitle">选择模板</div>
+                <div class="modal-content">
+                    <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:10px;" id="wcTplTip"></div>
+                    <div id="wcTplList"></div>
+                </div>
+                <div class="modal-actions">
+                    <button class="modal-btn cancel" onclick="WCP.closeTemplatePicker()">取消</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 合同全文 / 预览合同弹窗 -->
+        <div class="fulltext-modal" id="wcFullTextModal" onclick="if(event.target===this)WCP.closeFullText()">
+            <div class="fulltext-header">
+                <div class="fulltext-back" onclick="WCP.closeFullText()"><span class="back-arrow">←</span><span class="back-text">返回</span></div>
+                <div class="fulltext-title" id="wcFullTextTitle">📄 合同全文</div>
+            </div>
+            <div class="fulltext-content" id="wcFullTextContent"></div>
+        </div>
+
+        <!-- 版本记录弹窗（对齐「合同详情（合规版）」） -->
+        <div class="modal-overlay" id="versionModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <div class="title">合同版本记录</div>
+                </div>
+                <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
+                    <div class="version-section">
+                        <div class="version-section-title">版本历史</div>
+                        <div class="version-list" id="versionList"></div>
+                    </div>
+                    <div class="status-flow-section">
+                        <div class="status-flow-section-title">状态流转记录</div>
+                        <div class="status-flow-timeline" id="statusFlowTimeline"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn confirm" onclick="WCP.closeVersionModal()" style="width: 100%;">关闭</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 变更记录弹窗（对齐「合同详情（合规版）」） -->
+        <div class="modal-overlay change-record-modal" id="changeRecordModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <div class="title">变更记录</div>
+                </div>
+                <div class="modal-body">
+                    <div class="version-item">
+                        <div class="version-tag current">V2</div>
+                        <div class="version-info">
+                            <div class="version-name">第二次变更<span class="version-status-tag success">变更成功</span></div>
+                            <div class="version-date">2024-03-15 生效</div>
+                            <div class="version-current">当前版本</div>
+                        </div>
+                        <div class="view-btn" onclick="WCP.viewChangeVersion('v2')">查看</div>
+                    </div>
+                    <div class="version-item">
+                        <div class="version-tag">V1</div>
+                        <div class="version-info">
+                            <div class="version-name">第一次变更<span class="version-status-tag success">变更成功</span></div>
+                            <div class="version-date">2024-02-20 生效</div>
+                        </div>
+                        <div class="view-btn" onclick="WCP.viewChangeVersion('v1')">查看</div>
+                    </div>
+                    <div class="version-item">
+                        <div class="version-tag">V0</div>
+                        <div class="version-info">
+                            <div class="version-name">初始版本</div>
+                            <div class="version-date">2024-01-15 生效</div>
+                        </div>
+                        <div class="view-btn" onclick="WCP.viewChangeVersion('v0')">查看</div>
+                    </div>
+                    <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #E8E8E8;">
+                        <div style="font-size: 12px; color: #8C8C8C; margin-bottom: 12px;">变更历史</div>
+                        <div style="font-size: 12px; color: #595959; line-height: 1.8;">
+                            <div style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 12px;">
+                                <span style="color: var(--success-color); margin-top: 3px;">●</span>
+                                <div>
+                                    <div style="color: #262626;">2024-03-15 第二次变更生效</div>
+                                    <div style="color: #8C8C8C; font-size: 11px;">变更内容：新增阶段任务，金额调整¥15,000</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 12px;">
+                                <span style="color: var(--primary-color); margin-top: 3px;">●</span>
+                                <div>
+                                    <div style="color: #262626;">2024-03-10 变更确认通过</div>
+                                    <div style="color: #8C8C8C; font-size: 11px;">双方确认同意变更内容</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 12px;">
+                                <span style="color: #13C2C2; margin-top: 3px;">●</span>
+                                <div>
+                                    <div style="color: #262626;">2024-03-08 平台审核通过</div>
+                                    <div style="color: #8C8C8C; font-size: 11px;">运营人员审核通过变更申请</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 12px;">
+                                <span style="color: var(--warning-color); margin-top: 3px;">●</span>
+                                <div>
+                                    <div style="color: #262626;">2024-03-05 发起变更申请</div>
+                                    <div style="color: #8C8C8C; font-size: 11px;">发起人：陈庄（工长）</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 12px; padding-top: 12px; border-top: 1px dashed #E8E8E8;">
+                                <span style="color: var(--success-color); margin-top: 3px;">●</span>
+                                <div>
+                                    <div style="color: #262626;">2024-02-20 第一次变更生效</div>
+                                    <div style="color: #8C8C8C; font-size: 11px;">变更内容：合同金额调整¥10,000</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 12px; padding-top: 12px; border-top: 1px dashed #E8E8E8;">
+                                <span style="color: var(--success-color); margin-top: 3px;">●</span>
+                                <div>
+                                    <div style="color: #262626;">2024-01-15 合同签约完成</div>
+                                    <div style="color: #8C8C8C; font-size: 11px;">初始版本正式生效</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn confirm" onclick="WCP.closeChangeRecordModal()" style="width: 100%;">关闭</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 导出合同文件弹窗（对齐「合同详情（合规版）」） -->
+        <div class="export-modal" id="exportModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">导出合同文件</div>
+                    <div class="modal-close" onclick="WCP.closeExportModal()">✕</div>
+                </div>
+                <div class="export-option" onclick="WCP.exportToPDF()">
+                    <div class="icon">📄</div>
+                    <div class="info">
+                        <div class="title">导出为PDF</div>
+                        <div class="desc">生成完整合同文件，保存到手机本地</div>
+                    </div>
+                    <div class="arrow">›</div>
+                </div>
+                <div class="export-option" onclick="WCP.shareToWechat()">
+                    <div class="icon">💬</div>
+                    <div class="info">
+                        <div class="title">分享到微信</div>
+                        <div class="desc">生成PDF文件并发送给微信好友</div>
+                    </div>
+                    <div class="arrow">›</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-nav">
+        <div class="page-nav-title">原型导航</div>
+        <a href="home.html" class="page-nav-item">首页</a>
+        <a href="project-list.html" class="page-nav-item">项目列表</a>
+        <a href="project-detail.html" class="page-nav-item">项目详情</a>
+        <a href="contract-detail.html" class="page-nav-item">合同详情（合规版）</a>
+        <a href="message.html" class="page-nav-item">消息</a>
+        <a href="worker-contract-detail.html" class="page-nav-item active">工人合同详情（新流程）</a>
+        <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #E8E8E8;">
+            <div class="page-nav-title">合同状态切换（工人合同）</div>
+
+            <!-- 发起方视角 -->
+            <div class="status-group">
+                <div class="status-group-header" onclick="WCP.toggleStatusGroup(this)">
+                    <span class="status-group-icon">▼</span>
+                    <span class="status-group-title">发起方视角</span>
+                    <span class="status-group-count">5</span>
+                </div>
+                <div class="status-group-content">
+                    <div class="status-switch-item" onclick="WCP.updateStatus('worker_draft_initial')">拟定中(发起方)</div>
+                    <div class="status-switch-item" onclick="WCP.updateStatus('worker_inviting_sender')">确认中(发起方)</div>
+                    <div class="status-switch-item" onclick="WCP.updateStatus('worker_confirmed_sender')">已确认(发起方)</div>
+                    <div class="status-switch-item" onclick="WCP.updateStatus('worker_draft')">拟定中(撤回后)</div>
+                    <div class="status-switch-item" onclick="WCP.updateStatus('worker_signed')">已签约</div>
+                </div>
+            </div>
+
+            <!-- 受邀方视角 -->
+            <div class="status-group">
+                <div class="status-group-header" onclick="WCP.toggleStatusGroup(this)">
+                    <span class="status-group-icon">▶</span>
+                    <span class="status-group-title">受邀方视角</span>
+                    <span class="status-group-count">3</span>
+                </div>
+                <div class="status-group-content" style="display:none;">
+                    <div class="status-switch-item" onclick="WCP.updateStatus('worker_inviting_receiver')">确认中(受邀方)</div>
+                    <div class="status-switch-item" onclick="WCP.updateStatus('worker_confirmed_receiver')">已确认(受邀方)</div>
+                    <div class="status-switch-item" onclick="WCP.updateStatus('worker_lost_receiver')">抢单失败(受邀方)</div>
+                    <div class="status-switch-item" onclick="WCP.updateStatus('worker_rejected_receiver')">已拒绝(受邀方)</div>
+                </div>
+            </div>
+
+            <!-- 演示数据：合同类型切换 / 重置（原置于「更多」菜单，对齐合规版后迁移至此） -->
+            <div class="status-group">
+                <div class="status-group-header" onclick="WCP.toggleStatusGroup(this)">
+                    <span class="status-group-icon">▼</span>
+                    <span class="status-group-title">演示数据</span>
+                    <span class="status-group-count">7</span>
+                </div>
+                <div class="status-group-content">
+                    <div class="status-switch-item" onclick="WCP.createDemo('demolition')">拆除班组服务合同</div>
+                    <div class="status-switch-item" onclick="WCP.createDemo('shuidian')">水电班组服务合同</div>
+                    <div class="status-switch-item" onclick="WCP.createDemo('muzuo')">木作班组服务合同</div>
+                    <div class="status-switch-item" onclick="WCP.createDemo('niwa')">泥瓦工班组服务合同</div>
+                    <div class="status-switch-item" onclick="WCP.createDemo('youqi')">油漆工班组服务合同</div>
+                    <div class="status-switch-item" onclick="WCP.createDemo('xiaolingong')">小零工服务合同</div>
+                    <div class="status-switch-item" onclick="WCP.resetDemo()" style="color:var(--warning-color);">重置演示数据</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="contract-store.js"></script>
+    <script src="worker-contract-detail.js"></script>
+</body>
+</html>

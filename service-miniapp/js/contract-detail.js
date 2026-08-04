@@ -24,7 +24,13 @@ const ContractDetailPage = (function() {
         customConfirmCallback: null,
         customConfirmDanger: false,
         signFiles: [],
-        currentModalAction: ''
+        currentModalAction: '',
+        // —— 工人合同（方案 B）扩展 ——
+        isWorker: false,
+        workerId: '',
+        viewer: 'sender',     // sender（发起方/工长） | receiver（被邀请人）
+        asUserId: '',         // receiver 视角下的当前用户 id
+        workerContract: null
     };
     
     // ==================== 合同状态配置 ====================
@@ -246,6 +252,78 @@ const ContractDetailPage = (function() {
             actions: [
                 { text: '上传变更签约文件', type: 'primary', action: 'upload_change_sign' }
             ]
+        },
+
+        // ============== 工人合同新流程（方案 B） ==============
+        // 仅作用于 拆除/水电/木作/泥瓦/油漆/小零工 六类，基础施工/设计 仍走上方原流程
+        worker_inviting_sender: {
+            text: '确认中',
+            desc: '已邀请意向乙方参与此合同，等待对方确认/抢单（第一位确认者成为合同乙方）。',
+            bannerClass: 'confirming',
+            isWorker: true,
+            hideTabs: true,
+            actions: [
+                { text: '撤回确认', type: 'warning', action: 'worker_withdraw' }
+            ]
+        },
+        worker_inviting_receiver: {
+            text: '确认中',
+            desc: '您被邀请参与此合同，等待您确认/抢单。第一位确认者成为合同乙方。',
+            bannerClass: 'confirming',
+            isWorker: true,
+            hideTabs: true,
+            actions: [
+                { text: '拒绝', type: 'secondary', action: 'worker_reject' },
+                { text: '确认加入', type: 'primary', action: 'worker_confirm' }
+            ]
+        },
+        worker_confirmed_sender: {
+            text: '已确认',
+            desc: '乙方已确认，已自动加入项目架构层级。请等待乙方上传签约文件。',
+            bannerClass: 'confirmed',
+            isWorker: true,
+            hideTabs: true,
+            actions: [
+                { text: '撤回确认', type: 'warning', action: 'worker_withdraw' }
+            ]
+        },
+        worker_confirmed_receiver: {
+            text: '已确认',
+            desc: '您已成为本合同乙方，已自动加入项目架构层级。请上传签约文件，上传后合同正式生效。',
+            bannerClass: 'confirmed',
+            isWorker: true,
+            hideTabs: true,
+            actions: [
+                { text: '上传签约文件', type: 'primary', action: 'upload' }
+            ]
+        },
+        worker_lost_receiver: {
+            text: '已确认',
+            desc: '该合同已被其他人员确认（抢单失败），您未成为本合同乙方。',
+            bannerClass: 'confirmed',
+            isWorker: true,
+            hideTabs: true,
+            actions: []
+        },
+        worker_draft: {
+            text: '拟定中',
+            desc: '合同已撤回至拟定中，可重新填写并邀请人员后提交邀约。',
+            bannerClass: 'draft',
+            isWorker: true,
+            hideTabs: true,
+            actions: [
+                { text: '重新提交邀约', type: 'success', action: 'worker_resubmit' }
+            ]
+        },
+        worker_signed: {
+            text: '已签约',
+            desc: '合同已正式生效（乙方已上传签约文件并自动加入项目架构层级）。',
+            bannerClass: 'signed',
+            isWorker: true,
+            hideTabs: true,
+            actions: [
+                { text: '合同已生效', type: 'primary', action: 'view', disabled: true }
+            ]
         }
     };
     
@@ -359,7 +437,23 @@ const ContractDetailPage = (function() {
      */
     function initFromUrl() {
         const urlParams = new URLSearchParams(window.location.search);
-        
+
+        // —— 工人合同新流程（方案 B）：从合约库读取，按视角派生视图 ——
+        if (urlParams.get('worker') === '1' && urlParams.get('id')) {
+            state.isWorker = true;
+            state.workerId = urlParams.get('id');
+            state.viewer = urlParams.get('viewer') || 'sender';
+            state.asUserId = urlParams.get('asUserId') || '';
+            const c = ContractStore.getContract(state.workerId);
+            if (!c) {
+                showCustomToast('未找到该合同，可能已被清除');
+                return;
+            }
+            state.workerContract = c;
+            updateContractStatus(computeWorkerViewStatus());
+            return;
+        }
+
         if (urlParams.get('new') === '1') {
             state.isNewContract = true;
             state.newContractData = {
@@ -480,7 +574,10 @@ const ContractDetailPage = (function() {
         const draftEditForm = document.getElementById('draftEditForm');
         const draftViewContent = document.getElementById('draftViewContent');
         if (draftEditForm && draftViewContent) {
-            if (config.showEditForm) {
+            if (state.isWorker) {
+                draftEditForm.style.display = 'none';
+                draftViewContent.style.display = 'none';
+            } else if (config.showEditForm) {
                 draftEditForm.style.display = 'block';
                 draftViewContent.style.display = 'none';
             } else {
@@ -526,6 +623,14 @@ const ContractDetailPage = (function() {
         
         // 更新阶段任务显示（已签约前不显示进度和状态）
         updateStageTasksDisplay(status);
+
+        // 工人合同：签约后回写合约库，并渲染邀请名单
+        if (state.isWorker) {
+            if (status === 'signed') {
+                ContractStore.markSigned(state.workerId);
+            }
+            renderWorkerExtras(status);
+        }
     }
     
     /**
@@ -704,6 +809,150 @@ const ContractDetailPage = (function() {
         });
     }
     
+    // ============== 工人合同新流程（方案 B）渲染辅助 ==============
+    function escapeHtml(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+    }
+
+    // 根据合约库状态 + 当前视角，派生详情页应渲染的状态
+    function computeWorkerViewStatus() {
+        const c = ContractStore.getContract(state.workerId);
+        if (!c) return 'worker_draft';
+        if (state.viewer === 'receiver') {
+            if (c.status === 'worker_confirmed') {
+                const conf = c.invitations.filter(i => i.status === 'confirmed')[0];
+                if (conf && conf.userId === state.asUserId) return 'worker_confirmed_receiver';
+                return 'worker_lost_receiver';
+            }
+            if (c.status === 'worker_inviting') return 'worker_inviting_receiver';
+            return 'worker_draft';
+        }
+        if (c.status === 'worker_inviting') return 'worker_inviting_sender';
+        if (c.status === 'worker_confirmed') return 'worker_confirmed_sender';
+        if (c.status === 'worker_draft') return 'worker_draft';
+        if (c.status === 'worker_signed') return 'signed';
+        return 'worker_draft';
+    }
+
+    function renderWorkerFromStore() {
+        updateContractStatus(computeWorkerViewStatus());
+    }
+
+    function workerMetaRow(label, value) {
+        return '<div class="meta-row"><span class="meta-label">' + escapeHtml(label) +
+            '</span><span class="meta-value">' + escapeHtml(value) + '</span></div>';
+    }
+
+    function renderWorkerExtras(status) {
+        const card = document.getElementById('invitationCard');
+        if (!state.isWorker) {
+            if (card) card.style.display = 'none';
+            return;
+        }
+        const c = ContractStore.getContract(state.workerId);
+        if (!c) {
+            if (card) card.style.display = 'none';
+            return;
+        }
+        if (card) card.style.display = 'block';
+
+        const meta = document.getElementById('workerContractMeta');
+        if (meta) {
+            let html = '';
+            html += workerMetaRow('合同名称', c.name);
+            html += workerMetaRow('合同类型', c.typeName);
+            html += workerMetaRow('所属架构层级', c.group || '—');
+            if (c.amount) html += workerMetaRow('合同金额', c.amount + ' 元');
+            if (c.partyAName) html += workerMetaRow('甲方', c.partyAName);
+            if (c.partyBName && (c.status === 'worker_confirmed' || c.status === 'worker_signed')) {
+                html += workerMetaRow('乙方', c.partyBName);
+            }
+            meta.innerHTML = html;
+        }
+
+        renderWorkerFlow(status);
+        renderInviteListBox(c, status);
+
+        const arch = document.getElementById('workerArchNote');
+        if (arch) {
+            if (c.status === 'worker_confirmed' && c.joinedArchitecture) {
+                arch.style.display = 'block';
+                arch.innerHTML = '✅ 乙方「' + escapeHtml(c.partyBName) + '」已自动加入项目架构层级：' + escapeHtml(c.joinedArchitecture);
+            } else {
+                arch.style.display = 'none';
+            }
+        }
+
+        // 接收方未中签：仅展示失败提示，禁用操作按钮
+        if (state.viewer === 'receiver' && status === 'worker_lost_receiver') {
+            const ba = document.getElementById('bottomActions');
+            if (ba) {
+                ba.innerHTML = '<div class="action-btn secondary" style="opacity:.6;cursor:not-allowed;">该合同已被他人确认（抢单失败）</div>';
+                ba.style.display = 'flex';
+            }
+        }
+    }
+
+    function renderWorkerFlow(status) {
+        const steps = [
+            { key: 'inviting', label: '确认中', icon: '🤝' },
+            { key: 'confirmed', label: '已确认', icon: '✅' },
+            { key: 'signed', label: '已签约', icon: '📄' }
+        ];
+        const order = ['inviting', 'confirmed', 'signed'];
+        let current = 'inviting';
+        if (status.indexOf('confirmed') > -1) current = 'confirmed';
+        if (status === 'signed' || status.indexOf('signed') > -1) current = 'signed';
+        const curIdx = order.indexOf(current);
+
+        let html = '<div class="worker-flow">';
+        steps.forEach(function (s, i) {
+            const cls = i < curIdx ? 'done' : (i === curIdx ? 'current' : '');
+            html += '<div class="wf-step ' + cls + '"><div class="wf-circle">' + s.icon + '</div><div class="wf-label">' + s.label + '</div></div>';
+            if (i < steps.length - 1) {
+                html += '<div class="wf-line ' + (i < curIdx ? 'done' : '') + '"></div>';
+            }
+        });
+        html += '</div>';
+
+        const card = document.getElementById('invitationCard');
+        const meta = document.getElementById('workerContractMeta');
+        if (card && meta) {
+            const old = document.getElementById('workerFlowBox');
+            if (old && old.parentNode) old.parentNode.removeChild(old);
+            const div = document.createElement('div');
+            div.id = 'workerFlowBox';
+            div.style.marginBottom = '12px';
+            div.innerHTML = html;
+            card.insertBefore(div, meta);
+        }
+    }
+
+    function renderInviteListBox(c, status) {
+        const box = document.getElementById('inviteListBox');
+        if (!box) return;
+        box.innerHTML = '';
+        const taken = c.invitations.some(function (i) { return i.status === 'confirmed'; });
+        c.invitations.forEach(function (inv) {
+            const me = (inv.userId === state.asUserId);
+            let stText = '待确认', stCls = 'pending';
+            if (inv.status === 'confirmed') { stText = '已确认（乙方）'; stCls = 'confirmed'; }
+            else if (inv.status === 'rejected') { stText = '已拒绝'; stCls = 'rejected'; }
+            else if (taken && !me) { stText = '已被他人确认'; stCls = 'taken'; }
+            const initial = inv.name ? inv.name.charAt(0) : '?';
+            const rowEl = document.createElement('div');
+            rowEl.className = 'invite-row' + (me ? ' is-me' : '');
+            rowEl.innerHTML =
+                '<div class="invite-avatar">' + escapeHtml(initial) + '</div>' +
+                '<div class="invite-info"><div class="invite-name">' + escapeHtml(inv.name) + (me ? '（我）' : '') + '</div>' +
+                '<div class="invite-role">' + escapeHtml(inv.role) + '</div></div>' +
+                '<div class="invite-status ' + stCls + '">' + stText + '</div>';
+            box.appendChild(rowEl);
+        });
+    }
+
     /**
      * 更新状态切换高亮
      * @param {string} status - 状态标识
@@ -731,7 +980,14 @@ const ContractDetailPage = (function() {
             'change_platform_rejected': '变更审核驳回',
             'change_confirming_sender': '变更确认中(发起方)',
             'change_confirming_receiver': '变更确认中(待确认方)',
-            'change_signing_wait': '变更签约中'
+            'change_signing_wait': '变更签约中',
+            'worker_inviting_sender': '确认中(发起方)',
+            'worker_inviting_receiver': '确认中(被邀请人)',
+            'worker_confirmed_sender': '已确认(发起方)',
+            'worker_confirmed_receiver': '已确认(乙方)',
+            'worker_lost_receiver': '已确认(未中签)',
+            'worker_draft': '拟定中',
+            'worker_signed': '已签约'
         };
         
         document.querySelectorAll('.status-switch-item').forEach(item => {
@@ -755,11 +1011,15 @@ const ContractDetailPage = (function() {
             'confirmed': { a: '已确认', b: '已确认' },
             'signed': { a: '已签约', b: '已签约' },
             'changing': { a: '变更中', b: '待确认' },
-            'change_confirming': { a: '已确认', b: '变更中' }
+            'change_confirming': { a: '已确认', b: '变更中' },
+            'worker_confirmed_sender': { a: '已确认', b: '已确认' },
+            'worker_confirmed_receiver': { a: '已确认', b: '已确认' },
+            'worker_lost_receiver': { a: '已确认', b: '已确认' }
         };
-        
+
         if (partyATag && partyBTag) {
-            if (['draft', 'draft_party_a', 'draft_submittable', 'platform_reviewing', 'platform_rejected'].includes(status)) {
+            if (['draft', 'draft_party_a', 'draft_submittable', 'platform_reviewing', 'platform_rejected',
+                'worker_inviting_sender', 'worker_inviting_receiver', 'worker_draft'].includes(status)) {
                 partyATag.style.display = 'none';
                 partyBTag.style.display = 'none';
             } else if (statusMap[status]) {
@@ -778,8 +1038,8 @@ const ContractDetailPage = (function() {
     function updateSignFileCard(status) {
         const signFileCard = document.getElementById('signFileCard');
         const signFileUploadBtn = document.getElementById('signFileUploadBtn');
-        const showSignFileStates = ['signed', 'changing', 'change_confirming', 'change_platform_reviewing', 'change_platform_rejected', 'change_confirming_sender', 'change_confirming_receiver', 'change_signing_wait', 'change_confirmed'];
-        const canUploadSignFileStates = ['confirmed'];
+        const showSignFileStates = ['signed', 'changing', 'change_confirming', 'change_platform_reviewing', 'change_platform_rejected', 'change_confirming_sender', 'change_confirming_receiver', 'change_signing_wait', 'change_confirmed', 'worker_confirmed_sender', 'worker_confirmed_receiver', 'worker_signed'];
+        const canUploadSignFileStates = ['confirmed', 'worker_confirmed_receiver'];
         
         if (signFileCard) {
             signFileCard.style.display = showSignFileStates.includes(status) ? 'block' : 'none';
@@ -797,7 +1057,14 @@ const ContractDetailPage = (function() {
     function updateStatusFlowDiagram(status) {
         const flowSteps = document.querySelectorAll('.status-flow-step');
         const flowLines = document.querySelectorAll('.status-flow-line');
-        
+
+        // 工人合同使用邀请卡片内的专属流程条，隐藏默认流程图
+        if (state.isWorker) {
+            const sf = document.getElementById('statusFlowCard');
+            if (sf) sf.style.display = 'none';
+            return;
+        }
+
         const statusOrder = [
             'draft',
             'draft_party_a',
@@ -1032,7 +1299,12 @@ const ContractDetailPage = (function() {
             resubmit_change: { title: '重新发起变更', message: '确定要重新发起变更申请吗？提交后将由平台运营人员进行审核。' },
             reject_change_flow: { title: '驳回变更', message: '确定要驳回变更申请吗？' },
             confirm_change_flow: { title: '确认变更', message: '是否确认变更？确认后需上传签约文件变更生效！' },
-            upload_change_sign: { title: '上传变更签约文件', message: '请选择要上传的变更签约文件（支持PDF、JPG、PNG格式）。' }
+            upload_change_sign: { title: '上传变更签约文件', message: '请选择要上传的变更签约文件（支持PDF、JPG、PNG格式）。' },
+            // 工人合同新流程（方案 B）
+            worker_withdraw: { title: '撤回合同邀约', message: '确定要撤回确认吗？撤回后合同退回拟定中，需重新填写并邀请人员后提交邀约。' },
+            worker_reject: { title: '拒绝邀请', message: '确定要拒绝此合同邀约吗？拒绝后您不会成为本合同乙方。' },
+            worker_confirm: { title: '确认加入合同', message: '确定要确认加入此合同吗？确认后您将成为本合同乙方，并自动加入项目架构层级。' },
+            worker_resubmit: { title: '重新提交邀约', message: '确定要重新提交邀约吗？将向所选意向乙方重新发送合同邀约。' }
         };
         
         if (action === 'upload') {
@@ -1194,6 +1466,42 @@ const ContractDetailPage = (function() {
             '确认签约': () => {
                 showCustomToast('签约成功！合同已正式生效');
                 updateContractStatus('signed');
+            },
+            // 工人合同新流程（方案 B）动作
+            '撤回合同邀约': () => {
+                ContractStore.withdrawConfirm(state.workerId);
+                showCustomToast('已撤回确认，合同退回拟定中');
+                renderWorkerFromStore();
+            },
+            '拒绝邀请': () => {
+                ContractStore.rejectInvitation(state.workerId, state.asUserId);
+                showCustomToast('已拒绝该合同邀约');
+                renderWorkerFromStore();
+            },
+            '确认加入合同': () => {
+                const res = ContractStore.confirmInvitation(state.workerId, state.asUserId);
+                if (!res.ok) {
+                    if (res.reason === 'taken') {
+                        showCustomToast('手慢了，该合同已被他人确认（抢单失败）');
+                    } else {
+                        showCustomToast('操作失败，请刷新后重试');
+                    }
+                    renderWorkerFromStore();
+                    return;
+                }
+                showCustomToast('确认成功！您已成为本合同乙方，已自动加入项目架构层级');
+                renderWorkerFromStore();
+            },
+            '重新提交邀约': () => {
+                closeModal();
+                const c = ContractStore.getContract(state.workerId);
+                const q = new URLSearchParams({
+                    editId: state.workerId,
+                    group: c ? c.group : '',
+                    type: c ? c.type : ''
+                });
+                location.href = 'create-contract.html?' + q.toString();
+                return;
             }
         };
         
@@ -3227,37 +3535,7 @@ const ContractDetailPage = (function() {
     
     // ==================== PC端打开函数 ====================
     
-    /**
-     * 显示PC端打开弹窗
-     */
-    function showPcOpenModal() {
-        const modal = document.getElementById('pcOpenModal');
-        if (modal) modal.classList.add('show');
-    }
-    
-    /**
-     * 关闭PC端打开弹窗
-     */
-    function closePcOpenModal() {
-        const modal = document.getElementById('pcOpenModal');
-        if (modal) modal.classList.remove('show');
-    }
-    
-    /**
-     * 复制PC端链接
-     */
-    function copyPcLink() {
-        const pcLink = document.getElementById('pcLink');
-        if (!pcLink) return;
-        
-        const link = pcLink.textContent;
-        navigator.clipboard.writeText(link).then(() => {
-            showCustomToast('链接已复制到剪贴板');
-            closePcOpenModal();
-        }).catch(() => {
-            showCustomToast('复制失败，请手动复制');
-        });
-    }
+
     
     // ==================== 事件绑定 ====================
     
@@ -3416,10 +3694,7 @@ const ContractDetailPage = (function() {
         rejectSign,
         confirmSign,
         
-        // PC端打开
-        showPcOpenModal,
-        closePcOpenModal,
-        copyPcLink,
+
         
         // 模板选择函数
         showTemplatePicker,
@@ -3529,9 +3804,6 @@ window.closeSignConfirmModal = ContractDetailPage.closeSignConfirmModal;
 window.previewSignFile = ContractDetailPage.previewSignFile;
 window.rejectSign = ContractDetailPage.rejectSign;
 window.confirmSign = ContractDetailPage.confirmSign;
-window.showPcOpenModal = ContractDetailPage.showPcOpenModal;
-window.closePcOpenModal = ContractDetailPage.closePcOpenModal;
-window.copyPcLink = ContractDetailPage.copyPcLink;
 
 // ==================== 模板选择函数全局别名 ====================
 window.showTemplatePicker = ContractDetailPage.showTemplatePicker;

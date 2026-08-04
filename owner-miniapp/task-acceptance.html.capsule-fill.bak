@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>��װƽ̨С����ԭ�� - ��ʱ����</title>
+    <title>家装平台小程序原型 - 临时任务</title>
     <link rel="stylesheet" href="common.css">
     <style>
         .page-content {
@@ -867,258 +867,279 @@
             cursor: pointer;
         }
     </style>
+<style>
+    /* v2-native-capsule-style：微信原生胶囊占位（不可自定义，仅演示位置） */
+    .nav-bar .native-capsule {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        min-width: 46px;
+        height: 28px;
+        padding: 0 8px;
+        border: 1px dashed #cfcfcf;
+        border-radius: 14px;
+        color: #b3b3b3;
+        font-size: 13px;
+        line-height: 1;
+        user-select: none;
+        box-sizing: border-box;
+    }
+</style>
 </head>
 <body>
     <div class="phone-frame">
         <div class="status-bar">
             <div class="time">9:41</div>
-            <div class="icons">?? ??</div>
+            <div class="icons">📶 🔋</div>
         </div>
         
         <div class="nav-bar">
-            <div class="back" onclick="history.back()">�� ����</div>
-            <div class="title centered">��ʱ����</div>
-            <div class="actions">
-                <div class="action-btn" onclick="showCustomToast('�ر�С����')">?</div>
-            </div>
+            <div class="back" onclick="history.back()">← 返回</div>
+            <div class="title centered">临时任务</div>
+            
+        
+            <div class="actions"><div class="native-capsule" title="微信原生胶囊：由微信客户端渲染，开发者不可自定义其内容"></div></div>
         </div>
+            
+
         
         <div class="page-content">
             <div class="status-tabs">
                 <div class="status-tab active" onclick="switchStatusTab(this, 'pending')">
-                    ������
+                    待接受
                     <span class="badge" id="pendingBadge">3</span>
                 </div>
                 <div class="status-tab" onclick="switchStatusTab(this, 'inprogress')">
-                    ������
+                    进行中
                     <span class="badge" id="inprogressBadge" style="background-color: var(--primary-color);">4</span>
                 </div>
                 <div class="status-tab" onclick="switchStatusTab(this, 'completed')">
-                    �����
+                    已完成
                     <span class="badge" id="completedBadge" style="background-color: var(--success-color);">2</span>
                 </div>
                 <div class="status-tab" onclick="switchStatusTab(this, 'created')">
-                    �ҷ����
+                    我发起的
                     <span class="badge" id="createdBadge" style="background-color: var(--purple-color);">2</span>
                 </div>
                 <div class="status-tab" onclick="switchStatusTab(this, 'deleted')">
-                    ��ɾ��
+                    已删除
                     <span class="badge" id="deletedBadge" style="background-color: var(--text-tertiary);">1</span>
                 </div>
             </div>
             
             <div class="batch-action-bar show" id="batchActionBar">
-                <div class="info">��ѡ�� <span id="selectedCount">3</span> ������</div>
-                <button class="btn" onclick="acceptAllTasks()">һ��ȫ������</button>
+                <div class="info">已选择 <span id="selectedCount">3</span> 个任务</div>
+                <button class="btn" onclick="acceptAllTasks()">一键全部接受</button>
             </div>
             
             <div class="task-list" id="pendingList">
                 <div class="task-card" data-id="1">
                     <div class="card-top-row">
                         <div class="task-title-wrap">
-                            <div class="task-title">�����޲�ǽ���ѷ�</div>
-                            <div class="task-type temp">��ʱ����</div>
+                            <div class="task-title">紧急修补墙面裂缝</div>
+                            <div class="task-type temp">临时任务</div>
                         </div>
                     </div>
                     <div class="task-meta">
                         <div class="meta-item">
-                            <span class="icon">??</span>
-                            <span class="label">������ͬ��</span>
-                            <span>���߷ְ���ͬ</span>
+                            <span class="icon">📄</span>
+                            <span class="label">关联合同：</span>
+                            <span>泥瓦分包合同</span>
                         </div>
                     </div>
                     <div class="standard-section">
                         <div class="standard-header" onclick="toggleStandard(this)">
                             <div class="header-left">
-                                <span class="icon">??</span>
-                                <span>ִ�б�׼</span>
+                                <span class="icon">📋</span>
+                                <span>执行标准</span>
                             </div>
-                            <span class="arrow-icon">��</span>
+                            <span class="arrow-icon">▼</span>
                         </div>
                         <div class="standard-content">
-                            <div class="content-inner">ʹ����ͬ���ʽ����޲���ȷ����ԭǽ��һ��</div>
+                            <div class="content-inner">使用相同材质进行修补，确保与原墙面一致</div>
                         </div>
                     </div>
                     <div class="standard-section">
                         <div class="standard-header" onclick="toggleStandard(this)">
                             <div class="header-left">
-                                <span class="icon">?</span>
-                                <span>ȷ�ϱ�׼</span>
+                                <span class="icon">✅</span>
+                                <span>确认标准</span>
                             </div>
-                            <span class="arrow-icon">��</span>
+                            <span class="arrow-icon">▼</span>
                         </div>
                         <div class="standard-content">
-                            <div class="content-inner">�޲���������ɫ�����ƽ��</div>
+                            <div class="content-inner">修补后无明显色差，表面平整</div>
                         </div>
                     </div>
                     <div class="standard-section">
                         <div class="standard-header" onclick="toggleStandard(this)">
                             <div class="header-left">
-                                <span class="icon">??</span>
-                                <span>�����׼</span>
+                                <span class="icon">⚖️</span>
+                                <span>担责标准</span>
                             </div>
-                            <span class="arrow-icon">��</span>
+                            <span class="arrow-icon">▼</span>
                         </div>
                         <div class="standard-content">
-                            <div class="content-inner">��ʩ���������⵼�µķ�����ִ���˳е�</div>
+                            <div class="content-inner">因施工质量问题导致的返工由执行人承担</div>
                         </div>
                     </div>
                     <div class="sender-info">
-                        <div class="sender-avatar">��</div>
+                        <div class="sender-avatar">张</div>
                         <div class="sender-detail">
-                            <div class="sender-name">��������Ŀ������</div>
-                            <div class="sender-time">�ɷ�ʱ�䣺2024-01-25 14:30</div>
+                            <div class="sender-name">张三（项目经理）</div>
+                            <div class="sender-time">派发时间：2024-01-25 14:30</div>
                         </div>
                     </div>
                     <div class="card-actions" onclick="event.stopPropagation()">
-                        <button class="action-btn reject" onclick="showRejectModal(1)">�ܾ�</button>
-                        <button class="action-btn accept" onclick="acceptTask(1)">��������</button>
+                        <button class="action-btn reject" onclick="showRejectModal(1)">拒绝</button>
+                        <button class="action-btn accept" onclick="acceptTask(1)">接受任务</button>
                     </div>
                 </div>
                 
                 <div class="task-card" data-id="2">
                     <div class="card-top-row">
                         <div class="task-title-wrap">
-                            <div class="task-title">�����𻵲���</div>
-                            <div class="task-type temp">��ʱ����</div>
+                            <div class="task-title">更换损坏插座</div>
+                            <div class="task-type temp">临时任务</div>
                         </div>
                     </div>
                     <div class="task-meta">
                         <div class="meta-item">
-                            <span class="icon">??</span>
-                            <span class="label">������ͬ��</span>
-                            <span>ˮ��ְ���ͬ</span>
+                            <span class="icon">📄</span>
+                            <span class="label">关联合同：</span>
+                            <span>水电分包合同</span>
                         </div>
                     </div>
                     <div class="standard-section">
                         <div class="standard-header" onclick="toggleStandard(this)">
                             <div class="header-left">
-                                <span class="icon">??</span>
-                                <span>ִ�б�׼</span>
+                                <span class="icon">📋</span>
+                                <span>执行标准</span>
                             </div>
-                            <span class="arrow-icon">��</span>
+                            <span class="arrow-icon">▼</span>
                         </div>
                         <div class="standard-content">
-                            <div class="content-inner">�ϵ����������ͬ������</div>
+                            <div class="content-inner">断电操作，更换同规格插座</div>
                         </div>
                     </div>
                     <div class="standard-section">
                         <div class="standard-header" onclick="toggleStandard(this)">
                             <div class="header-left">
-                                <span class="icon">?</span>
-                                <span>ȷ�ϱ�׼</span>
+                                <span class="icon">✅</span>
+                                <span>确认标准</span>
                             </div>
-                            <span class="arrow-icon">��</span>
+                            <span class="arrow-icon">▼</span>
                         </div>
                         <div class="standard-content">
-                            <div class="content-inner">ͨ�������������װ�ι�</div>
+                            <div class="content-inner">通电测试正常，安装牢固</div>
                         </div>
                     </div>
                     <div class="standard-section">
                         <div class="standard-header" onclick="toggleStandard(this)">
                             <div class="header-left">
-                                <span class="icon">??</span>
-                                <span>�����׼</span>
+                                <span class="icon">⚖️</span>
+                                <span>担责标准</span>
                             </div>
-                            <span class="arrow-icon">��</span>
+                            <span class="arrow-icon">▼</span>
                         </div>
                         <div class="standard-content">
-                            <div class="content-inner">������������µĵ�·������ִ���˳е�</div>
+                            <div class="content-inner">因操作不当导致的电路故障由执行人承担</div>
                         </div>
                     </div>
                     <div class="sender-info">
-                        <div class="sender-avatar">��</div>
+                        <div class="sender-avatar">李</div>
                         <div class="sender-detail">
-                            <div class="sender-name">���ģ�ʩ�����ܣ�</div>
-                            <div class="sender-time">�ɷ�ʱ�䣺2024-01-25 10:15</div>
+                            <div class="sender-name">李四（施工主管）</div>
+                            <div class="sender-time">派发时间：2024-01-25 10:15</div>
                         </div>
                     </div>
                     <div class="card-actions" onclick="event.stopPropagation()">
-                        <button class="action-btn reject" onclick="showRejectModal(2)">�ܾ�</button>
-                        <button class="action-btn accept" onclick="acceptTask(2)">��������</button>
+                        <button class="action-btn reject" onclick="showRejectModal(2)">拒绝</button>
+                        <button class="action-btn accept" onclick="acceptTask(2)">接受任务</button>
                     </div>
                 </div>
                 
                 <div class="task-card" data-id="3">
                     <div class="card-top-row">
                         <div class="task-title-wrap">
-                            <div class="task-title">��ʱ������ư�װ</div>
-                            <div class="task-type temp">��ʱ����</div>
+                            <div class="task-title">临时增加射灯安装</div>
+                            <div class="task-type temp">临时任务</div>
                         </div>
                     </div>
                     <div class="task-meta">
                         <div class="meta-item">
-                            <span class="icon">??</span>
-                            <span class="label">������ͬ��</span>
-                            <span>ˮ��ְ���ͬ</span>
+                            <span class="icon">📄</span>
+                            <span class="label">关联合同：</span>
+                            <span>水电分包合同</span>
                         </div>
                     </div>
                     <div class="standard-section">
                         <div class="standard-header" onclick="toggleStandard(this)">
                             <div class="header-left">
-                                <span class="icon">??</span>
-                                <span>ִ�б�׼</span>
+                                <span class="icon">📋</span>
+                                <span>执行标准</span>
                             </div>
-                            <span class="arrow-icon">��</span>
+                            <span class="arrow-icon">▼</span>
                         </div>
                         <div class="standard-content">
-                            <div class="content-inner">�����ͼֽλ�ð�װ���</div>
+                            <div class="content-inner">按设计图纸位置安装射灯</div>
                         </div>
                     </div>
                     <div class="standard-section">
                         <div class="standard-header" onclick="toggleStandard(this)">
                             <div class="header-left">
-                                <span class="icon">?</span>
-                                <span>ȷ�ϱ�׼</span>
+                                <span class="icon">✅</span>
+                                <span>确认标准</span>
                             </div>
-                            <span class="arrow-icon">��</span>
+                            <span class="arrow-icon">▼</span>
                         </div>
                         <div class="standard-content">
-                            <div class="content-inner">λ��׼ȷ���ƹ�Ч���������</div>
+                            <div class="content-inner">位置准确，灯光效果符合设计</div>
                         </div>
                     </div>
                     <div class="standard-section">
                         <div class="standard-header" onclick="toggleStandard(this)">
                             <div class="header-left">
-                                <span class="icon">??</span>
-                                <span>�����׼</span>
+                                <span class="icon">⚖️</span>
+                                <span>担责标准</span>
                             </div>
-                            <span class="arrow-icon">��</span>
+                            <span class="arrow-icon">▼</span>
                         </div>
                         <div class="standard-content">
-                            <div class="content-inner">��װ���⵼�µĵƾ�����ִ���˳е�</div>
+                            <div class="content-inner">因安装问题导致的灯具损坏由执行人承担</div>
                         </div>
                     </div>
                     <div class="sender-info">
-                        <div class="sender-avatar">��</div>
+                        <div class="sender-avatar">张</div>
                         <div class="sender-detail">
-                            <div class="sender-name">��������Ŀ������</div>
-                            <div class="sender-time">�ɷ�ʱ�䣺2024-01-25 09:00</div>
+                            <div class="sender-name">张三（项目经理）</div>
+                            <div class="sender-time">派发时间：2024-01-25 09:00</div>
                         </div>
                     </div>
                     <div class="card-actions" onclick="event.stopPropagation()">
-                        <button class="action-btn reject" onclick="showRejectModal(3)">�ܾ�</button>
-                        <button class="action-btn accept" onclick="acceptTask(3)">��������</button>
+                        <button class="action-btn reject" onclick="showRejectModal(3)">拒绝</button>
+                        <button class="action-btn accept" onclick="acceptTask(3)">接受任务</button>
                     </div>
                 </div>
             </div>
             
             <div class="filter-bar show" id="inprogressFilterBar">
                 <select class="contract-filter" id="inprogressContractFilter" onchange="filterInprogressTasks()">
-                    <option value="">ȫ����ͬ</option>
-                    <option value="water">ˮ��ְ���ͬ</option>
-                    <option value="tile">���߷ְ���ͬ</option>
-                    <option value="wood">ľ���ְ���ͬ</option>
-                    <option value="paint">����ְ���ͬ</option>
+                    <option value="">全部合同</option>
+                    <option value="water">水电分包合同</option>
+                    <option value="tile">泥瓦分包合同</option>
+                    <option value="wood">木工分包合同</option>
+                    <option value="paint">油漆分包合同</option>
                 </select>
                 <select class="status-filter" id="inprogressStatusFilter" onchange="filterInprogressByStatusSelect()">
-                    <option value="all">ȫ��״̬</option>
-                    <option value="pending">����ʼ</option>
-                    <option value="confirming">ȷ����</option>
+                    <option value="all">全部状态</option>
+                    <option value="pending">待开始</option>
+                    <option value="confirming">确认中</option>
                 </select>
                 <div class="search-input-wrap">
-                    <span class="search-icon">??</span>
-                    <input type="text" class="search-input" id="inprogressSearchInput" placeholder="������������..." oninput="filterInprogressTasks()">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" id="inprogressSearchInput" placeholder="搜索任务名称..." oninput="filterInprogressTasks()">
                 </div>
             </div>
             
@@ -1126,137 +1147,137 @@
                 <div class="task-card" data-contract="water" data-status="pending">
                     <div class="card-top-row">
                         <div class="task-title-wrap">
-                            <div class="task-title">ˮ����·���</div>
-                            <div class="task-type temp">��ʱ����</div>
+                            <div class="task-title">水电线路检测</div>
+                            <div class="task-type temp">临时任务</div>
                         </div>
                     </div>
                     <div class="task-meta">
                         <div class="meta-item">
-                            <span class="icon">??</span>
-                            <span class="label">������ͬ��</span>
-                            <span>ˮ��ְ���ͬ</span>
+                            <span class="icon">📄</span>
+                            <span class="label">关联合同：</span>
+                            <span>水电分包合同</span>
                         </div>
                     </div>
                     <div class="sender-info">
-                        <div class="sender-avatar">��</div>
+                        <div class="sender-avatar">张</div>
                         <div class="sender-detail">
-                            <div class="sender-name">��������Ŀ������</div>
-                            <div class="sender-time">�ɷ�ʱ�䣺2024-01-24 16:00</div>
+                            <div class="sender-name">张三（项目经理）</div>
+                            <div class="sender-time">派发时间：2024-01-24 16:00</div>
                         </div>
                     </div>
                     <div class="received-info">
-                        <div class="received-status">��ǰ״̬</div>
-                        <div class="status-tag pending">����ʼ</div>
+                        <div class="received-status">当前状态</div>
+                        <div class="status-tag pending">待开始</div>
                     </div>
                     <div class="card-actions" style="margin-top: 12px;">
-                        <button class="action-btn view" onclick="location.href='temp-task-detail.html?status=accepted'">�鿴����</button>
-                        <button class="action-btn accept" onclick="showCustomToast('��ʼִ������')">��ʼִ��</button>
+                        <button class="action-btn view" onclick="location.href='temp-task-detail.html?status=accepted'">查看详情</button>
+                        <button class="action-btn accept" onclick="showCustomToast('开始执行任务')">开始执行</button>
                     </div>
                 </div>
                 
                 <div class="task-card" data-contract="wood" data-status="confirming">
                     <div class="card-top-row">
                         <div class="task-title-wrap">
-                            <div class="task-title">�޲��ſ򻮺�</div>
-                            <div class="task-type temp">��ʱ����</div>
+                            <div class="task-title">修补门框划痕</div>
+                            <div class="task-type temp">临时任务</div>
                         </div>
                     </div>
                     <div class="task-meta">
                         <div class="meta-item">
-                            <span class="icon">??</span>
-                            <span class="label">������ͬ��</span>
-                            <span>ľ���ְ���ͬ</span>
+                            <span class="icon">📄</span>
+                            <span class="label">关联合同：</span>
+                            <span>木工分包合同</span>
                         </div>
                     </div>
                     <div class="sender-info">
-                        <div class="sender-avatar">��</div>
+                        <div class="sender-avatar">李</div>
                         <div class="sender-detail">
-                            <div class="sender-name">���ģ�ʩ�����ܣ�</div>
-                            <div class="sender-time">�ɷ�ʱ�䣺2024-01-23 11:30</div>
+                            <div class="sender-name">李四（施工主管）</div>
+                            <div class="sender-time">派发时间：2024-01-23 11:30</div>
                         </div>
                     </div>
                     <div class="received-info">
-                        <div class="received-status">��ǰ״̬</div>
-                        <div class="status-tag in-progress">ȷ����</div>
+                        <div class="received-status">当前状态</div>
+                        <div class="status-tag in-progress">确认中</div>
                     </div>
                     <div class="card-actions" style="margin-top: 12px;">
-                        <button class="action-btn view" onclick="location.href='temp-task-detail.html?status=confirming'">�鿴����</button>
+                        <button class="action-btn view" onclick="location.href='temp-task-detail.html?status=confirming'">查看详情</button>
                     </div>
                 </div>
                 
                 <div class="task-card" data-contract="water" data-status="pending">
                     <div class="card-top-row">
                         <div class="task-title-wrap">
-                            <div class="task-title">����ˮ��ͷ</div>
-                            <div class="task-type temp">��ʱ����</div>
+                            <div class="task-title">更换水龙头</div>
+                            <div class="task-type temp">临时任务</div>
                         </div>
                     </div>
                     <div class="task-meta">
                         <div class="meta-item">
-                            <span class="icon">??</span>
-                            <span class="label">������ͬ��</span>
-                            <span>ˮ��ְ���ͬ</span>
+                            <span class="icon">📄</span>
+                            <span class="label">关联合同：</span>
+                            <span>水电分包合同</span>
                         </div>
                     </div>
                     <div class="sender-info">
-                        <div class="sender-avatar">��</div>
+                        <div class="sender-avatar">王</div>
                         <div class="sender-detail">
-                            <div class="sender-name">���壨ҵ����</div>
-                            <div class="sender-time">�ɷ�ʱ�䣺2024-01-21 09:00</div>
+                            <div class="sender-name">王五（业主）</div>
+                            <div class="sender-time">派发时间：2024-01-21 09:00</div>
                         </div>
                     </div>
                     <div class="received-info">
-                        <div class="received-status">��ǰ״̬</div>
-                        <div class="status-tag pending">����ʼ</div>
+                        <div class="received-status">当前状态</div>
+                        <div class="status-tag pending">待开始</div>
                     </div>
                     <div class="card-actions" style="margin-top: 12px;">
-                        <button class="action-btn view" onclick="location.href='temp-task-detail.html?status=accepted'">�鿴����</button>
-                        <button class="action-btn accept" onclick="showCustomToast('��ʼִ������')">��ʼִ��</button>
+                        <button class="action-btn view" onclick="location.href='temp-task-detail.html?status=accepted'">查看详情</button>
+                        <button class="action-btn accept" onclick="showCustomToast('开始执行任务')">开始执行</button>
                     </div>
                 </div>
                 
                 <div class="task-card" data-contract="tile" data-status="confirming">
                     <div class="card-top-row">
                         <div class="task-title-wrap">
-                            <div class="task-title">��ש�չ��޸�</div>
-                            <div class="task-type temp">��ʱ����</div>
+                            <div class="task-title">瓷砖空鼓修复</div>
+                            <div class="task-type temp">临时任务</div>
                         </div>
                     </div>
                     <div class="task-meta">
                         <div class="meta-item">
-                            <span class="icon">??</span>
-                            <span class="label">������ͬ��</span>
-                            <span>���߷ְ���ͬ</span>
+                            <span class="icon">📄</span>
+                            <span class="label">关联合同：</span>
+                            <span>泥瓦分包合同</span>
                         </div>
                     </div>
                     <div class="sender-info">
-                        <div class="sender-avatar">��</div>
+                        <div class="sender-avatar">张</div>
                         <div class="sender-detail">
-                            <div class="sender-name">��������Ŀ������</div>
-                            <div class="sender-time">�ɷ�ʱ�䣺2024-01-20 14:00</div>
+                            <div class="sender-name">张三（项目经理）</div>
+                            <div class="sender-time">派发时间：2024-01-20 14:00</div>
                         </div>
                     </div>
                     <div class="received-info">
-                        <div class="received-status">��ǰ״̬</div>
-                        <div class="status-tag in-progress">ȷ����</div>
+                        <div class="received-status">当前状态</div>
+                        <div class="status-tag in-progress">确认中</div>
                     </div>
                     <div class="card-actions" style="margin-top: 12px;">
-                        <button class="action-btn view" onclick="location.href='temp-task-detail.html?status=confirming'">�鿴����</button>
+                        <button class="action-btn view" onclick="location.href='temp-task-detail.html?status=confirming'">查看详情</button>
                     </div>
                 </div>
             </div>
             
             <div class="filter-bar" id="completedFilterBar">
                 <select class="contract-filter" id="completedContractFilter" onchange="filterCompletedTasks()">
-                    <option value="">ȫ����ͬ</option>
-                    <option value="water">ˮ��ְ���ͬ</option>
-                    <option value="tile">���߷ְ���ͬ</option>
-                    <option value="wood">ľ���ְ���ͬ</option>
-                    <option value="paint">����ְ���ͬ</option>
+                    <option value="">全部合同</option>
+                    <option value="water">水电分包合同</option>
+                    <option value="tile">泥瓦分包合同</option>
+                    <option value="wood">木工分包合同</option>
+                    <option value="paint">油漆分包合同</option>
                 </select>
                 <div class="search-input-wrap">
-                    <span class="search-icon">??</span>
-                    <input type="text" class="search-input" id="completedSearchInput" placeholder="������������..." oninput="filterCompletedTasks()">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" id="completedSearchInput" placeholder="搜索任务名称..." oninput="filterCompletedTasks()">
                 </div>
             </div>
             
@@ -1264,87 +1285,87 @@
                 <div class="task-card" data-contract="tile" data-status="completed">
                     <div class="card-top-row">
                         <div class="task-title-wrap">
-                            <div class="task-title">����ʩ������</div>
-                            <div class="task-type temp">��ʱ����</div>
+                            <div class="task-title">清理施工垃圾</div>
+                            <div class="task-type temp">临时任务</div>
                         </div>
                     </div>
                     <div class="task-meta">
                         <div class="meta-item">
-                            <span class="icon">??</span>
-                            <span class="label">������ͬ��</span>
-                            <span>���߷ְ���ͬ</span>
+                            <span class="icon">📄</span>
+                            <span class="label">关联合同：</span>
+                            <span>泥瓦分包合同</span>
                         </div>
                     </div>
                     <div class="sender-info">
-                        <div class="sender-avatar">��</div>
+                        <div class="sender-avatar">张</div>
                         <div class="sender-detail">
-                            <div class="sender-name">��������Ŀ������</div>
-                            <div class="sender-time">�ɷ�ʱ�䣺2024-01-22 15:00</div>
+                            <div class="sender-name">张三（项目经理）</div>
+                            <div class="sender-time">派发时间：2024-01-22 15:00</div>
                         </div>
                     </div>
                     <div class="received-info">
-                        <div class="received-status">���ʱ�䣺2024-01-22 17:30</div>
-                        <div class="status-tag completed">�����</div>
+                        <div class="received-status">完成时间：2024-01-22 17:30</div>
+                        <div class="status-tag completed">已完成</div>
                     </div>
                     <div class="card-actions" style="margin-top: 12px;">
-                        <button class="action-btn view" onclick="location.href='temp-task-detail.html?status=completed'">�鿴����</button>
+                        <button class="action-btn view" onclick="location.href='temp-task-detail.html?status=completed'">查看详情</button>
                     </div>
                 </div>
                 
                 <div class="task-card" data-contract="water" data-status="completed">
                     <div class="card-top-row">
                         <div class="task-title-wrap">
-                            <div class="task-title">������·����</div>
-                            <div class="task-type temp">��ʱ����</div>
+                            <div class="task-title">紧急电路检修</div>
+                            <div class="task-type temp">临时任务</div>
                         </div>
                     </div>
                     <div class="task-meta">
                         <div class="meta-item">
-                            <span class="icon">??</span>
-                            <span class="label">������ͬ��</span>
-                            <span>ˮ��ְ���ͬ</span>
+                            <span class="icon">📄</span>
+                            <span class="label">关联合同：</span>
+                            <span>水电分包合同</span>
                         </div>
                     </div>
                     <div class="sender-info">
-                        <div class="sender-avatar">��</div>
+                        <div class="sender-avatar">李</div>
                         <div class="sender-detail">
-                            <div class="sender-name">���ģ�ʩ�����ܣ�</div>
-                            <div class="sender-time">�ɷ�ʱ�䣺2024-01-19 10:00</div>
+                            <div class="sender-name">李四（施工主管）</div>
+                            <div class="sender-time">派发时间：2024-01-19 10:00</div>
                         </div>
                     </div>
                     <div class="received-info">
-                        <div class="received-status">���ʱ�䣺2024-01-19 16:00</div>
-                        <div class="status-tag completed">�����</div>
+                        <div class="received-status">完成时间：2024-01-19 16:00</div>
+                        <div class="status-tag completed">已完成</div>
                     </div>
                     <div class="card-actions" style="margin-top: 12px;">
-                        <button class="action-btn view" onclick="location.href='temp-task-detail.html?status=completed'">�鿴����</button>
+                        <button class="action-btn view" onclick="location.href='temp-task-detail.html?status=completed'">查看详情</button>
                     </div>
                 </div>
             </div>
             
             <div class="create-task-guide" onclick="goToCreateTask()">
-                <div class="guide-icon">?</div>
+                <div class="guide-icon">➕</div>
             </div>
             
             <div class="filter-bar" id="createdFilterBar" style="display: none;">
                 <select class="contract-filter" id="createdContractFilter" onchange="filterCreatedTasks()">
-                    <option value="">ȫ����ͬ</option>
-                    <option value="water">ˮ��ְ���ͬ</option>
-                    <option value="tile">���߷ְ���ͬ</option>
-                    <option value="wood">ľ���ְ���ͬ</option>
-                    <option value="paint">����ְ���ͬ</option>
+                    <option value="">全部合同</option>
+                    <option value="water">水电分包合同</option>
+                    <option value="tile">泥瓦分包合同</option>
+                    <option value="wood">木工分包合同</option>
+                    <option value="paint">油漆分包合同</option>
                 </select>
                 <select class="status-filter" id="createdStatusFilter" onchange="filterCreatedByStatusSelect()">
-                    <option value="all">ȫ��״̬</option>
-                    <option value="configuring">������</option>
-                    <option value="pending">������</option>
-                    <option value="accepted">�ѽ���</option>
-                    <option value="confirming">ȷ����</option>
-                    <option value="completed">�����</option>
+                    <option value="all">全部状态</option>
+                    <option value="configuring">待配置</option>
+                    <option value="pending">待接受</option>
+                    <option value="accepted">已接受</option>
+                    <option value="confirming">确认中</option>
+                    <option value="completed">已完成</option>
                 </select>
                 <div class="search-input-wrap">
-                    <span class="search-icon">??</span>
-                    <input type="text" class="search-input" id="createdSearchInput" placeholder="������������..." oninput="filterCreatedTasks()">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" id="createdSearchInput" placeholder="搜索任务名称..." oninput="filterCreatedTasks()">
                 </div>
             </div>
             
@@ -1352,108 +1373,108 @@
                 <div class="task-card configuring" data-contract="wood" data-status="configuring" data-id="config-1">
                     <div class="card-top-row">
                         <div class="task-title-wrap">
-                            <div class="task-title">ľ�Ű�װ����</div>
-                            <div class="task-type temp">��ʱ����</div>
+                            <div class="task-title">木门安装调试</div>
+                            <div class="task-type temp">临时任务</div>
                         </div>
-                        <div class="delete-icon" onclick="showDeleteModal(this, 'created', event)">???</div>
+                        <div class="delete-icon" onclick="showDeleteModal(this, 'created', event)">🗑️</div>
                     </div>
                     <div class="task-meta">
                         <div class="meta-item">
-                            <span class="icon">??</span>
-                            <span class="label">������ͬ��</span>
-                            <span>ľ���ְ���ͬ</span>
+                            <span class="icon">📄</span>
+                            <span class="label">关联合同：</span>
+                            <span>木工分包合同</span>
                         </div>
                         <div class="meta-item">
-                            <span class="icon">??</span>
-                            <span class="label">ִ���ˣ�</span>
-                            <span style="color: var(--text-tertiary);">����</span>
+                            <span class="icon">👤</span>
+                            <span class="label">执行人：</span>
+                            <span style="color: var(--text-tertiary);">暂无</span>
                         </div>
                     </div>
                     <div class="sender-info">
-                        <div class="sender-avatar" style="background: linear-gradient(135deg, #722ED1 0%, #9E5CF7 100%);">��</div>
+                        <div class="sender-avatar" style="background: linear-gradient(135deg, #722ED1 0%, #9E5CF7 100%);">我</div>
                         <div class="sender-detail">
-                            <div class="sender-name">�ҷ��������</div>
-                            <div class="sender-time">����ʱ�䣺2024-01-26 09:00</div>
+                            <div class="sender-name">我发起的任务</div>
+                            <div class="sender-time">创建时间：2024-01-26 09:00</div>
                         </div>
                     </div>
                     <div class="received-info">
-                        <div class="received-status">������ִ����</div>
-                        <div class="status-tag configuring">������</div>
+                        <div class="received-status">请配置执行人</div>
+                        <div class="status-tag configuring">待配置</div>
                     </div>
                     <div class="card-actions" style="margin-top: 12px;">
-                        <button class="action-btn primary" onclick="showConfigModal('config-1')">ȥ����</button>
+                        <button class="action-btn primary" onclick="showConfigModal('config-1')">去配置</button>
                     </div>
                 </div>
                 
                 <div class="task-card" data-contract="water" data-status="pending">
                     <div class="card-top-row">
                         <div class="task-title-wrap">
-                            <div class="task-title">������·����</div>
-                            <div class="task-type temp">��ʱ����</div>
+                            <div class="task-title">紧急电路检修</div>
+                            <div class="task-type temp">临时任务</div>
                         </div>
-                        <div class="delete-icon" onclick="showDeleteModal(this, 'created', event)">???</div>
+                        <div class="delete-icon" onclick="showDeleteModal(this, 'created', event)">🗑️</div>
                     </div>
                     <div class="task-meta">
                         <div class="meta-item">
-                            <span class="icon">??</span>
-                            <span class="label">������ͬ��</span>
-                            <span>ˮ��ְ���ͬ</span>
+                            <span class="icon">📄</span>
+                            <span class="label">关联合同：</span>
+                            <span>水电分包合同</span>
                         </div>
                         <div class="meta-item">
-                            <span class="icon">??</span>
-                            <span class="label">ִ���ˣ�</span>
-                            <span>����</span>
+                            <span class="icon">👤</span>
+                            <span class="label">执行人：</span>
+                            <span>李四</span>
                         </div>
                     </div>
                     <div class="sender-info">
-                        <div class="sender-avatar" style="background: linear-gradient(135deg, #722ED1 0%, #9E5CF7 100%);">��</div>
+                        <div class="sender-avatar" style="background: linear-gradient(135deg, #722ED1 0%, #9E5CF7 100%);">我</div>
                         <div class="sender-detail">
-                            <div class="sender-name">�ҷ��������</div>
-                            <div class="sender-time">�ɷ�ʱ�䣺2024-01-25 16:00</div>
+                            <div class="sender-name">我发起的任务</div>
+                            <div class="sender-time">派发时间：2024-01-25 16:00</div>
                         </div>
                     </div>
                     <div class="received-info">
-                        <div class="received-status">ִ���ˣ�����</div>
-                        <div class="status-tag pending">������</div>
+                        <div class="received-status">执行人：李四</div>
+                        <div class="status-tag pending">待接受</div>
                     </div>
                     <div class="card-actions" style="margin-top: 12px;">
-                        <button class="action-btn view" onclick="location.href='temp-task-detail.html?status=pending'">�鿴����</button>
+                        <button class="action-btn view" onclick="location.href='temp-task-detail.html?status=pending'">查看详情</button>
                     </div>
                 </div>
                 
                 <div class="task-card" data-contract="tile" data-status="accepted">
                     <div class="card-top-row">
                         <div class="task-title-wrap">
-                            <div class="task-title">ǽ���޲�</div>
-                            <div class="task-type temp">��ʱ����</div>
+                            <div class="task-title">墙面修补</div>
+                            <div class="task-type temp">临时任务</div>
                         </div>
-                        <div class="delete-icon" onclick="showDeleteModal(this, 'created', event)">???</div>
+                        <div class="delete-icon" onclick="showDeleteModal(this, 'created', event)">🗑️</div>
                     </div>
                     <div class="task-meta">
                         <div class="meta-item">
-                            <span class="icon">??</span>
-                            <span class="label">������ͬ��</span>
-                            <span>���߷ְ���ͬ</span>
+                            <span class="icon">📄</span>
+                            <span class="label">关联合同：</span>
+                            <span>泥瓦分包合同</span>
                         </div>
                         <div class="meta-item">
-                            <span class="icon">??</span>
-                            <span class="label">ִ���ˣ�</span>
-                            <span>����</span>
+                            <span class="icon">👤</span>
+                            <span class="label">执行人：</span>
+                            <span>王五</span>
                         </div>
                     </div>
                     <div class="sender-info">
-                        <div class="sender-avatar" style="background: linear-gradient(135deg, #722ED1 0%, #9E5CF7 100%);">��</div>
+                        <div class="sender-avatar" style="background: linear-gradient(135deg, #722ED1 0%, #9E5CF7 100%);">我</div>
                         <div class="sender-detail">
-                            <div class="sender-name">�ҷ��������</div>
-                            <div class="sender-time">�ɷ�ʱ�䣺2024-01-24 10:00</div>
+                            <div class="sender-name">我发起的任务</div>
+                            <div class="sender-time">派发时间：2024-01-24 10:00</div>
                         </div>
                     </div>
                     <div class="received-info">
-                        <div class="received-status">ִ���ˣ�����</div>
-                        <div class="status-tag accepted">�ѽ���</div>
+                        <div class="received-status">执行人：王五</div>
+                        <div class="status-tag accepted">已接受</div>
                     </div>
                     <div class="card-actions" style="margin-top: 12px;">
-                        <button class="action-btn view" onclick="location.href='temp-task-detail.html?status=accepted'">�鿴����</button>
+                        <button class="action-btn view" onclick="location.href='temp-task-detail.html?status=accepted'">查看详情</button>
                     </div>
                 </div>
             </div>
@@ -1461,11 +1482,11 @@
             <div class="deleted-list" id="deletedList" style="display: none;">
                 <div class="deleted-card" data-id="deleted-1">
                     <div class="card-top-row">
-                        <div class="task-title">�߿���ҵ�ӹ�</div>
-                        <div class="task-type">��ʱ����</div>
+                        <div class="task-title">高空作业加固</div>
+                        <div class="task-type">临时任务</div>
                     </div>
                     <div class="deleted-info">
-                        <span>ɾ��ʱ�䣺2024-01-20 10:30</span>
+                        <span>删除时间：2024-01-20 10:30</span>
                     </div>
                 </div>
             </div>
@@ -1473,15 +1494,15 @@
             <div class="confirm-modal" id="rejectModal">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <div class="modal-title">�ܾ�����</div>
+                        <div class="modal-title">拒绝任务</div>
                     </div>
                     <div class="modal-body">
-                        <div>ȷ��Ҫ�ܾ�����������˵���ܾ�ԭ��</div>
-                        <textarea class="reject-reason" id="rejectReason" placeholder="������ܾ�ԭ��"></textarea>
+                        <div>确定要拒绝此任务吗？请说明拒绝原因。</div>
+                        <textarea class="reject-reason" id="rejectReason" placeholder="请输入拒绝原因"></textarea>
                     </div>
                     <div class="modal-footer">
-                        <div class="modal-btn cancel" onclick="closeRejectModal()">ȡ��</div>
-                        <div class="modal-btn danger" onclick="confirmReject()">ȷ�Ͼܾ�</div>
+                        <div class="modal-btn cancel" onclick="closeRejectModal()">取消</div>
+                        <div class="modal-btn danger" onclick="confirmReject()">确认拒绝</div>
                     </div>
                 </div>
             </div>
@@ -1489,14 +1510,14 @@
             <div class="confirm-modal" id="acceptModal">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <div class="modal-title">��������</div>
+                        <div class="modal-title">接受任务</div>
                     </div>
                     <div class="modal-body">
-                        ȷ��Ҫ���ܴ������𣿽��ܺ��밴ʱ���ִ�С�
+                        确定要接受此任务吗？接受后请按时完成执行。
                     </div>
                     <div class="modal-footer">
-                        <div class="modal-btn cancel" onclick="closeAcceptModal()">ȡ��</div>
-                        <div class="modal-btn confirm" onclick="confirmAccept()">ȷ�Ͻ���</div>
+                        <div class="modal-btn cancel" onclick="closeAcceptModal()">取消</div>
+                        <div class="modal-btn confirm" onclick="confirmAccept()">确认接受</div>
                     </div>
                 </div>
             </div>
@@ -1504,10 +1525,10 @@
             <div class="custom-toast-modal" id="customToastModal">
                 <div class="modal-box">
                     <div class="modal-body" id="customToastMessage">
-                        �����ɹ�
+                        操作成功
                     </div>
                     <div class="modal-footer">
-                        <div class="modal-btn" onclick="closeCustomToast()">֪����</div>
+                        <div class="modal-btn" onclick="closeCustomToast()">知道了</div>
                     </div>
                 </div>
             </div>
@@ -1515,18 +1536,18 @@
             <div class="confirm-modal" id="deleteModal">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <div class="modal-title">ɾ������</div>
+                        <div class="modal-title">删除任务</div>
                     </div>
                     <div class="modal-body">
                         <div style="text-align: center;">
-                            <div style="font-size: 48px; margin-bottom: 12px;">???</div>
-                            <div style="font-size: 15px; color: var(--text-primary); margin-bottom: 8px;">ȷ��Ҫɾ����������</div>
-                            <div style="font-size: 13px; color: var(--text-tertiary);">ɾ�������"��ɾ��"�в鿴</div>
+                            <div style="font-size: 48px; margin-bottom: 12px;">🗑️</div>
+                            <div style="font-size: 15px; color: var(--text-primary); margin-bottom: 8px;">确定要删除此任务吗？</div>
+                            <div style="font-size: 13px; color: var(--text-tertiary);">删除后可在"已删除"中查看</div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <div class="modal-btn cancel" onclick="closeDeleteModal()">ȡ��</div>
-                        <div class="modal-btn danger" onclick="confirmDeleteTask()">ȷ��ɾ��</div>
+                        <div class="modal-btn cancel" onclick="closeDeleteModal()">取消</div>
+                        <div class="modal-btn danger" onclick="confirmDeleteTask()">确认删除</div>
                     </div>
                 </div>
             </div>
@@ -1534,61 +1555,61 @@
             <div class="confirm-modal" id="createTaskModal">
                 <div class="modal-content" style="width: 320px; max-height: 80vh; overflow-y: auto;">
                     <div class="modal-header">
-                        <div class="modal-title">������ʱ����</div>
+                        <div class="modal-title">创建临时任务</div>
                     </div>
                     <div class="modal-body" style="text-align: left; padding: 16px;">
                         <div style="margin-bottom: 14px;">
-                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">�������� <span style="color: var(--error-color);">*</span></div>
-                            <input type="text" id="taskNameInput" style="width: 100%; height: 36px; border: 1px solid var(--border-color); border-radius: 6px; padding: 0 10px; font-size: 14px; box-sizing: border-box;" placeholder="��������������">
+                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">任务名称 <span style="color: var(--error-color);">*</span></div>
+                            <input type="text" id="taskNameInput" style="width: 100%; height: 36px; border: 1px solid var(--border-color); border-radius: 6px; padding: 0 10px; font-size: 14px; box-sizing: border-box;" placeholder="请输入任务名称">
                         </div>
                         <div style="margin-bottom: 14px;">
-                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">������ͬ <span style="color: var(--error-color);">*</span></div>
+                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">关联合同 <span style="color: var(--error-color);">*</span></div>
                             <select id="taskContractSelect" style="width: 100%; height: 36px; border: 1px solid var(--border-color); border-radius: 6px; padding: 0 10px; font-size: 14px; background-color: var(--bg-primary);">
-                                <option value="">��ѡ���ͬ</option>
-                                <option value="water">ˮ��ְ���ͬ</option>
-                                <option value="tile">���߷ְ���ͬ</option>
-                                <option value="wood">ľ���ְ���ͬ</option>
-                                <option value="paint">����ְ���ͬ</option>
+                                <option value="">请选择合同</option>
+                                <option value="water">水电分包合同</option>
+                                <option value="tile">泥瓦分包合同</option>
+                                <option value="wood">木工分包合同</option>
+                                <option value="paint">油漆分包合同</option>
                             </select>
                         </div>
                         <div style="margin-bottom: 14px;">
-                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">ִ���ˣ�ѡ�</div>
+                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">执行人（选填）</div>
                             <select id="taskExecutorSelect" style="width: 100%; height: 36px; border: 1px solid var(--border-color); border-radius: 6px; padding: 0 10px; font-size: 14px; background-color: var(--bg-primary);">
-                                <option value="">��ѡ��ִ����</option>
-                                <option value="1">����</option>
-                                <option value="2">����</option>
-                                <option value="3">����</option>
+                                <option value="">请选择执行人</option>
+                                <option value="1">李四</option>
+                                <option value="2">王五</option>
+                                <option value="3">赵六</option>
                             </select>
                         </div>
                         <div style="margin-bottom: 14px;">
-                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">ȷ���ˣ�ѡ����5�ˣ�</div>
+                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">确认人（选填，最多5人）</div>
                             <div id="confirmerTags" style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;"></div>
                             <select id="taskConfirmerSelect" style="width: 100%; height: 36px; border: 1px solid var(--border-color); border-radius: 6px; padding: 0 10px; font-size: 14px; background-color: var(--bg-primary);" onchange="addConfirmer(this)">
-                                <option value="">��ѡ��ȷ����</option>
-                                <option value="����">��������Ŀ������</option>
-                                <option value="����">���ģ��繤��</option>
-                                <option value="����">���壨���߹���</option>
-                                <option value="����">������ľ����</option>
-                                <option value="Ǯ��">Ǯ�ߣ����Ṥ��</option>
-                                <option value="���">��ˣ�������</option>
+                                <option value="">请选择确认人</option>
+                                <option value="张三">张三（项目经理）</option>
+                                <option value="李四">李四（电工）</option>
+                                <option value="王五">王五（泥瓦工）</option>
+                                <option value="赵六">赵六（木工）</option>
+                                <option value="钱七">钱七（油漆工）</option>
+                                <option value="孙八">孙八（监理）</option>
                             </select>
                         </div>
                         <div style="margin-bottom: 14px;">
-                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">ִ�б�׼ <span style="color: var(--error-color);">*</span></div>
-                            <textarea id="taskExecStandard" style="width: 100%; min-height: 50px; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; font-size: 13px; resize: none; box-sizing: border-box;" placeholder="������ִ�б�׼"></textarea>
+                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">执行标准 <span style="color: var(--error-color);">*</span></div>
+                            <textarea id="taskExecStandard" style="width: 100%; min-height: 50px; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; font-size: 13px; resize: none; box-sizing: border-box;" placeholder="请输入执行标准"></textarea>
                         </div>
                         <div style="margin-bottom: 14px;">
-                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">ȷ�ϱ�׼ <span style="color: var(--error-color);">*</span></div>
-                            <textarea id="taskConfirmStandard" style="width: 100%; min-height: 50px; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; font-size: 13px; resize: none; box-sizing: border-box;" placeholder="������ȷ�ϱ�׼"></textarea>
+                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">确认标准 <span style="color: var(--error-color);">*</span></div>
+                            <textarea id="taskConfirmStandard" style="width: 100%; min-height: 50px; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; font-size: 13px; resize: none; box-sizing: border-box;" placeholder="请输入确认标准"></textarea>
                         </div>
                         <div style="margin-bottom: 14px;">
-                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">�����׼ <span style="color: var(--error-color);">*</span></div>
-                            <textarea id="taskResponsibleStandard" style="width: 100%; min-height: 50px; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; font-size: 13px; resize: none; box-sizing: border-box;" placeholder="�����뵣���׼"></textarea>
+                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">担责标准 <span style="color: var(--error-color);">*</span></div>
+                            <textarea id="taskResponsibleStandard" style="width: 100%; min-height: 50px; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; font-size: 13px; resize: none; box-sizing: border-box;" placeholder="请输入担责标准"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <div class="modal-btn cancel" onclick="closeCreateTaskModal()">ȡ��</div>
-                        <div class="modal-btn confirm" onclick="submitCreateTask()">��������</div>
+                        <div class="modal-btn cancel" onclick="closeCreateTaskModal()">取消</div>
+                        <div class="modal-btn confirm" onclick="submitCreateTask()">创建任务</div>
                     </div>
                 </div>
             </div>
@@ -1596,66 +1617,66 @@
             <div class="confirm-modal" id="configTaskModal">
                 <div class="modal-content" style="width: 320px; max-height: 80vh; overflow-y: auto;">
                     <div class="modal-header">
-                        <div class="modal-title">������ʱ����</div>
+                        <div class="modal-title">配置临时任务</div>
                     </div>
                     <div class="modal-body" style="text-align: left; padding: 16px;">
                         <div style="margin-bottom: 14px;">
-                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">��������</div>
+                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">任务名称</div>
                             <input type="text" id="configTaskName" style="width: 100%; height: 36px; border: 1px solid var(--border-color); border-radius: 6px; padding: 0 10px; font-size: 14px; box-sizing: border-box;">
                         </div>
                         <div style="margin-bottom: 14px;">
-                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">������ͬ</div>
+                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">关联合同</div>
                             <div id="configContract" style="font-size: 14px; color: var(--text-primary);"></div>
                         </div>
                         <div style="margin-bottom: 14px;">
-                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">ִ���� <span style="color: var(--error-color);">*</span></div>
+                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">执行人 <span style="color: var(--error-color);">*</span></div>
                             <div class="search-select" id="configExecutorSearchSelect">
                                 <div class="search-input-wrap" onclick="toggleConfigExecutorDropdown()">
-                                    <input type="text" class="search-input" id="configExecutorSearchInput" placeholder="������ѡ��ִ����" oninput="filterConfigExecutors()">
-                                    <span class="arrow">��</span>
+                                    <input type="text" class="search-input" id="configExecutorSearchInput" placeholder="搜索并选择执行人" oninput="filterConfigExecutors()">
+                                    <span class="arrow">▼</span>
                                 </div>
                                 <div class="dropdown-list" id="configExecutorDropdown">
-                                    <div class="dropdown-item" onclick="selectConfigExecutor('����', '�繤')">���ģ��繤��</div>
-                                    <div class="dropdown-item" onclick="selectConfigExecutor('����', '���߹�')">���壨���߹���</div>
-                                    <div class="dropdown-item" onclick="selectConfigExecutor('����', 'ľ��')">������ľ����</div>
-                                    <div class="dropdown-item" onclick="selectConfigExecutor('Ǯ��', '���Ṥ')">Ǯ�ߣ����Ṥ��</div>
+                                    <div class="dropdown-item" onclick="selectConfigExecutor('李四', '电工')">李四（电工）</div>
+                                    <div class="dropdown-item" onclick="selectConfigExecutor('王五', '泥瓦工')">王五（泥瓦工）</div>
+                                    <div class="dropdown-item" onclick="selectConfigExecutor('赵六', '木工')">赵六（木工）</div>
+                                    <div class="dropdown-item" onclick="selectConfigExecutor('钱七', '油漆工')">钱七（油漆工）</div>
                                 </div>
                             </div>
                         </div>
                         <div style="margin-bottom: 14px;">
-                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">ȷ���ˣ�ѡ����5�ˣ�</div>
+                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">确认人（选填，最多5人）</div>
                             <div id="configConfirmerTags" style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;"></div>
                             <div class="search-select" id="configConfirmerSearchSelect">
                                 <div class="search-input-wrap" onclick="toggleConfigConfirmerDropdown()">
-                                    <input type="text" class="search-input" id="configConfirmerSearchInput" placeholder="������ѡ��ȷ����" oninput="filterConfigConfirmers()">
-                                    <span class="arrow">��</span>
+                                    <input type="text" class="search-input" id="configConfirmerSearchInput" placeholder="搜索并选择确认人" oninput="filterConfigConfirmers()">
+                                    <span class="arrow">▼</span>
                                 </div>
                                 <div class="dropdown-list" id="configConfirmerDropdown">
-                                    <div class="dropdown-item" onclick="selectConfigConfirmer('����', '��Ŀ����')">��������Ŀ������</div>
-                                    <div class="dropdown-item" onclick="selectConfigConfirmer('����', '�繤')">���ģ��繤��</div>
-                                    <div class="dropdown-item" onclick="selectConfigConfirmer('����', '���߹�')">���壨���߹���</div>
-                                    <div class="dropdown-item" onclick="selectConfigConfirmer('����', 'ľ��')">������ľ����</div>
-                                    <div class="dropdown-item" onclick="selectConfigConfirmer('Ǯ��', '���Ṥ')">Ǯ�ߣ����Ṥ��</div>
-                                    <div class="dropdown-item" onclick="selectConfigConfirmer('���', '����')">��ˣ�������</div>
+                                    <div class="dropdown-item" onclick="selectConfigConfirmer('张三', '项目经理')">张三（项目经理）</div>
+                                    <div class="dropdown-item" onclick="selectConfigConfirmer('李四', '电工')">李四（电工）</div>
+                                    <div class="dropdown-item" onclick="selectConfigConfirmer('王五', '泥瓦工')">王五（泥瓦工）</div>
+                                    <div class="dropdown-item" onclick="selectConfigConfirmer('赵六', '木工')">赵六（木工）</div>
+                                    <div class="dropdown-item" onclick="selectConfigConfirmer('钱七', '油漆工')">钱七（油漆工）</div>
+                                    <div class="dropdown-item" onclick="selectConfigConfirmer('孙八', '监理')">孙八（监理）</div>
                                 </div>
                             </div>
                         </div>
                         <div style="margin-bottom: 14px;">
-                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">ִ�б�׼ <span style="color: var(--error-color);">*</span></div>
+                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">执行标准 <span style="color: var(--error-color);">*</span></div>
                             <textarea id="configExecStandard" style="width: 100%; min-height: 50px; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; font-size: 13px; resize: none; box-sizing: border-box;"></textarea>
                         </div>
                         <div style="margin-bottom: 14px;">
-                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">ȷ�ϱ�׼ <span style="color: var(--error-color);">*</span></div>
+                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">确认标准 <span style="color: var(--error-color);">*</span></div>
                             <textarea id="configConfirmStandard" style="width: 100%; min-height: 50px; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; font-size: 13px; resize: none; box-sizing: border-box;"></textarea>
                         </div>
                         <div style="margin-bottom: 14px;">
-                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">�����׼ <span style="color: var(--error-color);">*</span></div>
+                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">担责标准 <span style="color: var(--error-color);">*</span></div>
                             <textarea id="configResponsibleStandard" style="width: 100%; min-height: 50px; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; font-size: 13px; resize: none; box-sizing: border-box;"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <div class="modal-btn cancel" onclick="closeConfigModal()">ȡ��</div>
-                        <div class="modal-btn confirm" id="configSubmitBtn" style="opacity: 0.5; cursor: not-allowed;" onclick="showConfigSubmitConfirm()">�ύ</div>
+                        <div class="modal-btn cancel" onclick="closeConfigModal()">取消</div>
+                        <div class="modal-btn confirm" id="configSubmitBtn" style="opacity: 0.5; cursor: not-allowed;" onclick="showConfigSubmitConfirm()">提交</div>
                     </div>
                 </div>
             </div>
@@ -1663,18 +1684,18 @@
             <div class="confirm-modal" id="configSubmitConfirmModal">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <div class="modal-title">ȷ���ύ</div>
+                        <div class="modal-title">确认提交</div>
                     </div>
                     <div class="modal-body">
                         <div style="text-align: center;">
-                            <div style="font-size: 48px; margin-bottom: 12px;">??</div>
-                            <div style="font-size: 14px; color: var(--text-primary); margin-bottom: 8px;">�ύ��ִ���˺�ȷ���˽������޸�</div>
-                            <div style="font-size: 13px; color: var(--text-tertiary);">��ȷ����Ϣ��������ύ</div>
+                            <div style="font-size: 48px; margin-bottom: 12px;">⚠️</div>
+                            <div style="font-size: 14px; color: var(--text-primary); margin-bottom: 8px;">提交后执行人和确认人将不可修改</div>
+                            <div style="font-size: 13px; color: var(--text-tertiary);">请确认信息无误后再提交</div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <div class="modal-btn cancel" onclick="closeConfigSubmitConfirm()">ȡ��</div>
-                        <div class="modal-btn confirm" onclick="submitConfigTask()">ȷ���ύ</div>
+                        <div class="modal-btn cancel" onclick="closeConfigSubmitConfirm()">取消</div>
+                        <div class="modal-btn confirm" onclick="submitConfigTask()">确认提交</div>
                     </div>
                 </div>
             </div>
@@ -1683,14 +1704,13 @@
     </div>
     
     <div class="page-nav">
-        <div class="page-nav-title">ԭ�͵���</div>
-        <a href="home.html" class="page-nav-item">��ҳ</a>
-        <a href="project-list.html" class="page-nav-item">��Ŀ�б�</a>
-        <a href="project-detail.html" class="page-nav-item">��Ŀ����</a>
-        <a href="task-acceptance.html" class="page-nav-item active">��ʱ����</a>
-        <a href="contract-detail.html" class="page-nav-item">��ͬ����</a>
-        <a href="task-detail.html" class="page-nav-item">��������</a>
-        <a href="temp-task-detail.html" class="page-nav-item">��ʱ��������</a>
+        <div class="page-nav-title">原型导航</div>
+        <a href="home.html" class="page-nav-item">首页</a>
+        <a href="project-detail.html" class="page-nav-item">项目详情</a>
+        <a href="task-acceptance.html" class="page-nav-item active">临时任务</a>
+        <a href="contract-detail.html" class="page-nav-item">合同详情</a>
+        <a href="task-detail.html" class="page-nav-item">任务详情</a>
+        <a href="temp-task-detail.html" class="page-nav-item">临时任务详情</a>
     </div>
     
     <script>
@@ -1748,13 +1768,13 @@
             if (!name) return;
             
             if (selectedConfirmers.includes(name)) {
-                showCustomToast('��ȷ����������');
+                showCustomToast('该确认人已添加');
                 select.value = '';
                 return;
             }
             
             if (selectedConfirmers.length >= 5) {
-                showCustomToast('���ֻ��ѡ��5λȷ����');
+                showCustomToast('最多只能选择5位确认人');
                 select.value = '';
                 return;
             }
@@ -1774,7 +1794,7 @@
             container.innerHTML = selectedConfirmers.map(name => `
                 <div class="confirmer-tag">
                     ${name}
-                    <span class="remove-btn" onclick="removeConfirmer('${name}')">��</span>
+                    <span class="remove-btn" onclick="removeConfirmer('${name}')">×</span>
                 </div>
             `).join('');
         }
@@ -1788,23 +1808,23 @@
             const responsibleStandard = document.getElementById('taskResponsibleStandard').value.trim();
             
             if (!name) {
-                showCustomToast('��������������');
+                showCustomToast('请输入任务名称');
                 return;
             }
             if (!contract) {
-                showCustomToast('��ѡ�������ͬ');
+                showCustomToast('请选择关联合同');
                 return;
             }
             if (!execStandard) {
-                showCustomToast('������ִ�б�׼');
+                showCustomToast('请输入执行标准');
                 return;
             }
             if (!confirmStandard) {
-                showCustomToast('������ȷ�ϱ�׼');
+                showCustomToast('请输入确认标准');
                 return;
             }
             if (!responsibleStandard) {
-                showCustomToast('�����뵣���׼');
+                showCustomToast('请输入担责标准');
                 return;
             }
             
@@ -1822,35 +1842,35 @@
                     <div class="card-top-row">
                         <div class="task-title-wrap">
                             <div class="task-title">${name}</div>
-                            <div class="task-type temp">��ʱ����</div>
+                            <div class="task-type temp">临时任务</div>
                         </div>
-                        <div class="delete-icon" onclick="showDeleteModal(this, 'created', event)">???</div>
+                        <div class="delete-icon" onclick="showDeleteModal(this, 'created', event)">🗑️</div>
                     </div>
                     <div class="task-meta">
                         <div class="meta-item">
-                            <span class="icon">??</span>
-                            <span class="label">������ͬ��</span>
+                            <span class="icon">📄</span>
+                            <span class="label">关联合同：</span>
                             <span>${contractText}</span>
                         </div>
                         <div class="meta-item">
-                            <span class="icon">??</span>
-                            <span class="label">ִ���ˣ�</span>
-                            <span style="color: var(--text-tertiary);">����</span>
+                            <span class="icon">👤</span>
+                            <span class="label">执行人：</span>
+                            <span style="color: var(--text-tertiary);">暂无</span>
                         </div>
                     </div>
                     <div class="sender-info">
-                        <div class="sender-avatar" style="background: linear-gradient(135deg, #722ED1 0%, #9E5CF7 100%);">��</div>
+                        <div class="sender-avatar" style="background: linear-gradient(135deg, #722ED1 0%, #9E5CF7 100%);">我</div>
                         <div class="sender-detail">
-                            <div class="sender-name">�ҷ��������</div>
-                            <div class="sender-time">����ʱ�䣺${createTime}</div>
+                            <div class="sender-name">我发起的任务</div>
+                            <div class="sender-time">创建时间：${createTime}</div>
                         </div>
                     </div>
                     <div class="received-info">
-                        <div class="received-status">������ִ����</div>
-                        <div class="status-tag configuring">������</div>
+                        <div class="received-status">请配置执行人</div>
+                        <div class="status-tag configuring">待配置</div>
                     </div>
                     <div class="card-actions" style="margin-top: 12px;">
-                        <button class="action-btn primary" onclick="showConfigModal('${newCard.dataset.id}')">ȥ����</button>
+                        <button class="action-btn primary" onclick="showConfigModal('${newCard.dataset.id}')">去配置</button>
                     </div>
                 `;
                 
@@ -1860,13 +1880,13 @@
                 closeCreateTaskModal();
                 createdCount++;
                 document.getElementById('createdBadge').textContent = createdCount;
-                showCustomToast('��ʱ���񴴽��ɹ���\n������ִ���˺��ύ');
+                showCustomToast('临时任务创建成功！\n请配置执行人后提交');
             } else {
-                const confirmerInfo = selectedConfirmers.length > 0 ? `\nȷ���ˣ�${selectedConfirmers.join('��')}` : '';
+                const confirmerInfo = selectedConfirmers.length > 0 ? `\n确认人：${selectedConfirmers.join('、')}` : '';
                 closeCreateTaskModal();
                 createdCount++;
                 document.getElementById('createdBadge').textContent = createdCount;
-                showCustomToast('��ʱ���񴴽��ɹ���' + confirmerInfo);
+                showCustomToast('临时任务创建成功！' + confirmerInfo);
             }
         }
         
@@ -1937,9 +1957,9 @@
                 
                 document.getElementById('configTaskName').value = taskName;
                 document.getElementById('configContract').textContent = contract;
-                document.getElementById('configExecStandard').value = '�����ͼֽҪ����а�װ����';
-                document.getElementById('configConfirmStandard').value = '��װ�ι̣���������';
-                document.getElementById('configResponsibleStandard').value = '��װ���⵼�µ�����ִ���˳е�';
+                document.getElementById('configExecStandard').value = '按设计图纸要求进行安装调试';
+                document.getElementById('configConfirmStandard').value = '安装牢固，功能正常';
+                document.getElementById('configResponsibleStandard').value = '因安装问题导致的损坏由执行人承担';
             }
             document.getElementById('configExecutorSearchInput').value = '';
             configConfirmers = [];
@@ -2006,19 +2026,19 @@
         
         function selectConfigExecutor(name, role) {
             configExecutorSelected = name;
-            document.getElementById('configExecutorSearchInput').value = `${name}��${role}��`;
+            document.getElementById('configExecutorSearchInput').value = `${name}（${role}）`;
             closeAllConfigDropdowns();
             updateConfigSubmitBtn();
         }
         
         function selectConfigConfirmer(name, role) {
             if (configConfirmers.includes(name)) {
-                showCustomToast('��ȷ����������');
+                showCustomToast('该确认人已添加');
                 return;
             }
             
             if (configConfirmers.length >= 5) {
-                showCustomToast('���ֻ��ѡ��5λȷ����');
+                showCustomToast('最多只能选择5位确认人');
                 return;
             }
             
@@ -2037,7 +2057,7 @@
             container.innerHTML = configConfirmers.map(name => `
                 <div class="confirmer-tag">
                     ${name}
-                    <span class="remove-btn" onclick="removeConfigConfirmer('${name}')">��</span>
+                    <span class="remove-btn" onclick="removeConfigConfirmer('${name}')">×</span>
                 </div>
             `).join('');
         }
@@ -2057,7 +2077,7 @@
         
         function showConfigSubmitConfirm() {
             if (!configExecutorSelected) {
-                showCustomToast('��ѡ��ִ����');
+                showCustomToast('请选择执行人');
                 return;
             }
             document.getElementById('configSubmitConfirmModal').classList.add('show');
@@ -2074,23 +2094,23 @@
             const responsibleStandard = document.getElementById('configResponsibleStandard').value.trim();
             
             if (!taskName) {
-                showCustomToast('��������������');
+                showCustomToast('请输入任务名称');
                 return;
             }
             if (!configExecutorSelected) {
-                showCustomToast('��ѡ��ִ����');
+                showCustomToast('请选择执行人');
                 return;
             }
             if (!execStandard) {
-                showCustomToast('������ִ�б�׼');
+                showCustomToast('请输入执行标准');
                 return;
             }
             if (!confirmStandard) {
-                showCustomToast('������ȷ�ϱ�׼');
+                showCustomToast('请输入确认标准');
                 return;
             }
             if (!responsibleStandard) {
-                showCustomToast('�����뵣���׼');
+                showCustomToast('请输入担责标准');
                 return;
             }
             
@@ -2105,16 +2125,16 @@
                 }
                 
                 const statusTag = card.querySelector('.status-tag');
-                statusTag.textContent = '������';
+                statusTag.textContent = '待接收';
                 statusTag.classList.remove('configuring');
                 statusTag.classList.add('pending');
                 
                 const receivedStatus = card.querySelector('.received-status');
-                receivedStatus.textContent = `ִ���ˣ�${configExecutorSelected}`;
+                receivedStatus.textContent = `执行人：${configExecutorSelected}`;
                 
                 const metaItems = card.querySelectorAll('.meta-item');
                 metaItems.forEach(item => {
-                    if (item.querySelector('.icon') && item.querySelector('.icon').textContent === '??') {
+                    if (item.querySelector('.icon') && item.querySelector('.icon').textContent === '👤') {
                         item.querySelector('span:last-child').textContent = configExecutorSelected;
                         item.querySelector('span:last-child').style.color = 'var(--text-primary)';
                     }
@@ -2122,13 +2142,13 @@
                 
                 const cardActions = card.querySelector('.card-actions');
                 cardActions.innerHTML = `
-                    <button class="action-btn view" onclick="location.href='temp-task-detail.html?status=pending'">�鿴����</button>
+                    <button class="action-btn view" onclick="location.href='temp-task-detail.html?status=pending'">查看详情</button>
                 `;
             }
             
             closeConfigSubmitConfirm();
             closeConfigModal();
-            showCustomToast('�������ύ��\n�ѷ���֪ͨ��ִ���˺�ȷ����');
+            showCustomToast('任务已提交！\n已发送通知给执行人和确认人');
         }
         
         function showDeleteModal(icon, type, e) {
@@ -2140,22 +2160,22 @@
             currentDeleteType = type;
             
             if (!currentDeleteCard) {
-                showCustomToast('δ�ҵ�����Ƭ');
+                showCustomToast('未找到任务卡片');
                 return;
             }
             
             let canDelete = true;
-            let message = 'ȷ��Ҫɾ����������ɾ�������"��ɾ��"�лָ�';
+            let message = '确定要删除此任务吗？删除后可在"已删除"中恢复';
             
             if (type === 'inprogress') {
                 const status = currentDeleteCard.dataset.status;
                 if (status === 'confirming') {
                     canDelete = false;
-                    message = 'ȷ���е�����֧��ɾ��';
+                    message = '确认中的任务不支持删除';
                 }
             } else if (type === 'completed') {
                 canDelete = false;
-                message = '����ɵ�����֧��ɾ��';
+                message = '已完成的任务不支持删除';
             }
             
             if (!canDelete) {
@@ -2184,10 +2204,10 @@
                 deletedCard.innerHTML = `
                     <div class="card-top-row">
                         <div class="task-title">${taskTitle}</div>
-                        <div class="task-type">��ʱ����</div>
+                        <div class="task-type">临时任务</div>
                     </div>
                     <div class="deleted-info">
-                        <span>ɾ��ʱ�䣺${deleteTime}</span>
+                        <span>删除时间：${deleteTime}</span>
                     </div>
                 `;
                 
@@ -2214,7 +2234,7 @@
                 document.getElementById('deletedBadge').textContent = deletedCount;
             }
             closeDeleteModal();
-            showCustomToast('������ɾ��');
+            showCustomToast('任务已删除');
         }
         
         function restoreTask(btn) {
@@ -2224,7 +2244,7 @@
             document.getElementById('deletedBadge').textContent = deletedCount;
             createdCount++;
             document.getElementById('createdBadge').textContent = createdCount;
-            showCustomToast('�����ѻָ���"�ҷ����"�б�');
+            showCustomToast('任务已恢复到"我发起的"列表');
         }
         
         function filterInprogressTasks() {
@@ -2287,7 +2307,7 @@
         function confirmReject() {
             const reason = document.getElementById('rejectReason').value.trim();
             if (!reason) {
-                showCustomToast('������ܾ�ԭ��');
+                showCustomToast('请输入拒绝原因');
                 return;
             }
             
@@ -2299,7 +2319,7 @@
             }
             
             closeRejectModal();
-            showCustomToast('�Ѿܾ�������');
+            showCustomToast('已拒绝该任务');
         }
         
         function acceptTask(taskId) {
@@ -2323,7 +2343,7 @@
             }
             
             closeAcceptModal();
-            showCustomToast('�����ѽ��ܣ��밴ʱ���ִ�С�');
+            showCustomToast('任务已接受！请按时完成执行。');
         }
         
         function acceptAllTasks() {
@@ -2332,7 +2352,7 @@
             inprogressCount += pendingCount;
             pendingCount = 0;
             updateCounts();
-            showCustomToast('�ѽ�����������');
+            showCustomToast('已接受所有任务！');
         }
         
         function updateCounts() {
@@ -2346,8 +2366,8 @@
             if (pendingCount === 0) {
                 document.getElementById('pendingList').innerHTML = `
                     <div class="empty-state">
-                        <div class="icon">?</div>
-                        <div class="text">���޴����ܵ�����</div>
+                        <div class="icon">✅</div>
+                        <div class="text">暂无待接受的任务</div>
                     </div>
                 `;
             }
@@ -2365,4 +2385,3 @@
     </script>
 </body>
 </html>
-

@@ -6,6 +6,78 @@
     <title>家装平台小程序原型 - 项目详情</title>
     <link rel="stylesheet" href="common.css">
     <link rel="stylesheet" href="css/project-detail.css">
+<style>
+        /* 微信原生胶囊占位（样式参考真机效果，由微信客户端实际渲染） */
+    .nav-bar .native-capsule {
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        min-width: 56px;
+        height: 28px;
+        padding: 0 10px;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.7);
+        color: rgba(0, 0, 0, 0.6);
+        font-size: 12px;
+        line-height: 1;
+        user-select: none;
+        box-sizing: border-box;
+    }
+    .nav-bar .native-capsule .nc-left,
+    .nav-bar .native-capsule .nc-right {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        min-width: 16px;
+    }
+    .nav-bar .native-capsule .nc-right {
+        font-size: 10px;
+    }
+    .nav-bar .native-capsule .nc-divider {
+        width: 1px;
+        height: 14px;
+        background: rgba(0, 0, 0, 0.1);
+        margin: 0 4px;
+    }
+
+        /* ===== 首屏紧凑化 & 修复 ===== */
+        .quick-nav { padding: 4px 4px; max-height: 54px; }
+        .quick-nav-item .icon { width: 28px; height: 28px; font-size: 14px; margin-bottom: 1px; }
+        .quick-nav-item .label { font-size: 10px; }
+
+        .level-selector { padding: 2px 12px; }
+        .level-selector .level-dropdown .current .icon { width: 24px; height: 24px; font-size: 11px; margin-right: 5px; }
+        .level-selector .level-dropdown .current .text { font-size: 12px; }
+        .level-selector .breadcrumb-inline { font-size: 10px; margin-top: 0; }
+
+        .card { padding: 6px 8px; margin: 6px 8px; border-radius: 10px; }
+        .card .card-title { margin-bottom: 3px; font-size: 12px; }
+
+        /* 今日动态 - 修复堆叠 & 遮盖 */
+        .activity-list { max-height: none; overflow: visible; }
+        .activity-list.expanded { max-height: none; overflow: visible; }
+        .activity-item { padding: 4px 0 4px 20px; position: relative; overflow: visible; }
+        .activity-item::before { left: 6px; top: 20px; bottom: -4px; width: 2px; }
+        .activity-item::after { left: 1px; top: 10px; width: 10px; height: 10px; }
+        .activity-header { margin-bottom: 2px; display: flex; align-items: center; }
+        .activity-avatar { width: 24px; height: 24px; font-size: 10px; }
+        .activity-user { font-size: 11px; }
+        .activity-time { font-size: 9px; }
+        .activity-content { font-size: 11px; margin-bottom: 2px; line-height: 1.4; }
+        .activity-media { display: flex; gap: 4px; margin-top: 2px; overflow: visible; }
+        .activity-media-item { width: 48px; height: 48px; border-radius: 6px; flex-shrink: 0; }
+        .activity-more-btn { padding: 4px; font-size: 11px; margin-top: 2px; }
+
+        /* 待办 - 紧凑 */
+        .todo-content .todo-item:nth-child(n+3) { display: none; }
+        .todo-item { padding: 4px 6px; margin-bottom: 2px; }
+        .todo-item .icon { width: 22px; height: 22px; font-size: 10px; margin-right: 6px; }
+        .todo-item .title { font-size: 12px; }
+        .todo-item .desc { font-size: 10px; margin-top: 1px; }
+        .todo-item .status { font-size: 9px; padding: 1px 5px; }
+    </style>
 </head>
 <body>
     <div class="phone-frame">
@@ -16,19 +88,15 @@
 
         <div class="nav-bar">
             <div class="title">XX小区整体装修</div>
-            <div class="actions">
-                <div class="action-btn" onclick="toggleActionMenu()">⋯</div>
-                <div class="action-btn" id="closeBtn">✕</div>
-            </div>
-            <div class="action-menu" id="actionMenu">
-                <div class="action-menu-item" onclick="closeActionMenu();">
-                    <span class="icon">📋</span>
-                    <span>项目详情</span>
-                </div>
-            </div>
+            
+            
+        
+            <div class="actions"><div class="native-capsule" title="微信原生胶囊：由微信客户端渲染，开发者不可自定义其内容"><span class="nc-left">⋯</span><span class="nc-divider"></span><span class="nc-right">○</span></div></div>
         </div>
+            
 
-        <div class="page-content" id="pageContent">
+
+        <div class="page-content page-content--full" id="pageContent">
             <div class="loading-overlay" id="loadingOverlay">
                 <div class="loading-spinner"></div>
                 <div class="loading-text">加载中...</div>
@@ -129,16 +197,6 @@
                             <div class="activity-media-item" style="background: url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=120&h=120&fit=crop') center/cover; border-radius: 6px;"></div>
                             <div class="activity-media-item" style="background: url('https://images.unsplash.com/photo-1585232351009-aa654f89dfed?w=120&h=120&fit=crop') center/cover; border-radius: 6px;"></div>
                         </div>
-                    </div>
-                    <div class="activity-item tertiary hidden" data-href="task-detail.html">
-                        <div class="activity-header">
-                            <div class="activity-avatar" style="background: linear-gradient(135deg, #FA8C16 0%, #FFA940 100%);">王</div>
-                            <div class="activity-info">
-                                <div class="activity-user">王工长</div>
-                                <div class="activity-time">01-15 08:00</div>
-                            </div>
-                        </div>
-                        <div class="activity-content">创建了临时任务 紧急修补墙面裂缝</div>
                     </div>
                     <div class="activity-item quaternary hidden" data-href="contract-detail.html?status=signed">
                         <div class="activity-header">
@@ -265,7 +323,7 @@
                     <div class="todo-item" data-href="task-detail.html?status=confirming">
                         <div class="icon" style="background-color: #E6F7FF;">🔵</div>
                         <div class="content">
-                            <div class="title">开槽布线验收确认 <span class="task-tag task">任务</span></div>
+                            <div class="title">开槽布线验收确认</div>
                             <div class="desc">强电施工组 | 等待业主确认</div>
                         </div>
                         <div class="status urgent">待确认</div>
@@ -273,7 +331,7 @@
                     <div class="todo-item" data-href="task-detail.html?status=confirming">
                         <div class="icon" style="background-color: #E6F7FF;">🔵</div>
                         <div class="content">
-                            <div class="title">墙面贴砖验收确认 <span class="task-tag task">任务</span></div>
+                            <div class="title">墙面贴砖验收确认</div>
                             <div class="desc">泥瓦工作组 | 等待业主确认</div>
                         </div>
                         <div class="status pending">待确认</div>
@@ -281,7 +339,7 @@
                     <div class="todo-item" data-href="task-detail.html?status=pending">
                         <div class="icon" style="background-color: #F6FFED;">🟢</div>
                         <div class="content">
-                            <div class="title">水电工程验收 <span class="task-tag task">任务</span></div>
+                            <div class="title">水电工程验收</div>
                             <div class="desc">水电工作组 | 待业主确认</div>
                         </div>
                         <div class="status pending">待确认</div>
@@ -289,7 +347,7 @@
                     <div class="todo-item" data-href="task-detail.html?status=pending">
                         <div class="icon" style="background-color: #F6FFED;">🟢</div>
                         <div class="content">
-                            <div class="title">瓷砖铺贴验收 <span class="task-tag task">任务</span></div>
+                            <div class="title">瓷砖铺贴验收</div>
                             <div class="desc">泥瓦工作组 | 待业主确认</div>
                         </div>
                         <div class="status pending">待确认</div>
@@ -297,7 +355,7 @@
                     <div class="todo-item" data-href="contract-detail.html?status=confirming_receiver">
                         <div class="icon" style="background-color: #F9F0FF;">🟣</div>
                         <div class="content">
-                            <div class="title">泥瓦分包合同确认 <span class="task-tag contract">合同</span></div>
+                            <div class="title">泥瓦分包合同确认</div>
                             <div class="desc">泥瓦工作组 | 待业主确认</div>
                         </div>
                         <div class="status urgent">待确认</div>
@@ -390,6 +448,7 @@
         <div class="page-nav-title">原型导航</div>
         <a href="home.html" class="page-nav-item">首页</a>
         <a href="project-detail.html" class="page-nav-item active">项目详情</a>
+        <a href="project-detail-ongoing-v2.html" class="page-nav-item">项目详情（进行中-新版）</a>
         <a href="project-detail-completed.html" class="page-nav-item">项目详情（已完成）</a>
         <a href="project-info.html" class="page-nav-item">项目信息</a>
         <a href="architecture.html" class="page-nav-item">项目架构</a>

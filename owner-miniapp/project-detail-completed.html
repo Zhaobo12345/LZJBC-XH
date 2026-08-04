@@ -6,6 +6,56 @@
     <title>家装平台小程序原型 - 项目详情（已完成）</title>
     <link rel="stylesheet" href="common.css">
     <link rel="stylesheet" href="css/project-detail.css">
+<style>
+        /* 微信原生胶囊占位（样式参考真机效果，由微信客户端实际渲染） */
+    .nav-bar .native-capsule {
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        min-width: 56px;
+        height: 28px;
+        padding: 0 10px;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.7);
+        color: rgba(0, 0, 0, 0.6);
+        font-size: 12px;
+        line-height: 1;
+        user-select: none;
+        box-sizing: border-box;
+    }
+    .nav-bar .native-capsule .nc-left,
+    .nav-bar .native-capsule .nc-right {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        min-width: 16px;
+    }
+    .nav-bar .native-capsule .nc-right {
+        font-size: 10px;
+    }
+    .nav-bar .native-capsule .nc-divider {
+        width: 1px;
+        height: 14px;
+        background: rgba(0, 0, 0, 0.1);
+        margin: 0 4px;
+    }
+
+        /* ===== 今日动态修复 ===== */
+        .activity-list { max-height: none; overflow: visible; }
+        .activity-list.expanded { max-height: none; overflow: visible; }
+        .activity-item { padding: 4px 0 4px 20px; position: relative; overflow: visible; }
+        .activity-item::before { left: 6px; top: 20px; bottom: -4px; width: 2px; }
+        .activity-item::after { left: 1px; top: 10px; width: 10px; height: 10px; }
+        .activity-header { margin-bottom: 2px; display: flex; align-items: center; }
+        .activity-avatar { width: 24px; height: 24px; font-size: 10px; }
+        .activity-user { font-size: 11px; }
+        .activity-time { font-size: 9px; }
+        .activity-content { font-size: 12px; margin-bottom: 2px; line-height: 1.4; }
+        .activity-media { display: flex; gap: 4px; margin-top: 2px; overflow: visible; }
+        .activity-media-item { width: 48px; height: 48px; border-radius: 6px; flex-shrink: 0; }
+    </style>
 </head>
 <body>
     <div class="phone-frame">
@@ -16,17 +66,13 @@
 
         <div class="nav-bar">
             <div class="title">XX小区整体装修</div>
-            <div class="actions">
-                <div class="action-btn" onclick="toggleActionMenu()">⋯</div>
-                <div class="action-btn" id="closeBtn">✕</div>
-            </div>
-            <div class="action-menu" id="actionMenu">
-                <div class="action-menu-item" onclick="closeActionMenu();">
-                    <span class="icon">📋</span>
-                    <span>项目详情</span>
-                </div>
-            </div>
+            
+            
+        
+            <div class="actions"><div class="native-capsule" title="微信原生胶囊：由微信客户端渲染，开发者不可自定义其内容"><span class="nc-left">⋯</span><span class="nc-divider"></span><span class="nc-right">○</span></div></div>
         </div>
+            
+
 
         <div class="page-content" id="pageContent">
             <div class="loading-overlay" id="loadingOverlay">
@@ -381,6 +427,7 @@
         <div class="page-nav-title">原型导航</div>
         <a href="home.html" class="page-nav-item">首页</a>
         <a href="project-detail.html" class="page-nav-item">项目详情</a>
+        <a href="project-detail-ongoing-v2.html" class="page-nav-item">项目详情（进行中-新版）</a>
         <a href="project-detail-completed.html" class="page-nav-item active">项目详情（已完成）</a>
         <a href="project-info.html" class="page-nav-item">项目信息</a>
         <a href="architecture.html" class="page-nav-item">项目架构</a>

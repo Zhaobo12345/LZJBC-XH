@@ -13,13 +13,16 @@
             align-items: center;
             justify-content: space-between;
             padding: 16px;
-            background-color: var(--bg-primary);
-            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(135deg, #FFF7E6 0%, #FFE4BA 100%);
+            border-radius: 12px;
+            margin: 12px;
+            box-shadow: 0 2px 8px rgba(250, 140, 22, 0.12);
+            border: none;
         }
 
         .project-basic-header .left-info {
             font-size: 14px;
-            color: var(--text-primary);
+            color: #874D00;
             font-weight: 500;
         }
 
@@ -30,15 +33,47 @@
             margin: 0 2px;
         }
 
+        .project-basic-header .right-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
         .project-basic-header .right-info {
             display: inline-flex;
             align-items: center;
             padding: 6px 12px;
-            border: 1px solid var(--border-color);
+            border: 1px solid rgba(250, 140, 22, 0.25);
             border-radius: 16px;
             font-size: 12px;
-            color: var(--text-secondary);
-            background-color: var(--bg-secondary);
+            color: #874D00;
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* 整块可点击跳转「项目信息」页 */
+        .project-basic-header.clickable {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .project-basic-header.clickable:active {
+            background: linear-gradient(135deg, #FFE4BA 0%, #FFD591 100%);
+            box-shadow: 0 1px 4px rgba(250, 140, 22, 0.15);
+        }
+
+        .project-basic-header .enter-arrow {
+            font-size: 18px;
+            line-height: 1;
+            color: var(--text-tertiary, #C0C4CC);
+            font-weight: 400;
+        }
+
+        /* 快捷入口改为 4 项（「项目信息」入口已由顶部基本信息区承载，避免重复） */
+        .quick-nav {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            padding-left: 20px;
+            padding-right: 20px;
         }
 
         /* 架构选择区域（level-selector）高度减少一半 */
@@ -160,7 +195,233 @@
             font-size: 9px;
             margin-top: 0;
         }
+
+        /* 动态角色标签 */
+        .activity-role-tag {
+            display: inline-block;
+            font-size: 10px;
+            padding: 0 6px;
+            border-radius: 8px;
+            margin-left: 4px;
+            vertical-align: middle;
+            line-height: 14px;
+            height: 14px;
+            font-weight: 500;
+        }
+        .activity-role-tag.supervisor { background-color: #E6F7FF; color: #1890FF; }
+        .activity-role-tag.foreman { background-color: #F6FFED; color: #52C41A; }
+        .activity-role-tag.worker { background-color: #FFF7E6; color: #FA8C16; }
+        .activity-role-tag.designer { background-color: #F9F0FF; color: #722ED1; }
+        .activity-role-tag.owner { background-color: #FFF1F0; color: #F5222D; }
+
+        /* 动态阶段标签 */
+        .activity-stage-tag {
+            display: inline-block;
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 4px;
+            margin: 0 4px;
+            font-weight: 500;
+            line-height: 14px;
+        }
+        .activity-stage-tag.demolition { background-color: #FFF1F0; color: #F5222D; }
+        .activity-stage-tag.plumbing { background-color: #E6F7FF; color: #1890FF; }
+        .activity-stage-tag.carpentry { background-color: #FFF7E6; color: #FA8C16; }
+        .activity-stage-tag.tiling { background-color: #F9F0FF; color: #722ED1; }
+        .activity-stage-tag.painting { background-color: #FCFABE; color: #D4B106; }
+        .activity-stage-tag.installation { background-color: #F0F5FF; color: #2F54EB; }
+        .activity-stage-tag.cleanup { background-color: #F6FFED; color: #52C41A; }
+        .activity-stage-tag.design { background-color: #F9F0FF; color: #722ED1; }
+
+        /* ===== 首屏布局优化 v2 · 资深交互设计 =====
+           目标：统一卡片节奏 · 数据全宽堆叠 · 各模块首屏清晰可识别
+           说明：本块置于后段，覆盖前述 compact/half 定义；不改变任何内容与交互 */
+
+        /* 1. 项目头部：精致呼吸感 */
+        .project-basic-header {
+            margin: 8px 12px 6px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(250, 140, 22, 0.12);
+        }
+        .project-basic-header .left-info { font-size: 13px; }
+        .project-basic-header .left-info .highlight { font-size: 18px; margin: 0 2px; }
+        .project-basic-header .right-info { font-size: 11px; padding: 4px 10px; }
+
+        /* 2. 快捷入口：4 项横排，图标适中 */
+        .quick-nav { gap: 6px; padding: 8px 12px; max-height: 78px; }
+        .quick-nav-item .icon { width: 34px; height: 34px; font-size: 16px; margin-bottom: 3px; }
+        .quick-nav-item .label { font-size: 11px; }
+
+        /* 3. 架构选择器：单行紧凑 */
+        .level-selector.arch-half { padding: 5px 12px; }
+        .level-selector.arch-half .level-dropdown .current .icon { width: 28px; height: 28px; font-size: 13px; margin-right: 8px; }
+        .level-selector.arch-half .level-dropdown .current .text { font-size: 13px; }
+        .level-selector.arch-half .breadcrumb-inline { font-size: 10px; margin-top: 1px; }
+
+        /* 4. 卡片：统一节奏与柔和质感 */
+        .card { padding: 10px 12px; margin: 8px 10px; border-radius: 12px; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06); }
+        .card .card-title { margin-bottom: 8px; font-size: 14px; font-weight: 600; }
+
+        /* 5. 待办事项：默认 2 条，行距舒适 */
+        .todo-content .todo-item:nth-child(n+3) { display: none; }
+        .todo-item { padding: 7px 8px; margin-bottom: 4px; }
+        .todo-item .icon { width: 26px; height: 26px; font-size: 12px; margin-right: 8px; }
+        .todo-item .title { font-size: 13px; }
+        .todo-item .desc { font-size: 11px; margin-top: 1px; }
+        .todo-item .status { font-size: 10px; padding: 2px 6px; }
+
+        /* 6. 数据概览：合同 + 任务 上下堆叠（全宽舒展，标题不换行；375px 半宽过窄故弃并排） */
+        .stats-row { display: block; margin: 0 10px 8px; }
+        .stats-row > .card { margin: 0 0 8px 0; padding: 10px 12px; }
+        .stats-row > .card:last-child { margin-bottom: 0; }
+        .stats-row .card-title { margin-bottom: 8px; font-size: 14px; }
+        /* 合同概览：2 统计横排（全宽，中间分隔线） */
+        .card.contract-half .contract-summary { display: flex; flex-direction: row; align-items: center; padding: 4px 0; }
+        .card.contract-half .contract-stat { flex: 1; flex-direction: column; align-items: center; }
+        .card.contract-half .contract-stat .value { font-size: 18px; }
+        .card.contract-half .contract-stat .label { font-size: 11px; margin-top: 2px; }
+        .card.contract-half .contract-list.show { max-height: 110px; overflow-y: auto; }
+        .card.contract-half .contract-item { padding: 5px 0; }
+        .card.contract-half .contract-item .name { font-size: 13px; }
+        .card.contract-half .contract-item .meta { font-size: 11px; margin-top: 1px; }
+        .card.contract-half .contract-item .percent { font-size: 13px; }
+        /* 任务统计：3 项横排（全宽，icon 在上、文字居中） */
+        .card.task-half .task-stats { display: flex; flex-direction: row; gap: 8px; }
+        .card.task-half .task-stat-item { flex: 1; flex-direction: column; align-items: center; padding: 6px 4px; }
+        .card.task-half .task-stat-item .icon-wrap { width: 28px; height: 28px; font-size: 13px; margin-bottom: 4px; }
+        .card.task-half .task-stat-item .info { flex: none; display: block; text-align: center; }
+        .card.task-half .task-stat-item .value { font-size: 16px; }
+        .card.task-half .task-stat-item .label { font-size: 11px; margin-top: 2px; }
+
+        /* 7. 今日动态：增大首屏露出，时间轴清晰 */
+        .activity-list { max-height: 150px; }
+        .activity-list.expanded { max-height: 320px; }
+        .activity-item { padding: 6px 0 6px 16px; }
+        .activity-header { margin-bottom: 3px; }
+        .activity-avatar { width: 26px; height: 26px; font-size: 11px; }
+        .activity-user { font-size: 12px; }
+        .activity-time { font-size: 10px; }
+        .activity-content { font-size: 12px; margin-bottom: 3px; }
+        .activity-media { gap: 4px; margin-top: 3px; }
+        .activity-media-item { width: 48px; height: 48px; }
+        .activity-more-btn { padding: 5px; font-size: 12px; margin-top: 3px; }
+
+        /* 8. 标题行精简（沿用：隐藏合同/任务卡的辅助 badge） */
+        .contract-half .card-title .badge,
+        .task-half .card-title .badge { display: none; }
+
+        /* 9. 色彩优先级系统：待办紧急度左侧色条 + 卡片标题品牌锚点 */
+        .todo-item { border-left: 3px solid transparent; }
+        .todo-item:has(.status.urgent) { border-left-color: #FF4D4F; }
+        .todo-item:has(.status.pending) { border-left-color: #FA8C16; }
+        .todo-item:has(.status.in-progress) { border-left-color: #1890FF; }
+        .card .card-title { position: relative; padding-left: 12px; }
+        .card .card-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 14px;
+            border-radius: 2px;
+            background: var(--gradient-blue);
+        }
+
+        /* 10. 毛玻璃吸顶 + 入场微动效（原生级质感） */
+        .sticky-header {
+            background: rgba(255, 255, 255, 0.82);
+            -webkit-backdrop-filter: saturate(180%) blur(12px);
+            backdrop-filter: saturate(180%) blur(12px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+        .sticky-header .quick-nav,
+        .sticky-header .level-selector { background: transparent; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: none; }
+        }
+        .project-basic-header,
+        .card:has(#todoContent),
+        .stats-row,
+        .card:has(#activityList) { animation: fadeUp 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+        .project-basic-header { animation-delay: 0s; }
+        .card:has(#todoContent) { animation-delay: 0.08s; }
+        .stats-row { animation-delay: 0.16s; }
+        .card:has(#activityList) { animation-delay: 0.24s; }
+
+        /* 11. 数据色彩化 + 细节质感（视觉精致化，不改布局/高度） */
+        /* 合同/任务统计数字按语义着色：签约蓝·总进度绿·全部任务蓝·确认中橙·执行中橙 */
+        .card.contract-half .contract-stat:nth-of-type(1) .value { color: var(--primary-color); }
+        .card.contract-half .contract-stat:nth-of-type(2) .value .current { color: var(--success-color); }
+        .card.task-half .task-stat-item:nth-of-type(1) .value { color: var(--primary-color); }
+        .card.task-half .task-stat-item:nth-of-type(2) .value { color: var(--warning-color); }
+        .card.task-half .task-stat-item:nth-of-type(3) .value { color: var(--orange-color); }
+        /* 项目头部开工天数数字微光影 */
+        .project-basic-header .left-info .highlight { text-shadow: 0 1px 3px rgba(250, 140, 22, 0.25); }
+        /* 今日动态头像精致描边 */
+        .activity-avatar { box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85), 0 1px 4px rgba(0, 0, 0, 0.12); }
+        /* 卡片按压反馈 */
+        .card { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+        .card:active { transform: scale(0.99); }
+        /* "更多"链接统一为弱化色，按压转品牌色 */
+        .card .card-title .more { color: var(--text-tertiary); font-size: 11px; }
+        .card .card-title .more:active { color: var(--primary-color); }
     </style>
+<style>
+/* 微信原生胶囊占位（样式参考真机效果，由微信客户端实际渲染） */
+.nav-bar .native-capsule {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 56px;
+    height: 28px;
+    padding: 0 10px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.7);
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 12px;
+    line-height: 1;
+    user-select: none;
+    box-sizing: border-box;
+}
+.nav-bar .native-capsule .nc-left,
+.nav-bar .native-capsule .nc-right {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-width: 16px;
+}
+.nav-bar .native-capsule .nc-right {
+    font-size: 10px;
+}
+.nav-bar .native-capsule .nc-divider {
+    width: 1px;
+    height: 14px;
+    background: rgba(0, 0, 0, 0.1);
+    margin: 0 4px;
+}
+    .nav-bar .native-capsule .nc-left,
+    .nav-bar .native-capsule .nc-right {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        min-width: 16px;
+    }
+    .nav-bar .native-capsule .nc-right {
+        font-size: 10px;
+    }
+    .nav-bar .native-capsule .nc-divider {
+        width: 1px;
+        height: 14px;
+        background: rgba(0, 0, 0, 0.1);
+        margin: 0 4px;
+    }
+</style>
 </head>
 <body>
     <div class="phone-frame">
@@ -172,31 +433,30 @@
         <div class="nav-bar">
             <div class="back">← 返回</div>
             <div class="title centered">XX小区整体装修</div>
-            <div class="actions">
-                <div class="action-btn" id="menuBtn">⋯</div>
-                <div class="action-btn" id="closeBtn">✕</div>
-            </div>
-            <div class="action-menu" id="actionMenu">
-                <div class="action-menu-item" id="shareBtn">
-                    <span class="icon">📤</span>
-                    <span>分享给朋友</span>
-                </div>
-            </div>
+            
+            
+        
+            <div class="actions"><div class="native-capsule" title="微信原生胶囊：由微信客户端渲染，开发者不可自定义其内容"><span class="nc-left">⋯</span><span class="nc-divider"></span><span class="nc-right">○</span></div></div>
         </div>
+            
 
-        <div class="page-content" id="pageContent">
+
+        <div class="page-content page-content--full" id="pageContent">
             <div class="loading-overlay" id="loadingOverlay" style="display:none;">
                 <div class="loading-spinner"></div>
                 <div class="loading-text">加载中...</div>
             </div>
 
-            <!-- 项目基本信息（参考图片效果，置于最上方） -->
-            <div class="project-basic-header">
+            <!-- 项目基本信息（参考图片效果，置于最上方；整块可点击跳转项目信息页） -->
+            <div class="project-basic-header clickable" data-href="project-info.html">
                 <div class="left-info">
                     新家已开工<span class="highlight">60</span>天
                 </div>
-                <div class="right-info">
-                    75.0m² 2室1厅
+                <div class="right-wrap">
+                    <div class="right-info">
+                        75.0m² 2室1厅
+                    </div>
+                    <span class="enter-arrow">›</span>
                 </div>
             </div>
 
@@ -204,10 +464,6 @@
             <div class="sticky-header" id="stickyHeader">
                 <div class="quick-nav" id="quickNav">
                     <div class="pin-btn" id="pinBtn">📌 固定</div>
-                    <div class="quick-nav-item" data-href="project-info.html">
-                        <div class="icon info">📋</div>
-                        <div class="label">项目信息</div>
-                    </div>
                     <div class="quick-nav-item" data-href="architecture.html">
                         <div class="icon structure">🏗️</div>
                         <div class="label">架构</div>
@@ -336,7 +592,8 @@
                 </div>
             </div>
 
-            <!-- 合同概览（高度减半） -->
+            <!-- 合同概览 + 任务统计（紧凑堆叠） -->
+            <div class="stats-row">
             <div class="card contract-half">
                 <div class="card-title">
                     <span>📄 合同概览</span>
@@ -411,6 +668,7 @@
                     </div>
                 </div>
             </div>
+            </div>
 
             <!-- 今日动态 -->
             <div class="card">
@@ -423,11 +681,11 @@
                         <div class="activity-header">
                             <div class="activity-avatar">李</div>
                             <div class="activity-info">
-                                <div class="activity-user">李监理</div>
+                                <div class="activity-user">李监理<span class="activity-role-tag supervisor">监理</span></div>
                                 <div class="activity-time">01-15 10:30</div>
                             </div>
                         </div>
-                        <div class="activity-content">完成了 开槽布线 的验收</div>
+                        <div class="activity-content">完成了<span class="activity-stage-tag plumbing">水电</span>开槽布线 的验收</div>
                         <div class="activity-media">
                             <div class="activity-media-item" style="background: url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=120&h=120&fit=crop') center/cover; border-radius: 6px;"></div>
                             <div class="activity-media-item" style="background: url('https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=120&h=120&fit=crop') center/cover; border-radius: 6px;"></div>
@@ -440,16 +698,43 @@
                         <div class="activity-header">
                             <div class="activity-avatar" style="background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%);">张</div>
                             <div class="activity-info">
-                                <div class="activity-user">张工长</div>
+                                <div class="activity-user">张工长<span class="activity-role-tag foreman">工长</span></div>
                                 <div class="activity-time">01-15 09:15</div>
                             </div>
                         </div>
-                        <div class="activity-content">提交了 开槽布线 的验收申请</div>
+                        <div class="activity-content">提交了<span class="activity-stage-tag plumbing">水电</span>开槽布线 的验收申请</div>
                         <div class="activity-media">
                             <div class="activity-media-item" style="background: url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=120&h=120&fit=crop') center/cover; border-radius: 6px;"></div>
                             <div class="activity-media-item" style="background: url('https://images.unsplash.com/photo-1585232351009-aa654f89dfed?w=120&h=120&fit=crop') center/cover; border-radius: 6px;"></div>
                         </div>
                     </div>
+                    <div class="activity-item hidden tertiary" data-href="task-detail.html">
+                        <div class="activity-header">
+                            <div class="activity-avatar" style="background: linear-gradient(135deg, #FA8C16 0%, #FFA940 100%);">王</div>
+                            <div class="activity-info">
+                                <div class="activity-user">王施工<span class="activity-role-tag worker">施工</span></div>
+                                <div class="activity-time">01-15 08:30</div>
+                            </div>
+                        </div>
+                        <div class="activity-content">完成了<span class="activity-stage-tag plumbing">水电</span>水电改造 的施工</div>
+                    </div>
+                    <div class="activity-item hidden quaternary" data-href="task-detail.html">
+                        <div class="activity-header">
+                            <div class="activity-avatar" style="background: linear-gradient(135deg, #722ED1 0%, #9254DE 100%);">陈</div>
+                            <div class="activity-info">
+                                <div class="activity-user">陈设计<span class="activity-role-tag designer">设计</span></div>
+                                <div class="activity-time">01-15 08:00</div>
+                            </div>
+                        </div>
+                        <div class="activity-content">更新了<span class="activity-stage-tag design">设计</span>设计图纸 v2.0</div>
+                        <div class="activity-media">
+                            <div class="activity-media-item" style="background: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=120&h=120&fit=crop') center/cover; border-radius: 6px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="activity-more-btn" id="activityMoreBtn">
+                    <span>展示更多</span>
+                    <span class="arrow">›</span>
                 </div>
             </div>
 
@@ -572,13 +857,30 @@
             }
 
             function toggleActivityList() {
-                var hiddenItems = document.querySelectorAll('.activity-item.hidden');
+                var activityList = document.getElementById('activityList');
+                var moreBtn = document.getElementById('activityMoreBtn');
                 if (activityExpanded) {
+                    if (activityList) activityList.classList.remove('expanded');
+                    var hiddenItems = activityList ? activityList.querySelectorAll('.activity-item.tertiary, .activity-item.quaternary') : [];
                     hiddenItems.forEach(function(item) { item.classList.add('hidden'); });
                     activityExpanded = false;
+                    if (moreBtn) {
+                        var text = moreBtn.querySelector('span');
+                        var arrow = moreBtn.querySelector('.arrow');
+                        if (text) text.textContent = '展示更多';
+                        if (arrow) arrow.textContent = '›';
+                    }
                 } else {
-                    document.querySelectorAll('.activity-item').forEach(function(item) { item.classList.remove('hidden'); });
+                    if (activityList) activityList.classList.add('expanded');
+                    var allItems = activityList ? activityList.querySelectorAll('.activity-item') : [];
+                    allItems.forEach(function(item) { item.classList.remove('hidden'); });
                     activityExpanded = true;
+                    if (moreBtn) {
+                        var text = moreBtn.querySelector('span');
+                        var arrow = moreBtn.querySelector('.arrow');
+                        if (text) text.textContent = '收起';
+                        if (arrow) arrow.textContent = '˄';
+                    }
                 }
             }
 
@@ -624,16 +926,7 @@
 
             if (toastCloseBtn) toastCloseBtn.addEventListener('click', closeCustomToast);
 
-            var actionBtns = document.querySelectorAll('.nav-bar .action-btn');
-            actionBtns.forEach(function(btn, index) {
-                btn.addEventListener('click', function() {
-                    if (index === 0) {
-                        if (actionMenu) actionMenu.classList.toggle('show');
-                    } else if (index === 1) {
-                        showCustomToast('关闭小程序');
-                    }
-                });
-            });
+            ;
 
             var backBtn = document.querySelector('.nav-bar .back');
             if (backBtn) backBtn.addEventListener('click', function() { history.back(); });
