@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>家装平台小程序原型 - 工人合同退出/重选</title>
+    <link rel="stylesheet" href="common.css">
+
+    <style>
+        :root{
+            --bg-secondary:#F7F8FA; --bg-primary:#fff;
+            --text-primary:#1D2129; --text-secondary:#4E5969; --text-tertiary:#86909C;
+            --border-color:#E5E6EB;
+            --primary-color:#1677FF; --primary-light:#69B1FF;
+            --success-color:#52C41A; --warning-color:#FAAD14; --error-color:#F5222D;
+            --status-success-bg:#EAF7E6; --status-primary-bg:#E6F4FF; --status-error-bg:#FCEAEA; --status-warning-bg:#FFF7E6;
+        }
+
+        .page-content{
+            height: calc(100% - 88px);
+            background-color: var(--bg-secondary);
+            overflow-y: auto;
+            padding-bottom: 76px;
+        }
+
+        /* 微信原生胶囊占位（原型仅作占位，与主详情页一致） */
+        .nav-bar .native-capsule {
+            display: inline-flex; align-items: center; justify-content: space-between;
+            min-width: 56px; height: 28px; padding: 0 10px;
+            border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 14px;
+            background: rgba(255, 255, 255, 0.7); color: rgba(0, 0, 0, 0.6);
+            font-size: 12px; line-height: 1; user-select: none; box-sizing: border-box;
+        }
+        .nav-bar .native-capsule .nc-left,
+        .nav-bar .native-capsule .nc-right { display: inline-flex; align-items: center; justify-content: center; flex: 1; min-width: 16px; }
+        .nav-bar .native-capsule .nc-right { font-size: 10px; }
+        .nav-bar .native-capsule .nc-divider { width: 1px; height: 14px; background: rgba(0, 0, 0, 0.1); margin: 0 4px; }
+
+        /* 视角切换 */
+        .viewer-switch { display: flex; gap: 8px; padding: 12px 12px 4px; }
+        .viewer-switch .vs-btn {
+            flex: 1; height: 36px; border: 1px solid var(--border-color); border-radius: 8px;
+            background: var(--bg-primary); font-size: 13px; color: var(--text-secondary); cursor: pointer;
+        }
+        .viewer-switch .vs-btn.active { background: var(--status-primary-bg); border-color: var(--primary-color); color: var(--primary-color); font-weight: 500; }
+
+        /* 状态横幅 */
+        .wc-banner { margin: 12px; border-radius: 12px; padding: 16px; color: #fff; }
+        .wc-banner.confirmed { background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%); }
+        .wc-banner.pending { background: linear-gradient(135deg, #FAAD14 0%, #FFC53D 100%); }
+        .wc-banner.exited { background: linear-gradient(135deg, #F5222D 0%, #FF4D4F 100%); }
+        .wc-banner.replaced { background: linear-gradient(135deg, #F5222D 0%, #FF7A45 100%); }
+        .wc-banner-text { font-size: 18px; font-weight: 700; }
+        .wc-banner-desc { font-size: 12px; margin-top: 6px; line-height: 1.5; opacity: 0.95; }
+
+        /* 合同与乙方信息卡 */
+        .ctx-card {
+            margin: 0 12px 12px; background-color: var(--bg-primary); border-radius: 12px;
+            padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .ctx-card .card-title { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 12px; }
+        .meta-row { display: flex; padding: 7px 0; border-bottom: 1px dashed var(--border-color); font-size: 13px; }
+        .meta-row:last-child { border-bottom: none; }
+        .meta-label { color: var(--text-tertiary); width: 96px; flex-shrink: 0; }
+        .meta-value { color: var(--text-primary); flex: 1; font-weight: 500; }
+        .arch-note {
+            margin-top: 12px; padding: 10px 12px; border-radius: 8px;
+            background: var(--status-success-bg); color: var(--success-color); font-size: 12px; line-height: 1.5;
+        }
+        .arch-note.warn { background: var(--status-warning-bg); color: #D48806; }
+        .arch-note.err { background: var(--status-error-bg); color: var(--error-color); }
+
+        /* 候选人重选 */
+        .cand-list { margin-top: 4px; }
+        .cand-row { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
+        .cand-row:last-child { border-bottom: none; }
+        .cand-avatar {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: #fff; display: flex; align-items: center; justify-content: center;
+            font-size: 14px; margin-right: 10px; flex-shrink: 0;
+        }
+        .cand-info { flex: 1; }
+        .cand-name { font-size: 13px; color: var(--text-primary); font-weight: 500; }
+        .cand-role { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+        .cand-pick { font-size: 13px; color: var(--primary-color); border: 1px solid var(--primary-color); border-radius: 14px; padding: 4px 12px; cursor: pointer; }
+
+        /* 终态（乙方已退出） */
+        .ended-view { padding: 36px 16px 24px; text-align: center; }
+        .ended-icon {
+            width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 16px;
+            display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 700;
+        }
+        .ended-icon.exited { background: var(--status-error-bg); color: var(--error-color); }
+        .ended-status {
+            display: inline-block; font-size: 16px; font-weight: 700; padding: 6px 18px; border-radius: 16px; margin-bottom: 18px;
+            background: var(--status-error-bg); color: var(--error-color);
+        }
+        .ended-card { text-align: left; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; }
+        .ended-contract { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 10px; }
+        .ended-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+        .ended-reason { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border-color); font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+        .ended-reason .rr-label { color: var(--text-tertiary); margin-right: 6px; }
+
+        /* 底部操作 */
+        .wc-bottom-actions {
+            position: absolute; left: 0; right: 0; bottom: 0; display: flex; gap: 12px; padding: 10px 16px;
+            background: var(--bg-primary); border-top: 1px solid var(--border-color);
+        }
+        .wc-action-btn {
+            flex: 1; height: 42px; border-radius: 8px; font-size: 14px; font-weight: 600;
+            border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+        .wc-action-btn.primary { background: var(--primary-color); color: #fff; }
+        .wc-action-btn.success { background: var(--success-color); color: #fff; }
+        .wc-action-btn.warning { background: var(--bg-primary); color: var(--warning-color); border: 1px solid var(--warning-color); }
+        .wc-action-btn.secondary { background: var(--bg-primary); color: var(--text-secondary); border: 1px solid var(--border-color); }
+        .wc-action-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .wc-toast {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.7); color: #fff; padding: 12px 20px; border-radius: 8px;
+            font-size: 14px; z-index: 300; display: none; text-align: center; max-width: 220px;
+        }
+        .wc-modal {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 400; display: none; align-items: center; justify-content: center;
+        }
+        .wc-modal.show { display: flex; }
+        .wc-modal .modal-box { width: 85%; max-width: 300px; background: var(--bg-primary); border-radius: 12px; overflow: hidden; }
+        .wc-modal .modal-title { font-size: 16px; font-weight: 600; text-align: center; padding: 20px 16px 12px; color: var(--text-primary); }
+        .wc-modal .modal-content { font-size: 14px; color: var(--text-secondary); text-align: center; padding: 0 16px 20px; line-height: 1.5; }
+        .wc-modal .modal-actions { display: flex; border-top: 1px solid var(--border-color); }
+        .wc-modal .modal-btn { flex: 1; height: 48px; border: none; background: none; cursor: pointer; font-size: 16px; font-family: inherit; }
+        .wc-modal .modal-btn.cancel { color: var(--text-secondary); border-right: 1px solid var(--border-color); }
+        .wc-modal .modal-btn.confirm { color: var(--primary-color); font-weight: 600; }
+        .wc-modal .modal-btn.danger { color: var(--error-color); font-weight: 600; }
+        .modal-tip { font-size: 13px; color: var(--text-tertiary); margin: 0 0 10px; line-height: 1.5; text-align: left; }
+        .reason-input {
+            width: 100%; box-sizing: border-box; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px;
+            font-size: 14px; font-family: inherit; color: var(--text-primary); background: var(--bg-secondary); resize: none; line-height: 1.5;
+        }
+        .reason-input:focus { outline: none; border-color: var(--primary-color); }
+        .reason-err { color: var(--error-color); font-size: 12px; margin-top: 6px; }
+
+        /* 原型导航内状态预览项（与主详情页一致） */
+        .status-switch-item {
+            padding: 8px 12px; font-size: 13px; color: var(--text-secondary);
+            border-radius: 4px; cursor: pointer; transition: all 0.2s; margin: 4px 0;
+        }
+        .status-switch-item:hover { background-color: var(--bg-secondary); }
+        .status-switch-item.active {
+            background-color: var(--status-primary-bg);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        .status-switch-divider {
+            height: 1px; background-color: var(--border-color, #E5E6EB);
+            margin: 8px 0; border-radius: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <div class="time">9:41</div>
+            <div class="icons">📶 🔋</div>
+        </div>
+
+        <div class="nav-bar">
+            <div class="back" onclick="history.back()">← 返回</div>
+            <div class="title centered">乙方退出 / 甲方重选</div>
+            <div class="actions"><div class="native-capsule" title="微信原生胶囊：由微信客户端渲染"><span class="nc-left">⋯</span><span class="nc-divider"></span><span class="nc-right">○</span></div></div>
+        </div>
+
+        <div class="page-content">
+            <div class="viewer-switch">
+                <div class="vs-btn active" id="vsReceiver" onclick="WCP.setViewer('receiver')">乙方视角</div>
+                <div class="vs-btn" id="vsSender" onclick="WCP.setViewer('sender')">甲方视角（工长）</div>
+            </div>
+
+            <div class="wc-banner confirmed" id="statusBanner">
+                <div class="wc-banner-text" id="bannerText"></div>
+                <div class="wc-banner-desc" id="bannerDesc"></div>
+            </div>
+
+            <div class="ctx-card" id="ctxCard">
+                <div class="card-title">🤝 合同与乙方信息</div>
+                <div id="ctxMeta"></div>
+                <div class="arch-note" id="ctxArch"></div>
+            </div>
+
+            <div id="flowView"></div>
+        </div>
+
+        <div class="wc-bottom-actions" id="bottomActions" style="display:none;"></div>
+
+        <div class="wc-toast" id="appToast"></div>
+
+        <!-- 申请退出原因弹窗 -->
+        <div class="wc-modal" id="exitReasonModal">
+            <div class="modal-box">
+                <div class="modal-title">申请退出合作</div>
+                <div class="modal-content">
+                    <p class="modal-tip">请说明退出原因，方便工长（甲方）了解并重新安排乙方。</p>
+                    <textarea id="exitReasonInput" class="reason-input" rows="4" maxlength="200" placeholder="例如：近期已有其他工作安排，无法承接本项目"></textarea>
+                    <div class="reason-err" id="exitReasonErr" style="display:none;"></div>
+                </div>
+                <div class="modal-actions">
+                    <button class="modal-btn cancel" onclick="WCP.closeExitReason()">取消</button>
+                    <button class="modal-btn danger" onclick="WCP.submitExitReason()">提交退出</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 甲方主动重选二次确认弹窗 -->
+        <div class="wc-modal" id="ownerReselectModal">
+            <div class="modal-box">
+                <div class="modal-title">重新选择乙方</div>
+                <div class="modal-content">
+                    <p class="modal-tip">确认重新选择乙方？原乙方「张水电」将收到「合作未达成」通知，本合同回到确认中状态。</p>
+                </div>
+                <div class="modal-actions">
+                    <button class="modal-btn cancel" onclick="WCP.closeOwnerReselect()">取消</button>
+                    <button class="modal-btn danger" onclick="WCP.confirmOwnerReselect()">确认重选</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-nav">
+        <div class="page-nav-title">原型导航</div>
+        <a href="home.html" class="page-nav-item">首页</a>
+        <a href="project-list.html" class="page-nav-item">项目列表</a>
+        <a href="project-detail.html" class="page-nav-item">项目详情</a>
+        <a href="contract-detail.html" class="page-nav-item">合同详情（合规版）</a>
+        <a href="message.html" class="page-nav-item">消息</a>
+        <a href="worker-contract-detail.html" class="page-nav-item">工人合同详情（新流程）</a>
+        <a href="worker-contract-exit.html" class="page-nav-item active">工人合同退出/重选</a>
+        <div style="margin-top:16px; padding-top:12px; border-top:1px solid #E8E8E8;">
+            <div class="page-nav-title">退出流程状态预览</div>
+            <div class="status-switch-item" data-status="confirmed" onclick="WCP.setExitStatus('confirmed')">已确认（基线）</div>
+            <div class="status-switch-item" data-status="pending" onclick="WCP.setExitStatus('pending')">退出待处理</div>
+            <div class="status-switch-item" data-status="exited" onclick="WCP.setExitStatus('exited')">乙方已退出（终态）</div>
+            <div class="status-switch-item" data-status="rejected" onclick="WCP.setExitStatus('rejected')">甲方驳回（回已确认）</div>
+            <div class="status-switch-item" data-status="reselect" onclick="WCP.setExitStatus('reselect')">甲方同意→重选乙方</div>
+            <div class="status-switch-item" data-status="replaced" onclick="WCP.setExitStatus('replaced')">甲方主动→乙方被替换（终态）</div>
+        </div>
+    </div>
+
+    <script src="contract-store.js"></script>
+    <script src="worker-contract-exit.js"></script>
+</body>
+</html>

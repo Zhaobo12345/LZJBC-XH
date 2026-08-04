@@ -351,16 +351,28 @@
         return id;
     }
 
-    // 演示用：若名单中尚无「已拒绝」受邀人，预置最后一名为已拒绝并附原因，
-    // 便于发起方视图展示拒绝原因；幂等——用户真实拒绝后（已存在 rejected）不再覆盖
+    // 演示用：确保名单中存在「已拒绝 + 原因」的受邀人，便于发起方视图展示拒绝原因。
+    // 幂等：仅为缺原因的已拒绝者补填、或在没有已拒绝者时预置最后一名；不覆盖用户真实填写的原因。
+    // 修复点：旧逻辑遇「已存在 rejected」即 return false，导致旧测试残留的「已拒绝但缺 rejectReason」
+    // 受邀人无法补回原因，使「已拒绝」行丢失原因。现改为先补填缺原因者，再按需预置。
     function presetRejectedDemo(invitations) {
         if (!invitations || invitations.length < 2) return false;
+        var changed = false;
+        var reasonText = '近期已有其他项目安排，无法承接本合同，敬请谅解。';
+        invitations.forEach(function (i) {
+            if (i.status === 'rejected' && !i.rejectReason) {
+                i.rejectReason = reasonText;
+                changed = true;
+            }
+        });
         var hasRejected = invitations.some(function (i) { return i.status === 'rejected'; });
-        if (hasRejected) return false;
-        var last = invitations[invitations.length - 1];
-        last.status = 'rejected';
-        last.rejectReason = '近期已有其他项目安排，无法承接本合同，敬请谅解。';
-        return true;
+        if (!hasRejected) {
+            var last = invitations[invitations.length - 1];
+            last.status = 'rejected';
+            last.rejectReason = reasonText;
+            changed = true;
+        }
+        return changed;
     }
 
     function createDemo(type) {
@@ -620,19 +632,10 @@
     }
 
     function renderArchNote() {
-        var c = state.contract;
+        // 已确认 / 已签约态：架构层级加入说明已在上方 banner（「已自动加入项目架构层级」）展示，
+        // 下方不再重复该行，故提示框始终隐藏。
         var arch = $('workerArchNote');
-        var show = (state.status === 'worker_confirmed_sender' || state.status === 'worker_confirmed_receiver' || state.status === 'worker_signed');
-        if (show && c.group) {
-            var pId = previewConfirmedId();
-            var p = pId ? (c.invitations.filter(function (i) { return i.userId === pId; })[0] || {}) : {};
-            arch.style.display = 'block';
-            // 已确认 / 已签约态：乙方姓名已在元信息区展示，banner 也已说明「已自动加入项目架构层级」，
-            // 此处去掉与上方描述重复的整句，仅作确认态提示
-            arch.innerHTML = '乙方：' + escapeHtml(p.name || '—');
-        } else {
-            arch.style.display = 'none';
-        }
+        if (arch) arch.style.display = 'none';
     }
 
     // 受邀方终态（抢单失败 / 已拒绝）：轻量「邀约已结束」视图
@@ -680,15 +683,25 @@
 
     function renderContentSection() {
         var c = state.contract;
+        // 合同正文：对齐「拟定中」样式——form-label-row（合同正文 + 查看全文）+ 截断预览框（点击查看全文弹全文）
+        var preview = '<p>根据《中华人民共和国民法典》及相关法律法规的规定，甲乙双方本着平等、自愿、公平、诚实信用的原则，就' + escapeHtml(c.typeName) + '事宜协商一致，订立本合同。</p>' +
+            '<p class="text-title">一、工程概况</p>' +
+            '<p>工程名称：' + escapeHtml(c.name) + '</p>' +
+            '<p>工程地点：XX市XX区XX路XX号</p>' +
+            '<p>工程内容：' + escapeHtml(getContentIntro()) + '</p>';
+        var extra = getExtra();
+        var extraHtml = extra ? escapeHtml(extra).replace(/\n/g, '<br>') : '<span style="color:var(--text-tertiary);">暂无补充条款</span>';
         var html = '<div class="card">' +
-            '<div class="card-title"><span>📄 合同正文</span></div>' +
-            '<div class="text-content">根据《中华人民共和国民法典》及相关法律法规的规定，甲乙双方本着平等、自愿、公平、诚实信用的原则，就' + escapeHtml(c.typeName) + '事宜协商一致，订立本合同。<br><br>' +
-            '一、工程概况<br>工程名称：' + escapeHtml(c.name) + '<br>工程地点：XX市XX区XX路XX号<br>' + escapeHtml(getContentIntro()) + '<br><br>' +
-            '二、双方权利义务<br>甲方应按约定支付工程款；乙方应按标准施工，并自确认加入后自动归入项目架构层级「' + escapeHtml(c.group) + '」。' +
-            '</div></div>' +
-            '<div class="card">' +
-            '<div class="card-title"><span>📝 补充条款</span></div>' +
-            '<div class="text-content">' + escapeHtml(getExtra()).replace(/\n/g, '<br>') + '</div></div>';
+            '<div class="form-group">' +
+                '<div class="form-label-row"><label class="form-label">合同正文</label>' +
+                '<span class="view-full-link" onclick="WCP.showFullText()">查看全文 ></span></div>' +
+                '<div class="contract-text-preview">' + preview + '</div>' +
+            '</div>' +
+            '<div class="form-group" style="margin-top:16px;">' +
+                '<div class="form-label-row"><label class="form-label">补充条款</label></div>' +
+                '<div class="text-content">' + extraHtml + '</div>' +
+            '</div>' +
+            '</div>';
         $('contentSection').innerHTML = html;
     }
 
@@ -1327,6 +1340,15 @@
         icon.textContent = hidden ? '▼' : '▶';
     }
 
+    /* 右侧原型导航整块 收起 / 展开（不影响内部 status-group 各自展开态） */
+    function togglePageNav() {
+        var nav = document.querySelector('.page-nav');
+        var btn = $('pageNavToggle');
+        if (!nav) return;
+        var collapsed = nav.classList.toggle('collapsed');
+        if (btn) btn.classList.toggle('collapsed', collapsed);
+    }
+
     function toggleMoreOps() {
         var p = $('moreOpsPanel');
         var b = $('moreOpsBtn');
@@ -1514,6 +1536,7 @@
         init: init,
         updateStatus: updateStatus,
         toggleStatusGroup: toggleStatusGroup,
+        togglePageNav: togglePageNav,
         toggleEditPanel: toggleEditPanel,
         filterEdit: filterEdit,
         saveAndResubmit: saveAndResubmit,

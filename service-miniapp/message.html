@@ -1438,10 +1438,10 @@
             }
         });
 
-        // 合同邀约示例数据：一次性重置为 6 条，覆盖 查看邀约 / 已撤回 / 已拒绝 / 抢单失败 四类效果
+        // 合同邀约示例数据：一次性重置为 6 条，覆盖 查看邀约 / 已撤回 / 已拒绝 / 抢单失败 / 已确认 五类效果
         function ensureContractInviteDemo() {
             if (typeof ContractStore === 'undefined' || !ContractStore.getMessages) return;
-            var KEY = 'lzj_msg_invite_demo_v1';
+            var KEY = 'lzj_msg_invite_demo_v3';
             if (localStorage.getItem(KEY)) return;
 
             var ROLE_BY_TYPE = {
@@ -1465,7 +1465,23 @@
                 { id: 'demo-xiaolingong-example', type: 'xiaolingong', typeName: '小零工服务合同', group: '零星工程', name: '后期安装小零工合同', amount: 2200, invited: ['m-xiaolingong', 'm-xiaolingong-2', 'm-xiaolingong-3'] }
             ];
 
-            // 1) 确保 backing 示例合同存在（点开可正常跳转，且多人演示一致）
+            // 每条示例消息期望对应的「合同底层状态」与「被邀请人各自状态」，
+            // 保证点开「查看邀约」后 worker-contract-detail 计算的视角与消息卡片一致。
+            // - accepted : 该用户已确认 → 合同已确认
+            // - lost     : 他人已确认、该用户落败 → 合同已确认（确认人非本用户）
+            // - rejected : 该用户已拒绝 → 合同确认中（该人 rejected）
+            // - withdrawn: 发起方撤回 → 回到拟定中（合同草稿）
+            // - pending  : 该用户待响应 → 合同确认中（该人 pending）
+            var DEMO_STATES = {
+                'demo-xiaolingong-example': { contractStatus: 'worker_confirmed', confirmedUser: 'm-xiaolingong' },
+                'demo-youqi-example':       { contractStatus: 'worker_confirmed', confirmedUser: 'm-youqi-2' },
+                'demo-niwa-example':        { contractStatus: 'worker_inviting', rejectedUser: 'm-niwa' },
+                'demo-demolition-example':  { contractStatus: 'worker_draft' },
+                'demo-muzuo-example':       { contractStatus: 'worker_inviting' },
+                'demo-shuidian-example':    { contractStatus: 'worker_inviting' }
+            };
+
+            // 1) 确保 backing 示例合同存在，并强制对齐其状态 / 邀请人状态（与消息卡片一致）
             DEMO_CONTRACTS.forEach(function (d) {
                 if (!ContractStore.getContract(d.id)) {
                     var invited = d.invited.map(function (uid) {
@@ -1477,6 +1493,32 @@
                         amount: d.amount, invited: invited
                     });
                 }
+                var c = ContractStore.getContract(d.id);
+                var st = DEMO_STATES[d.id] || { contractStatus: 'worker_inviting' };
+                c.status = st.contractStatus;
+                c.invitations = (c.invitations || []).map(function (inv) {
+                    var ni = {};
+                    for (var k in inv) { if (inv.hasOwnProperty(k)) ni[k] = inv[k]; }
+                    if (st.confirmedUser) {
+                        ni.status = (inv.userId === st.confirmedUser) ? 'confirmed' : 'lost';
+                    } else if (st.rejectedUser) {
+                        ni.status = (inv.userId === st.rejectedUser) ? 'rejected' : 'pending';
+                    } else {
+                        ni.status = 'pending';
+                    }
+                    return ni;
+                });
+                if (st.confirmedUser) {
+                    var conf = (c.invitations || []).filter(function (i) { return i.userId === st.confirmedUser; })[0];
+                    c.partyB = st.confirmedUser;
+                    c.partyBName = conf ? conf.name : '';
+                    c.joinedArchitecture = d.group;
+                } else {
+                    c.partyB = '';
+                    c.partyBName = '';
+                    c.joinedArchitecture = '';
+                }
+                ContractStore.saveContract(c);
             });
 
             // 2) 清空现有合同邀约消息（去除历史测试产生的多余数据）
