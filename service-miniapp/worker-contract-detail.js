@@ -75,7 +75,10 @@
         worker_confirmed_sender: {
             text: '已确认', bannerClass: 'confirmed',
             desc: '乙方已确认，已自动加入项目架构层级。请上传已签署的纸质合同扫描件 / 照片，上传后合同正式生效。',
-            actions: [{ text: '上传签约文件', type: 'primary', action: 'upload' }]
+            actions: [
+                { text: '重新选择乙方', type: 'secondary', action: 'worker_reselect' },
+                { text: '上传签约文件', type: 'primary', action: 'upload_sign' }
+            ]
         },
         worker_confirmed_receiver: {
             text: '已确认', bannerClass: 'confirmed',
@@ -95,17 +98,53 @@
         worker_draft_initial: {
             text: '拟定中', bannerClass: 'draft',
             desc: '合同处于拟定中。可直接修改合同名称、合同金额，并选择意向乙方（仅各工种，1-3 人）后提交邀请。',
-            actions: [{ text: '提交邀请', type: 'success', action: 'worker_resubmit' }]
+            actions: [{ text: '提交并邀请乙方', type: 'success', action: 'worker_resubmit' }]
         },
         worker_draft: {
             text: '拟定中', bannerClass: 'draft',
             desc: '合同已撤回至拟定中。可直接修改合同名称、合同金额与意向乙方（仅各工种，1-3 人）后提交邀请。',
-            actions: [{ text: '提交邀请', type: 'success', action: 'worker_resubmit' }]
+            actions: [{ text: '提交并邀请乙方', type: 'success', action: 'worker_resubmit' }]
         },
         worker_signed: {
             text: '已签约', bannerClass: 'signed',
-            desc: '合同已正式生效（乙方已上传签约文件并自动加入项目架构层级）。',
-            actions: []
+            desc: '合同已正式生效。如需调整工程内容或金额，可发起合同变更（需对方确认后生效，无需平台审核）。',
+            actions: [{ text: '发起变更', type: 'primary', action: 'start_change' }]
+        },
+
+        // ============== 变更阶段（工人合同无需平台审核；对齐「合同详情（合规版）」变更流程去平台化版本，预览用） ==============
+        changing: {
+            text: '变更中', bannerClass: 'changing',
+            desc: '变更申请已发起，等待对方确认（阶段任务已暂停流转）。',
+            actions: [{ text: '撤回变更', type: 'warning', action: 'withdraw_change' }]
+        },
+        change_confirming: {
+            text: '待确认变更', bannerClass: 'change-confirming',
+            desc: '对方发起变更申请，请确认或驳回（阶段任务已暂停流转）。',
+            actions: [
+                { text: '驳回变更', type: 'secondary', action: 'reject_change' },
+                { text: '确认变更', type: 'primary', action: 'confirm_change' }
+            ]
+        },
+        change_confirming_sender: {
+            text: '变更确认中', bannerClass: 'confirming',
+            desc: '对方已确认变更，请上传变更签约文件（阶段任务已暂停流转）。',
+            actions: [{ text: '撤回变更', type: 'warning', action: 'withdraw_change' }]
+        },
+        change_signing_wait: {
+            text: '变更签约中', bannerClass: 'confirmed',
+            desc: '变更已确认，请上传线下已签约的合同变更文件，上传后变更正式生效（生成 V2 版本）。',
+            actions: [{ text: '上传变更签约文件', type: 'primary', action: 'upload_change_sign' }]
+        },
+        // 变更阶段分支：待确认方（乙方）驳回变更后的独立页面
+        change_rejected: {
+            text: '变更已驳回', bannerClass: 'rejected',
+            desc: '对方（乙方）已驳回本次变更申请，合同保持原已签约状态。可重新发起变更。',
+            actions: [
+                { text: '重新发起变更', type: 'primary', action: 'start_change' },
+                { text: '返回已签约', type: 'secondary', action: 'change_rejected_back' }
+            ],
+            showRejectReason: true,
+            rejectReason: '现场实际情况与变更内容不符，暂不接受该变更方案，请与工长（甲方）沟通后重新发起。'
         }
     };
 
@@ -113,7 +152,12 @@
         worker_withdraw: { title: '撤回合同邀约', message: '确定要撤回确认吗？撤回后合同退回拟定中，可就地修改意向乙方后重新提交邀约。' },
         worker_reject: { title: '拒绝邀请', message: '确定要拒绝此合同邀约吗？拒绝后您不会成为本合同乙方。' },
         worker_confirm: { title: '确认加入合同', message: '确定要确认加入此合同吗？确认后您将成为本合同乙方，并自动加入项目架构层级。' },
-        worker_resubmit: { title: '提交邀请', message: '确定要提交当前合同信息与意向乙方名单吗？将向所选意向乙方（仅各工种）发送合同邀约。' }
+        worker_resubmit: { title: '提交并邀请乙方', message: '确定要提交当前合同信息与意向乙方名单吗？将向所选意向乙方（仅各工种）发送合同邀约。' },
+        // 变更阶段动作（工人合同：无平台审核，对方确认后即进入签约）
+        withdraw_change: { title: '撤回变更', message: '确定要撤回变更申请吗？撤回后合同恢复已签约状态，阶段任务恢复流转。' },
+        reject_change: { title: '驳回变更', message: '确定要驳回该变更申请吗？驳回后合同保持原已签约状态。' },
+        confirm_change: { title: '确认变更', message: '确认后双方即达成变更，需上传变更签约文件方可生效，确定继续吗？' },
+        change_rejected_back: { title: '返回已签约', message: '确定返回合同已签约状态吗？变更申请将被清除，合同恢复为原始已签约内容。' }
     };
 
     var state = {
@@ -142,6 +186,9 @@
 
     // 默认示例合同（无 id 进入时直接展示）
     var DEFAULT_DEMO_TYPE = 'shuidian';
+
+    // 演示默认项目地址（受邀方视角元信息「项目地址」展示用）
+    var DEMO_PROJECT_ADDRESS = 'XX市XX区XX路XX号 · 阳光里小区 8 栋 2 单元 1101 室';
 
     // 合同内容 / 阶段任务 示例模板（按合同类型），对齐合规版展示
     var STAGE_TEMPLATES = {
@@ -269,7 +316,9 @@
         if (!state.contract) { renderNotFound(); return; }
         $('notFound').style.display = 'none';
         $('mainView').style.display = 'block';
-        updateStatus(computeStatus());
+        // 支持「发起变更」页提交后回跳预览（如 preview=changing），否则按合同数据推导状态
+        var preview = getParam('preview');
+        updateStatus(preview ? preview : computeStatus());
         bindModalDismiss();
     }
 
@@ -308,6 +357,11 @@
                 existing.partyAPhone = '13800138000';
                 needSave = true;
             }
+            // 旧数据可能缺少项目地址，补演示默认地址（受邀方视角展示用）
+            if (!existing.projectAddress) {
+                existing.projectAddress = DEMO_PROJECT_ADDRESS;
+                needSave = true;
+            }
             // 老演示默认仅 1 名受邀人，补充为 DEMO_TYPES 默认多人，便于演示多人抢单效果
             if (existing.invitations && existing.invitations.length === 1) {
                 existing.invitations = d.invited.map(function (uid) {
@@ -342,7 +396,7 @@
         });
         global.ContractStore.createContract({
             id: id, name: d.name, type: d.type, typeName: d.typeName,
-            group: d.group, partyA: 'm-owner', partyAName: '陈庄', partyAPhone: '13800138000', inviterName: '陈庄', inviterRole: '工长',
+            group: d.group, partyA: 'm-owner', partyAName: '陈庄', partyAPhone: '13800138000', projectAddress: DEMO_PROJECT_ADDRESS, inviterName: '陈庄', inviterRole: '工长',
             amount: d.amount, invited: invited
         });
         // 演示：预置一名「已拒绝」并附原因的受邀人，便于发起方视图展示拒绝原因
@@ -385,7 +439,7 @@
         });
         global.ContractStore.createContract({
             id: id, name: d.name, type: d.type, typeName: d.typeName,
-            group: d.group, partyA: 'm-owner', partyAName: '陈庄', partyAPhone: '13800138000', inviterName: '陈庄', inviterRole: '工长',
+            group: d.group, partyA: 'm-owner', partyAName: '陈庄', partyAPhone: '13800138000', projectAddress: DEMO_PROJECT_ADDRESS, inviterName: '陈庄', inviterRole: '工长',
             amount: d.amount, invited: invited
         });
         global.location.href = 'worker-contract-detail.html?id=' + encodeURIComponent(id) + '&viewer=sender';
@@ -407,6 +461,12 @@
         if (bcModal) {
             bcModal.addEventListener('click', function (e) {
                 if (e.target === bcModal) closeBusinessCard();
+            });
+        }
+        var reselectModal = $('reselectConfirmModal');
+        if (reselectModal) {
+            reselectModal.addEventListener('click', function (e) {
+                if (e.target === reselectModal) closeReselectConfirm();
             });
         }
     }
@@ -470,12 +530,38 @@
             return inv.status === 'rejected' ? 'rejected' : 'lost';
         }
         if (st === 'worker_signed') return inv.userId === firstId ? 'confirmed' : (inv.status === 'rejected' ? 'rejected' : 'lost');
+        // 变更阶段各状态：变更仅乙方需确认，其他人仅为历史邀约记录（不再「待确认」）。
+        // 乙方状态按变更逻辑随状态演进：
+        //   待确认变更 change_confirming（受邀方）·变更中 changing = 待确认（变更）；
+        //   确认中/签约中 change_confirming_sender·change_signing_wait = 已确认（变更）；已驳回 change_rejected = 已驳回（变更）
+        if (st === 'change_confirming' || st === 'changing') {
+            if (inv.userId === firstId) return 'change_pending';
+            return inv.status === 'rejected' ? 'rejected' : 'lost';
+        }
+        if (st === 'change_confirming_sender' || st === 'change_signing_wait') {
+            if (inv.userId === firstId) return 'change_confirmed';
+            return inv.status === 'rejected' ? 'rejected' : 'lost';
+        }
+        if (st === 'change_rejected') {
+            if (inv.userId === firstId) return 'change_rejected';
+            return inv.status === 'rejected' ? 'rejected' : 'lost';
+        }
         return inv.status;
     }
 
     // 右侧导航「状态切换」直接预览任意状态（按状态推导视角）
+    function updateStatusNavActive(status) {
+        // 同步右侧原型导航「合同状态切换（工人合同）」当前选中项高亮
+        // 仅匹配带 data-status 的状态项，不影响「演示数据」「接单体验 E」等跳转/按钮项
+        var items = document.querySelectorAll('.status-switch-item[data-status]');
+        for (var i = 0; i < items.length; i++) {
+            items[i].classList.toggle('active', items[i].getAttribute('data-status') === status);
+        }
+    }
+
     function updateStatus(status) {
         state.status = status;
+        updateStatusNavActive(status); // 同步导航状态项选中高亮
         var cfg = STATUS_CONFIG[status] || STATUS_CONFIG.worker_draft;
 
         // 视角跟随状态：受邀方状态需有有效 asUserId
@@ -487,6 +573,17 @@
         } else if (status.indexOf('_sender') > -1) {
             state.viewer = 'sender';
             state.asUserId = '';
+        } else if (status.indexOf('change') === 0) {
+            // 变更阶段：change_confirming（待确认变更·受邀方）与以 _receiver 结尾者为待确认方（乙方）视角，其余按发起方视角预览
+            if (status === 'change_confirming' || status.indexOf('_receiver') > -1) {
+                state.viewer = 'receiver';
+                var cFirstId = (state.contract.invitations[0] || {}).userId || '';
+                var cValid = state.contract.invitations.some(function (i) { return i.userId === state.asUserId; });
+                if (!cValid) state.asUserId = cFirstId;
+            } else {
+                state.viewer = 'sender';
+                state.asUserId = '';
+            }
         } else if (status === 'worker_draft' || status === 'worker_draft_initial') {
             state.viewer = 'sender';
             state.asUserId = '';
@@ -495,6 +592,17 @@
         $('bannerText').textContent = cfg.text;
         $('bannerDesc').textContent = cfg.desc;
         $('statusBanner').className = 'wc-banner ' + (cfg.bannerClass || 'draft');
+
+        // 变更已驳回（乙方）：展示乙方驳回原因
+        var crr = $('changeRejectReason');
+        if (crr) {
+            if (cfg.showRejectReason && cfg.rejectReason) {
+                crr.innerHTML = '<span class="crr-label">乙方驳回原因</span>' + escapeHtml(cfg.rejectReason);
+                crr.style.display = 'block';
+            } else {
+                crr.style.display = 'none';
+            }
+        }
 
         // 受邀方终态（抢单失败 / 已拒绝）：渲染轻量「邀约已结束」视图，隐藏完整详情，不影响发起方视图
         var isReceiverEnded = (status === 'worker_lost_receiver' || status === 'worker_rejected_receiver');
@@ -525,8 +633,9 @@
         renderLists(status);
 
         var isDraft = (status === 'worker_draft' || status === 'worker_draft_initial');
-        // 受邀方视角不展示「其他被邀请人及确认状态」，仅发起方可见完整名单
-        var showInviteList = !isDraft && state.viewer !== 'receiver';
+        // 受邀方视角不展示「其他被邀请人及确认状态」，仅发起方可见完整名单；
+        // 但待确认变更（change_confirming·受邀方）需展示「乙方（我）待确认（变更）」行，故放开名单显示
+        var showInviteList = !isDraft && (state.viewer !== 'receiver' || status === 'change_confirming');
         $('inviteListBox').style.display = showInviteList ? 'block' : 'none';
         $('inviteEditPanel').style.display = isDraft ? 'block' : 'none';
         if (isDraft) initEditPanel();
@@ -537,8 +646,14 @@
         if (dw) dw.style.display = isDraft ? 'block' : 'none';
         if (isDraft) renderDraftContent();
 
+        // 重新选择乙方（拟定中·撤回后）：存在被替换的原乙方时，横幅提示 + 历史卡片均以数据驱动展示（直接导航进入也生效）
+        if (isDraft && state.contract.replacedPartyB && state.contract.replacedPartyB.name) {
+            applyReselectBanner();
+        }
+
         renderArchNote();
         renderActions(cfg);
+        renderChangeHighlight();   // 变更阶段：在已签约内容基础上高亮标记变更点
 
         renderContentSection();
         renderStagesSection();
@@ -549,10 +664,24 @@
         var c = state.contract;
         var html = '';
         var isDraft = (state.status === 'worker_draft' || state.status === 'worker_draft_initial');
+        var isReceiver = (state.viewer === 'receiver');
         if (!isDraft) html += metaRow('合同名称', c.name);
-        html += metaRow('合同类型', c.typeName);
-        html += metaRow('所属架构层级', c.group || '—');
-        if (!isDraft && c.amount) html += metaRow('合同金额', c.amount + ' 元');
+        // 受邀方视角：取消「合同类型」「所属架构层级」，改为补充「项目地址」（见下方）
+        if (!isReceiver) {
+            html += metaRow('合同类型', c.typeName);
+            html += metaRow('所属架构层级', c.group || '—');
+        }
+        if (!isDraft && c.amount) {
+            // 变更阶段：合同金额以「旧值 → 新值」高亮标记变更点（仍为已签约内容框架）
+            var cpAmt = (isChangeStage() ? getActiveChangeProposal() : null);
+            if (cpAmt && cpAmt.amountNew !== cpAmt.amountOld) {
+                html += metaRowHighlight('合同金额', '¥' + fmtMoney(cpAmt.amountOld) + ' 元', '¥' + fmtMoney(cpAmt.amountNew) + ' 元');
+            } else {
+                html += metaRow('合同金额', c.amount + ' 元');
+            }
+        }
+        // 项目地址：受邀方视角补充展示（发起方/草稿保持原样，不增删）
+        if (isReceiver && c.projectAddress) html += metaRow('项目地址', c.projectAddress);
         if (c.partyAName) {
             var paPhone = c.partyAPhone || '13800138000';
             var paVal = '<span class="meta-party-a">' + escapeHtml(c.partyAName) + '（工长）</span>' +
@@ -587,6 +716,10 @@
         var order = ['draft', 'inviting', 'confirmed', 'signed'];
         var current = 'inviting';
         if (status === 'worker_draft' || status === 'worker_draft_initial') current = 'draft';
+        // 变更阶段：合同已签约，阶段任务按变更流程流转，步骤条整体置为已签约（变更以 banner 体现）
+        // 含「变更中」(changing) 与 change_* 全部变更态（变更进行中/确认中/签约中/已驳回），均与变更状态不冲突
+        // 该分支须置于 confirmed 判断之前，避免 change_* 中某些 key 因含 confirmed 子串被误判
+        else if (status.indexOf('change') === 0 || status === 'changing') current = 'signed';
         else if (status.indexOf('confirmed') > -1) current = 'confirmed';
         else if (status === 'worker_signed') current = 'signed';
         var curIdx = order.indexOf(current);
@@ -609,24 +742,42 @@
         var box = $('inviteListBox');
         box.innerHTML = '';
         var c = state.contract;
+        var firstId = (c.invitations[0] || {}).userId || '';
+        var isChangeView = (status === 'changing' || status === 'change_confirming' || status === 'change_confirming_sender' || status === 'change_signing_wait' || status === 'change_rejected');
+        var isReceiverChangeView = isChangeView && state.viewer === 'receiver';
         c.invitations.forEach(function (inv) {
+            // 受邀方变更确认态（change_confirming）：仅展示乙方（即受邀方本人）待确认行，不暴露其他受邀人
+            if (isReceiverChangeView && inv.userId !== firstId) return;
             var me = (inv.userId === state.asUserId);
             var ds = inviteDisplayStatus(inv);
             var stText = '待确认', stCls = 'pending';
             if (ds === 'confirmed') { stText = '已确认（乙方）'; stCls = 'confirmed'; }
             else if (ds === 'rejected') { stText = '已拒绝'; stCls = 'rejected'; }
             else if (ds === 'lost') { stText = '抢单失败'; stCls = 'lost'; }
+            else if (ds === 'change_pending') { stText = '待确认（变更）'; stCls = 'change-pending'; }
+            else if (ds === 'change_confirmed') { stText = '已确认（变更）'; stCls = 'change-confirmed'; }
+            else if (ds === 'change_rejected') { stText = '已驳回（变更）'; stCls = 'change-rejected'; }
             var reasonSub = '';
             if (ds === 'rejected' && inv.rejectReason && !me) {
                 reasonSub = '<div class="invite-reason">原因：' + escapeHtml(inv.rejectReason) + '</div>';
             }
+            var isPartyB = (inv.userId === firstId);
+            // 变更/已确认(发起方)/已签约：乙方已确定，其他被邀请人作为历史邀约记录弱化展示（浅色），
+            // 与变更阶段未选中邀请人效果一致（opacity 0.55 + muted 头像 + 灰色状态徽标）。
+            var isRecord = (isChangeView || status === 'worker_confirmed_sender' || status === 'worker_signed') && !isPartyB;
+            var partyBTag = isPartyB ? '<span class="invite-partyb-tag">乙方</span>' : '';
+            var recordTag = isRecord ? '<span class="invite-record-tag">邀约记录</span>' : '';
             var row = document.createElement('div');
-            row.className = 'invite-row' + (me ? ' is-me' : '');
+            row.className = 'invite-row' + (me ? ' is-me' : '') + (isPartyB && !isRecord ? ' is-partyb' : '') + (isRecord ? ' is-record' : '');
+            // 乙方行以「乙方 {人员}」呈现（乙方标签在前）；记录行附「邀约记录」标识
+            var nameHtml = isPartyB
+                ? (partyBTag + escapeHtml(inv.name) + (me ? '（我）' : ''))
+                : (escapeHtml(inv.name) + (me ? '（我）' : '') + recordTag);
             row.innerHTML =
-                '<div class="invite-avatar">' + escapeHtml(inv.name ? inv.name.charAt(0) : '?') + '</div>' +
-                '<div class="invite-info"><div class="invite-name">' + escapeHtml(inv.name) + (me ? '（我）' : '') + '</div>' +
+                '<div class="invite-avatar' + (isRecord ? ' muted' : '') + '">' + escapeHtml(inv.name ? inv.name.charAt(0) : '?') + '</div>' +
+                '<div class="invite-info"><div class="invite-name">' + nameHtml + '</div>' +
                 '<div class="invite-role">' + escapeHtml(inv.role) + '</div>' + reasonSub + '</div>' +
-                '<div class="invite-status ' + stCls + '">' + stText + '</div>';
+                '<div class="invite-status ' + stCls + (isRecord ? ' record' : '') + '">' + stText + '</div>';
             box.appendChild(row);
         });
     }
@@ -683,26 +834,70 @@
 
     function renderContentSection() {
         var c = state.contract;
+        var isReceiver = (state.viewer === 'receiver');
         // 合同正文：对齐「拟定中」样式——form-label-row（合同正文 + 查看全文）+ 截断预览框（点击查看全文弹全文）
-        var preview = '<p>根据《中华人民共和国民法典》及相关法律法规的规定，甲乙双方本着平等、自愿、公平、诚实信用的原则，就' + escapeHtml(c.typeName) + '事宜协商一致，订立本合同。</p>' +
-            '<p class="text-title">一、工程概况</p>' +
-            '<p>工程名称：' + escapeHtml(c.name) + '</p>' +
-            '<p>工程地点：XX市XX区XX路XX号</p>' +
-            '<p>工程内容：' + escapeHtml(getContentIntro()) + '</p>';
+        var preview;
+        if (isReceiver) {
+            // 受邀方视角：合同正文仅展示关键条款（甲方责权 / 乙方责权），其余内容点击「查看全部正文」查看
+            preview = receiverKeyClausesHTML();
+        } else {
+            preview = '<p>根据《中华人民共和国民法典》及相关法律法规的规定，甲乙双方本着平等、自愿、公平、诚实信用的原则，就' + escapeHtml(c.typeName) + '事宜协商一致，订立本合同。</p>' +
+                '<p class="text-title">一、工程概况</p>' +
+                '<p>工程名称：' + escapeHtml(c.name) + '</p>' +
+                '<p>工程地点：XX市XX区XX路XX号</p>' +
+                '<p>工程内容：' + escapeHtml(getContentIntro()) + '</p>';
+        }
+        var viewFullTextLabel = isReceiver ? '查看全部正文 >' : '查看全文 >';
         var extra = getExtra();
-        var extraHtml = extra ? escapeHtml(extra).replace(/\n/g, '<br>') : '<span style="color:var(--text-tertiary);">暂无补充条款</span>';
+        // 变更阶段：补充条款若被修改，以高亮标记「变更后」内容
+        var cpExtra = (isChangeStage() ? getActiveChangeProposal() : null);
+        var extraChanged = cpExtra && cpExtra.extraNew && cpExtra.extraNew !== cpExtra.extraOld;
+        var extraHtml;
+        if (extraChanged) {
+            extraHtml = '<span class="text-content-change">' + escapeHtml(cpExtra.extraNew).replace(/\n/g, '<br>') + '</span>' +
+                '<span class="text-content-change-tag">变更后</span>';
+        } else if (extra) {
+            extraHtml = escapeHtml(extra).replace(/\n/g, '<br>');
+        } else {
+            extraHtml = '<span style="color:var(--text-tertiary);">暂无补充条款</span>';
+        }
+        var stageChangeBlock = '';
+        if (cpExtra && cpExtra.stageNote) {
+            stageChangeBlock = '<div class="form-group" style="margin-top:16px;">' +
+                '<div class="form-label-row"><label class="form-label">阶段任务变更</label>' +
+                '<span class="text-content-change-tag">变更后</span></div>' +
+                '<div class="text-content"><span class="text-content-change">' + escapeHtml(cpExtra.stageNote) + '</span></div>' +
+            '</div>';
+        }
         var html = '<div class="card">' +
             '<div class="form-group">' +
                 '<div class="form-label-row"><label class="form-label">合同正文</label>' +
-                '<span class="view-full-link" onclick="WCP.showFullText()">查看全文 ></span></div>' +
+                '<span class="view-full-link" onclick="WCP.showFullText()">' + viewFullTextLabel + '</span></div>' +
                 '<div class="contract-text-preview">' + preview + '</div>' +
             '</div>' +
             '<div class="form-group" style="margin-top:16px;">' +
-                '<div class="form-label-row"><label class="form-label">补充条款</label></div>' +
+                '<div class="form-label-row"><label class="form-label">补充条款</label>' +
+                (extraChanged ? '<span class="text-content-change-tag">变更后</span>' : '') + '</div>' +
                 '<div class="text-content">' + extraHtml + '</div>' +
             '</div>' +
+            stageChangeBlock +
             '</div>';
         $('contentSection').innerHTML = html;
+    }
+
+    // 受邀方视角合同正文预览：仅展示关键条款（甲方责权 / 乙方责权）
+    function receiverKeyClausesHTML() {
+        return '<div class="clause-block"><div class="clause-title">一、甲方责权</div><ol class="clause-list">' +
+            '<li>甲方有权按照相关工艺及质量标准监督、指导乙方工作，并根据工作过程及完成情况给予奖励、处罚。</li>' +
+            '<li>甲方应按照工程施工要求在乙方施工前进行相关培训及交底，包含但不限于《现场施工管理规定》、《施工工艺及验收标准》、图纸交底等。</li>' +
+            '<li>甲方有责任按时为乙方提供满足工作需要的场地、材料、工具、安全措施等。</li>' +
+            '</ol></div>' +
+            '<div class="clause-block"><div class="clause-title">二、乙方责权</div><ol class="clause-list">' +
+            '<li>乙方有权在约定的支付节点获得报酬。</li>' +
+            '<li>当遇到现场、图纸冲突时，乙方应第一时间告知甲方进行协调。</li>' +
+            '<li>乙方在工作中应自觉保护其他工种的劳动成果，不得擅自破坏。</li>' +
+            '<li>乙方不得擅自把甲方提供的工具、材料拿出场外或使用到其他工地。</li>' +
+            '</ol></div>';
     }
 
     function renderStagesSection() {
@@ -774,6 +969,15 @@
     function onSignFilePicked(e) {
         var f = e.target && e.target.files && e.target.files[0];
         if (!f) return;
+        // 注：「变更签约文件上传」已改为跳转独立上传页（worker-change-sign-upload.html），上传成功后由该页跳回「已签约」；
+        // 此处仅处理「已确认 → 上传签约文件」的常规签约（无 changeProposal），上传后跳回「已签约」
+        if (state.contract && state.contract.changeProposal) {
+            applyChangeProposal();
+            showToast('变更签约文件已上传，合同变更已生效（V2）');
+            updateStatus('worker_signed');
+            e.target.value = '';
+            return;
+        }
         if (global.ContractStore && state.workerId) {
             global.ContractStore.markSigned(state.workerId);
             state.contract = global.ContractStore.getContract(state.workerId);
@@ -783,12 +987,51 @@
         e.target.value = '';
     }
 
+    // 变更生效（V2）：将发起变更页提交的提案（金额/补充条款/阶段任务/附件）落到合同，并写入版本记录
+    function applyChangeProposal() {
+        var cp = state.contract.changeProposal;
+        if (!cp) return;
+        var patch = {};
+        if (typeof cp.amountNew === 'number') { state.contract.amount = cp.amountNew; patch.amount = cp.amountNew; }
+        if (typeof cp.extraNew === 'string') { state.contract.extraClauses = cp.extraNew; patch.extraClauses = cp.extraNew; }
+        if (cp.stagesNew) { state.contract.stages = cp.stagesNew; patch.stages = cp.stagesNew; }
+        if (cp.attachmentsNew) { state.contract.attachments = cp.attachmentsNew; patch.attachments = cp.attachmentsNew; }
+        // 版本记录（历史版本）：标记 V2
+        state.contract.versionLog = state.contract.versionLog || [];
+        var vDesc = '变更生效';
+        if (cp.amountNew !== cp.amountOld) vDesc += '：金额 ¥' + fmtMoney(cp.amountOld) + ' → ¥' + fmtMoney(cp.amountNew);
+        if (cp.reason) vDesc += (vDesc === '变更生效' ? '：' : '；') + cp.reason;
+        state.contract.versionLog.push({
+            name: '合同变更 V2',
+            desc: vDesc,
+            date: nowLabel(),
+            by: state.contract.partyAName || '陈庄'
+        });
+        patch.versionLog = state.contract.versionLog;
+        // 清除提案（恢复为 clean 已签约内容）
+        state.contract.changeProposal = '';
+        patch.changeProposal = '';
+        pushChangeLog('变更生效（V2）', '合同变更已正式生效，阶段任务按变更后内容继续流转', 'primary');
+        if (global.ContractStore && state.workerId) {
+            global.ContractStore.patchContract(state.workerId, patch);
+        }
+    }
+
     // ============== 底部操作 ==============
     function renderActions(cfg) {
         var box = $('bottomActions');
         box.innerHTML = '';
         box.style.display = 'flex';
-        (cfg.actions || []).forEach(function (a) {
+        var actions = cfg.actions || [];
+        // 重新选择乙方（拟定中·撤回后）：存在被替换的原乙方时，底部操作显示为「恢复原乙方 / 提交并邀请乙方」
+        // 数据驱动（replacedPartyB 存在即代表处于重选草稿态），跨导航进入也稳定显示
+        if (state.contract.replacedPartyB && (status === 'worker_draft' || status === 'worker_draft_initial')) {
+            actions = [
+                { text: '恢复原乙方', type: 'secondary', action: 'worker_reselect_cancel' },
+                { text: '提交并邀请乙方', type: 'success', action: 'worker_resubmit' }
+            ];
+        }
+        (actions).forEach(function (a) {
             var btn = document.createElement('button');
             btn.className = 'wc-action-btn ' + (a.type || 'primary');
             btn.textContent = a.text;
@@ -796,16 +1039,28 @@
             btn.onclick = function () { handleAction(a.action); };
             box.appendChild(btn);
         });
-        if ((cfg.actions || []).length === 0) box.style.display = 'none';
+        if (actions.length === 0) box.style.display = 'none';
     }
 
     function handleAction(action) {
         if (action === 'view') return;
         if (action === 'upload') { pickSignFile(); return; }
+        // 已确认(发起方)：上传签约文件——参考「上传变更签约文件（新页面）」整页上传流程，跳转到独立上传页
+        // （worker-sign-upload.html），上传成功后由该页跳回「已签约」（V1）。不影响受邀方内联上传流程。
+        if (action === 'upload_sign') { global.location.href = 'worker-sign-upload.html'; return; }
+        // 变更签约中：参考「合同详情（合规版）」的上传变更签约文件流程——跳转到独立上传页面，上传成功后由该页跳回「已签约」
+        if (action === 'upload_change_sign') { global.location.href = 'worker-change-sign-upload.html'; return; }
         if (action === 'worker_resubmit') { saveAndResubmit(); return; }
+        // 已签约发起方：点「发起变更」→ 先二次确认，确认后跳转到发起变更「页面」（弹窗无法承载较多内容）
+        if (action === 'start_change') { confirmStartChange(); return; }
 
         // 点击「拒绝」直接展示填写原因弹窗（二次确认在提交原因后触发），不弹前置确认框
         if (action === 'worker_reject') { openRejectReason(); return; }
+
+        // 发起方已确认态：点「重新选择乙方」→ 弹二次确认
+        if (action === 'worker_reselect') { openReselectConfirm(); return; }
+        // 重选进行中（拟定中）：恢复原乙方（取消重选）
+        if (action === 'worker_reselect_cancel') { cancelReselect(); return; }
 
         var info = ACTION_TEXT[action];
         if (!info) return;
@@ -828,8 +1083,150 @@
                     showToast('确认失败，请稍后重试');
                 }
                 updateStatus(computeStatus());
+            } else if (action.indexOf('change') > -1 || action.indexOf('reject_change') > -1 || action.indexOf('confirm_change') > -1) {
+                // 变更阶段动作：按合规版流程推进状态并写入变更记录
+                var res = applyChangeAction(action);
+                if (res) {
+                    pushChangeLog(res.logTitle, res.logDesc, res.logType);
+                    // 撤回/驳回变更 → 回到已签约，清除变更提案（恢复为原始已签约内容）
+                    if (res.next === 'worker_signed') clearChangeProposal();
+                    showToast(res.toast);
+                    if (res.next) updateStatus(res.next);
+                }
             }
         });
+    }
+
+    // 变更阶段动作的推进逻辑（对齐「合同详情（合规版）」变更流程）
+    function applyChangeAction(action) {
+        switch (action) {
+            case 'withdraw_change':
+                return { next: 'worker_signed', toast: '已撤回变更，合同恢复已签约', logTitle: '撤回变更', logDesc: '发起方撤回变更申请，合同恢复已签约状态', logType: 'primary' };
+            case 'reject_change':
+                // 待确认方驳回 → 进入「变更已驳回」独立页面（保留提案用于展示被驳回的变更内容，不清除）
+                return { next: 'change_rejected', toast: '已驳回变更，进入变更已驳回页', logTitle: '驳回变更', logDesc: '待确认方（乙方）驳回变更申请，合同保持原已签约状态', logType: 'warning' };
+            case 'change_rejected_back':
+                return { next: 'worker_signed', toast: '已返回合同已签约状态', logTitle: '返回已签约', logDesc: '发起方关闭变更驳回页，合同恢复已签约状态', logType: 'primary' };
+            case 'confirm_change':
+                // 工人合同无平台审核：对方确认后直接进入「变更确认中」（待上传签约文件）
+                return { next: 'change_confirming_sender', toast: '已确认变更，请上传变更签约文件', logTitle: '确认变更', logDesc: '待确认方确认变更，双方达成变更，进入签约环节', logType: 'primary' };
+            default:
+                return null;
+        }
+    }
+
+    // 写入合同变更记录（变更记录弹窗动态读取）
+    function pushChangeLog(title, desc, type) {
+        if (!state.contract) return;
+        state.contract.changeLog = state.contract.changeLog || [];
+        state.contract.changeLog.push({
+            title: title,
+            desc: desc,
+            type: type || 'primary',
+            by: state.contract.partyAName || '陈庄',
+            byRole: '工长',
+            time: nowLabel()
+        });
+        if (global.ContractStore && state.workerId) {
+            global.ContractStore.patchContract(state.workerId, { changeLog: state.contract.changeLog });
+        }
+    }
+
+    // 金额千分位格式化
+    function fmtMoney(n) {
+        var v = Number(n) || 0;
+        return v.toLocaleString('zh-CN');
+    }
+
+    // 当前生效的「变更提案」：真实发起的变更优先；导航直接预览变更阶段时给出演示提案以便直观查看高亮
+    function getActiveChangeProposal() {
+        if (state.contract && state.contract.changeProposal) return state.contract.changeProposal;
+        if (state.status && state.status.indexOf('change') === 0) {
+            var baseAmt = Number(state.contract && state.contract.amount) || 0;
+            var baseExtra = getExtra() || '';
+            return {
+                reason: '因现场实际情况调整，需对合同金额与部分阶段任务进行变更',
+                amountOld: baseAmt,
+                amountNew: baseAmt + 2000,
+                extraOld: baseExtra,
+                extraNew: baseExtra ? (baseExtra + '；新增：水电隐蔽工程需增加打压测试环节。') : '新增：水电隐蔽工程需增加打压测试环节。',
+                stageNote: '新增「收尾阶段」：包含 2 个任务（保洁、验收）',
+                demo: true
+            };
+        }
+        return null;
+    }
+
+    function isChangeStage() {
+        return !!(state.status && state.status.indexOf('change') === 0);
+    }
+
+    // ============== 发起方「发起变更」（已签约 → 变更中） ==============
+    // 点「发起变更」先二次确认，确认后跳转到独立的发起变更「页面」（弹窗无法承载较多内容）
+    function confirmStartChange() {
+        showConfirm('发起合同变更',
+            '变更需对方确认，确认后需上传签约文件，上传后生成新版本（V2）。变更确认前阶段任务暂停流转。',
+            function () {
+                goChangePage();
+            },
+            { confirmText: '去填写', btnClass: 'primary' });
+    }
+    function goChangePage() {
+        clearChangeProposal();   // 进入发起变更页前清除旧提案，保证从「变更已驳回」重新发起时以当前合同内容全新填写
+        global.location.href = 'worker-contract-change.html?id=' + encodeURIComponent(state.workerId);
+    }
+    function clearChangeProposal() {
+        if (state.contract && state.contract.changeProposal) {
+            state.contract.changeProposal = '';
+            if (global.ContractStore && state.workerId) {
+                global.ContractStore.patchContract(state.workerId, { changeProposal: '' });
+            }
+        }
+    }
+
+    // ============== 变更内容高亮（变更阶段：仍为已签约内容，变更点高亮标记） ==============
+    function renderChangeHighlight() {
+        var card = $('changeHighlightCard');
+        if (!card) return;
+        if (!isChangeStage()) { card.style.display = 'none'; return; }
+        var cp = getActiveChangeProposal();
+        if (!cp) { card.style.display = 'none'; return; }
+        card.style.display = 'block';
+        var amtDiff = (cp.amountNew !== cp.amountOld);
+        var amtHtml = amtDiff
+            ? ('<span class="ch-old">¥' + fmtMoney(cp.amountOld) + '</span>' +
+               '<span class="ch-arrow">→</span>' +
+               '<span class="ch-new">¥' + fmtMoney(cp.amountNew) + '</span>' +
+               '<span class="ch-badge">' + (cp.amountNew > cp.amountOld ? '+' : '') + fmtMoney(cp.amountNew - cp.amountOld) + '</span>')
+            : ('<span class="ch-new">¥' + fmtMoney(cp.amountNew) + '</span>');
+        var extraChanged = (cp.extraNew && cp.extraNew !== cp.extraOld);
+        var extraHtml = '';
+        if (extraChanged) {
+            extraHtml = '<div class="ch-sub ch-old-text">原：' + escapeHtml(cp.extraOld || '（无）') + '</div>' +
+                '<div class="ch-sub ch-new-text">变更后：' + escapeHtml(cp.extraNew) + '</div>';
+        } else if (cp.extraNew) {
+            extraHtml = '<div class="ch-sub">' + escapeHtml(cp.extraNew) + '</div>';
+        }
+        var stageHtml = cp.stageNote ? ('<div class="ch-sub ch-new-text">' + escapeHtml(cp.stageNote) + '</div>') : '';
+        var stateLabel = '';
+        if (state.status === 'change_rejected') stateLabel = '<span class="ch-state rejected">变更已驳回（乙方）</span>';
+        else stateLabel = '<span class="ch-state done">变更进行中（待上传签约文件生效）</span>';
+        var html =
+            '<div class="ch-head"><span class="ch-title">🔄 变更内容</span>' + stateLabel + '</div>' +
+            (cp.reason ? '<div class="ch-reason"><span class="ch-reason-label">变更原因</span>' + escapeHtml(cp.reason) + '</div>' : '') +
+            '<div class="ch-row"><span class="ch-label">合同金额</span><span class="ch-value">' + amtHtml + '</span></div>' +
+            (extraHtml ? '<div class="ch-row"><span class="ch-label">补充条款</span><span class="ch-value">' + extraHtml + '</span></div>' : '') +
+            (stageHtml ? '<div class="ch-row"><span class="ch-label">阶段任务</span><span class="ch-value">' + stageHtml + '</span></div>' : '') +
+            (cp.demo ? '<div class="ch-demo-tip">（演示数据：在「已签约」页点击「发起变更」可发起真实变更并查看实际高亮）</div>' : '');
+        card.innerHTML = html;
+    }
+
+    // 元信息行（含变更高亮：旧值 → 新值）
+    function metaRowHighlight(label, oldVal, newVal) {
+        return '<div class="meta-row highlight"><span class="meta-label">' + escapeHtml(label) +
+            '</span><span class="meta-value"><span class="mv-old">' + escapeHtml(oldVal) +
+            '</span><span class="mv-arrow">→</span><span class="mv-new">' + escapeHtml(newVal) +
+            '</span><span class="mv-tag">变更</span></span></div>';
     }
 
     // ============== 拒绝原因弹窗 ==============
@@ -879,6 +1276,61 @@
         updateStatus(computeStatus());
     }
 
+    // ============== 发起方主动重新选择乙方 ==============
+    function openReselectConfirm() {
+        var m = $('reselectConfirmModal');
+        if (m) m.classList.add('show');
+    }
+    function closeReselectConfirm() {
+        var m = $('reselectConfirmModal');
+        if (m) m.classList.remove('show');
+    }
+    function confirmReselect() {
+        closeReselectConfirm();
+        if (global.ContractStore && state.workerId) {
+            global.ContractStore.reselectPartyB(state.workerId);   // 原乙方 replaced、versionLog 留痕、清空名单、退回拟定中
+            state.contract = global.ContractStore.getContract(state.workerId);
+        }
+        updateStatus('worker_draft');   // 渲染拟定中（撤回后）：横幅/历史卡片/底部「恢复原乙方·提交并邀请乙方」均以 replacedPartyB 数据驱动
+        showToast('合同已退回拟定中，请重新选择乙方');
+    }
+    // 重选拟定中横幅：提示原乙方合作未达成，并引导重新搜索选择 1-3 名意向乙方
+    function applyReselectBanner() {
+        var prev = state.contract.replacedPartyB;
+        $('bannerText').textContent = '重新选择乙方';
+        $('bannerDesc').textContent = prev && prev.name
+            ? ('原乙方「' + prev.name + '」合作未达成，合同已退回拟定中。请重新搜索并选择 1-3 名意向乙方后提交邀请。')
+            : '合同已退回拟定中。请重新搜索并选择 1-3 名意向乙方后提交邀请。';
+        $('statusBanner').className = 'wc-banner draft';
+        renderReselectHistory();   // 同步展示「历史选择记录」卡片
+    }
+    // 重选视图内的「历史选择记录」卡片：展示被替换的原乙方（发起人可见，直至提交新邀请）
+    function renderReselectHistory() {
+        var card = $('reselectHistoryCard');
+        if (!card) return;
+        var prev = state.contract.replacedPartyB;
+        if (prev && prev.name) {
+            card.style.display = 'block';
+            $('reselectHistoryBody').innerHTML =
+                memberAvatarHtml(prev, '') +
+                '<div class="rh-info">' +
+                    '<div class="rh-name">' + escapeHtml(prev.name) + '</div>' +
+                    '<div class="rh-role">' + escapeHtml(prev.role || '乙方') + '</div>' +
+                '</div>' +
+                '<span class="rh-tag">合作未达成</span>';
+        } else {
+            card.style.display = 'none';
+        }
+    }
+    function cancelReselect() {
+        var prev = state.contract.replacedPartyB;   // 恢复原乙方以 replacedPartyB 为权威来源（跨导航也稳定）
+        if (global.ContractStore && state.workerId && prev) {
+            global.ContractStore.reselectCancel(state.workerId, prev);
+            state.contract = global.ContractStore.getContract(state.workerId);
+        }
+        updateStatus('worker_confirmed_sender');
+        showToast('已取消重新选择，恢复原乙方');
+    }
     // ============== 乙方头像 / 个人电子名片（拟定中选择乙方时展示） ==============
     // 由 userId 生成稳定色相，保证同名不同人头像颜色不同（避免重名混淆）
     function avatarColor(seed) {
@@ -1040,6 +1492,7 @@
             state.contract = global.ContractStore.getContract(state.workerId);
             showToast('已提交邀请');
             updateStatus(computeStatus());
+            renderReselectHistory();            // 隐藏「历史选择记录」卡片（replacedPartyB 已清空）
         });
     }
 
@@ -1274,7 +1727,7 @@
     function showFullText() {
         var m = $('wcFullTextModal'); if (!m) return;
         $('wcFullTextTitle').textContent = '📄 合同正文（全文）';
-        $('wcFullTextContent').innerHTML = buildContractBodyHTML();
+        $('wcFullTextContent').innerHTML = (state.viewer === 'receiver') ? buildReceiverContractHTML() : buildContractBodyHTML();
         m.classList.add('show');
     }
     function closeFullText() { var m = $('wcFullTextModal'); if (m) m.classList.remove('show'); }
@@ -1307,6 +1760,37 @@
             '<p>5.2 乙方工期延误或质量不符的，应无偿返工并承担违约责任。</p></div></div>' +
             '<div class="contract-article"><div class="article-title">第六条 争议解决</div><div class="article-content">' +
             '<p>6.1 协商不成的，向工程所在地人民法院提起诉讼。</p></div></div>';
+    }
+    // 受邀方视角「查看全部正文」完整合同正文：关键条款（甲方责权 / 乙方责权）前置，再附标准条款
+    function buildReceiverContractHTML() {
+        var c = state.contract;
+        var addr = c.projectAddress ? escapeHtml(c.projectAddress) : 'XX市XX区XX路XX号';
+        var intro = getContentIntro();
+        var amount = c.amount ? (c.amount + ' 元') : '—';
+        return '<div class="contract-article"><div class="article-title">第一条 工程概况</div><div class="article-content">' +
+            '<p>1.1 工程名称：' + escapeHtml(c.name) + '</p>' +
+            '<p>1.2 工程地点：' + addr + '</p>' +
+            '<p>1.3 工程内容：' + escapeHtml(intro) + '</p></div></div>' +
+            '<div class="contract-article"><div class="article-title">第二条 甲方责权</div><div class="article-content">' +
+            '<p>2.1 甲方有权按照相关工艺及质量标准监督、指导乙方工作，并根据工作过程及完成情况给予奖励、处罚。</p>' +
+            '<p>2.2 甲方应按照工程施工要求在乙方施工前进行相关培训及交底，包含但不限于《现场施工管理规定》、《施工工艺及验收标准》、图纸交底等。</p>' +
+            '<p>2.3 甲方有责任按时为乙方提供满足工作需要的场地、材料、工具、安全措施等。</p></div></div>' +
+            '<div class="contract-article"><div class="article-title">第三条 乙方责权</div><div class="article-content">' +
+            '<p>3.1 乙方有权在约定的支付节点获得报酬。</p>' +
+            '<p>3.2 当遇到现场、图纸冲突时，乙方应第一时间告知甲方进行协调。</p>' +
+            '<p>3.3 乙方在工作中应自觉保护其他工种的劳动成果，不得擅自破坏。</p>' +
+            '<p>3.4 乙方不得擅自把甲方提供的工具、材料拿出场外或使用到其他工地。</p></div></div>' +
+            '<div class="contract-article"><div class="article-title">第四条 合同价款及支付方式</div><div class="article-content">' +
+            '<p>4.1 合同总价：人民币 ' + escapeHtml(amount) + '（含税）。</p>' +
+            '<p>4.2 支付方式：合同签订后支付预付款，材料进场验收合格后支付进度款，完工验收后支付尾款。</p></div></div>' +
+            '<div class="contract-article"><div class="article-title">第五条 工程质量及验收</div><div class="article-content">' +
+            '<p>5.1 乙方应严格按国家现行施工验收规范施工。</p>' +
+            '<p>5.2 分阶段验收，隐蔽工程验收合格后方可进行下一道工序。</p></div></div>' +
+            '<div class="contract-article"><div class="article-title">第六条 违约责任</div><div class="article-content">' +
+            '<p>6.1 甲方逾期付款的，按逾期金额千分之三/日支付违约金。</p>' +
+            '<p>6.2 乙方工期延误或质量不符的，应无偿返工并承担违约责任。</p></div></div>' +
+            '<div class="contract-article"><div class="article-title">第七条 争议解决</div><div class="article-content">' +
+            '<p>7.1 协商不成的，向工程所在地人民法院提起诉讼。</p></div></div>';
     }
     function buildFullContractHTML() {
         var c = state.contract;
@@ -1402,15 +1886,24 @@
         };
         return {
             'worker_draft_initial': base([]),
-            'worker_draft': {
-                versions: [{ tag: 'V1', name: '初始版本（拟定中·撤回后）', desc: '合同已重新编辑', date: '2024-01-09 重新拟定', current: true }],
-                timeline: [
+            'worker_draft': (function () {
+                // 重新选择乙方属于「历史版本」记录（非变更），合并合同 versionLog 展示
+                var log = (c.versionLog || []).slice().reverse();
+                var versions = log.map(function (e, i) {
+                    return { tag: 'R' + (i + 1), name: e.name, desc: e.desc, date: e.date || '', current: false };
+                });
+                versions.push({ tag: 'V1', name: '初始版本（拟定中·撤回后）', desc: '合同已重新编辑', date: '2024-01-09 重新拟定', current: true });
+                var timeline = [
                     { title: '创建合同', desc: '拟定中', time: '2024-01-05 10:00', type: 'success' },
                     { title: '提交邀请', desc: '进入确认中', time: '2024-01-06 14:30', type: 'success' },
                     { title: '撤回确认', desc: '合同退回拟定中', time: '2024-01-08 09:15', type: 'warning' },
                     { title: '重新编辑合同', desc: '拟定中', time: '2024-01-09 10:00', type: 'primary' }
-                ]
-            },
+                ];
+                log.forEach(function (e) {
+                    timeline.push({ title: '重新选择乙方', desc: '原乙方合作未达成，退回拟定中重新选择', time: e.date || '', type: 'warning' });
+                });
+                return { versions: versions, timeline: timeline };
+            })(),
             'worker_inviting_sender': base([]),
             'worker_inviting_receiver': {
                 versions: [{ tag: 'V1', name: '初始版本', desc: '已收到邀请，待确认', date: '2024-01-05 创建', current: true }],
@@ -1492,6 +1985,29 @@
     }
 
     function showChangeRecordModal() {
+        // 动态渲染本次操作留痕（从合同 changeLog 读取，反映重新选择乙方等实际操作）
+        var logWrap = $('changeRecordLog');
+        var logList = $('changeRecordLogList');
+        if (logWrap && logList) {
+            var log = (state.contract && state.contract.changeLog) || [];
+            if (log.length) {
+                logWrap.style.display = 'block';
+                logList.innerHTML = log.slice().reverse().map(function (e) {
+                    var dotCls = e.type === 'reselect' ? 'warning' : 'primary';
+                    return '<div class="cr-log-item">' +
+                        '<span class="cr-dot ' + dotCls + '"></span>' +
+                        '<div class="cr-log-main">' +
+                            '<div class="cr-log-title">' + escapeHtml(e.title) + '</div>' +
+                            '<div class="cr-log-desc">' + escapeHtml(e.desc) + '</div>' +
+                            '<div class="cr-log-meta">操作人：' + escapeHtml(e.by || '陈庄') +
+                                (e.byRole ? '（' + escapeHtml(e.byRole) + '）' : '') + ' · ' + escapeHtml(e.time || '') + '</div>' +
+                        '</div>' +
+                    '</div>';
+                }).join('');
+            } else {
+                logWrap.style.display = 'none';
+            }
+        }
         var m = $('changeRecordModal');
         if (m) m.classList.add('show');
     }
@@ -1565,6 +2081,12 @@
         openRejectReason: openRejectReason,
         closeRejectReason: closeRejectReason,
         submitRejectReason: submitRejectReason,
+        openReselectConfirm: openReselectConfirm,
+        closeReselectConfirm: closeReselectConfirm,
+        confirmReselect: confirmReselect,
+        cancelReselect: cancelReselect,
+        confirmStartChange: confirmStartChange,
+        goChangePage: goChangePage,
         openBusinessCard: openBusinessCard,
         closeBusinessCard: closeBusinessCard,
         switchDraftContentTab: switchDraftContentTab,

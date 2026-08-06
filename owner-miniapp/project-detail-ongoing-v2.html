@@ -193,6 +193,58 @@
                 </div>
             </div>
 
+            <!-- 待办事项（与架构切换无联动，置于吸顶导航上方） -->
+            <div class="card">
+                <div class="card-title">
+                    <span>📋 待办事项</span>
+                    <span class="badge-wrap"><span class="badge" id="todoBadge">5</span></span>
+                    <span class="more" data-href="todo-list.html">查看全部 ></span>
+                </div>
+
+                <div class="todo-content show" id="todoContent">
+                    <div class="todo-item" data-href="task-detail.html?status=confirming">
+                        <div class="icon" style="background-color: #E6F7FF;">🔵</div>
+                        <div class="content">
+                            <div class="title">开槽布线验收确认</div>
+                            <div class="desc">强电施工组 | 等待业主确认</div>
+                        </div>
+                        <div class="status urgent">待确认</div>
+                    </div>
+                    <div class="todo-item" data-href="task-detail.html?status=confirming">
+                        <div class="icon" style="background-color: #E6F7FF;">🔵</div>
+                        <div class="content">
+                            <div class="title">墙面贴砖验收确认</div>
+                            <div class="desc">泥瓦工作组 | 等待业主确认</div>
+                        </div>
+                        <div class="status pending">待确认</div>
+                    </div>
+                    <div class="todo-item" data-href="task-detail.html?status=pending">
+                        <div class="icon" style="background-color: #F6FFED;">🟢</div>
+                        <div class="content">
+                            <div class="title">水电工程验收</div>
+                            <div class="desc">水电工作组 | 待业主确认</div>
+                        </div>
+                        <div class="status pending">待确认</div>
+                    </div>
+                    <div class="todo-item" data-href="task-detail.html?status=pending">
+                        <div class="icon" style="background-color: #F6FFED;">🟢</div>
+                        <div class="content">
+                            <div class="title">瓷砖铺贴验收</div>
+                            <div class="desc">泥瓦工作组 | 待业主确认</div>
+                        </div>
+                        <div class="status pending">待确认</div>
+                    </div>
+                    <div class="todo-item" data-href="contract-detail.html?status=confirming_receiver">
+                        <div class="icon" style="background-color: #F9F0FF;">🟣</div>
+                        <div class="content">
+                            <div class="title">泥瓦分包合同确认</div>
+                            <div class="desc">泥瓦工作组 | 待业主确认</div>
+                        </div>
+                        <div class="status urgent">待确认</div>
+                    </div>
+                </div>
+            </div>
+
             <div class="sticky-header" id="stickyHeader">
                 <div class="quick-nav" id="quickNav">
                     <div class="pin-btn" id="pinBtn">📌 固定</div>
@@ -302,58 +354,6 @@
                 <div class="activity-more-btn" id="activityMoreBtn">
                     <span id="activityMoreText">展开更多</span>
                     <span class="arrow" id="activityMoreArrow">▼</span>
-                </div>
-            </div>
-
-            <!-- 待办事项 -->
-            <div class="card">
-                <div class="card-title">
-                    <span>📋 待办事项</span>
-                    <span class="badge-wrap"><span class="badge" id="todoBadge">5</span></span>
-                    <span class="more" data-href="todo-list.html">查看全部 ></span>
-                </div>
-
-                <div class="todo-content show" id="todoContent">
-                    <div class="todo-item" data-href="task-detail.html?status=confirming">
-                        <div class="icon" style="background-color: #E6F7FF;">🔵</div>
-                        <div class="content">
-                            <div class="title">开槽布线验收确认</div>
-                            <div class="desc">强电施工组 | 等待业主确认</div>
-                        </div>
-                        <div class="status urgent">待确认</div>
-                    </div>
-                    <div class="todo-item" data-href="task-detail.html?status=confirming">
-                        <div class="icon" style="background-color: #E6F7FF;">🔵</div>
-                        <div class="content">
-                            <div class="title">墙面贴砖验收确认</div>
-                            <div class="desc">泥瓦工作组 | 等待业主确认</div>
-                        </div>
-                        <div class="status pending">待确认</div>
-                    </div>
-                    <div class="todo-item" data-href="task-detail.html?status=pending">
-                        <div class="icon" style="background-color: #F6FFED;">🟢</div>
-                        <div class="content">
-                            <div class="title">水电工程验收</div>
-                            <div class="desc">水电工作组 | 待业主确认</div>
-                        </div>
-                        <div class="status pending">待确认</div>
-                    </div>
-                    <div class="todo-item" data-href="task-detail.html?status=pending">
-                        <div class="icon" style="background-color: #F6FFED;">🟢</div>
-                        <div class="content">
-                            <div class="title">瓷砖铺贴验收</div>
-                            <div class="desc">泥瓦工作组 | 待业主确认</div>
-                        </div>
-                        <div class="status pending">待确认</div>
-                    </div>
-                    <div class="todo-item" data-href="contract-detail.html?status=confirming_receiver">
-                        <div class="icon" style="background-color: #F9F0FF;">🟣</div>
-                        <div class="content">
-                            <div class="title">泥瓦分包合同确认</div>
-                            <div class="desc">泥瓦工作组 | 待业主确认</div>
-                        </div>
-                        <div class="status urgent">待确认</div>
-                    </div>
                 </div>
             </div>
 

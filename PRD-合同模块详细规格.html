@@ -79,6 +79,20 @@
             border-bottom: none;
         }
 
+        .sidebar-toc-list .toc-group-title {
+            padding: 16px 24px 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            letter-spacing: .5px;
+            cursor: default;
+            text-transform: none;
+            border-bottom: none;
+        }
+        .sidebar-toc-list .toc-group-title:first-of-type {
+            padding-top: 8px;
+        }
+
         .sidebar-toc-list a {
             display: block;
             padding: 12px 24px;
@@ -196,6 +210,21 @@
             overflow-x: auto;
             margin-bottom: 24px;
         }
+    
+        /* 目录折叠（一级默认收起，点击展开二级） */
+        .toc-chapter { margin: 2px 0; }
+        .toc-chapter-head { display: flex; align-items: center; cursor: pointer; padding-right: 10px; }
+        .toc-caret { margin-left: auto; font-size: 10px; line-height: 1; color: var(--text-tertiary); transition: transform .2s ease; transform: rotate(0deg); }
+        .toc-chapter.expanded .toc-caret { transform: rotate(90deg); }
+        .toc-sublist { display: none; list-style: none; margin: 2px 0 6px; padding: 0 0 0 14px; border-left: 1px solid var(--border-color); }
+        .toc-chapter.expanded > .toc-sublist { display: block; }
+        .toc-sublist li { margin: 0; }
+        .toc-sublist a { padding: 7px 14px; font-size: 12px; color: var(--text-secondary); border-left: none; }
+        .toc-sublist a:hover { background: var(--bg-secondary); color: var(--primary-color); }
+        .toc-sublist a.active { background: #E6F7FF; color: var(--primary-color); font-weight: 600; }
+        .sidebar-toc-list .toc-chapter-head > a { display: block; flex: 1; }
+        .sidebar-toc-list .toc-chapter-head > a.active { border-left-color: var(--primary-color); }
+
     </style>
 </head>
 <body>
@@ -203,13 +232,134 @@
     <nav class="sidebar-toc" id="sidebarToc">
         <div class="sidebar-toc-title">页面导航</div>
         <ul class="sidebar-toc-list">
-            <li><a href="#page-list">一、合同列表页（PC）</a></li>
-            <li><a href="#page-detail">二、合同详情页（PC）</a></li>
-            <li><a href="#page-mini-service">三、合同详情页（服务方）</a></li>
-            <li><a href="#page-mini-owner">四、合同详情页（业主）</a></li>
-            <li><a href="#change-function">五、发起变更功能详细规格</a></li>
-            <li><a href="#global-spec">六、全局规格参数</a></li>
+    <li class="toc-group-title">非工人合同（基础施工 / 设计服务合同）</li>
+    <li class="toc-chapter collapsed">
+        <div class="toc-chapter-head"><a href="#page-list">一、合同列表页（PC端）</a><span class="toc-caret">&#9656;</span></div>
+        <ul class="toc-sublist">
+            <li><a href="#sec-1-1">1.1 页面概述</a></li>
+            <li><a href="#sec-1-2">1.2 页面结构</a></li>
+            <li><a href="#sec-1-3">1.3 筛选条件规格</a></li>
+            <li><a href="#sec-1-4">1.4 列表字段规格</a></li>
+            <li><a href="#sec-1-5">1.5 操作按钮矩阵</a></li>
+            <li><a href="#sec-1-6">1.6 分页规格</a></li>
         </ul>
+    </li>
+    <li class="toc-chapter collapsed">
+        <div class="toc-chapter-head"><a href="#page-detail">二、合同详情页（PC端）</a><span class="toc-caret">&#9656;</span></div>
+        <ul class="toc-sublist">
+            <li><a href="#sec-2-1">2.1 基本信息</a></li>
+            <li><a href="#sec-2-2">2.2 业务目标</a></li>
+            <li><a href="#sec-2-3">2.3 功能范围</a></li>
+            <li><a href="#sec-2-4">2.4 页面结构</a></li>
+            <li><a href="#sec-2-5">2.5 字段定义与校验规则</a></li>
+            <li><a href="#sec-2-6">2.6 状态横幅规格</a></li>
+            <li><a href="#sec-2-7">2.7 按钮规格</a></li>
+            <li><a href="#sec-2-8">2.8 交互流程</a></li>
+            <li><a href="#sec-2-9">2.9 权限控制</a></li>
+            <li><a href="#sec-2-10">2.10 异常处理</a></li>
+        </ul>
+    </li>
+    <li class="toc-chapter collapsed">
+        <div class="toc-chapter-head"><a href="#page-mini-service">三、合同详情页（服务方小程序）</a><span class="toc-caret">&#9656;</span></div>
+        <ul class="toc-sublist">
+            <li><a href="#sec-3-1">3.1 页面概述</a></li>
+            <li><a href="#sec-3-2">3.2 页面结构（小程序）</a></li>
+            <li><a href="#sec-3-3">3.3 功能差异（与PC端对比）</a></li>
+            <li><a href="#sec-3-4">3.4 任务卡片交互规格</a></li>
+            <li><a href="#sec-3-7">3.7 拟定中状态-编辑交互规格</a></li>
+            <li><a href="#sec-3-8">3.8 状态横幅与驳回处理</a></li>
+            <li><a href="#sec-3-9">3.9 合同状态流程图规格</a></li>
+            <li><a href="#sec-3-10">3.10 变更内容展示规格</a></li>
+            <li><a href="#sec-3-11">3.11 导航菜单规格</a></li>
+            <li><a href="#sec-3-12">3.12 各状态页面效果与功能规格（发起方 vs 确认方）</a></li>
+        </ul>
+    </li>
+    <li class="toc-chapter collapsed">
+        <div class="toc-chapter-head"><a href="#page-mini-owner">四、合同详情页（业主小程序）</a><span class="toc-caret">&#9656;</span></div>
+        <ul class="toc-sublist">
+            <li><a href="#sec-4-1">4.1 页面概述</a></li>
+            <li><a href="#sec-4-2">4.2 功能差异（与PC端、服务方对比）</a></li>
+            <li><a href="#sec-4-3">4.3 确认合同按钮规格</a></li>
+            <li><a href="#sec-4-4">4.4 确认签约按钮规格</a></li>
+            <li><a href="#sec-4-5">4.5 各状态页面效果与功能规格</a></li>
+        </ul>
+    </li>
+    <li class="toc-chapter collapsed">
+        <div class="toc-chapter-head"><a href="#change-function">五、发起变更功能详细规格</a><span class="toc-caret">&#9656;</span></div>
+        <ul class="toc-sublist">
+            <li><a href="#sec-5-1">5.1 功能入口</a></li>
+            <li><a href="#sec-5-2">5.2 变更弹窗UI结构</a></li>
+            <li><a href="#sec-5-3">5.3 变更类型自动检测机制</a></li>
+            <li><a href="#sec-5-4">5.4 字段校验规则</a></li>
+            <li><a href="#sec-5-5">5.5 变更原因输入规格</a></li>
+            <li><a href="#sec-5-6">5.6 阶段任务编辑功能</a></li>
+            <li><a href="#sec-5-7">5.7 提交变更流程</a></li>
+            <li><a href="#sec-5-8">5.8 提交按钮状态控制</a></li>
+            <li><a href="#sec-5-9">5.9 变更后合同状态流转</a></li>
+            <li><a href="#sec-5-10">5.10 阶段任务暂停流转机制</a></li>
+            <li><a href="#sec-5-11">5.11 变更记录生成</a></li>
+            <li><a href="#sec-5-12">5.12 权限控制</a></li>
+            <li><a href="#sec-5-13">5.13 异常处理</a></li>
+            <li><a href="#sec-5-14">5.14 相关API接口</a></li>
+        </ul>
+    </li>
+    <li class="toc-chapter collapsed">
+        <div class="toc-chapter-head"><a href="#global-spec">六、全局规格参数（非工人合同 · 已确认）</a><span class="toc-caret">&#9656;</span></div>
+        <ul class="toc-sublist">
+            <li><a href="#sec-6-1">6.1 Toast规格</a></li>
+            <li><a href="#sec-6-2">6.2 列表分页规格</a></li>
+            <li><a href="#sec-6-3">6.3 状态机（已确认）</a></li>
+            <li><a href="#sec-6-4">6.4 字段校验规则</a></li>
+        </ul>
+    </li>
+    <li class="toc-group-title">工人合同（六类班组服务合同 · 新流程）</li>
+    <li class="toc-chapter collapsed">
+        <div class="toc-chapter-head"><a href="#worker-contract-sender">七、工人合同详情页（服务方·工长端）</a><span class="toc-caret">&#9656;</span></div>
+        <ul class="toc-sublist">
+            <li><a href="#sec-7-1">7.1 功能概述与定位</a></li>
+            <li><a href="#sec-7-2">7.2 角色与视角（发起方）</a></li>
+            <li><a href="#sec-7-3">7.3 核心场景（服务方 / 双方）</a></li>
+            <li><a href="#sec-7-4">7.4 状态机与流程</a></li>
+            <li><a href="#sec-7-5">7.5 服务方端字段（meta）</a></li>
+            <li><a href="#sec-7-6">7.6 页面清单</a></li>
+            <li><a href="#sec-7-7">7.7 服务方端交互效果</a></li>
+        </ul>
+    </li>
+    <li class="toc-chapter collapsed">
+        <div class="toc-chapter-head"><a href="#worker-contract-receiver">八、工人合同详情页（工人端·受邀方）</a><span class="toc-caret">&#9656;</span></div>
+        <ul class="toc-sublist">
+            <li><a href="#sec-8-1">8.1 概述与定位</a></li>
+            <li><a href="#sec-8-2">8.2 角色与视角（受邀方）</a></li>
+            <li><a href="#sec-8-3">8.3 受邀方状态与流程</a></li>
+            <li><a href="#sec-8-4">8.4 元信息差异化（受邀方）</a></li>
+            <li><a href="#sec-8-5">8.5 受邀方终态轻量视图</a></li>
+            <li><a href="#sec-8-6">8.6 简化接收体验方案（A / C / E）</a></li>
+            <li><a href="#sec-8-7">8.7 原型导航（受邀方视角分组）</a></li>
+        </ul>
+    </li>
+    <li class="toc-chapter collapsed">
+        <div class="toc-chapter-head"><a href="#worker-contract-change">九、工人合同变更功能详细规格</a><span class="toc-caret">&#9656;</span></div>
+        <ul class="toc-sublist">
+            <li><a href="#sec-9-1">9.1 功能概述与定位</a></li>
+            <li><a href="#sec-9-2">9.2 角色与权限</a></li>
+            <li><a href="#sec-9-3">9.3 变更状态机</a></li>
+            <li><a href="#sec-9-4">9.4 发起变更流程</a></li>
+            <li><a href="#sec-9-5">9.5 确认 / 驳回变更流程</a></li>
+            <li><a href="#sec-9-6">9.6 上传变更签约文件流程</a></li>
+            <li><a href="#sec-9-7">9.7 变更字段数据结构</a></li>
+            <li><a href="#sec-9-8">9.8 原型导航入口</a></li>
+        </ul>
+    </li>
+    <li class="toc-chapter collapsed">
+        <div class="toc-chapter-head"><a href="#worker-contract-global">十、工人合同全局规格参数（新流程 · 无平台审核）</a><span class="toc-caret">&#9656;</span></div>
+        <ul class="toc-sublist">
+            <li><a href="#sec-10-1">10.1 Toast规格</a></li>
+            <li><a href="#sec-10-2">10.2 列表分页规格</a></li>
+            <li><a href="#sec-10-3">10.3 工人合同状态机（无平台审核）</a></li>
+            <li><a href="#sec-10-4">10.4 工人合同字段校验规则</a></li>
+        </ul>
+    </li>
+</ul>
     </nav>
 
     <!-- 主内容区域 -->
@@ -233,7 +383,7 @@
                 <span class="badge">pc-contract-list.html</span>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-1-1">
                 <div class="subsection-title">1.1 页面概述</div>
                 <div class="info-grid">
                     <div class="info-item">
@@ -263,7 +413,7 @@
                 </div>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-1-2">
                 <div class="subsection-title">1.2 页面结构</div>
                 <div class="code-block">
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -286,7 +436,7 @@
                 </div>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-1-3">
                 <div class="subsection-title">1.3 筛选条件规格</div>
                 <table>
                     <thead>
@@ -320,7 +470,7 @@
                 </table>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-1-4">
                 <div class="subsection-title">1.4 列表字段规格</div>
                 <table>
                     <thead>
@@ -378,7 +528,7 @@
                 </table>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-1-5">
                 <div class="subsection-title">1.5 操作按钮矩阵</div>
                 <table>
                     <thead>
@@ -412,7 +562,7 @@
                 </table>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-1-6">
                 <div class="subsection-title">1.6 分页规格</div>
                 <table>
                     <thead>
@@ -451,7 +601,7 @@
             </div>
             
             <!-- 2.1 页面概述 -->
-            <div class="subsection">
+            <div class="subsection" id="sec-2-1">
                 <div class="subsection-title">2.1 基本信息</div>
                 <div class="info-grid">
                     <div class="info-item">
@@ -481,12 +631,12 @@
                 </div>
             </div>
             
-            <div class="subsection">
+            <div class="subsection" id="sec-2-2">
                 <div class="subsection-title">2.2 业务目标</div>
                 <p>运营角色查看合同详情并执行审核操作（通过/驳回）。</p>
             </div>
             
-            <div class="subsection">
+            <div class="subsection" id="sec-2-3">
                 <div class="subsection-title">2.3 功能范围</div>
                 <table>
                     <thead>
@@ -542,7 +692,7 @@
             </div>
 
             <!-- 2.4 页面结构 -->
-            <div class="subsection">
+            <div class="subsection" id="sec-2-4">
                 <div class="subsection-title">2.4 页面结构</div>
                 <div class="code-block">
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -568,7 +718,7 @@
             </div>
 
             <!-- 2.5 字段定义 -->
-            <div class="subsection">
+            <div class="subsection" id="sec-2-5">
                 <div class="subsection-title">2.5 字段定义与校验规则</div>
                 <table>
                     <thead>
@@ -628,7 +778,7 @@
             </div>
 
             <!-- 2.6 状态横幅规格 -->
-            <div class="subsection">
+            <div class="subsection" id="sec-2-6">
                 <div class="subsection-title">2.6 状态横幅规格</div>
                 <table>
                     <thead>
@@ -687,7 +837,7 @@
             </div>
 
             <!-- 2.7 按钮规格 -->
-            <div class="subsection">
+            <div class="subsection" id="sec-2-7">
                 <div class="subsection-title">2.7 按钮规格</div>
                 <table>
                     <thead>
@@ -728,7 +878,7 @@
             </div>
 
             <!-- 2.8 交互流程 -->
-            <div class="subsection">
+            <div class="subsection" id="sec-2-8">
                 <div class="subsection-title">2.8 交互流程</div>
                 <div class="code-block" style="font-size: 12px;">
 审核通过流程：
@@ -750,7 +900,7 @@
             </div>
 
             <!-- 2.9 权限控制 -->
-            <div class="subsection">
+            <div class="subsection" id="sec-2-9">
                 <div class="subsection-title">2.9 权限控制</div>
                 <table>
                     <thead>
@@ -797,7 +947,7 @@
             </div>
 
             <!-- 2.10 异常处理 -->
-            <div class="subsection">
+            <div class="subsection" id="sec-2-10">
                 <div class="subsection-title">2.10 异常处理</div>
                 <table>
                     <thead>
@@ -840,7 +990,7 @@
                 <span class="badge">service-miniapp/contract-detail.html</span>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-3-1">
                 <div class="subsection-title">3.1 页面概述</div>
                 <div class="info-grid">
                     <div class="info-item">
@@ -866,7 +1016,7 @@
                 </div>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-3-2">
                 <div class="subsection-title">3.2 页面结构（小程序）</div>
                 <div class="code-block">
 ┌─────────────────────────────────────┐
@@ -890,7 +1040,7 @@
                 </div>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-3-3">
                 <div class="subsection-title">3.3 功能差异（与PC端对比）</div>
                 <table>
                     <thead>
@@ -940,7 +1090,7 @@
                 </table>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-3-4">
                 <div class="subsection-title">3.4 任务卡片交互规格</div>
                 <table>
                     <thead>
@@ -970,7 +1120,7 @@
                 </table>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-3-7">
                 <div class="subsection-title">3.7 拟定中状态-编辑交互规格</div>
                 <p>服务方小程序合同详情页在"拟定中"和"审核驳回"状态下，提供合同内容编辑功能。因手机端编辑体验有限，提供"推荐使用电脑端编辑"引导。</p>
 
@@ -1105,7 +1255,7 @@
                 </table>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-3-8">
                 <div class="subsection-title">3.8 状态横幅与驳回处理</div>
                 <table>
                     <thead>
@@ -1169,7 +1319,7 @@
                 </table>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-3-9">
                 <div class="subsection-title">3.9 合同状态流程图规格</div>
                 <p>合同详情页顶部显示状态流程图卡片（statusFlowCard），标注当前所处阶段。</p>
                 <div class="code-block" style="font-size: 12px;">
@@ -1187,7 +1337,7 @@
                 </div>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-3-10">
                 <div class="subsection-title">3.10 变更内容展示规格</div>
                 <p>当合同处于"变更审核中"或"变更已通过"状态时，合同详情页显示变更相关内容。</p>
                 <table>
@@ -1233,7 +1383,7 @@
                 </table>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-3-11">
                 <div class="subsection-title">3.11 导航菜单规格</div>
                 <p>合同详情页导航栏右侧"⋯"按钮展开操作菜单，包含以下菜单项：</p>
                 <table>
@@ -1285,7 +1435,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="subsection">
+            <div class="subsection" id="sec-3-12">
                 <div class="subsection-title">3.12 各状态页面效果与功能规格（发起方 vs 确认方）</div>
                 <p>合同详情页根据当前用户是合同发起方还是确认方，在不同状态下展示不同的页面效果和操作按钮。以下按合同生命周期阶段逐一说明。</p>
 
@@ -1579,7 +1729,7 @@
                 <span class="badge">owner-miniapp/contract-detail.html</span>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-4-1">
                 <div class="subsection-title">4.1 页面概述</div>
                 <div class="info-grid">
                     <div class="info-item">
@@ -1605,7 +1755,7 @@
                 </div>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-4-2">
                 <div class="subsection-title">4.2 功能差异（与PC端、服务方对比）</div>
                 <table>
                     <thead>
@@ -1669,7 +1819,7 @@
                 </table>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-4-3">
                 <div class="subsection-title">4.3 确认合同按钮规格</div>
                 <table>
                     <thead>
@@ -1703,7 +1853,7 @@
                 </table>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-4-4">
                 <div class="subsection-title">4.4 确认签约按钮规格</div>
                 <table>
                     <thead>
@@ -1733,7 +1883,7 @@
                 </table>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-4-5">
                 <div class="subsection-title">4.5 各状态页面效果与功能规格</div>
                 <p>业主端合同详情页始终为只读查看模式（不可编辑合同内容），根据合同状态展示不同的横幅、内容区域和操作按钮。业主作为合同的甲方（发包方），在确认流程中具有确认权。</p>
 
@@ -1990,7 +2140,7 @@
             </div>
 
             <!-- 5.1 功能入口 -->
-            <div class="subsection">
+            <div class="subsection" id="sec-5-1">
                 <div class="subsection-title">5.1 功能入口</div>
                 <table>
                     <thead>
@@ -2025,7 +2175,7 @@
             </div>
 
             <!-- 5.2 变更弹窗UI结构 -->
-            <div class="subsection">
+            <div class="subsection" id="sec-5-2">
                 <div class="subsection-title">5.2 变更弹窗UI结构</div>
                 <div class="code-block">
 ┌─────────────────────────────────────┐
@@ -2084,7 +2234,7 @@
             </div>
 
             <!-- 5.3 变更类型自动检测机制 -->
-            <div class="subsection">
+            <div class="subsection" id="sec-5-3">
                 <div class="subsection-title">5.3 变更类型自动检测机制</div>
                 <div class="note">
                     <div class="note-title">重要说明</div>
@@ -2124,7 +2274,7 @@
             </div>
 
             <!-- 5.4 字段校验规则 -->
-            <div class="subsection">
+            <div class="subsection" id="sec-5-4">
                 <div class="subsection-title">5.4 字段校验规则</div>
                 <table>
                     <thead>
@@ -2166,7 +2316,7 @@
             </div>
 
             <!-- 5.5 变更原因输入规格 -->
-            <div class="subsection">
+            <div class="subsection" id="sec-5-5">
                 <div class="subsection-title">5.5 变更原因输入规格</div>
                 <table>
                     <thead>
@@ -2209,7 +2359,7 @@
             </div>
 
             <!-- 5.6 阶段任务编辑功能 -->
-            <div class="subsection">
+            <div class="subsection" id="sec-5-6">
                 <div class="subsection-title">5.6 阶段任务编辑功能</div>
                 <table>
                     <thead>
@@ -2260,7 +2410,7 @@
             </div>
 
             <!-- 5.7 提交变更流程 -->
-            <div class="subsection">
+            <div class="subsection" id="sec-5-7">
                 <div class="subsection-title">5.7 提交变更流程</div>
                 <div class="code-block" style="font-size: 12px;">
 提交变更流程：
@@ -2300,7 +2450,7 @@
             </div>
 
             <!-- 5.8 提交按钮状态控制 -->
-            <div class="subsection">
+            <div class="subsection" id="sec-5-8">
                 <div class="subsection-title">5.8 提交按钮状态控制</div>
                 <table>
                     <thead>
@@ -2333,7 +2483,7 @@
             </div>
 
             <!-- 5.9 变更后状态流转 -->
-            <div class="subsection">
+            <div class="subsection" id="sec-5-9">
                 <div class="subsection-title">5.9 变更后合同状态流转</div>
                 <table>
                     <thead>
@@ -2386,7 +2536,7 @@
             </div>
 
             <!-- 5.10 阶段任务暂停流转机制 -->
-            <div class="subsection">
+            <div class="subsection" id="sec-5-10">
                 <div class="subsection-title">5.10 阶段任务暂停流转机制</div>
                 <table>
                     <thead>
@@ -2426,7 +2576,7 @@
             </div>
 
             <!-- 5.11 变更记录生成 -->
-            <div class="subsection">
+            <div class="subsection" id="sec-5-11">
                 <div class="subsection-title">5.11 变更记录生成</div>
                 <table>
                     <thead>
@@ -2471,7 +2621,7 @@
             </div>
 
             <!-- 5.12 权限控制 -->
-            <div class="subsection">
+            <div class="subsection" id="sec-5-12">
                 <div class="subsection-title">5.12 权限控制</div>
                 <table>
                     <thead>
@@ -2524,7 +2674,7 @@
             </div>
 
             <!-- 5.13 异常处理 -->
-            <div class="subsection">
+            <div class="subsection" id="sec-5-13">
                 <div class="subsection-title">5.13 异常处理</div>
                 <table>
                     <thead>
@@ -2570,7 +2720,7 @@
             </div>
 
             <!-- 5.14 相关API接口 -->
-            <div class="subsection">
+            <div class="subsection" id="sec-5-14">
                 <div class="subsection-title">5.14 相关API接口</div>
                 <table>
                     <thead>
@@ -2614,10 +2764,10 @@
         <!-- ==================== 全局规格 ==================== -->
         <div class="section" id="global-spec">
             <div class="section-title">
-                六、全局规格参数（已确认）
+                六、全局规格参数（非工人合同 · 已确认）
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-6-1">
                 <div class="subsection-title">6.1 Toast规格</div>
                 <table>
                     <thead>
@@ -2643,7 +2793,7 @@
                 </table>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-6-2">
                 <div class="subsection-title">6.2 列表分页规格</div>
                 <table>
                     <thead>
@@ -2665,7 +2815,7 @@
                 </table>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-6-3">
                 <div class="subsection-title">6.3 状态机（已确认）</div>
                 <h4>合同状态机</h4>
                 <div class="code-block">
@@ -2682,7 +2832,7 @@
                 </div>
             </div>
 
-            <div class="subsection">
+            <div class="subsection" id="sec-6-4">
                 <div class="subsection-title">6.4 字段校验规则</div>
                 
                 <h4 style="margin-bottom: 12px;">合同基本信息字段</h4>
@@ -2873,7 +3023,448 @@
             </div>
         </div>
 
+        <!-- ==================== 7. 工人合同详情页（服务方·新流程） ==================== -->
+        <div class="section" id="worker-contract-sender">
+            <div class="section-title">
+                七、工人合同详情页（服务方·工长端）
+                <span class="badge">worker-contract-detail.html?viewer=sender</span>
+            </div>
+
+            <div class="subsection" id="sec-7-1">
+                <div class="subsection-title">7.1 功能概述与定位</div>
+                <p>工人合同（班组服务合同）与「基础施工服务合同 / 设计服务合同（合规版）」并行存在，但面向不同对象、走独立页面与独立状态机，属于<strong>非平台审核</strong>的轻量签约流程。本页面<strong>服务方（工长）端</strong>用于工长（甲方）创建 / 编辑合同、邀请乙方、管理确认与变更、上传签约文件；原型数据层为前端 <code>localStorage</code>（无后端）。</p>
+                <div class="note">
+                    <div class="note-title">工人合同 vs 非工人合同（基础 / 设计合同）关键差异</div>
+                    <ul>
+                        <li><strong>独立页面</strong>：工人合同走 <code>worker-contract-detail.html</code> + <code>worker-contract-detail.js</code>，与合规版 <code>contract-detail.html</code> 完全解耦，互不影响原流程（详见第一~六章）。</li>
+                        <li><strong>甲方 = 陈庄（工长，非业主）</strong>：阶段确认人 <code>conf</code> 同为陈庄；系统角色「业主」仅保留命名，不参与工人合同意向乙方。</li>
+                        <li><strong>意向乙方仅限六工种</strong>：拆除工 / 水电工 / 木作工 / 泥瓦工 / 油漆工 / 小零工，不含业主 / 设计师 / 项目总 / 工长。</li>
+                        <li><strong>无需平台审核</strong>：双方确认后即生效（对比合规版需平台审核），变更亦去平台化，对方确认即可进入签约。</li>
+                    </ul>
+                </div>
+                <div class="note">
+                    <div class="note-title">与工人端（受邀方）的边界</div>
+                    <p style="margin:0;">本章描述<strong>服务方（工长）发起方视角</strong>；工人作为受邀方看到的差异视图（元信息去「合同类型 / 架构层级」、加「项目地址」、终态轻量视图、整页接单体验等）见<strong>第八章</strong>。</p>
+                </div>
+            </div>
+
+            <div class="subsection" id="sec-7-2">
+                <div class="subsection-title">7.2 角色与视角（发起方）</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">发起方（sender · 服务方工长端）</div>
+                        <div class="info-value">工长 · 陈庄</div>
+                        <p style="font-size:13px;color:var(--text-secondary);margin-top:6px;">创建 / 编辑合同、邀请乙方（1-3 名意向乙方，按工种过滤）、撤回邀约、重新选择乙方、查看完整意向乙方名单与各自确认状态、上传签约 / 变更签约文件、发起变更。</p>
+                    </div>
+                </div>
+                <p>视角通过 URL 参数 <code>?viewer=sender|receiver</code> 或右侧原型导航「合同状态切换（工人合同）→ 发起方视角」分组切换；无 id 进入时自动播种水电示例并以发起方视角渲染。</p>
+            </div>
+
+            <div class="subsection" id="sec-7-3">
+                <div class="subsection-title">7.3 核心场景（服务方 / 双方）</div>
+                <table>
+                    <thead>
+                        <tr><th>场景</th><th>触发端</th><th>状态流转</th><th>说明</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>拟定并邀请合同</td><td>服务方</td><td>拟定中 → 确认中</td><td>编辑合同名称 / 金额、选择 1-3 名意向乙方（按工种过滤）后提交邀请。</td></tr>
+                        <tr><td>撤回邀约</td><td>服务方</td><td>确认中 → 拟定中</td><td>撤回后合同退回拟定中，可就地修改意向乙方后重新提交。</td></tr>
+                        <tr><td>重新选择乙方</td><td>服务方</td><td>已确认 → 确认中</td><td>原乙方收到「合作未达成」通知，合同回到确认中，请重新选定乙方。</td></tr>
+                        <tr><td>上传签约文件生效</td><td>服务方</td><td>已确认 → 已签约</td><td>走整页上传流程 <code>worker-sign-upload.html</code>，上传线下签署扫描件后合同正式生效。</td></tr>
+                        <tr><td>发起合同变更</td><td>双方</td><td>已签约 → … → 已签约(V2)</td><td>变更中 → 待确认变更 → 变更确认中 → 变更签约中 → 已签约。</td></tr>
+                        <tr><td>查看乙方确认 / 终态</td><td>服务方</td><td>—</td><td>发起方视角始终展示完整名单；非乙方以浅色弱化，抢单失败 / 已拒绝者仍列于名单（受邀方终态轻量视图见第八章）。</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection" id="sec-7-4">
+                <div class="subsection-title">7.4 状态机与流程</div>
+                <p>状态步骤条（横向）：<strong>拟定中 → 确认中 → 已确认 → 已签约</strong>。变更阶段整体以「已签约」为基底，变更进度由顶部 banner 体现。主流程状态机服务方与工人端共用，下表以<strong>发起方视角为主</strong>列出，标注受邀方视角的对应状态（受邀方交互细节见第八章）。</p>
+                <div class="subsection-title" style="font-size:15px;">7.4.1 主流程状态</div>
+                <table>
+                    <thead><tr><th>状态 key</th><th>显示文案</th><th>视角</th><th>说明（发起方）</th><th>主要操作（发起方）</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>worker_draft_initial</code></td><td>拟定中</td><td>发起方</td><td>初始拟定态，可改合同名称 / 金额、选意向乙方。</td><td>提交并邀请乙方</td></tr>
+                        <tr><td><code>worker_draft</code></td><td>拟定中</td><td>发起方</td><td>撤回后拟定态，可改并重提（展示被替换原乙方提示）。</td><td>提交并邀请乙方</td></tr>
+                        <tr><td><code>worker_inviting_sender</code></td><td>确认中</td><td>发起方</td><td>已邀请意向乙方，等待抢单（首位确认者成乙方）。</td><td>撤回确认</td></tr>
+                        <tr><td><code>worker_inviting_receiver</code></td><td>确认中</td><td>受邀方</td><td>被邀请参与，等待本人确认 / 拒绝。</td><td>拒绝 / 确认加入（见第八章 8.3）</td></tr>
+                        <tr><td><code>worker_confirmed_sender</code></td><td>已确认</td><td>发起方</td><td>乙方已确认并加入架构层级，待上传签约文件。</td><td>重新选择乙方 / 上传签约文件</td></tr>
+                        <tr><td><code>worker_confirmed_receiver</code></td><td>已确认</td><td>受邀方</td><td>已成为乙方，待上传签约文件。</td><td>上传签约文件（见第八章 8.3）</td></tr>
+                        <tr><td><code>worker_lost_receiver</code></td><td>已确认（抢单失败）</td><td>受邀方终态</td><td>被他人抢单，未成为乙方。</td><td>无（轻量视图见第八章 8.5）</td></tr>
+                        <tr><td><code>worker_rejected_receiver</code></td><td>已拒绝</td><td>受邀方终态</td><td>已拒绝邀约，流程结束。</td><td>无（轻量视图见第八章 8.5）</td></tr>
+                        <tr><td><code>worker_signed</code></td><td>已签约</td><td>双方</td><td>合同已生效，可发起变更。</td><td>发起变更</td></tr>
+                    </tbody>
+                </table>
+                <div class="subsection-title" style="font-size:15px;">7.4.2 变更阶段状态（无需平台审核）</div>
+                <p>变更功能为独立大流程，含完整状态机、跨角色确认、独立上传页与版本 V1→V2 流转，详见 <strong>第九章 工人合同变更功能详细规格</strong>。下表仅列发起方视角相关状态摘要：</p>
+                <table>
+                    <thead><tr><th>状态 key</th><th>显示文案</th><th>视角</th><th>说明（发起方）</th><th>主要操作（发起方）</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>changing</code></td><td>变更中</td><td>发起方</td><td>变更申请已发起，等待对方确认，阶段任务暂停流转。</td><td>撤回变更</td></tr>
+                        <tr><td><code>change_confirming_sender</code></td><td>变更确认中</td><td>发起方</td><td>对方已确认变更，待上传变更签约文件。</td><td>撤回变更</td></tr>
+                        <tr><td><code>change_signing_wait</code></td><td>变更签约中</td><td>双方</td><td>变更已确认，待上传线下签约的变更文件（生成 V2）。</td><td>上传变更签约文件</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection" id="sec-7-5">
+                <div class="subsection-title">7.5 服务方端字段（meta）</div>
+                <p>以下为<strong>发起方视角</strong>可见的合同元信息；「合同类型 / 所属架构层级」为发起方专有字段，受邀方不展示（详见第八章 8.4）。</p>
+                <table>
+                    <thead><tr><th>字段</th><th>说明</th><th>备注</th></tr></thead>
+                    <tbody>
+                        <tr><td>合同名称 name</td><td>合同标题</td><td>草稿态可编辑</td></tr>
+                        <tr><td>合同类型 typeName</td><td>如「水电班组服务合同」</td><td>发起方 / 草稿专有</td></tr>
+                        <tr><td>所属架构层级 group</td><td>如「水电工程」</td><td>发起方 / 草稿专有</td></tr>
+                        <tr><td>合同金额 amount</td><td>金额（元）</td><td>草稿态可编辑；变更态以「旧值 → 新值」高亮</td></tr>
+                        <tr><td>甲方 partyAName</td><td>陈庄（工长）</td><td>附拨打电话入口</td></tr>
+                        <tr><td>乙方 partyBName</td><td>确认后的工人</td><td>确认后展示；其余意向乙方以浅色弱化</td></tr>
+                    </tbody>
+                </table>
+                <div class="subsection-title" style="font-size:15px;">7.5.1 其他核心数据</div>
+                <table>
+                    <thead><tr><th>对象</th><th>结构</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td>意向乙方 invited[]</td><td><code>{ userId, name, role }</code></td><td>role 仅六工种；1-3 人；按合同类型过滤工种候选。</td></tr>
+                        <tr><td>合同正文</td><td>模板 contentIntro + 关键条款 + 标准条款</td><td>草稿态可补充条款；受邀方预览仅关键条款（见第八章）。</td></tr>
+                        <tr><td>阶段任务 stages[]</td><td><code>{ name, order(顺序/并行), tasks:[{name, exec, conf}] }</code></td><td>exec=工人，conf=陈庄；草稿态可内联增删改、切换顺序 / 并行。</td></tr>
+                        <tr><td>附件 attachments[]</td><td>文件列表</td><td>草稿态可上传 / 删除。</td></tr>
+                        <tr><td>变更提案 changeProposal</td><td><code>{ amountOld, amountNew, content, stages }</code></td><td>变更中由发起方填写，对方确认后生效。</td></tr>
+                        <tr><td>版本 history[] / 状态流转 statusFlow[]</td><td>记录列表</td><td>详情页「版本与流转」弹窗查看。</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection" id="sec-7-6">
+                <div class="subsection-title">7.6 页面清单</div>
+                <table>
+                    <thead><tr><th>文件</th><th>类型</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>worker-contract-detail.html</code> + <code>.js</code></td><td>主页面</td><td>工人合同详情：状态机、双视角、拟定编辑、意向乙方名单、合同正文 / 阶段任务 / 附件、变更、接单体验入口；右侧原型导航可收起。</td></tr>
+                        <tr><td><code>worker-sign-upload.html</code></td><td>独立页</td><td>V1 上传签约文件整页流程（服务方发起上传，微信原生导航栏占位 + 上传框 + 文件列表 + 提交→已签约）。</td></tr>
+                        <tr><td><code>worker-change-sign-upload.html</code></td><td>独立页</td><td>上传变更签约文件整页流程（同上，内容适配 V2 变更）。</td></tr>
+                        <tr><td><code>wechat-service-notice.html</code> / <code>invite-banner-demo.html</code> / <code>worker-contract-receive.html</code></td><td>演示页</td><td>工人端接收邀约的简化体验（方案 C / A / E），偏向受邀方视角，详见第八章 8.6。</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection" id="sec-7-7">
+                <div class="subsection-title">7.7 服务方端交互效果</div>
+                <ul>
+                    <li><strong>状态步骤条动态高亮</strong>：随当前状态点亮「拟定中→确认中→已确认→已签约」；变更态整体置为已签约并以顶部 banner 体现变更进度。</li>
+                    <li><strong>拟定中可编辑</strong>：合同名称 / 金额可直接改；意向乙方按工种过滤选 1-3 人；合同正文（模板 / 补充条款）、阶段任务（内联增删改、顺序↔并行切换）、附件（上传删除）、预览合同；编辑随「提交邀请」一并落库。</li>
+                    <li><strong>非乙方名单弱化</strong>：已确认 / 已签约态，其余被邀请人整行浅色（opacity 0.55 + 灰头像 + 灰状态徽标 + 「邀约记录」标签），乙方保持高亮。</li>
+                    <li><strong>弹窗体系</strong>：确认操作（二次确认）、拒绝原因（必填）、重选乙方二次确认、工人名片、模板选择、合同全文、版本历史 / 状态流转、变更记录。</li>
+                    <li><strong>整页上传</strong>：上传签约 / 变更签约文件走独立页（微信原生导航栏占位 + 上传框 + 文件项可删除 + 提交 toast → 跳转已签约 / 已签约 V2）。</li>
+                    <li><strong>原型导航可收起</strong>：标题「原型导航 ▼」点击整块收起 / 展开（图标 ▼↔▸），与内部各分组展开态解耦；发起方视角分组含全部发起方状态与「上传签约文件（新页面）」入口。</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 第八章：工人端（受邀方） -->
+        <div class="section" id="worker-contract-receiver">
+            <div class="section-title">
+                八、工人合同详情页（工人端·受邀方）
+                <span class="badge">worker-contract-detail.html?viewer=receiver</span>
+            </div>
+
+            <div class="subsection" id="sec-8-1">
+                <div class="subsection-title">8.1 概述与定位</div>
+                <p>本章描述<strong>工人端（受邀方）</strong>视角。工人作为被邀请的六工种乙方，通过消息「合同邀约」或简化接收体验（方案 A / C / E）进入合同详情，进行确认 / 拒绝 / 抢单、查看关键条款与项目地址、上传本人签署文件。其视图在发起方基础上做<strong>信息收敛</strong>：隐藏「合同类型 / 所属架构层级」等发起方内部字段，强化「项目地址」与「关键条款」，终态（抢单失败 / 已拒绝）仅展示轻量「邀约已结束」视图。</p>
+                <div class="note">
+                    <div class="note-title">入口（工人端接收邀约）</div>
+                    <ul>
+                        <li><strong>方案 C</strong>：微信客户端层「服务通知」会话（<code>wechat-service-notice.html</code>），点合同邀约气泡直达详情。</li>
+                        <li><strong>方案 A</strong>：小程序内顶部滑出邀约通知条（<code>invite-banner-demo.html</code>），不阻断操作，参考滴滴抢单。</li>
+                        <li><strong>方案 E</strong>：整页接单卡片流（<code>worker-contract-receive.html</code> 系列），主接单卡 + 纵向卡片流 + 吸底 CTA。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="subsection" id="sec-8-2">
+                <div class="subsection-title">8.2 角色与视角（受邀方）</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">受邀方（receiver · 工人端）</div>
+                        <div class="info-value">被邀请的工人</div>
+                        <p style="font-size:13px;color:var(--text-secondary);margin-top:6px;">确认 / 拒绝 / 抢单；展示全部正文（关键条款 + 标准条款）与项目地址；终态（抢单失败 / 已拒绝）展示轻量「邀约已结束」视图。主流程状态机与发起方共用（见第七章 7.4）。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection" id="sec-8-3">
+                <div class="subsection-title">8.3 受邀方状态与流程</div>
+                <p>主流程状态机与第七章共用；<strong>变更流程的受邀方状态（待确认变更 / 变更已驳回）及确认 / 驳回交互见第九章</strong>。下表聚焦<strong>受邀方视角</strong>在主流程可见的状态（其显示文案、确认 / 拒绝操作、接单体验 E 预览态）：</p>
+                <table>
+                    <thead><tr><th>状态 key</th><th>显示文案</th><th>受邀方操作</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>worker_inviting_receiver</code></td><td>确认中</td><td>拒绝 / 确认加入</td><td>被邀请参与，等待本人确认；首位确认者成乙方。</td></tr>
+                        <tr><td><code>worker_confirmed_receiver</code></td><td>已确认</td><td>上传签约文件</td><td>已成为乙方，待上传本人签署文件（内联 <code>pickSignFile</code>）。</td></tr>
+                        <tr><td><code>worker_lost_receiver</code></td><td>已确认（抢单失败）</td><td>无</td><td>被他人抢单，未成为乙方 → 终态轻量视图（见 8.5）。</td></tr>
+                        <tr><td><code>worker_rejected_receiver</code></td><td>已拒绝</td><td>无</td><td>已拒绝邀约，流程结束 → 终态轻量视图（见 8.5）。</td></tr>
+                        <tr><td>（接单体验 E）确认中</td><td>确认中</td><td>确认加入</td><td>方案 E 整页卡片流预览态，含阶段任务与附件。</td></tr>
+                        <tr><td>（接单体验 E）已确认</td><td>已确认</td><td>—</td><td>方案 E 整页卡片流预览态，展示已签约前确认态。</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection" id="sec-8-4">
+                <div class="subsection-title">8.4 元信息差异化（受邀方）</div>
+                <p>受邀方视角对元信息与正文预览做收敛，去除发起方内部字段、强化履约相关信息：</p>
+                <table>
+                    <thead><tr><th>差异项</th><th>发起方（第七章）</th><th>受邀方（本章）</th></tr></thead>
+                    <tbody>
+                        <tr><td>合同类型 typeName</td><td>展示</td><td><strong>不展示</strong></td></tr>
+                        <tr><td>所属架构层级 group</td><td>展示</td><td><strong>不展示</strong></td></tr>
+                        <tr><td>项目地址 projectAddress</td><td>不展示</td><td><strong>展示</strong>（演示默认取自合同数据）</td></tr>
+                        <tr><td>合同正文预览</td><td>完整正文</td><td>仅<strong>关键条款</strong>（甲方责权 3 条 + 乙方责权 4 条）；「查看全部正文」展开完整（关键 + 标准条款）。</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection" id="sec-8-5">
+                <div class="subsection-title">8.5 受邀方终态轻量视图</div>
+                <p>当受邀方处于<strong>抢单失败（<code>worker_lost_receiver</code>）/ 已拒绝（<code>worker_rejected_receiver</code>）</strong>时，详情页隐藏 banner、意向乙方名单、合同正文、底部操作区，仅渲染<strong>「合同名称 + 状态徽标 + 说明」</strong>的轻量「邀约已结束」视图（<code>renderReceiverEndedView</code>）。该效果<strong>仅作用于受邀方终态</strong>；发起方在名单中看到他人 lost / rejected 仍保持完整详情。</p>
+            </div>
+
+            <div class="subsection" id="sec-8-6">
+                <div class="subsection-title">8.6 简化接收体验方案（A / C / E）</div>
+                <table>
+                    <thead><tr><th>方案</th><th>文件</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td>方案 C · 微信服务通知</td><td><code>wechat-service-notice.html</code></td><td>微信客户端层「服务通知」会话，点合同邀约气泡直达 <code>worker-contract-detail.html?viewer=receiver</code>。</td></tr>
+                        <tr><td>方案 A · 应用内顶部通知条</td><td><code>invite-banner-demo.html</code></td><td>phone-frame 小程序外壳，进入时顶部滑出邀约通知条，参考滴滴抢单实时提醒、不阻断操作。</td></tr>
+                        <tr><td>方案 E · 整页接单卡片流</td><td><code>worker-contract-receive.html</code> / <code>-inviting.html</code> / <code>-confirmed.html</code></td><td>模拟真实工人接单视角：顶部小程序导航 + 主接单卡 hero + 纵向卡片流 + 吸底 CTA，自带水电演示数据，完整保留阶段任务（4 阶段）与附件（4 项）；含确认中 / 已确认演示态切换条。</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection" id="sec-8-7">
+                <div class="subsection-title">8.7 原型导航（受邀方视角分组）</div>
+                <p>右侧原型导航「合同状态切换（工人合同）」下，与发起方分组并列的受邀方分组，用于预览工人端各状态与演示方案：</p>
+                <table>
+                    <thead><tr><th>分组</th><th>内容</th></tr></thead>
+                    <tbody>
+                        <tr><td>受邀方视角</td><td>确认中(受邀方) / 已确认(受邀方) / 抢单失败(受邀方) / 已拒绝(受邀方) / 确认中·接单体验E / 已确认·接单体验E</td></tr>
+                        <tr><td>演示数据</td><td>微信服务通知（C方案）/ 应用内顶部通知条（A方案）</td></tr>
+                    </tbody>
+                </table>
+                <p style="margin-top:12px;color:var(--text-tertiary);font-size:13px;">注：原「分享」相关导航已随项目取消分享（改用小程序原生胶囊内分享）移除；「工人合同退出 / 重选」独立页已从导航与工程中删除。</p>
+            </div>
+        </div>
+
         <!-- 文档结束 -->
+        <div class="section" id="worker-contract-change">
+            <div class="section-title">
+                九、工人合同变更功能详细规格
+                <span class="badge">worker-contract-detail.html · worker-change-sign-upload.html</span>
+            </div>
+
+            <div class="subsection" id="sec-9-1">
+                <div class="subsection-title">9.1 功能概述与定位</div>
+                <p>工人合同（班组服务合同）已签约后，发起方（工长·陈庄）与受邀方（工人·乙方）均可发起合同变更。变更流程与合规版「发起变更功能」最大差异在于 <strong>去平台审核</strong>：双方确认即生效，无需平台介入。</p>
+                <div class="note">
+                    <div class="note-title">与合规版发起变更的关键差异</div>
+                    <ul>
+                        <li><strong>无需平台审核</strong>：发起方提交变更 → 受邀方确认 / 驳回，确认后即进入签约，对比合规版需平台审核通过。</li>
+                        <li><strong>生成 V2 版本</strong>：变更签约后合同升级为 V2，原 V1 保留于「版本与流转」记录，可回溯。</li>
+                        <li><strong>独立上传页</strong>：变更签约文件走整页 <code>worker-change-sign-upload.html</code>，与 V1 上传页 <code>worker-sign-upload.html</code> 对称。</li>
+                        <li><strong>阶段任务暂停流转</strong>：变更期间（changing / change_confirming / change_confirming_sender）阶段任务暂停，签约后恢复。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="subsection" id="sec-9-2">
+                <div class="subsection-title">9.2 角色与权限</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">发起方（sender）</div>
+                        <div class="info-value">工长 · 陈庄</div>
+                        <p style="font-size:13px;color:var(--text-secondary);margin-top:6px;">已签约状态底部「发起变更」入口；填写变更提案（金额 / 正文 / 阶段任务）；可撤回变更。</p>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">受邀方（receiver）</div>
+                        <div class="info-value">工人 · 乙方</div>
+                        <p style="font-size:13px;color:var(--text-secondary);margin-top:6px;">收到「待确认变更」，可确认或驳回；驳回后合同保持原已签约，发起方可重新发起。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection" id="sec-9-3">
+                <div class="subsection-title">9.3 变更状态机</div>
+                <p>变更以「已签约」为基底，变更进度由顶部 banner 体现。状态步骤条整体停留在已签约，变更态叠加显示。</p>
+                <table>
+                    <thead><tr><th>状态 key</th><th>显示文案</th><th>视角</th><th>说明</th><th>主要操作</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>changing</code></td><td>变更中</td><td>发起方</td><td>变更申请已发起，等待对方确认，阶段任务暂停流转。</td><td>撤回变更</td></tr>
+                        <tr><td><code>change_confirming</code></td><td>待确认变更</td><td>受邀方</td><td>对方发起变更，请确认或驳回。</td><td>驳回变更 / 确认变更</td></tr>
+                        <tr><td><code>change_confirming_sender</code></td><td>变更确认中</td><td>发起方</td><td>对方已确认变更，待上传变更签约文件。</td><td>撤回变更</td></tr>
+                        <tr><td><code>change_signing_wait</code></td><td>变更签约中</td><td>双方</td><td>变更已确认，待上传线下签约的变更文件（生成 V2）。</td><td>上传变更签约文件</td></tr>
+                        <tr><td><code>change_rejected</code></td><td>变更已驳回</td><td>受邀方</td><td>乙方已驳回变更，保持原已签约；可重新发起。</td><td>重新发起变更 / 返回已签约</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection" id="sec-9-4">
+                <div class="subsection-title">9.4 发起变更流程</div>
+                <ol>
+                    <li>发起方在「已签约」状态点击底部「发起变更」→ 弹出变更编辑面板。</li>
+                    <li>填写 <code>changeProposal</code>：
+                        <ul>
+                            <li><strong>合同金额</strong>：以「旧值 → 新值」高亮对比展示（金额差异醒目）。</li>
+                            <li><strong>合同正文</strong>：可补充 / 调整变更条款。</li>
+                            <li><strong>阶段任务</strong>：可增删改阶段任务及顺序 / 并行设置。</li>
+                        </ul>
+                    </li>
+                    <li>提交变更 → 合同进入 <code>changing</code>（变更中），阶段任务暂停流转，并通知受邀方。</li>
+                </ol>
+            </div>
+
+            <div class="subsection" id="sec-9-5">
+                <div class="subsection-title">9.5 确认 / 驳回变更流程</div>
+                <table>
+                    <thead><tr><th>动作</th><th>角色</th><th>流转</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td>确认变更</td><td>受邀方</td><td>待确认变更 → 变更确认中</td><td>受邀方确认后，合同回到发起方视角「变更确认中」，待上传签约文件。</td></tr>
+                        <tr><td>驳回变更</td><td>受邀方</td><td>待确认变更 → 变更已驳回</td><td>乙方驳回，合同保持原已签约；发起方可重新发起变更或返回已签约。</td></tr>
+                        <tr><td>撤回变更</td><td>发起方</td><td>变更中 / 变更确认中 → 已签约</td><td>发起方在对方确认前可撤回，合同恢复已签约原状。</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection" id="sec-9-6">
+                <div class="subsection-title">9.6 上传变更签约文件流程</div>
+                <p>变更确认后进入「变更签约中」，点击「上传变更签约文件」跳转独立整页 <code>worker-change-sign-upload.html</code>：</p>
+                <ul>
+                    <li>微信原生导航栏占位 + 上传框 + 文件项可删除。</li>
+                    <li>提交后 toast 提示，跳转回详情页并生成 <strong>V2</strong> 合同版本，原 V1 保留于「版本与流转」。</li>
+                    <li>与 V1 上传页 <code>worker-sign-upload.html</code>（已确认→已签约）对称，但内容适配变更提案（金额新旧对比、变更正文、阶段任务）。</li>
+                </ul>
+            </div>
+
+            <div class="subsection" id="sec-9-7">
+                <div class="subsection-title">9.7 变更字段数据结构</div>
+                <table>
+                    <thead><tr><th>对象</th><th>结构</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>changeProposal</code></td><td><code>{ amountOld, amountNew, content, stages }</code></td><td>发起方填写的变更提案；金额新旧对比高亮，stages 为变更后阶段任务。</td></tr>
+                        <tr><td>版本 history[]</td><td>记录列表</td><td>V1 / V2 等版本及状态流转，详情页「版本与流转」弹窗查看。</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection" id="sec-9-8">
+                <div class="subsection-title">9.8 原型导航入口</div>
+                <p>右侧原型导航「合同状态切换（工人合同）→ 变更阶段」分组（计数 6），用于快速预览变更各状态：</p>
+                <table>
+                    <thead><tr><th>预览项</th><th>对应状态</th></tr></thead>
+                    <tbody>
+                        <tr><td>变更中(发起方)</td><td><code>changing</code></td></tr>
+                        <tr><td>待确认变更(受邀方)</td><td><code>change_confirming</code></td></tr>
+                        <tr><td>变更已驳回(受邀方驳回)</td><td><code>change_rejected</code></td></tr>
+                        <tr><td>变更确认中(发起方)</td><td><code>change_confirming_sender</code></td></tr>
+                        <tr><td>变更签约中</td><td><code>change_signing_wait</code></td></tr>
+                        <tr><td>上传变更签约文件（新页面）</td><td>跳 <code>worker-change-sign-upload.html</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+            <div class="section" id="worker-contract-global">
+            <div class="section-title">
+                十、工人合同全局规格参数（新流程 · 无平台审核）
+            </div>
+            <p style="margin:0 0 16px;color:var(--text-secondary);">本章为<strong>工人合同（六类班组服务合同）</strong>专用的全局规格，与第六章「全局规格参数（非工人合同）」平行存在。工人合同走独立页面、独立状态机、<strong>无平台审核</strong>，因此第六章涉及平台审核的状态机与字段校验规则（待审核 / 审核驳回 / 审核人 / 审核驳回原因等）对工人合同<strong>不适用</strong>；本章在复用通用维度（Toast、分页、任务状态机）的基础上，给出工人合同专属的状态机与字段校验规则。</p>
+
+            <div class="subsection" id="sec-10-1">
+                <div class="subsection-title">10.1 Toast规格</div>
+                <p style="margin:0 0 8px;color:var(--text-secondary);">与第六章 6.1 完全一致（通用组件，工人合同沿用）：</p>
+                <table>
+                    <thead><tr><th>属性</th><th>值</th></tr></thead>
+                    <tbody>
+                        <tr><td>位置</td><td>屏幕中部</td></tr>
+                        <tr><td>持续时间</td><td>2秒</td></tr>
+                        <tr><td>样式</td><td>半透明黑色背景，白色文字，圆角8px</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection" id="sec-10-2">
+                <div class="subsection-title">10.2 列表分页规格</div>
+                <p style="margin:0 0 8px;color:var(--text-secondary);">与第六章 6.2 一致（通用规则，工人合同沿用）：</p>
+                <table>
+                    <thead><tr><th>属性</th><th>值</th></tr></thead>
+                    <tbody>
+                        <tr><td>每页条数</td><td>10条</td></tr>
+                        <tr><td>加载方式</td><td>分页器（PC端）、下拉加载更多（小程序）</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection" id="sec-10-3">
+                <div class="subsection-title">10.3 工人合同状态机（无平台审核）</div>
+                <h4>主流程状态机（双方共用，无平台审核）</h4>
+                <div class="code-block">
+拟定中(worker_draft_initial) ─┐
+                              ├─→ 确认中(worker_inviting) → 已确认(worker_confirmed) → 已签约(worker_signed)
+撤回后拟定中(worker_draft) ────┘
+（已确认阶段发起方「重新选择乙方」→ 回到 确认中 → 已确认；全程无平台审核）
+                </div>
+                <h4 style="margin-top:16px;">任务状态机（与第六章 6.3 任务状态机一致）</h4>
+                <div class="code-block">
+待开始(pending) → 执行中(in_progress) → 确认中(confirming) → 已完成(completed)
+                </div>
+                <h4 style="margin-top:16px;">变更状态机（叠加于「已签约」，详见第九章）</h4>
+                <div class="code-block">
+已签约 → 变更中(changing) → 待确认变更(change_confirming) → 变更确认中(change_confirming_sender) → 变更签约中(change_signing_wait) → 已签约(V2)
+                                                     ｜
+                                              变更已驳回(change_rejected) → 回到 已签约
+                </div>
+                <p style="margin:8px 0 0;color:var(--text-secondary);">说明：与第六章 6.3 的根本差异在于<strong>不存在「待审核 / 审核驳回」环节</strong>，乙方由「首位确认者」自动成为（并发首胜），双方确认即生效；变更同样去平台化。</p>
+            </div>
+
+            <div class="subsection" id="sec-10-4">
+                <div class="subsection-title">10.4 工人合同字段校验规则</div>
+                <p style="margin:0 0 8px;color:var(--text-secondary);">与第六章 6.4 的差异：<strong>不含任何平台审核字段</strong>（无 审核人 / 审核时间 / 审核通过备注 / 审核驳回原因）；合同类型枚举为六工种；甲方固定为工长·陈庄。</p>
+                <h4>合同基本信息字段（工人合同）</h4>
+                <table>
+                    <thead><tr><th>字段</th><th>类型</th><th>必填</th><th>校验规则</th><th>错误提示</th></tr></thead>
+                    <tbody>
+                        <tr><td>合同名称（name）</td><td>String(200)</td><td>必填</td><td>1-200字符，非空；草稿态可编辑</td><td>请输入合同名称 / 合同名称不能超过200个字符</td></tr>
+                        <tr><td>合同类型（typeName）</td><td>Enum</td><td>必填</td><td>枚举值：拆除班组服务合同(demolition)、水电班组服务合同(shuidian)、木作班组服务合同(muzuo)、泥瓦工班组服务合同(niwa)、油漆工班组服务合同(youqi)、小零工服务合同(xiaolingong)</td><td>请选择合同类型</td></tr>
+                        <tr><td>所属架构层级（group）</td><td>String</td><td>选填</td><td>如「水电工程」，发起方 / 草稿专有</td><td>—</td></tr>
+                        <tr><td>合同金额（amount）</td><td>Decimal(12,2)</td><td>必填</td><td>正数，≤99,999,999.99，最多2位小数；草稿态可编辑；变更态以「旧值 → 新值」高亮对比</td><td>请输入正确的金额 / 金额不能超过99,999,999.99元</td></tr>
+                        <tr><td>项目地址（projectAddress）</td><td>String</td><td>选填</td><td>发起方与受邀方均可见（受邀方元信息专有行）</td><td>—</td></tr>
+                        <tr><td>甲方（partyAName）</td><td>String</td><td>系统填充</td><td>固定为「陈庄（工长）」，附拨打电话入口</td><td>—</td></tr>
+                        <tr><td>乙方（partyBName）</td><td>String</td><td>确认后填充</td><td>首位确认者成为乙方；其余意向乙方以浅色弱化</td><td>—</td></tr>
+                        <tr><td>合同附件（attachments）</td><td>JSON</td><td>选填</td><td>最多20张，单张≤10MB，格式：jpg/jpeg/png/webp</td><td>请上传图片格式的文件 / 单张图片不能超过10MB / 最多上传20张附件</td></tr>
+                    </tbody>
+                </table>
+                <h4 style="margin-top:16px;">意向乙方字段（invited[]）</h4>
+                <table>
+                    <thead><tr><th>字段</th><th>类型</th><th>必填</th><th>校验规则</th><th>错误提示</th></tr></thead>
+                    <tbody>
+                        <tr><td>意向乙方数量</td><td>Array</td><td>必填</td><td>1-3 人；按合同类型过滤工种候选（仅六工种）</td><td>请至少选择 1 名意向乙方</td></tr>
+                        <tr><td>userId / name / role</td><td>String</td><td>必填</td><td>role 仅限：拆除工 / 水电工 / 木作工 / 泥瓦工 / 油漆工 / 小零工</td><td>—</td></tr>
+                    </tbody>
+                </table>
+                <h4 style="margin-top:16px;">合同变更字段（changeProposal，详见第九章）</h4>
+                <table>
+                    <thead><tr><th>字段</th><th>类型</th><th>必填</th><th>校验规则</th><th>错误提示</th></tr></thead>
+                    <tbody>
+                        <tr><td>变更金额（amountOld / amountNew）</td><td>Decimal(12,2)</td><td>选填</td><td>正数，≤99,999,999.99；以「旧值 → 新值」高亮对比</td><td>请输入正确的金额</td></tr>
+                        <tr><td>变更内容（content）</td><td>Text</td><td>选填</td><td>变更条款说明</td><td>—</td></tr>
+                        <tr><td>变更阶段任务（stages）</td><td>JSON</td><td>选填</td><td>变更后阶段任务及顺序 / 并行设置</td><td>—</td></tr>
+                    </tbody>
+                </table>
+                <h4 style="margin-top:16px;">交互规格</h4>
+                <div class="code-block">
+实时校验：输入时显示字数统计，失焦时校验格式，提交前全字段校验
+错误显示：输入框边框变红（#FF4D4F），下方显示红色提示文字
+金额输入：失焦时自动格式化为两位小数，大额显示「X.X万」
+                </div>
+            </div>
+            </div>
+
         <div style="text-align: center; padding: 48px 0; color: var(--text-tertiary);">
             <p>— 合同模块规格结束 —</p>
             <p style="font-size: 12px; margin-top: 8px;">继续查看 <a href="PRD-任务模块详细规格.html" style="color: var(--primary-color);">任务模块规格</a></p>
@@ -2884,11 +3475,17 @@
     <!-- 滚动高亮脚本 -->
     <script>
         // 监听滚动,高亮当前章节
-        const sections = [
+                const sections = [
             'page-list',
             'page-detail',
             'page-mini-service',
-            'page-mini-owner'
+            'page-mini-owner',
+            'change-function',
+            'global-spec',
+            'worker-contract-sender',
+            'worker-contract-receiver',
+            'worker-contract-change',
+            'worker-contract-global'
         ];
         
         const tocLinks = document.querySelectorAll('.sidebar-toc-list a');
@@ -2943,6 +3540,14 @@
         
         // 页面加载时触发一次滚动监听
         window.dispatchEvent(new Event('scroll'));
+
+        // 目录折叠：一级默认收起，点击一级目录项展开二级
+        document.querySelectorAll('.toc-chapter-head').forEach(function (head) {
+            head.addEventListener('click', function () {
+                var li = head.closest('.toc-chapter');
+                if (li) li.classList.toggle('expanded');
+            });
+        });
     </script>
 </body>
 </html>

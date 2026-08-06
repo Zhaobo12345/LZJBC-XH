@@ -27,6 +27,81 @@
         .wc-banner.confirmed { background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%); }
         .wc-banner.signed { background: linear-gradient(135deg, #722ED1 0%, #9254DE 100%); }
         .wc-banner.rejected { background: linear-gradient(135deg, #F5222D 0%, #FF4D4F 100%); }
+        /* 变更阶段 banner（对齐合同详情合规版） */
+        .wc-banner.changing { background: linear-gradient(135deg, #FA8C16 0%, #FFA940 100%); }
+        .wc-banner.change-confirming { background: linear-gradient(135deg, #FAAD14 0%, #FFC53D 100%); }
+        .wc-banner.reviewing { background: linear-gradient(135deg, #13C2C2 0%, #36CFC9 100%); }
+        .wc-banner.changedone { background: linear-gradient(135deg, #722ED1 0%, #9254DE 100%); }
+        /* 变更已驳回（乙方）原因 */
+        .change-reject-reason {
+            margin: 0 12px 4px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            background: #FFF1F0;
+            border: 1px solid #FFCCC7;
+            color: #CF1322;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .change-reject-reason .crr-label { font-weight: 600; margin-right: 6px; }
+        .change-reject-reason .crr-label { font-weight: 600; margin-right: 6px; }
+
+        /* ============== 发起变更编辑弹窗 ============== */
+        .change-edit-box { max-width: 340px; }
+        .change-edit-content { max-height: 64vh; overflow-y: auto; text-align: left; }
+        .change-notice {
+            display: flex; gap: 8px; align-items: flex-start;
+            background: #FFF7E6; border: 1px solid #FFD591; color: #AD6800;
+            border-radius: 8px; padding: 10px 12px; font-size: 12px; line-height: 1.6; margin-bottom: 14px;
+        }
+        .change-notice .cn-icon { font-size: 14px; line-height: 1.6; }
+        .amount-change-row { display: flex; flex-direction: column; gap: 8px; }
+        .amount-old { font-size: 13px; color: var(--text-tertiary); }
+        .amount-new-wrap { display: flex; align-items: center; gap: 8px; }
+        .amount-new-label { font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
+        .amount-new-input { flex: 1; }
+        .edit-count { text-align: right; font-size: 11px; color: var(--text-tertiary); margin-top: 4px; }
+        .edit-err { color: var(--error-color); font-size: 12px; margin-top: 4px; }
+        .req { color: var(--error-color); }
+        .wc-modal .modal-btn.primary {
+            background: var(--primary-color); color: #fff; border: none;
+        }
+        .wc-modal .modal-btn.primary:active { opacity: .85; }
+
+        /* ============== 变更内容高亮卡片（变更阶段：已签约内容 + 高亮变更点） ============== */
+        .change-highlight-card {
+            margin: 0 12px 12px; border-radius: 12px; padding: 14px;
+            background: #FFFBE6; border: 1px solid #FFE58F;
+        }
+        .change-highlight-card .ch-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+        .ch-title { font-size: 14px; font-weight: 700; color: #AD6800; }
+        .ch-state { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #FFF1B8; color: #AD6800; }
+        .ch-state.done { background: #F6FFED; color: #389E0D; border: 1px solid #B7EB8E; }
+        .ch-state.rejected { background: #FFF1F0; color: #CF1322; border: 1px solid #FFCCC7; }
+        .ch-reason { font-size: 12px; color: #614700; line-height: 1.6; margin-bottom: 10px; background: #FFFFFF; border-radius: 8px; padding: 8px 10px; }
+        .ch-reason-label { font-weight: 600; margin-right: 4px; }
+        .ch-row { display: flex; gap: 10px; padding: 7px 0; border-top: 1px dashed #FFD591; font-size: 13px; }
+        .ch-label { width: 64px; flex-shrink: 0; color: #8C6D1F; padding-top: 2px; }
+        .ch-value { flex: 1; color: #262626; line-height: 1.6; }
+        .ch-old { color: #8C8C8C; text-decoration: line-through; margin-right: 2px; }
+        .ch-arrow { color: #FA8C16; margin: 0 4px; }
+        .ch-new { color: #FA8C16; font-weight: 600; }
+        .ch-badge { display: inline-block; margin-left: 8px; padding: 1px 7px; border-radius: 10px; background: #FFF1B8; color: #AD6800; font-size: 11px; }
+        .ch-sub { font-size: 12px; }
+        .ch-old-text { color: #8C8C8C; }
+        .ch-new-text { color: #FA8C16; }
+        .ch-demo-tip { margin-top: 10px; font-size: 11px; color: #B08900; }
+
+        /* 元信息 变更高亮 */
+        .meta-row.highlight .meta-value { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .mv-old { color: #8C8C8C; text-decoration: line-through; }
+        .mv-arrow { color: #FA8C16; }
+        .mv-new { color: #FA8C16; font-weight: 600; }
+        .mv-tag { font-size: 10px; padding: 1px 6px; border-radius: 8px; background: #FFF1B8; color: #AD6800; }
+
+        /* 补充条款 / 阶段任务 变更高亮 */
+        .text-content-change { background: #FFFBE6; border-bottom: 2px solid #FFD591; padding: 0 2px; border-radius: 3px; }
+        .text-content-change-tag { display: inline-block; margin-left: 6px; font-size: 10px; padding: 1px 6px; border-radius: 8px; background: #FFF1B8; color: #AD6800; vertical-align: middle; }
         .wc-banner-text { font-size: 18px; font-weight: 700; }
         .wc-banner-desc { font-size: 12px; margin-top: 6px; line-height: 1.5; opacity: 0.95; }
 
@@ -102,6 +177,37 @@
         .invite-status.lost {
             background: #FFF3E0; color: #D4690E; border: 1px solid #FFD591; font-weight: 600;
         }
+        /* 变更中（发起方）：乙方处于「待确认（变更）」状态，区别于普通待确认 */
+        .invite-status.change-pending {
+            background: var(--status-primary-bg); color: var(--primary-color); font-weight: 600;
+            border: 1px solid var(--primary-light);
+        }
+        /* 变更阶段各状态：乙方状态随变更逻辑演进，配色区别于普通待确认/已确认 */
+        .invite-status.change-confirmed {
+            background: var(--status-success-bg); color: var(--success-color); font-weight: 600;
+            border: 1px solid var(--success-color);
+        }
+        .invite-status.change-rejected {
+            background: var(--status-error-bg); color: var(--error-color); font-weight: 600;
+            border: 1px solid var(--error-color);
+        }
+        /* 乙方标识徽标（邀约名单中标明当前乙方） */
+        .invite-partyb-tag {
+            display: inline-block; margin-right: 6px; padding: 1px 6px; border-radius: 8px;
+            font-size: 10px; font-weight: 600; line-height: 1.5;
+            background: var(--status-primary-bg); color: var(--primary-color); vertical-align: middle;
+        }
+        .invite-row.is-partyb { background: var(--status-primary-bg); border-radius: 8px; padding-left: 8px; padding-right: 8px; }
+        /* 变更中：其他受邀人为历史邀约记录，暗色呈现、不突出，仅作记录标识 */
+        .invite-record-tag {
+            display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 8px;
+            font-size: 10px; font-weight: 500; line-height: 1.5;
+            background: var(--bg-secondary); color: var(--text-tertiary); vertical-align: middle;
+        }
+        .invite-row.is-record { opacity: 0.55; }
+        .invite-row.is-record .invite-name { color: var(--text-secondary); }
+        .invite-avatar.muted { background: #C9CDD4; color: #fff; }
+        .invite-status.record { background: var(--bg-secondary); color: var(--text-tertiary); font-weight: 400; border: none; }
 
         .arch-note {
             margin-top: 12px; padding: 10px 12px; border-radius: 8px;
@@ -135,6 +241,12 @@
             background: var(--bg-primary); outline: none; font-family: inherit;
         }
         .edit-input:focus { border-color: var(--primary-color); }
+        .edit-textarea {
+            width: 100%; box-sizing: border-box; border: 1px solid var(--border-color);
+            border-radius: 8px; padding: 10px 12px; font-size: 13px; color: var(--text-primary);
+            background: var(--bg-primary); outline: none; font-family: inherit; resize: vertical; line-height: 1.5;
+        }
+        .edit-textarea:focus { border-color: var(--primary-color); }
         .invite-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
         .invite-chip {
             display: inline-flex; align-items: center; gap: 4px;
@@ -235,7 +347,7 @@
             border-radius: 12px; overflow: hidden;
         }
         .wc-modal .modal-title { font-size: 16px; font-weight: 600; text-align: center; padding: 20px 16px 12px; color: var(--text-primary); }
-        .wc-modal .modal-content { font-size: 14px; color: var(--text-secondary); text-align: center; padding: 0 16px 20px; line-height: 1.5; }
+        .wc-modal .modal-content { font-size: 14px; color: var(--text-secondary); text-align: center; padding: 0 16px 20px; line-height: 1.5; white-space: pre-line; }
         .wc-modal .modal-actions { display: flex; border-top: 1px solid var(--border-color); }
         .wc-modal .modal-btn { flex: 1; height: 48px; border: none; background: none; cursor: pointer; font-size: 16px; font-family: inherit; }
         .wc-modal .modal-btn.cancel { color: var(--text-secondary); border-right: 1px solid var(--border-color); }
@@ -245,6 +357,34 @@
         /* 拒绝原因弹窗 */
         #rejectReasonModal .modal-content { text-align: left; }
         .modal-tip { font-size: 13px; color: var(--text-tertiary); margin: 0 0 10px; line-height: 1.5; }
+        /* 重新选择乙方：候选提示 */
+        .reselect-hint {
+            font-size: 13px; color: var(--text-secondary); background: #fff7e6;
+            border: 1px solid #ffe1b3; border-radius: 8px; padding: 8px 10px; margin-bottom: 10px;
+        }
+        /* 重选视图：历史选择记录卡片（被替换原乙方，发起人可见） */
+        .reselect-history {
+            background: #fff1f0; border: 1px solid #ffccc7; border-radius: 10px;
+            padding: 10px 12px; margin: 0 0 12px;
+        }
+        .reselect-history .rh-title { font-size: 12px; color: #cf1322; font-weight: 600; margin-bottom: 8px; }
+        .reselect-history .rh-body { display: flex; align-items: center; gap: 10px; }
+        .reselect-history .rh-info { flex: 1; min-width: 0; }
+        .reselect-history .rh-name { font-size: 14px; color: #262626; font-weight: 600; }
+        .reselect-history .rh-role { font-size: 12px; color: #8c8c8c; }
+        .reselect-history .rh-tag {
+            font-size: 11px; color: #cf1322; background: #ffccc7; border-radius: 4px;
+            padding: 2px 8px; white-space: nowrap;
+        }
+        /* 变更记录：本次操作留痕 */
+        .cr-log-item { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 12px; }
+        .cr-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex: 0 0 auto; }
+        .cr-dot.primary { background: var(--primary-color); }
+        .cr-dot.warning { background: var(--warning-color); }
+        .cr-log-main { flex: 1; min-width: 0; }
+        .cr-log-title { font-size: 13px; color: #262626; font-weight: 600; }
+        .cr-log-desc { font-size: 12px; color: #595959; line-height: 1.6; margin: 2px 0; }
+        .cr-log-meta { font-size: 11px; color: #8c8c8c; }
         .reject-reason-input {
             width: 100%; box-sizing: border-box; border: 1px solid var(--border-color);
             border-radius: 8px; padding: 10px; font-size: 14px; font-family: inherit;
@@ -343,6 +483,21 @@
         }
         .wc-preview-btn:active { opacity: 0.85; }
 
+        /* 受邀方视角合同正文预览：关键条款（甲方责权 / 乙方责权）排版 */
+        .contract-text-preview .clause-block { margin-bottom: 10px; }
+        .contract-text-preview .clause-block:last-child { margin-bottom: 0; }
+        .contract-text-preview .clause-title {
+            font-size: 13px; font-weight: 600; color: var(--text-primary, #1D2129);
+            margin-bottom: 4px;
+        }
+        .contract-text-preview .clause-list {
+            margin: 0; padding-left: 18px;
+        }
+        .contract-text-preview .clause-list li {
+            font-size: 12px; line-height: 1.6; color: var(--text-secondary, #4E5969);
+            margin-bottom: 3px;
+        }
+
         /* 受邀方终态（抢单失败/已拒绝）轻量「邀约已结束」视图 */
         .receiver-ended-view { padding: 36px 16px 24px; text-align: center; }
         .re-ended-icon {
@@ -410,6 +565,10 @@
                     <div class="wc-banner-text" id="bannerText"></div>
                     <div class="wc-banner-desc" id="bannerDesc"></div>
                 </div>
+                <!-- 变更阶段：在已签约内容基础上高亮标记变更点（发起变更后 / 导航预览变更阶段时显示） -->
+                <div class="change-highlight-card" id="changeHighlightCard" style="display:none;"></div>
+                <!-- 变更已驳回（乙方）：乙方驳回原因展示 -->
+                <div class="change-reject-reason" id="changeRejectReason" style="display:none;"></div>
 
                 <!-- 合同邀约与乙方（工人合同特有） -->
                 <div class="worker-invite-card" id="invitationCard">
@@ -420,7 +579,13 @@
                     <!-- 非草稿：邀请名单 -->
                     <div id="inviteListBox"></div>
 
-                    <!-- 草稿：内联编辑面板（拟定中 / 拟定中撤回后，统一由底部「提交邀请」控制） -->
+                    <!-- 草稿：重选时展示「历史选择记录」卡片（被替换的原乙方，发起人可见） -->
+                    <div id="reselectHistoryCard" class="reselect-history" style="display:none;">
+                        <div class="rh-title">📌 历史选择记录（本次重选前）</div>
+                        <div class="rh-body" id="reselectHistoryBody"></div>
+                    </div>
+
+                    <!-- 草稿：内联编辑面板（拟定中 / 拟定中撤回后，统一由底部「提交并邀请乙方」控制） -->
                     <div id="inviteEditPanel" class="invite-edit-panel" style="display:none;">
                         <div class="form-section-title">合同信息（拟定中可修改）</div>
                         <div class="edit-field">
@@ -557,6 +722,20 @@
             </div>
         </div>
 
+        <!-- 重新选择乙方：二次确认弹窗 -->
+        <div class="wc-modal" id="reselectConfirmModal">
+            <div class="modal-box">
+                <div class="modal-title">重新选择乙方</div>
+                <div class="modal-content">
+                    <p class="modal-tip" id="reselectConfirmTip">确认重新选择乙方？原乙方将收到「合作未达成」通知，合同回到确认中状态，请重新选定乙方。</p>
+                </div>
+                <div class="modal-actions">
+                    <button class="modal-btn cancel" onclick="WCP.closeReselectConfirm()">取消</button>
+                    <button class="modal-btn danger" onclick="WCP.confirmReselect()">确认重选</button>
+                </div>
+            </div>
+        </div>
+
         <!-- 个人电子名片（开发中） -->
         <div class="wc-modal" id="businessCardModal">
             <div class="modal-box business-card-box">
@@ -672,8 +851,8 @@
                             <div style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 12px;">
                                 <span style="color: #13C2C2; margin-top: 3px;">●</span>
                                 <div>
-                                    <div style="color: #262626;">2024-03-08 平台审核通过</div>
-                                    <div style="color: #8C8C8C; font-size: 11px;">运营人员审核通过变更申请</div>
+                                    <div style="color: #262626;">2024-03-08 对方确认变更</div>
+                                    <div style="color: #8C8C8C; font-size: 11px;">乙方确认同意变更内容（无需平台审核）</div>
                                 </div>
                             </div>
                             <div style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 12px;">
@@ -698,6 +877,11 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <!-- 动态：本次操作留痕（从合同 changeLog 渲染，反映重新选择乙方等实际操作） -->
+                    <div id="changeRecordLog" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #E8E8E8; display:none;">
+                        <div style="font-size: 12px; color: #8C8C8C; margin-bottom: 12px;">本次操作留痕</div>
+                        <div id="changeRecordLogList"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -741,7 +925,6 @@
         <a href="contract-detail.html" class="page-nav-item">合同详情（合规版）</a>
         <a href="message.html" class="page-nav-item">消息</a>
         <a href="worker-contract-detail.html" class="page-nav-item active">工人合同详情（新流程）</a>
-        <a href="worker-contract-exit.html" class="page-nav-item">工人合同退出/重选</a>
         <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #E8E8E8;">
             <div class="page-nav-title">合同状态切换（工人合同）</div>
 
@@ -750,14 +933,15 @@
                 <div class="status-group-header" onclick="WCP.toggleStatusGroup(this)">
                     <span class="status-group-icon">▼</span>
                     <span class="status-group-title">发起方视角</span>
-                    <span class="status-group-count">5</span>
+                    <span class="status-group-count">6</span>
                 </div>
                 <div class="status-group-content">
-                    <div class="status-switch-item" onclick="WCP.updateStatus('worker_draft_initial')">拟定中(发起方)</div>
-                    <div class="status-switch-item" onclick="WCP.updateStatus('worker_inviting_sender')">确认中(发起方)</div>
-                    <div class="status-switch-item" onclick="WCP.updateStatus('worker_confirmed_sender')">已确认(发起方)</div>
-                    <div class="status-switch-item" onclick="WCP.updateStatus('worker_draft')">拟定中(撤回后)</div>
-                    <div class="status-switch-item" onclick="WCP.updateStatus('worker_signed')">已签约</div>
+                    <div class="status-switch-item" data-status="worker_draft_initial" onclick="WCP.updateStatus('worker_draft_initial')">拟定中(发起方)</div>
+                    <div class="status-switch-item" data-status="worker_inviting_sender" onclick="WCP.updateStatus('worker_inviting_sender')">确认中(发起方)</div>
+                    <div class="status-switch-item" data-status="worker_confirmed_sender" onclick="WCP.updateStatus('worker_confirmed_sender')">已确认(发起方)</div>
+                    <a class="status-switch-item" href="worker-sign-upload.html" style="text-decoration:none;">上传签约文件（新页面）</a>
+                    <div class="status-switch-item" data-status="worker_draft" onclick="WCP.updateStatus('worker_draft')">拟定中(撤回后)</div>
+                    <div class="status-switch-item" data-status="worker_signed" onclick="WCP.updateStatus('worker_signed')">已签约</div>
                 </div>
             </div>
 
@@ -766,36 +950,46 @@
                 <div class="status-group-header" onclick="WCP.toggleStatusGroup(this)">
                     <span class="status-group-icon">▶</span>
                     <span class="status-group-title">受邀方视角</span>
-                    <span class="status-group-count">3</span>
+                    <span class="status-group-count">5</span>
                 </div>
                 <div class="status-group-content" style="display:none;">
-                    <div class="status-switch-item" onclick="WCP.updateStatus('worker_inviting_receiver')">确认中(受邀方)</div>
-                    <div class="status-switch-item" onclick="WCP.updateStatus('worker_confirmed_receiver')">已确认(受邀方)</div>
-                    <div class="status-switch-item" onclick="WCP.updateStatus('worker_lost_receiver')">抢单失败(受邀方)</div>
-                    <div class="status-switch-item" onclick="WCP.updateStatus('worker_rejected_receiver')">已拒绝(受邀方)</div>
+                    <div class="status-switch-item" data-status="worker_inviting_receiver" onclick="WCP.updateStatus('worker_inviting_receiver')">确认中(受邀方)</div>
+                    <div class="status-switch-item" data-status="worker_confirmed_receiver" onclick="WCP.updateStatus('worker_confirmed_receiver')">已确认(受邀方)</div>
+                    <div class="status-switch-item" data-status="worker_lost_receiver" onclick="WCP.updateStatus('worker_lost_receiver')">抢单失败(受邀方)</div>
+                    <div class="status-switch-item" data-status="worker_rejected_receiver" onclick="WCP.updateStatus('worker_rejected_receiver')">已拒绝(受邀方)</div>
+                    <div class="status-switch-divider"></div>
+                    <a class="status-switch-item" href="worker-contract-receive-inviting.html" style="text-decoration:none;">确认中（接单体验 E）</a>
+                    <a class="status-switch-item" href="worker-contract-receive-confirmed.html" style="text-decoration:none;">已确认（接单体验 E）</a>
                 </div>
             </div>
 
-            <!-- 演示数据：合同类型切换 / 重置（原置于「更多」菜单，对齐合规版后迁移至此） -->
+            <!-- 演示数据：合同邀约方案演示入口（独立页面） -->
             <div class="status-group">
                 <div class="status-group-header" onclick="WCP.toggleStatusGroup(this)">
                     <span class="status-group-icon">▼</span>
                     <span class="status-group-title">演示数据</span>
-                    <span class="status-group-count">9</span>
+                    <span class="status-group-count">2</span>
                 </div>
                 <div class="status-group-content">
-                    <div class="status-switch-item" onclick="WCP.createDemo('demolition')">拆除班组服务合同</div>
-                    <div class="status-switch-item" onclick="WCP.createDemo('shuidian')">水电班组服务合同</div>
-                    <div class="status-switch-item" onclick="WCP.createDemo('muzuo')">木作班组服务合同</div>
-                    <div class="status-switch-item" onclick="WCP.createDemo('niwa')">泥瓦工班组服务合同</div>
-                    <div class="status-switch-item" onclick="WCP.createDemo('youqi')">油漆工班组服务合同</div>
-                    <div class="status-switch-item" onclick="WCP.createDemo('xiaolingong')">小零工服务合同</div>
-                    <div class="status-switch-item" onclick="WCP.resetDemo()" style="color:var(--warning-color);">重置演示数据</div>
-
-                    <!-- 合同邀约方案演示入口（独立页面） -->
-                    <div class="status-switch-divider"></div>
                     <a class="status-switch-item" href="wechat-service-notice.html" style="text-decoration:none;">微信服务通知（C方案）</a>
                     <a class="status-switch-item" href="invite-banner-demo.html" style="text-decoration:none;">应用内顶部通知条（A方案）</a>
+                </div>
+            </div>
+
+            <!-- 变更阶段：工人合同无需平台审核，对齐「合同详情（合规版）」变更流程去平台化版本（预览用，不影响其它功能） -->
+            <div class="status-group">
+                <div class="status-group-header" onclick="WCP.toggleStatusGroup(this)">
+                    <span class="status-group-icon">▶</span>
+                    <span class="status-group-title">变更阶段</span>
+                    <span class="status-group-count">6</span>
+                </div>
+                <div class="status-group-content" style="display:none;">
+                    <div class="status-switch-item" data-status="changing" onclick="WCP.updateStatus('changing')">变更中(发起方)</div>
+                    <div class="status-switch-item" data-status="change_confirming" onclick="WCP.updateStatus('change_confirming')">待确认变更(受邀方)</div>
+                    <div class="status-switch-item" data-status="change_rejected" onclick="WCP.updateStatus('change_rejected')">变更已驳回(受邀方驳回)</div>
+                    <div class="status-switch-item" data-status="change_confirming_sender" onclick="WCP.updateStatus('change_confirming_sender')">变更确认中(发起方)</div>
+                    <div class="status-switch-item" data-status="change_signing_wait" onclick="WCP.updateStatus('change_signing_wait')">变更签约中</div>
+                    <a class="status-switch-item" href="worker-change-sign-upload.html" style="text-decoration:none;">上传变更签约文件（新页面）</a>
                 </div>
             </div>
         </div>

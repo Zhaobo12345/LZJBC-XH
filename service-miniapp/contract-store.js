@@ -88,6 +88,7 @@
             partyA: data.partyA || '',
             partyAName: data.partyAName || '',
             partyAPhone: data.partyAPhone || '',
+            projectAddress: data.projectAddress || '',
             amount: data.amount || '',
             isWorker: true,
             status: 'worker_inviting',
@@ -96,7 +97,9 @@
             partyBName: '',
             joinedArchitecture: '',
             signed: false,
-            createdAt: Date.now()
+            createdAt: Date.now(),
+            changeLog: [],
+            versionLog: []
         };
         saveContract(contract);
         // 为每个被邀请人生成一条「合同邀约」消息
@@ -205,6 +208,7 @@
             return { userId: m.userId, name: m.name, role: m.role, status: 'pending' };
         });
         c.status = 'worker_inviting';
+        c.replacedPartyB = '';
         saveContract(c);
         c.invitations.forEach(function (inv) {
             addMessage({
@@ -233,6 +237,74 @@
         c.status = 'worker_signed';
         c.signed = true;
         saveContract(c);
+    }
+
+    /**
+     * 发起方主动重新选择乙方：将当前已确认乙方标记为「合作未达成（被替换）」，
+     * 清空受邀名单并把合同退回「拟定中」，由发起方在拟定中重新搜索并选择 1-3 名意向乙方后提交邀请。
+     */
+    function reselectPartyB(id) {
+        var c = getContract(id);
+        if (!c) return { ok: false };
+        var replaced = c.invitations.filter(function (i) { return i.status === 'confirmed'; });
+        c.invitations.forEach(function (i) {
+            if (i.status === 'confirmed') i.status = 'replaced';
+        });
+        // 记录被替换的原乙方（用于拟定中横幅提示「合作未达成」）
+        c.replacedPartyB = replaced.length
+            ? { userId: replaced[0].userId, name: replaced[0].name, role: replaced[0].role }
+            : '';
+        // 留痕：重新选择乙方属于「历史版本」记录（非合同变更），写入 versionLog，
+        // 由发起方在「版本记录（历史版本）」中查看；不写入 changeLog（变更记录）。
+        c.versionLog = c.versionLog || [];
+        c.versionLog.push({
+            name: '重新选择乙方',
+            desc: '原乙方「' + (replaced[0] ? replaced[0].name : '') + '」合作未达成，合同退回拟定中重新选择',
+            date: nowLabel()
+        });
+        // 清空受邀名单：拟定中由发起人重新挑选（选择乙方流程与拟定中完全一致）
+        c.invitations = [];
+        c.status = 'worker_draft';
+        c.partyB = '';
+        c.partyBName = '';
+        c.joinedArchitecture = '';
+        saveContract(c);
+        // 通知原乙方：本次合作未达成
+        replaced.forEach(function (i) {
+            addMessage({
+                id: 'cmsg-replace-' + c.id + '-' + i.userId,
+                type: 'contract_invite',
+                contractId: c.id,
+                toUserId: i.userId,
+                toUserName: i.name,
+                fromUserName: c.inviterName || '陈庄',
+                fromUserRole: c.inviterRole || '工长',
+                contractName: c.name,
+                contractType: c.typeName,
+                group: c.group,
+                status: 'replaced',
+                time: nowLabel(),
+                date: '今天',
+                unread: true
+            });
+        });
+        return { ok: true, contract: c };
+    }
+
+    /**
+     * 发起方取消重新选择：恢复原已确认乙方与已确认状态。
+     */
+    function reselectCancel(id, prev) {
+        var c = getContract(id);
+        if (!c || !prev) return { ok: false };
+        c.invitations = [{ userId: prev.userId, name: prev.name, role: prev.role, status: 'confirmed' }];
+        c.status = 'worker_confirmed';
+        c.partyB = prev.userId;
+        c.partyBName = prev.name;
+        c.joinedArchitecture = c.group || '';
+        c.replacedPartyB = '';
+        saveContract(c);
+        return { ok: true, contract: c };
     }
 
     // ============== 消息 ==============
@@ -314,6 +386,8 @@
         withdrawConfirm: withdrawConfirm,
         submitInvite: submitInvite,
         markSigned: markSigned,
+        reselectPartyB: reselectPartyB,
+        reselectCancel: reselectCancel,
         getMessages: getMessages,
         clearAll: clearAll,
         addMessage: addMessage,

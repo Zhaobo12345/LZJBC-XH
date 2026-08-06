@@ -14,6 +14,7 @@
 - **意向乙方按合同类型过滤工种**：`TRADE_ROLE_BY_TYPE` 映射 类型→工种角色，草稿态编辑面板仅展示匹配工种（如 水电班组服务合同 → 仅水电工可选）。`DEMO_TYPES.invited` 已改为单一匹配工种，与之一致。
 - **拟定中页面 = 可编辑合同内容**（参考「合同详情（合规版）」`contract-detail.html`，复用其 `css/contract-detail.css` 同名类，降低开发成本）：草稿态用 `draftContentWrap` 替换只读区 `readOnlySections`，提供「更换模板（按当前内容Tab分支提供类型匹配模板）/ 合同正文查看全文 / 补充条款输入 / 阶段任务内联增删改与按序并行切换 / 附件上传删除 / 预览合同」；编辑结果经 `patchContract` 随"提交邀请"一并落库。
 - **受邀方终态（抢单失败 `worker_lost_receiver` / 已拒绝 `worker_rejected_receiver`）渲染轻量「邀约已结束」视图**：`updateStatus()` 内侦测此二态即隐藏 banner / `#invitationCard` / `#readOnlySections` / `#draftContentWrap` / `#bottomActions`，改显 `#receiverEndedView`（合同名称 + 状态徽标 + 说明），由 `renderReceiverEndedView()` 渲染；**仅作用于受邀方终态，发起方视角（含名单中他人 lost/rejected）保持完整详情不变**。
+- **受邀方视角（`state.viewer==='receiver'`）元信息与合同正文差异化**（2026-08-05 确定）：`renderMeta` 对受邀方**去掉「合同类型」「所属架构层级」两行、新增「项目地址」行**（项目地址来自合同数据 `projectAddress` 字段，演示默认 `DEMO_PROJECT_ADDRESS`）；`renderContentSection` 对受邀方合同正文预览**仅展示关键条款**（甲方责权3条 + 乙方责权4条，由 `receiverKeyClausesHTML()` 生成），且「查看全文」链接**改为「查看全部正文」**，点开后由 `buildReceiverContractHTML()` 展示含关键条款 + 标准条款的完整正文（发起方仍用 `buildContractBodyHTML()`）。发起方/草稿态的 `renderMeta` 与正文预览**保持原样**。合同数据层 `createContract` 含 `projectAddress` 字段（默认 `data.projectAddress||''`）。
 
 ## 数据口径约定（全部待办页）
 - `service-miniapp/todo-list.html` 与 `owner-miniapp/todo-list.html` 的「全部待办」列表**不含**「临时任务」示例项、**不含**「待审核」待办（待审核仅 PC 运营人员端存在，服务方/业主端无）。
@@ -28,3 +29,9 @@
 - ~~原型导航 `service-miniapp/share-navigation.html`~~ **已于 2026-08-04 删除**（`git rm`，用户确认：工人合同详情页 `worker-contract-detail.html` 右侧原型导航已包含其全部内容）。删除前该页仅含「工人合同详情（新流程）」与「消息通知」两个 section；A/C 两页面入口现仅挂在 `worker-contract-detail.html` 右侧原型导航「演示数据」分组底部（见下条）。项目内代码/HTML 已无任何对该页的引用（仅 `产品需求说明书-历史版本.md` 存档仍提及，属历史记录不改）。
 - A/C 两页面的**二级入口**同时挂在 `worker-contract-detail.html` 右侧原型导航「演示数据」分组底部（以 `<a>` 链接形式，配 `status-switch-divider` 分隔线，与合同类型/重置项区分；该分组计数已由 7 改为 9）。
 - 2026-08-04 曾误将 C 方案演示卡放进 message.html「合同邀约」Tab，按用户指令已撤销并改为独立页面；后续**勿再在 message.html 内置该演示**。
+- 受邀方体验改造 **方案 E（整页接单卡片流）验证页** = 独立页面 `service-miniapp/worker-contract-receive.html`（2026-08-05 新增）：模拟真实工人接单视角（顶部小程序导航 + 主接单卡 hero + 纵向卡片流 + 吸底 CTA），自带水电演示数据，**完整保留阶段任务（4 阶段）与附件（4 项）**；顶部「确认中 / 已确认」演示态切换条供快速预览两态。入口挂在 `worker-contract-detail.html` 右侧原型导航（page-nav）「工人合同详情（新流程）」之后。此页为独立新增、零耦合，不影响任何其他功能页面；原 `worker-contract-detail.html` 受邀方改动保持不动。
+
+## 页面布局约定（项目详情进行中-新版）
+- `project-detail-ongoing-v2.html`（service-miniapp 与 owner-miniapp 两份）的「待办事项」卡片：**不与架构切换联动**，故置于「吸顶导航」（快捷入口 + 架构切换 同处 `.sticky-header`）**之前**（即快捷入口上方），作为普通滚动卡片；吸顶区仅保留快捷入口 + 架构切换。
+- 改动方式：按 HTML 注释锚点整体移动，不改任何 CSS/JS（`.card:has(#todoContent)` 入场动效、`data-href` 文档级跳转均与位置无关）；两份文件结构一致、同步改动。
+- 现状顺序：项目基本信息 → 待办事项 → [快捷入口 + 架构切换 吸顶] → 合同/任务概览 → 今日动态（owner 版今日动态在吸顶块之后、合同概览之前）。

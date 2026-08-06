@@ -66,6 +66,10 @@
             margin: 0 4px;
         }
 
+        /* 上传页覆盖层内：状态栏与导航栏不收缩，保证微信原生导航栏布局稳定 */
+        .sign-upload-page > .status-bar,
+        .sign-upload-page > .nav-bar { flex-shrink: 0; }
+
         /* 页内文字版「更多」按钮 —— 位于内容区，不在导航栏，避开仿冒界面风险 */
         .content-toolbar {
             display: flex;
@@ -1994,12 +1998,15 @@
         </div>
         
         <div class="sign-upload-page" id="signUploadPage">
-            <div class="page-header">
-                <div class="header-back" onclick="closeSignUploadPage()">
-                    <span>← 返回</span>
-                </div>
-                <div class="header-title">上传签约文件</div>
-                <div class="header-placeholder"></div>
+            <!-- 微信原生状态栏 + 导航栏（与合同详情页一致，符合微信小程序默认规范） -->
+            <div class="status-bar">
+                <div class="time">9:41</div>
+                <div class="icons">📶 🔋</div>
+            </div>
+            <div class="nav-bar">
+                <div class="back" onclick="closeSignUploadPage()">← 返回</div>
+                <div class="title centered">上传签约文件</div>
+                <div class="actions"><div class="native-capsule" title="微信原生胶囊：由微信客户端渲染，开发者不可自定义其内容"><span class="nc-left">⋯</span><span class="nc-divider"></span><span class="nc-right">○</span></div></div>
             </div>
             <div class="page-content">
                 <div class="notice-card">

@@ -460,6 +460,41 @@
                 </div>
             </div>
 
+            <!-- 待办事项（与架构切换无联动，置于吸顶导航上方） -->
+            <div class="card">
+                <div class="card-title">
+                    <span>📋 待办事项</span>
+                    <span class="badge-wrap"><span class="badge" id="todoBadge">3</span></span>
+                    <span class="more" data-href="todo-list.html">查看全部 ></span>
+                </div>
+                <div class="todo-content show" id="todoContent">
+                    <div class="todo-item" data-href="contract-detail.html?status=confirming_receiver">
+                        <div class="icon" style="background-color: #E6F7FF;">🔵</div>
+                        <div class="content">
+                            <div class="title">泥瓦分包合同确认 <span class="task-tag contract">合同</span></div>
+                            <div class="desc">泥瓦工作组 | 待确认</div>
+                        </div>
+                        <div class="status urgent">待确认</div>
+                    </div>
+                    <div class="todo-item" data-href="contract-detail.html?status=signing">
+                        <div class="icon" style="background-color: #E6F7FF;">🔵</div>
+                        <div class="content">
+                            <div class="title">木工分包合同签约 <span class="task-tag contract">合同</span></div>
+                            <div class="desc">木工工作组 | 待签约</div>
+                        </div>
+                        <div class="status pending">待确认</div>
+                    </div>
+                    <div class="todo-item" data-href="task-detail.html?status=in_progress">
+                        <div class="icon" style="background-color: #FFF7E6;">🟡</div>
+                        <div class="content">
+                            <div class="title">吊顶安装 <span class="task-tag task">任务</span></div>
+                            <div class="desc">木工工作组 | 张三执行中</div>
+                        </div>
+                        <div class="status in-progress">执行中</div>
+                    </div>
+                </div>
+            </div>
+
             <!-- 快捷入口：架构、成员、资料库、对账单 -->
             <div class="sticky-header" id="stickyHeader">
                 <div class="quick-nav" id="quickNav">
@@ -553,41 +588,6 @@
                             </div>
                             <div class="check" style="visibility:hidden;">✓</div>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 待办事项（置于合同概览上方，默认展示三条） -->
-            <div class="card">
-                <div class="card-title">
-                    <span>📋 待办事项</span>
-                    <span class="badge-wrap"><span class="badge" id="todoBadge">3</span></span>
-                    <span class="more" data-href="todo-list.html">查看全部 ></span>
-                </div>
-                <div class="todo-content show" id="todoContent">
-                    <div class="todo-item" data-href="contract-detail.html?status=confirming_receiver">
-                        <div class="icon" style="background-color: #E6F7FF;">🔵</div>
-                        <div class="content">
-                            <div class="title">泥瓦分包合同确认 <span class="task-tag contract">合同</span></div>
-                            <div class="desc">泥瓦工作组 | 待确认</div>
-                        </div>
-                        <div class="status urgent">待确认</div>
-                    </div>
-                    <div class="todo-item" data-href="contract-detail.html?status=signing">
-                        <div class="icon" style="background-color: #E6F7FF;">🔵</div>
-                        <div class="content">
-                            <div class="title">木工分包合同签约 <span class="task-tag contract">合同</span></div>
-                            <div class="desc">木工工作组 | 待签约</div>
-                        </div>
-                        <div class="status pending">待确认</div>
-                    </div>
-                    <div class="todo-item" data-href="task-detail.html?status=in_progress">
-                        <div class="icon" style="background-color: #FFF7E6;">🟡</div>
-                        <div class="content">
-                            <div class="title">吊顶安装 <span class="task-tag task">任务</span></div>
-                            <div class="desc">木工工作组 | 张三执行中</div>
-                        </div>
-                        <div class="status in-progress">执行中</div>
                     </div>
                 </div>
             </div>
@@ -733,8 +733,8 @@
                     </div>
                 </div>
                 <div class="activity-more-btn" id="activityMoreBtn">
-                    <span>展示更多</span>
-                    <span class="arrow">›</span>
+                    <span id="activityMoreText">展开更多</span>
+                    <span class="arrow" id="activityMoreArrow">▼</span>
                 </div>
             </div>
 
@@ -792,6 +792,8 @@
 
             var quickNavExpanded = true;
             var activityExpanded = false;
+            var userManualExpand = false;
+            var lastScrollTop = 0;
 
             function showCustomToast(message) {
                 if (customToastMessage && customToastModal) {
@@ -856,6 +858,36 @@
                 }
             }
 
+            function handleScroll() {
+                if (!pageContent) return;
+                var scrollTop = pageContent.scrollTop;
+                if (scrollTop > 50) {
+                    if (quickNavExpanded && !userManualExpand) {
+                        if (quickNav) quickNav.classList.add('collapsed');
+                        if (quickNavToggle) quickNavToggle.classList.add('show');
+                        quickNavExpanded = false;
+                        if (toggleText) toggleText.textContent = '展开快捷入口';
+                        if (toggleArrow) toggleArrow.classList.remove('expanded');
+                    }
+                    var sh = document.getElementById('stickyHeader');
+                    if (sh) sh.classList.add('with-shadow');
+                    if (levelSelector) levelSelector.classList.add('sticky');
+                } else {
+                    if (!quickNavExpanded) {
+                        if (quickNav) quickNav.classList.remove('collapsed');
+                        if (quickNavToggle) quickNavToggle.classList.remove('show');
+                        quickNavExpanded = true;
+                        if (toggleText) toggleText.textContent = '收起快捷入口';
+                        if (toggleArrow) toggleArrow.classList.add('expanded');
+                        userManualExpand = false;
+                    }
+                    var sh2 = document.getElementById('stickyHeader');
+                    if (sh2) sh2.classList.remove('with-shadow');
+                    if (levelSelector) levelSelector.classList.remove('sticky');
+                }
+                lastScrollTop = scrollTop;
+            }
+
             function toggleActivityList() {
                 var activityList = document.getElementById('activityList');
                 var moreBtn = document.getElementById('activityMoreBtn');
@@ -867,8 +899,8 @@
                     if (moreBtn) {
                         var text = moreBtn.querySelector('span');
                         var arrow = moreBtn.querySelector('.arrow');
-                        if (text) text.textContent = '展示更多';
-                        if (arrow) arrow.textContent = '›';
+                        if (text) text.textContent = '展开更多';
+                        if (arrow) arrow.classList.remove('expanded');
                     }
                 } else {
                     if (activityList) activityList.classList.add('expanded');
@@ -879,7 +911,7 @@
                         var text = moreBtn.querySelector('span');
                         var arrow = moreBtn.querySelector('.arrow');
                         if (text) text.textContent = '收起';
-                        if (arrow) arrow.textContent = '˄';
+                        if (arrow) arrow.classList.add('expanded');
                     }
                 }
             }
@@ -907,6 +939,8 @@
             }
 
             if (quickNavToggle) quickNavToggle.addEventListener('click', toggleQuickNav);
+
+            if (pageContent) pageContent.addEventListener('scroll', handleScroll);
 
             if (levelSelector) {
                 levelSelector.addEventListener('click', function(e) {

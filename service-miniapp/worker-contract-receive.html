@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>家装平台小程序原型 - 接单体验验证（E方案）</title>
+    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="css/contract-detail.css">
+    <style>
+        /* ===== 方案 E：整页接单卡片流（验证页） ===== */
+        * { box-sizing: border-box; }
+        body { margin: 0; background: #f2f3f5; font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; }
+        .receive-page {
+            max-width: 480px; margin: 0 auto; min-height: 100vh;
+            background: var(--bg-secondary, #f2f3f5); display: flex; flex-direction: column;
+            position: relative; padding-bottom: 84px;
+        }
+
+        /* 顶部小程序导航 */
+        .app-nav {
+            display: flex; align-items: center; gap: 8px;
+            height: 48px; padding: 0 12px; background: #fff;
+            border-bottom: 1px solid #ececec; position: sticky; top: 0; z-index: 20;
+        }
+        .app-nav .back { font-size: 22px; color: #333; text-decoration: none; width: 28px; }
+        .app-nav .nav-title { font-size: 16px; font-weight: 600; color: #222; flex: 1; }
+        .demo-switch {
+            display: flex; background: #f0f1f3; border-radius: 14px; padding: 2px; font-size: 11px;
+        }
+        .demo-switch span {
+            padding: 3px 9px; border-radius: 12px; color: #888; cursor: pointer; white-space: nowrap;
+        }
+        .demo-switch span.on { background: #fff; color: var(--primary-color, #1677ff); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+
+        .receive-scroll { flex: 1; overflow-y: auto; padding: 12px; }
+
+        /* 主接单卡（hero） */
+        .hero-card {
+            background: #fff; border-radius: 16px; padding: 18px 16px 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,.06); position: relative; overflow: hidden;
+        }
+        .hero-card::before {
+            content: ""; position: absolute; left: 0; top: 0; right: 0; height: 4px;
+            background: linear-gradient(135deg, #1677ff 0%, #4096ff 100%);
+        }
+        .hero-card.confirmed::before { background: linear-gradient(135deg, #52c41a 0%, #73d13d 100%); }
+        .hero-inviter { display: flex; align-items: center; gap: 10px; }
+        .hero-avatar {
+            width: 40px; height: 40px; border-radius: 50%; background: #1677ff; color: #fff;
+            display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600; flex: 0 0 auto;
+        }
+        .hero-inviter-text { font-size: 13px; color: #666; }
+        .hero-inviter-text b { color: #222; }
+        .hero-trade { font-size: 20px; font-weight: 700; color: #1a1a1a; margin: 14px 0 4px; }
+        .hero-amount {
+            font-size: 34px; font-weight: 800; color: #fa541c; line-height: 1.1; margin: 6px 0 2px;
+        }
+        .hero-amount small { font-size: 16px; font-weight: 600; }
+        .hero-amount-label { font-size: 12px; color: #999; margin-bottom: 10px; }
+        .hero-meta-row { display: flex; gap: 18px; flex-wrap: wrap; margin: 10px 0; }
+        .hero-meta { font-size: 13px; color: #555; }
+        .hero-meta b { color: #222; display: block; font-size: 12px; color: #999; font-weight: 400; margin-bottom: 2px; }
+        .hero-compete {
+            margin-top: 12px; background: #fff7e6; border: 1px solid #ffe1a8; color: #d48806;
+            font-size: 12px; padding: 8px 10px; border-radius: 8px; line-height: 1.5;
+        }
+        .hero-confirmed-badge {
+            display: inline-block; margin-top: 12px; background: #f6ffed; border: 1px solid #b7eb8f;
+            color: #52c41a; font-size: 12px; padding: 8px 10px; border-radius: 8px;
+        }
+        /* 下一步任务流（已确认态） */
+        .next-flow { margin-top: 14px; border-top: 1px dashed #eee; padding-top: 12px; }
+        .next-flow-title { font-size: 13px; font-weight: 600; color: #333; margin-bottom: 8px; }
+        .next-step { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+        .next-dot {
+            width: 18px; height: 18px; border-radius: 50%; flex: 0 0 auto; margin-top: 1px;
+            background: #52c41a; color: #fff; font-size: 11px; display: flex; align-items: center; justify-content: center;
+        }
+        .next-dot.pending { background: #fff; border: 1px solid #d9d9d9; color: #bbb; }
+        .next-step-text { font-size: 13px; color: #333; }
+        .next-step-text span { display: block; font-size: 11px; color: #999; margin-top: 1px; }
+
+        /* 卡片流 */
+        .flow-card {
+            background: #fff; border-radius: 14px; padding: 14px 16px; margin-top: 12px;
+            box-shadow: 0 1px 6px rgba(0,0,0,.04);
+        }
+        .flow-title { font-size: 15px; font-weight: 600; color: #222; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+        .flow-title .badge { font-size: 11px; font-weight: 400; color: #999; }
+        .flow-line { font-size: 13px; color: #555; line-height: 1.7; }
+        .flow-line b { color: #222; }
+        .call-link {
+            color: var(--primary-color, #1677ff); text-decoration: none; font-weight: 600;
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 3px 10px; border: 1px solid #91caff; border-radius: 14px; font-size: 12px;
+            background: #f0f7ff;
+        }
+        .call-link:active { background: #e6f4ff; }
+        .clause-block { margin-bottom: 8px; }
+        .clause-title { font-size: 13px; font-weight: 600; color: #333; margin: 6px 0 4px; }
+        .clause-list { margin: 0; padding-left: 18px; }
+        .clause-list li { font-size: 12px; color: #666; line-height: 1.7; }
+
+        /* 附件（保留完整内容） */
+        .mini-att { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid #f5f5f5; }
+        .mini-att:last-child { border-bottom: none; }
+        .mini-att-icon { font-size: 20px; }
+        .mini-att-name { font-size: 13px; color: #333; flex: 1; }
+        .mini-att-meta { font-size: 11px; color: #999; }
+
+        details.full-text { margin-top: 4px; }
+        details.full-text summary { font-size: 13px; color: var(--primary-color, #1677ff); cursor: pointer; user-select: none; }
+        details.full-text .ft-body { font-size: 12px; color: #666; line-height: 1.8; margin-top: 8px; }
+
+        /* 吸底 CTA */
+        .sticky-cta {
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 100%; max-width: 480px; background: #fff; border-top: 1px solid #eee;
+            display: flex; gap: 12px; padding: 12px 16px; z-index: 30;
+            box-shadow: 0 -2px 10px rgba(0,0,0,.05);
+        }
+        .cta-btn {
+            flex: 1; height: 46px; border-radius: 23px; font-size: 16px; font-weight: 600;
+            border: none; cursor: pointer;
+        }
+        .cta-secondary { background: #f5f5f5; color: #666; flex: 0 0 96px; }
+        .cta-primary { background: linear-gradient(135deg, #1677ff 0%, #4096ff 100%); color: #fff; }
+        .cta-primary.confirmed { background: linear-gradient(135deg, #52c41a 0%, #73d13d 100%); }
+
+        /* toast */
+        .app-toast {
+            position: fixed; left: 50%; top: 50%; transform: translate(-50%,-50%);
+            background: rgba(0,0,0,.8); color: #fff; font-size: 13px; padding: 10px 16px;
+            border-radius: 8px; z-index: 100; opacity: 0; pointer-events: none; transition: opacity .2s; white-space: pre-line; text-align: center;
+        }
+        .app-toast.show { opacity: 1; }
+    </style>
+</head>
+<body>
+<div class="receive-page">
+    <!-- 顶部小程序导航（真实视角，不带原型栏） -->
+    <div class="app-nav">
+        <a class="back" href="worker-contract-detail.html">&lsaquo;</a>
+        <div class="nav-title">合同邀约</div>
+        <div class="demo-switch">
+            <span id="swInviting" onclick="setState('inviting')">确认中</span>
+            <span id="swConfirmed" onclick="setState('confirmed')">已确认</span>
+        </div>
+    </div>
+
+    <div class="receive-scroll">
+        <!-- 主接单卡（hero）：由 JS 按状态渲染 -->
+        <div id="hero"></div>
+
+        <!-- 卡片流：保留全部信息，按工人决策维度组织 -->
+        <div class="flow-card">
+            <div class="flow-title">🤝 合作方 <span class="badge">甲方（工长）· 乙方（您）</span></div>
+            <div class="flow-line">甲方（雇主）：<a href="tel:13888888888" class="call-link">📞 陈庄（工长）拨打电话</a>。</div>
+            <div class="flow-line">乙方（您）：<b>张水电</b>。</div>
+        </div>
+
+        <div class="flow-card">
+            <div class="flow-title">📋 关键条款</div>
+            <div class="clause-block"><div class="clause-title">一、甲方责权</div>
+                <ol class="clause-list">
+                    <li>甲方有权按照相关工艺及质量标准监督、指导乙方工作，并根据工作过程及完成情况给予奖励、处罚。</li>
+                    <li>甲方应按照工程施工要求在乙方施工前进行相关培训及交底，包含但不限于《现场施工管理规定》、《施工工艺及验收标准》、图纸交底等。</li>
+                    <li>甲方有责任按时为乙方提供满足工作需要的场地、材料、工具、安全措施等。</li>
+                </ol></div>
+            <div class="clause-block"><div class="clause-title">二、乙方责权</div>
+                <ol class="clause-list">
+                    <li>乙方有权在约定的支付节点获得报酬。</li>
+                    <li>当遇到现场、图纸冲突时，乙方应第一时间告知甲方进行协调。</li>
+                    <li>乙方在工作中应自觉保护其他工种的劳动成果，不得擅自破坏。</li>
+                    <li>乙方不得擅自把甲方提供的工具、材料拿出场外或使用到其他工地。</li>
+                </ol></div>
+            <details class="full-text">
+                <summary>请查看详细条款</summary>
+                <div class="ft-body">
+                    一、工程概况：工程名称「水电班组服务合同」，地点 XX市XX区XX路XX号。二、双方权利义务（见上方甲方责权/乙方责权）。三、价款与支付：合同金额 ¥8,800 元（含材料与人工），具体支付节点由双方书面约定。四、验收与违约：隐蔽工程验收合格后方可进入下一道工序。五、争议解决：协商不成的，提交项目所在地人民法院诉讼解决。
+                </div>
+            </details>
+        </div>
+
+        <!-- 我要干的活（即阶段任务，与原页面 worker-contract-detail.js renderStagesSection 保持一致：复用 contract-detail.css 的 stage-* / task-* 样式） -->
+        <div class="flow-card">
+            <div class="flow-title">🔧 我要干的活 <span class="badge" id="stageCount">4 个阶段</span></div>
+            <div id="stageWrap"></div>
+        </div>
+
+        <!-- 附件（完整保留） -->
+        <div class="flow-card">
+            <div class="flow-title">📎 合同附件 <span class="badge">4 项</span></div>
+            <div class="mini-att"><div class="mini-att-icon">📄</div><div class="mini-att-name">水电班组服务合同.pdf</div><div class="mini-att-meta">2.3MB</div></div>
+            <div class="mini-att"><div class="mini-att-icon">🖼️</div><div class="mini-att-name">量房照片.jpg</div><div class="mini-att-meta">1.5MB</div></div>
+            <div class="mini-att"><div class="mini-att-icon">📊</div><div class="mini-att-name">材料清单.xlsx</div><div class="mini-att-meta">156KB</div></div>
+            <div class="mini-att"><div class="mini-att-icon">📐</div><div class="mini-att-name">施工图纸.dwg</div><div class="mini-att-meta">5.8MB</div></div>
+        </div>
+    </div>
+
+    <!-- 吸底 CTA：由 JS 按状态渲染 -->
+    <div class="sticky-cta" id="cta"></div>
+
+    <div class="app-toast" id="appToast"></div>
+</div>
+
+<script>
+    // 演示状态：inviting（确认中） / confirmed（已确认）
+    var appState = 'inviting';
+
+    function $(id) { return document.getElementById(id); }
+    function showToast(msg) {
+        var t = $('appToast'); if (!t) return;
+        t.textContent = msg; t.classList.add('show');
+        setTimeout(function () { t.classList.remove('show'); }, 2200);
+    }
+
+    // 阶段任务：与原页面（worker-contract-detail.js STAGE_TEMPLATES.shuidian / renderStagesSection）保持完全一致
+    var DEMO_STAGES = [
+        { name: '材料进场阶段', order: '并行执行', tasks: [ { name: '材料采购', exec: '张水电', conf: '陈庄' }, { name: '材料报验', exec: '张水电', conf: '陈庄' } ] },
+        { name: '布管布线阶段', order: '顺序执行', tasks: [ { name: '开槽布管', exec: '张水电', conf: '陈庄' }, { name: '穿线接线', exec: '张水电', conf: '陈庄' }, { name: '阶段确认', exec: '张水电', conf: '陈庄' } ] },
+        { name: '安装阶段', order: '顺序执行', tasks: [ { name: '开关插座安装', exec: '张水电', conf: '陈庄' } ] },
+        { name: '收尾阶段', order: '顺序执行', tasks: [ { name: '通水通电测试', exec: '张水电', conf: '陈庄' }, { name: '阶段确认', exec: '张水电', conf: '陈庄' } ] }
+    ];
+
+    function renderStages() {
+        var html = DEMO_STAGES.map(function (s, i) {
+            var tasks = (s.tasks || []).map(function (t) {
+                return '<div class="task-item"><div class="task-info">' +
+                    '<div class="task-name">' + t.name + '</div>' +
+                    '<div class="task-meta-row"><span class="task-meta-item"><span class="role-tag executor">执行</span> ' + t.exec + '</span>' +
+                    '<span class="task-meta-item"><span class="role-tag confirmer">确认</span> ' + t.conf + '</span></div>' +
+                    '</div></div>';
+            }).join('');
+            return '<div class="stage-item"><div class="stage-header" onclick="toggleStage(this)">' +
+                '<div class="stage-icon">' + (i + 1) + '</div>' +
+                '<div class="stage-info"><div class="stage-name">' + s.name + '</div>' +
+                '<div class="stage-meta">' + (s.tasks ? s.tasks.length : 0) + '个任务 · 待开始</div>' +
+                '<div class="stage-order-tag" style="background-color:#FFF7E6;color:#FA8C16;">' + (s.order || '并行执行') + '</div></div>' +
+                '<div class="arrow expanded">▼</div></div>' +
+                '<div class="stage-tasks show">' + tasks + '</div></div>';
+        }).join('');
+        var wrap = $('stageWrap');
+        if (wrap) wrap.innerHTML = html;
+        var cnt = $('stageCount');
+        if (cnt) cnt.textContent = DEMO_STAGES.length + ' 个阶段';
+    }
+
+    function toggleStage(header) {
+        var tasks = header.parentElement.querySelector('.stage-tasks');
+        var arrow = header.querySelector('.arrow');
+        if (!tasks) return;
+        var collapsed = tasks.style.display === 'none';
+        tasks.style.display = collapsed ? 'block' : 'none';
+        if (arrow) arrow.classList.toggle('expanded', collapsed);
+    }
+
+    function setState(s) {
+        appState = s;
+        renderHero();
+        renderCta();
+        $('swInviting').className = (s === 'inviting') ? 'on' : '';
+        $('swConfirmed').className = (s === 'confirmed') ? 'on' : '';
+    }
+
+    function renderHero() {
+        var inviting = appState === 'inviting';
+        var html = '<div class="hero-card' + (inviting ? '' : ' confirmed') + '">';
+        // 邀请人
+        html += '<div class="hero-inviter"><div class="hero-avatar">陈</div>' +
+                '<div class="hero-inviter-text"><b>陈庄（工长）</b> 邀请您承接</div></div>';
+        // 工种 + 报酬
+        html += '<div class="hero-trade">水电班组服务合同</div>';
+        html += '<div class="hero-amount"><small>¥</small>8,800<small> 元</small></div>';
+        html += '<div class="hero-amount-label">合同报酬（含材料与人工）</div>';
+        // 元信息
+        html += '<div class="hero-meta-row">' +
+                '<div class="hero-meta"><b>项目地址</b>XX市XX区XX路XX号</div></div>';
+        // 状态相关提示
+        if (inviting) {
+            html += '<div class="hero-compete">⚡ 首位确认者成为本合同乙方 · 当前 3 人受邀中，尽快确认锁定名额</div>';
+        } else {
+            html += '<div class="hero-confirmed-badge">✅ 您已成为本合同乙方，已自动加入项目架构层级</div>';
+            html += '<div class="next-flow"><div class="next-flow-title">下一步</div>' +
+                    '<div class="next-step"><div class="next-dot">1</div><div class="next-step-text">上传签约文件<span>合同正式生效前需上传纸质合同扫描件</span></div></div>' +
+                    '<div class="next-step"><div class="next-dot pending">2</div><div class="next-step-text">等待开工通知<span>工长确认后推送开工时间</span></div></div>' +
+                    '<div class="next-step"><div class="next-dot pending">3</div><div class="next-step-text">查看工程任务<span>阶段任务与验收节点</span></div></div>' +
+                    '</div>';
+        }
+        html += '</div>';
+        $('hero').innerHTML = html;
+    }
+
+    function renderCta() {
+        var inviting = appState === 'inviting';
+        var html;
+        if (inviting) {
+            html = '<button class="cta-btn cta-secondary" onclick="doDecline()">暂不接</button>' +
+                   '<button class="cta-btn cta-primary" onclick="doReceive()">接单</button>';
+        } else {
+            html = '<button class="cta-btn cta-primary confirmed" onclick="doUpload()">上传签约文件</button>';
+        }
+        $('cta').innerHTML = html;
+    }
+
+    function doReceive() {
+        showToast('已接单！您已成为本合同乙方');
+        setState('confirmed');
+    }
+    function doDecline() {
+        showToast('已暂不接，可在消息中重新查看');
+    }
+    function doUpload() {
+        showToast('请上传已签署的纸质合同扫描件 / 照片');
+    }
+
+    // 初始化
+    renderStages();
+    setState('inviting');
+</script>
+</body>
+</html>

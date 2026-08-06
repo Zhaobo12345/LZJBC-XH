@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>家装平台小程序原型 - 工人合同上传变更签约文件</title>
+    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="css/contract-detail.css">
+
+    <style>
+        :root{
+            --bg-secondary:#F7F8FA; --bg-primary:#fff;
+            --text-primary:#1D2129; --text-secondary:#4E5969; --text-tertiary:#86909C;
+            --border-color:#E5E6EB;
+            --primary-color:#1677FF; --primary-light:#69B1FF;
+            --success-color:#52C41A; --warning-color:#FAAD14; --error-color:#F5222D;
+            --status-success-bg:#EAF7E6; --status-primary-bg:#E6F4FF; --status-error-bg:#FCEAEA; --status-warning-bg:#FFF7E6;
+        }
+        /* 微信原生胶囊占位（原型仅作占位，与「工人合同详情」等页面一致，符合微信小程序默认规范） */
+        .nav-bar .native-capsule {
+            display: inline-flex; align-items: center; justify-content: space-between;
+            min-width: 56px; height: 28px; padding: 0 10px;
+            border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 14px;
+            background: rgba(255, 255, 255, 0.7); color: rgba(0, 0, 0, 0.6);
+            font-size: 12px; line-height: 1; user-select: none; box-sizing: border-box;
+        }
+        .nav-bar .native-capsule .nc-left,
+        .nav-bar .native-capsule .nc-right {
+            display: inline-flex; align-items: center; justify-content: center;
+            flex: 1; min-width: 16px;
+        }
+        .nav-bar .native-capsule .nc-right { font-size: 10px; }
+        .nav-bar .native-capsule .nc-divider { width: 1px; height: 14px; background: rgba(0, 0, 0, 0.1); margin: 0 4px; }
+        /* 上传页内：状态栏与导航栏不收缩，保证微信原生导航栏布局稳定 */
+        .sign-upload-page > .status-bar,
+        .sign-upload-page > .nav-bar { flex-shrink: 0; }
+        /* 轻量 toast（与原型 WCP.showToast 风格一致） */
+        .wc-toast{
+            position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+            background:rgba(0,0,0,.8); color:#fff; padding:10px 16px; border-radius:8px;
+            font-size:13px; z-index:999; opacity:0; transition:opacity .2s; pointer-events:none; max-width:80%; text-align:center;
+        }
+        .wc-toast.show{ opacity:1; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <!-- 参考「合同详情（合规版）」sign-upload-page 整页上传样式 -->
+        <div class="sign-upload-page show">
+            <!-- 微信原生状态栏 + 导航栏（符合微信小程序默认规范，与「工人合同详情」等页面一致） -->
+            <div class="status-bar">
+                <div class="time">9:41</div>
+                <div class="icons">📶 🔋</div>
+            </div>
+            <div class="nav-bar">
+                <div class="back" onclick="goBack()">← 返回</div>
+                <div class="title centered">上传变更签约文件</div>
+                <div class="actions"><div class="native-capsule" title="微信原生胶囊：由微信客户端渲染，开发者不可自定义其内容"><span class="nc-left">⋯</span><span class="nc-divider"></span><span class="nc-right">○</span></div></div>
+            </div>
+            <div class="page-content">
+                <div class="notice-card">
+                    <div class="notice-title">
+                        <span>📋</span>
+                        <span>上传说明</span>
+                    </div>
+                    <ul class="notice-list">
+                        <li>请上传线下已签署的《合同变更协议》扫描件或照片</li>
+                        <li>支持 PDF、JPG、PNG 格式，单个文件不超过 10MB</li>
+                        <li>上传后合同变更正式生效（生成 V2 版本），阶段任务按变更后内容继续流转</li>
+                    </ul>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-title">
+                        <span>📎</span>
+                        <span>变更签约文件</span>
+                    </div>
+                    <div class="upload-box" onclick="document.getElementById('changeSignFileInput').click()">
+                        <div class="icon">📁</div>
+                        <div class="text">点击上传变更签约文件</div>
+                        <div class="hint">支持 PDF、JPG、PNG 格式</div>
+                    </div>
+                    <input type="file" id="changeSignFileInput" style="display: none;" accept=".pdf,.jpg,.jpeg,.png" onchange="handleSignFileSelect(this)">
+                    <div id="signFileList"></div>
+                </div>
+            </div>
+            <div class="page-footer">
+                <button class="submit-btn" onclick="submitSignFile()">提交变更签约文件</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var signFiles = [];
+
+        function handleSignFileSelect(input) {
+            if (input.files.length > 0) {
+                var file = input.files[0];
+                signFiles.push({
+                    name: file.name,
+                    size: (file.size / 1024).toFixed(1) + 'KB'
+                });
+                renderSignFileList();
+            }
+        }
+
+        function renderSignFileList() {
+            var el = document.getElementById('signFileList');
+            if (!el) return;
+            el.innerHTML = signFiles.map(function (f, i) {
+                return '<div class="file-item">' +
+                    '<div class="file-icon">📄</div>' +
+                    '<div class="file-info"><div class="file-name">' + f.name + '</div><div class="file-size">' + f.size + '</div></div>' +
+                    '<div class="file-remove" onclick="removeSignFile(' + i + ')">×</div>' +
+                    '</div>';
+            }).join('');
+        }
+
+        function removeSignFile(i) {
+            signFiles.splice(i, 1);
+            renderSignFileList();
+        }
+
+        function goBack() {
+            // 返回「变更签约中」状态页
+            location.href = 'worker-contract-detail.html?preview=change_signing_wait';
+        }
+
+        function submitSignFile() {
+            if (signFiles.length === 0) {
+                showToast('请上传变更签约文件');
+                return;
+            }
+            showToast('变更签约文件已上传，合同已生效');
+            // 上传成功后跳转到「已签约」页面（参考合规版提交后 updateContractStatus('signed')）
+            setTimeout(function () {
+                location.href = 'worker-contract-detail.html?preview=worker_signed';
+            }, 900);
+        }
+
+        function showToast(msg) {
+            var t = document.createElement('div');
+            t.className = 'wc-toast';
+            t.textContent = msg;
+            document.querySelector('.phone-frame').appendChild(t);
+            setTimeout(function () { t.classList.add('show'); }, 10);
+            setTimeout(function () {
+                t.classList.remove('show');
+                setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 300);
+            }, 1800);
+        }
+    </script>
+</body>
+</html>
