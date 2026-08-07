@@ -518,218 +518,6 @@
             flex: 1;
         }
 
-        .promoter-banner {
-            background: linear-gradient(135deg, #FFF7E6 0%, #FFE7BA 100%);
-            border: 1px solid #FFD591;
-            border-radius: 12px;
-            padding: 12px 16px;
-            margin: 12px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .promoter-banner:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 159, 10, 0.2);
-        }
-
-        .promoter-banner .banner-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex: 1;
-        }
-
-        .promoter-banner .banner-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #FF9F43 0%, #FFA726 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            flex-shrink: 0;
-        }
-
-        .promoter-banner .banner-content {
-            flex: 1;
-        }
-
-        .promoter-banner .banner-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #D48806;
-            margin-bottom: 2px;
-        }
-
-        .promoter-banner .banner-desc {
-            font-size: 12px;
-            color: #AD6800;
-        }
-
-        .promoter-banner .banner-arrow {
-            color: #FF9F43;
-            font-size: 18px;
-        }
-
-        .promoter-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: linear-gradient(135deg, #FF9F43 0%, #FFA726 100%);
-            color: #FFFFFF;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-
-        .promoter-badge .badge-icon {
-            font-size: 14px;
-        }
-
-        .promoter-tip {
-            display: none;
-            background-color: #E6F7FF;
-            border: 1px solid #91D5FF;
-            border-radius: 8px;
-            padding: 8px 12px;
-            margin: 0 16px 12px;
-            font-size: 12px;
-            color: #0050B3;
-        }
-
-        .promoter-tip.show {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .promoter-tip .tip-icon {
-            font-size: 16px;
-            flex-shrink: 0;
-        }
-
-        .promoter-tip .tip-text {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 4px;
-        }
-
-        .promoter-tip .inline-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 2px;
-            background: linear-gradient(135deg, #FF9F43 0%, #FFA726 100%);
-            color: #FFFFFF;
-            padding: 1px 6px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 600;
-            white-space: nowrap;
-            margin-left: 4px;
-        }
-
-        .promoter-tip .inline-badge .badge-icon {
-            font-size: 10px;
-        }
-
-        /* 演示控制面板 - 贴近手机框外右侧，与发起人提示区域同行 */
-        .demo-control-panel {
-            position: fixed;
-            top: 130px;
-            left: calc(50% + 198px + 16px);
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-            z-index: 9999;
-            min-width: 180px;
-        }
-
-        .demo-control-panel .panel-title {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .demo-control-panel .control-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-        }
-
-        .demo-control-panel .control-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .demo-control-panel .control-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        /* Toggle Switch */
-        .toggle-switch {
-            position: relative;
-            width: 40px;
-            height: 22px;
-            background-color: #d9d9d9;
-            border-radius: 11px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            flex-shrink: 0;
-        }
-
-        .toggle-switch.active {
-            background-color: var(--success-color);
-        }
-
-        .toggle-switch::after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 18px;
-            height: 18px;
-            background-color: #fff;
-            border-radius: 50%;
-            transition: transform 0.3s;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-        }
-
-        .toggle-switch.active::after {
-            transform: translateX(18px);
-        }
-
-        .demo-control-panel .status-text {
-            font-size: 11px;
-            margin-top: 8px;
-            padding: 4px 8px;
-            border-radius: 4px;
-            text-align: center;
-        }
-
-        .demo-control-panel .status-text.uncertified {
-            background: #FFF7E6;
-            color: #D48806;
-        }
-
-        .demo-control-panel .status-text.certified {
-            background: #E6F7FF;
-            color: #0050B3;
-        }
     </style>
 <style>
 /* 微信原生胶囊占位（样式参考真机效果，由微信客户端实际渲染） */
@@ -803,26 +591,6 @@
 
 
         <div class="page-content">
-            <div class="promoter-banner" id="promoterBanner" onclick="goToPromoterAuth()">
-                <div class="banner-left">
-                    <div class="banner-icon">💰</div>
-                    <div class="banner-content">
-                        <div class="banner-title">成为项目发起人可享受项目分利</div>
-                        <div class="banner-desc">立即认证，开启收益之旅</div>
-                    </div>
-                </div>
-                <div class="banner-arrow">›</div>
-            </div>
-
-            <div class="promoter-tip" id="promoterTip">
-                <span class="tip-text">
-                    <span>您已是 <span class="inline-badge">
-                        <span class="badge-icon">⭐</span>
-                        <span>项目发起人</span>
-                    </span> 可享受项目分利权益</span>
-                </span>
-            </div>
-
             <form id="createForm">
                 <div class="form-section">
                     <div class="form-group">
@@ -1040,14 +808,6 @@
             <div class="action-sheet-cancel" onclick="hideUploadActionSheet()">取消</div>
         </div>
     </div>
-    <div class="demo-control-panel" id="demoControlPanel">
-        <div class="panel-title">演示控制</div>
-        <div class="control-item">
-            <span class="control-label">发起人认证</span>
-            <div class="toggle-switch" id="promoterToggle" onclick="togglePromoterStatus()"></div>
-        </div>
-        <div class="status-text uncertified" id="promoterStatusText">未认证：展示Banner入口</div>
-    </div>
 
     <div class="page-nav">
         <div class="page-nav-title">原型导航</div>
@@ -1069,7 +829,6 @@
         let selectedHouseType = '';
         let selectedStyles = [];
         let uploadedFiles = [];
-        let isPromoter = false;
 
         // 初始化默认选项值（DOM中已有默认选中项）
         function initDefaultSelections() {
@@ -1260,52 +1019,8 @@
             }
         }
 
-        function checkPromoterStatus() {
-            // 从localStorage读取认证状态
-            const storedStatus = localStorage.getItem('isPromoter');
-            isPromoter = storedStatus === 'true';
 
-            // 同步更新演示控制面板状态
-            updatePromoterUI();
-        }
 
-        function togglePromoterStatus() {
-            // 切换认证状态
-            isPromoter = !isPromoter;
-            localStorage.setItem('isPromoter', isPromoter ? 'true' : 'false');
-            updatePromoterUI();
-        }
-
-        function updatePromoterUI() {
-            const toggleEl = document.getElementById('promoterToggle');
-            const statusText = document.getElementById('promoterStatusText');
-            const banner = document.getElementById('promoterBanner');
-            const tip = document.getElementById('promoterTip');
-
-            if (isPromoter) {
-                // 已认证状态
-                toggleEl.classList.add('active');
-                statusText.textContent = '已认证：隐藏Banner，展示提示条和角标';
-                statusText.className = 'status-text certified';
-
-                // 页面内区域切换
-                banner.style.display = 'none';
-                tip.classList.add('show');
-            } else {
-                // 未认证状态
-                toggleEl.classList.remove('active');
-                statusText.textContent = '未认证：展示Banner入口';
-                statusText.className = 'status-text uncertified';
-
-                // 页面内区域切换
-                banner.style.display = 'flex';
-                tip.classList.remove('show');
-            }
-        }
-
-        function goToPromoterAuth() {
-            location.href = 'promoter-auth.html';
-        }
 
         function showModal(title, content, onConfirm, showCancel = true) {
             document.getElementById('modalTitle').textContent = title;
@@ -1661,7 +1376,6 @@
 
         // 初始化
         initDefaultSelections();
-        checkPromoterStatus();
         initRegionSelect();
         initCharCount();
         initPhoneValidation();

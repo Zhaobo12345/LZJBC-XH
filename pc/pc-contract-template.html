@@ -189,6 +189,23 @@
             background-color: #F5F5F5;
         }
 
+        .template-status.draft {
+            color: #FA8C16;
+            background-color: #FFF7E6;
+        }
+
+        .pc-btn-toggle.publish {
+            color: #FA8C16;
+            border-color: #FFD591;
+            background-color: #FFF7E6;
+        }
+
+        .pc-btn-toggle.publish:hover {
+            color: #FFFFFF;
+            background-color: #FA8C16;
+            border-color: #FA8C16;
+        }
+
         .template-status .dot {
             width: 6px;
             height: 6px;
@@ -483,31 +500,43 @@
 
                 <div class="template-container">
                     <div class="template-sidebar">
-                        <div class="template-sidebar-title">模板分类</div>
+                        <div class="template-sidebar-title">模板类型</div>
                         <div class="category-tree">
                             <div class="category-tree-item active">
                                 <span>全部模板</span>
                                 <span class="count">24</span>
                             </div>
                             <div class="category-tree-item">
-                                <span>分包合同</span>
-                                <span class="count">8</span>
+                                <span>基础施工服务合同</span>
+                                <span class="count">4</span>
                             </div>
                             <div class="category-tree-item">
-                                <span>主合同</span>
+                                <span>设计服务合同</span>
                                 <span class="count">3</span>
                             </div>
                             <div class="category-tree-item">
-                                <span>补充协议</span>
+                                <span>拆除班组服务合同</span>
+                                <span class="count">3</span>
+                            </div>
+                            <div class="category-tree-item">
+                                <span>水电班组服务合同</span>
                                 <span class="count">5</span>
                             </div>
                             <div class="category-tree-item">
-                                <span>劳务合同</span>
-                                <span class="count">4</span>
+                                <span>木作班组服务合同</span>
+                                <span class="count">2</span>
                             </div>
                             <div class="category-tree-item">
-                                <span>材料采购</span>
-                                <span class="count">4</span>
+                                <span>泥瓦工班组服务合同</span>
+                                <span class="count">3</span>
+                            </div>
+                            <div class="category-tree-item">
+                                <span>油漆工班组服务合同</span>
+                                <span class="count">2</span>
+                            </div>
+                            <div class="category-tree-item">
+                                <span>小零工服务合同</span>
+                                <span class="count">2</span>
                             </div>
                         </div>
                     </div>
@@ -515,20 +544,20 @@
                     <div class="template-main">
                         <div class="template-toolbar">
                             <div class="template-search">
-                                <input type="text" placeholder="搜索模板名称...">
-                                <select class="pc-form-select" style="width: 120px;">
-                                    <option>全部城市</option>
-                                    <option>全国</option>
-                                    <option>杭州</option>
-                                    <option>上海</option>
-                                    <option>北京</option>
-                                    <option>深圳</option>
-                                </select>
-                                <select class="pc-form-select" style="width: 120px;">
-                                    <option>全部状态</option>
-                                    <option>启用</option>
-                                    <option>停用</option>
-                                </select>
+                                <input type="text" id="searchName" placeholder="搜索模板名称...">
+                                <select class="pc-form-select" id="filterCity" style="width: 120px;">
+<option value="">全部城市</option>
+<option value="北京市">北京市</option>
+<option value="南阳市">南阳市</option>
+<option value="西安市">西安市</option>
+</select>
+                                <select class="pc-form-select" id="filterStatus" style="width: 120px;">
+<option value="">全部状态</option>
+<option value="启用">启用</option>
+<option value="停用">停用</option>
+</select>
+<button class="pc-btn pc-btn-primary" onclick="applyFilters()">搜索</button>
+<button class="pc-btn pc-btn-default" onclick="resetFilters()">重置</button>
                             </div>
                         </div>
 
@@ -538,20 +567,20 @@
                                     <tr>
                                         <th>模板名称</th>
                                         <th>城市</th>
-                                        <th>分类</th>
+                                        <th>模板类型</th>
                                         <th>版本</th>
                                         <th>状态</th>
                                         <th>更新时间</th>
                                         <th>操作</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="templateTableBody">
                                     <tr data-id="1" data-status="active">
                                         <td>
-                                            <span class="template-name" onclick="previewTemplate(1)">水电分包合同模板</span>
+                                            <span class="template-name" onclick="previewTemplate(1)">水电班组服务合同模板</span>
                                         </td>
-                                        <td>杭州</td>
-                                        <td><span class="template-category-tag">分包合同</span></td>
+                                        <td>北京市</td>
+                                        <td><span class="template-category-tag">水电班组服务合同</span></td>
                                         <td><span class="template-version">v2.0</span></td>
                                         <td>
                                             <span class="template-status active" id="status1">
@@ -569,10 +598,10 @@
                                     </tr>
                                     <tr data-id="2" data-status="active">
                                         <td>
-                                            <span class="template-name" onclick="previewTemplate(2)">泥瓦分包合同模板</span>
+                                            <span class="template-name" onclick="previewTemplate(2)">泥瓦工班组服务合同模板</span>
                                         </td>
-                                        <td>杭州</td>
-                                        <td><span class="template-category-tag">分包合同</span></td>
+                                        <td>南阳市</td>
+                                        <td><span class="template-category-tag">泥瓦工班组服务合同</span></td>
                                         <td><span class="template-version">v1.5</span></td>
                                         <td>
                                             <span class="template-status active" id="status2">
@@ -590,10 +619,10 @@
                                     </tr>
                                     <tr data-id="3" data-status="active">
                                         <td>
-                                            <span class="template-name" onclick="previewTemplate(3)">木工分包合同模板</span>
+                                            <span class="template-name" onclick="previewTemplate(3)">木作班组服务合同模板</span>
                                         </td>
-                                        <td>杭州</td>
-                                        <td><span class="template-category-tag">分包合同</span></td>
+                                        <td>西安市</td>
+                                        <td><span class="template-category-tag">木作班组服务合同</span></td>
                                         <td><span class="template-version">v1.2</span></td>
                                         <td>
                                             <span class="template-status active" id="status3">
@@ -611,10 +640,10 @@
                                     </tr>
                                     <tr data-id="4" data-status="active">
                                         <td>
-                                            <span class="template-name" onclick="previewTemplate(4)">油漆分包合同模板</span>
+                                            <span class="template-name" onclick="previewTemplate(4)">油漆工班组服务合同模板</span>
                                         </td>
-                                        <td>杭州</td>
-                                        <td><span class="template-category-tag">分包合同</span></td>
+                                        <td>北京市</td>
+                                        <td><span class="template-category-tag">油漆工班组服务合同</span></td>
                                         <td><span class="template-version">v1.0</span></td>
                                         <td>
                                             <span class="template-status active" id="status4">
@@ -632,10 +661,10 @@
                                     </tr>
                                     <tr data-id="5" data-status="active">
                                         <td>
-                                            <span class="template-name" onclick="previewTemplate(5)">主合同模板（标准版）</span>
+                                            <span class="template-name" onclick="previewTemplate(5)">基础施工服务合同模板（标准版）</span>
                                         </td>
-                                        <td>全国</td>
-                                        <td><span class="template-category-tag">主合同</span></td>
+                                        <td>南阳市</td>
+                                        <td><span class="template-category-tag">基础施工服务合同</span></td>
                                         <td><span class="template-version">v3.0</span></td>
                                         <td>
                                             <span class="template-status active" id="status5">
@@ -651,12 +680,12 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr data-id="6" data-status="inactive">
                                         <td>
-                                            <span class="template-name" onclick="previewTemplate(6)">旧版水电合同模板</span>
+                                            <span class="template-name" onclick="previewTemplate(6)">旧版水电班组服务合同模板</span>
                                         </td>
-                                        <td>杭州</td>
-                                        <td><span class="template-category-tag">分包合同</span></td>
+                                        <td>西安市</td>
+                                        <td><span class="template-category-tag">水电班组服务合同</span></td>
                                         <td><span class="template-version">v1.0</span></td>
                                         <td>
                                             <span class="template-status inactive">
@@ -677,7 +706,7 @@
                         </div>
 
                         <div class="pc-pagination">
-                            <span style="color: var(--text-tertiary); font-size: 13px;">共 24 条</span>
+                            <span id="resultCount" style="color: var(--text-tertiary); font-size: 13px;">共 24 条</span>
                             <div class="pc-pagination-item disabled">‹</div>
                             <div class="pc-pagination-item active">1</div>
                             <div class="pc-pagination-item">2</div>
@@ -731,24 +760,25 @@
                                 <input type="text" class="pc-form-input" id="templateName" placeholder="请输入模板名称">
                             </div>
                             <div class="pc-form-group">
-                                <label class="pc-form-label">模板分类<span class="required">*</span></label>
+                                <label class="pc-form-label">模板类型<span class="required">*</span></label>
                                 <select class="pc-form-select" id="templateCategory">
-                                    <option value="">请选择分类</option>
-                                    <option value="分包合同">分包合同</option>
-                                    <option value="主合同">主合同</option>
-                                    <option value="补充协议">补充协议</option>
-                                    <option value="劳务合同">劳务合同</option>
-                                    <option value="材料采购">材料采购</option>
+                                    <option value="">请选择模板类型</option>
+                                    <option value="基础施工服务合同">基础施工服务合同</option>
+                                    <option value="设计服务合同">设计服务合同</option>
+                                    <option value="拆除班组服务合同">拆除班组服务合同</option>
+                                    <option value="水电班组服务合同">水电班组服务合同</option>
+                                    <option value="木作班组服务合同">木作班组服务合同</option>
+                                    <option value="泥瓦工班组服务合同">泥瓦工班组服务合同</option>
+                                    <option value="油漆工班组服务合同">油漆工班组服务合同</option>
+                                    <option value="小零工服务合同">小零工服务合同</option>
                                 </select>
                             </div>
                             <div class="pc-form-group">
                                 <label class="pc-form-label">适用城市<span class="required">*</span></label>
                                 <select class="pc-form-select" id="templateCity">
-                                    <option value="全国">全国</option>
-                                    <option value="杭州">杭州</option>
-                                    <option value="上海">上海</option>
-                                    <option value="北京">北京</option>
-                                    <option value="深圳">深圳</option>
+                                    <option value="北京市">北京市</option>
+                                    <option value="南阳市">南阳市</option>
+                                    <option value="西安市">西安市</option>
                                 </select>
                             </div>
                             <div class="pc-form-group">
@@ -784,7 +814,7 @@
             </div>
             <div class="pc-modal-footer">
                 <button class="pc-btn pc-btn-default" onclick="closeCreateModal()">取消</button>
-                <button class="pc-btn pc-btn-default">保存草稿</button>
+                <button class="pc-btn pc-btn-default" onclick="saveDraft()">保存草稿</button>
                 <button class="pc-btn pc-btn-primary" onclick="saveTemplate()">保存并发布</button>
             </div>
         </div>
@@ -792,17 +822,17 @@
 
     <div class="preview-panel" id="previewPanel">
         <div class="preview-header">
-            <div class="preview-title">模板预览 - 水电分包合同模板</div>
+            <div class="preview-title">模板预览 - 水电班组服务合同模板</div>
             <div class="preview-close" onclick="closePreview()">×</div>
         </div>
         <div class="preview-body">
-            <h3 style="text-align: center; margin-bottom: 20px;">水电分包合同</h3>
+            <h3 style="text-align: center; margin-bottom: 20px;">水电班组服务合同</h3>
             
             <p><strong>甲方：</strong>{{party_a}}</p>
             <p><strong>乙方：</strong>{{party_b}}</p>
             <br>
             
-            <p>根据《中华人民共和国合同法》及相关法律法规，甲乙双方本着平等、自愿、公平、诚实信用的原则，就水电工程分包事宜，经协商一致，签订本合同。</p>
+            <p>根据《中华人民共和国合同法》及相关法律法规，甲乙双方本着平等、自愿、公平、诚实信用的原则，就水电工程服务事宜，经协商一致，签订本合同。</p>
             <br>
             
             <h4>第一条 工程概况</h4>
@@ -883,11 +913,12 @@
 
         const templateData = {
             1: {
-                name: '水电分包合同模板',
-                category: '分包合同',
-                city: '杭州',
-                desc: '适用于水电工程分包业务的标准合同模板',
-                content: `<p>根据《中华人民共和国合同法》及相关法律法规，甲乙双方本着平等、自愿、公平、诚实信用的原则，就水电工程分包事宜，经协商一致，签订本合同。</p>
+                name: '水电班组服务合同模板',
+                category: '水电班组服务合同',
+                city: '北京市',
+                desc: '适用于水电工程班组服务业务的标准合同模板',
+                status: 'active',
+                content: `<p>根据《中华人民共和国合同法》及相关法律法规，甲乙双方本着平等、自愿、公平、诚实信用的原则，就水电工程服务事宜，经协商一致，签订本合同。</p>
 <br>
 <h4>第一条 工程概况</h4>
 <p>1.1 工程名称：{{project_name}}</p>
@@ -903,36 +934,48 @@
 <p>3.2 开工日期：以甲方书面通知为准</p>`
             },
             2: {
-                name: '泥瓦分包合同模板',
-                category: '分包合同',
-                city: '杭州',
-                desc: '适用于泥瓦工程分包业务的标准合同模板',
-                content: `<p>根据《中华人民共和国合同法》及相关法律法规，甲乙双方就泥瓦工程分包事宜签订本合同。</p>
+                name: '泥瓦工班组服务合同模板',
+                category: '泥瓦工班组服务合同',
+                city: '南阳市',
+                desc: '适用于泥瓦工程班组服务业务的标准合同模板',
+                status: 'active',
+                content: `<p>根据《中华人民共和国合同法》及相关法律法规，甲乙双方就泥瓦工程服务事宜签订本合同。</p>
 <br>
 <h4>第一条 工程概况</h4>
 <p>1.1 工程名称：{{project_name}}</p>
 <p>1.2 工程地点：{{project_location}}</p>`
             },
             3: {
-                name: '木工分包合同模板',
-                category: '分包合同',
-                city: '全国',
-                desc: '适用于木工工程分包业务的标准合同模板',
-                content: `<p>木工工程分包合同正文...</p>`
+                name: '木作班组服务合同模板',
+                category: '木作班组服务合同',
+                city: '西安市',
+                desc: '适用于木工工程班组服务业务的标准合同模板',
+                status: 'active',
+                content: `<p>木工工程服务合同正文...</p>`
             },
             4: {
-                name: '油漆分包合同模板',
-                category: '分包合同',
-                city: '全国',
-                desc: '适用于油漆工程分包业务的标准合同模板',
-                content: `<p>油漆工程分包合同正文...</p>`
+                name: '油漆工班组服务合同模板',
+                category: '油漆工班组服务合同',
+                city: '北京市',
+                desc: '适用于油漆工程班组服务业务的标准合同模板',
+                status: 'active',
+                content: `<p>油漆工程服务合同正文...</p>`
             },
             5: {
-                name: '主合同模板',
-                category: '主合同',
-                city: '全国',
-                desc: '适用于装修工程主合同的标准模板',
-                content: `<p>装修工程主合同正文...</p>`
+                name: '基础施工服务合同模板（标准版）',
+                category: '基础施工服务合同',
+                city: '南阳市',
+                desc: '适用于装修工程基础施工的标准模板',
+                status: 'active',
+                content: `<p>装修工程基础施工服务合同正文...</p>`
+            },
+            6: {
+                name: '旧版水电班组服务合同模板',
+                category: '水电班组服务合同',
+                city: '西安市',
+                desc: '水电班组服务合同旧版本（已停用）',
+                status: 'inactive',
+                content: `<p>水电班组服务合同旧版正文...</p>`
             }
         };
 
@@ -943,7 +986,7 @@
             document.getElementById('modalTitle').textContent = '新建合同文本模板';
             document.getElementById('templateName').value = '';
             document.getElementById('templateCategory').value = '';
-            document.getElementById('templateCity').value = '全国';
+            document.getElementById('templateCity').value = '北京市';
             document.getElementById('templateDesc').value = '';
             document.getElementById('templateContent').innerHTML = '<p>在此输入合同正文内容...</p>';
             document.getElementById('createModal').classList.add('show');
@@ -1058,19 +1101,250 @@
                 statusSpan.innerHTML = '<span class="dot"></span>启用';
                 alert('模板已启用，新建合同可选择此模板');
             }
+            applyFilters();
+        }
+
+        function escapeHtml(s) {
+            return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+            });
+        }
+
+        function formatNow() {
+            var d = new Date();
+            function p(n) { return (n < 10 ? '0' : '') + n; }
+            return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+        }
+
+        function showToast(message) {
+            var toast = document.getElementById('pcToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'pcToast';
+                toast.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.75);color:#fff;padding:10px 20px;border-radius:6px;font-size:14px;z-index:9999;opacity:0;transition:opacity .25s;pointer-events:none;';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = message;
+            toast.style.opacity = '1';
+            clearTimeout(toast._t);
+            toast._t = setTimeout(function () { toast.style.opacity = '0'; }, 2000);
+        }
+
+        function getNextId() {
+            var max = 0;
+            document.querySelectorAll('#templateTableBody tr[data-id]').forEach(function (r) {
+                var id = parseInt(r.dataset.id, 10);
+                if (id > max) max = id;
+            });
+            Object.keys(templateData).forEach(function (k) {
+                var id = parseInt(k, 10);
+                if (id > max) max = id;
+            });
+            return max + 1;
+        }
+
+        function buildRowHTML(id, data, status) {
+            var map = {
+                active:   { cls: 'active',   text: '启用',   toggle: '<button class="pc-btn-toggle disable" id="toggleBtn' + id + '" onclick="toggleStatus(' + id + ')">停用</button>' },
+                inactive: { cls: 'inactive', text: '停用',   toggle: '<button class="pc-btn pc-btn-text pc-btn-sm" onclick="toggleStatus(' + id + ')">启用</button>' },
+                draft:    { cls: 'draft',    text: '草稿',   toggle: '<button class="pc-btn-toggle publish" id="publishBtn' + id + '" onclick="publishDraft(' + id + ')">发布</button>' }
+            };
+            var s = map[status];
+            return '<tr data-id="' + id + '" data-status="' + status + '">'
+                + '<td><span class="template-name" onclick="previewTemplate(' + id + ')">' + escapeHtml(data.name) + '</span></td>'
+                + '<td>' + escapeHtml(data.city) + '</td>'
+                + '<td><span class="template-category-tag">' + escapeHtml(data.category) + '</span></td>'
+                + '<td><span class="template-version">' + escapeHtml(data.version || 'v1.0') + '</span></td>'
+                + '<td><span class="template-status ' + s.cls + '" id="status' + id + '"><span class="dot"></span>' + s.text + '</span></td>'
+                + '<td>' + escapeHtml(data.updateTime) + '</td>'
+                + '<td><div class="pc-table-actions">'
+                + '<button class="pc-btn pc-btn-text pc-btn-sm" onclick="editTemplate(' + id + ')">编辑</button>'
+                + '<button class="pc-btn pc-btn-text pc-btn-sm" onclick="showVersionHistory(' + id + ')">版本</button>'
+                + s.toggle
+                + '</div></td></tr>';
+        }
+
+        function updateSidebarCounts() {
+            var rows = document.querySelectorAll('#templateTableBody tr');
+            var totals = {};
+            rows.forEach(function (r) {
+                var cat = r.querySelector('.template-category-tag').textContent;
+                totals[cat] = (totals[cat] || 0) + 1;
+            });
+            document.querySelectorAll('.category-tree-item').forEach(function (item) {
+                var name = item.querySelector('span').textContent;
+                var cnt = item.querySelector('.count');
+                if (name === '全部模板') {
+                    cnt.textContent = rows.length;
+                } else {
+                    cnt.textContent = totals[name] || 0;
+                }
+            });
+        }
+
+        function persistTemplate(status) {
+            var name = document.getElementById('templateName').value.trim();
+            var category = document.getElementById('templateCategory').value;
+            var city = document.getElementById('templateCity').value;
+            var desc = document.getElementById('templateDesc').value.trim();
+            var content = document.getElementById('templateContent').innerHTML.trim();
+
+            var id, isNew;
+            if (currentEditId == null) {
+                id = getNextId();
+                isNew = true;
+            } else {
+                id = currentEditId;
+                isNew = false;
+            }
+
+            var existing = templateData[id];
+            var version = isNew ? 'v1.0' : (existing && existing.version ? existing.version : 'v1.0');
+            var data = { name: name, category: category, city: city, desc: desc, content: content, version: version, updateTime: formatNow(), status: status };
+            templateData[id] = data;
+
+            var rowHTML = buildRowHTML(id, data, status);
+            if (isNew) {
+                document.getElementById('templateTableBody').insertAdjacentHTML('afterbegin', rowHTML);
+            } else {
+                var row = document.querySelector('#templateTableBody tr[data-id="' + id + '"]');
+                if (row) row.outerHTML = rowHTML;
+            }
+            updateSidebarCounts();
+            applyFilters();
+            return id;
         }
 
         function saveTemplate() {
-            alert('模板已保存并发布！');
+            var nameEl = document.getElementById('templateName');
+            var catEl = document.getElementById('templateCategory');
+            var cityEl = document.getElementById('templateCity');
+            var contentEl = document.getElementById('templateContent');
+            var errs = [];
+            if (!nameEl.value.trim()) { errs.push('请输入模板名称'); nameEl.style.borderColor = '#FF4D4F'; } else { nameEl.style.borderColor = ''; }
+            if (!catEl.value) { errs.push('请选择模板类型'); catEl.style.borderColor = '#FF4D4F'; } else { catEl.style.borderColor = ''; }
+            if (!cityEl.value) { errs.push('请选择适用城市'); cityEl.style.borderColor = '#FF4D4F'; } else { cityEl.style.borderColor = ''; }
+            var contentText = contentEl.textContent.trim();
+            if (!contentText || contentText === '在此输入合同正文内容...') { errs.push('请输入合同正文'); contentEl.style.borderColor = '#FF4D4F'; } else { contentEl.style.borderColor = ''; }
+            if (errs.length) {
+                alert('请完善以下信息：\n' + errs.join('\n'));
+                return;
+            }
+            var dupName = nameEl.value.trim();
+            var dupCity = cityEl.value;
+            if (isDuplicateActiveName(dupName, dupCity, currentEditId)) {
+                alert('该城市下已存在同名的启用中模板（' + dupName + ' / ' + dupCity + '），请勿重复创建');
+                nameEl.style.borderColor = '#FF4D4F';
+                return;
+            }
+            persistTemplate('active');
             closeCreateModal();
+            showToast('模板已保存并发布');
+        }
+
+        function saveDraft() {
+            var nameEl = document.getElementById('templateName');
+            var name = nameEl.value.trim();
+            if (!name) {
+                alert('请输入模板名称');
+                nameEl.focus();
+                nameEl.style.borderColor = '#FF4D4F';
+                return;
+            }
+            nameEl.style.borderColor = '';
+            persistTemplate('draft');
+            closeCreateModal();
+            showToast('已保存草稿');
+        }
+
+        function publishDraft(id) {
+            var row = document.querySelector('#templateTableBody tr[data-id="' + id + '"]');
+            if (!row) return;
+            var t = templateData[id];
+            if (t && isDuplicateActiveName(t.name, t.city, id)) {
+                showToast('该城市下已存在同名的启用中模板，发布失败');
+                return;
+            }
+            row.dataset.status = 'active';
+            var statusSpan = document.getElementById('status' + id);
+            statusSpan.className = 'template-status active';
+            statusSpan.innerHTML = '<span class="dot"></span>启用';
+            var pubBtn = document.getElementById('publishBtn' + id);
+            if (pubBtn) {
+                pubBtn.outerHTML = '<button class="pc-btn-toggle disable" id="toggleBtn' + id + '" onclick="toggleStatus(' + id + ')">停用</button>';
+            }
+            if (templateData[id]) templateData[id].status = 'active';
+            showToast('模板已发布');
         }
 
         document.querySelectorAll('.category-tree-item').forEach(item => {
             item.addEventListener('click', function() {
                 document.querySelectorAll('.category-tree-item').forEach(i => i.classList.remove('active'));
                 this.classList.add('active');
+                applyFilters();
             });
         });
+
+        function isDuplicateActiveName(name, city, excludeId) {
+            var lower = (name || '').trim().toLowerCase();
+            for (var k in templateData) {
+                var key = parseInt(k, 10);
+                if (key === excludeId) continue;
+                var t = templateData[k];
+                if (t && t.status === 'active' && (t.name || '').trim().toLowerCase() === lower && t.city === city) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function applyFilters() {
+            var name = (document.getElementById('searchName').value || '').trim();
+            var city = document.getElementById('filterCity').value;
+            var status = document.getElementById('filterStatus').value;
+            var activeTree = document.querySelector('.category-tree-item.active');
+            var typeFilter = activeTree ? activeTree.querySelector('span').textContent : '全部模板';
+            var rows = document.querySelectorAll('#templateTableBody tr');
+            var shown = 0;
+            rows.forEach(function (r) {
+                var rName = r.querySelector('.template-name').textContent;
+                var rCity = r.children[1].textContent.trim();
+                var rType = r.querySelector('.template-category-tag').textContent.trim();
+                var rStatus = r.dataset.status;
+                var ok = true;
+                if (name && rName.indexOf(name) === -1) ok = false;
+                if (city && rCity !== city) ok = false;
+                if (status) {
+                    var want = (status === '启用') ? 'active' : 'inactive';
+                    if (rStatus !== want) ok = false;
+                }
+                if (typeFilter && typeFilter !== '全部模板' && rType !== typeFilter) ok = false;
+                r.style.display = ok ? '' : 'none';
+                if (ok) shown++;
+            });
+            var cnt = document.getElementById('resultCount');
+            if (cnt) cnt.textContent = '共 ' + shown + ' 条';
+        }
+
+        function resetFilters() {
+            document.getElementById('searchName').value = '';
+            document.getElementById('filterCity').value = '';
+            document.getElementById('filterStatus').value = '';
+            var all = document.querySelector('.category-tree-item');
+            document.querySelectorAll('.category-tree-item').forEach(function (i) { i.classList.remove('active'); });
+            if (all) all.classList.add('active');
+            applyFilters();
+        }
+
+        // 文档示例深链：通过 URL hash 直接打开新建 / 编辑弹窗（仅在带特定 hash 时触发，不改变默认打开行为）
+        (function () {
+            var h = location.hash;
+            if (h === '#modal-create') {
+                showCreateModal();
+            } else if (h === '#modal-edit') {
+                editTemplate(1);
+            }
+        })();
 
         </script>
 </body>
