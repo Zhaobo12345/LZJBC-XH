@@ -43,10 +43,9 @@ const ContractDetailPage = (function() {
             showEditForm: true,
             isNew: state.isNewContract,
             hideTabs: true,
-            actions: state.isNewContract ? [
-                { text: '提交确认', type: 'success', action: 'submit', disabled: true, disabledReason: '请完善合同内容后再提交' }
-            ] : [
-                { text: '提交确认', type: 'success', action: 'submit', disabled: true, disabledReason: '请完善合同内容后再提交' }
+            actions: [
+                { text: '仅保存', type: 'secondary', action: 'save_draft' },
+                { text: '提交确认', type: 'success', action: 'submit' }
             ]
         },
         draft_party_a: {
@@ -67,6 +66,7 @@ const ContractDetailPage = (function() {
             showEditForm: true,
             isNew: false,
             actions: [
+                { text: '仅保存', type: 'secondary', action: 'save_draft' },
                 { text: '提交确认', type: 'success', action: 'submit' }
             ]
         },
@@ -110,8 +110,10 @@ const ContractDetailPage = (function() {
             showRejectReason: true,
             rejectReason: '合同条款不符合平台规范，请补充完善施工范围说明及验收标准',
             showEditGuide: true,
+            showEditForm: true,
             actions: [
-                { text: '重新提交', type: 'success', action: 'resubmit', disabled: true, disabledReason: '请修改合同内容后再重新提交' }
+                { text: '仅保存', type: 'secondary', action: 'save_draft' },
+                { text: '重新提交', type: 'success', action: 'resubmit' }
             ]
         },
         platform_rejected_modified: {
@@ -122,7 +124,9 @@ const ContractDetailPage = (function() {
             showRejectReason: true,
             rejectReason: '合同条款不符合平台规范，请补充完善施工范围说明及验收标准',
             showModifiedTag: true,
+            showEditForm: true,
             actions: [
+                { text: '仅保存', type: 'secondary', action: 'save_draft' },
                 { text: '重新提交', type: 'success', action: 'resubmit' }
             ]
         },
@@ -558,18 +562,6 @@ const ContractDetailPage = (function() {
             }
         }
         
-        // 编辑引导
-        const editGuideBox = document.getElementById('editGuideBox');
-        if (editGuideBox) {
-            editGuideBox.style.display = config.showEditGuide ? 'block' : 'none';
-        }
-        
-        // PC端编辑引导
-        const pcGuide = document.getElementById('pcEditGuide');
-        if (pcGuide) {
-            pcGuide.style.display = config.showPcGuide ? 'block' : 'none';
-        }
-        
         // 编辑表单显示控制
         const draftEditForm = document.getElementById('draftEditForm');
         const draftViewContent = document.getElementById('draftViewContent');
@@ -585,7 +577,12 @@ const ContractDetailPage = (function() {
                 draftViewContent.style.display = 'block';
             }
         }
-        
+
+        // 进入可编辑的拟定中时，用本地草稿快照恢复上次编辑内容（仅保存功能）
+        if (!state.isWorker && config.showEditForm) {
+            loadDraftSnapshot();
+        }
+
         // 变更相关显示
         updateChangeDisplay(status, config);
         
@@ -789,16 +786,32 @@ const ContractDetailPage = (function() {
             const btn = document.createElement('div');
             btn.className = 'action-btn ' + (action.type || '');
 
-            if (action.disabled) {
+            // 拟定中类状态（draft / draft_submittable / platform_rejected / platform_rejected_modified）：
+            // 主提交按钮（submit / resubmit）的可用态随必填项实时计算
+            var isDraftSubmit = (action.action === 'submit' &&
+                    (state.currentStatus === 'draft' || state.currentStatus === 'draft_submittable')) ||
+                (action.action === 'resubmit' &&
+                    (state.currentStatus === 'platform_rejected' || state.currentStatus === 'platform_rejected_modified'));
+            var effectiveDisabled = action.disabled || (isDraftSubmit && !isDraftSubmittable());
+
+            if (effectiveDisabled) {
                 btn.style.opacity = '0.5';
                 btn.style.cursor = 'not-allowed';
                 if (action.disabledReason) {
                     btn.title = action.disabledReason;
+                } else if (isDraftSubmit) {
+                    btn.title = (action.action === 'resubmit'
+                        ? '请完善合同内容（合同名称、金额、甲方、乙方，并至少一个阶段及任务）后再重新提交'
+                        : '请完善合同内容（合同名称、金额、甲方、乙方，并至少一个阶段及任务）后再提交');
                 }
             } else {
-                btn.onclick = function() {
-                    ContractDetailPage.showStatusModal(action.action);
-                };
+                if (action.action === 'save_draft') {
+                    btn.onclick = function() { saveDraftContent(); };
+                } else {
+                    btn.onclick = function() {
+                        ContractDetailPage.showStatusModal(action.action);
+                    };
+                }
                 if (action.fullWidth) {
                     btn.style.width = '100%';
                 }
@@ -808,7 +821,153 @@ const ContractDetailPage = (function() {
             actionsContainer.appendChild(btn);
         });
     }
-    
+
+    // ==================== 拟定中「提交确认」可用性校验 ====================
+    // 必填项：合同名称、合同金额(>0)、甲方、乙方 均已填写即视为可提交
+    function isDraftSubmittable() {
+        if (state.isWorker) return false;
+        var nameEl = document.getElementById('editContractName');
+        var amountEl = document.getElementById('editContractAmount');
+        var partyAEl = document.getElementById('editPartyA');
+        var partyBEl = document.getElementById('editPartyB');
+        var nameOk = !!(nameEl && nameEl.value.trim() !== '');
+        var amountVal = amountEl ? parseFloat(amountEl.value) : NaN;
+        var amountOk = !isNaN(amountVal) && amountVal > 0;
+        var partyAOk = !!(partyAEl && partyAEl.value.trim() !== '');
+        var partyBOk = !!(partyBEl && partyBEl.value.trim() !== '');
+        // 至少一个阶段，且其中至少包含一个有名称的任务
+        var stageList = document.getElementById('editStageList');
+        var hasStage = !!(stageList && stageList.querySelectorAll('.stage-card').length > 0);
+        var hasTask = false;
+        if (stageList) {
+            stageList.querySelectorAll('.task-input').forEach(function (ti) {
+                if (ti.value.trim() !== '') hasTask = true;
+            });
+        }
+        var stageTaskOk = hasStage && hasTask;
+        return nameOk && amountOk && partyAOk && partyBOk && stageTaskOk;
+    }
+
+    // ==================== 仅保存草稿（拟定中编辑内容本地持久化） ====================
+    function getBasicDraftKey() {
+        if (state.isNewContract) return 'lzj_basic_draft_new';
+        return 'lzj_basic_draft_' + (state.currentContractId || 'contract-001');
+    }
+
+    function escapeAttr(s) {
+        return String(s == null ? '' : s)
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+    }
+
+    function collectDraftSnapshot() {
+        var snap = { name: '', amount: '', partyA: '', partyB: '', content: '', stages: [], savedAt: Date.now() };
+        var nameEl = document.getElementById('editContractName');
+        var amountEl = document.getElementById('editContractAmount');
+        var partyAEl = document.getElementById('editPartyA');
+        var partyBEl = document.getElementById('editPartyB');
+        var contentEl = document.getElementById('editContractContent');
+        if (nameEl) snap.name = nameEl.value;
+        if (amountEl) snap.amount = amountEl.value;
+        if (partyAEl) snap.partyA = partyAEl.value;
+        if (partyBEl) snap.partyB = partyBEl.value;
+        if (contentEl) snap.content = contentEl.value;
+
+        var stageCards = document.querySelectorAll('#editStageList .stage-card');
+        stageCards.forEach(function (card) {
+            var nameInput = card.querySelector('.stage-name-input');
+            var sw = card.querySelector('.switch');
+            var stage = {
+                name: nameInput ? nameInput.value : '',
+                sequential: sw ? sw.classList.contains('active') : false,
+                tasks: []
+            };
+            var taskItems = card.querySelectorAll('.task-edit-list .task-edit-item');
+            taskItems.forEach(function (t) {
+                var ti = t.querySelector('.task-input');
+                stage.tasks.push({
+                    name: ti ? ti.value : '',
+                    executor: t.getAttribute('data-executor') || '',
+                    confirmers: t.getAttribute('data-confirmers') || ''
+                });
+            });
+            snap.stages.push(stage);
+        });
+        return snap;
+    }
+
+    function saveDraftContent() {
+        if (state.isWorker) return;
+        try {
+            var snap = collectDraftSnapshot();
+            localStorage.setItem(getBasicDraftKey(), JSON.stringify(snap));
+            showCustomToast('已保存草稿内容');
+        } catch (e) {
+            showCustomToast('保存失败，请稍后重试');
+        }
+    }
+
+    function renderStagesFromSnapshot(stages) {
+        var list = document.getElementById('editStageList');
+        if (!list) return;
+        list.innerHTML = '';
+        (stages || []).forEach(function (stage) {
+            var tasksHtml = (stage.tasks || []).map(function (t) {
+                return '<div class="task-edit-item" data-executor="' + escapeAttr(t.executor) + '" data-confirmers="' + escapeAttr(t.confirmers) + '">' +
+                    '<input type="text" class="task-input" value="' + escapeAttr(t.name) + '" placeholder="任务名称">' +
+                    '<div class="task-action-btn edit" onclick="editTaskDetail(this)" title="编辑详情">✎</div>' +
+                    '<div class="task-action-btn" onclick="deleteTask(this)">×</div>' +
+                    '</div>';
+            }).join('');
+            var card = document.createElement('div');
+            card.className = 'stage-card';
+            card.innerHTML =
+                '<div class="stage-card-header">' +
+                    '<div class="stage-card-header-row">' +
+                        '<input type="text" class="stage-name-input" value="' + escapeAttr(stage.name) + '" placeholder="请输入阶段名称">' +
+                        '<div class="stage-sequential">' +
+                            '<span>按序执行</span>' +
+                            '<div class="switch' + (stage.sequential ? ' active' : '') + '" onclick="toggleStageSequential(this)"></div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="stage-card-header-row">' +
+                        '<div class="stage-actions">' +
+                            '<div class="stage-action-btn add" onclick="addTaskToStage(this)">+ 添加任务</div>' +
+                            '<div class="stage-action-btn delete" onclick="deleteStage(this)">× 删除阶段</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="task-edit-list">' + tasksHtml + '</div>';
+            list.appendChild(card);
+        });
+    }
+
+    function loadDraftSnapshot() {
+        if (state.isWorker) return;
+        try {
+            var raw = localStorage.getItem(getBasicDraftKey());
+            if (!raw) return;
+            var snap = JSON.parse(raw);
+            var nameEl = document.getElementById('editContractName');
+            var amountEl = document.getElementById('editContractAmount');
+            var partyAEl = document.getElementById('editPartyA');
+            var partyBEl = document.getElementById('editPartyB');
+            var contentEl = document.getElementById('editContractContent');
+            if (nameEl && snap.name != null) nameEl.value = snap.name;
+            if (amountEl && snap.amount != null) amountEl.value = snap.amount;
+            if (partyAEl && snap.partyA != null) partyAEl.value = snap.partyA;
+            if (partyBEl && snap.partyB != null) partyBEl.value = snap.partyB;
+            if (contentEl && snap.content != null) contentEl.value = snap.content;
+            if (snap.stages && snap.stages.length) {
+                renderStagesFromSnapshot(snap.stages);
+            }
+        } catch (e) {
+            // 快照损坏则忽略，回退到默认表单
+        }
+    }
+
     // ============== 工人合同新流程（方案 B）渲染辅助 ==============
     function escapeHtml(s) {
         return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -1213,39 +1372,7 @@ const ContractDetailPage = (function() {
     /**
      * 复制编辑链接
      */
-    function copyEditLink() {
-        const link = 'https://www.example.com/contract/edit/BJSDSWHT000001';
-        
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(link).then(function() {
-                showCustomToast('链接已复制到剪贴板！\n\n请在电脑浏览器中打开该链接，使用手机扫码授权登录后即可编辑合同。');
-            }).catch(function() {
-                fallbackCopy(link);
-            });
-        } else {
-            fallbackCopy(link);
-        }
-    }
-    
-    /**
-     * 降级复制方法
-     * @param {string} text - 要复制的文本
-     */
-    function fallbackCopy(text) {
-        const textArea = document.createElement('textarea');
-        textArea.value = text;
-        textArea.style.position = 'fixed';
-        textArea.style.left = '-9999px';
-        document.body.appendChild(textArea);
-        textArea.select();
-        try {
-            document.execCommand('copy');
-            showCustomToast('链接已复制到剪贴板！\n\n请在电脑浏览器中打开该链接，使用手机扫码授权登录后即可编辑合同。');
-        } catch (err) {
-            showCustomToast('复制失败，请手动复制以下链接：\n\n' + text);
-        }
-        document.body.removeChild(textArea);
-    }
+    // [已废弃] 引导电脑端编辑链接功能已于本版合同取消（2026-08-10）
     
     /**
      * 切换操作菜单
@@ -1520,21 +1647,21 @@ const ContractDetailPage = (function() {
     const contractTemplates = [
         {
             id: 'tpl_001',
-            name: '水电分包标准合同（杭州）',
+            name: '水电分包标准合同（西安）',
             type: '水电工程',
-            city: '杭州',
+            city: '西安',
             updateTime: '2024-03-15',
-            desc: '杭州市水电分包合同标准范本，包含工程概况、双方权利义务、验收标准、付款方式等完整条款',
-            content: '甲方（发包方）：______________\n乙方（承包方）：______________\n\n根据《中华人民共和国民法典》及相关法律法规，甲乙双方本着平等、自愿、公平、诚实信用的原则，就水电工程分包事宜协商一致，订立本合同。\n\n第一条 工程概况\n1.1 工程名称：XX小区整体装修水电工程\n1.2 工程地点：杭州市XX区XX路XX号\n1.3 工程内容：强电、弱电、给排水等水电工程\n\n第二条 合同金额\n合同总金额为人民币（大写）____________元整（¥__________）。\n\n第三条 工期\n3.1 计划开工日期：____年__月__日\n3.2 计划竣工日期：____年__月__日\n3.3 总工期：____日历天\n\n第四条 付款方式\n4.1 材料进场支付合同总金额的30%\n4.2 布管布线完成支付合同总金额的40%\n4.3 安装调试完成支付合同总金额的25%\n4.4 验收合格后支付剩余5%\n\n第五条 双方权利义务\n（详细条款...）\n\n第六条 质量标准\n（详细条款...）\n\n第七条 验收标准\n（详细条款...）\n\n第八条 违约责任\n（详细条款...）\n\n第九条 争议解决\n本合同履行过程中发生争议，双方应友好协商解决；协商不成的，可向杭州市人民法院提起诉讼。\n\n甲方（签章）：______________    乙方（签章）：______________\n签订日期：____年__月__日        签订日期：____年__月__日'
+            desc: '西安市水电分包合同标准范本，包含工程概况、双方权利义务、验收标准、付款方式等完整条款',
+            content: '甲方（发包方）：______________\n乙方（承包方）：______________\n\n根据《中华人民共和国民法典》及相关法律法规，甲乙双方本着平等、自愿、公平、诚实信用的原则，就水电工程分包事宜协商一致，订立本合同。\n\n第一条 工程概况\n1.1 工程名称：XX小区整体装修水电工程\n1.2 工程地点：西安市XX区XX路XX号\n1.3 工程内容：强电、弱电、给排水等水电工程\n\n第二条 合同金额\n合同总金额为人民币（大写）____________元整（¥__________）。\n\n第三条 工期\n3.1 计划开工日期：____年__月__日\n3.2 计划竣工日期：____年__月__日\n3.3 总工期：____日历天\n\n第四条 付款方式\n4.1 材料进场支付合同总金额的30%\n4.2 布管布线完成支付合同总金额的40%\n4.3 安装调试完成支付合同总金额的25%\n4.4 验收合格后支付剩余5%\n\n第五条 双方权利义务\n（详细条款...）\n\n第六条 质量标准\n（详细条款...）\n\n第七条 验收标准\n（详细条款...）\n\n第八条 违约责任\n（详细条款...）\n\n第九条 争议解决\n本合同履行过程中发生争议，双方应友好协商解决；协商不成的，可向西安市人民法院提起诉讼。\n\n甲方（签章）：______________    乙方（签章）：______________\n签订日期：____年__月__日        签订日期：____年__月__日'
         },
         {
             id: 'tpl_002',
-            name: '水电分包简约合同（杭州）',
+            name: '水电分包简约合同（西安）',
             type: '水电工程',
-            city: '杭州',
+            city: '西安',
             updateTime: '2024-02-20',
             desc: '简约版水电分包合同，仅包含基本条款，适合简单合作',
-            content: '甲方（发包方）：______________\n乙方（承包方）：______________\n\n一、工程名称：XX小区整体装修水电工程\n二、工程地点：杭州市XX区XX路XX号\n三、合同金额：人民币________元整（¥________）\n四、工期：____年__月__日至____年__月__日\n五、付款方式：按阶段付款\n   - 材料进场：30%\n   - 布管布线完成：40%\n   - 验收合格：30%\n六、质量要求：符合国家现行标准\n七、争议解决：协商不成的，向杭州市人民法院起诉\n\n甲方（签章）：______________    乙方（签章）：______________\n日期：____年__月__日'
+            content: '甲方（发包方）：______________\n乙方（承包方）：______________\n\n一、工程名称：XX小区整体装修水电工程\n二、工程地点：西安市XX区XX路XX号\n三、合同金额：人民币________元整（¥________）\n四、工期：____年__月__日至____年__月__日\n五、付款方式：按阶段付款\n   - 材料进场：30%\n   - 布管布线完成：40%\n   - 验收合格：30%\n六、质量要求：符合国家现行标准\n七、争议解决：协商不成的，向西安市人民法院起诉\n\n甲方（签章）：______________    乙方（签章）：______________\n日期：____年__月__日'
         }
     ];
     
@@ -1543,7 +1670,7 @@ const ContractDetailPage = (function() {
             id: 'stage_tpl_001',
             name: '水电工程标准阶段模板',
             type: '水电工程',
-            city: '杭州',
+            city: '西安',
             updateTime: '2024-03-10',
             desc: '水电工程标准阶段划分，包含材料进场、布管布线、安装、调试验收4个阶段',
             stages: [
@@ -1557,7 +1684,7 @@ const ContractDetailPage = (function() {
             id: 'stage_tpl_002',
             name: '水电工程简约阶段模板',
             type: '水电工程',
-            city: '杭州',
+            city: '西安',
             updateTime: '2024-02-15',
             desc: '水电工程简约阶段划分，仅包含主要阶段',
             stages: [
@@ -1638,7 +1765,7 @@ const ContractDetailPage = (function() {
         if (!listContainer) return;
         
         const filteredTemplates = contractTemplates.filter(function(tpl) {
-            return tpl.city === '杭州' && tpl.type === '水电工程';
+            return tpl.city === '西安' && tpl.type === '水电工程';
         });
         
         if (filteredTemplates.length === 0) {
@@ -1678,7 +1805,7 @@ const ContractDetailPage = (function() {
         if (!listContainer) return;
         
         const filteredTemplates = stageTemplates.filter(function(tpl) {
-            return tpl.city === '杭州' && tpl.type === '水电工程';
+            return tpl.city === '西安' && tpl.type === '水电工程';
         });
         
         if (filteredTemplates.length === 0) {
@@ -2387,10 +2514,10 @@ const ContractDetailPage = (function() {
      * 检查变更内容
      */
     function checkChangeContent() {
-        const container = document.getElementById('stageEditContainer');
+        const container = document.getElementById('editStageList') || document.getElementById('stageEditContainer');
         if (!container) return;
         
-        const stages = container.querySelectorAll('.stage-edit-item');
+        const stages = container.querySelectorAll('.stage-card, .stage-edit-item');
         
         let hasContent = false;
         
@@ -2471,13 +2598,7 @@ const ContractDetailPage = (function() {
         if (actionMenu) actionMenu.classList.remove('show');
     }
     
-    /**
-     * 显示PC端编辑引导
-     */
-    function showPCEditGuide() {
-        showCustomToast('请前往电脑端修改合同正文\n\n1. 在电脑浏览器打开平台官网\n2. 使用手机扫码授权登录\n3. 进入合同管理进行编辑\n\n链接已复制到剪贴板');
-        copyEditLink();
-    }
+    // [已废弃] 引导电脑端编辑功能已于本版合同取消（2026-08-10）
     
     /**
      * 切换变更页面Tab
@@ -2501,15 +2622,14 @@ const ContractDetailPage = (function() {
             targetContent.classList.add('active');
         }
         
-        // 更新更换模板按钮文本
+        // 附件 Tab：隐藏「更换模板」按钮（附件不支持模板功能）
         const templateBtn = document.getElementById('changeTemplateBtn');
         if (templateBtn) {
-            if (tabId === 'contract-content') {
-                templateBtn.textContent = '📄 更换合同模板';
-            } else if (tabId === 'stage-task') {
-                templateBtn.textContent = '📄 更换任务模板';
-            } else if (tabId === 'attachment') {
-                templateBtn.textContent = '📄 更换附件模板';
+            if (tabId === 'attachment') {
+                templateBtn.style.display = 'none';
+            } else {
+                templateBtn.style.display = '';
+                templateBtn.textContent = tabId === 'stage-task' ? '📄 更换任务模板' : '📄 更换合同模板';
             }
         }
         
@@ -2600,15 +2720,14 @@ const ContractDetailPage = (function() {
             targetPane.classList.add('active');
         }
         
-        // 更新更换模板按钮文本
+        // 附件 Tab：隐藏「更换模板」按钮（附件不支持模板功能）
         const templateBtn = document.getElementById('draftTemplateBtn');
         if (templateBtn) {
-            if (tabId === 'contract-text') {
-                templateBtn.textContent = '📄 更换合同模板';
-            } else if (tabId === 'stage-task') {
-                templateBtn.textContent = '📄 更换任务模板';
-            } else if (tabId === 'attachment') {
-                templateBtn.textContent = '📄 更换附件模板';
+            if (tabId === 'attachment') {
+                templateBtn.style.display = 'none';
+            } else {
+                templateBtn.style.display = '';
+                templateBtn.textContent = tabId === 'stage-task' ? '📄 更换任务模板' : '📄 更换合同模板';
             }
         }
         
@@ -2737,7 +2856,7 @@ const ContractDetailPage = (function() {
      * @param {HTMLElement} btn - 按钮元素
      */
     function addTaskToStage(btn) {
-        state.currentStageItem = btn.closest('.stage-edit-item');
+        state.currentStageItem = btn.closest('.stage-card, .stage-edit-item');
         state.newTaskConfirmPersonList = [];
         
         const modal = document.getElementById('addTaskModal');
@@ -3110,13 +3229,15 @@ const ContractDetailPage = (function() {
             return;
         }
         
-        if (taskList && taskList.querySelectorAll('.task-edit-item').length > 1) {
-            showCustomConfirm('删除任务', '确定要删除此任务吗？', function() {
+        if (taskList) {
+            var remainCount = taskList.querySelectorAll('.task-edit-item').length;
+            var taskMsg = remainCount > 1
+                ? '确定要删除此任务吗？'
+                : '确定要删除此任务吗？删除后该阶段暂时没有任务，需要时可在该阶段重新添加。';
+            showCustomConfirm('删除任务', taskMsg, function() {
                 taskItem.remove();
                 checkChangeContent();
             }, true);
-        } else {
-            showCustomToast('每个阶段至少保留一个任务');
         }
     }
     
@@ -3125,10 +3246,10 @@ const ContractDetailPage = (function() {
      * @param {HTMLElement} btn - 按钮元素
      */
     function deleteStage(btn) {
-        const stageItem = btn.closest('.stage-edit-item');
+        const stageItem = btn.closest('.stage-card, .stage-edit-item');
         if (!stageItem) return;
         
-        const container = document.getElementById('stageEditContainer');
+        const container = stageItem.parentElement;
         
         const completedTasks = stageItem.querySelectorAll('.task-edit-item[data-completed="true"]');
         if (completedTasks.length > 0) {
@@ -3142,7 +3263,7 @@ const ContractDetailPage = (function() {
             return;
         }
         
-        if (container && container.querySelectorAll('.stage-edit-item').length > 1) {
+        if (container && container.querySelectorAll('.stage-card, .stage-edit-item').length > 1) {
             showCustomConfirm('删除阶段', '确定要删除此阶段吗？删除后该阶段下的所有任务也将被删除。', function() {
                 stageItem.remove();
                 checkChangeContent();
@@ -3157,7 +3278,7 @@ const ContractDetailPage = (function() {
      * @param {HTMLElement} element - 元素
      */
     function toggleStageSequential(element) {
-        const stageItem = element.closest('.stage-edit-item');
+        const stageItem = element.closest('.stage-card, .stage-edit-item');
         if (!stageItem) return;
         
         const switchEl = element.querySelector('.switch');
@@ -3208,7 +3329,7 @@ const ContractDetailPage = (function() {
      * @param {HTMLElement} btn - 按钮元素
      */
     function editStageSettings(btn) {
-        const stageItem = btn.closest('.stage-edit-item');
+        const stageItem = btn.closest('.stage-card, .stage-edit-item');
         if (!stageItem) return;
         
         const stageNameInput = stageItem.querySelector('.stage-name-input');
@@ -3259,7 +3380,45 @@ const ContractDetailPage = (function() {
         newStage.scrollIntoView({ behavior: 'smooth' });
         checkChangeContent();
     }
-    
+
+    /**
+     * 添加新阶段（拟定中草稿视图 · #editStageList · .stage-card）
+     * 与变更流程 addNewStage（#stageEditContainer · .stage-edit-item）分开声明，
+     * 避免两个同名函数被 JS 提升合并为变更版，导致草稿视图「添加阶段」无反应。
+     * 新增的阶段卡片结构与草稿 HTML（.stage-card）一致，复用统一的 addTaskToStage / deleteStage。
+     */
+    function addNewStageDraft() {
+        const list = document.getElementById('editStageList');
+        if (!list) return;
+
+        const stageHtml = '<div class="stage-card">' +
+            '<div class="stage-card-header">' +
+                '<div class="stage-card-header-row">' +
+                    '<input type="text" class="stage-name-input" value="" placeholder="请输入阶段名称">' +
+                    '<div class="stage-sequential">' +
+                        '<span>按序执行</span>' +
+                        '<div class="switch" onclick="toggleStageSequential(this)"></div>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="stage-card-header-row">' +
+                    '<div class="stage-actions">' +
+                        '<div class="stage-action-btn add" onclick="addTaskToStage(this)">+ 添加任务</div>' +
+                        '<div class="stage-action-btn delete" onclick="deleteStage(this)">× 删除阶段</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+            '<div class="task-edit-list"></div>' +
+        '</div>';
+
+        list.insertAdjacentHTML('beforeend', stageHtml);
+
+        const cards = list.querySelectorAll('.stage-card');
+        const newStage = cards[cards.length - 1];
+        const nameInput = newStage ? newStage.querySelector('.stage-name-input') : null;
+        if (nameInput) nameInput.focus();
+        if (newStage) newStage.scrollIntoView({ behavior: 'smooth' });
+    }
+
     // ==================== 人员搜索函数 ====================
     
     /**
@@ -3563,6 +3722,19 @@ const ContractDetailPage = (function() {
                 });
             }
         });
+
+        // 拟定中编辑表单：必填项变化时实时刷新「提交确认」可用态（不重渲染表单，避免清空未保存内容）
+        var draftForm = document.getElementById('draftEditForm');
+        if (draftForm) {
+            var refreshSubmitState = function() {
+                if (state.currentStatus === 'draft' || state.currentStatus === 'draft_submittable' ||
+                    state.currentStatus === 'platform_rejected' || state.currentStatus === 'platform_rejected_modified') {
+                    updateBottomActions(contractStatus[state.currentStatus]);
+                }
+            };
+            draftForm.addEventListener('input', refreshSubmitState);
+            draftForm.addEventListener('change', refreshSubmitState);
+        }
     }
     
     // ==================== 初始化 ====================
@@ -3605,7 +3777,6 @@ const ContractDetailPage = (function() {
         showFullText,
         closeFullText,
         toggleQRCode,
-        copyEditLink,
         toggleActionMenu,
         closeActionMenu,
         
@@ -3640,7 +3811,6 @@ const ContractDetailPage = (function() {
         showMoreOptions,
         toggleChangeActionMenu,
         closeChangeActionMenu,
-        showPCEditGuide,
         switchChangeTab,
         showChangeTemplatePicker,
         addNewAttachment,
@@ -3672,6 +3842,7 @@ const ContractDetailPage = (function() {
         toggleStageSequential,
         editStageSettings,
         addNewStage,
+        addNewStageDraft,
         
         // 人员搜索
         toggleExecutorSearch,
@@ -3731,7 +3902,6 @@ window.toggleStage = ContractDetailPage.toggleStage;
 window.showFullText = ContractDetailPage.showFullText;
 window.closeFullText = ContractDetailPage.closeFullText;
 window.toggleQRCode = ContractDetailPage.toggleQRCode;
-window.copyEditLink = ContractDetailPage.copyEditLink;
 window.toggleActionMenu = ContractDetailPage.toggleActionMenu;
 window.closeActionMenu = ContractDetailPage.closeActionMenu;
 window.showStatusModal = ContractDetailPage.showStatusModal;
@@ -3757,7 +3927,6 @@ window.closeChangeModal = ContractDetailPage.closeChangeModal;
 window.showMoreOptions = ContractDetailPage.showMoreOptions;
 window.toggleChangeActionMenu = ContractDetailPage.toggleChangeActionMenu;
 window.closeChangeActionMenu = ContractDetailPage.closeChangeActionMenu;
-window.showPCEditGuide = ContractDetailPage.showPCEditGuide;
 window.switchChangeTab = ContractDetailPage.switchChangeTab;
 window.showChangeTemplatePicker = ContractDetailPage.showChangeTemplatePicker;
 window.addNewAttachment = ContractDetailPage.addNewAttachment;
@@ -3787,6 +3956,7 @@ window.deleteStage = ContractDetailPage.deleteStage;
 window.toggleStageSequential = ContractDetailPage.toggleStageSequential;
 window.editStageSettings = ContractDetailPage.editStageSettings;
 window.addNewStage = ContractDetailPage.addNewStage;
+window.addNewStageDraft = ContractDetailPage.addNewStageDraft;
 window.toggleExecutorSearch = ContractDetailPage.toggleExecutorSearch;
 window.toggleConfirmerSearch = ContractDetailPage.toggleConfirmerSearch;
 window.selectExecutor = ContractDetailPage.selectExecutor;

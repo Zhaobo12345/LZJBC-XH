@@ -319,23 +319,6 @@
                     <div class="reject-reason-content" id="rejectReasonContent"></div>
                     <div class="reject-reason-tip">请根据以上原因修改合同内容后重新提交</div>
                 </div>
-                <div class="edit-guide-box" id="editGuideBox" style="display: none;">
-                    <div class="edit-guide-title">📝 修改引导</div>
-                    <div class="edit-guide-content">
-                        请按以下步骤修改合同内容：
-                        <ol>
-                            <li>在电脑浏览器打开平台官网</li>
-                            <li>使用手机扫码授权登录</li>
-                            <li>进入合同管理，找到此合同</li>
-                            <li>根据驳回原因修改对应内容</li>
-                            <li>保存后返回小程序重新提交</li>
-                        </ol>
-                        <div class="edit-guide-btn" onclick="copyEditLink()">
-                            <span>📋</span>
-                            <span>复制电脑端编辑链接</span>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <div class="change-reason-display" id="changeReasonDisplay" style="display: none;">
@@ -425,38 +408,6 @@
                 <div class="arch-note" id="workerArchNote" style="display: none;"></div>
             </div>
 
-            <div class="pc-edit-guide" id="pcEditGuide" style="display: none;">
-                <div class="guide-header">
-                    <div class="guide-icon">💻</div>
-                    <div>
-                        <div class="guide-title">推荐使用电脑端编辑</div>
-                        <div class="guide-subtitle">合同内容较多，电脑端编辑体验更佳</div>
-                    </div>
-                </div>
-                <div class="guide-content">
-                    合同内容包含多个条款和附件，建议在电脑端进行编辑，操作更便捷、效率更高。
-                </div>
-                <div class="guide-steps">
-                    <div class="step-item">
-                        <div class="step-num">1</div>
-                        <div class="step-text">在电脑浏览器打开平台官网</div>
-                    </div>
-                    <div class="step-item">
-                        <div class="step-num">2</div>
-                        <div class="step-text">使用手机扫码授权登录</div>
-                    </div>
-                    <div class="step-item">
-                        <div class="step-num">3</div>
-                        <div class="step-text">进入合同管理进行编辑</div>
-                    </div>
-                </div>
-                <div class="guide-actions">
-                    <div class="guide-btn primary" onclick="copyEditLink()">
-                        <span>🔗</span>
-                        <span>复制链接到电脑端编辑</span>
-                    </div>
-                </div>
-            </div>
 
             <!-- 拟定中状态编辑表单 -->
             <div class="draft-edit-form" id="draftEditForm" style="display: none;">
@@ -632,7 +583,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="add-stage-btn" onclick="addNewStage()">
+                        <div class="add-stage-btn" id="draft-add-stage" onclick="addNewStageDraft()">
                             <span>+ 添加新阶段</span>
                         </div>
                     </div>
@@ -1264,7 +1215,7 @@
 
 一、工程概况
 工程名称：XX小区整体装修水电工程
-工程地点：杭州市XX区XX路XX号
+工程地点：西安市XX区XX路XX号
 工程内容：强电、弱电、给排水等水电工程
 
 二、合同金额
@@ -2108,7 +2059,7 @@
                 <div class="template-filter-info">
                     <div class="filter-row">
                         <span class="filter-label">当前合同：</span>
-                        <span class="filter-value" id="templateFilterCity">杭州</span>
+                        <span class="filter-value" id="templateFilterCity">西安</span>
                         <span class="filter-sep">·</span>
                         <span class="filter-value" id="templateFilterType">水电工程</span>
                     </div>
@@ -2144,7 +2095,7 @@
                 <div class="template-filter-info">
                     <div class="filter-row">
                         <span class="filter-label">当前合同：</span>
-                        <span class="filter-value" id="stageTemplateFilterCity">杭州</span>
+                        <span class="filter-value" id="stageTemplateFilterCity">西安</span>
                         <span class="filter-sep">·</span>
                         <span class="filter-value" id="stageTemplateFilterType">水电工程</span>
                     </div>

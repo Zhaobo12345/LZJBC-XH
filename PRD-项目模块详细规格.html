@@ -2457,7 +2457,7 @@
 
                 <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">6.6.5 创建后跳转</div>
                 <div class="code-block" style="font-size: 12px;">
-创建成功后跳转到<a href="service-miniapp/contract-detail.html" target="_blank">合同详情页（contract-detail.html）</a>，携带以下URL参数：
+创建成功后根据合同类型跳转至对应合同详情页：基础施工/设计合同 → <a href="service-miniapp/contract-detail.html" target="_blank">contract-detail.html</a>；六类班组服务合同（工人合同） → <a href="service-miniapp/worker-contract-detail.html" target="_blank">worker-contract-detail.html</a>，携带以下URL参数：
 - id: 新合同ID
 - name: 合同名称
 - type: 合同类型编码
@@ -2470,6 +2470,23 @@
 - new: '1'（标记为新创建）
 
 跳转后合同详情页以"拟定中"状态展示，可在小程序内继续编辑合同内容。
+                </div>
+
+                <div class="note" style="margin-top: 12px;">
+                    <div class="note-title">创建完成 ≠ 合同完整：进入「拟定中」状态需继续完善后方可提交</div>
+                    <p style="margin: 0 0 8px;">创建成功的合同仅处于初始「拟定中（draft）」状态，携带创建时填写的基础字段（合同类型 / 名称 / 甲乙 / 金额 / 工作组）。此时合同尚不完整——还需在合同详情页继续完善<strong>合同正文、阶段任务、附件</strong>等具体信息，经必填校验（名称非空、金额&gt;0、甲方乙方已选、至少一个阶段及任务等）通过后方可<strong>提交</strong>，再进入后续的<strong>确认 / 平台审核（合规版）</strong>或<strong>确认 / 签约（工人合同）</strong>流程。以下按合同类型指向《PRD-合同模块详细规格》中对应的「拟定中」状态与编辑交互文档位置：</p>
+                    <ul style="margin: 0; padding-left: 20px;">
+                        <li style="margin-bottom: 6px;"><strong>基础施工服务合同 / 设计服务合同（合规版 · 非工人合同）</strong>：创建后进入合规版「拟定中」状态，完善内容并提交后走平台审核流程。对应文档：
+                            <a href="PRD-合同模块详细规格.html#sec-3-7" target="_blank" style="color: var(--primary-color);">§3.7 拟定中状态-编辑交互规格</a>、
+                            <a href="PRD-合同模块详细规格.html#sec-3-8" target="_blank" style="color: var(--primary-color);">§3.8 状态横幅与驳回处理（draft）</a>（详见
+                            <a href="PRD-合同模块详细规格.html#page-mini-service" target="_blank" style="color: var(--primary-color);">第三章 合同详情页（服务方小程序）</a>）。<br>原型页面：<a href="service-miniapp/contract-detail.html" style="color: var(--primary-color);">service-miniapp/contract-detail.html</a>（拟定中状态可直接查看编辑表单）。
+                        </li>
+                        <li style="margin-bottom: 0;"><strong>六类班组服务合同（工人合同 · 拆除 / 水电 / 木作 / 泥瓦 / 油漆 / 小零工）</strong>：创建后进入工人合同「拟定中」状态（worker_draft_initial / worker_draft），完善内容并经「仅保存 / 提交并邀请乙方」后走确认签约流程（无平台审核）。对应文档：
+                            <a href="PRD-合同模块详细规格.html#sec-7-5" target="_blank" style="color: var(--primary-color);">§7.5 状态机与流程</a>、
+                            <a href="PRD-合同模块详细规格.html#sec-7-6" target="_blank" style="color: var(--primary-color);">§7.6 拟定中状态-编辑交互规格</a>（详见
+                            <a href="PRD-合同模块详细规格.html#sec-7-1" target="_blank" style="color: var(--primary-color);">第七章 工人合同详情页（服务方·工长端）</a>）。<br>原型页面：<a href="service-miniapp/worker-contract-detail.html" style="color: var(--primary-color);">service-miniapp/worker-contract-detail.html</a>（拟定中状态可直接查看编辑面板、意向乙方选择等完整编辑交互）。
+                        </li>
+                    </ul>
                 </div>
 
                 <div class="subsection-title" style="font-size: 14px; margin-top: 16px;">6.6.6 创建成功后系统生成信息</div>

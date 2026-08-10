@@ -98,12 +98,18 @@
         worker_draft_initial: {
             text: '拟定中', bannerClass: 'draft',
             desc: '合同处于拟定中。可直接修改合同名称、合同金额，并选择意向乙方（仅各工种，1-3 人）后提交邀请。',
-            actions: [{ text: '提交并邀请乙方', type: 'success', action: 'worker_resubmit' }]
+            actions: [
+                { text: '仅保存', type: 'secondary', action: 'worker_save_draft' },
+                { text: '提交并邀请乙方', type: 'success', action: 'worker_resubmit' }
+            ]
         },
         worker_draft: {
             text: '拟定中', bannerClass: 'draft',
             desc: '合同已撤回至拟定中。可直接修改合同名称、合同金额与意向乙方（仅各工种，1-3 人）后提交邀请。',
-            actions: [{ text: '提交并邀请乙方', type: 'success', action: 'worker_resubmit' }]
+            actions: [
+                { text: '仅保存', type: 'secondary', action: 'worker_save_draft' },
+                { text: '提交并邀请乙方', type: 'success', action: 'worker_resubmit' }
+            ]
         },
         worker_signed: {
             text: '已签约', bannerClass: 'signed',
@@ -1027,6 +1033,7 @@
         // 数据驱动（replacedPartyB 存在即代表处于重选草稿态），跨导航进入也稳定显示
         if (state.contract.replacedPartyB && (status === 'worker_draft' || status === 'worker_draft_initial')) {
             actions = [
+                { text: '仅保存', type: 'secondary', action: 'worker_save_draft' },
                 { text: '恢复原乙方', type: 'secondary', action: 'worker_reselect_cancel' },
                 { text: '提交并邀请乙方', type: 'success', action: 'worker_resubmit' }
             ];
@@ -1051,6 +1058,8 @@
         // 变更签约中：参考「合同详情（合规版）」的上传变更签约文件流程——跳转到独立上传页面，上传成功后由该页跳回「已签约」
         if (action === 'upload_change_sign') { global.location.href = 'worker-change-sign-upload.html'; return; }
         if (action === 'worker_resubmit') { saveAndResubmit(); return; }
+        // 拟定中「仅保存」：持久化当前草稿编辑内容（参考「合同详情（合规版）」），不改变状态、不发送邀约
+        if (action === 'worker_save_draft') { saveDraftOnly(); return; }
         // 已签约发起方：点「发起变更」→ 先二次确认，确认后跳转到发起变更「页面」（弹窗无法承载较多内容）
         if (action === 'start_change') { confirmStartChange(); return; }
 
@@ -1484,7 +1493,6 @@
                     attachments: state.contract.attachments,
                     templateText: state.contract.templateText,
                     templateStage: state.contract.templateStage,
-                    templateAtt: state.contract.templateAtt,
                     contentIntro: state.contract.contentIntro
                 });
             }
@@ -1494,6 +1502,32 @@
             updateStatus(computeStatus());
             renderReselectHistory();            // 隐藏「历史选择记录」卡片（replacedPartyB 已清空）
         });
+    }
+
+    // ============== 拟定中「仅保存」（参考「合同详情（合规版）」saveDraftContent） ==============
+    // 将当前草稿编辑内容持久化到合约库，不改变状态、不发送邀约、不弹出二次确认；
+    // 重新进入拟定中时由 initEditPanel / renderDraftContent 自动恢复（含意向乙方）。
+    function saveDraftOnly() {
+        var name = ($('editNameInput').value || '').trim();
+        var amount = ($('editAmountInput').value || '').trim();
+        ensureDraftFields();
+        if (global.ContractStore.patchContract) {
+            global.ContractStore.patchContract(state.workerId, {
+                name: name,
+                amount: amount,
+                stages: state.contract.stages,
+                extraClauses: state.contract.extraClauses,
+                attachments: state.contract.attachments,
+                templateText: state.contract.templateText,
+                templateStage: state.contract.templateStage,
+                contentIntro: state.contract.contentIntro,
+                // 持久化意向乙方选择（仅落库，不发送邀约、不改变状态；submitInvite 时会被整体覆盖）
+                invitations: state.editInvited.map(function (m) {
+                    return { userId: m.userId, name: m.name, role: m.role, status: 'pending' };
+                })
+            });
+        }
+        showToast('已保存草稿内容');
     }
 
     // ============== 拟定中：可编辑合同内容（参考「合同详情（合规版）」） ==============
@@ -1518,7 +1552,6 @@
         if (!c.attachments) c.attachments = defaultAttachments();
         if (c.templateText == null) c.templateText = '';
         if (c.templateStage == null) c.templateStage = '';
-        if (c.templateAtt == null) c.templateAtt = '';
         if (!c.contentIntro) c.contentIntro = (STAGE_TEMPLATES[c.type] || STAGE_TEMPLATES.shuidian).contentIntro;
     }
     function getStages() { ensureDraftFields(); return state.contract.stages; }
@@ -1549,6 +1582,9 @@
             var el = $(pid);
             if (el) el.classList.toggle('active', i === map[key]);
         });
+        // 附件 Tab：隐藏「更换模板」按钮（附件不支持模板功能）
+        var btn = $('draftTemplateBtn');
+        if (btn) btn.style.display = (key === 'attachment') ? 'none' : '';
     }
 
     function renderDraftContractText() {
@@ -1642,12 +1678,6 @@
         }).join('');
         var listEl = $('draftAttList');
         if (listEl) listEl.innerHTML = html;
-        var info = $('draftAttInfo');
-        var tag = $('draftAttTag');
-        if (info && tag) {
-            if (c.templateAtt) { info.style.display = 'block'; tag.textContent = '已选择模板：' + c.templateAtt; }
-            else { info.style.display = 'none'; }
-        }
     }
     function addDraftAttachment() { var inp = $('draftAttInput'); if (inp) inp.click(); }
     function onDraftAttPicked(e) {
@@ -1671,18 +1701,16 @@
             { id: 'std', name: '标准' + b + '服务合同', desc: '含工程概况 / 价款 / 质量 / 违约等完整条款' },
             { id: 'lite', name: '精简' + b + '服务合同', desc: '核心条款精简版' }
         ];
-        if (kind === 'stage') return [
+        // stage
+        return [
             { id: 'std', name: '标准' + b + '工程阶段', desc: '沿用本合同类型标准阶段模板' },
             { id: 'lite', name: '精简' + b + '工程阶段', desc: '仅保留核心阶段' }
-        ];
-        return [
-            { id: 'std', name: '标准附件清单', desc: '户型图 / 材料清单 / 施工图纸' },
-            { id: 'lite', name: '精简附件清单', desc: '仅户型图' }
         ];
     }
     function showDraftTemplatePicker() {
         var tab = state.draftContentTab || 'contract-text';
-        var kind = tab === 'stage-task' ? 'stage' : (tab === 'attachment' ? 'att' : 'text');
+        if (tab === 'attachment') { showToast('附件区不支持更换模板，请直接上传或删除附件'); return; }
+        var kind = tab === 'stage-task' ? 'stage' : 'text';
         openTemplatePicker(kind);
     }
     function openTemplatePicker(kind) {
@@ -1695,13 +1723,16 @@
         var list = $('wcTplList');
         if (!list) return;
         var items = getDraftTemplates(kind);
-        var titleMap = { text: '选择合同正文模板', stage: '选择阶段任务模板', att: '选择附件模板' };
+        var titleMap = { text: '选择合同正文模板', stage: '选择阶段任务模板' };
         var t = $('wcTplTitle'); if (t) t.textContent = titleMap[kind] || '选择模板';
         var tip = $('wcTplTip'); if (tip) tip.textContent = '仅显示与当前合同类型（' + (state.contract.typeName || '') + '）匹配的模板';
         list.innerHTML = items.map(function (it) {
-            return '<div class="member-picker-item" onclick="WCP.applyTemplate(\'' + kind + '\',\'' + it.id + '\')">' +
+            return '<div class="member-picker-item">' +
                 '<span>' + escapeHtml(it.name) + '<br><span style="font-size:11px;color:var(--text-tertiary);">' + escapeHtml(it.desc) + '</span></span>' +
-                '<span class="check">选择</span></div>';
+                '<span class="mpi-actions">' +
+                    '<span class="mpi-btn" onclick="WCP.previewDraftTemplate(\'' + kind + '\',\'' + it.id + '\')">预览</span>' +
+                    '<span class="mpi-btn primary" onclick="WCP.applyTemplate(\'' + kind + '\',\'' + it.id + '\')">使用</span>' +
+                '</span></div>';
         }).join('');
     }
     function applyTemplate(kind, id) {
@@ -1709,19 +1740,58 @@
         if (kind === 'text') {
             c.templateText = (getDraftTemplates('text').filter(function (x) { return x.id === id; })[0] || {}).name || '';
             if (id === 'lite') c.contentIntro = '工程内容：' + draftBaseName() + '相关作业（精简版）。';
-        } else if (kind === 'stage') {
+        } else {
             var src = (STAGE_TEMPLATES[c.type] || STAGE_TEMPLATES.shuidian).stages;
             c.stages = id === 'lite' ? clone(src).slice(0, 2) : clone(src);
             c.templateStage = (getDraftTemplates('stage').filter(function (x) { return x.id === id; })[0] || {}).name || '';
-        } else {
-            c.attachments = id === 'lite' ? [{ name: '户型图.pdf', meta: '1.2MB · 2024-01-10上传' }] : defaultAttachments();
-            c.templateAtt = (getDraftTemplates('att').filter(function (x) { return x.id === id; })[0] || {}).name || '';
         }
         closeTemplatePicker();
         renderDraftContent();
         showToast('已应用模板');
     }
     function closeTemplatePicker() { var m = $('wcTemplatePicker'); if (m) m.classList.remove('show'); }
+
+    // 模板预览（对齐「合同详情（合规版）」更换模板的预览交互）
+    function previewDraftTemplate(kind, id) {
+        var item = (getDraftTemplates(kind) || []).filter(function (x) { return x.id === id; })[0];
+        if (!item) return;
+        state.previewTplKind = kind;
+        state.previewTplId = id;
+        var titleEl = $('wcPreviewTitle'); if (titleEl) titleEl.textContent = item.name;
+        var typeEl = $('wcPreviewType'); if (typeEl) typeEl.textContent = (state.contract && state.contract.typeName) || '';
+        var contentEl = $('wcPreviewContent');
+        if (contentEl) {
+            var html = '';
+            if (kind === 'stage') {
+                var src = STAGE_TEMPLATES[state.contract.type] || STAGE_TEMPLATES.shuidian;
+                var stages = (id === 'lite') ? src.stages.slice(0, 2) : src.stages;
+                html += '<div class="preview-section"><div class="preview-section-title">阶段任务明细（' + stages.length + ' 个阶段）</div><div class="preview-stage-list">';
+                stages.forEach(function (s, i) {
+                    var tasks = (s.tasks || []).map(function (t) {
+                        return '<div class="preview-task-item"><span class="preview-task-name">' + escapeHtml(t.name) + '</span><span class="preview-task-sub">执行：' + escapeHtml(t.exec || '') + ' · 确认：' + escapeHtml(t.conf || '') + '</span></div>';
+                    }).join('');
+                    html += '<div class="preview-stage-item"><div class="preview-stage-header"><span class="preview-stage-num">' + (i + 1) + '</span><span class="preview-stage-name">' + escapeHtml(s.name) + '</span><span class="preview-stage-order">' + escapeHtml(s.order || '') + '</span></div><div class="preview-task-list">' + tasks + '</div></div>';
+                });
+                html += '</div></div>';
+            } else {
+                var c = state.contract;
+                var tpl = STAGE_TEMPLATES[c.type] || STAGE_TEMPLATES.shuidian;
+                var intro = tpl.contentIntro || '';
+                var extra = getExtra() || '';
+                html += '<div class="preview-section"><div class="preview-section-title">工程内容</div><div class="preview-section-content">' + escapeHtml(intro) + '</div></div>';
+                html += '<div class="preview-section"><div class="preview-section-title">补充条款</div><div class="preview-section-content">' + escapeHtml(extra).replace(/\n/g, '<br>') + '</div></div>';
+            }
+            contentEl.innerHTML = html;
+        }
+        var picker = $('wcTemplatePicker'); if (picker) picker.classList.remove('show');
+        var prev = $('wcTemplatePreview'); if (prev) prev.classList.add('show');
+    }
+    function applyTemplateFromPreview() {
+        if (!state.previewTplKind) return;
+        applyTemplate(state.previewTplKind, state.previewTplId);
+        closeTemplatePreview();
+    }
+    function closeTemplatePreview() { var m = $('wcTemplatePreview'); if (m) m.classList.remove('show'); }
 
     // ---- 查看全文 / 预览合同 ----
     function showFullText() {
@@ -2104,6 +2174,9 @@
         showDraftTemplatePicker: showDraftTemplatePicker,
         applyTemplate: applyTemplate,
         closeTemplatePicker: closeTemplatePicker,
+        previewDraftTemplate: previewDraftTemplate,
+        applyTemplateFromPreview: applyTemplateFromPreview,
+        closeTemplatePreview: closeTemplatePreview,
         showFullText: showFullText,
         closeFullText: closeFullText,
         previewContract: previewContract
