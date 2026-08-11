@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>微信服务通知（订阅消息）演示 - 合同邀约</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #cfcfcf;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 24px 0;
+            min-height: 100vh;
+        }
+        .wx-shell {
+            width: 375px;
+            height: 812px;
+            background: #ededed;
+            border-radius: 38px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+        }
+        .wx-statusbar {
+            height: 44px;
+            flex-shrink: 0;
+            background: #ededed;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 22px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #000;
+        }
+        .wx-nav {
+            height: 46px;
+            flex-shrink: 0;
+            background: #ededed;
+            position: relative;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #dcdcdc;
+        }
+        .wx-nav .back {
+            position: absolute;
+            left: 14px;
+            font-size: 26px;
+            line-height: 1;
+            color: #1a1a1a;
+            cursor: pointer;
+            width: 30px;
+            text-align: center;
+        }
+        .wx-nav .title {
+            flex: 1;
+            text-align: center;
+            font-size: 17px;
+            font-weight: 600;
+            color: #000;
+        }
+        .wx-search {
+            padding: 8px 12px;
+            background: #ededed;
+            flex-shrink: 0;
+        }
+        .wx-search .box {
+            background: #dcdcdc;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 13px;
+            color: #7d7d7d;
+            padding: 7px 0;
+        }
+        .wx-list {
+            flex: 1;
+            background: #fff;
+            overflow-y: auto;
+        }
+        .wx-item {
+            display: flex;
+            align-items: center;
+            padding: 13px 14px;
+            border-bottom: 1px solid #f2f2f2;
+            cursor: pointer;
+            position: relative;
+        }
+        .wx-item:active { background: #f6f6f6; }
+        .wx-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 9px;
+            background: #07C160;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-right: 12px;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .wx-avatar .dot {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            min-width: 19px;
+            height: 19px;
+            background: #fa5151;
+            color: #fff;
+            border-radius: 10px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5px;
+            border: 2px solid #fff;
+            font-weight: 600;
+        }
+        .wx-info { flex: 1; min-width: 0; }
+        .wx-row1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .wx-name { font-size: 16px; color: #000; font-weight: 500; }
+        .wx-time { font-size: 12px; color: #b2b2b2; }
+        .wx-preview {
+            font-size: 13px;
+            color: #888;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .wx-divider {
+            font-size: 12px;
+            color: #b2b2b2;
+            padding: 8px 14px 4px;
+            background: #ededed;
+        }
+        .wx-msg-row {
+            display: flex;
+            padding: 10px 14px;
+            align-items: flex-start;
+        }
+        .wx-msg-row.app { justify-content: flex-start; }
+        .wx-msg-row.me { justify-content: flex-end; }
+        .wx-bubble {
+            max-width: 76%;
+            background: #fff;
+            border-radius: 6px;
+            padding: 9px 12px;
+            font-size: 14px;
+            color: #1a1a1a;
+            line-height: 1.5;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+            position: relative;
+        }
+        .wx-msg-row.me .wx-bubble { background: #95EC69; }
+        .wx-bubble .m-title { font-weight: 600; margin-bottom: 4px; }
+        .wx-bubble .m-sub { font-size: 12px; color: #666; }
+        .wx-bubble.invite {
+            border: 1px solid #07C160;
+            cursor: pointer;
+        }
+        .wx-bubble.invite:active { background: #f0fff5; }
+        .wx-bubble .m-go {
+            margin-top: 8px;
+            color: #07C160;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .hidden { display: none !important; }
+        .demo-tip {
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 14px;
+            width: 430px;
+            max-width: 92vw;
+            background: rgba(0, 0, 0, 0.78);
+            color: #fff;
+            font-size: 12px;
+            line-height: 1.6;
+            padding: 10px 14px;
+            border-radius: 8px;
+        }
+        .demo-tip b { color: #95EC69; }
+    </style>
+</head>
+<body>
+    <div class="wx-shell">
+        <div class="wx-statusbar">
+            <span>9:41</span>
+            <span>📶 🔋</span>
+        </div>
+        <div class="wx-nav">
+            <div class="back" onclick="goBack()">‹</div>
+            <div class="title" id="wxTitle">微信</div>
+        </div>
+
+        <!-- 视图1：微信聊天列表（服务通知入口） -->
+        <div class="wx-search" id="searchView"><div class="box">搜索</div></div>
+        <div class="wx-list" id="listView">
+            <div class="wx-divider">服务通知</div>
+            <div class="wx-item" onclick="openServiceNotice()">
+                <div class="wx-avatar">🔔<span class="dot">1</span></div>
+                <div class="wx-info">
+                    <div class="wx-row1">
+                        <span class="wx-name">服务通知</span>
+                        <span class="wx-time">09:38</span>
+                    </div>
+                    <div class="wx-preview">【家装平台】您有一条新的工人合同邀约待确认</div>
+                </div>
+            </div>
+            <div class="wx-item">
+                <div class="wx-avatar" style="background:#10AEFF;">📢</div>
+                <div class="wx-info">
+                    <div class="wx-row1">
+                        <span class="wx-name">订阅号消息</span>
+                        <span class="wx-time">昨天</span>
+                    </div>
+                    <div class="wx-preview">多个公众号的图文更新</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 视图2：服务通知会话详情（家装平台推送） -->
+        <div class="wx-list hidden" id="detailView">
+            <div class="wx-divider">今天 09:38</div>
+            <div class="wx-msg-row app">
+                <div class="wx-bubble invite" onclick="openMiniApp()">
+                    <div class="m-title">🔔 工人合同邀约待确认</div>
+                    <div class="m-sub">泥瓦班组服务合同 · 金额 ¥12,800 · 甲方 陈庄</div>
+                    <div class="m-sub">请于 08-07 前响应，逾期视为放弃</div>
+                    <div class="m-go">点击查看并响应 ›</div>
+                </div>
+            </div>
+            <div class="wx-msg-row app">
+                <div class="wx-bubble">
+                    <div class="m-title">项目进度提醒</div>
+                    <div class="m-sub">您参与的「XX小区整体装修」水电阶段已完工</div>
+                </div>
+            </div>
+            <div class="wx-msg-row me">
+                <div class="wx-bubble">收到，我去现场验收</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="demo-tip">
+        <b>微信客户端层 · 服务通知（订阅消息）</b>：此界面并非小程序内页面，而是被邀请人离开小程序时，平台通过微信合规通道（订阅消息）在「服务通知」推送合同邀约；点开即直达小程序内响应页。
+    </div>
+
+    <script>
+        function openServiceNotice() {
+            document.getElementById('searchView').classList.add('hidden');
+            document.getElementById('listView').classList.add('hidden');
+            document.getElementById('detailView').classList.remove('hidden');
+            document.getElementById('wxTitle').textContent = '服务通知';
+        }
+        function goBack() {
+            if (!document.getElementById('detailView').classList.contains('hidden')) {
+                document.getElementById('detailView').classList.add('hidden');
+                document.getElementById('listView').classList.remove('hidden');
+                document.getElementById('searchView').classList.remove('hidden');
+                document.getElementById('wxTitle').textContent = '微信';
+            }
+            // 列表页已是顶层（原型演示，无上级页面）
+        }
+        function openMiniApp() {
+            showToast('正在打开小程序…');
+            setTimeout(function () {
+                location.href = 'worker-contract-detail.html?viewer=receiver';
+            }, 500);
+        }
+        function showToast(msg) {
+            var t = document.createElement('div');
+            t.textContent = msg;
+            t.style.cssText = 'position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.8);color:#fff;padding:10px 18px;border-radius:8px;font-size:14px;z-index:9999;';
+            document.body.appendChild(t);
+            setTimeout(function () { t.remove(); }, 1200);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>良造家管理平台 - PC端其他模块详细PRD规格</title>
+    <style>
+        :root {
+            --primary-color: #1890FF;
+            --success-color: #52C41A;
+            --warning-color: #FA8C16;
+            --error-color: #FF4D4F;
+            --text-primary: #262626;
+            --text-secondary: #595959;
+            --text-tertiary: #8C8C8C;
+            --border-color: #E8E8E8;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #FAFAFA;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-secondary);
+        }
+
+        /* 左右布局 */
+        .page-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 左侧目录 */
+        .sidebar-toc {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            z-index: 100;
+            flex-shrink: 0;
+        }
+
+        .sidebar-toc::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-toc::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        .sidebar-toc::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        .sidebar-toc-title {
+            padding: 24px 24px 16px;
+            font-size: 18px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background: var(--bg-primary);
+            z-index: 1;
+        }
+
+        .sidebar-toc-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-toc-list li {
+            border-bottom: none;
+        }
+
+        .sidebar-toc-list a {
+            display: block;
+            padding: 12px 24px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 13px;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-toc-list a:hover {
+            background: var(--bg-secondary);
+            color: var(--warning-color);
+            text-decoration: none;
+        }
+
+        .sidebar-toc-list a.active {
+            background: #FFF7E6;
+            color: var(--warning-color);
+            border-left-color: var(--warning-color);
+            font-weight: 500;
+        }
+
+        /* 目录二级嵌套（章节子项） */
+        .sidebar-toc-sub {
+            list-style: none;
+            padding: 0 0 4px 0;
+            margin: 0;
+            background: rgba(0,0,0,0.015);
+        }
+        .sidebar-toc-sub li { border-bottom: none; }
+        .sidebar-toc-sub a {
+            padding: 8px 24px 8px 40px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            border-left: 3px solid transparent;
+        }
+        .sidebar-toc-sub a:hover {
+            background: var(--bg-secondary);
+            color: var(--warning-color);
+        }
+        .sidebar-toc-sub a.active {
+            background: #FFF7E6;
+            color: var(--warning-color);
+            border-left-color: var(--warning-color);
+        }
+        .sidebar-toc-list li.toc-parent > a {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            background: var(--bg-secondary);
+        }
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+        .header {
+            background: linear-gradient(135deg, #FA8C16 0%, #FAAD14 100%);
+            color: white;
+            padding: 48px 24px;
+            margin-bottom: 32px;
+        }
+        .header h1 { font-size: 32px; margin-bottom: 8px; }
+        .section {
+            background: var(--bg-primary);
+            border-radius: 8px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--warning-color);
+        }
+        .subsection { margin-bottom: 32px; }
+        .subsection-title { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+        table th, table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 13px; }
+        table th { background: var(--bg-secondary); font-weight: 600; color: var(--text-secondary); }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .info-item { padding: 16px; background: var(--bg-secondary); border-radius: 6px; }
+        .info-label { font-size: 12px; color: var(--text-tertiary); margin-bottom: 4px; }
+        .info-value { font-size: 14px; font-weight: 500; }
+        .code-block {
+            background: #1E1E1E;
+            color: #D4D4D4;
+            padding: 16px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin-bottom: 24px;
+        }
+        .note {
+            background: #FFFBE6;
+            border-left: 4px solid var(--warning-color);
+            padding: 12px 16px;
+            margin-bottom: 24px;
+            border-radius: 0 6px 6px 0;
+        }
+        .note-title { font-weight: 600; color: var(--warning-color); margin-bottom: 4px; }
+        .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .tag-required { background: #FFF1F0; color: var(--error-color); }
+        .tag-optional { background: #F0F5FF; color: var(--primary-color); }
+        .file-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            border-bottom: 1px dashed var(--primary-color);
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .file-link:hover { color: var(--warning-color); border-bottom-color: var(--warning-color); }
+        .proto-ref {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin: 0 0 16px 0;
+            padding: 4px 10px;
+            background: #F0F5FF;
+            border: 1px solid #D6E4FF;
+            border-radius: 4px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .proto-ref .proto-ref-label { color: var(--primary-color); font-weight: 500; }
+
+        .list-field-table th:nth-child(1) { width: 16%; }
+        .list-field-table th:nth-child(2) { width: 22%; }
+        .list-field-table th:nth-child(3) { width: 62%; }
+    </style>
+</head>
+<body>
+    <!-- 左侧目录 -->
+    <nav class="sidebar-toc" id="sidebarToc">
+        <div class="sidebar-toc-title">页面导航</div>
+        <ul class="sidebar-toc-list">
+            <li class="toc-parent"><a href="#page-contract-template">一、合同文本模板页</a>
+                <ul class="sidebar-toc-sub">
+                    <li><a href="#s1-1">1.1 页面概述</a></li>
+                    <li><a href="#s1-2">1.2 页面结构</a></li>
+                    <li><a href="#s1-3">1.3 列表页</a></li>
+                    <li><a href="#s1-4">1.4 新建模板</a></li>
+                    <li><a href="#s1-5">1.5 编辑模板</a></li>
+                    <li><a href="#s1-6">1.6 启用 / 停用</a></li>
+                    <li><a href="#s1-7">1.7 权限控制逻辑</a></li>
+                    <li><a href="#s1-8">1.8 动画和视觉反馈</a></li>
+                    <li><a href="#s1-9">1.9 异常处理逻辑</a></li>
+                </ul>
+            </li>
+            <li class="toc-parent"><a href="#page-stage-template">二、阶段任务模板页</a>
+                <ul class="sidebar-toc-sub">
+                    <li><a href="#s2-1">2.1 页面概述</a></li>
+                    <li><a href="#s2-2">2.2 页面结构</a></li>
+                    <li><a href="#s2-3">2.3 列表页</a></li>
+                    <li><a href="#s2-4">2.4 新建模板</a></li>
+                    <li><a href="#s2-5">2.5 编辑模板</a></li>
+                    <li><a href="#s2-6">2.6 启用 / 停用</a></li>
+                    <li><a href="#s2-7">2.7 动画和视觉反馈</a></li>
+                    <li><a href="#s2-8">2.8 异常处理逻辑</a></li>
+                    <li><a href="#s2-9">2.9 任务三段标准规格</a></li>
+                </ul>
+            </li>
+            <li><a href="#pc-other-api-summary">三、API接口汇总</a></li>
+        </ul>
+    </nav>
+
+    <!-- 主内容区域 -->
+    <div class="main-content">
+        <!-- 文档头部 -->
+        <div class="header">
+            <div class="container">
+                <h1>良造家管理平台 - PC端其他模块详细PRD规格</h1>
+                <div style="font-size: 14px; opacity: 0.9;">版本：v1.0 | 创建日期：2026-07-17 | 模块：模板管理、用户管理</div>
+            </div>
+        </div>
+
+        <div class="container">
+        <!-- ==================== 1. 合同文本模板页 ==================== -->
+        <div class="section" id="page-contract-template">
+            <div class="section-title">一、合同文本模板页（PC端）</div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="s1-1">1.1 页面概述</div>
+                <div class="info-grid">
+                    <div class="info-item"><div class="info-label">页面名称</div><div class="info-value">合同文本模板页</div></div>
+                    <div class="info-item"><div class="info-label">页面文件</div><div class="info-value"><a class="file-link" href="pc/pc-contract-template.html" target="_blank">pc-contract-template.html</a></div></div>
+                    <div class="info-item"><div class="info-label">适用角色</div><div class="info-value">运营角色</div></div>
+                    <div class="info-item"><div class="info-label">页面入口</div><div class="info-value">侧边栏导航"模板管理"</div></div>
+                    <div class="info-item"><div class="info-label">页面类型</div><div class="info-value">管理页</div></div>
+                    <div class="info-item"><div class="info-label">业务目标</div><div class="info-value">管理合同文本模板供编辑时使用</div></div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="s1-2">1.2 页面结构</div>
+                <div class="code-block">
+┌─────────────────────────────────────────────────────────────────────┐
+│  侧边栏（220px）                                                     │
+│  - Logo + 平台名称                                                   │
+│  - 导航菜单：合同审核管理                                             │
+│  - 模板管理分组                                                      │
+│    * 合同文本模板（激活）                                             │
+│    * 阶段任务模板                                                    │
+├─────────────────────────────────────────────────────────────────────┤
+│  主内容区                                                            │
+│  ├─ Header（56px）                                                  │
+│  │  - 面包屑：模板管理 / 合同文本模板                                 │
+│  │  - 用户信息：运营人员                                              │
+│  │  - 用户下拉菜单（退出登录）                                        │
+│  ├─ 内容头                                                          │
+│  │  - 页面标题"合同文本模板"                                          │
+│  │  - 右上"新建模板"按钮                                             │
+│  └─ 模板容器（左右两栏）                                              │
+│     ├─ 左侧：模板类型树（240px）                                      │
+│     │   - 全部模板 / 基础施工服务合同 / 设计服务合同 / 拆除班组服务合同 / 水电班组服务合同 / 木作班组服务合同 / 泥瓦工班组服务合同 / 油漆工班组服务合同 / 小零工服务合同 │
+│     └─ 右侧：工具栏 + 列表表格 + 分页                                 │
+│        - 工具栏：名称搜索框 + 城市下拉 + 状态下拉                      │
+│        - 列表列：模板名称/城市/模板类型/版本/状态/更新时间/操作            │
+│        - 操作：编辑 / 版本 / 停用·启用                                │
+│        - 底部分页条：共 N 条 / 页码                                   │
+└─────────────────────────────────────────────────────────────────────┘
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="s1-3">1.3 列表页</div>
+                <div class="proto-ref"><span class="proto-ref-label">关联原型页面：</span><a class="file-link" href="pc/pc-contract-template.html" target="_blank">pc/pc-contract-template.html</a></div>
+
+                <div class="note">
+                    <div class="note-title">交互说明</div>
+                    <div>以下筛选、搜索、排序规则已在原型（pc-contract-template.html）中落地：顶部工具栏「搜索 / 重置」按钮可实时过滤右侧表格；左侧模板类型树点击可即时筛选对应类型；两类筛选之间及与顶部城市/状态条件均为 <b>AND</b> 叠加；分页「共 N 条」随筛选结果实时刷新。原型列表为演示数据（6 条静态行 + 静态 count），筛选按实际渲染行生效。</div>
+                </div>
+
+                <div class="subsection-title" style="font-size: 16px;">1.3.1 列表页布局与组成</div>
+                <div class="code-block">
++-----------------------------------------------------------------------+
+|  主内容区                                                            |
+|  +- 内容头（页面标题"合同文本模板" + 右上"新建模板"按钮）              |
+|  +- 模板容器（左右两栏）                                              |
+|     +- 左侧：模板类型树（240px 固定）                                 |
+|     |   - 全部模板 / 基础施工服务合同 / 设计服务合同 / 拆除班组服务合同 / 水电班组服务合同 / 木作班组服务合同 / 泥瓦工班组服务合同 / 油漆工班组服务合同 / 小零工服务合同 |
+|     |   - 每项右侧显示该分类模板数量 count                            |
+|     +- 右侧：主区                                                     |
+|         +- 工具栏（搜索框 + 城市下拉 + 状态下拉 + 搜索/重置按钮）                      |
+|         +- 模板列表表格（七列）                                       |
+|         +- 分页条（共 N 条 / 页码）                                   |
++-----------------------------------------------------------------------+
+                </div>
+
+                <div class="subsection-title" style="font-size: 16px;">1.3.2 列表字段说明</div>
+                <table class="list-field-table">
+                    <thead><tr><th>列名</th><th>字段来源 / 取值</th><th>渲染样式与交互</th></tr></thead>
+                    <tbody>
+                        <tr><td>模板名称</td><td>模板名称字段</td><td>可点击文本（class template-name），点击右侧滑出预览面板（previewTemplate）</td></tr>
+                        <tr><td>城市</td><td>适用城市字段</td><td>纯文本（北京市 / 南阳市 / 西安市）</td></tr>
+                        <tr><td>模板类型</td><td>模板类型字段</td><td>标签（class template-category-tag），取值同左侧模板类型树；与模板类型树强关联</td></tr>
+                        <tr><td>版本</td><td>版本字段</td><td>版本徽标（class template-version），如 v2.0 / v1.5；点击"版本"按钮查看版本历史</td></tr>
+                        <tr><td>状态</td><td>状态字段</td><td>状态徽标（class template-status）：启用=绿底绿字带圆点（active）；停用=灰底灰字带圆点（inactive）。停用行整体加 .disabled（opacity 0.6、名称转灰）</td></tr>
+                        <tr><td>更新时间</td><td>更新时间字段</td><td>文本，格式 YYYY-MM-DD HH:mm（如 2024-01-10 14:30）</td></tr>
+                        <tr><td>操作</td><td>—</td><td>编辑（打开编辑弹窗）/ 版本（右侧滑出版本历史面板）/ 停用·启用（状态切换，见 1.6）</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 16px;">1.3.3 左侧模板类型筛选（与列表字段的关联关系）</div>
+                <table>
+                    <thead><tr><th>模板类型树节点</th><th>演示 count</th><th>关联规则</th></tr></thead>
+                    <tbody>
+                        <tr><td>全部模板</td><td>24</td><td>不限模板类型，展示所有模板</td></tr>
+                        <tr><td>基础施工服务合同</td><td>4</td><td>按列表「模板类型」字段 = "基础施工服务合同" 精确过滤</td></tr>
+                        <tr><td>设计服务合同</td><td>3</td><td>按列表「模板类型」字段 = "设计服务合同" 精确过滤</td></tr>
+                        <tr><td>拆除班组服务合同</td><td>3</td><td>按列表「模板类型」字段 = "拆除班组服务合同" 精确过滤</td></tr>
+                        <tr><td>水电班组服务合同</td><td>5</td><td>按列表「模板类型」字段 = "水电班组服务合同" 精确过滤</td></tr>
+                        <tr><td>木作班组服务合同</td><td>2</td><td>按列表「模板类型」字段 = "木作班组服务合同" 精确过滤</td></tr>
+                        <tr><td>泥瓦工班组服务合同</td><td>3</td><td>按列表「模板类型」字段 = "泥瓦工班组服务合同" 精确过滤</td></tr>
+                        <tr><td>油漆工班组服务合同</td><td>2</td><td>按列表「模板类型」字段 = "油漆工班组服务合同" 精确过滤</td></tr>
+                        <tr><td>小零工服务合同</td><td>2</td><td>按列表「模板类型」字段 = "小零工服务合同" 精确过滤</td></tr>
+                    </tbody>
+                </table>
+                <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
+                    <li><strong>取值同源：</strong>模板类型树节点的名称与列表「模板类型」列的标签取值完全一致（同一枚举：基础施工服务合同 / 设计服务合同 / 拆除班组服务合同 / 水电班组服务合同 / 木作班组服务合同 / 泥瓦工班组服务合同 / 油漆工班组服务合同 / 小零工服务合同），二者强关联。</li>
+                    <li><strong>count 含义：</strong>节点右侧数字为该分类下模板数量，由列表数据实时统计得出（原型中为演示值，新增/发布/停用时同步刷新）；点击节点即按该类型精确过滤右侧列表。</li>
+                    <li><strong>互斥单选：</strong>模板类型树为单选，点击节点高亮 active（蓝底蓝字），其余节点取消高亮；"全部模板" 等价于"不按模板类型过滤"。</li>
+                    <li><strong>叠加关系：</strong>左侧模板类型筛选与右侧顶部工具栏的搜索/城市/状态筛选为 <strong>AND（同时满足）</strong> 叠加。</li>
+                </ul>
+
+                <div class="subsection-title" style="font-size: 16px;">1.3.4 顶部搜索与筛选条件匹配规则</div>
+                <table>
+                    <thead><tr><th>控件</th><th>匹配字段</th><th>匹配方式</th><th>空 / "全部" 取值行为</th></tr></thead>
+                    <tbody>
+                        <tr><td>模板名称搜索框</td><td>模板名称</td><td>模糊匹配：包含输入关键字即命中；忽略大小写、忽略首尾空格</td><td>为空 = 不限名称</td></tr>
+                        <tr><td>城市下拉</td><td>城市</td><td>精确匹配：选项值 = 字段值</td><td>"全部城市" = 不限；选项值与模板「适用城市」字段一致（北京市 / 南阳市 / 西安市），精确匹配</td></tr>
+                        <tr><td>状态下拉</td><td>状态</td><td>精确匹配：启用=active / 停用=inactive</td><td>"全部状态" = 不限</td></tr>
+                    </tbody>
+                </table>
+                <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
+                    <li>三个顶部控件之间为 <strong>AND</strong> 关系：需同时满足名称模糊命中、城市精确相等、状态精确相等。</li>
+                    <li>顶部筛选再与左侧模板类型树叠加，仍为 AND（四类条件全部命中才出现在列表）。</li>
+                    <li>「搜索」按钮（applyFilters）触发按上述条件过滤；「重置」按钮（resetFilters）清空名称/城市/状态并恢复“全部模板”选中，列表与类型树 count 同步刷新。</li>
+                </ul>
+
+                <div class="subsection-title" style="font-size: 16px;">1.3.5 列表排序与分页</div>
+                <table>
+                    <thead><tr><th>项</th><th>规则</th></tr></thead>
+                    <tbody>
+                        <tr><td>默认排序</td><td>按「更新时间」倒序（最新在前）；<b>新建保存的模板（保存草稿 / 保存并发布）直接插入列表最上方</b>（创建 / 更新时间倒序），保证最新创建的模板置顶，修正此前新增模板排在列表末尾的问题；演示数据顺序即：2024-01-10 → 2024-01-08 → 2024-01-05 → 2024-01-03 → 2024-01-01 → 2023-12-15</td></tr>
+                        <tr><td>列头排序</td><td>当前原型列头不可点击排序（无排序交互）；如需扩展，建议支持按「更新时间」「模板名称」升/降序切换</td></tr>
+                        <tr><td>分页</td><td>底部分页条显示"共 N 条"；默认每页 10 条（演示 24 条 → 3 页），页码 1 / 2 / 3；首末页禁用翻页箭头（‹ ›）</td></tr>
+                        <tr><td>筛选后分页</td><td>count 与页码随筛选结果实时重算（演示为静态，仅展示样式）</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="s1-4">1.4 新建模板</div>
+                <div class="proto-ref"><span class="proto-ref-label">关联原型页面：</span><a class="file-link" href="pc/pc-contract-template.html#modal-create" target="_blank">pc/pc-contract-template.html#modal-create</a></div>
+
+                <div class="subsection-title" style="font-size: 16px;">1.4.1 入口与弹窗布局</div>
+                <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
+                    <li><strong>入口：</strong>列表页内容头右上角"新建模板"按钮（showCreateModal()）→ 弹出大型弹窗（pc-modal-xl），标题"新建合同文本模板"。</li>
+                    <li><strong>弹窗结构：</strong>基本信息区（模板名称 / 模板类型 / 适用城市 / 模板描述）+ 合同正文区（富文本编辑器，含工具栏）。底部操作：取消 / 保存草稿 / 保存并发布。预览通过点击列表模板名称滑出右侧面板（600px）。</li>
+                </ul>
+
+                <div class="subsection-title" style="font-size: 16px;">1.4.2 字段说明与规格</div>
+                <table>
+                    <thead><tr><th>字段</th><th>必填</th><th>类型 / 取值</th><th>规格</th><th>默认值</th></tr></thead>
+                    <tbody>
+                        <tr><td>模板名称</td><td><span class="tag tag-required">必填</span></td><td>文本</td><td>1-50 字符</td><td>空</td></tr>
+                        <tr><td>模板类型</td><td><span class="tag tag-required">必填</span></td><td>单选</td><td>基础施工服务合同 / 设计服务合同 / 拆除班组服务合同 / 水电班组服务合同 / 木作班组服务合同 / 泥瓦工班组服务合同 / 油漆工班组服务合同 / 小零工服务合同</td><td>空（请选择）</td></tr>
+                        <tr><td>适用城市</td><td><span class="tag tag-required">必填</span></td><td>单选</td><td>北京市 / 南阳市 / 西安市</td><td>北京市</td></tr>
+                        <tr><td>模板描述</td><td><span class="tag tag-optional">选填</span></td><td>文本</td><td>1-200 字符（建议）</td><td>空</td></tr>
+                        <tr><td>合同正文</td><td><span class="tag tag-required">必填</span></td><td>富文本</td><td>1-50000 字符，支持加粗/斜体/下划线/对齐/列表/表格/图片/链接</td><td>"在此输入合同正文内容..."（占位）</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 16px;">1.4.3 校验规则</div>
+                <table>
+                    <thead><tr><th>字段</th><th>校验时机</th><th>规则</th><th>错误提示</th><th>是否阻断提交</th></tr></thead>
+                    <tbody>
+                        <tr><td>模板名称</td><td>失焦 + 提交</td><td>非空且 1-50 字符；<b>同一适用城市下、且已存在状态为「启用」的其他模板时不允许重名</b>（草稿态不校验，仅在发布/启用时校验；编辑自身不计入）</td><td>"请输入模板名称" / "该城市下已存在同名的启用中模板，请勿重复创建"</td><td>是</td></tr>
+                        <tr><td>模板类型</td><td>提交</td><td>必选一项</td><td>"请选择模板类型"</td><td>是</td></tr>
+                        <tr><td>适用城市</td><td>提交</td><td>必选一项（默认北京市）</td><td>"请选择适用城市"</td><td>是</td></tr>
+                        <tr><td>合同正文</td><td>提交</td><td>非空且 ≥1 字符（去除占位文本后）</td><td>"请输入模板内容"</td><td>是</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 16px;">1.4.4 交互效果</div>
+                <table>
+                    <thead><tr><th>交互场景</th><th>效果</th></tr></thead>
+                    <tbody>
+                        <tr><td>打开新建弹窗</td><td>标题置"新建合同文本模板"；表单全部清空；正文重置为占位文本；城市默认"北京市"；遮罩淡入</td></tr>
+                        <tr><td>富文本工具栏</td><td>加粗(B)/斜体(I)/下划线(U)/左中右对齐/有序·无序列表/插入表格/图片/链接；激活态按钮蓝底白字</td></tr>
+                        <tr><td>插入表格 / 图片 / 链接</td><td>弹 prompt 输入行数/列数/URL/描述，确认后以 HTML 插入光标处</td></tr>
+                        <tr><td>保存草稿</td><td>存为草稿（不发布），关闭弹窗，列表<b>最上方</b>新增一行（状态「草稿」），提示"已保存草稿"</td></tr>
+                        <tr><td>保存并发布</td><td>先执行 1.4.3 校验（含同城市启用模板重名校验），通过则关闭弹窗并 Toast"模板已保存并发布"；列表<b>最上方</b>新增一行（状态默认启用）并按当前筛选条件重算列表（applyFilters）</td></tr>
+                        <tr><td>取消</td><td>关闭弹窗，不保存任何内容</td></tr>
+                        <tr><td>点击列表模板名称</td><td>右侧滑出预览面板（600px，previewPanel），展示正文与版本历史；可关闭</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 16px;">1.4.5 保存流程与状态流转</div>
+                <div class="note">
+                    <div class="note-title">两种保存动作的差异</div>
+                    <div>新建 / 编辑弹窗底部提供「保存草稿」与「保存并发布」两个动作，二者在<b>校验强度</b>与<b>生成的状态</b>上不同，对应实现分别为 <code>saveDraft()</code> 与 <code>saveTemplate()</code>（status=active）。</div>
+                </div>
+                <table>
+                    <thead><tr><th>维度</th><th>保存草稿</th><th>保存并发布</th></tr></thead>
+                    <tbody>
+                        <tr><td>触发按钮</td><td>保存草稿</td><td>保存并发布</td></tr>
+                        <tr><td>校验时机</td><td>提交时</td><td>提交时</td></tr>
+                        <tr><td>校验强度</td><td>仅校验「模板名称」非空</td><td>校验「模板名称 / 模板类型 / 适用城市 / 合同正文」全部必填（规则见 1.4.3）</td></tr>
+                        <tr><td>生成状态</td><td>草稿（橙色「草稿」徽标，列表可一键「发布」转为启用）</td><td>启用（绿色「启用」徽标，可直接被新建合同选用）</td></tr>
+                        <tr><td>列表联动</td><td>新增一行（状态=草稿），「全部模板」计数与对应类型计数 +1</td><td>新增 / 覆盖一行（状态=启用），计数同步刷新</td></tr>
+                        <tr><td>提示</td><td>Toast 中部「已保存草稿」</td><td>Toast 中部「模板已保存并发布」</td></tr>
+                        <tr><td>失败处理</td><td>名称为空则阻止并聚焦输入框、红框提示</td><td>任一必填缺失则阻止并红框高亮+弹窗汇总；若<b>同城市下已存在同名启用模板</b>亦阻止（提示“该城市下已存在同名的启用中模板，请勿重复创建”）</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 15px; margin-top: 20px;">状态流转（草稿 / 启用 / 停用）</div>
+                <div class="code-block">
+草稿 ──(列表行「发布」按钮 / publishDraft)──▶ 启用 ──(列表行「停用」/ toggleStatus)──▶ 停用
+  ▲                                                  │                                      │
+  └────────(编辑后点「保存草稿」回退)─────────────────┘                                      │
+                                                                 停用 ──(列表行「启用」/ toggleStatus)──▶ 启用
+                </div>
+                <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
+                    <li><b>草稿 → 启用</b>：草稿行操作区提供「发布」按钮（publishDraft(id)），点击后状态徽标转「启用」、按钮转为「停用」，模板立即进入可选用范围。</li>
+                    <li><b>启用 ↔ 停用</b>：见 1.6 启用 / 停用，状态仅影响新建合同可选用范围，不影响已签署或已生成合同。</li>
+                    <li><b>启用 / 停用 → 草稿</b>：已发布模板在编辑后点击「保存草稿」可回退为草稿态（保留内容、退出选用范围），后续可再次发布。</li>
+                </ul>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="s1-5">1.5 编辑模板</div>
+                <div class="proto-ref"><span class="proto-ref-label">关联原型页面：</span><a class="file-link" href="pc/pc-contract-template.html#modal-edit" target="_blank">pc/pc-contract-template.html#modal-edit</a></div>
+
+                <div class="subsection-title" style="font-size: 16px;">1.5.1 入口</div>
+                <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
+                    <li>列表"操作"列点击"编辑"（editTemplate(id)）→ 打开同一大型弹窗，标题变为"编辑合同文本模板"。</li>
+                </ul>
+
+                <div class="subsection-title" style="font-size: 16px;">1.5.2 与新建模板的差异</div>
+                <table>
+                    <thead><tr><th>维度</th><th>新建模板</th><th>编辑模板</th></tr></thead>
+                    <tbody>
+                        <tr><td>弹窗标题</td><td>新建合同文本模板</td><td>编辑合同文本模板</td></tr>
+                        <tr><td>表单初始值</td><td>全部清空 / 默认值</td><td>回显所选模板的名称 / 分类 / 城市 / 描述 / 正文</td></tr>
+                        <tr><td>版本处理</td><td>初始版本 v1.0</td><td>保存后版本号递增（如 v2.0），并写入版本历史</td></tr>
+                        <tr><td>字段规格与校验</td><td colspan="2">完全一致（见 1.4.2 / 1.4.3）</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 16px;">1.5.3 交互效果</div>
+                <table>
+                    <thead><tr><th>交互场景</th><th>效果</th></tr></thead>
+                    <tbody>
+                        <tr><td>打开编辑弹窗</td><td>按所选模板 id 取数据回显；正文区渲染已保存 HTML；遮罩淡入</td></tr>
+                        <tr><td>保存并发布</td><td>覆盖原模板；版本递增；关闭弹窗 Toast"模板已保存并发布"；列表对应行更新（名称/分类/城市/更新时间）</td></tr>
+                        <tr><td>保存草稿</td><td>覆盖草稿内容，不影响已发布版本</td></tr>
+                        <tr><td>取消</td><td>关闭弹窗，放弃本次修改</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="note">
+                    <div class="note-title">版本说明</div>
+                    <div>编辑保存后生成新版本（如 v1.5 → v2.0），旧版本保留在"版本历史"中，可查看 / 恢复（showVersionHistory(id) 滑出预览面板展示版本列表）。</div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="s1-6">1.6 启用 / 停用</div>
+
+                <div class="subsection-title" style="font-size: 16px;">1.6.1 入口</div>
+                <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
+                    <li>列表"操作"列的"停用 / 启用"按钮（toggleStatus(id)），依据当前行状态显示相反操作。</li>
+                </ul>
+
+                <div class="subsection-title" style="font-size: 16px;">1.6.2 停用交互流程</div>
+                <table>
+                    <thead><tr><th>步骤</th><th>行为</th></tr></thead>
+                    <tbody>
+                        <tr><td>1. 点击"停用"</td><td>弹出二次确认："确定要停用此模板吗？停用后新建合同将无法选择此模板。"</td></tr>
+                        <tr><td>2. 取消</td><td>关闭确认框，不执行任何变更</td></tr>
+                        <tr><td>3. 确认</td><td>执行停用：行加 .disabled、状态徽标转"停用"（灰）、按钮文案"停用"→"启用"；提示"模板已停用，新建合同将无法选择此模板"</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 16px;">1.6.3 启用交互流程</div>
+                <table>
+                    <thead><tr><th>步骤</th><th>行为</th></tr></thead>
+                    <tbody>
+                        <tr><td>1. 点击"启用"</td><td>无需确认，直接执行</td></tr>
+                        <tr><td>2. 执行</td><td>行移除 .disabled、状态徽标转"启用"（绿）、按钮文案"启用"→"停用"；提示"模板已启用，新建合同可选择此模板"</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 16px;">1.6.4 行联动效果</div>
+                <table>
+                    <thead><tr><th>状态变化</th><th>视觉联动</th></tr></thead>
+                    <tbody>
+                        <tr><td>启用 → 停用</td><td>整行 opacity 0.6（.disabled）；状态徽标绿→灰；操作按钮"停用"→"启用"；模板名称转灰</td></tr>
+                        <tr><td>停用 → 启用</td><td>整行恢复不透明；状态徽标灰→绿；按钮"启用"→"停用"；名称恢复主色</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 16px;">1.6.5 影响范围</div>
+                <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
+                    <li>停用仅影响"新建合同 / 发起变更时可选用模板的范围"，已签署或已生成的合同不受影响。</li>
+                    <li>模板类型树 count 同步（停用模板仍计入总数，仅状态变化，不减少总条数）。</li>
+                </ul>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="s1-7">1.7 权限控制逻辑</div>
+                <table>
+                    <thead><tr><th>操作</th><th>运营角色</th></tr></thead>
+                    <tbody>
+                        <tr><td>查看模板列表</td><td>✅</td></tr>
+                        <tr><td>创建模板</td><td>✅</td></tr>
+                        <tr><td>编辑模板</td><td>✅</td></tr>
+                        <tr><td>启用 / 停用模板</td><td>✅</td></tr>
+                        <tr><td>预览模板</td><td>✅</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="s1-8">1.8 动画和视觉反馈</div>
+                <table>
+                    <thead><tr><th>交互场景</th><th>动画效果</th></tr></thead>
+                    <tbody>
+                        <tr><td>新建/编辑弹窗打开</td><td>遮罩层渐显 0.3 秒，弹窗淡入</td></tr>
+                        <tr><td>新建模板按钮悬停</td><td>背景色从 #1890FF 变为 #40A9FF，阴影 0 4px 12px rgba(24,144,255,0.3)</td></tr>
+                        <tr><td>模板行悬停</td><td>背景色变为 #FAFAFA</td></tr>
+                        <tr><td>模板名称点击（预览）</td><td>右侧预览面板从 right:-600px 滑入至 right:0，过渡 0.3 秒</td></tr>
+                        <tr><td>模板类型树节点点击</td><td>节点背景与文字切换为蓝底蓝字（active），无动画过渡</td></tr>
+                        <tr><td>保存成功</td><td>Toast 中部显示"模板已保存并发布"，持续 2 秒</td></tr>
+                        <tr><td>富文本工具栏按钮激活</td><td>按钮背景变蓝、文字变白</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="s1-9">1.9 异常处理逻辑</div>
+                <table>
+                    <thead><tr><th>异常场景</th><th>处理方式</th><th>用户提示</th></tr></thead>
+                    <tbody>
+                        <tr><td>模板名称为空</td><td>阻止提交，聚焦输入框</td><td>Toast 中部显示"请输入模板名称"</td></tr>
+                        <tr><td>模板名称重复</td><td>阻止提交</td><td>Toast 中部显示"模板名称已存在"</td></tr>
+                        <tr><td>模板类型 / 城市未选</td><td>阻止提交</td><td>Toast 中部显示"请选择模板类型" / "请选择适用城市"</td></tr>
+                        <tr><td>合同正文为空</td><td>阻止提交</td><td>Toast 中部显示"请输入模板内容"</td></tr>
+                        <tr><td>网络错误</td><td>显示错误状态</td><td>Toast 中部显示"操作失败，请稍后重试"</td></tr>
+                        <tr><td>无模板数据</td><td>显示空状态</td><td>页面中央显示"暂无模板，点击创建"</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ==================== 2. 阶段任务模板页 ==================== -->
+        <div class="section" id="page-stage-template">
+            <div class="section-title">二、阶段任务模板页（PC端）</div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="s2-1">2.1 页面概述</div>
+                <div class="info-grid">
+                    <div class="info-item"><div class="info-label">页面名称</div><div class="info-value">阶段任务模板页</div></div>
+                    <div class="info-item"><div class="info-label">页面文件</div><div class="info-value"><a class="file-link" href="pc/pc-stage-template.html" target="_blank">pc-stage-template.html</a></div></div>
+                    <div class="info-item"><div class="info-label">适用角色</div><div class="info-value">运营角色</div></div>
+                    <div class="info-item"><div class="info-label">页面入口</div><div class="info-value">侧边栏"阶段任务模板"</div></div>
+                    <div class="info-item"><div class="info-label">业务目标</div><div class="info-value">管理阶段任务模板，按城市和模板类型划分</div></div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="s2-2">2.2 页面结构</div>
+                <div class="code-block">
+┌─────────────────────────────────────────────────────────────────────┐
+│  Header + 操作栏（同合同文本模板页）                                  │
+├─────────────────────────────────────────────────────────────────────┤
+│  筛选栏                                                              │
+│  - 城市选择下拉框                                                    │
+│  - 模板类型下拉框                                                    │
+│  - 搜索框                                                            │
+├─────────────────────────────────────────────────────────────────────┤
+│  模板卡片列表                                                         │
+│  - 模板名称 + 适用城市 + 模板类型                                     │
+│  - 阶段数量统计                                                       │
+│  - 操作：预览、编辑、删除                                             │
+├─────────────────────────────────────────────────────────────────────┤
+│  创建/编辑弹窗                                                        │
+│  - 基本信息：模板名称、适用城市、模板类型                              │
+│  - 阶段列表：阶段名称 + 任务列表                                       │
+│  - 添加阶段、添加任务                                                 │
+└─────────────────────────────────────────────────────────────────────┘
+                </div>
+                <div class="note">
+                    <div class="note-title">列表页详细规则</div>
+                    <div>阶段任务模板页的列表布局、卡片字段、左侧模板类型筛选、顶部搜索 / 筛选匹配规则与排序分页，详见 <b>2.3 列表页</b>。</div>
+                </div>
+            </div>
+
+                <div class="subsection">
+                <div class="subsection-title" id="s2-3">2.3 列表页</div>
+                <div class="proto-ref"><span class="proto-ref-label">关联原型页面：</span><a class="file-link" href="pc/pc-stage-template.html" target="_blank">pc/pc-stage-template.html</a></div>
+
+                <div class="note">
+                    <div class="note-title">交互说明</div>
+                    <div>以下筛选、搜索、排序规则已在原型（pc-stage-template.html）中落地：顶部工具栏「搜索 / 重置」按钮可实时过滤右侧卡片；左侧模板类型树点击可即时筛选对应类型；两类筛选之间及与顶部城市/状态条件均为 <b>AND</b> 叠加；分页「共 N 条」随筛选结果实时刷新。原型列表为演示数据（4 张静态卡片 + 静态 count），筛选按实际渲染卡片生效。</div>
+                </div>
+
+                <div class="subsection-title" style="font-size: 16px;">2.3.1 列表页布局与组成</div>
+                <div class="code-block">
++-----------------------------------------------------------------------+
+|  主内容区                                                            |
+|  +- 内容头（页面标题"阶段任务模板" + 右上"新建模板"按钮）              |
+|  +- 模板容器（左右两栏）                                              |
+|     +- 左侧：模板类型树（240px 固定）                                 |
+|     |   - 全部模板 / 基础施工服务合同 / 设计服务合同 / 拆除班组服务合同 / 水电班组服务合同 / 木作班组服务合同 / 泥瓦工班组服务合同 / 油漆工班组服务合同 / 小零工服务合同 |
+|     |   - 每项右侧显示该分类模板数量 count                            |
+|     +- 右侧：主区                                                     |
+|         +- 工具栏（名称搜索框 + 城市下拉 + 状态下拉 + 搜索/重置按钮）  |
+|         +- 模板卡片列表（每张卡片展示：名称 + 类型 + 城市 + 状态 + 阶段/任务统计 + 操作） |
+|         +- 分页条（共 N 条 / 页码）                                   |
++-----------------------------------------------------------------------+
+                </div>
+
+                <div class="subsection-title" style="font-size: 16px;">2.3.2 卡片字段说明</div>
+                <table class="list-field-table">
+                    <thead><tr><th>卡片字段</th><th>字段来源 / 取值</th><th>渲染样式与交互</th></tr></thead>
+                    <tbody>
+                        <tr><td>模板名称</td><td>模板名称字段</td><td>卡片标题文本（class template-card-name）；点击卡片头展开/收起阶段详情</td></tr>
+                        <tr><td>模板类型</td><td>模板类型字段</td><td>卡片 meta「类型：」标签，取值同左侧模板类型树八类枚举；与类型树强关联</td></tr>
+                        <tr><td>适用城市</td><td>适用城市字段</td><td>卡片 meta「城市：」文本（全国 / 北京市 / 南阳市 / 西安市）</td></tr>
+                        <tr><td>状态</td><td>状态字段</td><td>状态徽标（class template-status）：启用中=绿底绿字带圆点（active）；已禁用=灰底灰字带圆点（disabled）；草稿=橙底橙字（draft）。已禁用卡片整体加 .disabled（opacity 0.6、名称转灰）</td></tr>
+                        <tr><td>阶段 / 任务统计</td><td>阶段数 / 任务数</td><td>卡片展示「共 N 个阶段 / M 个任务」（data-stage-count / data-task-count）</td></tr>
+                        <tr><td>更新时间</td><td>更新时间字段</td><td>文本，格式 YYYY-MM-DD HH:mm</td></tr>
+                        <tr><td>操作</td><td>—</td><td>预览（展开卡片查看阶段详情）/ 编辑（打开编辑弹窗）/ 发布·禁用·启用（状态切换，见 2.6）</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 16px;">2.3.3 左侧模板类型筛选（与卡片字段的关联关系）</div>
+                <table>
+                    <thead><tr><th>模板类型树节点</th><th>演示 count</th><th>关联规则</th></tr></thead>
+                    <tbody>
+                        <tr><td>全部模板</td><td>18</td><td>不限模板类型，展示所有模板</td></tr>
+                        <tr><td>基础施工服务合同</td><td>3</td><td>按卡片「类型：」字段 = "基础施工服务合同" 精确过滤</td></tr>
+                        <tr><td>设计服务合同</td><td>2</td><td>按卡片「类型：」字段 = "设计服务合同" 精确过滤</td></tr>
+                        <tr><td>拆除班组服务合同</td><td>2</td><td>按卡片「类型：」字段 = "拆除班组服务合同" 精确过滤</td></tr>
+                        <tr><td>水电班组服务合同</td><td>3</td><td>按卡片「类型：」字段 = "水电班组服务合同" 精确过滤</td></tr>
+                        <tr><td>木作班组服务合同</td><td>2</td><td>按卡片「类型：」字段 = "木作班组服务合同" 精确过滤</td></tr>
+                        <tr><td>泥瓦工班组服务合同</td><td>2</td><td>按卡片「类型：」字段 = "泥瓦工班组服务合同" 精确过滤</td></tr>
+                        <tr><td>油漆工班组服务合同</td><td>2</td><td>按卡片「类型：」字段 = "油漆工班组服务合同" 精确过滤</td></tr>
+                        <tr><td>小零工服务合同</td><td>2</td><td>按卡片「类型：」字段 = "小零工服务合同" 精确过滤</td></tr>
+                    </tbody>
+                </table>
+                <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
+                    <li><strong>取值同源：</strong>模板类型树节点名称与卡片「类型：」标签取值完全一致（同一枚举：基础施工服务合同 / 设计服务合同 / 拆除班组服务合同 / 水电班组服务合同 / 木作班组服务合同 / 泥瓦工班组服务合同 / 油漆工班组服务合同 / 小零工服务合同），二者强关联。</li>
+                    <li><strong>count 含义：</strong>节点右侧数字为该分类下模板数量，由卡片数据实时统计得出（原型中为演示值，新增/发布/禁用时同步刷新，见 updateStageSidebarCounts）；点击节点即按该类型精确过滤右侧卡片。</li>
+                    <li><strong>互斥单选：</strong>模板类型树为单选，点击节点高亮 active（蓝底蓝字），其余节点取消高亮；"全部模板" 等价于"不按模板类型过滤"。</li>
+                    <li><strong>叠加关系：</strong>左侧模板类型筛选与右侧顶部工具栏的搜索/城市/状态筛选为 <strong>AND（同时满足）</strong> 叠加。</li>
+                </ul>
+
+                <div class="subsection-title" style="font-size: 16px;">2.3.4 顶部搜索与筛选条件匹配规则</div>
+                <table>
+                    <thead><tr><th>控件</th><th>匹配字段</th><th>匹配方式</th><th>空 / "全部" 取值行为</th></tr></thead>
+                    <tbody>
+                        <tr><td>模板名称搜索框</td><td>模板名称</td><td>模糊匹配：包含输入关键字即命中；忽略大小写、忽略首尾空格</td><td>为空 = 不限名称</td></tr>
+                        <tr><td>城市下拉</td><td>城市</td><td>精确匹配：选项值 = 字段值</td><td>"全部城市" = 不限；选项值与卡片「城市：」字段一致（全国 / 北京市 / 南阳市 / 西安市），精确匹配</td></tr>
+                        <tr><td>状态下拉</td><td>状态</td><td>精确匹配：状态下拉显示"启用 / 停用"，分别对应数据状态 active / disabled（卡片徽标文案为"启用中 / 已禁用"）</td><td>"全部状态" = 不限</td></tr>
+                    </tbody>
+                </table>
+                <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
+                    <li>三个顶部控件之间为 <strong>AND</strong> 关系：需同时满足名称模糊命中、城市精确相等、状态精确相等。</li>
+                    <li>顶部筛选再与左侧模板类型树叠加，仍为 AND（四类条件全部命中才出现在列表）。</li>
+                    <li>「搜索」按钮（applyFilters）触发按上述条件过滤；「重置」按钮（resetFilters）清空名称/城市/状态并恢复"全部模板"选中，列表与类型树 count 同步刷新。</li>
+                </ul>
+
+                <div class="subsection-title" style="font-size: 16px;">2.3.5 列表排序与分页</div>
+                <table>
+                    <thead><tr><th>项</th><th>规则</th></tr></thead>
+                    <tbody>
+                        <tr><td>默认排序</td><td>卡片按「创建 / 更新时间」倒序（最新在前）；<b>新建或编辑保存后的模板直接插入列表最上方</b>（创建时间倒序），确保最新模板置顶，修正此前新增模板排在列表末尾的问题；演示数据顺序即创建 / 更新先后</td></tr>
+                        <tr><td>列头排序</td><td>当前原型卡片无列头排序交互；如需扩展，建议支持按「更新时间」「模板名称」升 / 降序切换</td></tr>
+                        <tr><td>分页</td><td>底部分页条显示"共 N 条"；默认每页 10 条（演示 4 张 → 1 页），超出则分页码 1 / 2 / 3…</td></tr>
+                        <tr><td>筛选后分页</td><td>count 与页码随筛选结果实时重算（演示为静态，仅展示样式）；重置后恢复全部计数</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+<div class="subsection-title" id="s2-4">2.4 新建模板</div>
+                <div class="proto-ref"><span class="proto-ref-label">关联原型页面：</span><a class="file-link" href="pc/pc-stage-template.html#modal-create" target="_blank">pc/pc-stage-template.html#modal-create</a></div>
+
+                <div class="subsection-title" style="font-size: 16px;">2.4.1 入口与弹窗布局</div>
+                <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
+                    <li><strong>入口：</strong>列表页内容头右上角"+ 新建模板"按钮（showCreateModal()）→ 弹出大型弹窗，标题"新建阶段任务模板"。</li>
+                    <li><strong>弹窗结构：</strong>基本信息区（模板名称 / 模板类型 / 适用城市 / 模板描述）+ 阶段任务区（阶段列表：阶段名称 + 按序执行开关 + 任务列表；支持添加阶段 / 添加任务）+ 底部操作：取消 / 保存草稿 / 保存并发布。</li>
+                </ul>
+
+                <div class="subsection-title" style="font-size: 16px;">2.4.2 字段说明与规格</div>
+                <table>
+                    <thead><tr><th>字段</th><th>类型</th><th>必填</th><th>校验规则</th><th>错误提示</th></tr></thead>
+                    <tbody>
+                        <tr><td>模板名称</td><td>String(50)</td><td><span class="tag tag-required">必填</span></td><td>1-50 字符，非空</td><td>请输入模板名称</td></tr>
+                        <tr><td>模板类型</td><td>Enum</td><td><span class="tag tag-required">必填</span></td><td>枚举值：基础施工服务合同 / 设计服务合同 / 拆除班组服务合同 / 水电班组服务合同 / 木作班组服务合同 / 泥瓦工班组服务合同 / 油漆工班组服务合同 / 小零工服务合同</td><td>请选择模板类型</td></tr>
+                        <tr><td>适用城市</td><td>Enum</td><td><span class="tag tag-required">必填</span></td><td>枚举值：全国 / 北京市 / 南阳市 / 西安市</td><td>请选择适用城市</td></tr>
+                        <tr><td>模板描述</td><td>String(200)</td><td><span class="tag tag-optional">选填</span></td><td>1-200 字符（建议填写）</td><td>—</td></tr>
+                        <tr><td>阶段任务</td><td>复合（阶段 + 任务）</td><td><span class="tag tag-required">必填</span></td><td>至少包含 <b>1 个阶段</b>；阶段含：阶段名称、是否按序执行；任务含：任务名称、执行标准、确认标准、担责标准（见 2.9）</td><td>请至少添加一个阶段信息</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 16px;">2.4.3 校验规则</div>
+                <table>
+                    <thead><tr><th>保存动作</th><th>校验时机</th><th>规则</th><th>错误提示</th><th>是否阻断提交</th></tr></thead>
+                    <tbody>
+                        <tr><td>保存草稿</td><td>提交</td><td>校验「模板名称」非空 <b>且至少 1 个阶段</b></td><td>请输入模板名称 / 请至少添加一个阶段信息</td><td>是</td></tr>
+                        <tr><td>保存并发布</td><td>提交</td><td>「模板名称 / 模板类型 / 适用城市」必填 <b>且至少 1 个阶段（必备）</b>；<b>同一适用城市下已存在状态为「启用中」的其他模板时，不允许同名</b>（草稿态不校验，仅在发布/启用时校验；编辑自身不计入）</td><td>请输入模板名称 / 请选择模板类型 / 请选择适用城市（汇总弹窗）/ 请至少添加一个阶段信息；“该城市下已存在同名的启用中模板，请勿重复创建”</td><td>是</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 16px;">2.4.4 交互效果</div>
+                <table>
+                    <thead><tr><th>交互场景</th><th>效果</th></tr></thead>
+                    <tbody>
+                        <tr><td>打开新建弹窗</td><td>标题置"新建阶段任务模板"；表单清空；适用城市默认空（需选择）；阶段列表清空；遮罩淡入</td></tr>
+                        <tr><td>添加阶段 / 任务</td><td>阶段以 prompt 录入名称后插入阶段列表；任务通过「添加任务」弹窗录入名称与三段标准（执行/确认/担责），可编辑、删除</td></tr>
+                        <tr><td>保存草稿</td><td>校验「模板名称」非空且至少 1 个阶段，通过后关闭弹窗，列表<b>最上方</b>新增卡片（状态「草稿」），计数 +1，Toast「已保存草稿」；阶段与任务随模板一并持久化</td></tr>
+                        <tr><td>保存并发布</td><td>校验通过后关闭弹窗，列表<b>最上方</b>新增卡片（状态「启用中」），计数 +1，Toast「模板已保存并发布」；对应类型与「全部模板」计数同步刷新（updateStageSidebarCounts）；发布后自动按当前筛选条件重算列表（applyFilters）；阶段与任务随模板一并持久化并体现在卡片预览</td></tr>
+                        <tr><td>阶段不足校验</td><td>提交时若阶段列表为空，阻断保存并提示「请至少添加一个阶段信息（阶段任务模板必须包含至少一个阶段）」，无论草稿或发布</td></tr>
+                        <tr><td>发布校验失败</td><td>必填缺失则阻止并汇总弹窗；若<b>同城市已存在同名「启用中」模板</b>亦阻止，提示“该城市下已存在同名的启用中模板，请勿重复创建”</td></tr>
+                        <tr><td>取消</td><td>关闭弹窗，不保存</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 15px; margin-top: 20px;"><div class="subsection-title" style="font-size: 16px;">2.4.5 保存流程与状态流转</div>
+                <div class="note">
+                    <div class="note-title">两种保存动作的差异</div>
+                    <div>新建 / 编辑弹窗底部提供「保存草稿」与「保存并发布」两个动作，二者在<b>校验强度</b>与<b>生成的状态</b>上不同，对应实现分别为 <code>saveDraft()</code> 与 <code>saveTemplate()</code>（status=active）。</div>
+                </div>
+                <table>
+                    <thead><tr><th>维度</th><th>保存草稿</th><th>保存并发布</th></tr></thead>
+                    <tbody>
+                        <tr><td>触发按钮</td><td>保存草稿</td><td>保存并发布</td></tr>
+                        <tr><td>校验时机</td><td>提交时</td><td>提交时</td></tr>
+                        <tr><td>校验强度</td><td>校验「模板名称」非空 <b>且至少 1 个阶段</b></td><td>校验「模板名称 / 模板类型 / 适用城市」必填（规则见 2.3.3）<b>且至少 1 个阶段（必备）</b></td></tr>
+                        <tr><td>生成状态</td><td>草稿（橙色「草稿」徽标，卡片可一键「发布」转为启用中）</td><td>启用中（绿色「启用中」徽标，可直接被新建合同选用）</td></tr>
+                        <tr><td>列表联动</td><td>新增一张卡片（状态=草稿），「全部模板」计数与对应类型计数 +1</td><td>新增 / 覆盖一张卡片（状态=启用中），计数同步刷新</td></tr>
+                        <tr><td>提示</td><td>Toast 中部「已保存草稿」</td><td>Toast 中部「模板已保存并发布」</td></tr>
+                        <tr><td>失败处理</td><td>名称为空或阶段为空则阻止并提示（聚焦输入框 / "请至少添加一个阶段信息"）</td><td>任一必填缺失或阶段为空则阻止并红框高亮+弹窗汇总；若<b>同城市下已存在同名启用中模板</b>亦阻止（提示"该城市下已存在同名的启用中模板，请勿重复创建"）</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 15px; margin-top: 20px;">状态流转（草稿 / 启用中 / 已禁用）</div>
+<div class="code-block">
+草稿 ──(卡片「发布」按钮 / publishStageDraft)──▶ 启用中 ──(卡片「禁用」/ toggleTemplateStatus)──▶ 已禁用
+  ▲                                                       │                                      │
+  └─────────(编辑后点「保存草稿」回退)──────────────────────┘                                      │
+                                                                  已禁用 ──(卡片「启用」/ toggleTemplateStatus)──▶ 启用中
+                </div>
+                <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
+                    <li><b>草稿 → 启用中</b>：草稿卡片操作区提供「发布」按钮（publishStageDraft(id)），点击后状态徽标转「启用中」、按钮转为「禁用」，模板立即进入可选用范围。</li>
+                    <li><b>启用中 ↔ 已禁用</b>：见 2.6 启用 / 停用，状态仅影响新建合同可选用范围，不影响已签署或已生成合同。</li>
+                    <li><b>启用中 / 已禁用 → 草稿</b>：已发布模板在编辑后点击「保存草稿」可回退为草稿态（保留内容、退出选用范围），后续可再次发布。</li>
+                </ul>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="s2-5">2.5 编辑模板</div>
+                <div class="proto-ref"><span class="proto-ref-label">关联原型页面：</span><a class="file-link" href="pc/pc-stage-template.html#modal-edit" target="_blank">pc/pc-stage-template.html#modal-edit</a></div>
+
+                <div class="subsection-title" style="font-size: 16px;">2.5.1 入口</div>
+                <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
+                    <li>卡片操作区"编辑"（editTemplate(id)）→ 打开同一弹窗，标题变为"编辑阶段任务模板"，并重置 currentEditId 以确保保存时覆盖原卡片而非新增。</li>
+                </ul>
+
+                <div class="subsection-title" style="font-size: 16px;">2.5.2 与新建模板的差异</div>
+                <table>
+                    <thead><tr><th>维度</th><th>新建模板</th><th>编辑模板</th></tr></thead>
+                    <tbody>
+                        <tr><td>弹窗标题</td><td>新建阶段任务模板</td><td>编辑阶段任务模板</td></tr>
+                        <tr><td>表单初始值</td><td>全部清空 / 默认值</td><td>回显所选模板的名称 / 类型 / 城市 / 描述（新建模板以 stageTemplateMeta 存储）</td></tr>
+                        <tr><td>保存结果</td><td>新增卡片（id 自增）</td><td>覆盖原卡片（id 不变）</td></tr>
+                        <tr><td>字段规格与校验</td><td colspan="2">完全一致（见 2.4.2 / 2.4.3）</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 16px;">2.5.3 交互效果</div>
+                <table>
+                    <thead><tr><th>交互场景</th><th>效果</th></tr></thead>
+                    <tbody>
+                        <tr><td>打开编辑弹窗</td><td>按所选卡片 id 取 stageTemplateMeta 回显名称 / 类型 / 城市 / 描述；<b>阶段列表由 meta.stages 重建并回显已保存的阶段与任务</b>（currentStages），可继续编辑、增删阶段与任务</td></tr>
+                        <tr><td>保存并发布</td><td>覆盖原卡片（状态置「启用中」），计数不变，Toast「模板已保存并发布」</td></tr>
+                        <tr><td>保存草稿</td><td>覆盖原卡片内容为草稿态（状态「草稿」），Toast「已保存草稿」</td></tr>
+                        <tr><td>取消</td><td>关闭弹窗，放弃修改</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="s2-6">2.6 启用 / 停用</div>
+
+                <div class="subsection-title" style="font-size: 16px;">2.6.1 入口</div>
+                <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
+                    <li>卡片操作区"禁用 / 启用"按钮（toggleTemplateStatus(id)），依据当前卡片状态显示相反操作；草稿卡片显示「发布」而非禁用/启用。</li>
+                </ul>
+
+                <div class="subsection-title" style="font-size: 16px;">2.6.2 禁用交互流程</div>
+                <table>
+                    <thead><tr><th>步骤</th><th>行为</th></tr></thead>
+                    <tbody>
+                        <tr><td>1. 点击"禁用"</td><td>若该模板被引用（data-refs &gt; 0），弹二次确认："该模板已被引用 N 次，禁用后新建合同将无法选择此模板。确定要禁用吗？"；未被引用则直接执行。</td></tr>
+                        <tr><td>2. 确认</td><td>卡片加 .disabled（opacity 0.6）、状态徽标转"已禁用"（灰）、按钮"禁用"→"启用"；提示"模板已禁用，新建合同将无法选择此模板"</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 16px;">2.6.3 启用交互流程</div>
+                <table>
+                    <thead><tr><th>步骤</th><th>行为</th></tr></thead>
+                    <tbody>
+                        <tr><td>1. 点击"启用"</td><td>无需确认，直接执行</td></tr>
+                        <tr><td>2. 执行</td><td>卡片移除 .disabled、状态徽标转"启用中"（绿）、按钮"启用"→"禁用"；提示"模板已启用，新建合同可选择此模板"</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 16px;">2.6.4 卡片联动效果</div>
+                <table>
+                    <thead><tr><th>状态变化</th><th>视觉联动</th></tr></thead>
+                    <tbody>
+                        <tr><td>启用中 → 已禁用</td><td>整卡 opacity 0.6；状态徽标绿→灰；操作按钮"禁用"→"启用"；模板名称转灰</td></tr>
+                        <tr><td>已禁用 → 启用中</td><td>整卡恢复不透明；状态徽标灰→绿；按钮"启用"→"禁用"；名称恢复主色</td></tr>
+                        <tr><td>草稿 → 启用中</td><td>草稿卡片"发布"按钮（publishStageDraft）点击后，状态徽标转"启用中"、按钮转为"禁用"</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="font-size: 16px;">2.6.5 影响范围</div>
+                <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
+                    <li>禁用 / 草稿仅影响"新建合同 / 发起变更时可选用模板的范围"，已签署或已生成的合同不受影响。</li>
+                    <li>模板类型树计数同步：总数与对应类型计数随卡片增删实时刷新（updateStageSidebarCounts）。</li>
+                </ul>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="s2-7">2.7 动画和视觉反馈</div>
+                <table>
+                    <thead><tr><th>交互场景</th><th>动画效果</th></tr></thead>
+                    <tbody>
+                        <tr><td>筛选条件切换</td><td>列表淡出淡入，显示加载骨架屏0.3秒</td></tr>
+                        <tr><td>模板卡片悬停</td><td>卡片上浮2px，阴影加深</td></tr>
+                        <tr><td>阶段展开/收起</td><td>内容区域高度动画过渡0.2秒</td></tr>
+                        <tr><td>拖拽调整阶段顺序</td><td>阶段卡片跟随鼠标移动，松手后其他卡片动画调整位置</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="s2-8">2.8 异常处理逻辑</div>
+                <table>
+                    <thead><tr><th>异常场景</th><th>处理方式</th><th>用户提示</th></tr></thead>
+                    <tbody>
+                        <tr><td>阶段名称为空</td><td>阻止添加</td><td>Toast中部显示"请输入阶段名称"</td></tr>
+                        <tr><td>任务名称为空</td><td>阻止添加</td><td>Toast中部显示"请输入任务名称"</td></tr>
+                        <tr><td>三段标准为空</td><td>阻止保存</td><td>Toast中部显示"请填写任务的标准内容"</td></tr>
+                        <tr><td>删除正在使用的模板</td><td>阻止删除</td><td>Toast中部显示"该模板正在使用中"</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="s2-9">2.9 任务三段标准规格</div>
+                <table>
+                    <thead><tr><th>标准类型</th><th>必填</th><th>字数限制</th></tr></thead>
+                    <tbody>
+                        <tr><td>执行标准</td><td><span class="tag tag-required">必填</span></td><td>1-2000字符</td></tr>
+                        <tr><td>确认标准</td><td><span class="tag tag-required">必填</span></td><td>1-2000字符</td></tr>
+                        <tr><td>担责标准</td><td><span class="tag tag-required">必填</span></td><td>1-2000字符</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- API接口汇总 -->
+        <div class="section" id="pc-other-api-summary">
+            <div class="section-title">三、API接口汇总</div>
+            <table>
+                <thead><tr><th>模块</th><th>接口</th><th>方法</th><th>说明</th></tr></thead>
+                <tbody>
+                    <tr><td>合同模板</td><td>/api/v1/contract-templates</td><td>GET</td><td>获取合同模板列表</td></tr>
+                    <tr><td>合同模板</td><td>/api/v1/contract-templates</td><td>POST</td><td>创建合同模板</td></tr>
+                    <tr><td>合同模板</td><td>/api/v1/contract-templates/:id</td><td>GET</td><td>获取合同模板详情</td></tr>
+                    <tr><td>合同模板</td><td>/api/v1/contract-templates/:id</td><td>PUT</td><td>更新合同模板</td></tr>
+                    <tr><td>合同模板</td><td>/api/v1/contract-templates/:id</td><td>DELETE</td><td>删除合同模板</td></tr>
+                    <tr><td>阶段模板</td><td>/api/v1/stage-templates</td><td>GET</td><td>获取阶段任务模板列表</td></tr>
+                    <tr><td>阶段模板</td><td>/api/v1/stage-templates</td><td>POST</td><td>创建阶段任务模板</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 文档结束 -->
+        <div style="text-align: center; padding: 48px 0; color: var(--text-tertiary);">
+            <p>— PC端其他模块规格结束 —</p>
+            <p style="font-size: 12px; margin-top: 8px;">返回 <a href="PRD-完整文档.html" style="color: var(--warning-color);">完整文档</a></p>
+        </div>
+        </div>
+    </div>
+
+    <!-- 滚动高亮脚本 -->
+    <script>
+        const tocLinks = Array.from(document.querySelectorAll('.sidebar-toc-list a'));
+        // 收集所有目录锚点对应的目标元素（含章节与嵌套小节）
+        const anchorTargets = tocLinks
+            .map(link => {
+                const id = link.getAttribute('href').substring(1);
+                const el = document.getElementById(id);
+                return el ? { link, id, top: el.offsetTop } : null;
+            })
+            .filter(Boolean)
+            .sort((a, b) => a.top - b.top);
+
+        window.addEventListener('scroll', function() {
+            const scrollPos = window.scrollY || window.pageYOffset;
+            let currentId = anchorTargets.length ? anchorTargets[0].id : '';
+            for (let i = 0; i < anchorTargets.length; i++) {
+                if (scrollPos + 120 >= anchorTargets[i].top) {
+                    currentId = anchorTargets[i].id;
+                } else {
+                    break;
+                }
+            }
+            tocLinks.forEach(link => {
+                link.classList.toggle('active', link.getAttribute('href') === '#' + currentId);
+            });
+        });
+        
+        tocLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    const offsetTop = targetElement.offsetTop - 20;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        window.dispatchEvent(new Event('scroll'));
+    </script>
+</body>
+</html>

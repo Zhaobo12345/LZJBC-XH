@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>家装平台小程序原型 - 发起变更</title>
+    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="css/contract-detail.css">
+    <style>
+        .page-content { height: calc(100% - 88px); background-color: var(--bg-secondary); overflow-y: auto; padding-bottom: 88px; }
+        .change-content { padding: 12px; }
+
+        /* 变更辅助操作（对齐合规版，补少量缺失样式） */
+        .content-toolbar {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .tb-hint { font-size: 12px; color: var(--text-secondary); }
+        .text-more-btn {
+            font-size: 12px; color: var(--primary-color); cursor: pointer; user-select: none;
+        }
+        .text-more-btn .caret { display: inline-block; transition: transform .2s; }
+        .more-ops-panel {
+            display: none; background: #fff; border-radius: 10px; padding: 6px;
+            margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+        .more-ops-panel.show { display: block; }
+        .op-item {
+            display: flex; align-items: center; gap: 8px; padding: 10px 8px;
+            font-size: 13px; color: var(--text-primary); cursor: pointer; border-radius: 8px;
+        }
+        .op-item:hover { background: var(--bg-secondary); }
+        .op-icon { font-size: 15px; }
+
+        /* 补充条款（合同正文 tab 内可编辑） */
+        .edit-textarea {
+            width: 100%; box-sizing: border-box; border: 1px solid var(--border-color, #E5E6EB);
+            border-radius: 8px; padding: 10px 12px; font-size: 14px; color: var(--text-primary, #1D2129);
+            background: #fff; outline: none; resize: none; line-height: 1.5; font-family: inherit;
+        }
+        .edit-textarea:focus { border-color: var(--primary-color); }
+        .change-reason-tip { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--text-tertiary); margin-top: 4px; }
+        .edit-err { color: var(--error-color); font-size: 12px; margin-top: 4px; }
+
+        /* 金额输入框 */
+        .edit-input {
+            width: 100%; box-sizing: border-box; height: 40px; border: 1px solid var(--border-color, #E5E6EB);
+            border-radius: 8px; padding: 0 12px; font-size: 14px; color: var(--text-primary, #1D2129);
+            background: #fff; outline: none;
+        }
+        .edit-input:focus { border-color: var(--primary-color); }
+        .amount-new-input { text-align: right; }
+        .change-item.diff .item-value { color: var(--primary-color); font-weight: 600; }
+        .change-item.diff .item-value.down { color: var(--success-color); }
+
+        /* 阶段任务编辑（复用合规版 stage-edit-item / task-edit-item 视觉，字段以工人合同为准） */
+        .task-edit-item {
+            display: flex; align-items: center; gap: 8px; padding: 10px 0;
+            border-bottom: 1px solid var(--border-color, #F2F3F5);
+        }
+        .task-edit-item:last-child { border-bottom: none; }
+        .task-edit-main { flex: 1; }
+        .task-edit-name {
+            width: 100%; box-sizing: border-box; height: 34px; border: 1px solid var(--border-color, #E5E6EB);
+            border-radius: 6px; padding: 0 10px; font-size: 13px; outline: none; margin-bottom: 6px;
+        }
+        .task-edit-name:focus, .task-edit-role:focus { border-color: var(--primary-color); }
+        .task-edit-roles { display: flex; gap: 8px; }
+        .task-edit-role {
+            flex: 1; box-sizing: border-box; height: 30px; border: 1px solid var(--border-color, #E5E6EB);
+            border-radius: 6px; padding: 0 8px; font-size: 12px; outline: none;
+        }
+        .task-edit-del {
+            width: 28px; height: 28px; line-height: 26px; text-align: center; border-radius: 50%;
+            border: 1px solid var(--border-color, #E5E6EB); color: var(--text-tertiary); cursor: pointer; flex: none;
+        }
+        .task-edit-del:active { background: var(--bg-secondary); }
+
+        .add-attachment-btn {
+            margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 6px;
+            height: 44px; border: 1px dashed var(--border-color, #D9D9D9); border-radius: 8px;
+            color: var(--text-secondary); font-size: 13px; cursor: pointer; background: #fff;
+        }
+        .add-attachment-btn:active { background: var(--bg-secondary); }
+
+        /* 底部固定操作栏 */
+        .change-footer {
+            position: absolute; left: 0; right: 0; bottom: 0; height: 68px;
+            display: flex; align-items: center; gap: 12px; padding: 0 16px;
+            background: #fff; border-top: 1px solid var(--border-color, #E5E6EB); box-sizing: border-box;
+        }
+        .change-footer .btn {
+            flex: 1; height: 44px; line-height: 44px; text-align: center; border-radius: 22px;
+            font-size: 15px; font-weight: 500; cursor: pointer;
+        }
+        .change-footer .btn.cancel { background: #F2F3F5; color: var(--text-secondary); }
+        .change-footer .btn.submit { background: var(--primary-color); color: #fff; }
+        .change-footer .btn.submit.disabled { opacity: .5; cursor: not-allowed; }
+
+        .ch-err-toast {
+            position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.8); color: #fff; padding: 10px 18px; border-radius: 8px;
+            font-size: 13px; z-index: 60; display: none; max-width: 80%; text-align: center;
+        }
+
+        /* 通用信息弹窗（版本记录 / 变更记录） */
+        .info-modal-mask {
+            position: absolute; inset: 0; background: rgba(0,0,0,0.45); z-index: 70; display: none;
+            align-items: center; justify-content: center;
+        }
+        .info-modal-mask.show { display: flex; }
+        .info-modal {
+            width: 80%; max-height: 70%; background: #fff; border-radius: 12px; overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+        .info-modal-head {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 16px; border-bottom: 1px solid var(--border-color, #F2F3F5); font-weight: 600; font-size: 15px;
+        }
+        .info-modal-head .close { cursor: pointer; color: var(--text-tertiary); font-size: 18px; }
+        .info-modal-body { padding: 14px 16px; overflow-y: auto; font-size: 13px; color: var(--text-primary); line-height: 1.7; }
+        .info-empty { color: var(--text-tertiary); text-align: center; padding: 20px 0; }
+        .info-row { padding: 8px 0; border-bottom: 1px dashed var(--border-color, #F2F3F5); }
+        .info-row:last-child { border-bottom: none; }
+        .info-row .t { font-weight: 500; }
+        .info-row .d { color: var(--text-secondary); font-size: 12px; margin-top: 2px; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <div class="time">9:41</div>
+            <div class="icons">📶 🔋</div>
+        </div>
+
+        <div class="nav-bar">
+            <div class="back" onclick="WCP.cancelChange()">← 返回</div>
+            <div class="title centered">发起变更</div>
+            <div class="actions"><div class="native-capsule" title="微信原生胶囊：由微信客户端渲染，开发者不可自定义其内容"><span class="nc-left">⋯</span><span class="nc-divider"></span><span class="nc-right">○</span></div></div>
+        </div>
+
+        <div class="page-content">
+            <div class="change-content">
+                <!-- 变更辅助操作 -->
+                <div class="content-toolbar">
+                    <span class="tb-hint">变更辅助操作</span>
+                    <span class="text-more-btn" id="changeMoreOpsBtn" onclick="WCP.toggleChangeMoreOps()">更多<span class="caret" id="moreCaret">▾</span></span>
+                </div>
+                <div class="more-ops-panel" id="changeMoreOpsPanel">
+                    <div class="op-item" onclick="WCP.showVersionModal()"><span class="op-icon">📋</span><span>版本记录</span></div>
+                    <div class="op-item" onclick="WCP.showChangeRecordModal()"><span class="op-icon">📜</span><span>变更记录</span></div>
+                </div>
+
+                <!-- 变更须知（对齐合规版） -->
+                <div class="change-notice">
+                    <div class="notice-title"><span>⚠️</span><span>变更须知</span></div>
+                    <ul class="notice-list">
+                        <li>发起变更后需对方确认，确认后需上传签约文件方可生效</li>
+                        <li>变更生效后将生成新版本记录（V2）</li>
+                        <li>变更确认前阶段任务暂停流转</li>
+                    </ul>
+                </div>
+
+                <!-- 变更原因 -->
+                <div class="change-section">
+                    <div class="section-title"><span>📝</span><span>变更原因 <span class="req">*</span></span></div>
+                    <textarea id="changeReasonInput" class="edit-textarea" rows="4" maxlength="200" placeholder="请详细说明变更原因，如：因业主需求变更、现场实际情况调整等..." oninput="WCP.onChangeReasonInput()"></textarea>
+                    <div class="change-reason-tip">
+                        <span>变更原因将展示给对方（乙方）</span>
+                        <span id="changeReasonCount">0/200</span>
+                    </div>
+                    <div class="edit-err" id="changeReasonErr" style="display:none;">请填写变更原因</div>
+                </div>
+
+                <!-- 合同基本信息（字段以工人合同为准） -->
+                <div class="change-section">
+                    <div class="section-title"><span>📄</span><span>合同基本信息</span></div>
+                    <div class="change-info-grid">
+                        <div class="change-info-item">
+                            <div class="info-label">合同名称</div>
+                            <div class="info-value" id="ctxName">—</div>
+                        </div>
+                        <div class="change-info-item">
+                            <div class="info-label">合同类型</div>
+                            <div class="info-value" id="ctxType">—</div>
+                        </div>
+                        <div class="change-info-item">
+                            <div class="info-label">甲方（发包方）</div>
+                            <div class="info-value" id="ctxPartyA">—</div>
+                        </div>
+                        <div class="change-info-item">
+                            <div class="info-label">乙方（承包方）</div>
+                            <div class="info-value" id="ctxPartyB">—</div>
+                        </div>
+                        <div class="change-info-item">
+                            <div class="info-label">当前合同金额</div>
+                            <div class="info-value" id="ctxAmount">¥0</div>
+                        </div>
+                        <div class="change-info-item">
+                            <div class="info-label">所属架构层级</div>
+                            <div class="info-value" id="ctxGroup">—</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 合同金额变更 -->
+                <div class="change-section">
+                    <div class="section-title"><span>💰</span><span>合同金额变更</span></div>
+                    <div class="change-item">
+                        <div class="item-label">当前合同金额</div>
+                        <div class="item-value" id="amountOldText">¥0</div>
+                    </div>
+                    <div class="change-item highlight">
+                        <div class="item-label">变更后金额</div>
+                        <div class="item-value">
+                            <input type="number" id="changeAmountNew" class="edit-input amount-new-input" placeholder="请输入变更后金额" oninput="WCP.onAmountInput()">
+                        </div>
+                    </div>
+                    <div class="change-item diff" id="amountDiffRow" style="display:none;">
+                        <div class="item-label">金额变动</div>
+                        <div class="item-value" id="amountDiffText">+¥0</div>
+                    </div>
+                </div>
+
+                <!-- 合同内容（三标签页，对齐合规版布局） -->
+                <div class="change-section">
+                    <div class="section-title"><span>📑</span><span>合同内容</span></div>
+                    <div class="change-tabs">
+                        <div class="change-tab active" onclick="WCP.switchChangeTab(this, 'contract-content')">合同正文</div>
+                        <div class="change-tab" onclick="WCP.switchChangeTab(this, 'stage-task')">阶段任务</div>
+                        <div class="change-tab" onclick="WCP.switchChangeTab(this, 'attachment')">合同附件</div>
+                    </div>
+
+                    <!-- 合同正文 -->
+                    <div class="change-tab-content active" id="contract-content">
+                        <div class="change-contract-content">
+                            <div class="content-preview" id="changeContractContentPreview"></div>
+                            <div class="content-toggle" onclick="WCP.toggleContractContent(this)">
+                                <span class="toggle-text">展开全文</span>
+                                <span class="toggle-icon">▼</span>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-top:16px;">
+                            <div class="form-label-row"><label class="form-label">补充条款变更</label></div>
+                            <textarea id="changeExtraInput" class="edit-textarea" rows="3" placeholder="可修改补充条款，留空则保持不变"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- 阶段任务（可编辑） -->
+                    <div class="change-tab-content" id="stage-task">
+                        <div id="stageEditContainer"></div>
+                        <div class="add-stage-btn" onclick="WCP.addNewStage()"><span>+ 添加新阶段</span></div>
+                    </div>
+
+                    <!-- 合同附件 -->
+                    <div class="change-tab-content" id="attachment">
+                        <div class="change-attachment-list" id="attachmentList"></div>
+                        <div class="add-attachment-btn" onclick="WCP.addNewAttachment()"><span>+ 添加附件</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="change-footer">
+            <div class="btn cancel" onclick="WCP.cancelChange()">取消</div>
+            <div class="btn submit" id="submitChangeBtn" onclick="WCP.submitChange()">提交变更</div>
+        </div>
+
+        <div class="ch-err-toast" id="errToast"></div>
+
+        <!-- 通用信息弹窗 -->
+        <div class="info-modal-mask" id="infoModalMask" onclick="WCP.closeInfoModal(event)">
+            <div class="info-modal" onclick="event.stopPropagation()">
+                <div class="info-modal-head"><span id="infoModalTitle">提示</span><span class="close" onclick="WCP.closeInfoModal()">✕</span></div>
+                <div class="info-modal-body" id="infoModalBody"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="contract-store.js"></script>
+    <script>
+    (function () {
+        var global = window;
+        var contract = null;
+        var workerId = '';
+        var stages = [];       // 本地编辑副本
+        var attachments = [];  // 本地编辑副本
+
+        function getParam(n) { return new URLSearchParams(global.location.search).get(n); }
+        function $(id) { return document.getElementById(id); }
+        function fmtMoney(n) {
+            var v = Number(n) || 0;
+            return v.toLocaleString('zh-CN');
+        }
+        function nowLabel() {
+            var d = new Date();
+            var h = d.getHours(); var m = d.getMinutes();
+            return (h < 10 ? '0' + h : '' + h) + ':' + (m < 10 ? '0' + m : '' + m);
+        }
+        function escapeHtml(s) {
+            return String(s == null ? '' : s)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+        function showToast(msg) {
+            var t = $('errToast');
+            if (!t) return;
+            t.textContent = msg;
+            t.style.display = 'block';
+            global.setTimeout(function () { t.style.display = 'none'; }, 1600);
+        }
+
+        function getContentIntro() {
+            return contract.contentIntro || (contract.typeName ? contract.typeName + '相关施工内容' : '水电工程');
+        }
+        function buildBodyPreview() {
+            return '<p>根据《中华人民共和国民法典》及相关法律法规的规定，甲乙双方本着平等、自愿、公平、诚实信用的原则，就' + escapeHtml(contract.typeName || '工人') + '事宜协商一致，订立本合同。</p>' +
+                '<p class="text-title">一、工程概况</p>' +
+                '<p>工程名称：' + escapeHtml(contract.name || '工人合同') + '</p>' +
+                '<p>工程地点：XX市XX区XX路XX号</p>' +
+                '<p>工程内容：' + escapeHtml(getContentIntro()) + '</p>';
+        }
+        function buildBodyFull() {
+            return buildBodyPreview() +
+                '<p class="text-title">二、合同金额</p>' +
+                '<p>合同总金额为人民币（大写）' + escapeHtml(contract.amountText || '—') + '（¥' + fmtMoney(contract.amount) + '）</p>' +
+                '<p class="text-title">三、工期</p>' +
+                '<p>计划开工日期：以双方确认为准；总工期按阶段任务节点执行。</p>' +
+                '<p class="text-title">四、双方责权</p>' +
+                '<p>甲方（工长）有权监督、指导乙方工作并按节点支付报酬；乙方应按时、按质完成对应工种施工任务，并配合阶段确认。</p>';
+        }
+
+        function init() {
+            workerId = getParam('id') || '';
+            if (!global.ContractStore || !workerId) { renderNotFound(); return; }
+            contract = global.ContractStore.getContract(workerId);
+            if (!contract) { renderNotFound(); return; }
+
+            // 合同基本信息
+            $('ctxName').textContent = contract.name || '工人合同';
+            $('ctxType').textContent = contract.typeName || '—';
+            $('ctxPartyA').textContent = contract.partyAName || '陈庄（工长）';
+            var partyBName = contract.partyBName || '';
+            if (!partyBName && contract.invitations) {
+                for (var pi = 0; pi < contract.invitations.length; pi++) {
+                    if (contract.invitations[pi].status === 'confirmed') {
+                        partyBName = contract.invitations[pi].name || '';
+                        break;
+                    }
+                }
+            }
+            $('ctxPartyB').textContent = partyBName || '待确认';
+            var baseAmt = Number(contract.amount) || 0;
+            $('ctxAmount').textContent = '¥' + fmtMoney(baseAmt);
+            $('ctxGroup').textContent = contract.group || '—';
+
+            // 金额变更预填
+            $('amountOldText').textContent = '¥' + fmtMoney(baseAmt);
+            $('changeAmountNew').value = baseAmt;
+            updateAmountDiff();
+
+            // 合同正文预览
+            $('changeContractContentPreview').innerHTML = buildBodyPreview();
+
+            // 阶段任务 / 附件本地副本
+            stages = clone(contract.stages || []);
+            if (!stages.length) stages = [{ name: '施工阶段', order: '并行执行', tasks: [] }];
+            attachments = clone(contract.attachments || []);
+            renderStages();
+            renderAttachments();
+
+            // 其他预填
+            $('changeExtraInput').value = (contract.extraClauses || '');
+            $('changeReasonInput').value = '';
+            $('changeReasonCount').textContent = '0/200';
+        }
+
+        function clone(o) { try { return JSON.parse(JSON.stringify(o)); } catch (e) { return []; } }
+
+        function renderNotFound() {
+            showToast('合同数据暂不可用，请返回合同详情重试');
+            global.setTimeout(function () { goDetail('worker_signed'); }, 1200);
+        }
+
+        function toggleChangeMoreOps() {
+            var p = $('changeMoreOpsPanel');
+            var c = $('moreCaret');
+            if (!p) return;
+            var show = !p.classList.contains('show');
+            p.classList.toggle('show', show);
+            if (c) c.style.transform = show ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+
+        function showVersionModal() {
+            var log = (contract.versionLog || []).slice().reverse();
+            var body = log.length
+                ? log.map(function (v) {
+                    return '<div class="info-row"><div class="t">' + escapeHtml(v.name || '版本') + '</div><div class="d">' + escapeHtml(v.desc || '') + (v.date ? ' · ' + escapeHtml(v.date) : '') + '</div></div>';
+                }).join('')
+                : '<div class="info-empty">暂无版本记录</div>';
+            openInfoModal('版本记录（历史版本）', body);
+        }
+        function showChangeRecordModal() {
+            var log = (contract.changeLog || []).slice().reverse();
+            var body = log.length
+                ? log.map(function (v) {
+                    return '<div class="info-row"><div class="t">' + escapeHtml(v.title || '变更') + '</div><div class="d">' + escapeHtml(v.desc || '') + (v.time ? ' · ' + escapeHtml(v.time) : '') + '</div></div>';
+                }).join('')
+                : '<div class="info-empty">暂无变更记录</div>';
+            openInfoModal('变更记录', body);
+        }
+        function openInfoModal(title, bodyHtml) {
+            $('infoModalTitle').textContent = title;
+            $('infoModalBody').innerHTML = bodyHtml;
+            $('infoModalMask').classList.add('show');
+        }
+        function closeInfoModal(e) {
+            if (e && e.target && e.target.id && e.target.id !== 'infoModalMask') return;
+            $('infoModalMask').classList.remove('show');
+        }
+
+        function onChangeReasonInput() {
+            var ta = $('changeReasonInput');
+            var cnt = $('changeReasonCount');
+            if (ta && cnt) cnt.textContent = (ta.value || '').length + '/200';
+            var err = $('changeReasonErr');
+            if (err && ta && (ta.value || '').trim()) err.style.display = 'none';
+        }
+
+        function switchChangeTab(tabEl, key) {
+            var tabs = document.querySelectorAll('.change-tab');
+            for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
+            if (tabEl) tabEl.classList.add('active');
+            var ids = ['contract-content', 'stage-task', 'attachment'];
+            ids.forEach(function (id) {
+                var el = $(id);
+                if (el) el.classList.toggle('active', id === key);
+            });
+        }
+
+        function onAmountInput() { updateAmountDiff(); }
+        function updateAmountDiff() {
+            var amountOld = Number(contract.amount) || 0;
+            var amountNew = Number($('changeAmountNew').value) || 0;
+            var diffRow = $('amountDiffRow');
+            var diffText = $('amountDiffText');
+            if (!diffRow || !diffText) return;
+            if (amountNew === amountOld) { diffRow.style.display = 'none'; return; }
+            diffRow.style.display = 'flex';
+            var diff = amountNew - amountOld;
+            diffText.className = 'item-value ' + (diff < 0 ? 'down' : '');
+            diffText.textContent = (diff > 0 ? '+' : '') + '¥' + fmtMoney(diff);
+        }
+
+        function toggleContractContent(el) {
+            var preview = $('changeContractContentPreview');
+            if (!preview) return;
+            var expanded = preview.getAttribute('data-expanded') === '1';
+            if (expanded) {
+                preview.innerHTML = buildBodyPreview();
+                preview.setAttribute('data-expanded', '0');
+                el.querySelector('.toggle-text').textContent = '展开全文';
+            } else {
+                preview.innerHTML = buildBodyFull();
+                preview.setAttribute('data-expanded', '1');
+                el.querySelector('.toggle-text').textContent = '收起全文';
+            }
+        }
+
+        // ===== 阶段任务编辑 =====
+        function renderStages() {
+            var html = stages.map(function (s, si) {
+                var seqActive = (s.order === '按序执行') ? ' active' : '';
+                var tasks = (s.tasks || []).map(function (t, ti) {
+                    return '<div class="task-edit-item" data-si="' + si + '" data-ti="' + ti + '">' +
+                        '<div class="task-edit-main">' +
+                            '<input class="task-edit-name" value="' + escapeHtml(t.name || '') + '" placeholder="任务名称" oninput="WCP.updateTaskField(' + si + ',' + ti + ',\'name\',this.value)">' +
+                            '<div class="task-edit-roles">' +
+                                '<input class="task-edit-role" value="' + escapeHtml(t.exec || '') + '" placeholder="执行人" oninput="WCP.updateTaskField(' + si + ',' + ti + ',\'exec\',this.value)">' +
+                                '<input class="task-edit-role" value="' + escapeHtml(t.conf || '') + '" placeholder="确认人" oninput="WCP.updateTaskField(' + si + ',' + ti + ',\'conf\',this.value)">' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="task-edit-del" onclick="WCP.deleteTask(' + si + ',' + ti + ')">×</div>' +
+                    '</div>';
+                }).join('');
+                return '<div class="stage-edit-item" data-stage="' + (si + 1) + '" data-sequential="' + (s.order === '按序执行' ? 'true' : 'false') + '">' +
+                    '<div class="stage-header-row">' +
+                        '<input type="text" class="stage-name-input" value="' + escapeHtml(s.name || '') + '" placeholder="请输入阶段名称" oninput="WCP.updateStageName(' + si + ',this.value)">' +
+                        '<div class="stage-sequential" onclick="WCP.toggleStageSequential(this,' + si + ')">' +
+                            '<span>按序执行</span><div class="switch' + seqActive + '"></div>' +
+                        '</div>' +
+                        '<div class="stage-actions">' +
+                            '<div class="stage-action-btn add" onclick="WCP.addTaskToStage(' + si + ')"><span class="btn-icon">+</span> 添加任务</div>' +
+                            '<div class="stage-action-btn delete" onclick="WCP.deleteStage(' + si + ')"><span class="btn-icon">×</span> 删除阶段</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="task-edit-list">' + tasks + '</div>' +
+                '</div>';
+            }).join('');
+            $('stageEditContainer').innerHTML = html;
+        }
+        function updateStageName(si, val) { if (stages[si]) stages[si].name = val; }
+        function toggleStageSequential(el, si) {
+            if (!stages[si]) return;
+            var sw = el.querySelector('.switch');
+            var on = !sw.classList.contains('active');
+            sw.classList.toggle('active', on);
+            stages[si].order = on ? '按序执行' : '并行执行';
+        }
+        function addTaskToStage(si) {
+            if (!stages[si]) return;
+            stages[si].tasks = stages[si].tasks || [];
+            stages[si].tasks.push({ name: '新任务', exec: '', conf: '' });
+            renderStages();
+        }
+        function deleteTask(si, ti) {
+            if (stages[si] && stages[si].tasks) { stages[si].tasks.splice(ti, 1); renderStages(); }
+        }
+        function updateTaskField(si, ti, field, val) {
+            if (stages[si] && stages[si].tasks && stages[si].tasks[ti]) stages[si].tasks[ti][field] = val;
+        }
+        function addNewStage() {
+            stages.push({ name: '新阶段', order: '并行执行', tasks: [] });
+            renderStages();
+        }
+        function deleteStage(si) {
+            stages.splice(si, 1);
+            renderStages();
+        }
+
+        // ===== 合同附件编辑 =====
+        function renderAttachments() {
+            var html = attachments.map(function (a, i) {
+                return '<div class="attachment-item">' +
+                    '<div class="file-icon">📄</div>' +
+                    '<div class="file-info"><div class="file-name">' + escapeHtml(a.name || '') + '</div><div class="file-meta">' + escapeHtml(a.meta || '') + '</div></div>' +
+                    '<div class="attachment-action" onclick="WCP.deleteAttachment(' + i + ')">删除</div>' +
+                '</div>';
+            }).join('');
+            $('attachmentList').innerHTML = html || '<div class="info-empty" style="padding:12px 0;">暂无附件</div>';
+        }
+        function addNewAttachment() {
+            var name = global.prompt('请输入附件名称', '新附件.pdf');
+            if (!name) return;
+            attachments.push({ name: name, meta: '刚刚添加' });
+            renderAttachments();
+        }
+        function deleteAttachment(i) { attachments.splice(i, 1); renderAttachments(); }
+
+        // ===== 校验与提交 =====
+        function validate() {
+            var reason = ($('changeReasonInput').value || '').trim();
+            if (!reason) {
+                var err = $('changeReasonErr');
+                if (err) { err.textContent = '请填写变更原因'; err.style.display = 'block'; }
+                $('changeReasonInput').focus();
+                return null;
+            }
+            var amountOld = Number(contract.amount) || 0;
+            var amountNew = Number($('changeAmountNew').value) || 0;
+            var extraOld = contract.extraClauses || '';
+            var extraNew = ($('changeExtraInput').value || '').trim();
+            if (!extraNew) extraNew = extraOld;
+            return {
+                reason: reason,
+                amountOld: amountOld,
+                amountNew: amountNew,
+                extraOld: extraOld,
+                extraNew: extraNew,
+                stagesNew: clone(stages),
+                attachmentsNew: clone(attachments),
+                time: nowLabel(),
+                by: contract.partyAName || '陈庄'
+            };
+        }
+
+        function submitChange() {
+            var proposal = validate();
+            if (!proposal) return;
+            contract.changeProposal = proposal;
+            contract.changeLog = contract.changeLog || [];
+            contract.changeLog.push({
+                title: '发起变更',
+                desc: '变更类型：' + (proposal.amountNew !== proposal.amountOld ? '含金额变更' : '仅内容/阶段变更'),
+                type: 'warning',
+                by: contract.partyAName || '陈庄',
+                byRole: '工长',
+                time: nowLabel()
+            });
+            global.ContractStore.patchContract(workerId, {
+                changeProposal: proposal,
+                changeLog: contract.changeLog
+            });
+            showToast('变更申请已发起，等待对方确认');
+            global.setTimeout(function () { goDetail('changing'); }, 700);
+        }
+
+        function cancelChange() { goDetail('worker_signed'); }
+
+        function goDetail(preview) {
+            global.location.href = 'worker-contract-detail.html?id=' + encodeURIComponent(workerId) +
+                '&viewer=sender&preview=' + encodeURIComponent(preview);
+        }
+
+        global.WCP = {
+            init: init,
+            toggleChangeMoreOps: toggleChangeMoreOps,
+            showVersionModal: showVersionModal,
+            showChangeRecordModal: showChangeRecordModal,
+            closeInfoModal: closeInfoModal,
+            onChangeReasonInput: onChangeReasonInput,
+            switchChangeTab: switchChangeTab,
+            onAmountInput: onAmountInput,
+            toggleContractContent: toggleContractContent,
+            updateStageName: updateStageName,
+            toggleStageSequential: toggleStageSequential,
+            addTaskToStage: addTaskToStage,
+            deleteTask: deleteTask,
+            updateTaskField: updateTaskField,
+            addNewStage: addNewStage,
+            deleteStage: deleteStage,
+            addNewAttachment: addNewAttachment,
+            deleteAttachment: deleteAttachment,
+            submitChange: submitChange,
+            cancelChange: cancelChange
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e2e8f0;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="userGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="frontendGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="serviceGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="dataGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="infraGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#6b7280;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4b5563;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="4" stdDeviation="4" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="1200" height="900" fill="url(#bgGradient)"/>
+  
+  <!-- 标题 -->
+  <text x="600" y="45" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="bold" fill="#1e293b" text-anchor="middle">良造家管理平台 - 系统架构设计图</text>
+  <text x="600" y="70" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" fill="#64748b" text-anchor="middle">Liangzaojia Management Platform - System Architecture</text>
+  
+  <!-- 用户层 -->
+  <g id="user-layer">
+    <rect x="50" y="95" width="1100" height="110" rx="12" fill="white" filter="url(#shadow)"/>
+    <rect x="50" y="95" width="1100" height="35" rx="12" fill="url(#userGradient)"/>
+    <rect x="50" y="118" width="1100" height="12" fill="url(#userGradient)"/>
+    <text x="70" y="120" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold" fill="white">用户层 User Layer</text>
+    
+    <!-- 用户角色 -->
+    <g transform="translate(80, 145)">
+      <rect width="150" height="50" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+      <text x="75" y="22" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12" font-weight="bold" fill="#1e40af" text-anchor="middle">运营角色</text>
+      <text x="75" y="38" font-family="Arial, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Operator</text>
+    </g>
+    <g transform="translate(250, 145)">
+      <rect width="150" height="50" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+      <text x="75" y="22" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12" font-weight="bold" fill="#1e40af" text-anchor="middle">合同发起方角色</text>
+      <text x="75" y="38" font-family="Arial, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Contract Initiator</text>
+    </g>
+    <g transform="translate(420, 145)">
+      <rect width="150" height="50" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+      <text x="75" y="22" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12" font-weight="bold" fill="#1e40af" text-anchor="middle">服务方用户</text>
+      <text x="75" y="38" font-family="Arial, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Service Provider</text>
+    </g>
+    <g transform="translate(590, 145)">
+      <rect width="150" height="50" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+      <text x="75" y="22" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12" font-weight="bold" fill="#1e40af" text-anchor="middle">业主用户</text>
+      <text x="75" y="38" font-family="Arial, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Owner</text>
+    </g>
+  </g>
+  
+  <!-- 连接线：用户层到前端层 -->
+  <g stroke="#94a3b8" stroke-width="2" fill="none" stroke-dasharray="5,5">
+    <path d="M155,205 L155,230 L300,230 L300,255"/>
+    <path d="M325,205 L325,230 L300,230"/>
+    <path d="M495,205 L495,230 L600,230 L600,255"/>
+    <path d="M665,205 L665,230 L600,230"/>
+  </g>
+  
+  <!-- 前端层 -->
+  <g id="frontend-layer">
+    <rect x="50" y="255" width="1100" height="140" rx="12" fill="white" filter="url(#shadow)"/>
+    <rect x="50" y="255" width="1100" height="35" rx="12" fill="url(#frontendGradient)"/>
+    <rect x="50" y="278" width="1100" height="12" fill="url(#frontendGradient)"/>
+    <text x="70" y="280" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold" fill="white">前端层 Frontend Layer</text>
+    
+    <!-- PC管理端 -->
+    <g transform="translate(80, 305)">
+      <rect width="280" height="75" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+      <text x="140" y="20" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13" font-weight="bold" fill="#047857" text-anchor="middle">PC管理端</text>
+      <text x="140" y="38" font-family="Arial, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">PC Management Console</text>
+      <line x1="20" y1="48" x2="260" y2="48" stroke="#d1d5db" stroke-width="1"/>
+      <text x="140" y="65" font-family="Microsoft YaHei, Arial, sans-serif" font-size="11" fill="#374151" text-anchor="middle">登录 | 合同管理 | 合同编辑 | 模板管理</text>
+    </g>
+    
+    <!-- 服务方小程序 -->
+    <g transform="translate(380, 305)">
+      <rect width="280" height="75" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+      <text x="140" y="20" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13" font-weight="bold" fill="#047857" text-anchor="middle">服务方小程序</text>
+      <text x="140" y="38" font-family="Arial, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Service Provider Mini Program</text>
+      <line x1="20" y1="48" x2="260" y2="48" stroke="#d1d5db" stroke-width="1"/>
+      <text x="140" y="65" font-family="Microsoft YaHei, Arial, sans-serif" font-size="11" fill="#374151" text-anchor="middle">首页 | 项目管理 | 任务管理 | 合同管理</text>
+    </g>
+    
+    <!-- 业主小程序 -->
+    <g transform="translate(680, 305)">
+      <rect width="280" height="75" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+      <text x="140" y="20" font-family="Microsoft YaHei, Arial, sans-serif" font-size="13" font-weight="bold" fill="#047857" text-anchor="middle">业主小程序</text>
+      <text x="140" y="38" font-family="Arial, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Owner Mini Program</text>
+      <line x1="20" y1="48" x2="260" y2="48" stroke="#d1d5db" stroke-width="1"/>
+      <text x="140" y="65" font-family="Microsoft YaHei, Arial, sans-serif" font-size="11" fill="#374151" text-anchor="middle">首页 | 项目查看 | 任务验收 | 合同查看</text>
+    </g>
+    
+    <!-- 技术栈标注 -->
+    <g transform="translate(980, 305)">
+      <rect width="150" height="75" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1"/>
+      <text x="75" y="20" font-family="Microsoft YaHei, Arial, sans-serif" font-size="11" font-weight="bold" fill="#166534" text-anchor="middle">技术栈</text>
+      <text x="75" y="40" font-family="Arial, sans-serif" font-size="10" fill="#374151" text-anchor="middle">HTML5 / CSS3</text>
+      <text x="75" y="55" font-family="Arial, sans-serif" font-size="10" fill="#374151" text-anchor="middle">JavaScript</text>
+      <text x="75" y="70" font-family="Arial, sans-serif" font-size="10" fill="#374151" text-anchor="middle">LocalStorage</text>
+    </g>
+  </g>
+  
+  <!-- 连接线：前端层到服务层 -->
+  <g stroke="#94a3b8" stroke-width="2" fill="none" stroke-dasharray="5,5">
+    <path d="M220,395 L220,420 L600,420 L600,445"/>
+    <path d="M520,395 L520,420 L600,420"/>
+    <path d="M820,395 L820,420 L600,420"/>
+  </g>
+  
+  <!-- 服务层 -->
+  <g id="service-layer">
+    <rect x="50" y="445" width="1100" height="140" rx="12" fill="white" filter="url(#shadow)"/>
+    <rect x="50" y="445" width="1100" height="35" rx="12" fill="url(#serviceGradient)"/>
+    <rect x="50" y="468" width="1100" height="12" fill="url(#serviceGradient)"/>
+    <text x="70" y="470" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold" fill="white">服务层 Service Layer</text>
+    
+    <!-- 服务模块 -->
+    <g transform="translate(80, 495)">
+      <rect width="160" height="75" rx="8" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+      <text x="80" y="25" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12" font-weight="bold" fill="#b45309" text-anchor="middle">用户认证服务</text>
+      <text x="80" y="42" font-family="Arial, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Auth Service</text>
+      <line x1="15" y1="52" x2="145" y2="52" stroke="#fcd34d" stroke-width="1"/>
+      <text x="80" y="68" font-family="Microsoft YaHei, Arial, sans-serif" font-size="10" fill="#374151" text-anchor="middle">登录 | 权限验证</text>
+    </g>
+    
+    <g transform="translate(260, 495)">
+      <rect width="160" height="75" rx="8" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+      <text x="80" y="25" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12" font-weight="bold" fill="#b45309" text-anchor="middle">合同管理服务</text>
+      <text x="80" y="42" font-family="Arial, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Contract Service</text>
+      <line x1="15" y1="52" x2="145" y2="52" stroke="#fcd34d" stroke-width="1"/>
+      <text x="80" y="68" font-family="Microsoft YaHei, Arial, sans-serif" font-size="10" fill="#374151" text-anchor="middle">创建 | 编辑 | 审核 | 变更</text>
+    </g>
+    
+    <g transform="translate(440, 495)">
+      <rect width="160" height="75" rx="8" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+      <text x="80" y="25" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12" font-weight="bold" fill="#b45309" text-anchor="middle">项目管理服务</text>
+      <text x="80" y="42" font-family="Arial, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Project Service</text>
+      <line x1="15" y1="52" x2="145" y2="52" stroke="#fcd34d" stroke-width="1"/>
+      <text x="80" y="68" font-family="Microsoft YaHei, Arial, sans-serif" font-size="10" fill="#374151" text-anchor="middle">创建 | 查看 | 成员管理</text>
+    </g>
+    
+    <g transform="translate(620, 495)">
+      <rect width="160" height="75" rx="8" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+      <text x="80" y="25" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12" font-weight="bold" fill="#b45309" text-anchor="middle">任务管理服务</text>
+      <text x="80" y="42" font-family="Arial, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Task Service</text>
+      <line x1="15" y1="52" x2="145" y2="52" stroke="#fcd34d" stroke-width="1"/>
+      <text x="80" y="68" font-family="Microsoft YaHei, Arial, sans-serif" font-size="10" fill="#374151" text-anchor="middle">执行 | 验收 | 评价</text>
+    </g>
+    
+    <g transform="translate(800, 495)">
+      <rect width="160" height="75" rx="8" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+      <text x="80" y="25" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12" font-weight="bold" fill="#b45309" text-anchor="middle">模板管理服务</text>
+      <text x="80" y="42" font-family="Arial, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Template Service</text>
+      <line x1="15" y1="52" x2="145" y2="52" stroke="#fcd34d" stroke-width="1"/>
+      <text x="80" y="68" font-family="Microsoft YaHei, Arial, sans-serif" font-size="10" fill="#374151" text-anchor="middle">合同模板 | 阶段模板</text>
+    </g>
+    
+    <g transform="translate(980, 495)">
+      <rect width="150" height="75" rx="8" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+      <text x="75" y="25" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12" font-weight="bold" fill="#b45309" text-anchor="middle">分享服务</text>
+      <text x="75" y="42" font-family="Arial, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Share Service</text>
+      <line x1="15" y1="52" x2="135" y2="52" stroke="#fcd34d" stroke-width="1"/>
+      <text x="75" y="68" font-family="Microsoft YaHei, Arial, sans-serif" font-size="10" fill="#374151" text-anchor="middle">项目 | 合同 | 任务</text>
+    </g>
+  </g>
+  
+  <!-- 连接线：服务层到数据层 -->
+  <g stroke="#94a3b8" stroke-width="2" fill="none" stroke-dasharray="5,5">
+    <path d="M160,585 L160,610 L600,610 L600,635"/>
+    <path d="M340,585 L340,610 L600,610"/>
+    <path d="M520,585 L520,610 L600,610"/>
+    <path d="M700,585 L700,610 L600,610"/>
+    <path d="M880,585 L880,610 L600,610"/>
+    <path d="M1055,585 L1055,610 L600,610"/>
+  </g>
+  
+  <!-- 数据层 -->
+  <g id="data-layer">
+    <rect x="50" y="635" width="1100" height="120" rx="12" fill="white" filter="url(#shadow)"/>
+    <rect x="50" y="635" width="1100" height="35" rx="12" fill="url(#dataGradient)"/>
+    <rect x="50" y="658" width="1100" height="12" fill="url(#dataGradient)"/>
+    <text x="70" y="660" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold" fill="white">数据层 Data Layer</text>
+    
+    <!-- 数据实体 -->
+    <g transform="translate(80, 685)">
+      <rect width="160" height="55" rx="8" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="2"/>
+      <text x="80" y="20" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12" font-weight="bold" fill="#6d28d9" text-anchor="middle">用户 User</text>
+      <text x="80" y="40" font-family="Microsoft YaHei, Arial, sans-serif" font-size="10" fill="#374151" text-anchor="middle">id | 姓名 | 角色 | 联系方式</text>
+    </g>
+    
+    <g transform="translate(260, 685)">
+      <rect width="160" height="55" rx="8" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="2"/>
+      <text x="80" y="20" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12" font-weight="bold" fill="#6d28d9" text-anchor="middle">项目 Project</text>
+      <text x="80" y="40" font-family="Microsoft YaHei, Arial, sans-serif" font-size="10" fill="#374151" text-anchor="middle">id | 名称 | 类型 | 预算 | 工期</text>
+    </g>
+    
+    <g transform="translate(440, 685)">
+      <rect width="160" height="55" rx="8" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="2"/>
+      <text x="80" y="20" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12" font-weight="bold" fill="#6d28d9" text-anchor="middle">合同 Contract</text>
+      <text x="80" y="40" font-family="Microsoft YaHei, Arial, sans-serif" font-size="10" fill="#374151" text-anchor="middle">id | 名称 | 金额 | 状态 | 内容</text>
+    </g>
+    
+    <g transform="translate(620, 685)">
+      <rect width="160" height="55" rx="8" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="2"/>
+      <text x="80" y="20" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12" font-weight="bold" fill="#6d28d9" text-anchor="middle">阶段 Stage</text>
+      <text x="80" y="40" font-family="Microsoft YaHei, Arial, sans-serif" font-size="10" fill="#374151" text-anchor="middle">id | 名称 | 顺序 | 状态</text>
+    </g>
+    
+    <g transform="translate(800, 685)">
+      <rect width="160" height="55" rx="8" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="2"/>
+      <text x="80" y="20" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12" font-weight="bold" fill="#6d28d9" text-anchor="middle">任务 Task</text>
+      <text x="80" y="40" font-family="Microsoft YaHei, Arial, sans-serif" font-size="10" fill="#374151" text-anchor="middle">id | 名称 | 标准 | 执行人 | 状态</text>
+    </g>
+    
+    <g transform="translate(980, 685)">
+      <rect width="150" height="55" rx="8" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="2"/>
+      <text x="75" y="20" font-family="Microsoft YaHei, Arial, sans-serif" font-size="12" font-weight="bold" fill="#6d28d9" text-anchor="middle">模板 Template</text>
+      <text x="75" y="40" font-family="Microsoft YaHei, Arial, sans-serif" font-size="10" fill="#374151" text-anchor="middle">id | 名称 | 类型 | 内容</text>
+    </g>
+  </g>
+  
+  <!-- 基础设施层 -->
+  <g id="infra-layer">
+    <rect x="50" y="775" width="1100" height="80" rx="12" fill="white" filter="url(#shadow)"/>
+    <rect x="50" y="775" width="1100" height="35" rx="12" fill="url(#infraGradient)"/>
+    <rect x="50" y="798" width="1100" height="12" fill="url(#infraGradient)"/>
+    <text x="70" y="800" font-family="Microsoft YaHei, Arial, sans-serif" font-size="14" font-weight="bold" fill="white">基础设施层 Infrastructure Layer</text>
+    
+    <!-- 基础设施组件 -->
+    <g transform="translate(80, 825)">
+      <rect width="180" height="20" rx="4" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1"/>
+      <text x="90" y="14" font-family="Microsoft YaHei, Arial, sans-serif" font-size="11" fill="#374151" text-anchor="middle">MongoDB 数据库</text>
+    </g>
+    
+    <g transform="translate(280, 825)">
+      <rect width="180" height="20" rx="4" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1"/>
+      <text x="90" y="14" font-family="Microsoft YaHei, Arial, sans-serif" font-size="11" fill="#374151" text-anchor="middle">Node.js / Express</text>
+    </g>
+    
+    <g transform="translate(480, 825)">
+      <rect width="180" height="20" rx="4" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1"/>
+      <text x="90" y="14" font-family="Microsoft YaHei, Arial, sans-serif" font-size="11" fill="#374151" text-anchor="middle">文件存储服务</text>
+    </g>
+    
+    <g transform="translate(680, 825)">
+      <rect width="180" height="20" rx="4" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1"/>
+      <text x="90" y="14" font-family="Microsoft YaHei, Arial, sans-serif" font-size="11" fill="#374151" text-anchor="middle">Redis 缓存</text>
+    </g>
+    
+    <g transform="translate(880, 825)">
+      <rect width="250" height="20" rx="4" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1"/>
+      <text x="125" y="14" font-family="Microsoft YaHei, Arial, sans-serif" font-size="11" fill="#374151" text-anchor="middle">HTTPS / 数据加密 / 备份策略</text>
+    </g>
+  </g>
+  
+  <!-- 图例 -->
+  <g transform="translate(50, 870)">
+    <text x="0" y="12" font-family="Microsoft YaHei, Arial, sans-serif" font-size="11" fill="#64748b">图例：</text>
+    <rect x="50" y="0" width="20" height="15" rx="3" fill="url(#userGradient)"/>
+    <text x="75" y="12" font-family="Microsoft YaHei, Arial, sans-serif" font-size="11" fill="#64748b">用户层</text>
+    <rect x="130" y="0" width="20" height="15" rx="3" fill="url(#frontendGradient)"/>
+    <text x="155" y="12" font-family="Microsoft YaHei, Arial, sans-serif" font-size="11" fill="#64748b">前端层</text>
+    <rect x="210" y="0" width="20" height="15" rx="3" fill="url(#serviceGradient)"/>
+    <text x="235" y="12" font-family="Microsoft YaHei, Arial, sans-serif" font-size="11" fill="#64748b">服务层</text>
+    <rect x="290" y="0" width="20" height="15" rx="3" fill="url(#dataGradient)"/>
+    <text x="315" y="12" font-family="Microsoft YaHei, Arial, sans-serif" font-size="11" fill="#64748b">数据层</text>
+    <rect x="370" y="0" width="20" height="15" rx="3" fill="url(#infraGradient)"/>
+    <text x="395" y="12" font-family="Microsoft YaHei, Arial, sans-serif" font-size="11" fill="#64748b">基础设施层</text>
+    <line x1="470" y1="7" x2="510" y2="7" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,5"/>
+    <text x="515" y="12" font-family="Microsoft YaHei, Arial, sans-serif" font-size="11" fill="#64748b">数据流向</text>
+  </g>
+  
+  <!-- 版本信息 -->
+  <text x="1150" y="885" font-family="Microsoft YaHei, Arial, sans-serif" font-size="10" fill="#9ca3af" text-anchor="end">v1.0 | 2026-05-06</text>
+</svg>
