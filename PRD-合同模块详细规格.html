@@ -289,6 +289,7 @@
             <li><a href="#sec-3-10">3.10 变更内容展示规格</a></li>
             <li><a href="#sec-3-11">3.11 导航菜单规格</a></li>
             <li><a href="#sec-3-12">3.12 各状态页面效果与功能规格（发起方 vs 确认方）</a></li>
+                    <li><a href="#sec-3-13">3.13 合同金额脱敏规则</a></li>
         </ul>
     </li>
     <li class="toc-chapter collapsed">
@@ -1849,6 +1850,20 @@
         </div>
 
         <!-- ==================== 4. 业主小程序合同详情页 ==================== -->
+
+            <!-- 3.13 合同金额脱敏规则 -->
+            <div class="subsection" id="sec-3-13">
+                <div class="subsection-title">3.13 合同金额脱敏规则</div>
+                <div class="note" style="margin:12px 0;"><div class="note-title">合同金额展示受权限控制</div><p>服务方小程序端与业主端的合同金额展示统一遵守以下脱敏规则（PC 端运营人员拥有全部权限，无需脱敏）：</p></div>
+                <table><thead><tr><th>权限条件</th><th>金额展示</th><th>说明</th></tr></thead><tbody>
+                <tr><td>拥有「全部权限」</td><td><strong>展示实际金额</strong>（如 ¥150,000.00）</td><td>系统管理员 / 运营人员</td></tr>
+                <tr><td>拥有「所属架构及下属层级权限（含合同）」</td><td><strong>展示实际金额</strong></td><td>有该组织架构数据权限的用户</td></tr>
+                <tr><td>是该合同的创建人或甲方或乙方</td><td><strong>展示实际金额</strong></td><td>合同直接关系人</td></tr>
+                <tr><td>不满足以上任一条件</td><td><strong>展示 ***</strong>（三颗星占位符）</td><td>无权限用户看到的加密脱敏效果</td></tr>
+                </tbody></table>
+                <p style="margin-top:8px;color:var(--text-secondary);font-size:13px;">实现方式：<code>common.js</code> 中 <code>ContractAmountMask</code> 全局工具，提供 <code>canView(contract, userPermission, userId)</code> 判断是否可查看，及 <code>format(amount, contract, userPermission, userId)</code> 返回脱敏后金额。服务方小程序端 <code>contract-detail.html</code> 原型导航底部提供权限切换演示开关（手机框外，不影响页面功能）。</p>
+            </div>
+
         <div class="section" id="page-mini-owner">
             <div class="section-title">
                 四、合同详情页（业主小程序）

@@ -227,11 +227,15 @@
     <nav class="sidebar-toc" id="sidebarToc">
         <div class="sidebar-toc-title">页面导航</div>
         <ul class="sidebar-toc-list">
+            <li class="toc-group-title">公共规格</li>
             <li><a href="#task-status-machine">一、任务状态机</a></li>
-            <li><a href="#page-task-list-service">二、任务列表页（服务方）</a></li>
+            <li class="toc-group-title">服务方小程序</li>
+            <li><a href="#page-task-list-service">二、全部任务（服务方）</a></li>
+            <li><a href="#page-task-list-service">2.7 任务状态详解（服务方）</a></li>
             <li><a href="#page-task-detail-service">三、任务详情页（服务方）</a></li>
             <li><a href="#page-task-acceptance-service">四、任务验收页（服务方）</a></li>
-            <li><a href="#page-task-list-owner">五、任务列表页（业主）</a></li>
+            <li class="toc-group-title">业主小程序</li>
+            <li><a href="#page-task-list-owner">五、全部任务（业主）</a></li>
             <li><a href="#page-task-detail-owner">六、任务详情页（业主）</a></li>
             <li><a href="#page-task-acceptance-owner">七、任务验收页（业主）</a></li>
             <li><a href="#page-todo-list-service">八、全部待办页（服务方）</a></li>
@@ -341,10 +345,10 @@
             </div>
         </div>
 
-        <!-- ==================== 1. 任务列表页（服务方） ==================== -->
+        <!-- ==================== 1. 全部任务（服务方） ==================== -->
         <div class="section" id="page-task-list-service">
             <div class="section-title">
-                二、任务列表页（服务方小程序）
+                二、全部任务（服务方小程序）
                 <span class="badge">service-miniapp/task-list.html</span>
             </div>
 
@@ -353,7 +357,7 @@
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">页面名称</div>
-                        <div class="info-value">任务列表页</div>
+                        <div class="info-value">全部任务</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面路径</div>
@@ -365,7 +369,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面入口</div>
-                        <div class="info-value">首页"我的任务"卡片、底部导航</div>
+                        <div class="info-value">项目详情页「全部任务」入口、底部导航</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面类型</div>
@@ -556,6 +560,22 @@
                     </tbody>
                 </table>
             </div>
+
+            <div class="subsection" style="padding-top:12px;">
+                <div class="subsection-title">2.7 任务状态详解（服务方全部任务列表）</div>
+                <div class="note" style="margin:12px 0;"><div class="note-title">以下按任务在列表中的实际状态逐一说明</div><p>服务方「全部任务」页通过底部状态Tab（全部 / 待开始 / 执行中 / 待确认 / 已完成）筛选展示，每种状态对应不同的卡片样式、操作入口与交互逻辑。</p></div>
+                <table>
+                    <thead><tr><th style="width:10%">Tab</th><th style="width:10%">状态标识</th><th style="width:22%">卡片展示字段</th><th style="width:10%">角色操作</th><th>交互流程</th></tr></thead>
+                    <tbody>
+                        <tr><td>全部</td><td>—</td><td>任务名称 · 所属阶段 · 执行人 · 确认人 · 截止时间 · 状态badge</td><td>按角色过滤可操作项</td><td>默认展示全部状态任务；点击卡片跳转任务详情页；Tab角标显示各状态数量</td></tr>
+                        <tr><td>待开始</td><td>⏸ 待开始</td><td>任务名称 · 所属阶段 · 执行人 · 截止时间 · 状态badge</td><td>执行人：开始执行</td><td>执行人选项卡 → 点击「开始执行」→ 任务状态变为「执行中」→ 自动跳转任务详情页进入执行视角</td></tr>
+                        <tr><td>执行中</td><td>▶ 执行中</td><td>任务名称 · 所属阶段 · 执行人 · 已耗时 · 状态badge</td><td>执行人：上传记录 · 提交验收</td><td>执行人选项卡 → 点击「上传记录」→ 弹出上传弹窗（支持图片/视频/语音+说明）→ 提交执行记录后返回；点击「提交验收」→ 二次确认 → 任务状态变为「待确认」→ 通知确认人</td></tr>
+                        <tr><td>待确认</td><td>⏳ 待确认</td><td>任务名称 · 所属阶段 · 确认人列表 · 状态badge · 确认进度</td><td>确认人：确认通过 · 驳回<br>执行人：查看进度</td><td>确认人选项卡 → 点击卡片跳转验收页 → 查看执行记录 → 确认通过（可选评价）或驳回（需填写原因）；所有确认人通过后任务变为「已完成」；任一驳回则任务回到「执行中」并通知执行人</td></tr>
+                        <tr><td>已完成</td><td>✓ 已完成</td><td>任务名称 · 所属阶段 · 完成时间 · 评价标签 · 状态badge</td><td>全部角色：查看详情</td><td>点击卡片查看任务详情（只读）；有业主评价则显示评价标签和星级</td></tr>
+                    </tbody>
+                </table>
+                <p style="margin-top:12px;color:var(--text-secondary);font-size:13px;">过滤逻辑：Tab切换时按任务 <code>data-status</code> 属性筛选显示。<strong>全部</strong>Tab展示所有任务；其他Tab仅展示匹配状态的任务卡片。已驳回任务归入「待开始」Tab，由执行人重新执行。</p>
+            </div>
         </div>
 
         <!-- ==================== 2. 任务详情页（服务方） ==================== -->
@@ -578,7 +598,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
-                        <div class="info-value">项目经理、施工组长、执行人</div>
+                        <div class="info-value">全部</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面入口</div>
@@ -914,7 +934,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
-                        <div class="info-value">确认人（项目经理、施工组长）</div>
+                        <div class="info-value">全部（确认人身份时可操作验收）</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面入口</div>
@@ -933,10 +953,10 @@
             </div>
         </div>
 
-        <!-- ==================== 4. 任务列表页（业主） ==================== -->
+        <!-- ==================== 4. 全部任务（业主） ==================== -->
         <div class="section" id="page-task-list-owner">
             <div class="section-title">
-                五、任务列表页（业主小程序）
+                五、全部任务（业主小程序）
                 <span class="badge">owner-miniapp/task-list.html</span>
             </div>
 
@@ -945,7 +965,7 @@
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">页面名称</div>
-                        <div class="info-value">任务列表页</div>
+                        <div class="info-value">全部任务</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面路径</div>
@@ -957,7 +977,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面入口</div>
-                        <div class="info-value">首页"我的任务"卡片</div>
+                        <div class="info-value">项目详情页「全部任务」入口</div>
                     </div>
                 </div>
             </div>
@@ -1127,7 +1147,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面入口</div>
-                        <div class="info-value">首页待办卡片"查看全部"、项目详情页待办卡片"查看全部"</div>
+                        <div class="info-value">项目详情页待办卡片「全部任务」、项目详情页待办卡片"查看全部"</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面类型</div>
@@ -1391,7 +1411,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面入口</div>
-                        <div class="info-value">首页待办卡片"查看全部"、项目详情页待办卡片"查看全部"</div>
+                        <div class="info-value">项目详情页待办卡片「全部任务」、项目详情页待办卡片"查看全部"</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面类型</div>

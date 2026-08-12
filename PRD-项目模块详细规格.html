@@ -443,6 +443,10 @@
                     <li><a href="#sub-11-4">11.4 数据加载规则</a></li>
                     <li><a href="#sub-11-5">11.5 交互规格</a></li>
                     <li><a href="#sub-11-6">11.6 时间显示规则</a></li>
+                    <li><a href="#sub-11-7">11.7 类型与日期筛选规格</a></li>
+                    <li><a href="#sub-11-8">11.8 角色标签与阶段标签</a></li>
+                    <li><a href="#sub-11-9">11.9 权限锁定与无权限弹窗</a></li>
+                    <li><a href="#sub-11-10">11.10 媒体展示（施工现场照片）</a></li>
                 </ul>
             </li>
         </ul>
@@ -471,6 +475,9 @@
                     <li><a href="#sub-13-1">13.1 页面概述</a></li>
                     <li><a href="#sub-13-2">13.2 功能说明</a></li>
                     <li><a href="#sub-13-3">13.3 功能差异</a></li>
+                    <li><a href="#sub-13-4">13.4 类型与日期筛选（业主端）</a></li>
+                    <li><a href="#sub-13-5">13.5 角色标签与阶段标签（业主端）</a></li>
+                    <li><a href="#sub-13-6">13.6 权限锁定（业主纯查看）</a></li>
                 </ul>
             </li>
             <li class="nav-item collapsed" id="nav-page-info-owner">
@@ -1049,7 +1056,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td rowspan="3">合同概览卡片</td>
+                            <td rowspan="4">合同概览卡片</td>
                             <td>签约进度</td>
                             <td><code>GET /api/v1/projects/:id/contracts</code></td>
                             <td>已签约合同数 / 总合同数</td>
@@ -1065,7 +1072,12 @@
                             <td>项目下所有合同总数（含各级子项目）</td>
                         </tr>
                         <tr>
-                            <td rowspan="3">任务统计卡片</td>
+                            <td>查看全部合同</td>
+                            <td>前端交互</td>
+                            <td>点击"查看合同"展开/折叠全部合同列表（即查看全部合同）；列表内合同项点击跳转对应<a href="service-miniapp/contract-detail.html" target="_blank">合同详情页</a></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4">任务统计卡片</td>
                             <td>全部任务</td>
                             <td><code>GET /api/v1/projects/:id/tasks/stats</code></td>
                             <td>已完成任务数 / 总任务数</td>
@@ -1079,6 +1091,11 @@
                             <td>执行中任务</td>
                             <td><code>tasks.status = 'in_progress'</code></td>
                             <td>状态为"执行中"的任务数量</td>
+                        </tr>
+                        <tr>
+                            <td>查看全部</td>
+                            <td>前端交互</td>
+                            <td>点击"查看全部"跳转<a href="service-miniapp/task-list.html" target="_blank">任务列表页（服务方）</a></td>
                         </tr>
                         <tr>
                             <td rowspan="2">待办事项卡片</td>
@@ -1174,7 +1191,7 @@
                     <tbody>
                         <tr>
                             <td>功能说明</td>
-                            <td>展示项目的最新动态，包括任务完成、合同签署、文件上传等操作记录</td>
+                            <td>展示项目「今日」产生的动态，包括任务完成、任务确认结果、合同签署等操作记录</td>
                         </tr>
                         <tr>
                             <td>数据来源</td>
@@ -1185,8 +1202,8 @@
                             <td>时间线形式，按时间倒序排列</td>
                         </tr>
                         <tr>
-                            <td>默认显示条数</td>
-                            <td>最新3条</td>
+                            <td>展示范围与默认折叠</td>
+                            <td>展示「今日」产生的全部动态（非"最新 N 条"截取）；列表默认折叠为约一条半高度——首条完整展示，次条仅露出半条并带截断渐隐，暗示下方仍有内容。今日无动态时整块不展示。</td>
                         </tr>
                         <tr>
                             <td>动态内容</td>
@@ -1202,7 +1219,7 @@
                         </tr>
                         <tr>
                             <td>查看全部动态</td>
-                            <td>点击"查看全部动态"按钮，跳转到项目动态页（activity-list.html），传递当前层级参数（level=项目部/工作组/施工组）</td>
+                            <td>点击"查看全部动态"按钮，跳转到项目动态页（activity-list.html），默认展示全部动态；进入后可通过页头类型筛选（全部 / 任务 / 合同 / 系统）与日期筛选（全部时间 / 今天 / 本周 / 本月 / 自定义）自行过滤</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1210,8 +1227,14 @@
                     <div class="note-title">跳转逻辑说明</div>
                     <p><strong>跳转条件：</strong>点击"查看全部动态"按钮时触发跳转</p>
                     <p><strong>跳转目标：</strong>activity-list.html</p>
-                    <p><strong>参数传递：</strong>携带当前选择的层级参数（level），用于筛选显示对应层级的动态记录</p>
-                    <p><strong>页面逻辑：</strong>项目动态页接收层级参数后，自动筛选该层级下的全部动态，详见"十一、项目动态页（服务方小程序）"</p>
+                    <p><strong>参数传递：</strong>无需传递层级参数；项目动态页默认展示全部动态，用户在页内通过类型 + 日期筛选器自行过滤（详见 11.7）</p>
+                    <p><strong>页面逻辑：</strong>项目动态页提供类型筛选 + 日期筛选，详见 11.7「类型与日期筛选规格」</p>
+                </div>
+                <div class="note" style="margin-top: 12px;">
+                    <div class="note-title">展示规则补充</div>
+                    <p><strong>角色 / 阶段标签：</strong>今日动态每条记录头部可展示角色标签（监理 / 工长 / 施工 / 设计）与阶段标签（水电 / 设计 / 基础施工等），样式与"十一、项目动态页"保持一致。</p>
+                    <p><strong>媒体：</strong>含图文的动态展示施工现场照片缩略图（任务类、合同类均使用施工现场照片）；点击"查看全部动态"进入项目动态页查看大图与完整列表。</p>
+                    <p><strong>展开更多：</strong>当今日动态超过默认一条半高度（即次条被截断、有内容未露全）时，列表底部显示"展开更多"，点击展开为今日全部动态并变为"收起"（箭头旋转）；仅 1 条或更少（不足一条半）时不显示该按钮（详见 3.8 交互规格）。</p>
                 </div>
             </div>
 
@@ -1338,12 +1361,12 @@
                             <td rowspan="3">今日动态</td>
                             <td>"展开更多"按钮</td>
                             <td>点击</td>
-                            <td>展开/收起隐藏的动态项；文案随状态变化（"展开更多"/"收起"），箭头旋转</td>
+                            <td>展开时解除一条半折叠、显示今日全部动态；收起时恢复一条半折叠；文案随状态变化（"展开更多"/"收起"），箭头旋转。仅今日动态不足一条半（1 条或更少）时不显示该按钮</td>
                         </tr>
                         <tr>
                             <td>"查看全部"链接</td>
                             <td>点击</td>
-                            <td>跳转到项目动态页（activity-list.html），携带当前层级参数</td>
+                            <td>跳转到项目动态页（activity-list.html），无需携带层级参数；进入后通过类型 + 日期筛选器过滤（详见 11.7）</td>
                         </tr>
                         <tr>
                             <td>动态项</td>
@@ -1516,7 +1539,7 @@
                         </tr>
                         <tr>
                             <td>今日动态-展开更多</td>
-                            <td>动态少于3条时不显示"展开更多"按钮</td>
+                            <td>今日动态不足一条半（即仅 1 条或更少）时不显示"展开更多"按钮；与进行中状态规则一致</td>
                         </tr>
                     </tbody>
                 </table>
@@ -4776,7 +4799,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面路径</div>
-                        <div class="info-value">/pages/project/activity-list</div>
+                        <div class="info-value">/pages/project/activity-list<br><a href="service-miniapp/activity-list.html" target="_blank" style="color: var(--primary-color); text-decoration: underline;">原型：service-miniapp/activity-list.html</a></div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
@@ -4797,8 +4820,10 @@
 │  - 标题：项目动态                    │
 │  - 返回按钮                          │
 ├─────────────────────────────────────┤
-│  层级筛选器（可选）                   │
-│  - 项目部/工作组/施工组下拉选择       │
+│  类型筛选器（顶部 chips）             │
+│  - 全部 / 任务 / 合同 / 系统          │
+│  日期筛选器（下拉 + 自定义）          │
+│  - 全部时间/今天/本周/本月/自定义     │
 ├─────────────────────────────────────┤
 │  动态时间线列表                      │
 │  ┌─────────────────────────────────┐│
@@ -4854,22 +4879,10 @@
                             <td>跳转<a href="service-miniapp/contract-detail.html" target="_blank">合同详情页</a></td>
                         </tr>
                         <tr>
-                            <td>文件上传</td>
-                            <td>【操作人】上传了【文件数量】个文件</td>
-                            <td>📁</td>
-                            <td>跳转项目资料页</td>
-                        </tr>
-                        <tr>
-                            <td>成员加入</td>
-                            <td>【成员姓名】加入了项目</td>
-                            <td>👥</td>
-                            <td>跳转项目成员页</td>
-                        </tr>
-                        <tr>
-                            <td>对账单确认</td>
-                            <td>【对账单编号】业主已确认</td>
-                            <td>💰</td>
-                            <td>跳转对账单详情页</td>
+                            <td>任务确认结果</td>
+                            <td>【任务名称】确认通过 / 已驳回（确认人【确认人姓名】）</td>
+                            <td>✔️</td>
+                            <td>跳转任务详情页</td>
                         </tr>
                     </tbody>
                 </table>
@@ -4887,7 +4900,7 @@
                     <tbody>
                         <tr>
                             <td>数据来源</td>
-                            <td><code>GET /api/v1/projects/:id/activities?level=xxx&page=1&size=20</code></td>
+                            <td><code>GET /api/v1/projects/:id/activities?type=task|contract|system&date=all|today|week|month|custom&page=1&size=20</code></td>
                         </tr>
                         <tr>
                             <td>分页方式</td>
@@ -4898,8 +4911,12 @@
                             <td>按时间倒序，最新动态在最上方</td>
                         </tr>
                         <tr>
-                            <td>层级筛选</td>
-                            <td>通过URL参数level传递，可选值：项目部/工作组/施工组</td>
+                            <td>类型筛选</td>
+                            <td>通过URL参数 <code>type</code> 传递，可选值：<code>task</code> / <code>contract</code> / <code>system</code>（不传或 <code>all</code> 表示全部）</td>
+                        </tr>
+                        <tr>
+                            <td>日期筛选</td>
+                            <td>通过URL参数 <code>date</code> 传递，可选值：<code>all</code> / <code>today</code> / <code>week</code> / <code>month</code> / <code>custom</code>（custom 另需起止日期）；与类型筛选可叠加</td>
                         </tr>
                         <tr>
                             <td>空状态</td>
@@ -4927,12 +4944,12 @@
                         <tr>
                             <td>动态项点击</td>
                             <td>点击单条动态记录</td>
-                            <td>根据动态类型跳转到对应的详情页（任务/合同/资料等）</td>
+                            <td>根据动态类型跳转到对应的详情页（任务/合同）</td>
                         </tr>
                         <tr>
-                            <td>层级筛选</td>
-                            <td>切换层级选择器</td>
-                            <td>重新加载数据，筛选显示对应层级的动态</td>
+                            <td>类型 / 日期筛选</td>
+                            <td>切换类型 chips 或日期下拉</td>
+                            <td>重新加载数据，按所选类型（全部/任务/合同/系统）与日期区间（全部时间/今天/本周/本月/自定义）叠加筛选动态</td>
                         </tr>
                         <tr>
                             <td>媒体缩略图</td>
@@ -4984,6 +5001,57 @@
                             <td>yyyy-MM-dd</td>
                             <td>2025-12-01</td>
                         </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="subsection" id="sub-11-7">
+                <div class="subsection-title">11.7 类型与日期筛选规格</div>
+                <table>
+                    <thead><tr><th>筛选维度</th><th>选项 / 交互</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td>类型筛选（顶部标签 chips）</td><td>全部 / 任务 / 合同 / 系统</td><td>点击切换当前类型，按动态 <code>type</code> 字段过滤；默认"全部"。原型函数 <code>filterByType(type, el)</code>。</td></tr>
+                        <tr><td>日期筛选（下拉 + 自定义）</td><td>全部时间 / 今天 / 本周 / 本月 / 自定义（起止日期）</td><td>下拉切换 <code>filterByDate(value)</code>；选择"自定义"后通过起止 <code>input[type=date]</code> 调用 <code>applyCustomDateFilter()</code> 按日期区间过滤。</td></tr>
+                        <tr><td>筛选联动</td><td>类型 × 日期 叠加</td><td>两类筛选可同时生效；筛选结果为空时展示空状态"暂无动态记录"。</td></tr>
+                        <tr><td>结果计数</td><td>筛选区右侧 <code>totalCount</code></td><td>实时显示当前筛选结果条数。</td></tr>
+                    </tbody>
+                </table>
+                <div class="note" style="margin-top: 12px;">
+                    <div class="note-title">与 11.2 / 11.4 的一致性说明</div>
+                    <p>11.2 页面结构图与 11.4 数据加载规则已<strong>按原型落地修订为「类型筛选 + 日期筛选」</strong>（项目部 / 工作组 / 施工组下拉的层级筛选未实现，已移除）。本小节（11.7）为筛选维度的详细规格，与 11.2 / 11.4 完全一致。</p>
+                </div>
+            </div>
+
+            <div class="subsection" id="sub-11-8">
+                <div class="subsection-title">11.8 角色标签与阶段标签规格</div>
+                <table>
+                    <thead><tr><th>标签</th><th>取值 / 样式</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td>角色标签（<code>activity-role-tag</code>）</td><td>监理(supervisor) / 工长(foreman) / 施工(worker) / 设计(designer)</td><td>动态含 <code>roleClass</code> 时于头部渲染对应彩色标签；四色区分（监理蓝 / 工长绿 / 施工橙 / 设计紫）。与项目详情页（进行中-新版）保持一致。</td></tr>
+                        <tr><td>阶段标签（<code>activity-stage-tag</code>）</td><td>水电(plumbing) / 设计(design) / 基础施工(base) 等</td><td>在动态内容中以 <code>&lt;span&gt;</code> 内联展示，如"提交了[基础施工]阶段开工申请"。样式与项目详情页一致，只读展示。</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection" id="sub-11-9">
+                <div class="subsection-title">11.9 权限锁定与无权限弹窗</div>
+                <table>
+                    <thead><tr><th>要素</th><th>行为</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td>锁定态展示</td><td>🔒 无查看权限</td><td>动态 <code>hasPermission=false</code> 时，卡片加 <code>no-permission</code> 类（半透明），底部显示"🔒 无查看权限"，不可点开详情。</td></tr>
+                        <tr><td>点击无权限卡片</td><td>弹出"无查看权限"模态框</td><td>调用 <code>showPermissionModal()</code> 弹出 <code>permissionModal</code>，文案"您没有权限查看该合同记录，请联系项目管理人员获取权限"；按钮"知道了"关闭。</td></tr>
+                        <tr><td>适用场景</td><td>合同类动态对非授权角色</td><td>如业主查看特定合同动态时展示锁定态；有权限时点击跳转对应详情页（任务 / 合同）。</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection" id="sub-11-10">
+                <div class="subsection-title">11.10 媒体展示（施工现场照片）</div>
+                <table>
+                    <thead><tr><th>要素</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td>缩略图网格</td><td>动态含 <code>hasMedia</code> 时渲染图片网格（<code>activity-media-item</code>）；第 3 项起若含视频则显示视频占位。</td></tr>
+                        <tr><td>图片内容</td><td>任务类（水电布线 / 墙面施工 / 水管打压 / 线管安装）、合同类均使用<strong>施工现场照片</strong>，本地存放于 <code>shared/images/</code>（<code>site-1..4.png</code>），替代原远程图，离线可用。</td></tr>
+                        <tr><td>点击预览</td><td>设计上点击缩略图全屏预览图片 / 播放视频（原型内为示意交互）。</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -5201,7 +5269,7 @@
                             <td rowspan="3">今日动态</td>
                             <td>"展开更多"按钮</td>
                             <td>点击</td>
-                            <td>展开/收起隐藏的动态项；文案随状态变化（"展开更多"/"收起"），箭头旋转</td>
+                            <td>展开时解除一条半折叠、显示今日全部动态；收起时恢复一条半折叠；文案随状态变化（"展开更多"/"收起"），箭头旋转。仅今日动态不足一条半（1 条或更少）时不显示该按钮</td>
                         </tr>
                         <tr>
                             <td>"查看全部"链接</td>
@@ -5285,7 +5353,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td rowspan="4">合同概览卡片</td>
+                            <td rowspan="5">合同概览卡片</td>
                             <td>签约进度</td>
                             <td><code>GET /api/v1/projects/:id/contracts</code></td>
                             <td>已签约合同数 / 总合同数</td>
@@ -5306,7 +5374,12 @@
                             <td>每项合同额外显示状态标签（如"拟定中""待我确认"），业主视角专属</td>
                         </tr>
                         <tr>
-                            <td rowspan="3">任务统计卡片</td>
+                            <td>查看全部合同</td>
+                            <td>前端交互</td>
+                            <td>点击"查看合同"展开/折叠全部合同列表（即查看全部合同）；列表内合同项点击跳转对应<a href="owner-miniapp/contract-detail.html" target="_blank">业主端合同详情页</a></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4">任务统计卡片</td>
                             <td>全部任务</td>
                             <td><code>GET /api/v1/projects/:id/tasks/stats</code></td>
                             <td>已完成任务数 / 总任务数</td>
@@ -5320,6 +5393,11 @@
                             <td>执行中任务</td>
                             <td><code>tasks.status = 'in_progress'</code></td>
                             <td>状态为"执行中"的任务数量</td>
+                        </tr>
+                        <tr>
+                            <td>查看全部</td>
+                            <td>前端交互</td>
+                            <td>点击"查看全部"跳转<a href="owner-miniapp/task-list.html" target="_blank">任务列表页（业主端）</a></td>
                         </tr>
                         <tr>
                             <td rowspan="2">待办事项卡片</td>
@@ -5531,7 +5609,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面路径</div>
-                        <div class="info-value">/pages/project/activity-list</div>
+                        <div class="info-value">/pages/project/activity-list<br><a href="owner-miniapp/activity-list.html" target="_blank" style="color: var(--primary-color); text-decoration: underline;">原型：owner-miniapp/activity-list.html</a></div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
@@ -5563,8 +5641,8 @@
                             <td>从项目详情页"今日动态"卡片点击"查看全部动态"进入</td>
                         </tr>
                         <tr>
-                            <td>层级筛选</td>
-                            <td>业主可查看项目部、工作组、施工组各层级的动态</td>
+                            <td>类型 / 日期筛选</td>
+                            <td>提供类型筛选（全部/任务/合同/系统）与日期筛选（全部时间/今天/本周/本月/自定义），业主可据此过滤查看项目动态（详见 13.4）；仅展示业主可见的动态</td>
                         </tr>
                         <tr>
                             <td>动态点击</td>
@@ -5590,9 +5668,9 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>层级筛选</td>
-                            <td>✅ 可筛选项目部/工作组/施工组</td>
-                            <td>✅ 可筛选，但仅查看自己所在层级的动态</td>
+                            <td>类型 / 日期筛选</td>
+                            <td>✅ 可按类型（全部/任务/合同/系统）与日期（全部时间/今天/本周/本月/自定义）筛选</td>
+                            <td>✅ 可筛选，仅查看业主可见的动态</td>
                         </tr>
                         <tr>
                             <td>动态点击</td>
@@ -5606,6 +5684,21 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="subsection" id="sub-13-4">
+                <div class="subsection-title">13.4 类型与日期筛选（业主端）</div>
+                <p>业主端项目动态页结构与服务端一致，顶部同样提供<strong>类型（全部 / 任务 / 合同 / 系统）</strong>与<strong>日期（全部时间 / 今天 / 本周 / 本月 / 自定义）</strong>筛选，二者叠加生效；业主可查看项目部、工作组、施工组各层级的动态。</p>
+            </div>
+
+            <div class="subsection" id="sub-13-5">
+                <div class="subsection-title">13.5 角色标签与阶段标签（业主端）</div>
+                <p>同 11.8：动态头部展示角色标签（监理 / 工长 / 施工 / 设计）与阶段标签（水电 / 设计 / 基础施工等），样式与项目详情页保持一致，只读展示。</p>
+            </div>
+
+            <div class="subsection" id="sub-13-6">
+                <div class="subsection-title">13.6 权限锁定（业主纯查看）</div>
+                <p>业主端动态整体为<strong>纯查看模式</strong>，无操作权限；若某动态 <code>hasPermission=false</code> 同样显示"🔒 无查看权限"并在点击时弹出无权限提示。跳转后目标页仅展示业主可见内容（详见 11.9）。</p>
             </div>
         </div>
 
@@ -6784,7 +6877,7 @@
                             <td>动态类型（type）</td>
                             <td>Enum</td>
                             <td><span class="tag tag-system">系统填充</span></td>
-                            <td>枚举值：contract_signed（合同签约）、task_completed（任务完成）、task_rejected（任务驳回）、member_joined（成员加入）、member_removed（成员移除）、statement_created（对账单创建）</td>
+                            <td>枚举值：contract_signed（合同签约）、task_submitted（任务提交）、task_completed（任务完成）、task_rejected（任务驳回）、task_confirm（任务确认）、member_removed（成员移除）</td>
                             <td>—</td>
                         </tr>
                         <tr>
@@ -7177,7 +7270,7 @@
             subSections.forEach(sub => {
                 const subTop = sub.offsetTop;
                 const subHeight = sub.offsetHeight;
-                if (scrollPos >= subTop && scrollPos < subHeight) {
+                if (scrollPos >= subTop && scrollPos < subTop + subHeight) {
                     currentSubSection = sub.getAttribute('id');
                 }
             });
@@ -7216,6 +7309,9 @@
                         userCollapsed.delete(navItem.id);
                         localStorage.setItem('nav-expanded-' + navItem.id, 'true');
                     }
+                    // 立即为被点击的二级目录项添加选中样式
+                    subNavLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
                     const offsetTop = target.offsetTop - 20;
                     window.scrollTo({ top: offsetTop, behavior: 'smooth' });
                 }

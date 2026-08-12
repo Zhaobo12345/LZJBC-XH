@@ -315,16 +315,18 @@
         if (!state.workerId) {
             // 无 id：直接展示示例合同（水电班组服务合同），不再展示独立的合同说明/创建页
             state.workerId = ensureDemoSeed(DEFAULT_DEMO_TYPE);
-            state.viewer = 'sender';
+            if (!state.viewer || state.viewer === 'sender') state.viewer = 'sender';
             state.asUserId = '';
         }
         state.contract = global.ContractStore.getContract(state.workerId);
         if (!state.contract) { renderNotFound(); return; }
         $('notFound').style.display = 'none';
         $('mainView').style.display = 'block';
-        // 支持「发起变更」页提交后回跳预览（如 preview=changing），否则按合同数据推导状态
+        // 支持「发起变更」页提交后回跳预览（如 preview=changing）或外部跳转指定状态（如 status=worker_confirmed_receiver）
         var preview = getParam('preview');
-        updateStatus(preview ? preview : computeStatus());
+        var urlStatus = getParam('status');
+        state.viewer = getParam('viewer') || state.viewer;
+        updateStatus(urlStatus ? urlStatus : (preview ? preview : computeStatus()));
         bindModalDismiss();
     }
 

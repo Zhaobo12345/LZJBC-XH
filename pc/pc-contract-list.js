@@ -33,6 +33,15 @@ function toggleUserDropdown() {
         let currentReviewId = null;
         let currentReviewType = null;
 
+        // PC端 = 运营人员，默认全部权限
+        var LIST_USER_PERMISSION = 'all';
+        var LIST_USER_ID = 'platform-operator';
+
+        function getMaskedAmountList(c) {
+            if (!window.ContractAmountMask) return c.amount;
+            return window.ContractAmountMask.format(c.amount, c, LIST_USER_PERMISSION, LIST_USER_ID);
+        }
+
         const allContracts = [
             { id: 13, name: '基础施工服务合同-雁塔区撤回示例', project: '雁塔区别墅', type: 'base_construction', typeName: '基础施工服务合同', amount: '￥60,000', status: 'contract_withdrawn', statusName: '合同已撤回', statusClass: 'withdrawn', time: '2024-01-27 09:40', rejectReason: '' },
             { id: 14, name: '设计服务合同-未央区撤回示例', project: '未央区平层', type: 'design', typeName: '设计服务合同', amount: '￥30,000', status: 'change_withdrawn', statusName: '变更已撤回', statusClass: 'withdrawn', time: '2024-01-26 18:20', rejectReason: '' },
@@ -113,7 +122,7 @@ function toggleUserDropdown() {
                         <td><span class="contract-name" onclick="viewContract(${c.id}, '${c.status}', '')">${c.name}</span></td>
                         <td><span class="project-link" onclick="viewProject(${c.id})">${c.project}</span></td>
                         <td>${c.typeName}</td>
-                        <td>${c.amount}</td>
+                        <td>${getMaskedAmountList(c)}</td>
                         <td><span class="status-tag ${c.statusClass}">${c.statusName}</span></td>
                         <td>${c.time}</td>
                         <td>

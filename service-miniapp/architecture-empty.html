@@ -178,18 +178,18 @@
             font-size: 13px;
             color: var(--text-secondary);
         }
-+
+
         .node-manager {
             font-size: 12px;
             color: var(--text-secondary);
         }
-+
+
         .manager-name {
             font-weight: 600;
             color: var(--text-primary);
             margin-left: 6px;
         }
-+
+
         .meta-count {
             font-size: 12px;
             color: var(--text-tertiary);
@@ -387,7 +387,7 @@
                     <div class="header-left">
                         <div class="project-name">XX小区整体装修</div>
                     </div>
-                    <div class="create-btn-inline" onclick="showCreateModal()">
+                    <div class="create-btn-inline" onclick="location.href='architecture.html'">
                         <span>+</span>
                         <span>创建工作组</span>
                     </div>
@@ -418,7 +418,7 @@
                     </div>
                 </div>
 
-                <div class="add-node-btn" onclick="showCreateModal()">
+                <div class="add-node-btn" onclick="location.href='architecture.html'">
                     <span>+</span>
                     <span>创建工作组</span>
                 </div>
@@ -482,7 +482,6 @@
                 createdBy: creatorName,
                 createdByRole: '创建人',
                 createdAt: Date.now()
-+                
             };
             project.groups.push(group);
             localStorage.setItem('newProjectData', JSON.stringify(project));
@@ -516,7 +515,7 @@
 
             // 更新工作组计数（第二个 stat-item-inline）
             try {
-+                var stats = document.querySelectorAll('.header-stats .stat-item-inline .num');
+                var stats = document.querySelectorAll('.header-stats .stat-item-inline .num');
                 if (stats && stats.length >= 2) {
                     var groupsCount = project.groups.length;
                     stats[1].textContent = groupsCount;
@@ -553,7 +552,7 @@
                     if (el) el.textContent = manager;
                 }
                 var groups = (project.groups && project.groups.length) ? project.groups.length : 0;
-+                var countEl = document.getElementById('projectGroupCount');
+                var countEl = document.getElementById('projectGroupCount');
                 if (countEl) countEl.textContent = groups + '个工作组';
             } catch (e) { }
         })();

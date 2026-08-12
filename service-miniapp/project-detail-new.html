@@ -26,6 +26,12 @@
             font-size: 12px;
             color: #389E0D;
             line-height: 1.4;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .guide-tip-bar .tip-text:hover {
+            opacity: 0.7;
+            text-decoration: underline;
         }
         .guide-tip-bar .tip-text strong {
             font-weight: 600;
@@ -255,7 +261,7 @@
             <!-- 顶部引导提示条 -->
             <div class="guide-tip-bar" id="guideTipBar">
                 <span class="tip-icon">🎉</span>
-                <span class="tip-text">项目创建成功，请<strong>添加架构层级</strong>创建合同</span>
+                <span class="tip-text" onclick="location.href='architecture-empty.html'">项目创建成功，请<strong>添加架构层级</strong>创建合同 →</span>
                 <span class="close-btn" id="guideTipClose">✕</span>
             </div>
 
@@ -396,7 +402,7 @@
             <div class="card">
                 <div class="card-title">
                     <span>📝 今日动态</span>
-                    <span class="more" data-href="activity-list-empty.html">查看全部 ></span>
+                    <span class="more" data-href="activity-list.html">查看全部 ></span>
                 </div>
                 <div class="simple-empty-state">
                     <div class="empty-icon">📝</div>

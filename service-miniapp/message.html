@@ -1250,10 +1250,23 @@
         function switchTab(tab) {
             currentTab = tab;
             
-            document.querySelectorAll('.message-tab').forEach(t => {
+            document.querySelectorAll('.message-tab').forEach(function(t) {
                 t.classList.remove('active');
             });
-            event.currentTarget.classList.add('active');
+            // 兼容点击事件和程序化调用
+            var tabEl;
+            if (event && event.currentTarget) {
+                tabEl = event.currentTarget;
+            } else {
+                var tabs = document.querySelectorAll('.message-tab');
+                for (var i = 0; i < tabs.length; i++) {
+                    if (tabs[i].getAttribute('onclick').indexOf(tab) !== -1) {
+                        tabEl = tabs[i];
+                        break;
+                    }
+                }
+            }
+            if (tabEl) tabEl.classList.add('active');
             
             renderMessages(tab);
             updateDemoPanel();
@@ -1549,7 +1562,23 @@
         }
         ensureContractInviteDemo();
 
-        renderMessages('invite');
+        // 外部跳转指定Tab（如 ?tab=contract）
+        var _urlTab = '';
+        (function() {
+            var params = new URLSearchParams(window.location.search);
+            _urlTab = params.get('tab') || '';
+            if (_urlTab) {
+                switchTab(_urlTab);
+                setTimeout(function() { switchTab(_urlTab); }, 300);
+            }
+        })();
+        
+        if (!_urlTab) {
+            renderMessages('invite');
+        }
+        if (!_urlTab) {
+            renderMessages('invite');
+        }
         updateContractBadge();
         updateDemoPanel();
         updateBadge();

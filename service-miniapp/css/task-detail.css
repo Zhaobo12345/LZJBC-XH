@@ -2083,6 +2083,7 @@
 /* ===== Modal Constrain to Phone Frame ===== */
 /* 所有模态框都在 .phone-frame 内部，统一使用 absolute 定位 */
 .upload-modal,
+.upload-record-modal,
 .confirm-modal,
 .evaluation-modal,
 .evaluation-list-modal,

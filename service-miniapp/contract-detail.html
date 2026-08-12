@@ -418,7 +418,7 @@
                     <div class="form-group">
                         <label class="form-label">合同类型</label>
                         <div class="readonly-field">
-                            <span class="readonly-value" id="editContractType">分包合同</span>
+                            <span class="readonly-value" id="editContractType">基础施工服务合同</span>
                             <span class="readonly-tag">不可编辑</span>
                         </div>
                     </div>
@@ -431,7 +431,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label"><span class="required">*</span> 合同名称</label>
-                        <input type="text" class="form-input" id="editContractName" placeholder="请输入合同名称" value="水电分包合同">
+                        <input type="text" class="form-input" id="editContractName" placeholder="请输入合同名称" value="基础施工合同0810">
                     </div>
                     <div class="form-group">
                         <label class="form-label"><span class="required">*</span> 合同金额</label>
@@ -617,7 +617,7 @@
                 </div>
                 <div class="info-row">
                     <div class="label">合同名称</div>
-                    <div class="value">水电分包合同</div>
+                    <div class="value">基础施工合同0810</div>
                 </div>
                 <div class="info-row">
                     <div class="label">合同类型</div>
@@ -1051,7 +1051,7 @@
                         <div class="attachment-item">
                             <div class="file-icon">📄</div>
                             <div class="file-info">
-                                <div class="file-name">水电分包合同_签约文件.pdf</div>
+                                <div class="file-name">基础施工合同0810_签约文件.pdf</div>
                                 <div class="file-meta">张三上传 · 2024-01-15 10:30</div>
                             </div>
                             <div class="download-btn" onclick="showCustomToast('预览文件')">👁️</div>
@@ -1066,7 +1066,7 @@
                     <div class="attachment-item">
                         <div class="file-icon">📄</div>
                         <div class="file-info">
-                            <div class="file-name">水电分包合同.pdf</div>
+                            <div class="file-name">基础施工合同0810.pdf</div>
                             <div class="file-meta">2.3MB · 2024-01-10上传</div>
                         </div>
                         <div class="download-btn" onclick="showCustomToast('下载文件')">⬇</div>
@@ -1165,7 +1165,7 @@
                     <div class="change-info-grid">
                         <div class="change-info-item">
                             <div class="info-label">合同名称</div>
-                            <div class="info-value">水电分包合同</div>
+                            <div class="info-value">基础施工合同0810</div>
                         </div>
                         <div class="change-info-item">
                             <div class="info-label">合同编号</div>
@@ -1715,7 +1715,7 @@
                 <div class="contract-article">
                     <div class="article-title">合同编号：BJSDSWHT000001</div>
                     <div class="article-content">
-                        <p><strong>合同名称：</strong>水电分包合同</p>
+                        <p><strong>合同名称：</strong>基础施工合同0810</p>
                         <p><strong>签订日期：</strong>2024年01月10日</p>
                         <p><strong>合同金额：</strong>人民币捌万元整（¥80,000.00）</p>
                     </div>
@@ -2002,7 +2002,7 @@
                     <div class="sign-file-preview">
                         <div class="file-icon">📄</div>
                         <div class="file-info">
-                            <div class="file-name">水电分包合同_签约文件.pdf</div>
+                            <div class="file-name">基础施工合同0810_签约文件.pdf</div>
                             <div class="file-meta">上传人：张三 · 2024-01-10 15:30</div>
                         </div>
                         <div class="file-action" onclick="previewSignFile()">预览</div>
@@ -2281,7 +2281,7 @@
     </div>
     
     <div class="page-nav">
-        <div class="page-nav-title">原型导航</div>
+        <div class="page-nav-title" style="display:none;">原型导航</div>
         <a href="home.html" class="page-nav-item">首页</a>
         <a href="project-list.html" class="page-nav-item">项目列表</a>
         <a href="project-detail.html" class="page-nav-item">项目详情</a>
@@ -2297,11 +2297,10 @@
                 <div class="status-group-header" onclick="toggleStatusGroup(this)">
                     <span class="status-group-icon">▼</span>
                     <span class="status-group-title">草稿阶段</span>
-                    <span class="status-group-count">3</span>
+                    <span class="status-group-count">2</span>
                 </div>
                 <div class="status-group-content">
                     <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('draft')">拟定中</div>
-                    <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('draft_party_a')">拟定中（甲方）</div>
                     <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('draft_submittable')">拟定中(可提交)</div>
                 </div>
             </div>
@@ -2311,12 +2310,11 @@
                 <div class="status-group-header" onclick="toggleStatusGroup(this)">
                     <span class="status-group-icon">▶</span>
                     <span class="status-group-title">审核阶段</span>
-                    <span class="status-group-count">3</span>
+                    <span class="status-group-count">2</span>
                 </div>
                 <div class="status-group-content" style="display: none;">
                     <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('platform_reviewing')">待平台审核</div>
                     <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('platform_rejected')">平台审核驳回</div>
-                    <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('platform_rejected_modified')">平台驳回(已修改)</div>
                 </div>
             </div>
             
@@ -2325,13 +2323,11 @@
                 <div class="status-group-header" onclick="toggleStatusGroup(this)">
                     <span class="status-group-icon">▶</span>
                     <span class="status-group-title">确认阶段</span>
-                    <span class="status-group-count">4</span>
+                    <span class="status-group-count">2</span>
                 </div>
                 <div class="status-group-content" style="display: none;">
                     <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('confirming_sender')">确认中(发起方)</div>
-                    <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('confirming_receiver')">确认中(待确认方)</div>
                     <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('confirmed')">已确认</div>
-                    <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('confirmed_party_a')">已确认（甲方）</div>
                 </div>
             </div>
             
@@ -2352,24 +2348,32 @@
                 <div class="status-group-header" onclick="toggleStatusGroup(this)">
                     <span class="status-group-icon">▶</span>
                     <span class="status-group-title">变更阶段</span>
-                    <span class="status-group-count">7</span>
+                    <span class="status-group-count">5</span>
                 </div>
                 <div class="status-group-content" style="display: none;">
                     <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('changing')">变更中(发起方)</div>
-                    <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('change_confirming')">变更中(待确认方)</div>
                     <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('change_platform_reviewing')">变更审核中</div>
                     <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('change_platform_rejected')">变更审核驳回</div>
                     <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('change_confirming_sender')">变更确认中(发起方)</div>
-                    <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('change_confirming_receiver')">变更确认中(待确认方)</div>
                     <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('change_signing_wait')">变更签约中</div>
                 </div>
+            </div>
+
+            <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border-color);">
+                <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:8px;">🔐 金额脱敏（演示）</div>
+                <label style="display:block;padding:6px 8px;font-size:12px;cursor:pointer;">
+                    <input type="radio" name="permDemo" value="all" checked onchange="ContractDetailPage.toggleAmountMask(this.value)"> 有权限（展示金额）
+                </label>
+                <label style="display:block;padding:6px 8px;font-size:12px;cursor:pointer;">
+                    <input type="radio" name="permDemo" value="basic" onchange="ContractDetailPage.toggleAmountMask(this.value)"> 无权限（脱敏 ***）
+                </label>
             </div>
         </div>
     </div>
     
 
+    <script src="../common.js"></script>
     <script src="contract-store.js"></script>
-    <script src="js/page-nav.js"></script>
     <script src="js/contract-detail.js"></script>
     <script>
         // 页内「更多」面板控制（v2 示范页专用，不写入任何共享 JS 文件）

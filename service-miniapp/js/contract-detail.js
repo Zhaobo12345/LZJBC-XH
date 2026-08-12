@@ -3205,7 +3205,7 @@ const ContractDetailPage = (function() {
         const stageItem = element.closest('.stage-card, .stage-edit-item');
         if (!stageItem) return;
         
-        const switchEl = element.querySelector('.switch');
+        const switchEl = element.classList.contains('switch') ? element : element.querySelector('.switch');
         const isSequential = stageItem.dataset.sequential === 'true';
         
         const completedTasks = stageItem.querySelectorAll('.task-edit-item[data-completed="true"]');
@@ -3669,6 +3669,7 @@ const ContractDetailPage = (function() {
     function init() {
         bindGlobalEvents();
         initFromUrl();
+        applyAmountMask();
     }
     
     // DOM加载完成后初始化
@@ -3676,6 +3677,33 @@ const ContractDetailPage = (function() {
         document.addEventListener('DOMContentLoaded', init);
     } else {
         init();
+    }
+    
+    // ==================== 金额脱敏演示 ====================
+    var _maskPermission = 'all';
+    var _maskUserId = 'chenzhuang';
+
+    function applyAmountMask() {
+        var contractRow = document.getElementById('contractAmountRow');
+        var changeRow = document.getElementById('contractAmountChange');
+        if (!window.ContractAmountMask) return;
+        
+        var displayAmount = _maskPermission === 'all' ? '¥80,000.00' : '***';
+        if (contractRow) contractRow.textContent = displayAmount;
+        
+        // 变更对比行：脱敏时隐藏变更金额对比（内容本身敏感）
+        if (changeRow) {
+            if (_maskPermission === 'all') {
+                // Keep original display (JS handles show/hide)
+            } else {
+                changeRow.querySelector('.value').innerHTML = '<span style=\"color:var(--text-tertiary);\">***</span>';
+            }
+        }
+    }
+
+    function toggleAmountMask(perm) {
+        _maskPermission = perm;
+        applyAmountMask();
     }
     
     // ==================== 公开API ====================
@@ -3707,6 +3735,10 @@ const ContractDetailPage = (function() {
         // 弹窗函数
         showStatusModal,
         closeModal,
+        
+        // 金额脱敏
+        toggleAmountMask,
+        applyAmountMask,
         confirmAction,
         updateRejectReasonCount,
         getRejectReason,

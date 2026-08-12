@@ -284,7 +284,7 @@
         var inviting = appState === 'inviting';
         var html;
         if (inviting) {
-            html = '<button class="cta-btn cta-secondary" onclick="doDecline()">暂不接</button>' +
+            html = '<button class="cta-btn cta-secondary" onclick="doDecline()">拒绝</button>' +
                    '<button class="cta-btn cta-primary" onclick="doReceive()">接单</button>';
         } else {
             html = '<button class="cta-btn cta-primary confirmed" onclick="doUpload()">上传签约文件</button>';
@@ -292,13 +292,15 @@
         $('cta').innerHTML = html;
     }
 
-    // 确认中 → 接单：跳转已确认页面（演示流程连贯性）
+    // 确认中 → 接单：跳转工人合同详情-已确认(受邀方)
     function doReceive() {
         showToast('已接单！您已成为本合同乙方');
-        setTimeout(function () { global.location.href = 'worker-contract-receive-confirmed.html'; }, 700);
+        setTimeout(function () { window.location.href = 'worker-contract-detail.html?viewer=receiver&status=worker_confirmed_receiver'; }, 700);
     }
+    // 确认中 → 拒绝：跳转合同邀约消息页
     function doDecline() {
-        showToast('已暂不接，可在消息中重新查看');
+        showToast('已拒绝该合同邀约');
+        setTimeout(function () { window.location.href = 'message.html?tab=contract'; }, 700);
     }
     function doUpload() {
         showToast('请上传已签署的纸质合同扫描件 / 照片');

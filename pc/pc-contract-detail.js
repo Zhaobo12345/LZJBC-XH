@@ -1,6 +1,25 @@
 let currentStatus = 'draft';
         let pendingAction = null;
 
+        // PC端 = 运营人员，默认全部权限
+        var DETAIL_USER_PERMISSION = 'all';
+        var DETAIL_USER_ID = 'platform-operator';
+        var CONTRACT_AMOUNT = '¥150,000.00';
+        var CONTRACT_AMOUNT_OLD = '¥150,000.00';
+        var CONTRACT_AMOUNT_NEW = '¥180,000.00';
+
+        function getMaskedAmount(amount) {
+            if (!window.ContractAmountMask) return amount;
+            // 构建简化合同对象用于权限判断
+            var contract = { creator: '陈庄', partyA: '陈庄', partyB: '王强' };
+            return window.ContractAmountMask.format(amount, contract, DETAIL_USER_PERMISSION, DETAIL_USER_ID);
+        }
+
+        function renderMaskedAmounts() {
+            var el = document.getElementById('infoBarAmount');
+            if (el) el.textContent = getMaskedAmount(CONTRACT_AMOUNT);
+        }
+
         const statusConfig = {
             platform_reviewing: {
                 title: '⏳ 待平台审核',
@@ -78,6 +97,7 @@ let currentStatus = 'draft';
             updateOperationLog();
             updateStagesContent();
             updateStageStatusForReview();
+            renderMaskedAmounts();
         }
 
         function handlePageChange(value) {
