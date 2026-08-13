@@ -32,6 +32,18 @@ const TaskDetailPage = (function() {
         [TaskStatus.PENDING_BLOCKED]: '待开始（前置阻塞）'
     };
 
+    // 配置人视角可见性控制：业主端不支持配置任务（任何状态均无配置人视角）；
+    // 服务端仅在 待配置(配置中切换条)/待开始/执行中/前置阻塞 状态保留配置人视角，
+    // 确认中/确认中(被驳回后)/驳回后待开始/已完成/已完成(含驳回) 状态不支持配置任务。
+    const OWNER_SIDE = false; // 业主端此处置 true；服务端正 prototype
+    function getConfigurerViewVisible(status) {
+        if (OWNER_SIDE) return { roleSwitcher: false, configuring: false };
+        if (status === TaskStatus.CONFIGURING) return { roleSwitcher: false, configuring: true };
+        const roleSwitcherStates = [TaskStatus.PENDING, TaskStatus.PENDING_BLOCKED, TaskStatus.IN_PROGRESS];
+        if (roleSwitcherStates.indexOf(status) !== -1) return { roleSwitcher: true, configuring: false };
+        return { roleSwitcher: false, configuring: false };
+    }
+
     const appState = {
         rating: 0,
         taskStatus: TaskStatus.CONFIGURING,
@@ -1059,6 +1071,15 @@ const TaskDetailPage = (function() {
     
     function updateTaskStatus(status) {
         currentTaskStatus = status;
+        const cfgView = getConfigurerViewVisible(status);
+        // 不支持配置任务的状态/端，配置人视角不可达，回退到合适的默认视角，避免渲染配置页内容
+        if (currentUserRole === UserRoles.CONFIGURER && !cfgView.roleSwitcher && !cfgView.configuring) {
+            currentUserRole = (status === TaskStatus.CONFIRMING || status === TaskStatus.CONFIRMING_AFTER_REJECT ||
+                status === TaskStatus.COMPLETED || status === TaskStatus.COMPLETED_WITH_REJECT)
+                ? UserRoles.CONFIRMER
+                : (status === TaskStatus.PENDING || status === TaskStatus.REJECTED_PENDING || status === TaskStatus.IN_PROGRESS
+                    ? UserRoles.EXECUTOR : UserRoles.OTHER);
+        }
         const header = safeGetElement('taskHeader');
         const statusBadge = safeGetElement('taskStatus');
         const confirmProgress = safeGetElement('confirmProgress');
@@ -1286,6 +1307,13 @@ const TaskDetailPage = (function() {
             
             const preTaskBlockCard = document.getElementById('preTaskBlockCard');
             if (preTaskBlockCard) preTaskBlockCard.style.display = 'block';
+
+            const preTaskBlockTip = document.getElementById('preTaskBlockTip');
+            if (preTaskBlockTip) {
+                preTaskBlockTip.textContent = currentUserRole === 'executor'
+                    ? '💡 前置任务完成后将自动通知您'
+                    : '💡 前置任务完成后将自动通知执行人';
+            }
             
             if (executionRecordCard) executionRecordCard.style.display = 'none';
             if (confirmRecordCard) confirmRecordCard.style.display = 'none';
@@ -2538,7 +2566,25 @@ const TaskDetailPage = (function() {
                 item.classList.add('active');
             }
         });
-        
+
+        // 按状态/端显隐「配置人视角」导航项（仅隐藏，不删除 DOM；其他状态/页面保留该视角）
+        const roleSwitcherEl = document.getElementById('roleSwitcher');
+        if (roleSwitcherEl) {
+            roleSwitcherEl.querySelectorAll('.role-switch-item').forEach(function(it) {
+                if (it.textContent.trim() === '配置人视角') {
+                    it.style.display = cfgView.roleSwitcher ? '' : 'none';
+                }
+            });
+        }
+        const configuringEl = document.getElementById('configuringRoleSwitcher');
+        if (configuringEl) {
+            configuringEl.querySelectorAll('.role-switch-item').forEach(function(it) {
+                if (it.textContent.trim() === '配置人视角') {
+                    it.style.display = cfgView.configuring ? '' : 'none';
+                }
+            });
+        }
+
         initProfileClickEvents();
     }
     

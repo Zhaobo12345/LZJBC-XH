@@ -135,6 +135,20 @@
             padding: 4px 12px;
             border-radius: 12px;
         }
+        /* 原型页面跳转链接 */
+        .section-title .badge a {
+            color: #fff;
+            text-decoration: none;
+            border-bottom: 1px dashed rgba(255,255,255,0.75);
+        }
+        .section-title .badge a:hover { border-bottom-style: solid; }
+        a.proto-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            border-bottom: 1px dashed var(--primary-color);
+            cursor: pointer;
+        }
+
         .subsection { margin-bottom: 32px; }
         .subsection-title {
             font-size: 18px;
@@ -354,11 +368,10 @@
                 <ul class="nav-sub">
                     <li><a href="#sub-5-1">5.1 页面概述</a></li>
                     <li><a href="#sub-5-2">5.2 表单字段</a></li>
-                    <li><a href="#sub-5-3">5.3 项目发起人机制</a></li>
-                    <li><a href="#sub-5-4">5.4 创建流程</a></li>
-                    <li><a href="#sub-5-5">5.5 提交校验与二次确认</a></li>
-                    <li><a href="#sub-5-6">5.6 创建成功后跳转规则</a></li>
-                    <li><a href="#sub-5-7">5.7 创建成功后系统生成信息</a></li>
+                    <li><a href="#sub-5-3">5.3 创建流程</a></li>
+                    <li><a href="#sub-5-4">5.4 提交校验与二次确认</a></li>
+                    <li><a href="#sub-5-5">5.5 创建成功后跳转规则</a></li>
+                    <li><a href="#sub-5-6">5.6 创建成功后系统生成信息</a></li>
                 </ul>
             </li>
             <li class="nav-item collapsed" id="nav-page-architecture-service">
@@ -580,7 +593,6 @@
         <div class="section" id="page-home-service">
             <div class="section-title">
                 一、首页（服务方小程序）
-                <span class="badge">service-miniapp/home.html</span>
             </div>
 
             <div class="subsection" id="sub-1-1">
@@ -592,7 +604,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面路径</div>
-                        <div class="info-value"><a href="service-miniapp/home.html" target="_blank">/pages/home/index</a></div>
+                        <div class="info-value"><a href="service-miniapp/home.html" target="_blank">service-miniapp/home.html</a></div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
@@ -617,7 +629,6 @@
         <div class="section" id="page-list-service">
             <div class="section-title">
                 二、项目列表页（服务方小程序）
-                <span class="badge">service-miniapp/project-list.html</span>
             </div>
 
             <div class="subsection" id="sub-2-1">
@@ -629,7 +640,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面路径</div>
-                        <div class="info-value"><a href="service-miniapp/project-list.html" target="_blank">/pages/project-list/index</a></div>
+                        <div class="info-value"><a href="service-miniapp/project-list.html" target="_blank">service-miniapp/project-list.html</a></div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
@@ -658,7 +669,7 @@
                         </tr>
                         <tr>
                             <td>自己创建的项目</td>
-                            <td>当前用户作为项目发起人创建的项目，拥有项目管理权限</td>
+                            <td>当前用户创建的项目，拥有项目管理权限</td>
                         </tr>
                         <tr>
                             <td>已加入的项目</td>
@@ -880,7 +891,7 @@
 
                 <div class="note" style="margin-top: 16px; background: #E6F7FF; border-left-color: var(--primary-color);">
                     <div class="note-title" style="color: var(--primary-color);">空状态SVG插图说明</div>
-                    <p>空状态插图统一使用项目内置的<code>shared/empty-state.js</code>组件，包含10种内置SVG插图。项目列表页使用的类型为<code>empty-project</code>（空项目）和<code>no-network</code>（无网络），详见 <a href="../shared/empty-state-demo.html" target="_blank" style="color: var(--primary-color);">空状态组件演示页</a>。</p>
+                    <p>空状态插图统一使用项目内置的<code>shared/empty-state.js</code>组件，包含10种内置SVG插图。项目列表页使用的类型为<code>empty-project</code>（空项目）和<code>no-network</code>（无网络），详见 <a href="service-miniapp/project-list-empty-demo.html" target="_blank" style="color: var(--primary-color);">空状态组件演示页</a>。</p>
                 </div>
             </div>
         </div>
@@ -889,7 +900,6 @@
         <div class="section" id="page-detail-service">
             <div class="section-title">
                 三、项目详情页（服务方小程序）
-                <span class="badge">service-miniapp/project-detail.html</span>
             </div>
 
             <div class="subsection" id="sub-3-1">
@@ -901,7 +911,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面路径</div>
-                        <div class="info-value"><a href="service-miniapp/project-detail.html" target="_blank">/pages/project-detail/index</a></div>
+                        <div class="info-value"><a href="service-miniapp/project-detail.html" target="_blank">service-miniapp/project-detail.html</a></div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
@@ -1219,7 +1229,7 @@
                         </tr>
                         <tr>
                             <td>查看全部动态</td>
-                            <td>点击"查看全部动态"按钮，跳转到项目动态页（activity-list.html），默认展示全部动态；进入后可通过页头类型筛选（全部 / 任务 / 合同 / 系统）与日期筛选（全部时间 / 今天 / 本周 / 本月 / 自定义）自行过滤</td>
+                            <td>点击"查看全部动态"按钮，跳转到项目动态页（activity-list.html），默认展示全部动态；进入后可通过页头类型筛选（全部 / 任务 / 合同）与日期筛选（全部时间 / 今天 / 昨天 / 近7天 / 近30天 / 自定义）自行过滤</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1550,7 +1560,6 @@
         <div class="section" id="page-info-service">
             <div class="section-title">
                 四、项目信息页（服务方小程序）
-                <span class="badge">service-miniapp/project-info.html</span>
             </div>
 
             <div class="subsection" id="sub-4-1">
@@ -1790,7 +1799,6 @@
         <div class="section" id="page-create-service">
             <div class="section-title">
                 五、创建项目页（服务方小程序）
-                <span class="badge">service-miniapp/create-project.html</span>
             </div>
 
             <div class="subsection" id="sub-5-1">
@@ -1951,52 +1959,7 @@
             </div>
 
             <div class="subsection" id="sub-5-3">
-                <div class="subsection-title">5.3 项目发起人机制</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>属性</th>
-                            <th>说明</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>定义</td>
-                            <td>项目发起人是指通过平台认证、享有项目分利权益的独立角色身份。用户需主动完成发起人认证流程，获得发起人身份标识后方可享受分利权益。发起人与项目创建者无必然关联。</td>
-                        </tr>
-                        <tr>
-                            <td>发起人标识规则</td>
-                            <td>用户通过认证流程后，系统将 <code>users.is_promoter</code> 字段标记为 <code>true</code>，表示该用户已具备发起人身份。发起人身份一经认证，在用户维度持久生效，不随项目变更而变动。</td>
-                        </tr>
-                        <tr>
-                            <td>数据来源</td>
-                            <td><code>users.is_promoter</code> 字段（布尔值），通过API <code>GET /api/v1/users/promoter-status</code> 获取当前登录用户的发起人认证状态</td>
-                        </tr>
-                        <tr>
-                            <td>认证入口展示规则</td>
-                            <td>进入创建项目页时，根据 <code>users.is_promoter</code> 值判断：
-                                <br>• <strong>未认证（is_promoter = false）</strong>：在页面顶部展示"成为项目发起人可享受项目分利"Banner入口，引导用户完成认证
-                                <br>• <strong>已认证（is_promoter = true）</strong>：Banner入口隐藏，不再展示。页面上方显示"您已是认证项目发起人，可享受项目分利权益"提示条，同时在页面标题右侧显示"项目发起人"角标
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>认证流程</td>
-                            <td>点击Banner入口 → 跳转发起人认证页面 → 完成认证信息提交 → 系统审核通过 → <code>users.is_promoter</code> 标记为 <code>true</code> → 返回创建项目页，展示已认证状态</td>
-                        </tr>
-                        <tr>
-                            <td>权益说明</td>
-                            <td>认证发起人可获得项目利润分成，具体比例由平台规则确定</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="note" style="margin-top: 16px;">
-                    <div class="note-title">发起人身份与项目创建的关系</div>
-                    <p>发起人身份是用户级别的独立认证状态，与是否创建项目无关。用户可以在未认证发起人身份的情况下创建项目，但无法享受分利权益。发起人认证后，创建的所有项目均自动关联发起人身份。</p>
-                </div>
-            </div>
-
-            <div class="subsection" id="sub-5-4">
-                <div class="subsection-title">5.4 创建流程</div>
+                <div class="subsection-title">5.3 创建流程</div>
                 <div class="code-block">
 1. 填写项目信息
 2. 点击"创建项目"
@@ -2010,8 +1973,8 @@
                 </div>
             </div>
 
-            <div class="subsection" id="sub-5-5">
-                <div class="subsection-title">5.5 提交校验与二次确认</div>
+            <div class="subsection" id="sub-5-4">
+                <div class="subsection-title">5.4 提交校验与二次确认</div>
                 <div class="note">
                     <div class="note-title">交互说明</div>
                     <p>当用户点击"创建项目"按钮时，需进行前置校验与二次确认流程，确保数据完整性与用户操作确认。</p>
@@ -2066,8 +2029,8 @@
                 </table>
             </div>
 
-            <div class="subsection" id="sub-5-6">
-                <div class="subsection-title">5.6 创建成功后跳转规则</div>
+            <div class="subsection" id="sub-5-5">
+                <div class="subsection-title">5.5 创建成功后跳转规则</div>
                 <table>
                     <thead>
                         <tr>
@@ -2120,8 +2083,8 @@
                 </div>
             </div>
 
-            <div class="subsection" id="sub-5-7">
-                <div class="subsection-title">5.7 创建成功后系统生成信息</div>
+            <div class="subsection" id="sub-5-6">
+                <div class="subsection-title">5.6 创建成功后系统生成信息</div>
                 <table>
                     <thead>
                         <tr>
@@ -2177,7 +2140,6 @@
         <div class="section" id="page-architecture-service">
             <div class="section-title">
                 六、项目架构页（服务方小程序）
-                <span class="badge">service-miniapp/architecture.html</span>
             </div>
 
             <div class="subsection" id="sub-6-1">
@@ -2940,7 +2902,6 @@
         <div class="section" id="page-member-service">
             <div class="section-title">
                 七、项目成员页（服务方小程序）
-                <span class="badge">service-miniapp/member.html</span>
             </div>
 
             <div class="subsection" id="sub-7-1">
@@ -3823,7 +3784,6 @@
         <div class="section" id="page-files-service">
             <div class="section-title">
                 八、项目资料页（服务方小程序）
-                <span class="badge">service-miniapp/project-files.html</span>
             </div>
 
             <div class="subsection" id="sub-8-1">
@@ -4006,7 +3966,6 @@
         <div class="section" id="page-statement-list-service">
             <div class="section-title">
                 九、对账单列表页（服务方小程序）
-                <span class="badge">service-miniapp/statement-list.html</span>
             </div>
 
             <div class="subsection" id="sub-9-1">
@@ -4302,7 +4261,7 @@
                     <li>账单类型为单选胶囊，选中态高亮，点击其他项切换选中。</li>
                     <li>金额输入实时格式化：仅允许数字与单个负号、最多两位小数。</li>
                     <li>用途描述实时字数统计（0/200）。</li>
-                    <li>提交后弹出"二次确认"弹窗（与创建项目 5.5 一致）：校验通过即弹出标题"确认提交"的确认弹窗，确认后才提交并以 Toast 反馈（详见 9.7.4）。</li>
+                    <li>提交后弹出"二次确认"弹窗（与创建项目 5.4 一致）：校验通过即弹出标题"确认提交"的确认弹窗，确认后才提交并以 Toast 反馈（详见 9.7.4）。</li>
                 </ul>
 
                 <div class="subsection-title" id="sub-9-7-4" style="font-size: 14px; margin-top: 16px;">9.7.4 提交校验与确认流程</div>
@@ -4360,7 +4319,7 @@
                 </table>
                 <div class="note">
                     <div class="note-title">说明</div>
-                    <p>已与"创建项目"（5.5 提交校验与二次确认）保持一致：点击"提交并通知对方"先执行必填与格式校验，校验通过才弹出<strong>二次确认弹窗</strong>（标题"确认提交"）；点击"确认提交"关闭弹窗并执行提交（Toast + 关闭抽屉 + 1.5 秒刷新列表），点击"取消"仅关闭弹窗并保留表单数据。校验不通过时仍按上述 Toast 提示、停留表单。</p>
+                    <p>已与"创建项目"（5.4 提交校验与二次确认）保持一致：点击"提交并通知对方"先执行必填与格式校验，校验通过才弹出<strong>二次确认弹窗</strong>（标题"确认提交"）；点击"确认提交"关闭弹窗并执行提交（Toast + 关闭抽屉 + 1.5 秒刷新列表），点击"取消"仅关闭弹窗并保留表单数据。校验不通过时仍按上述 Toast 提示、停留表单。</p>
                 </div>
 
                 <div class="subsection-title" id="sub-9-7-5" style="font-size: 14px; margin-top: 16px;">9.7.5 创建成功后跳转规则</div>
@@ -4411,7 +4370,6 @@
         <div class="section" id="page-statement-detail-service">
             <div class="section-title">
                 十、对账单详情页（服务方小程序）
-                <span class="badge">service-miniapp/statement-detail.html</span>
             </div>
 
             <div class="subsection" id="sub-10-1">
@@ -4787,7 +4745,6 @@
         <div class="section" id="page-activity-service">
             <div class="section-title">
                 十一、项目动态页（服务方小程序）
-                <span class="badge">service-miniapp/activity-list.html</span>
             </div>
 
             <div class="subsection" id="sub-11-1">
@@ -4799,7 +4756,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面路径</div>
-                        <div class="info-value">/pages/project/activity-list<br><a href="service-miniapp/activity-list.html" target="_blank" style="color: var(--primary-color); text-decoration: underline;">原型：service-miniapp/activity-list.html</a></div>
+                        <div class="info-value"><a href="service-miniapp/activity-list.html" target="_blank">service-miniapp/activity-list.html</a></div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
@@ -4821,9 +4778,9 @@
 │  - 返回按钮                          │
 ├─────────────────────────────────────┤
 │  类型筛选器（顶部 chips）             │
-│  - 全部 / 任务 / 合同 / 系统          │
+│  - 全部 / 任务 / 合同          │
 │  日期筛选器（下拉 + 自定义）          │
-│  - 全部时间/今天/本周/本月/自定义     │
+│  - 全部时间/今天/昨天/近7天/近30天/自定义     │
 ├─────────────────────────────────────┤
 │  动态时间线列表                      │
 │  ┌─────────────────────────────────┐│
@@ -4900,11 +4857,11 @@
                     <tbody>
                         <tr>
                             <td>数据来源</td>
-                            <td><code>GET /api/v1/projects/:id/activities?type=task|contract|system&date=all|today|week|month|custom&page=1&size=20</code></td>
+                            <td><code>GET /api/v1/projects/:id/activities?type=task|contract&date=all|today|yesterday|week|month|custom&page=1&size=10</code></td>
                         </tr>
                         <tr>
                             <td>分页方式</td>
-                            <td>上拉加载更多，每页20条</td>
+                            <td>前端一次性加载全部动态；动态数量超过 10 条时显示"加载更多"按钮（原型当前为示意交互，点击提示"加载更多动态…"）</td>
                         </tr>
                         <tr>
                             <td>排序规则</td>
@@ -4912,15 +4869,15 @@
                         </tr>
                         <tr>
                             <td>类型筛选</td>
-                            <td>通过URL参数 <code>type</code> 传递，可选值：<code>task</code> / <code>contract</code> / <code>system</code>（不传或 <code>all</code> 表示全部）</td>
+                            <td>通过URL参数 <code>type</code> 传递，可选值：<code>task</code> / <code>contract</code>（不传或 <code>all</code> 表示全部）</td>
                         </tr>
                         <tr>
                             <td>日期筛选</td>
-                            <td>通过URL参数 <code>date</code> 传递，可选值：<code>all</code> / <code>today</code> / <code>week</code> / <code>month</code> / <code>custom</code>（custom 另需起止日期）；与类型筛选可叠加</td>
+                            <td>通过URL参数 <code>date</code> 传递，可选值：<code>all</code> / <code>today</code> / <code>yesterday</code> / <code>week</code> / <code>month</code> / <code>custom</code>（custom 另需起止日期）；与类型筛选可叠加</td>
                         </tr>
                         <tr>
                             <td>空状态</td>
-                            <td>显示空状态插图，提示"暂无动态记录"</td>
+                            <td>显示空状态插图，提示"无动态"</td>
                         </tr>
                         <tr>
                             <td>下拉刷新</td>
@@ -4949,7 +4906,7 @@
                         <tr>
                             <td>类型 / 日期筛选</td>
                             <td>切换类型 chips 或日期下拉</td>
-                            <td>重新加载数据，按所选类型（全部/任务/合同/系统）与日期区间（全部时间/今天/本周/本月/自定义）叠加筛选动态</td>
+                            <td>重新加载数据，按所选类型（全部/任务/合同）与日期区间（全部时间/今天/昨天/近7天/近30天/自定义）叠加筛选动态</td>
                         </tr>
                         <tr>
                             <td>媒体缩略图</td>
@@ -4957,9 +4914,9 @@
                             <td>全屏预览图片或播放视频</td>
                         </tr>
                         <tr>
-                            <td>上拉加载</td>
-                            <td>滚动到底部触发</td>
-                            <td>加载下一页数据，追加到列表末尾</td>
+                            <td>加载更多</td>
+                            <td>动态超过 10 条时显示"加载更多"按钮</td>
+                            <td>点击显示"加载更多动态…"提示（原型为示意交互，未实现真实分页加载）</td>
                         </tr>
                     </tbody>
                 </table>
@@ -4977,29 +4934,14 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>今天</td>
-                            <td>今天 HH:mm</td>
-                            <td>今天 14:30</td>
+                            <td>分组标签</td>
+                            <td>动态按产生时间距今天数分组，组头依次展示：今天 / 昨天 / 前天 / 3天前 / 5天前 / 10天前 / 20天前（倒序，最新在前）</td>
+                            <td>今天、昨天、前天、3天前…</td>
                         </tr>
                         <tr>
-                            <td>昨天</td>
-                            <td>昨天 HH:mm</td>
-                            <td>昨天 09:15</td>
-                        </tr>
-                        <tr>
-                            <td>本周内</td>
-                            <td>周X HH:mm</td>
-                            <td>周二 16:20</td>
-                        </tr>
-                        <tr>
-                            <td>今年内</td>
-                            <td>MM-dd HH:mm</td>
-                            <td>07-25 10:00</td>
-                        </tr>
-                        <tr>
-                            <td>去年及更早</td>
-                            <td>yyyy-MM-dd</td>
-                            <td>2025-12-01</td>
+                            <td>组内时间</td>
+                            <td>每条动态在组内显示具体时间 HH:mm</td>
+                            <td>09:00、16:30</td>
                         </tr>
                     </tbody>
                 </table>
@@ -5009,9 +4951,9 @@
                 <table>
                     <thead><tr><th>筛选维度</th><th>选项 / 交互</th><th>说明</th></tr></thead>
                     <tbody>
-                        <tr><td>类型筛选（顶部标签 chips）</td><td>全部 / 任务 / 合同 / 系统</td><td>点击切换当前类型，按动态 <code>type</code> 字段过滤；默认"全部"。原型函数 <code>filterByType(type, el)</code>。</td></tr>
-                        <tr><td>日期筛选（下拉 + 自定义）</td><td>全部时间 / 今天 / 本周 / 本月 / 自定义（起止日期）</td><td>下拉切换 <code>filterByDate(value)</code>；选择"自定义"后通过起止 <code>input[type=date]</code> 调用 <code>applyCustomDateFilter()</code> 按日期区间过滤。</td></tr>
-                        <tr><td>筛选联动</td><td>类型 × 日期 叠加</td><td>两类筛选可同时生效；筛选结果为空时展示空状态"暂无动态记录"。</td></tr>
+                        <tr><td>类型筛选（顶部标签 chips）</td><td>全部 / 任务 / 合同</td><td>点击切换当前类型，按动态 <code>type</code> 字段过滤；默认"全部"。原型函数 <code>filterByType(type, el)</code>。</td></tr>
+                        <tr><td>日期筛选（下拉 + 自定义）</td><td>全部时间 / 今天 / 昨天 / 近7天 / 近30天 / 自定义（起止日期）</td><td>下拉切换 <code>filterByDate(value)</code>；选择"自定义"后通过起止 <code>input[type=date]</code> 调用 <code>applyCustomDateFilter()</code> 按日期区间过滤。</td></tr>
+                        <tr><td>筛选联动</td><td>类型 × 日期 叠加</td><td>两类筛选可同时生效；筛选结果为空时展示空状态"无动态"。</td></tr>
                         <tr><td>结果计数</td><td>筛选区右侧 <code>totalCount</code></td><td>实时显示当前筛选结果条数。</td></tr>
                     </tbody>
                 </table>
@@ -5026,8 +4968,8 @@
                 <table>
                     <thead><tr><th>标签</th><th>取值 / 样式</th><th>说明</th></tr></thead>
                     <tbody>
-                        <tr><td>角色标签（<code>activity-role-tag</code>）</td><td>监理(supervisor) / 工长(foreman) / 施工(worker) / 设计(designer)</td><td>动态含 <code>roleClass</code> 时于头部渲染对应彩色标签；四色区分（监理蓝 / 工长绿 / 施工橙 / 设计紫）。与项目详情页（进行中-新版）保持一致。</td></tr>
-                        <tr><td>阶段标签（<code>activity-stage-tag</code>）</td><td>水电(plumbing) / 设计(design) / 基础施工(base) 等</td><td>在动态内容中以 <code>&lt;span&gt;</code> 内联展示，如"提交了[基础施工]阶段开工申请"。样式与项目详情页一致，只读展示。</td></tr>
+                        <tr><td>角色标签（<code>activity-role-tag</code>）</td><td>监理(supervisor) / 工长(foreman) / 施工(worker) / 设计(designer) / 业主(owner)</td><td>动态含 <code>roleClass</code> 时于头部渲染对应彩色标签；五色区分（监理蓝 / 工长绿 / 施工橙 / 设计紫 / 业主红）。与项目详情页（进行中-新版）保持一致。</td></tr>
+                        <tr><td>阶段标签（<code>activity-stage-tag</code>）</td><td>拆除(demolition) / 水电(plumbing) / 木作(carpentry) / 泥瓦(tiling) / 油漆(painting) / 安装(installation) / 清理(cleanup) / 设计(design) / 基础施工(base)</td><td>在动态内容中以 <code>&lt;span&gt;</code> 内联展示，如"提交了[基础施工]阶段开工申请"。样式与项目详情页一致，只读展示。</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -5061,7 +5003,6 @@
         <div class="section" id="page-detail-owner">
             <div class="section-title">
                 十二、项目详情页（业主小程序）
-                <span class="badge">owner-miniapp/project-detail.html</span>
             </div>
 
             <div class="subsection" id="sub-12-1">
@@ -5597,7 +5538,6 @@
         <div class="section" id="page-activity-owner">
             <div class="section-title">
                 十三、项目动态页（业主小程序）
-                <span class="badge">owner-miniapp/activity-list.html</span>
             </div>
 
             <div class="subsection" id="sub-13-1">
@@ -5609,7 +5549,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面路径</div>
-                        <div class="info-value">/pages/project/activity-list<br><a href="owner-miniapp/activity-list.html" target="_blank" style="color: var(--primary-color); text-decoration: underline;">原型：owner-miniapp/activity-list.html</a></div>
+                        <div class="info-value"><a href="owner-miniapp/activity-list.html" target="_blank">owner-miniapp/activity-list.html</a></div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
@@ -5642,7 +5582,7 @@
                         </tr>
                         <tr>
                             <td>类型 / 日期筛选</td>
-                            <td>提供类型筛选（全部/任务/合同/系统）与日期筛选（全部时间/今天/本周/本月/自定义），业主可据此过滤查看项目动态（详见 13.4）；仅展示业主可见的动态</td>
+                            <td>提供类型筛选（全部/任务/合同）与日期筛选（全部时间/今天/昨天/近7天/近30天/自定义），业主可据此过滤查看项目动态（详见 13.4）；仅展示业主可见的动态</td>
                         </tr>
                         <tr>
                             <td>动态点击</td>
@@ -5669,7 +5609,7 @@
                     <tbody>
                         <tr>
                             <td>类型 / 日期筛选</td>
-                            <td>✅ 可按类型（全部/任务/合同/系统）与日期（全部时间/今天/本周/本月/自定义）筛选</td>
+                            <td>✅ 可按类型（全部/任务/合同）与日期（全部时间/今天/昨天/近7天/近30天/自定义）筛选</td>
                             <td>✅ 可筛选，仅查看业主可见的动态</td>
                         </tr>
                         <tr>
@@ -5688,12 +5628,12 @@
 
             <div class="subsection" id="sub-13-4">
                 <div class="subsection-title">13.4 类型与日期筛选（业主端）</div>
-                <p>业主端项目动态页结构与服务端一致，顶部同样提供<strong>类型（全部 / 任务 / 合同 / 系统）</strong>与<strong>日期（全部时间 / 今天 / 本周 / 本月 / 自定义）</strong>筛选，二者叠加生效；业主可查看项目部、工作组、施工组各层级的动态。</p>
+                <p>业主端项目动态页结构与服务端一致，顶部同样提供<strong>类型（全部 / 任务 / 合同）</strong>与<strong>日期（全部时间 / 今天 / 昨天 / 近7天 / 近30天 / 自定义）</strong>筛选，二者叠加生效；业主仅查看本人可见的动态。</p>
             </div>
 
             <div class="subsection" id="sub-13-5">
                 <div class="subsection-title">13.5 角色标签与阶段标签（业主端）</div>
-                <p>同 11.8：动态头部展示角色标签（监理 / 工长 / 施工 / 设计）与阶段标签（水电 / 设计 / 基础施工等），样式与项目详情页保持一致，只读展示。</p>
+                <p>同 11.8：动态头部展示角色标签（监理 / 工长 / 施工 / 设计 / 业主）与阶段标签（拆除 / 水电 / 木作 / 泥瓦 / 油漆 / 安装 / 清理 / 设计 / 基础施工），样式与项目详情页保持一致，只读展示。</p>
             </div>
 
             <div class="subsection" id="sub-13-6">
@@ -5706,7 +5646,6 @@
         <div class="section" id="page-info-owner">
             <div class="section-title">
                 十四、项目信息页（业主小程序）
-                <span class="badge">owner-miniapp/project-info.html</span>
             </div>
 
             <div class="subsection" id="sub-14-1">
@@ -5897,7 +5836,6 @@
         <div class="section" id="page-architecture-owner">
             <div class="section-title">
                 十五、项目架构页（业主小程序）
-                <span class="badge">owner-miniapp/architecture.html</span>
             </div>
 
             <div class="subsection" id="sub-15-1">
@@ -6124,7 +6062,6 @@
         <div class="section" id="page-member-owner">
             <div class="section-title">
                 十六、项目成员页（业主小程序）
-                <span class="badge">owner-miniapp/member.html</span>
             </div>
 
             <div class="subsection" id="sub-16-1">
@@ -6175,7 +6112,6 @@
         <div class="section" id="page-files-owner">
             <div class="section-title">
                 十七、项目资料页（业主小程序）
-                <span class="badge">owner-miniapp/project-files.html</span>
             </div>
 
             <div class="subsection" id="sub-17-1">
@@ -6210,7 +6146,6 @@
         <div class="section" id="page-statement-list-owner">
             <div class="section-title">
                 十八、对账单列表页（业主小程序）
-                <span class="badge">owner-miniapp/statement-list.html</span>
             </div>
 
             <div class="subsection" id="sub-18-1">
@@ -6337,7 +6272,6 @@
         <div class="section" id="page-statement-detail-owner">
             <div class="section-title">
                 十九、对账单详情页（业主小程序）
-                <span class="badge">owner-miniapp/statement-detail.html</span>
             </div>
 
             <div class="subsection" id="sub-19-1">
@@ -6877,7 +6811,7 @@
                             <td>动态类型（type）</td>
                             <td>Enum</td>
                             <td><span class="tag tag-system">系统填充</span></td>
-                            <td>枚举值：contract_signed（合同签约）、task_submitted（任务提交）、task_completed（任务完成）、task_rejected（任务驳回）、task_confirm（任务确认）、member_removed（成员移除）</td>
+                            <td>枚举值：contract_signed（合同签约）、contract_audit（合同审核）、task_submitted（任务提交）、task_completed（任务完成）、task_rejected（任务驳回）、task_confirm（任务确认）</td>
                             <td>—</td>
                         </tr>
                         <tr>
@@ -6891,7 +6825,7 @@
                             <td>目标类型（target_type）</td>
                             <td>Enum</td>
                             <td><span class="tag tag-optional">选填</span></td>
-                            <td>枚举值：contract、task、statement、member</td>
+                            <td>枚举值：contract、task</td>
                             <td>—</td>
                         </tr>
                         <tr>
@@ -6929,7 +6863,7 @@
                             <td>待办类型（type）</td>
                             <td>Enum</td>
                             <td><span class="tag tag-system">系统填充</span></td>
-                            <td>枚举值：task_confirm（任务确认）、contract_review（合同审核）、statement_confirm（对账单确认）</td>
+                            <td>枚举值：task_confirm（任务确认）、contract_audit（合同审核）、statement_confirm（对账单确认）</td>
                             <td>—</td>
                         </tr>
                         <tr>

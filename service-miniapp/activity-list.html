@@ -25,22 +25,6 @@
             gap: 12px;
         }
 
-        .level-badge {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            background-color: var(--status-primary-bg);
-            border-radius: 16px;
-            font-size: 13px;
-            color: var(--primary-color);
-            flex-shrink: 0;
-        }
-
-        .level-badge .icon {
-            font-size: 14px;
-        }
-
         .date-filter {
             display: flex;
             align-items: center;
@@ -577,10 +561,6 @@
         <div class="page-content">
             <div class="filter-header">
                 <div class="filter-row">
-                    <div class="level-badge">
-                        <span class="icon">🏢</span>
-                        <span id="currentLevel">项目部</span>
-                    </div>
                     <div class="date-filter">
                         <select class="date-filter-select" id="dateFilter" onchange="filterByDate(this.value)">
                             <option value="all">全部时间</option>
@@ -793,24 +773,6 @@
                 typeLabel: '任务开始',
                 content: '提交了<span class="activity-stage-tag base">基础施工</span>阶段开工申请',
                 source: '基础施工服务合同',
-                hasMedia: false,
-                mediaCount: 0,
-                hasPermission: true
-            },
-            {
-                id: 9,
-                date: getDateString(3),
-                dateLabel: '3天前',
-                user: '陈庄',
-                avatar: '陈',
-                avatarColor: 'linear-gradient(135deg, #52C41A 0%, #73D13D 100%)',
-                time: '09:00',
-                role: '工长',
-                roleClass: 'foreman',
-                type: 'system',
-                typeLabel: '项目启动',
-                content: '创建了项目并正式启动施工',
-                source: '项目部',
                 hasMedia: false,
                 mediaCount: 0,
                 hasPermission: true
@@ -1095,9 +1057,6 @@
                 case 'task':
                     location.href = 'task-detail.html';
                     break;
-                case 'system':
-                    showToast('查看项目详情');
-                    break;
             }
         }
 
@@ -1133,10 +1092,6 @@
                 closePermissionModal();
             }
         });
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const level = urlParams.get('level') || '项目部';
-        document.getElementById('currentLevel').textContent = level;
 
         renderActivities();
     </script>

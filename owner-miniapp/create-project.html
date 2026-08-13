@@ -356,102 +356,6 @@
         .date-row .form-group {
             flex: 1;
         }
-
-        .promoter-banner {
-            background: linear-gradient(135deg, #FFF7E6 0%, #FFE7BA 100%);
-            border: 1px solid #FFD591;
-            border-radius: 12px;
-            padding: 12px 16px;
-            margin: 12px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .promoter-banner:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 159, 10, 0.2);
-        }
-
-        .promoter-banner .banner-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex: 1;
-        }
-
-        .promoter-banner .banner-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #FF9F43 0%, #FFA726 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            flex-shrink: 0;
-        }
-
-        .promoter-banner .banner-content {
-            flex: 1;
-        }
-
-        .promoter-banner .banner-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #D48806;
-            margin-bottom: 2px;
-        }
-
-        .promoter-banner .banner-desc {
-            font-size: 12px;
-            color: #AD6800;
-        }
-
-        .promoter-banner .banner-arrow {
-            color: #FF9F43;
-            font-size: 18px;
-        }
-
-        .promoter-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: linear-gradient(135deg, #FF9F43 0%, #FFA726 100%);
-            color: #FFFFFF;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-
-        .promoter-badge .badge-icon {
-            font-size: 14px;
-        }
-
-        .promoter-tip {
-            display: none;
-            background-color: #E6F7FF;
-            border: 1px solid #91D5FF;
-            border-radius: 8px;
-            padding: 8px 12px;
-            margin: 0 16px 12px;
-            font-size: 12px;
-            color: #0050B3;
-        }
-
-        .promoter-tip.show {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .promoter-tip .tip-icon {
-            font-size: 16px;
-        }
     </style>
 <style>
         /* 微信原生胶囊占位（样式参考真机效果，由微信客户端实际渲染） */
@@ -501,35 +405,14 @@
             <div class="back" onclick="history.back()">← 返回</div>
             <div class="title centered">
                 创建项目
-                <span class="promoter-badge" id="promoterBadge" style="display: none;">
-                    <span class="badge-icon">⭐</span>
-                    <span>项目发起人</span>
-                </span>
             </div>
-            
-        
+
             <div class="actions"><div class="native-capsule" title="微信原生胶囊：由微信客户端渲染，开发者不可自定义其内容"><span class="nc-left">⋯</span><span class="nc-divider"></span><span class="nc-right">○</span></div></div>
         </div>
-            
 
-        
+
+
         <div class="page-content">
-            <div class="promoter-banner" id="promoterBanner" onclick="goToPromoterAuth()">
-                <div class="banner-left">
-                    <div class="banner-icon">💰</div>
-                    <div class="banner-content">
-                        <div class="banner-title">成为项目发起人可享受项目分利</div>
-                        <div class="banner-desc">立即认证，开启收益之旅</div>
-                    </div>
-                </div>
-                <div class="banner-arrow">›</div>
-            </div>
-            
-            <div class="promoter-tip" id="promoterTip">
-                <span class="tip-icon">✓</span>
-                <span>您已是认证项目发起人，可享受项目分利权益</span>
-            </div>
-            
             <form id="createForm">
                 <div class="form-section">
                     <div class="form-group">
@@ -732,29 +615,7 @@
         let selectedHouseType = '';
         let selectedStyles = [];
         let uploadedFiles = [];
-        let isPromoter = false;
-        
-        function checkPromoterStatus() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const promoterStatus = urlParams.get('promoter');
-            
-            if (promoterStatus === 'certified' || localStorage.getItem('isPromoter') === 'true') {
-                isPromoter = true;
-                localStorage.setItem('isPromoter', 'true');
-                showPromoterStatus();
-            }
-        }
-        
-        function showPromoterStatus() {
-            document.getElementById('promoterBanner').style.display = 'none';
-            document.getElementById('promoterTip').classList.add('show');
-            document.getElementById('promoterBadge').style.display = 'inline-flex';
-        }
-        
-        function goToPromoterAuth() {
-            location.href = 'promoter-auth.html';
-        }
-        
+
         function showModal(title, content, onConfirm, showCancel = true) {
             document.getElementById('modalTitle').textContent = title;
             document.getElementById('modalContent').textContent = content;
@@ -1009,8 +870,6 @@
                 }
             });
         });
-        
-        checkPromoterStatus();
     </script>
 </body>
 </html>

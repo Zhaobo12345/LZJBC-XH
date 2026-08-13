@@ -232,7 +232,7 @@
 
         .contract-header {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             padding: 12px 16px;
             background-color: var(--bg-secondary);
             cursor: pointer;
@@ -254,49 +254,74 @@
             color: #FFFFFF;
             font-size: 16px;
             margin-right: 12px;
+            flex-shrink: 0;
         }
 
-        .contract-header .contract-info {
+        .contract-header .contract-main {
             flex: 1;
+            min-width: 0;
         }
 
         .contract-header .contract-name {
             font-size: 15px;
             font-weight: 600;
             color: var(--text-primary);
+            line-height: 20px;
+        }
+
+        .contract-header .contract-footer-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-top: 4px;
+            flex-wrap: wrap;
         }
 
         .contract-header .contract-meta {
             font-size: 12px;
             color: var(--text-tertiary);
-            margin-top: 2px;
+            line-height: 16px;
+            white-space: nowrap;
         }
 
-        .contract-header .contract-stats {
+        .contract-header .contract-progress {
             display: flex;
-            gap: 12px;
-            margin-right: 12px;
+            align-items: center;
+            gap: 8px;
+            flex: 1 1 120px;
+            min-width: 96px;
         }
 
-        .contract-header .stat-badge {
+        .contract-header .progress-track {
+            flex: 1;
+            height: 6px;
+            min-width: 50px;
+            background-color: #F0F0F0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .contract-header .progress-fill {
+            height: 100%;
+            width: 0;
+            background-color: var(--success-color);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .contract-header .progress-text {
             font-size: 12px;
-            padding: 2px 8px;
-            border-radius: 10px;
-        }
-
-        .contract-header .stat-badge.pending {
-            background-color: var(--status-warning-bg);
-            color: var(--warning-color);
-        }
-
-        .contract-header .stat-badge.confirming {
-            background-color: var(--status-primary-bg);
-            color: var(--primary-color);
+            color: var(--text-tertiary);
+            white-space: nowrap;
         }
 
         .contract-header .arrow {
             color: var(--text-tertiary);
             transition: transform 0.3s;
+            margin-left: 8px;
+            flex-shrink: 0;
+            line-height: 20px;
         }
 
         .contract-header .arrow.expanded {
@@ -501,6 +526,12 @@
             color: var(--text-tertiary);
         }
 
+        .task-item .task-status.config {
+            background-color: transparent;
+            color: var(--text-tertiary);
+            border: 1px dashed var(--border-color);
+        }
+
         .task-item .task-status-text {
             display: flex;
             align-items: center;
@@ -518,6 +549,12 @@
         .task-item .task-status-text.pending {
             background-color: var(--status-warning-bg);
             color: var(--warning-color);
+        }
+
+        .task-item .task-status-text.config {
+            background-color: #F5F5F5;
+            color: #8C8C8C;
+            border: 1px solid #E8E8E8;
         }
 
         .task-item .task-status-text.confirming {
@@ -617,6 +654,12 @@
         .task-item .task-tag.temp {
             background-color: #F9F0FF;
             color: #722ED1;
+        }
+
+        .task-item .task-tag.rejected {
+            background-color: #FFF1F0;
+            color: var(--error-color);
+            border: 1px solid #FFCCC7;
         }
 
         .task-item .task-meta {
@@ -1146,6 +1189,7 @@
                     <div class="status-dropdown" id="statusDropdownMenu">
                         <div class="status-dropdown-item active" data-status="all">全部状态</div>
                         <div class="status-dropdown-item" data-status="pending">待开始</div>
+                        <div class="status-dropdown-item" data-status="config">待配置</div>
                         <div class="status-dropdown-item" data-status="executing">执行中</div>
                         <div class="status-dropdown-item" data-status="confirming">确认中</div>
                         <div class="status-dropdown-item" data-status="completed">已完成</div>
@@ -1162,13 +1206,15 @@
                 <div class="contract-section" data-contract="contract-1">
                     <div class="contract-header" onclick="toggleContract(this)">
                         <div class="contract-icon">📄</div>
-                        <div class="contract-info">
+                        <div class="contract-main">
                             <div class="contract-name">水电分包合同</div>
-                            <div class="contract-meta">水电工作组 · 4个阶段 · 12个任务</div>
-                        </div>
-                        <div class="contract-stats">
-                            <span class="stat-badge pending">待开始 3</span>
-                            <span class="stat-badge confirming">确认中 1</span>
+                            <div class="contract-footer-row">
+                                <div class="contract-meta">水电工作组 · 4个阶段 · 13个任务</div>
+                                <div class="contract-progress">
+                                    <div class="progress-track"><div class="progress-fill"></div></div>
+                                    <div class="progress-text">已完成 0/0</div>
+                                </div>
+                            </div>
                         </div>
                         <div class="arrow expanded">▼</div>
                     </div>
@@ -1297,7 +1343,7 @@
                             <div class="stage-header" onclick="toggleStage(this)">
                                 <div class="stage-dot"></div>
                                 <div class="stage-name">收尾阶段</div>
-                                <div class="stage-count">0/2 待开始</div>
+                                <div class="stage-count">待配置 1 · 待开始 2</div>
                                 <div class="arrow">▼</div>
                             </div>
                             <div class="task-list">
@@ -1317,6 +1363,14 @@
                                     </div>
                                     <div class="task-status-text pending"><span class="status-icon">⏸</span>待开始</div>
                                 </div>
+                                <div class="task-item" data-type="contract" data-status="config" data-priority="normal" data-participant="true" onclick="goToTaskDetail(this)">
+                                    <div class="task-status config">⚙</div>
+                                    <div class="task-info">
+                                        <div class="task-name">智能家居设备预配置</div>
+                                        <div class="task-meta">执行人：李四 · 确认人：张三、王五</div>
+                                    </div>
+                                    <div class="task-status-text config">待配置</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1325,13 +1379,15 @@
                 <div class="contract-section" data-contract="contract-2">
                     <div class="contract-header" onclick="toggleContract(this)">
                         <div class="contract-icon" style="background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%);">📄</div>
-                        <div class="contract-info">
+                        <div class="contract-main">
                             <div class="contract-name">泥瓦分包合同</div>
-                            <div class="contract-meta">泥瓦工作组 · 3个阶段 · 8个任务</div>
-                        </div>
-                        <div class="contract-stats">
-                            <span class="stat-badge pending">待开始 2</span>
-                            <span class="stat-badge confirming">确认中 1</span>
+                            <div class="contract-footer-row">
+                                <div class="contract-meta">泥瓦工作组 · 3个阶段 · 8个任务</div>
+                                <div class="contract-progress">
+                                    <div class="progress-track"><div class="progress-fill"></div></div>
+                                    <div class="progress-text">已完成 0/0</div>
+                                </div>
+                            </div>
                         </div>
                         <div class="arrow">▼</div>
                     </div>
@@ -1367,7 +1423,7 @@
                             <div class="stage-header" onclick="toggleStage(this)">
                                 <div class="stage-dot confirming"></div>
                                 <div class="stage-name">贴砖阶段</div>
-                                <div class="stage-count">1/3 进行中</div>
+                                <div class="stage-count">确认中 1 · 待开始 2</div>
                                 <div class="arrow">▼</div>
                             </div>
                             <div class="task-list">
@@ -1390,7 +1446,19 @@
                                         <div class="task-meta">执行人：王五 · 确认人：张三、李四</div>
                                     </div>
                                     <div class="task-status-text pending"><span class="status-icon">⏸</span>待开始</div>
+                                </div>
+                                <div class="task-item" data-type="contract" data-status="pending" data-priority="normal" data-participant="true" onclick="goToTaskDetail(this)">
+                                    <div class="task-status pending">○</div>
+                                    <div class="task-info">
+                                        <div class="task-name">墙砖空鼓复检 <span class="task-tag rejected">已驳回</span></div>
+                                        <div class="task-meta">执行人：王五 · 确认人：李四</div>
+                                        <div class="confirm-progress">
+                                            <div class="confirm-progress-bar"><div class="confirm-progress-fill" style="width: 100%; background-color: var(--error-color);"></div></div>
+                                            <div class="confirm-progress-text" style="color: var(--error-color);">已驳回 · 需重新执行</div>
+                                        </div>
                                     </div>
+                                    <div class="task-status-text pending"><span class="status-icon">⏸</span>待开始</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1399,12 +1467,15 @@
                 <div class="contract-section" data-contract="contract-3">
                     <div class="contract-header" onclick="toggleContract(this)">
                         <div class="contract-icon" style="background: linear-gradient(135deg, #FA8C16 0%, #FFA940 100%);">📄</div>
-                        <div class="contract-info">
+                        <div class="contract-main">
                             <div class="contract-name">木工分包合同</div>
-                            <div class="contract-meta">木工工作组 · 2个阶段 · 4个任务</div>
-                        </div>
-                        <div class="contract-stats">
-                            <span class="stat-badge pending">待开始 4</span>
+                            <div class="contract-footer-row">
+                                <div class="contract-meta">木工工作组 · 2个阶段 · 4个任务</div>
+                                <div class="contract-progress">
+                                    <div class="progress-track"><div class="progress-fill"></div></div>
+                                    <div class="progress-text">已完成 0/0</div>
+                                </div>
+                            </div>
                         </div>
                         <div class="arrow">▼</div>
                     </div>
@@ -1441,12 +1512,15 @@
                 <div class="contract-section" data-contract="contract-4">
                     <div class="contract-header" onclick="toggleContract(this)">
                         <div class="contract-icon" style="background: linear-gradient(135deg, #722ED1 0%, #9254DE 100%);">📄</div>
-                        <div class="contract-info">
+                        <div class="contract-main">
                             <div class="contract-name">油漆分包合同</div>
-                            <div class="contract-meta">油漆工作组 · 2个阶段 · 4个任务</div>
-                        </div>
-                        <div class="contract-stats">
-                            <span class="stat-badge pending">待开始 4</span>
+                            <div class="contract-footer-row">
+                                <div class="contract-meta">油漆工作组 · 2个阶段 · 4个任务</div>
+                                <div class="contract-progress">
+                                    <div class="progress-track"><div class="progress-fill"></div></div>
+                                    <div class="progress-text">已完成 0/0</div>
+                                </div>
+                            </div>
                         </div>
                         <div class="arrow">▼</div>
                     </div>
@@ -1786,8 +1860,48 @@
             }
         }
         
+        let _defaultExpand = null;
+        function snapshotExpandState() {
+            if (_defaultExpand) return;
+            _defaultExpand = { sg: new Map(), tl: new Map() };
+            document.querySelectorAll('.stage-group').forEach(el => _defaultExpand.sg.set(el, el.classList.contains('show')));
+            document.querySelectorAll('.task-list').forEach(el => _defaultExpand.tl.set(el, el.classList.contains('show')));
+        }
+        function restoreExpandState() {
+            if (!_defaultExpand) return;
+            _defaultExpand.sg.forEach((shouldShow, el) => {
+                el.classList.toggle('show', shouldShow);
+                const section = el.closest('.contract-section');
+                const arrow = section && section.querySelector('.contract-header .arrow');
+                if (arrow) arrow.classList.toggle('expanded', shouldShow);
+            });
+            _defaultExpand.tl.forEach((shouldShow, el) => {
+                el.classList.toggle('show', shouldShow);
+                const header = el.previousElementSibling;
+                const arrow = header && header.querySelector('.arrow');
+                if (arrow) arrow.classList.toggle('expanded', shouldShow);
+            });
+        }
+        function expandAncestors(task) {
+            const tl = task.closest('.task-list');
+            if (tl) {
+                tl.classList.add('show');
+                const arrow = tl.previousElementSibling && tl.previousElementSibling.querySelector('.arrow');
+                if (arrow) arrow.classList.add('expanded');
+            }
+            const sg = task.closest('.stage-group');
+            if (sg) {
+                sg.classList.add('show');
+                const section = sg.closest('.contract-section');
+                const arrow = section && section.querySelector('.contract-header .arrow');
+                if (arrow) arrow.classList.add('expanded');
+            }
+        }
+
         function filterTasks() {
             const searchText = document.getElementById('searchInput').value.toLowerCase();
+            snapshotExpandState();
+            const isFiltering = !(currentFilters.contract === 'all' && currentFilters.type === 'all' && currentFilters.status === 'all' && !currentFilters.mine && !searchText);
             const contractSections = document.querySelectorAll('.contract-section');
             let totalVisible = 0;
             let pendingCount = 0;
@@ -1835,6 +1949,7 @@
                         task.style.display = visible ? 'flex' : 'none';
                         
                         if (visible) {
+                            expandAncestors(task);
                             stageVisibleCount++;
                             contractVisibleCount++;
                             totalVisible++;
@@ -1907,16 +2022,16 @@
             });
             
             document.getElementById('resultCount').textContent = '共 ' + totalVisible + ' 个任务';
-            document.getElementById('totalCount').textContent = totalVisible;
-            document.getElementById('pendingCount').textContent = pendingCount;
-            document.getElementById('confirmingCount').textContent = confirmingCount;
-            document.getElementById('completedCount').textContent = completedCount;
-            
+
             const emptyState = document.getElementById('emptyState');
             if (totalVisible === 0) {
                 emptyState.style.display = 'flex';
             } else {
                 emptyState.style.display = 'none';
+            }
+
+            if (!isFiltering) {
+                restoreExpandState();
             }
         }
         
@@ -2109,6 +2224,22 @@
             }
         }
 
+        function renderContractProgress() {
+            document.querySelectorAll('.contract-section').forEach(function(section) {
+                const items = section.querySelectorAll('.task-item');
+                const total = items.length;
+                let completed = 0;
+                items.forEach(function(it) {
+                    if (it.dataset.status === 'completed') completed++;
+                });
+                const pct = total ? Math.round(completed / total * 100) : 0;
+                const fill = section.querySelector('.progress-fill');
+                const text = section.querySelector('.progress-text');
+                if (fill) fill.style.width = pct + '%';
+                if (text) text.textContent = '已完成 ' + completed + '/' + total;
+            });
+        }
+
         function checkSequentialTasks() {
             const contractSections = document.querySelectorAll('.contract-section');
             
@@ -2177,6 +2308,7 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             checkSequentialTasks();
+            renderContractProgress();
             
             const participantOptions = document.querySelectorAll('.filter-option');
             participantOptions.forEach(function(option) {

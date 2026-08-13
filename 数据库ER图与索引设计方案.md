@@ -168,12 +168,11 @@ erDiagram
     tasks {
         String id PK "UUID主键"
         String task_no UK "任务编号TK+日期+流水号"
-        String stage_id FK "关联stages.id(临时任务为null)"
+        String stage_id FK "关联stages.id"
         String project_id FK "关联projects.id"
         String contract_id FK "关联contracts.id"
         String arch_node_id FK "关联project_architecture.id"
         String name "任务名称"
-        Boolean is_temporary "是否临时任务"
         Text execution_standard "执行标准"
         Text confirmation_standard "确认标准"
         Text responsibility_standard "担责标准"
@@ -368,7 +367,7 @@ erDiagram
     contracts ||--o{ tasks : "contract_id"
     contracts ||--o{ statements : "contract_id"
 
-    stages ||--o{ tasks : "stage_id(临时任务可为null)"
+    stages ||--o{ tasks : "stage_id"
 
     tasks ||--o{ execution_records : "task_id"
     tasks ||--o{ task_evaluations : "task_id(每个确认人一条)"
@@ -499,7 +498,6 @@ erDiagram
         String arch_node_id FK
         String executor_id FK
         String confirmer_id FK
-        Boolean is_temporary
         Enum status
     }
     execution_records {
@@ -569,9 +567,9 @@ erDiagram
 | 17 | contract_changes | confirmed_by | users | id | N:1 | 业主确认人 |
 | 18 | stages | contract_id | contracts | id | N:1 | 一个合同可有多个阶段 |
 | 19 | stages | template_id | stage_templates | id | N:1 | 来源模板 |
-| 20 | tasks | stage_id | stages | id | N:1 | 临时任务可为null |
+| 20 | tasks | stage_id | stages | id | N:1 | — |
 | 21 | tasks | project_id | projects | id | N:1 | — |
-| 22 | tasks | contract_id | contracts | id | N:1 | 可为null(临时任务) |
+| 22 | tasks | contract_id | contracts | id | N:1 | — |
 | 23 | tasks | arch_node_id | project_architecture | id | N:1 | 可为null |
 | 24 | tasks | executor_id | users | id | N:1 | 执行人 |
 | 25 | tasks | confirmer_id | users | id | N:1 | 确认人 |
@@ -607,8 +605,6 @@ erDiagram
 | project_architecture 自引用 | `parent_id` 引用自身 `id`，形成4级树形结构：项目部(L1)→工作组(L2)→施工组(L3)→任务包(L4) |
 | task_evaluations(task_id, evaluator_id) | **每个确认人仅一条评价**，唯一索引为(task_id, evaluator_id)联合唯一，而非仅task_id |
 | statements 自引用 | `related_statement_id` 引用自身 `id`，对账单驳回后重新提交时关联原单 |
-| tasks.stage_id 可空 | 临时任务(is_temporary=true)不关联合同阶段，stage_id为null |
-| tasks.contract_id 可空 | 临时任务可不关联合同 |
 | messages.sender_id 可空 | null表示系统消息 |
 | contracts.template_id 可空 | 可不使用模板手动创建 |
 | invite_records.target_node_id 可空 | 邀请加入项目时不一定指定架构节点 |

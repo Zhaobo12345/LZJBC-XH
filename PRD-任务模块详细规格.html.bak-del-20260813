@@ -270,9 +270,8 @@
         <ul class="sidebar-toc-list">
             <li class="toc-group-title">公共规格</li>
             <li><a href="#task-status-machine">一、任务状态机</a></li>
-            <li class="toc-sub"><a href="#sub-1-1">1.1 状态定义</a></li>
-            <li class="toc-sub"><a href="#sub-1-2">1.2 确认结果与主状态映射</a></li>
-            <li class="toc-sub"><a href="#sub-1-3">1.3 无确认人快捷完成（状态流转场景）</a></li>
+            <li class="toc-sub"><a href="#sub-x1">状态定义</a></li>
+            <li class="toc-sub"><a href="#sub-x2">确认结果与主状态映射</a></li>
             <li class="toc-group-title">服务方小程序</li>
             <li><a href="#page-task-list-service">二、全部任务（服务方）</a></li>
             <li class="toc-sub"><a href="#sub-2-1">2.1 页面概述</a></li>
@@ -302,49 +301,53 @@
             <li class="toc-sub"><a href="#sub-3-17">3.17 已完成</a></li>
             <li class="toc-sub"><a href="#sub-3-18">3.18 已完成（含驳回）</a></li>
             <li class="toc-sub"><a href="#sub-3-19">3.19 驳回后待开始</a></li>
-            <li><a href="#page-todo-list-service">四、全部待办页（服务方）</a></li>
+            <li><a href="#page-task-acceptance-service">四、任务验收页（服务方）</a></li>
             <li class="toc-sub"><a href="#sub-4-1">4.1 页面概述</a></li>
-            <li class="toc-sub"><a href="#sub-4-2">4.2 页面结构</a></li>
-            <li class="toc-sub"><a href="#sub-4-3">4.3 待办类型与来源</a></li>
-            <li class="toc-sub"><a href="#sub-4-4">4.4 筛选规格</a></li>
-            <li class="toc-sub"><a href="#sub-4-5">4.5 待办卡片规格</a></li>
-            <li class="toc-sub"><a href="#sub-4-6">4.6 交互流程</a></li>
-            <li class="toc-sub"><a href="#sub-4-7">4.7 交互效果</a></li>
-            <li class="toc-group-title">业主小程序</li>
-            <li><a href="#page-task-list-owner">五、全部任务（业主）</a></li>
+            <li><a href="#page-todo-list-service">五、全部待办页（服务方）</a></li>
             <li class="toc-sub"><a href="#sub-5-1">5.1 页面概述</a></li>
-            <li class="toc-sub"><a href="#sub-5-2">5.2 与服务方差异</a></li>
-            <li><a href="#page-task-detail-owner">六、任务详情页（业主）</a></li>
-            <li class="toc-sub"><a href="#sub-6-1">6.1 与服务方差异</a></li>
-            <li class="toc-sub"><a href="#sub-6-2">6.2 业主确认按钮规格</a></li>
-            <li class="toc-sub"><a href="#sub-6-3">6.3 任务详情页按状态分视角详述（业主方）</a></li>
-            <li class="toc-sub"><a href="#sub-6-4">6.4 待配置（业主只读）</a></li>
-            <li class="toc-sub"><a href="#sub-6-5">6.5 待开始（业主只读）</a></li>
-            <li class="toc-sub"><a href="#sub-6-6">6.6 待开始（前置阻塞）（业主只读）</a></li>
-            <li class="toc-sub"><a href="#sub-6-7">6.7 执行中（业主只读）</a></li>
-            <li class="toc-sub"><a href="#sub-6-8">6.8 确认中（业主可确认）</a></li>
-            <li class="toc-sub"><a href="#sub-6-9">6.9 确认中（被驳回后）（业主可确认）</a></li>
-            <li class="toc-sub"><a href="#sub-6-10">6.10 已完成（业主可评价）</a></li>
-            <li class="toc-sub"><a href="#sub-6-11">6.11 已完成（含驳回）（业主可评价）</a></li>
-            <li class="toc-sub"><a href="#sub-6-12">6.12 驳回后待开始（业主只读）</a></li>
-            <li><a href="#page-todo-list-owner">七、全部待办页（业主）</a></li>
-            <li class="toc-sub"><a href="#sub-7-1">7.1 页面概述</a></li>
-            <li class="toc-sub"><a href="#sub-7-2">7.2 与服务方差异</a></li>
-            <li class="toc-sub"><a href="#sub-7-3">7.3 筛选规格</a></li>
-            <li class="toc-sub"><a href="#sub-7-4">7.4 交互流程</a></li>
-            <li class="toc-sub"><a href="#sub-7-5">7.5 交互效果</a></li>
-            <li class="toc-sub"><a href="#sub-7-6">7.6 对账单确认待办（服务方提交触发）</a></li>
-            <li class="toc-sub"><a href="#sub-7-7">7.7 生成规则</a></li>
-            <li class="toc-sub"><a href="#sub-7-8">7.8 待办内容规格</a></li>
-            <li class="toc-sub"><a href="#sub-7-9">7.9 交互与完成规则</a></li>
+            <li class="toc-sub"><a href="#sub-5-2">5.2 页面结构</a></li>
+            <li class="toc-sub"><a href="#sub-5-3">5.3 待办类型与来源</a></li>
+            <li class="toc-sub"><a href="#sub-5-4">5.4 筛选规格</a></li>
+            <li class="toc-sub"><a href="#sub-5-5">5.5 待办卡片规格</a></li>
+            <li class="toc-sub"><a href="#sub-5-6">5.6 交互流程</a></li>
+            <li class="toc-sub"><a href="#sub-5-7">5.7 交互效果</a></li>
+            <li class="toc-group-title">业主小程序</li>
+            <li><a href="#page-task-list-owner">六、全部任务（业主）</a></li>
+            <li class="toc-sub"><a href="#sub-6-1">6.1 页面概述</a></li>
+            <li class="toc-sub"><a href="#sub-6-2">6.2 与服务方差异</a></li>
+            <li><a href="#page-task-detail-owner">七、任务详情页（业主）</a></li>
+            <li class="toc-sub"><a href="#sub-7-1">7.1 与服务方差异</a></li>
+            <li class="toc-sub"><a href="#sub-7-2">7.2 业主确认按钮规格</a></li>
+            <li class="toc-sub"><a href="#sub-7-3">7.3 任务详情页按状态分视角详述（业主方）</a></li>
+            <li class="toc-sub"><a href="#sub-7-4">7.4 待配置（业主只读）</a></li>
+            <li class="toc-sub"><a href="#sub-7-5">7.5 待开始（业主只读）</a></li>
+            <li class="toc-sub"><a href="#sub-7-6">7.6 待开始（前置阻塞）（业主只读）</a></li>
+            <li class="toc-sub"><a href="#sub-7-7">7.7 执行中（业主只读）</a></li>
+            <li class="toc-sub"><a href="#sub-7-8">7.8 确认中（业主可确认）</a></li>
+            <li class="toc-sub"><a href="#sub-7-9">7.9 确认中（被驳回后）（业主可确认）</a></li>
+            <li class="toc-sub"><a href="#sub-7-10">7.10 已完成（业主可评价）</a></li>
+            <li class="toc-sub"><a href="#sub-7-11">7.11 已完成（含驳回）（业主可评价）</a></li>
+            <li class="toc-sub"><a href="#sub-7-12">7.12 驳回后待开始（业主只读）</a></li>
+            <li><a href="#page-task-acceptance-owner">八、任务验收页（业主）</a></li>
+            <li class="toc-sub"><a href="#sub-8-1">8.1 页面概述</a></li>
+            <li><a href="#page-todo-list-owner">九、全部待办页（业主）</a></li>
+            <li class="toc-sub"><a href="#sub-9-1">9.1 页面概述</a></li>
+            <li class="toc-sub"><a href="#sub-9-2">9.2 与服务方差异</a></li>
+            <li class="toc-sub"><a href="#sub-9-3">9.3 筛选规格</a></li>
+            <li class="toc-sub"><a href="#sub-9-4">9.4 交互流程</a></li>
+            <li class="toc-sub"><a href="#sub-9-5">9.5 交互效果</a></li>
+            <li class="toc-sub"><a href="#sub-9-6">9.6 对账单确认待办（服务方提交触发）</a></li>
+            <li class="toc-sub"><a href="#sub-x3">生成规则</a></li>
+            <li class="toc-sub"><a href="#sub-x4">待办内容规格</a></li>
+            <li class="toc-sub"><a href="#sub-x5">交互与完成规则</a></li>
             <li class="toc-group-title">公共规格</li>
-            <li><a href="#validation-rules">八、字段校验规则</a></li>
-            <li class="toc-sub"><a href="#sub-8-1">8.1 任务基本信息字段</a></li>
-            <li class="toc-sub"><a href="#sub-8-2">8.2 执行记录表字段</a></li>
-            <li class="toc-sub"><a href="#sub-8-3">8.3 确认记录表字段</a></li>
-            <li><a href="#task-api-summary">九、API接口汇总</a></li>
-            <li class="toc-sub"><a href="#sub-9-1">9.1 任务列表接口</a></li>
-            <li class="toc-sub"><a href="#sub-9-2">9.2 任务详情接口</a></li>
+            <li><a href="#validation-rules">十、字段校验规则</a></li>
+            <li class="toc-sub"><a href="#sub-10-1">10.1 任务基本信息字段</a></li>
+            <li class="toc-sub"><a href="#sub-10-2">10.2 执行记录表字段</a></li>
+            <li class="toc-sub"><a href="#sub-10-3">10.3 确认记录表字段</a></li>
+            <li><a href="#task-api-summary">十一、API接口汇总</a></li>
+            <li class="toc-sub"><a href="#sub-11-1">11.1 任务列表接口</a></li>
+            <li class="toc-sub"><a href="#sub-11-2">11.2 任务详情接口</a></li>
         </ul>
     </nav>
 
@@ -404,7 +407,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-1-1">1.1 状态定义</div>
+                <div class="subsection-title" id="sub-x1">状态定义</div>
                 <table>
                     <thead>
                         <tr>
@@ -450,7 +453,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-1-2">1.2 确认结果与主状态映射</div>
+                <div class="subsection-title" id="sub-x2">确认结果与主状态映射</div>
                 <p>「确认中」为多人确认阶段，确认人对单条确认记录给出<strong>确认结果</strong>（confirmed / rejected）；该结果<strong>不是任务主状态</strong>，而是驱动任务主状态流转的依据：</p>
                 <table>
                     <thead><tr><th>确认结果</th><th>触发条件</th><th>任务主状态变化</th><th>记录处理</th></tr></thead>
@@ -463,7 +466,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-1-3">1.3 无确认人快捷完成（状态流转场景）</div>
+                <div class="subsection-title" id="sub-x3">无确认人快捷完成（状态流转场景）</div>
                 <p>确认人为<strong>选填</strong>角色。当任务<strong>未配置任何确认人</strong>（确认人列表为空）时，确认环节无对象参与，系统自动跳过「确认中」阶段，建立一条「执行中 → 已完成」的快捷流转分支：</p>
                 <table>
                     <thead><tr><th>触发条件</th><th>状态流转</th><th>可执行 / 跳过操作</th><th>记录生成</th></tr></thead>
@@ -900,13 +903,6 @@
                     </tbody>
                 </table>
                 <div class="note">说明：原型上传控件按系统选择器类型通配接收（accept = image/*, video/*, audio/*），不限定具体扩展名；数量、大小、时长限制见上表，单文件不超过 20MB。常见格式列举如上，仅作示意，以各端系统选择器实际可选项为准。</div>
-                <div class="note">
-                    <div class="note-title">限制项校验实现口径</div>
-                    <p>上表「文件大小」「视频 / 音频时长」等限制<strong>无法靠 accept 属性实现</strong>：accept 仅按文件类型过滤选择范围，既不限制大小、也不限制时长，必须依靠<strong>显式校验逻辑</strong>落实。建议口径如下：</p>
-                    <p>① <strong>客户端预校验（选完即拦，体验最优）</strong>：用户选完文件后，立即读取该文件的<strong>大小</strong>与<strong>时长</strong>进行判断（视频时长超过 3 分钟、或单文件超过 20MB 则直接提示并丢弃），避免无效上传。</p>
-                    <p>② <strong>服务端权威校验（防绕过）</strong>：文件上传后，由服务端用媒体探针读取真实<strong>大小</strong>与<strong>时长</strong>，超限则拒收并返回错误，必要时可对超大视频转码压缩以节省存储与带宽。</p>
-                    <p>注：限制能否真正生效取决于是否实现上述校验。原型当前仅记录文件大小、尚未落地大小 / 时长校验，属待补实现。</p>
-                </div>
             </div>
 
             <div class="subsection">
@@ -989,13 +985,13 @@
                 <p><strong>驳回：</strong>确认人点击"驳回" → 弹出驳回弹窗（可上传附件、必填驳回原因）→ 点击"确认驳回" → 系统校验驳回原因（空或超长均拦截并 Toast 提示）→ 校验通过则驳回生效。</p>
 
                 <h4 style="margin-top: 16px;">状态流转</h4>
-                <p><strong>通过后的状态流转：</strong>任务主状态由「确认中」流转为「已完成」；若该任务此前曾被驳回页面效果为「已完成（含驳回）」。多确认人场景下需全部确认人确认通过才完成流转，期间展示确认进度（如"确认进度：1/3"）。确认成功 Toast 中部显示"确认成功"，持续 2 秒。</p>
+                <p><strong>通过后的状态流转：</strong>任务主状态由「确认中」流转为「已完成」；若该任务此前曾被驳回（即处于「确认中（被驳回后）」），则流转为「已完成（含驳回）」。多确认人场景下需全部确认人才完成流转，期间展示确认进度（如"确认进度：1/3"）。确认成功 Toast 中部显示"确认成功"，持续 2 秒。</p>
                 <p><strong>驳回后的状态流转：</strong>任务主状态由「确认中」回退为「待开始」，呈现为「驳回后待开始（REJECTED_PENDING）」；若该任务为「确认中（被驳回后）」再次被驳回，仍回退至「待开始」由执行人重新执行。任务在「待开始」列表以"已驳回·需重新执行"标识呈现。</p>
 
-                <h4 style="margin-top: 16px;">多确认人确认与驳回（状态流转细化）</h4>
-                <p><strong>第一人确认后其他确认人的效果：</strong>多确认人场景下，第一位确认人确认通过后，任务主状态<strong>仍保持「确认中」</strong>，不发生完成流转；其余确认人保持"待确认"状态，继续等待逐一确认。确认进度实时更新（如"确认进度：1/3" → "2/3" → "全部确认人已确认"），步骤条进度同步推进（"x/3 已确认"）。每位确认人在本轮内仅可确认 / 驳回<strong>一次</strong>，已确认的确认人不再出现在"待确认"队列；只有<strong>全部</strong>确认人确认通过，任务才流转为「已完成」（此前曾被驳回则呈现「已完成（含驳回）」）。</p>
-                <p><strong>任一确认人驳回后，此前已确认人仍需重新确认（需求）：</strong>多确认人场景下，<strong>任一</strong>确认人发起驳回，任务即回退为「驳回后待开始（REJECTED_PENDING）」，由执行人重新执行。此时<strong>不论其他确认人此前是否已确认，"所有"确认人的确认状态均被重置为"待确认"</strong>，需在执行人重新提交执行记录、任务再次进入「确认中」后，<strong>逐一重新确认</strong>——即此前已确认的确认人<strong>不能豁免</strong>，必须再次确认方计入新一轮进度。被驳回轮次产生的各确认人确认记录标记为"已驳回"并留存（含驳回原因），<strong>不计入</strong>新一轮确认进度。</p>
-
+                <div class="note">
+                    <div class="note-title">无确认人场景（本节操作不适用）</div>
+                    <p>当任务<strong>未配置确认人</strong>时，不存在确认 / 驳回的发起对象，本节「确认通过 / 驳回」操作及对应字段必填校验<strong>均不适用</strong>：执行人提交执行记录后任务直接流转为「已完成」（快捷完成，跳过「确认中」），不生成确认记录、不触发确认进度与确认结果。该场景见 §一「无确认人快捷完成（状态流转场景）」。</p>
+                </div>
 
                 <h4 style="margin-top: 16px;">相关记录生成与动态生成</h4>
                 <p><strong>相关记录生成：</strong>确认通过后生成一条确认记录（确认人、确认时间、附件、评语、综合评星、评价标签），状态记为"已确认"；驳回后生成一条驳回记录（确认人、驳回时间、附件、驳回原因），状态记为"已驳回"并留存驳回原因，原确认/执行相关记录保留为历史。</p>
@@ -1342,14 +1338,52 @@
         
         </div>
 
-        <!-- ==================== 待办管理（服务方） ==================== -->
-        <div class="section" id="page-todo-list-service">
+        <!-- ==================== 3. 任务验收页（服务方） ==================== -->
+        <div class="section" id="page-task-acceptance-service">
             <div class="section-title">
-                四、全部待办页（服务方小程序）
+                四、任务验收页（服务方小程序）
             </div>
 
             <div class="subsection">
                 <div class="subsection-title" id="sub-4-1">4.1 页面概述</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">页面名称</div>
+                        <div class="info-value">任务验收页</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面路径</div>
+                        <div class="info-value"><a href="service-miniapp/task-acceptance.html" target="_blank">service-miniapp/task-acceptance.html</a></div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">适用角色</div>
+                        <div class="info-value">全部（确认人身份时可操作验收）</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面入口</div>
+                        <div class="info-value">订阅消息通知、任务详情页确认按钮</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">页面类型</div>
+                        <div class="info-value">验收确认页</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note">
+                <div class="note-title">页面说明</div>
+                <p>任务验收页是任务详情页的简化版本，专门用于确认人快速验收任务。页面结构与任务详情页类似，但底部操作栏固定显示"确认通过"和"驳回"按钮。</p>
+            </div>
+        </div>
+
+        <!-- ==================== 待办管理（服务方） ==================== -->
+        <div class="section" id="page-todo-list-service">
+            <div class="section-title">
+                五、全部待办页（服务方小程序）
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="sub-5-1">5.1 页面概述</div>
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">页面名称</div>
@@ -1379,7 +1413,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-4-2">4.2 页面结构</div>
+                <div class="subsection-title" id="sub-5-2">5.2 页面结构</div>
                 <div class="code-block">
 ┌─────────────────────────────────────┐
 │  导航栏                              │
@@ -1400,7 +1434,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-4-3">4.3 待办类型与来源</div>
+                <div class="subsection-title" id="sub-5-3">5.3 待办类型与来源</div>
                 <table>
                     <thead>
                         <tr>
@@ -1480,7 +1514,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-4-4">4.4 筛选规格</div>
+                <div class="subsection-title" id="sub-5-4">5.4 筛选规格</div>
                 <table>
                     <thead>
                         <tr>
@@ -1510,7 +1544,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-4-5">4.5 待办卡片规格</div>
+                <div class="subsection-title" id="sub-5-5">5.5 待办卡片规格</div>
                 <table>
                     <thead>
                         <tr>
@@ -1544,7 +1578,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-4-6">4.6 交互流程</div>
+                <div class="subsection-title" id="sub-5-6">5.6 交互流程</div>
                 <div class="code-block">
 1. 进入页面
    - 默认选中"全部"Tab，展示所有待办事项
@@ -1564,7 +1598,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-4-7">4.7 交互效果</div>
+                <div class="subsection-title" id="sub-5-7">5.7 交互效果</div>
                 <table>
                     <thead>
                         <tr>
@@ -1601,11 +1635,11 @@
         <!-- ==================== 4. 全部任务（业主） ==================== -->
         <div class="section" id="page-task-list-owner">
             <div class="section-title">
-                五、全部任务（业主小程序）
+                六、全部任务（业主小程序）
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-5-1">5.1 页面概述</div>
+                <div class="subsection-title" id="sub-6-1">6.1 页面概述</div>
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">页面名称</div>
@@ -1627,7 +1661,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-5-2">5.2 与服务方差异</div>
+                <div class="subsection-title" id="sub-6-2">6.2 与服务方差异</div>
                 <table>
                     <thead>
                         <tr>
@@ -1667,15 +1701,15 @@
             </div>
         </div>
 
-        <!-- ==================== 六、任务详情页（业主） ==================== -->
+        <!-- ==================== 七、任务详情页（业主） ==================== -->
         <div class="section" id="page-task-detail-owner">
             <div class="section-title">
-                六、任务详情页（业主小程序）
+                七、任务详情页（业主小程序）
                 <span class="badge"><a href="owner-miniapp/task-detail.html" target="_blank">owner-miniapp/task-detail.html</a></span>
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-6-1">6.1 与服务方差异</div>
+                <div class="subsection-title" id="sub-7-1">7.1 与服务方差异</div>
                 <table>
                     <thead>
                         <tr>
@@ -1715,7 +1749,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-6-2">6.2 业主确认按钮规格</div>
+                <div class="subsection-title" id="sub-7-2">7.2 业主确认按钮规格</div>
                 <table>
                     <thead>
                         <tr>
@@ -1749,7 +1783,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-6-3">6.3 任务详情页按状态分视角详述（业主方）</div>
+                <div class="subsection-title" id="sub-7-3">7.3 任务详情页按状态分视角详述（业主方）</div>
                 <p class="section-desc">本章基于业主小程序原型（owner-miniapp/task-detail.html）对任务详情页在<strong>每一种状态</strong>下的页面表现，结合<strong>业主视角</strong>单独展开描述，涵盖逻辑、权限、效果、字段、交互五个维度。与「三、任务详情页（服务方）」不同，业主端<strong>只有业主这一种固定视角、无角色切换器</strong>；业主在任务中扮演的角色是<strong>确认人之一</strong>（以及任务相关方查看者），不具备配置人 / 执行人能力。</p>
                 <div class="note"><div class="note-title">业主不支持配置任务（与 2.7 待配置角色操作的区别）</div><p>「2.7 任务状态详解（服务方全部任务列表）」中「待配置」状态的角色操作写明「合同甲乙方及合同创建者可配置执行人、配置确认人、提交任务」——这是<strong>服务方</strong>配置人（项目经理 / 工长）的能力。业主端<strong>不存在配置人角色、不提供任何任务配置入口</strong>：业主查看「待配置」态任务时仅能只读等待（提示"任务正在配置中，请等待配置完成"），既不能配置执行人 / 确认人，也不能提交任务。此为产品设计特殊约定，<strong>业主特殊不支持配置</strong>，特此说明。</p></div>
                 <h4>业主端页面通用区块</h4>
@@ -1763,7 +1797,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-6-4">6.4 待配置（业主只读）</div>
+                <div class="subsection-title" id="sub-7-4">7.4 待配置（业主只读）</div>
                 <h4>逻辑</h4>
                 <p>任务已生成但尚未配置执行人与确认人。业主在原型中作为「未来确认人」被动等待，页面无任何配置入口。</p>
                 <h4>权限与用户视角</h4>
@@ -1777,7 +1811,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-6-5">6.5 待开始（业主只读）</div>
+                <div class="subsection-title" id="sub-7-5">7.5 待开始（业主只读）</div>
                 <h4>逻辑</h4>
                 <p>执行人已配置，等待执行人开始执行。业主作为未来确认人只读等待。</p>
                 <h4>权限与用户视角</h4>
@@ -1791,7 +1825,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-6-6">6.6 待开始（前置阻塞）（业主只读）</div>
+                <div class="subsection-title" id="sub-7-6">7.6 待开始（前置阻塞）（业主只读）</div>
                 <h4>逻辑</h4>
                 <p>任务设置了「按序执行」且前置任务未完成，进入阻塞。业主只读查看阻塞信息。</p>
                 <h4>权限与用户视角</h4>
@@ -1805,7 +1839,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-6-7">6.7 执行中（业主只读）</div>
+                <div class="subsection-title" id="sub-7-7">7.7 执行中（业主只读）</div>
                 <h4>逻辑</h4>
                 <p>执行人已上传记录尚未提交确认。业主可查看执行人提交的进度与内容。</p>
                 <h4>权限与用户视角</h4>
@@ -1819,7 +1853,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-6-8">6.8 确认中（业主可确认）</div>
+                <div class="subsection-title" id="sub-7-8">7.8 确认中（业主可确认）</div>
                 <h4>逻辑</h4>
                 <p>执行人已提交，等待确认人确认。业主在确认人列表中且轮到其确认时，底部显示「确认通过 / 驳回」。</p>
                 <h4>权限与用户视角</h4>
@@ -1836,7 +1870,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-6-9">6.9 确认中（被驳回后）（业主可确认）</div>
+                <div class="subsection-title" id="sub-7-9">7.9 确认中（被驳回后）（业主可确认）</div>
                 <h4>逻辑</h4>
                 <p>任务曾被驳回（主状态回退待开始），执行人重新提交后进入第 2 轮确认。业主视角与服务方「确认中（被驳回后）」一致，并额外可见历史记录。</p>
                 <h4>权限与用户视角</h4>
@@ -1850,7 +1884,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-6-10">6.10 已完成（业主可评价）</div>
+                <div class="subsection-title" id="sub-7-10">7.10 已完成（业主可评价）</div>
                 <h4>逻辑</h4>
                 <p>全部确认人确认通过。业主作为确认人可对执行人进行评价。</p>
                 <h4>权限与用户视角</h4>
@@ -1867,7 +1901,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-6-11">6.11 已完成（含驳回）（业主可评价）</div>
+                <div class="subsection-title" id="sub-7-11">7.11 已完成（含驳回）（业主可评价）</div>
                 <h4>逻辑</h4>
                 <p>任务经历驳回、执行人重新提交后最终全部确认通过。业主视角与服务方「已完成（含驳回）」一致，历史记录区保留曾驳回过程。</p>
                 <h4>权限与用户视角</h4>
@@ -1881,7 +1915,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-6-12">6.12 驳回后待开始（业主只读）</div>
+                <div class="subsection-title" id="sub-7-12">7.12 驳回后待开始（业主只读）</div>
                 <h4>逻辑</h4>
                 <p>确认中有人驳回后主状态<strong>回退</strong>为待开始（状态回退效果），确认记录与驳回原因<strong>留存</strong>。业主只读查看，等待执行人重新执行。</p>
                 <h4>权限与用户视角</h4>
@@ -1897,14 +1931,32 @@
 
         </div>
 
-        <!-- ==================== 待办管理（业主方） ==================== -->
-        <div class="section" id="page-todo-list-owner">
+        <!-- ==================== 八、任务验收页（业主） ==================== -->
+        <div class="section" id="page-task-acceptance-owner">
             <div class="section-title">
-                七、全部待办页（业主小程序）
+                八、任务验收页（业主小程序）
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-7-1">7.1 页面概述</div>
+                <div class="subsection-title" id="sub-8-1">8.1 页面概述</div>
+                <p>业主任务验收页与服务方验收页功能类似，主要差异：</p>
+                <ul style="margin-top: 12px; padding-left: 20px;">
+                    <li>确认通过后<strong>必须</strong>进行星级评价</li>
+                    <li>评价内容会作为业主对服务的正式评价记录</li>
+                    <li>业主的评价会显示在执行人的服务评分中</li>
+                </ul>
+            </div>
+        </div>
+
+
+        <!-- ==================== 待办管理（业主方） ==================== -->
+        <div class="section" id="page-todo-list-owner">
+            <div class="section-title">
+                九、全部待办页（业主小程序）
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="sub-9-1">9.1 页面概述</div>
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">页面名称</div>
@@ -1934,7 +1986,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-7-2">7.2 与服务方差异</div>
+                <div class="subsection-title" id="sub-9-2">9.2 与服务方差异</div>
                 <table>
                     <thead>
                         <tr>
@@ -1969,7 +2021,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-7-3">7.3 筛选规格</div>
+                <div class="subsection-title" id="sub-9-3">9.3 筛选规格</div>
                 <p>业主端筛选逻辑与服务方完全一致：全部 / 待处理 / 已处理三个Tab，各Tab角标显示对应数量，切换时按 data-status 过滤显示。</p>
                 <table>
                     <thead>
@@ -1996,7 +2048,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-7-4">7.4 交互流程</div>
+                <div class="subsection-title" id="sub-9-4">9.4 交互流程</div>
                 <div class="code-block">
 1. 进入页面
    - 默认选中"全部"Tab，展示所有待办事项
@@ -2014,12 +2066,12 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-7-5">7.5 交互效果</div>
+                <div class="subsection-title" id="sub-9-5">9.5 交互效果</div>
                 <p>业主端交互效果与服务方完全一致：Tab切换高亮、卡片Hover效果、空状态显示、导航栏菜单等，详见 <a href="#page-todo-list-service">5.7 交互效果</a>。</p>
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-7-6">7.6 对账单确认待办（服务方提交触发）</div>
+                <div class="subsection-title" id="sub-9-6">9.6 对账单确认待办（服务方提交触发）</div>
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">待办类型</div>
@@ -2047,10 +2099,10 @@
                     </div>
                 </div>
 
-                <div class="subsection-title" style="margin-top:16px;" id="sub-7-7">7.7 生成规则</div>
+                <div class="subsection-title" style="margin-top:16px;" id="sub-x3">生成规则</div>
                 <p>服务方在「对账单」列表页点击新增，填写关联合同、账单类型、本次金额、用途描述并提交（经「确认提交」二次确认弹窗）成功后，系统自动为当前对账单的<strong>确认人（业主）</strong>生成一条「对账单确认」待办项。每个成功提交的对账单仅生成一条对应待办；重复提交不会重复生成。</p>
 
-                <div class="subsection-title" style="margin-top:16px;" id="sub-7-8">7.8 待办内容规格</div>
+                <div class="subsection-title" style="margin-top:16px;" id="sub-x4">待办内容规格</div>
                 <table>
                     <thead>
                         <tr>
@@ -2088,7 +2140,7 @@
                     </tbody>
                 </table>
 
-                <div class="subsection-title" style="margin-top:16px;" id="sub-7-9">7.9 交互与完成规则</div>
+                <div class="subsection-title" style="margin-top:16px;" id="sub-x5">交互与完成规则</div>
                 <div class="code-block">
 1. 业主在「全部待办」页（业主小程序）看到该待办，位于"待处理"分组
 2. 点击待办卡片 → 跳转 statement-detail.html?status=pending&role=confirmer
@@ -2105,11 +2157,11 @@
         <!-- ==================== 字段校验规则 ==================== -->
         <div class="section" id="validation-rules">
             <div class="section-title">
-                八、字段校验规则
+                十、字段校验规则
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-8-1">8.1 任务基本信息字段</div>
+                <div class="subsection-title" id="sub-10-1">10.1 任务基本信息字段</div>
                 <table>
                     <thead>
                         <tr>
@@ -2168,7 +2220,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-8-2">8.2 执行记录表字段（execution_records）</div>
+                <div class="subsection-title" id="sub-10-2">10.2 执行记录表字段（execution_records）</div>
                 <table>
                     <thead>
                         <tr>
@@ -2220,7 +2272,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-8-3">8.3 确认记录表字段（task_confirmations）</div>
+                <div class="subsection-title" id="sub-10-3">10.3 确认记录表字段（task_confirmations）</div>
                 <table>
                     <thead>
                         <tr>
@@ -2284,11 +2336,11 @@
         <!-- ==================== API接口汇总 ==================== -->
         <div class="section" id="task-api-summary">
             <div class="section-title">
-                九、API接口汇总
+                十一、API接口汇总
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-9-1">9.1 任务列表接口</div>
+                <div class="subsection-title" id="sub-11-1">11.1 任务列表接口</div>
                 <table>
                     <thead>
                         <tr>
@@ -2316,7 +2368,7 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-9-2">9.2 任务详情接口</div>
+                <div class="subsection-title" id="sub-11-2">11.2 任务详情接口</div>
                 <table>
                     <thead>
                         <tr>
