@@ -82,8 +82,8 @@
         },
         worker_confirmed_receiver: {
             text: '已确认', bannerClass: 'confirmed',
-            desc: '您已成为本合同乙方，已自动加入项目架构层级。请上传签约文件，上传后合同正式生效。',
-            actions: [{ text: '上传签约文件', type: 'primary', action: 'upload' }]
+            desc: '您已成为本合同乙方，已自动加入项目架构层级。等待发起方上传已签署的纸质合同扫描件，上传后合同正式生效。',
+            actions: []
         },
         worker_lost_receiver: {
             text: '已确认', bannerClass: 'confirmed',
@@ -963,8 +963,7 @@
                 '<div class="download-btn" onclick="WCP.showToast(\'预览文件\')">👁️</div></div>';
         }
         if (status === 'worker_confirmed_receiver') {
-            return '<div class="sign-file-drop">请上传已签署的纸质合同扫描件 / 照片' +
-                '<div class="sf-btn" onclick="WCP.pickSignFile()">选择文件并上传</div></div>';
+            return '<div class="sign-file-wait">等待发起方上传已签署的纸质合同扫描件，上传后合同正式生效。</div>';
         }
         if (status === 'worker_confirmed_sender') {
             return '<div class="sign-file-drop">请上传已签署的纸质合同扫描件 / 照片' +
@@ -1053,9 +1052,8 @@
 
     function handleAction(action) {
         if (action === 'view') return;
-        if (action === 'upload') { pickSignFile(); return; }
         // 已确认(发起方)：上传签约文件——参考「上传变更签约文件（新页面）」整页上传流程，跳转到独立上传页
-        // （worker-sign-upload.html），上传成功后由该页跳回「已签约」（V1）。不影响受邀方内联上传流程。
+        // （worker-sign-upload.html），上传成功后由该页跳回「已签约」（V1）。受邀方视角不支持上传签约文件（见 worker_confirmed_receiver）。
         if (action === 'upload_sign') { global.location.href = 'worker-sign-upload.html'; return; }
         // 变更签约中：参考「合同详情（合规版）」的上传变更签约文件流程——跳转到独立上传页面，上传成功后由该页跳回「已签约」
         if (action === 'upload_change_sign') { global.location.href = 'worker-change-sign-upload.html'; return; }

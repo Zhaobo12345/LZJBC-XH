@@ -300,7 +300,8 @@ const TaskDetailPage = (function() {
         showToast('设置成功，将消息通知执行人！');
         
         setTimeout(() => {
-            updateTaskStatus(TaskStatus.PENDING);
+            // 前置阻塞态下改派执行人不解除阻塞，保持当前阻塞状态；其余情况回到「待开始」
+            updateTaskStatus(currentTaskStatus === TaskStatus.PENDING_BLOCKED ? TaskStatus.PENDING_BLOCKED : TaskStatus.PENDING);
         }, 500);
     }
     
@@ -874,6 +875,11 @@ const TaskDetailPage = (function() {
     }
     
     function showSubmitConfirmModal() {
+        // 未上传执行记录时，禁止提交确认 / 完成任务，提示先上传
+        if (executionRecordsList.length === 0) {
+            showToast('请先上传执行记录，再提交确认 / 完成任务');
+            return;
+        }
         const hasConfirmers = currentConfirmers.length > 0;
         const modalTitle = document.getElementById('submitModalTitle');
         const modalText = document.getElementById('submitModalText');
@@ -1249,9 +1255,13 @@ const TaskDetailPage = (function() {
                     var fixedBar=document.getElementById('fixedUploadBar');if(fixedBar)fixedBar.style.display='block'; var fixedBar = document.getElementById('fixedUploadBar'); if (fixedBar) fixedBar.style.display = 'block';
                     const hasConfirmers = currentConfirmers.length > 0;
                     const submitBtnText = hasConfirmers ? '提交确认' : '完成任务';
+                    // 未上传执行记录时，「提交确认 / 完成任务」按钮置灰且不可点击
+                    const canSubmit = executionRecordsList.length > 0;
                     if (actionButtons) actionButtons.innerHTML = `
                         <div class="btn secondary" onclick="showUploadRecordModal()">上传记录</div>
-                        <div class="btn primary" onclick="showSubmitConfirmModal()">${submitBtnText}</div>
+                        ${canSubmit
+                            ? `<div class="btn primary" onclick="showSubmitConfirmModal()">${submitBtnText}</div>`
+                            : `<div class="btn primary disabled" style="opacity:0.5;cursor:not-allowed;" title="请先上传执行记录，再提交确认 / 完成任务">${submitBtnText}</div>`}
                     `;
                 } else if (currentUserRole === 'confirmer') {
                     if (actionButtons) actionButtons.innerHTML = `
@@ -1311,8 +1321,8 @@ const TaskDetailPage = (function() {
             const preTaskBlockTip = document.getElementById('preTaskBlockTip');
             if (preTaskBlockTip) {
                 preTaskBlockTip.textContent = currentUserRole === 'executor'
-                    ? '💡 前置任务完成后将自动通知您'
-                    : '💡 前置任务完成后将自动通知执行人';
+                    ? '💡 完成后将自动通知您'
+                    : '💡 完成后将自动通知执行人';
             }
             
             if (executionRecordCard) executionRecordCard.style.display = 'none';
@@ -1326,12 +1336,15 @@ const TaskDetailPage = (function() {
             executorList.style.display = 'flex';
             executorItem.style.display = 'flex';
             noExecutorView.style.display = 'none';
-            addExecutorBtn.style.display = 'none';
-            
+
             if (currentUserRole === 'configurer') {
+                addExecutorBtn.style.display = 'flex';
+                addExecutorBtn.innerHTML = '<span class="edit-icon">✎</span> 修改执行人';
+                addExecutorBtn.onclick = function() { showExecutorSelector(true); };
                 renderConfiguringConfirmerList();
                 if (addConfirmerBtn) addConfirmerBtn.style.display = 'flex';
             } else {
+                addExecutorBtn.style.display = 'none';
                 renderConfirmerList();
                 if (addConfirmerBtn) addConfirmerBtn.style.display = 'none';
             }
@@ -2616,7 +2629,15 @@ const TaskDetailPage = (function() {
         
         if (status === TaskStatus.CONFIGURING) {
             currentUserRole = role === 'other' ? 'other' : 'configurer';
-        } else if (status === TaskStatus.PENDING || status === TaskStatus.REJECTED_PENDING) {
+        } else if (status === TaskStatus.PENDING) {
+            // 待开始态：角色切换器显示（含配置人视角），renderPending 已完整支持配置人/执行人/确认人/其他视角
+            if (role === 'configurer') currentUserRole = 'configurer';
+            else if (role === 'confirmer') currentUserRole = 'confirmer';
+            else if (role === 'other') currentUserRole = 'other';
+            else if (role === 'nonExecutor') currentUserRole = 'nonExecutor';
+            else currentUserRole = 'executor';
+        } else if (status === TaskStatus.REJECTED_PENDING) {
+            // 驳回后待开始态：配置人视角不可达（角色切换器隐藏），仅执行人/非执行人
             currentUserRole = role === 'nonExecutor' ? 'nonExecutor' : 'executor';
         } else if (status === TaskStatus.PENDING_BLOCKED) {
             if (role === 'confirmer') {
@@ -2801,6 +2822,14 @@ const TaskDetailPage = (function() {
         window.location.href = `task-report.html?taskId=${taskId}`;
     }
 
+    /**
+     * 跳转前置任务详情页（演示：前置任务「开槽布管」当前为进行中）
+     * 真实环境应携带前置任务 id：task-detail.html?taskId=<preTaskId>
+     */
+    function goToPreTaskDetail() {
+        window.location.href = 'task-detail.html?status=in_progress&role=executor';
+    }
+
     function showEvaluationListModal() {
         const evaluationListBody = document.getElementById('evaluationListBody');
         
@@ -2942,6 +2971,7 @@ const TaskDetailPage = (function() {
     }
     
     document.addEventListener('DOMContentLoaded', function() {
+        initFromUrl();
         initProfileClickEvents();
         
         // 将外部模态框移动到 .phone-frame 内部
@@ -3009,6 +3039,7 @@ const TaskDetailPage = (function() {
     window.closeUploadModal = closeUploadModal;
     window.removeRecordFile = removeRecordFile;
     window.goToTaskReport = goToTaskReport;
+    window.goToPreTaskDetail = goToPreTaskDetail;
     
     return {
         init: initFromUrl,

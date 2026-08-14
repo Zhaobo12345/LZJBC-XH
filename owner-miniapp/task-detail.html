@@ -687,8 +687,8 @@
             </div>
             <div class="page-nav-title" style="margin-top: 12px;">更多状态（含驳回流程）</div>
             <div class="status-switcher">
-                <div class="status-switch-item" onclick="updateTaskStatus('confirming_after_reject')">确认中（被驳回后）</div>
                 <div class="status-switch-item" onclick="updateTaskStatus('rejected_pending')">驳回后待开始</div>
+                <div class="status-switch-item" onclick="updateTaskStatus('confirming_after_reject')">确认中（驳回后再次执行）</div>
                 <div class="status-switch-item" onclick="updateTaskStatus('completed_with_reject')">已完成（含驳回）</div>
             </div>
             <div class="page-nav-title" style="margin-top: 12px;">前置任务阻塞效果</div>
@@ -705,7 +705,6 @@
                 <div class="status-switch-item role-switch-item" onclick="switchUserRole('other')">其他用户视角</div>
             </div>
             <div class="status-switcher" id="configuringRoleSwitcher" style="margin-top: 8px; display: none;">
-                <div class="status-switch-item role-switch-item active" onclick="switchUserRole('configurer')">配置人视角</div>
                 <div class="status-switch-item role-switch-item" onclick="switchUserRole('other')">其他用户视角</div>
             </div>
         </div>

@@ -4,6 +4,7 @@
 - **中断即取消**：当用户在消息中途发出 "Interrupted by user" 或明确表示"取消/不需要"某任务后，紧接着给出新的指令，则被中断的任务视为**已被取消**，不得继续执行或顺带落地。只执行用户新给出的指令。
 - 单点改动、逐项确认的工作流（create-contract / worker-contract 等原型迭代）延续：代码定稿后再同步 PRD/文档（除非用户说"仅改代码"）。
 - **PRD 中英文书写顺序约定（2026-08-10 确认）**：文档**以中文说明为主、代码/数据库标识为辅**。凡「状态码 / 枚举值 / 标签类型」等有中文对照者，一律 **中文在前、英文 key 置于括号内**（`初始拟定（worker_draft_initial）`），**禁止** `worker_draft_initial（初始拟定）` 这类英文前置；状态机表格列序固定为 `显示文案 | 状态 key | …`（中文列在首）。**例外（保持英文在前）**：技术标识符 / 组件名 / 代码表达式 / URL 片段，即括号内是规格说明而非中文译名者——如 `localStorage（无后端）`、`Header（56px）`、`SectionTab（内容/阶段/附件切换Tab）`、`textarea（可编辑）`、`hasChangeContent === true（阶段或任务有变更）`、`POST /api/v1/contracts/:id/reject（需填写驳回原因）`。
+- **PRD 英文规范强约束（2026-08-14 重申）**：向 PRD 新增/修改段落时，**交付前必须先自查正文裸英文**——凡字段名、状态名、枚举值、子字段（如媒体文件的 name/type/size）等有中文对照者，一律「中文（英文标识符）」前置（`媒体文件（files）`、`name（文件名）`），**禁止** `<code>files</code>` / `<code>name</code>` 这类裸英文标识符；仅 MIME 类型（`<code>image/*</code>`）、URL 片段、代码表达式等纯技术字面量可保留英文并置于 `<code>`。每轮改动后用 Grep 扫 `<code>` 与裸露英文字母串确认无违规再交付。
 - **PRD 文档撰写约定（2026-08-10 确认）**：当前产品需求文档为**第一版**，撰写时**不要**写入"本版已取消 X / 已移除 X / 已取消（历史留存参考）"等**历史对比 / 前后差异**表述，也不要为已砍掉的功能保留"已取消"专节；直接按当前最终方案描述，章节编号保持连续无空缺。功能取舍仅在代码层记忆（见下方「产品决策与功能取消记录」）留存，不在 PRD 营造前后对比效果。
 - 改动前置约束：任何修改都不得影响基础施工服务合同 / 设计服务合同 的原流程（工人合同逻辑一律经 `isWorkerType` / 独立页面门控）。
 
@@ -40,6 +41,7 @@
 
 ## 产品决策与功能取消记录
 - **本版合同已取消「引导到电脑端编辑合同内容」功能**（2026-08-10 确认）：基础施工服务合同（service-miniapp/contract-detail.*）不再提供任何"复制电脑端编辑链接 / 推荐使用电脑端编辑"等引导。已从 `contract-detail.html` 删除 `editGuideBox`（含"复制电脑端编辑链接"）与 `pcEditGuide`（含"复制链接到电脑端编辑"）两段；从 `contract-detail.js` 删除 `copyEditLink`/`fallbackCopy`/`showPCEditGuide` 函数及其公共 API 与 `window.*` 别名（均无外部调用，为死代码）。后续**勿再恢复** PC 端编辑引导相关 UI/逻辑。
+- **工人合同「已确认（受邀方）」不支持上传签约文件（2026-08-14 确认）**：V1 签约的纸质合同扫描件**仅由发起方（工长·甲方）上传**（对应 `worker_confirmed_sender` 的内联 `pickSignFile` 与整页 `worker-sign-upload.html`）；受邀方（`worker_confirmed_receiver`）与接单体验 E（`worker-contract-receive.html` 已确认态）**不得提供任何上传签约文件入口/按钮**，改为只读"等待发起方上传签约文件"提示。代码改动：`worker-contract-detail.js`（STATUS_CONFIG 去 `upload` 动作 + `renderSignArea` 改等待态 + 删除 `handleAction('upload')` 死分支）；`worker-contract-receive.html`（下一步流程第 1 步与吸底 CTA 改为等待提示，删除 `doUpload()`）。PRD 同步：§7.5.1 状态机表、§8.2 页面结构图、§8.4 受邀方状态表 三处去除"受邀方上传签约文件"表述。
 - **基础合同阶段编辑器存在两套并行体系（重要，易踩坑）**：
   - 拟定中编辑表单（`#editStageList`，阶段卡片 class = `.stage-card`）：由 `renderStagesFromSnapshot`/`loadDraftSnapshot`/`collectDraftSnapshot` 维护，用户在拟定中实际操作的就是它。
   - 变更流程阶段编辑器（`#stageEditContainer`，阶段卡片 class = `.stage-edit-item`）：位于变更 Tab（`change-tab-content#stage-task`），仅变更申请流程使用，`addNewStage` 仍向它追加 `.stage-edit-item`。

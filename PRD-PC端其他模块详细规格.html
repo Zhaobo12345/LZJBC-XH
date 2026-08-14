@@ -315,7 +315,7 @@
 
                 <div class="note">
                     <div class="note-title">交互说明</div>
-                    <div>以下筛选、搜索、排序规则已在原型（pc-contract-template.html）中落地：顶部工具栏「搜索 / 重置」按钮可实时过滤右侧表格；左侧模板类型树点击可即时筛选对应类型；两类筛选之间及与顶部城市/状态条件均为 <b>AND</b> 叠加；分页「共 N 条」随筛选结果实时刷新。原型列表为演示数据（6 条静态行 + 静态 count），筛选按实际渲染行生效。</div>
+                    <div>以下筛选、搜索、排序规则已在原型（pc-contract-template.html）中落地：顶部工具栏「搜索 / 重置」按钮可实时过滤右侧表格；左侧模板类型树点击可即时筛选对应类型；两类筛选之间及与顶部城市/状态条件均为 <b>与</b> 叠加；分页「共 N 条」随筛选结果实时刷新。原型列表为演示数据（6 条静态行 + 静态 count），筛选按实际渲染行生效。</div>
                 </div>
 
                 <div class="subsection-title" style="font-size: 16px;">1.3.1 列表页布局与组成</div>
@@ -367,7 +367,7 @@
                     <li><strong>取值同源：</strong>模板类型树节点的名称与列表「模板类型」列的标签取值完全一致（同一枚举：基础施工服务合同 / 设计服务合同 / 拆除班组服务合同 / 水电班组服务合同 / 木作班组服务合同 / 泥瓦工班组服务合同 / 油漆工班组服务合同 / 小零工服务合同），二者强关联。</li>
                     <li><strong>count 含义：</strong>节点右侧数字为该分类下模板数量，由列表数据实时统计得出（原型中为演示值，新增/发布/停用时同步刷新）；点击节点即按该类型精确过滤右侧列表。</li>
                     <li><strong>互斥单选：</strong>模板类型树为单选，点击节点高亮 active（蓝底蓝字），其余节点取消高亮；"全部模板" 等价于"不按模板类型过滤"。</li>
-                    <li><strong>叠加关系：</strong>左侧模板类型筛选与右侧顶部工具栏的搜索/城市/状态筛选为 <strong>AND（同时满足）</strong> 叠加。</li>
+                    <li><strong>叠加关系：</strong>左侧模板类型筛选与右侧顶部工具栏的搜索/城市/状态筛选为 <strong>与（同时满足）</strong> 叠加。</li>
                 </ul>
 
                 <div class="subsection-title" style="font-size: 16px;">1.3.4 顶部搜索与筛选条件匹配规则</div>
@@ -380,9 +380,9 @@
                     </tbody>
                 </table>
                 <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
-                    <li>三个顶部控件之间为 <strong>AND</strong> 关系：需同时满足名称模糊命中、城市精确相等、状态精确相等。</li>
-                    <li>顶部筛选再与左侧模板类型树叠加，仍为 AND（四类条件全部命中才出现在列表）。</li>
-                    <li>「搜索」按钮（applyFilters）触发按上述条件过滤；「重置」按钮（resetFilters）清空名称/城市/状态并恢复“全部模板”选中，列表与类型树 count 同步刷新。</li>
+                    <li>三个顶部控件之间为 <strong>与</strong> 关系：需同时满足名称模糊命中、城市精确相等、状态精确相等。</li>
+                    <li>顶部筛选再与左侧模板类型树叠加，仍为 与（四类条件全部命中才出现在列表）。</li>
+                    <li>「搜索」按钮触发按上述条件过滤；「重置」按钮清空名称/城市/状态并恢复“全部模板”选中，列表与类型树 count 同步刷新。</li>
                 </ul>
 
                 <div class="subsection-title" style="font-size: 16px;">1.3.5 列表排序与分页</div>
@@ -403,7 +403,7 @@
 
                 <div class="subsection-title" style="font-size: 16px;">1.4.1 入口与弹窗布局</div>
                 <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
-                    <li><strong>入口：</strong>列表页内容头右上角"新建模板"按钮（showCreateModal()）→ 弹出大型弹窗（pc-modal-xl），标题"新建合同文本模板"。</li>
+                    <li><strong>入口：</strong>列表页内容头右上角"新建模板"按钮→ 弹出大型弹窗（pc-modal-xl），标题"新建合同文本模板"。</li>
                     <li><strong>弹窗结构：</strong>基本信息区（模板名称 / 模板类型 / 适用城市 / 模板描述）+ 合同正文区（富文本编辑器，含工具栏）。底部操作：取消 / 保存草稿 / 保存并发布。预览通过点击列表模板名称滑出右侧面板（600px）。</li>
                 </ul>
 
@@ -438,7 +438,7 @@
                         <tr><td>富文本工具栏</td><td>加粗(B)/斜体(I)/下划线(U)/左中右对齐/有序·无序列表/插入表格/图片/链接；激活态按钮蓝底白字</td></tr>
                         <tr><td>插入表格 / 图片 / 链接</td><td>弹 prompt 输入行数/列数/URL/描述，确认后以 HTML 插入光标处</td></tr>
                         <tr><td>保存草稿</td><td>存为草稿（不发布），关闭弹窗，列表<b>最上方</b>新增一行（状态「草稿」），提示"已保存草稿"</td></tr>
-                        <tr><td>保存并发布</td><td>先执行 1.4.3 校验（含同城市启用模板重名校验），通过则关闭弹窗并 Toast"模板已保存并发布"；列表<b>最上方</b>新增一行（状态默认启用）并按当前筛选条件重算列表（applyFilters）</td></tr>
+                        <tr><td>保存并发布</td><td>先执行 1.4.3 校验（含同城市启用模板重名校验），通过则关闭弹窗并 轻提示"模板已保存并发布"；列表<b>最上方</b>新增一行（状态默认启用）并按当前筛选条件重算列表</td></tr>
                         <tr><td>取消</td><td>关闭弹窗，不保存任何内容</td></tr>
                         <tr><td>点击列表模板名称</td><td>右侧滑出预览面板（600px，previewPanel），展示正文与版本历史；可关闭</td></tr>
                     </tbody>
@@ -447,7 +447,7 @@
                 <div class="subsection-title" style="font-size: 16px;">1.4.5 保存流程与状态流转</div>
                 <div class="note">
                     <div class="note-title">两种保存动作的差异</div>
-                    <div>新建 / 编辑弹窗底部提供「保存草稿」与「保存并发布」两个动作，二者在<b>校验强度</b>与<b>生成的状态</b>上不同，对应实现分别为 <code>saveDraft()</code> 与 <code>saveTemplate()</code>（status=active）。</div>
+                    <div>新建 / 编辑弹窗底部提供「保存草稿」与「保存并发布」两个动作，二者在<b>校验强度</b>与<b>生成的状态</b>上不同，对应实现分别为「保存草稿」动作与「保存并发布」动作（状态=启用）。</div>
                 </div>
                 <table>
                     <thead><tr><th>维度</th><th>保存草稿</th><th>保存并发布</th></tr></thead>
@@ -457,20 +457,20 @@
                         <tr><td>校验强度</td><td>仅校验「模板名称」非空</td><td>校验「模板名称 / 模板类型 / 适用城市 / 合同正文」全部必填（规则见 1.4.3）</td></tr>
                         <tr><td>生成状态</td><td>草稿（橙色「草稿」徽标，列表可一键「发布」转为启用）</td><td>启用（绿色「启用」徽标，可直接被新建合同选用）</td></tr>
                         <tr><td>列表联动</td><td>新增一行（状态=草稿），「全部模板」计数与对应类型计数 +1</td><td>新增 / 覆盖一行（状态=启用），计数同步刷新</td></tr>
-                        <tr><td>提示</td><td>Toast 中部「已保存草稿」</td><td>Toast 中部「模板已保存并发布」</td></tr>
+                        <tr><td>提示</td><td>轻提示 中部「已保存草稿」</td><td>轻提示 中部「模板已保存并发布」</td></tr>
                         <tr><td>失败处理</td><td>名称为空则阻止并聚焦输入框、红框提示</td><td>任一必填缺失则阻止并红框高亮+弹窗汇总；若<b>同城市下已存在同名启用模板</b>亦阻止（提示“该城市下已存在同名的启用中模板，请勿重复创建”）</td></tr>
                     </tbody>
                 </table>
 
                 <div class="subsection-title" style="font-size: 15px; margin-top: 20px;">状态流转（草稿 / 启用 / 停用）</div>
                 <div class="code-block">
-草稿 ──(列表行「发布」按钮 / publishDraft)──▶ 启用 ──(列表行「停用」/ toggleStatus)──▶ 停用
+草稿 ──(列表行「发布」按钮)──▶ 启用 ──(列表行「停用」)──▶ 停用
   ▲                                                  │                                      │
   └────────(编辑后点「保存草稿」回退)─────────────────┘                                      │
-                                                                 停用 ──(列表行「启用」/ toggleStatus)──▶ 启用
+                                                                 停用 ──(列表行「启用」)──▶ 启用
                 </div>
                 <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
-                    <li><b>草稿 → 启用</b>：草稿行操作区提供「发布」按钮（publishDraft(id)），点击后状态徽标转「启用」、按钮转为「停用」，模板立即进入可选用范围。</li>
+                    <li><b>草稿 → 启用</b>：草稿行操作区提供「发布」按钮，点击后状态徽标转「启用」、按钮转为「停用」，模板立即进入可选用范围。</li>
                     <li><b>启用 ↔ 停用</b>：见 1.6 启用 / 停用，状态仅影响新建合同可选用范围，不影响已签署或已生成合同。</li>
                     <li><b>启用 / 停用 → 草稿</b>：已发布模板在编辑后点击「保存草稿」可回退为草稿态（保留内容、退出选用范围），后续可再次发布。</li>
                 </ul>
@@ -482,7 +482,7 @@
 
                 <div class="subsection-title" style="font-size: 16px;">1.5.1 入口</div>
                 <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
-                    <li>列表"操作"列点击"编辑"（editTemplate(id)）→ 打开同一大型弹窗，标题变为"编辑合同文本模板"。</li>
+                    <li>列表"操作"列点击"编辑"→ 打开同一大型弹窗，标题变为"编辑合同文本模板"。</li>
                 </ul>
 
                 <div class="subsection-title" style="font-size: 16px;">1.5.2 与新建模板的差异</div>
@@ -501,7 +501,7 @@
                     <thead><tr><th>交互场景</th><th>效果</th></tr></thead>
                     <tbody>
                         <tr><td>打开编辑弹窗</td><td>按所选模板 id 取数据回显；正文区渲染已保存 HTML；遮罩淡入</td></tr>
-                        <tr><td>保存并发布</td><td>覆盖原模板；版本递增；关闭弹窗 Toast"模板已保存并发布"；列表对应行更新（名称/分类/城市/更新时间）</td></tr>
+                        <tr><td>保存并发布</td><td>覆盖原模板；版本递增；关闭弹窗 轻提示"模板已保存并发布"；列表对应行更新（名称/分类/城市/更新时间）</td></tr>
                         <tr><td>保存草稿</td><td>覆盖草稿内容，不影响已发布版本</td></tr>
                         <tr><td>取消</td><td>关闭弹窗，放弃本次修改</td></tr>
                     </tbody>
@@ -518,7 +518,7 @@
 
                 <div class="subsection-title" style="font-size: 16px;">1.6.1 入口</div>
                 <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
-                    <li>列表"操作"列的"停用 / 启用"按钮（toggleStatus(id)），依据当前行状态显示相反操作。</li>
+                    <li>列表"操作"列的"停用 / 启用"按钮，依据当前行状态显示相反操作。</li>
                 </ul>
 
                 <div class="subsection-title" style="font-size: 16px;">1.6.2 停用交互流程</div>
@@ -580,7 +580,7 @@
                         <tr><td>模板行悬停</td><td>背景色变为 #FAFAFA</td></tr>
                         <tr><td>模板名称点击（预览）</td><td>右侧预览面板从 right:-600px 滑入至 right:0，过渡 0.3 秒</td></tr>
                         <tr><td>模板类型树节点点击</td><td>节点背景与文字切换为蓝底蓝字（active），无动画过渡</td></tr>
-                        <tr><td>保存成功</td><td>Toast 中部显示"模板已保存并发布"，持续 2 秒</td></tr>
+                        <tr><td>保存成功</td><td>轻提示 中部显示"模板已保存并发布"，持续 2 秒</td></tr>
                         <tr><td>富文本工具栏按钮激活</td><td>按钮背景变蓝、文字变白</td></tr>
                     </tbody>
                 </table>
@@ -591,11 +591,11 @@
                 <table>
                     <thead><tr><th>异常场景</th><th>处理方式</th><th>用户提示</th></tr></thead>
                     <tbody>
-                        <tr><td>模板名称为空</td><td>阻止提交，聚焦输入框</td><td>Toast 中部显示"请输入模板名称"</td></tr>
-                        <tr><td>模板名称重复</td><td>阻止提交</td><td>Toast 中部显示"模板名称已存在"</td></tr>
-                        <tr><td>模板类型 / 城市未选</td><td>阻止提交</td><td>Toast 中部显示"请选择模板类型" / "请选择适用城市"</td></tr>
-                        <tr><td>合同正文为空</td><td>阻止提交</td><td>Toast 中部显示"请输入模板内容"</td></tr>
-                        <tr><td>网络错误</td><td>显示错误状态</td><td>Toast 中部显示"操作失败，请稍后重试"</td></tr>
+                        <tr><td>模板名称为空</td><td>阻止提交，聚焦输入框</td><td>轻提示 中部显示"请输入模板名称"</td></tr>
+                        <tr><td>模板名称重复</td><td>阻止提交</td><td>轻提示 中部显示"模板名称已存在"</td></tr>
+                        <tr><td>模板类型 / 城市未选</td><td>阻止提交</td><td>轻提示 中部显示"请选择模板类型" / "请选择适用城市"</td></tr>
+                        <tr><td>合同正文为空</td><td>阻止提交</td><td>轻提示 中部显示"请输入模板内容"</td></tr>
+                        <tr><td>网络错误</td><td>显示错误状态</td><td>轻提示 中部显示"操作失败，请稍后重试"</td></tr>
                         <tr><td>无模板数据</td><td>显示空状态</td><td>页面中央显示"暂无模板，点击创建"</td></tr>
                     </tbody>
                 </table>
@@ -651,7 +651,7 @@
 
                 <div class="note">
                     <div class="note-title">交互说明</div>
-                    <div>以下筛选、搜索、排序规则已在原型（pc-stage-template.html）中落地：顶部工具栏「搜索 / 重置」按钮可实时过滤右侧卡片；左侧模板类型树点击可即时筛选对应类型；两类筛选之间及与顶部城市/状态条件均为 <b>AND</b> 叠加；分页「共 N 条」随筛选结果实时刷新。原型列表为演示数据（4 张静态卡片 + 静态 count），筛选按实际渲染卡片生效。</div>
+                    <div>以下筛选、搜索、排序规则已在原型（pc-stage-template.html）中落地：顶部工具栏「搜索 / 重置」按钮可实时过滤右侧卡片；左侧模板类型树点击可即时筛选对应类型；两类筛选之间及与顶部城市/状态条件均为 <b>与</b> 叠加；分页「共 N 条」随筛选结果实时刷新。原型列表为演示数据（4 张静态卡片 + 静态 count），筛选按实际渲染卡片生效。</div>
                 </div>
 
                 <div class="subsection-title" style="font-size: 16px;">2.3.1 列表页布局与组成</div>
@@ -701,9 +701,9 @@
                 </table>
                 <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
                     <li><strong>取值同源：</strong>模板类型树节点名称与卡片「类型：」标签取值完全一致（同一枚举：基础施工服务合同 / 设计服务合同 / 拆除班组服务合同 / 水电班组服务合同 / 木作班组服务合同 / 泥瓦工班组服务合同 / 油漆工班组服务合同 / 小零工服务合同），二者强关联。</li>
-                    <li><strong>count 含义：</strong>节点右侧数字为该分类下模板数量，由卡片数据实时统计得出（原型中为演示值，新增/发布/禁用时同步刷新，见 updateStageSidebarCounts）；点击节点即按该类型精确过滤右侧卡片。</li>
+                    <li><strong>count 含义：</strong>节点右侧数字为该分类下模板数量，由卡片数据实时统计得出（原型中为演示值，新增/发布/禁用时同步刷新，见左侧类型树计数同步刷新）；点击节点即按该类型精确过滤右侧卡片。</li>
                     <li><strong>互斥单选：</strong>模板类型树为单选，点击节点高亮 active（蓝底蓝字），其余节点取消高亮；"全部模板" 等价于"不按模板类型过滤"。</li>
-                    <li><strong>叠加关系：</strong>左侧模板类型筛选与右侧顶部工具栏的搜索/城市/状态筛选为 <strong>AND（同时满足）</strong> 叠加。</li>
+                    <li><strong>叠加关系：</strong>左侧模板类型筛选与右侧顶部工具栏的搜索/城市/状态筛选为 <strong>与（同时满足）</strong> 叠加。</li>
                 </ul>
 
                 <div class="subsection-title" style="font-size: 16px;">2.3.4 顶部搜索与筛选条件匹配规则</div>
@@ -716,9 +716,9 @@
                     </tbody>
                 </table>
                 <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
-                    <li>三个顶部控件之间为 <strong>AND</strong> 关系：需同时满足名称模糊命中、城市精确相等、状态精确相等。</li>
-                    <li>顶部筛选再与左侧模板类型树叠加，仍为 AND（四类条件全部命中才出现在列表）。</li>
-                    <li>「搜索」按钮（applyFilters）触发按上述条件过滤；「重置」按钮（resetFilters）清空名称/城市/状态并恢复"全部模板"选中，列表与类型树 count 同步刷新。</li>
+                    <li>三个顶部控件之间为 <strong>与</strong> 关系：需同时满足名称模糊命中、城市精确相等、状态精确相等。</li>
+                    <li>顶部筛选再与左侧模板类型树叠加，仍为 与（四类条件全部命中才出现在列表）。</li>
+                    <li>「搜索」按钮触发按上述条件过滤；「重置」按钮清空名称/城市/状态并恢复"全部模板"选中，列表与类型树 count 同步刷新。</li>
                 </ul>
 
                 <div class="subsection-title" style="font-size: 16px;">2.3.5 列表排序与分页</div>
@@ -738,7 +738,7 @@
 
                 <div class="subsection-title" style="font-size: 16px;">2.4.1 入口与弹窗布局</div>
                 <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
-                    <li><strong>入口：</strong>列表页内容头右上角"+ 新建模板"按钮（showCreateModal()）→ 弹出大型弹窗，标题"新建阶段任务模板"。</li>
+                    <li><strong>入口：</strong>列表页内容头右上角"+ 新建模板"按钮→ 弹出大型弹窗，标题"新建阶段任务模板"。</li>
                     <li><strong>弹窗结构：</strong>基本信息区（模板名称 / 模板类型 / 适用城市 / 模板描述）+ 阶段任务区（阶段列表：阶段名称 + 按序执行开关 + 任务列表；支持添加阶段 / 添加任务）+ 底部操作：取消 / 保存草稿 / 保存并发布。</li>
                 </ul>
 
@@ -769,8 +769,8 @@
                     <tbody>
                         <tr><td>打开新建弹窗</td><td>标题置"新建阶段任务模板"；表单清空；适用城市默认空（需选择）；阶段列表清空；遮罩淡入</td></tr>
                         <tr><td>添加阶段 / 任务</td><td>阶段以 prompt 录入名称后插入阶段列表；任务通过「添加任务」弹窗录入名称与三段标准（执行/确认/担责），可编辑、删除</td></tr>
-                        <tr><td>保存草稿</td><td>校验「模板名称」非空且至少 1 个阶段，通过后关闭弹窗，列表<b>最上方</b>新增卡片（状态「草稿」），计数 +1，Toast「已保存草稿」；阶段与任务随模板一并持久化</td></tr>
-                        <tr><td>保存并发布</td><td>校验通过后关闭弹窗，列表<b>最上方</b>新增卡片（状态「启用中」），计数 +1，Toast「模板已保存并发布」；对应类型与「全部模板」计数同步刷新（updateStageSidebarCounts）；发布后自动按当前筛选条件重算列表（applyFilters）；阶段与任务随模板一并持久化并体现在卡片预览</td></tr>
+                        <tr><td>保存草稿</td><td>校验「模板名称」非空且至少 1 个阶段，通过后关闭弹窗，列表<b>最上方</b>新增卡片（状态「草稿」），计数 +1，轻提示「已保存草稿」；阶段与任务随模板一并持久化</td></tr>
+                        <tr><td>保存并发布</td><td>校验通过后关闭弹窗，列表<b>最上方</b>新增卡片（状态「启用中」），计数 +1，轻提示「模板已保存并发布」；对应类型与「全部模板」计数同步刷新；发布后自动按当前筛选条件重算列表；阶段与任务随模板一并持久化并体现在卡片预览</td></tr>
                         <tr><td>阶段不足校验</td><td>提交时若阶段列表为空，阻断保存并提示「请至少添加一个阶段信息（阶段任务模板必须包含至少一个阶段）」，无论草稿或发布</td></tr>
                         <tr><td>发布校验失败</td><td>必填缺失则阻止并汇总弹窗；若<b>同城市已存在同名「启用中」模板</b>亦阻止，提示“该城市下已存在同名的启用中模板，请勿重复创建”</td></tr>
                         <tr><td>取消</td><td>关闭弹窗，不保存</td></tr>
@@ -780,7 +780,7 @@
                 <div class="subsection-title" style="font-size: 15px; margin-top: 20px;"><div class="subsection-title" style="font-size: 16px;">2.4.5 保存流程与状态流转</div>
                 <div class="note">
                     <div class="note-title">两种保存动作的差异</div>
-                    <div>新建 / 编辑弹窗底部提供「保存草稿」与「保存并发布」两个动作，二者在<b>校验强度</b>与<b>生成的状态</b>上不同，对应实现分别为 <code>saveDraft()</code> 与 <code>saveTemplate()</code>（status=active）。</div>
+                    <div>新建 / 编辑弹窗底部提供「保存草稿」与「保存并发布」两个动作，二者在<b>校验强度</b>与<b>生成的状态</b>上不同，对应实现分别为「保存草稿」动作与「保存并发布」动作（状态=启用）。</div>
                 </div>
                 <table>
                     <thead><tr><th>维度</th><th>保存草稿</th><th>保存并发布</th></tr></thead>
@@ -790,7 +790,7 @@
                         <tr><td>校验强度</td><td>校验「模板名称」非空 <b>且至少 1 个阶段</b></td><td>校验「模板名称 / 模板类型 / 适用城市」必填（规则见 2.3.3）<b>且至少 1 个阶段（必备）</b></td></tr>
                         <tr><td>生成状态</td><td>草稿（橙色「草稿」徽标，卡片可一键「发布」转为启用中）</td><td>启用中（绿色「启用中」徽标，可直接被新建合同选用）</td></tr>
                         <tr><td>列表联动</td><td>新增一张卡片（状态=草稿），「全部模板」计数与对应类型计数 +1</td><td>新增 / 覆盖一张卡片（状态=启用中），计数同步刷新</td></tr>
-                        <tr><td>提示</td><td>Toast 中部「已保存草稿」</td><td>Toast 中部「模板已保存并发布」</td></tr>
+                        <tr><td>提示</td><td>轻提示 中部「已保存草稿」</td><td>轻提示 中部「模板已保存并发布」</td></tr>
                         <tr><td>失败处理</td><td>名称为空或阶段为空则阻止并提示（聚焦输入框 / "请至少添加一个阶段信息"）</td><td>任一必填缺失或阶段为空则阻止并红框高亮+弹窗汇总；若<b>同城市下已存在同名启用中模板</b>亦阻止（提示"该城市下已存在同名的启用中模板，请勿重复创建"）</td></tr>
                     </tbody>
                 </table>
@@ -815,7 +815,7 @@
 
                 <div class="subsection-title" style="font-size: 16px;">2.5.1 入口</div>
                 <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
-                    <li>卡片操作区"编辑"（editTemplate(id)）→ 打开同一弹窗，标题变为"编辑阶段任务模板"，并重置 currentEditId 以确保保存时覆盖原卡片而非新增。</li>
+                    <li>卡片操作区"编辑"→ 打开同一弹窗，标题变为"编辑阶段任务模板"，并重置 currentEditId 以确保保存时覆盖原卡片而非新增。</li>
                 </ul>
 
                 <div class="subsection-title" style="font-size: 16px;">2.5.2 与新建模板的差异</div>
@@ -834,8 +834,8 @@
                     <thead><tr><th>交互场景</th><th>效果</th></tr></thead>
                     <tbody>
                         <tr><td>打开编辑弹窗</td><td>按所选卡片 id 取 stageTemplateMeta 回显名称 / 类型 / 城市 / 描述；<b>阶段列表由 meta.stages 重建并回显已保存的阶段与任务</b>（currentStages），可继续编辑、增删阶段与任务</td></tr>
-                        <tr><td>保存并发布</td><td>覆盖原卡片（状态置「启用中」），计数不变，Toast「模板已保存并发布」</td></tr>
-                        <tr><td>保存草稿</td><td>覆盖原卡片内容为草稿态（状态「草稿」），Toast「已保存草稿」</td></tr>
+                        <tr><td>保存并发布</td><td>覆盖原卡片（状态置「启用中」），计数不变，轻提示「模板已保存并发布」</td></tr>
+                        <tr><td>保存草稿</td><td>覆盖原卡片内容为草稿态（状态「草稿」），轻提示「已保存草稿」</td></tr>
                         <tr><td>取消</td><td>关闭弹窗，放弃修改</td></tr>
                     </tbody>
                 </table>
@@ -880,7 +880,7 @@
                 <div class="subsection-title" style="font-size: 16px;">2.6.5 影响范围</div>
                 <ul style="margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.9;">
                     <li>禁用 / 草稿仅影响"新建合同 / 发起变更时可选用模板的范围"，已签署或已生成的合同不受影响。</li>
-                    <li>模板类型树计数同步：总数与对应类型计数随卡片增删实时刷新（updateStageSidebarCounts）。</li>
+                    <li>模板类型树计数同步：总数与对应类型计数随卡片增删实时刷新。</li>
                 </ul>
             </div>
 
@@ -902,10 +902,10 @@
                 <table>
                     <thead><tr><th>异常场景</th><th>处理方式</th><th>用户提示</th></tr></thead>
                     <tbody>
-                        <tr><td>阶段名称为空</td><td>阻止添加</td><td>Toast中部显示"请输入阶段名称"</td></tr>
-                        <tr><td>任务名称为空</td><td>阻止添加</td><td>Toast中部显示"请输入任务名称"</td></tr>
-                        <tr><td>三段标准为空</td><td>阻止保存</td><td>Toast中部显示"请填写任务的标准内容"</td></tr>
-                        <tr><td>删除正在使用的模板</td><td>阻止删除</td><td>Toast中部显示"该模板正在使用中"</td></tr>
+                        <tr><td>阶段名称为空</td><td>阻止添加</td><td>轻提示中部显示"请输入阶段名称"</td></tr>
+                        <tr><td>任务名称为空</td><td>阻止添加</td><td>轻提示中部显示"请输入任务名称"</td></tr>
+                        <tr><td>三段标准为空</td><td>阻止保存</td><td>轻提示中部显示"请填写任务的标准内容"</td></tr>
+                        <tr><td>删除正在使用的模板</td><td>阻止删除</td><td>轻提示中部显示"该模板正在使用中"</td></tr>
                     </tbody>
                 </table>
             </div>

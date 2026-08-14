@@ -128,6 +128,13 @@
         .cta-secondary { background: #f5f5f5; color: #666; flex: 0 0 96px; }
         .cta-primary { background: linear-gradient(135deg, #1677ff 0%, #4096ff 100%); color: #fff; }
         .cta-primary.confirmed { background: linear-gradient(135deg, #52c41a 0%, #73d13d 100%); }
+        /* 已确认态：只读状态提示（非按钮） */
+        .cta-status-hint {
+            flex: 1; display: flex; align-items: center; justify-content: center;
+            height: 46px; border-radius: 23px;
+            font-size: 14px; color: #999; background: #fafafa;
+            cursor: default; user-select: none;
+        }
 
         /* toast（定位在手机框内） */
         .app-toast {
@@ -271,7 +278,7 @@
         } else {
             html += '<div class="hero-confirmed-badge">✅ 您已成为本合同乙方，已自动加入项目架构层级</div>';
             html += '<div class="next-flow"><div class="next-flow-title">下一步</div>' +
-                    '<div class="next-step"><div class="next-dot">1</div><div class="next-step-text">上传签约文件<span>合同正式生效前需上传纸质合同扫描件</span></div></div>' +
+                    '<div class="next-step"><div class="next-dot">1</div><div class="next-step-text">等待发起方上传签约文件<span>合同正式生效前由发起方上传纸质合同扫描件</span></div></div>' +
                     '<div class="next-step"><div class="next-dot pending">2</div><div class="next-step-text">等待开工通知<span>工长确认后推送开工时间</span></div></div>' +
                     '<div class="next-step"><div class="next-dot pending">3</div><div class="next-step-text">查看工程任务<span>阶段任务与验收节点</span></div></div>' +
                     '</div>';
@@ -287,7 +294,7 @@
             html = '<button class="cta-btn cta-secondary" onclick="doDecline()">拒绝</button>' +
                    '<button class="cta-btn cta-primary" onclick="doReceive()">接单</button>';
         } else {
-            html = '<button class="cta-btn cta-primary confirmed" onclick="doUpload()">上传签约文件</button>';
+            html = '<div class="cta-status-hint">⏳ 等待发起方上传签约文件，合同将正式生效</div>';
         }
         $('cta').innerHTML = html;
     }
@@ -302,9 +309,7 @@
         showToast('已拒绝该合同邀约');
         setTimeout(function () { window.location.href = 'message.html?tab=contract'; }, 700);
     }
-    function doUpload() {
-        showToast('请上传已签署的纸质合同扫描件 / 照片');
-    }
+    // 受邀方不支持上传签约文件，已移除 doUpload()
 
     // 初始化
     renderStages();
