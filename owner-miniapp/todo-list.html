@@ -261,10 +261,10 @@
         <div class="page-content">
             <div class="todo-filter-bar">
                 <div class="todo-filter-btn active" onclick="filterTodo('all', this)">
-                    全部 <span class="badge">15</span>
+                    全部 <span class="badge">16</span>
                 </div>
                 <div class="todo-filter-btn" onclick="filterTodo('pending', this)">
-                    待处理 <span class="badge">12</span>
+                    待处理 <span class="badge">13</span>
                 </div>
                 <div class="todo-filter-btn" onclick="filterTodo('completed', this)">
                     已处理 <span class="badge">3</span>
@@ -350,6 +350,17 @@
                         </div>
                         <div class="item-status pending">待执行</div>
                     </div>
+                    <div class="todo-item" data-status="pending" onclick="location.href='task-detail.html?status=confirming'">
+                        <div class="item-icon contract">🟢</div>
+                        <div class="item-content">
+                            <div class="item-title">
+                                墙面腻子批刮
+                                <span class="task-tag contract">任务</span>
+                            </div>
+                            <div class="item-meta">油漆工作组 · 待执行</div>
+                        </div>
+                        <div class="item-status pending">待执行</div>
+                    </div>
                     <div class="todo-item" data-status="completed" onclick="location.href='task-detail.html?status=confirming'">
                         <div class="item-icon" style="background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%);">✅</div>
                         <div class="item-content">
@@ -357,9 +368,9 @@
                                 材料采购
                                 <span class="task-tag contract">任务</span>
                             </div>
-                            <div class="item-meta">执行人：张三 · 已完成</div>
+                            <div class="item-meta">执行人：张三 · 已执行</div>
                         </div>
-                        <div class="item-status" style="background-color: var(--status-success-bg); color: var(--success-color);">已完成</div>
+                        <div class="item-status" style="background-color: var(--status-success-bg); color: var(--success-color);">已执行</div>
                     </div>
                     <div class="todo-item" data-status="completed" onclick="location.href='task-detail.html?status=confirming'">
                         <div class="item-icon" style="background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%);">✅</div>
@@ -368,9 +379,9 @@
                                 防水施工
                                 <span class="task-tag contract">任务</span>
                             </div>
-                            <div class="item-meta">执行人：王五 · 已完成</div>
+                            <div class="item-meta">执行人：王五 · 已执行</div>
                         </div>
-                        <div class="item-status" style="background-color: var(--status-success-bg); color: var(--success-color);">已完成</div>
+                        <div class="item-status" style="background-color: var(--status-success-bg); color: var(--success-color);">已执行</div>
                     </div>
                     <div class="todo-item" data-status="completed" onclick="location.href='task-detail.html?status=confirming'">
                         <div class="item-icon" style="background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%);">✅</div>
@@ -379,9 +390,9 @@
                                 墙面基层处理
                                 <span class="task-tag contract">任务</span>
                             </div>
-                            <div class="item-meta">执行人：李四 · 已完成</div>
+                            <div class="item-meta">执行人：李四 · 已执行</div>
                         </div>
-                        <div class="item-status" style="background-color: var(--status-success-bg); color: var(--success-color);">已完成</div>
+                        <div class="item-status" style="background-color: var(--status-success-bg); color: var(--success-color);">已执行</div>
                     </div>
                     <div class="todo-item" data-status="pending" onclick="location.href='contract-detail.html?status=change_confirming'">
                         <div class="item-icon" style="background: linear-gradient(135deg, #FA8C16 0%, #FFA940 100%);">📝</div>

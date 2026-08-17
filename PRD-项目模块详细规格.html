@@ -452,7 +452,7 @@
                 <ul class="nav-sub">
                     <li><a href="#sub-11-1">11.1 页面概述</a></li>
                     <li><a href="#sub-11-2">11.2 页面结构</a></li>
-                    <li><a href="#sub-11-3">11.3 动态类型规格</a></li>
+                    <li><a href="#sub-11-3">11.3 动态类型规格与生成规则</a></li>
                     <li><a href="#sub-11-4">11.4 数据加载规则</a></li>
                     <li><a href="#sub-11-5">11.5 交互规格</a></li>
                     <li><a href="#sub-11-6">11.6 时间显示规则</a></li>
@@ -1201,7 +1201,7 @@
                     <tbody>
                         <tr>
                             <td>功能说明</td>
-                            <td>展示项目「今日」产生的动态，包括任务完成、任务确认结果、合同签署等操作记录</td>
+                            <td>展示项目「今日」产生的动态，由系统在各业务动作完成时自动生成（生成规则见 <a href="#sub-11-3">11.3 动态类型规格与生成规则</a>）；今日可能出现的动态项包括：任务提交、任务完成、任务确认、任务驳回、合同签约（含非工人 / 工人合同）</td>
                         </tr>
                         <tr>
                             <td>数据来源</td>
@@ -1245,6 +1245,10 @@
                     <p><strong>角色 / 阶段标签：</strong>今日动态每条记录头部可展示角色标签（监理 / 工长 / 施工 / 设计）与阶段标签（水电 / 设计 / 基础施工等），样式与"十一、项目动态页"保持一致。</p>
                     <p><strong>媒体：</strong>含图文的动态展示施工现场照片缩略图（任务类、合同类均使用施工现场照片）；点击"查看全部动态"进入项目动态页查看大图与完整列表。</p>
                     <p><strong>展开更多：</strong>当今日动态超过默认一条半高度（即次条被截断、有内容未露全）时，列表底部显示"展开更多"，点击展开为今日全部动态并变为"收起"（箭头旋转）；仅 1 条或更少（不足一条半）时不显示该按钮（详见 3.8 交互规格）。</p>
+                </div>
+                <div class="note" style="margin-top: 12px;">
+                    <div class="note-title">动态生成规则来源</div>
+                    <p>「今日动态」卡片所展示的每一条动态，均由对应业务动作（任务执行 / 确认、合同签约等）完成时由系统自动生成，无需用户填写；其<strong>生成时机、动态文案（content 模板）、字段规格、跳转与可见性规则</strong>统一见 <a href="#sub-11-3">11.3 动态类型规格与生成规则</a>（规则来源：任务模块 §3.14/§3.15、合同模块 §6.3.4/§10.3.3）。<br>注：「合同审核」「创建了合同」两类动态因源模块未定义「项目动态」生成规则，故不在项目动态中呈现。</p>
                 </div>
             </div>
 
@@ -2513,11 +2517,6 @@
                             <td>操作记录</td>
                             <td>自动生成"系统 创建了合同"操作日志</td>
                             <td>在合同详情页"操作记录"区域显示，包含操作人、操作时间与操作类型</td>
-                        </tr>
-                        <tr>
-                            <td>项目动态</td>
-                            <td>自动推送一条合同创建动态</td>
-                            <td>在项目动态页展示"XX 创建了合同：[合同名称]"，通知项目内其他成员</td>
                         </tr>
                     </tbody>
                 </table>
@@ -4800,50 +4799,47 @@
             </div>
 
             <div class="subsection" id="sub-11-3">
-                <div class="subsection-title">11.3 动态类型规格</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>动态类型</th>
-                            <th>动态内容模板</th>
-                            <th>图标</th>
-                            <th>跳转目标</th>
-                        </tr>
-                    </thead>
+                <div class="subsection-title">11.3 动态类型规格与生成规则（项目动态）</div>
+                <p style="margin:0 0 12px;color:var(--text-secondary);font-size:13px;">项目动态（<code>activity-list</code>）由系统在<strong>各业务动作完成时自动生成</strong>，无需用户填写、无校验场景。本节约统一定义全部动态项的<strong>类型、生成时机、动态文案（content 模板）、字段规格、跳转目标与可见性规则</strong>；规则来源见 <a href="PRD-任务模块详细规格.html" target="_blank">任务模块 §3.14(4)/§3.15(4)</a> 与 <a href="PRD-合同模块详细规格.html" target="_blank">合同模块 §6.3.4/§10.3.3</a>。</p>
+                <h4 style="margin:12px 0 8px;">动态项汇总（按 type 枚举值）</h4>
+                <table class="spec-table">
+                    <thead><tr><th>动态类型（typeLabel）</th><th>枚举值（type）</th><th>生成时机 / 触发动作</th><th>动态文案（content 模板）</th><th>跳转目标</th><th>源章节</th></tr></thead>
                     <tbody>
-                        <tr>
-                            <td>任务完成</td>
-                            <td>【任务名称】已完成验收</td>
-                            <td>✅</td>
-                            <td>跳转任务详情页</td>
-                        </tr>
-                        <tr>
-                            <td>任务提交</td>
-                            <td>【任务名称】已提交验收申请</td>
-                            <td>📤</td>
-                            <td>跳转任务详情页</td>
-                        </tr>
-                        <tr>
-                            <td>合同签署</td>
-                            <td>【合同名称】已签署完成</td>
-                            <td>📝</td>
-                            <td>跳转<a href="service-miniapp/contract-detail.html" target="_blank">合同详情页</a></td>
-                        </tr>
-                        <tr>
-                            <td>合同审核</td>
-                            <td>【合同名称】审核通过/已驳回</td>
-                            <td>📋</td>
-                            <td>跳转<a href="service-miniapp/contract-detail.html" target="_blank">合同详情页</a></td>
-                        </tr>
-                        <tr>
-                            <td>任务确认结果</td>
-                            <td>【任务名称】确认通过 / 已驳回（确认人【确认人姓名】）</td>
-                            <td>✔️</td>
-                            <td>跳转任务详情页</td>
-                        </tr>
+                        <tr><td>任务提交</td><td><code>task_submitted</code></td><td>执行人点击「提交确认」（有确认人）→ 任务流转至确认中（confirming）</td><td>完成了{阶段名称}{任务名称}的施工</td><td><a href="service-miniapp/task-detail.html" target="_blank">task-detail.html</a></td><td>任务 §3.14(4)</td></tr>
+                        <tr><td>任务完成</td><td><code>task_completed</code></td><td>① 执行人「完成任务」（无确认人）→ 已完成；② 最后一位确认人确认通过 → 任务闭环（由确认流程驱动）</td><td>完成了{阶段名称}{任务名称}的施工</td><td><a href="service-miniapp/task-detail.html" target="_blank">task-detail.html</a></td><td>任务 §3.14(4)/§3.15(4)</td></tr>
+                        <tr><td>任务确认</td><td><code>task_confirm</code></td><td>单条确认人点击「确认通过」</td><td>{确认人姓名} 确认了 {阶段名称}{任务名称}</td><td><a href="service-miniapp/task-detail.html" target="_blank">task-detail.html</a></td><td>任务 §3.15(4)</td></tr>
+                        <tr><td>任务驳回</td><td><code>task_rejected</code></td><td>单条确认人点击「驳回」</td><td>{确认人姓名} 驳回了 {阶段名称}{任务名称}</td><td><a href="service-miniapp/task-detail.html" target="_blank">task-detail.html</a></td><td>任务 §3.15(4)</td></tr>
+                        <tr><td>合同签约</td><td><code>contract_signed</code></td><td>① 非工人合同：confirmed → signed（乙方上传签约文件）；② 工人合同：worker_confirmed → worker_signed（发起方上传签约文件）</td><td>{合同名称}签约完成</td><td>非工人：<a href="service-miniapp/contract-detail.html" target="_blank">contract-detail.html</a>；工人：<a href="service-miniapp/worker-contract-detail.html" target="_blank">worker-contract-detail.html</a></td><td>合同 §6.3.4/§10.3.3</td></tr>
                     </tbody>
                 </table>
-            </div>
+                <div class="note">
+                    <div class="note-title">排除项说明</div>
+                    <p>依据源模块（合同 §6.3 / 任务模块）的<strong>生成规则</strong>：仅当某业务动作在源模块定义了「项目动态」生成规则时，才在项目动态中呈现对应动态项。<strong>无生成规则的动态类型不在此呈现</strong>——例如「合同审核（contract_audit）」仅定义<strong>待办</strong>生成规则（§6.3.2），未定义动态生成规则；「创建了合同」亦未在合同模块定义动态生成规则，故二者均不在项目动态中呈现（「创建了合同」保留于合同详情页「操作记录」日志）。</p>
+                </div>
+                <h4 style="margin:16px 0 8px;">动态记录字段（通用数据模型）</h4>
+                <p style="margin:0 0 8px;font-size:13px;color:var(--text-secondary);">字段持久化口径见 <a href="#sub-20-5">20.5 项目动态表字段（project_activities）</a>；下表为逻辑字段模型，系统自动生成，无用户填写入口。</p>
+                <table class="spec-table">
+                    <thead><tr><th>字段</th><th>取值 / 说明</th><th>来源</th></tr></thead>
+                    <tbody>
+                        <tr><td>操作人（user）</td><td>动作执行人姓名；头像（avatar）取姓名首字，头像底色（avatarColor）按角色预设</td><td>当前操作人</td></tr>
+                        <tr><td>角色（role）/ 角色样式（roleClass）</td><td>操作人所属角色名与样式类（监理 supervisor / 工长 foreman / 施工 worker / 设计 designer / 业主 owner）</td><td>操作人角色</td></tr>
+                        <tr><td>类型（type）</td><td>固定枚举：task_submitted / task_completed / task_confirm / task_rejected / contract_signed</td><td>系统固定</td></tr>
+                        <tr><td>类型标签（typeLabel）</td><td>任务提交 / 任务完成 / 任务确认 / 任务驳回 / 合同签约</td><td>由触发动作决定</td></tr>
+                        <tr><td>内容（content）</td><td>按上表「动态文案」模板生成（含 {阶段名称}/{任务名称}/{确认人姓名}/{合同名称} 占位符）</td><td>由触发动作 + 业务对象生成</td></tr>
+                        <tr><td>来源（source）</td><td>任务类：所属合同 / 服务名称；合同类：所属项目 / 合同名称</td><td>业务对象所属</td></tr>
+                        <tr><td>时间（time）/ 日期（date）/ 日期标签（dateLabel）</td><td>时间 = 动作完成时间（时:分）；日期与日期标签（今天 / 昨天 / …）按动作时间计算，归入「项目动态」对应日期分组（当天归入「今天」）</td><td>动作完成时间</td></tr>
+                        <tr><td>媒体文件（files）</td><td>任务类取执行人 / 确认人上传的图片 / 视频 / 音频合并集合（📷/🎬/🎵）；合同签约默认空集合</td><td>动作上传的媒体附件</td></tr>
+                        <tr><td>是否有权限查看（hasPermission）</td><td>按项目成员权限判定（默认项目内成员可查看）；合同类对非授权角色置 false（见 §11.9 锁定态）</td><td>系统权限</td></tr>
+                    </tbody>
+                </table>
+                <h4 style="margin:16px 0 8px;">页面逻辑与交互</h4>
+                <ul>
+                    <li><strong>生成时机</strong>：动态与对应业务动作（执行记录 / 确认结果 / 签约）<strong>一一对应</strong>，于动作完成时由系统生成；归入「项目动态」对应日期分组。</li>
+                    <li><strong>聚合规则</strong>：任务提交 / 完成动态仅对执行记录的<strong>媒体文件做汇总合并</strong>（hasMedia / mediaCount），<strong>文字不逐条汇总</strong>，统一为标准 content 文案（任务 §3.14 聚合规则）。</li>
+                    <li><strong>跳转逻辑</strong>：点击动态项按 <code>type</code> 跳转——任务类 → <code>task-detail.html</code>；合同类 → <code>contract-detail.html</code>（工人合同 → <code>worker-contract-detail.html</code>）；业主端跳转后仅查看（§13）。</li>
+                    <li><strong>可见性（hasPermission）</strong>：默认项目内成员可见；合同类动态对非授权角色显示「🔒 无查看权限」并弹窗（§11.9）；工人合同动态仅对<strong>已在项目内的成员</strong>（含已确认加入架构层级的乙方工人）可见，受邀方未加入项目前不可见（与 §10.3.2「不向受邀方生成应用内待办」一致）。</li>
+                    <li><strong>今日动态联动</strong>：当日生成的动态同步出现在项目详情页「今日动态」卡片（§3.7），按时间倒序、默认折叠一条半；今日无动态时整块不展示。</li>
+                </ul>            </div>
 
             <div class="subsection" id="sub-11-4">
                 <div class="subsection-title">11.4 数据加载规则</div>
@@ -4997,6 +4993,7 @@
                     </tbody>
                 </table>
             </div>
+
         </div>
 
         <!-- ==================== 12. 项目详情页（业主小程序） ==================== -->
@@ -5593,6 +5590,7 @@
                 <div class="note" style="margin-top: 12px;">
                     <div class="note-title">权限说明</div>
                     <p>业主端项目动态页为纯查看模式，不支持发起任何操作。动态内容展示规则与服务方一致，但跳转目标页面仅展示业主可见内容。</p>
+                    <p>业主端所呈现的全部动态项的<strong>生成规则（生成时机、content 模板、字段、跳转、可见性）</strong>与服务方同源，统一见 <a href="#sub-11-3">11.3 动态类型规格与生成规则</a>。</p>
                 </div>
             </div>
 
@@ -6811,7 +6809,7 @@
                             <td>动态类型（type）</td>
                             <td>Enum</td>
                             <td><span class="tag tag-system">系统填充</span></td>
-                            <td>枚举值：contract_signed（合同签约）、contract_audit（合同审核）、task_submitted（任务提交）、task_completed（任务完成）、task_rejected（任务驳回）、task_confirm（任务确认）</td>
+                            <td>枚举值：contract_signed（合同签约）、task_submitted（任务提交）、task_completed（任务完成）、task_rejected（任务驳回）、task_confirm（任务确认）</td>
                             <td>—</td>
                         </tr>
                         <tr>
@@ -6840,6 +6838,62 @@
                             <td>DateTime</td>
                             <td><span class="tag tag-system">系统填充</span></td>
                             <td>日期时间格式</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>类型标签（typeLabel）</td>
+                            <td>Enum</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>枚举值：任务提交 / 任务完成 / 任务确认 / 任务驳回 / 合同签约（与 <code>type</code> 一一对应）</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>动态内容（content）</td>
+                            <td>String(500)</td>
+                            <td><span class="tag tag-system">系统生成</span></td>
+                            <td>由生成规则模板生成（如「完成了{阶段名称}{任务名称}的施工」「{合同名称}签约完成」）；与 description 同源</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>来源（source）</td>
+                            <td>String(200)</td>
+                            <td><span class="tag tag-optional">选填</span></td>
+                            <td>任务类：所属合同 / 服务名称；合同类：所属项目 / 合同名称</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>媒体文件（files）</td>
+                            <td>JSON</td>
+                            <td><span class="tag tag-optional">选填</span></td>
+                            <td>图片 / 视频 / 音频集合（任务类取执行人 / 确认人上传合并）</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>角色（role）/ 角色样式（roleClass）</td>
+                            <td>String</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>操作人角色（监理 / 工长 / 施工 / 设计 / 业主）</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>头像（avatar）/ 头像底色（avatarColor）</td>
+                            <td>String</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>取操作人姓名首字 + 角色底色（派生自 operator_id → users 表）</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>日期标签（dateLabel）</td>
+                            <td>String</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>今天 / 昨天 / 前天 / N天前（按 created_at 距今天数计算）</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>是否有权限查看（hasPermission）</td>
+                            <td>Boolean</td>
+                            <td><span class="tag tag-system">系统填充</span></td>
+                            <td>默认 true（项目内成员可见）；合同类对非授权角色置 false（见 §11.9）</td>
                             <td>—</td>
                         </tr>
                     </tbody>

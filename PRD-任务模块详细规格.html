@@ -284,7 +284,11 @@
             <li class="toc-sub"><a href="#sub-2-1">2.1 页面概述</a></li>
             <li class="toc-sub"><a href="#sub-2-2">2.2 页面结构</a></li>
             <li class="toc-sub"><a href="#sub-2-3">2.3 状态选项卡规格</a></li>
-            <li class="toc-sub"><a href="#sub-2-4">2.4 任务卡片规格</a></li>
+            <li class="toc-sub"><a href="#sub-2-4">2.4 列表卡片规格（合同 / 阶段 / 任务）</a></li>
+            <li class="toc-sub"><a href="#sub-2-4-1">2.4.1 合同卡片字段</a></li>
+            <li class="toc-sub"><a href="#sub-2-4-2">2.4.2 阶段卡片字段</a></li>
+            <li class="toc-sub"><a href="#sub-2-4-3">2.4.3 任务卡片字段</a></li>
+            <li class="toc-sub"><a href="#sub-2-4-4">2.4.4 卡片交互描述</a></li>
             <li class="toc-sub"><a href="#sub-2-5">2.5 筛选规格</a></li>
             <li class="toc-sub"><a href="#sub-2-6">2.6 分页规格</a></li>
             <li class="toc-sub"><a href="#sub-2-7">2.7 任务状态详解（服务方全部任务列表）</a></li>
@@ -304,10 +308,10 @@
             <li class="toc-sub"><a href="#sub-3-13">3.13 待开始（前置阻塞）</a></li>
             <li class="toc-sub"><a href="#sub-3-14">3.14 执行中</a></li>
             <li class="toc-sub"><a href="#sub-3-15">3.15 确认中</a></li>
-            <li class="toc-sub"><a href="#sub-3-16">3.16 确认中（被驳回后）</a></li>
-            <li class="toc-sub"><a href="#sub-3-17">3.17 已完成</a></li>
-            <li class="toc-sub"><a href="#sub-3-18">3.18 已完成（含驳回）</a></li>
-            <li class="toc-sub"><a href="#sub-3-19">3.19 驳回后待开始</a></li>
+            <li class="toc-sub"><a href="#sub-3-16">3.16 已完成</a></li>
+            <li class="toc-sub"><a href="#sub-3-17">3.17 驳回后待开始</a></li>
+            <li class="toc-sub"><a href="#sub-3-18">3.18 确认中（被驳回后）</a></li>
+            <li class="toc-sub"><a href="#sub-3-19">3.19 已完成（含驳回）</a></li>
             <li><a href="#page-todo-list-service">四、全部待办页（服务方）</a></li>
             <li class="toc-sub"><a href="#sub-4-1">4.1 页面概述</a></li>
             <li class="toc-sub"><a href="#sub-4-2">4.2 页面结构</a></li>
@@ -320,19 +324,25 @@
             <li><a href="#page-task-list-owner">五、全部任务（业主）</a></li>
             <li class="toc-sub"><a href="#sub-5-1">5.1 页面概述</a></li>
             <li class="toc-sub"><a href="#sub-5-2">5.2 与服务方差异</a></li>
+            <li class="toc-sub"><a href="#sub-5-3">5.3 页面结构</a></li>
+            <li class="toc-sub"><a href="#sub-5-4">5.4 状态筛选规格</a></li>
+            <li class="toc-sub"><a href="#sub-5-5">5.5 任务卡片规格</a></li>
+            <li class="toc-sub"><a href="#sub-5-6">5.6 筛选规格</a></li>
+            <li class="toc-sub"><a href="#sub-5-7">5.7 分页规格</a></li>
+            <li class="toc-sub"><a href="#sub-5-8">5.8 任务状态详解（业主方）</a></li>
             <li><a href="#page-task-detail-owner">六、任务详情页（业主）</a></li>
             <li class="toc-sub"><a href="#sub-6-1">6.1 与服务方差异</a></li>
             <li class="toc-sub"><a href="#sub-6-2">6.2 业主确认按钮规格</a></li>
             <li class="toc-sub"><a href="#sub-6-3">6.3 任务详情页按状态分视角详述（业主方）</a></li>
             <li class="toc-sub"><a href="#sub-6-4">6.4 待配置（业主只读）</a></li>
-            <li class="toc-sub"><a href="#sub-6-5">6.5 待开始（业主只读）</a></li>
-            <li class="toc-sub"><a href="#sub-6-6">6.6 待开始（前置阻塞）（业主只读）</a></li>
-            <li class="toc-sub"><a href="#sub-6-7">6.7 执行中（业主只读）</a></li>
-            <li class="toc-sub"><a href="#sub-6-8">6.8 确认中（业主可确认）</a></li>
-            <li class="toc-sub"><a href="#sub-6-9">6.9 确认中（被驳回后）（业主可确认）</a></li>
-            <li class="toc-sub"><a href="#sub-6-10">6.10 已完成（业主可评价）</a></li>
-            <li class="toc-sub"><a href="#sub-6-11">6.11 已完成（含驳回）（业主可评价）</a></li>
-            <li class="toc-sub"><a href="#sub-6-12">6.12 驳回后待开始（业主只读）</a></li>
+            <li class="toc-sub"><a href="#sub-6-5">6.5 待开始</a></li>
+            <li class="toc-sub"><a href="#sub-6-6">6.6 待开始（前置阻塞）</a></li>
+            <li class="toc-sub"><a href="#sub-6-7">6.7 执行中</a></li>
+            <li class="toc-sub"><a href="#sub-6-8">6.8 确认中</a></li>
+<li class="toc-sub"><a href="#sub-6-9">6.9 已完成</a></li>
+<li class="toc-sub"><a href="#sub-6-10">6.10 驳回后待开始</a></li>
+<li class="toc-sub"><a href="#sub-6-11">6.11 确认中（被驳回后）</a></li>
+<li class="toc-sub"><a href="#sub-6-12">6.12 已完成（含驳回）</a></li>
             <li><a href="#page-todo-list-owner">七、全部待办页（业主）</a></li>
             <li class="toc-sub"><a href="#sub-7-1">7.1 页面概述</a></li>
             <li class="toc-sub"><a href="#sub-7-2">7.2 与服务方差异</a></li>
@@ -535,7 +545,7 @@
                 <div class="code-block">
 ┌─────────────────────────────────────┐
 │  导航栏                              │
-│  - 标题：我的任务                    │
+│  - 标题：全部任务                    │
 ├─────────────────────────────────────┤
 │  状态筛选下拉框                      │
 │  - 选项：全部状态 | 待配置 | 待开始  │
@@ -547,17 +557,24 @@
 │  - 任务状态筛选下拉框                │
 │  - 搜索框                            │
 ├─────────────────────────────────────┤
-│  合同分组列表（可折叠）               │
-│  ├─ 合同卡片头部                     │
+│  合同分组列表（可折叠，按合同分组）   │
+│  ├─ 合同卡片头部（可点击展开/收起）  │
 │  │  - 合同图标 + 合同名称            │
 │  │  - 元信息：工作组·阶段数·任务总数 │
 │  │  - 整体完成进度条（已完成 x/y）   │
 │  │  - 展开/收起箭头                  │
-│  └─ 任务卡片列表                     │
-│     - 任务名称                      │
-│     - 执行人、确认人                 │
-│     - 任务状态（图标 + 文字）         │
-│     - 点击跳转详情                   │
+│  └─ 阶段分组（可折叠，按阶段分组）   │
+│     ├─ 阶段卡片头部（可点击展开/收起）│
+│     │  - 阶段状态指示点 + 阶段名称   │
+│     │  - 按序执行标识（仅按序阶段）  │
+│     │  - 阶段进度摘要（x/y + 状态）  │
+│     │  - 展开/收起箭头               │
+│     └─ 任务卡片列表                  │
+│        - 状态图标 + 任务名称         │
+│        - 执行人、确认人              │
+│        - 确认进度（仅确认中任务）     │
+│        - 任务状态文字（图标 + 文字）  │
+│        - 点击跳转详情                │
 └─────────────────────────────────────┘
                 </div>
             </div>
@@ -609,7 +626,96 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-2-4">2.4 任务卡片规格</div>
+                <div class="subsection-title" id="sub-2-4">2.4 列表卡片规格（合同 / 阶段 / 任务）</div>
+                <p style="margin:8px 0 4px;color:var(--text-secondary);font-size:13px;">列表页采用「合同 → 阶段 → 任务」三级分组结构（详见 <a href="#sub-2-2">§2.2 页面结构</a>）。以下按三级逐一定义卡片字段与展示规则；交互（展开/收起、跳转）统一在 <a href="#sub-2-4-4">§2.4.4</a> 描述。</p>
+
+                <h4 id="sub-2-4-1" style="margin:18px 0 8px;font-size:15px;color:var(--primary-color);">2.4.1 合同卡片（合同分组头部）字段</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>字段</th>
+                            <th>数据来源</th>
+                            <th>显示规则</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>合同图标</td>
+                            <td>固定资源（合同类型图标）</td>
+                            <td>统一展示，如 📄</td>
+                        </tr>
+                        <tr>
+                            <td>合同名称</td>
+                            <td>contracts.name</td>
+                            <td>完整显示，如「水电分包合同」</td>
+                        </tr>
+                        <tr>
+                            <td>隶属工作组名称</td>
+                            <td>contracts.workgroup_name</td>
+                            <td>与阶段数、任务总数合并为一行元信息：格式「&lt;工作组&gt; · &lt;阶段数&gt;个阶段 · &lt;任务数&gt;个任务」，如「水电工作组 · 4个阶段 · 13个任务」</td>
+                        </tr>
+                        <tr>
+                            <td>阶段数量总数</td>
+                            <td>阶段集合计数</td>
+                            <td>上述元信息中的「N个阶段」</td>
+                        </tr>
+                        <tr>
+                            <td>任务总数</td>
+                            <td>任务集合计数</td>
+                            <td>上述元信息中的「N个任务」</td>
+                        </tr>
+                        <tr>
+                            <td>整体完成进度条及数量</td>
+                            <td>合同内任务集合（status=completed 计数 / 任务总数）</td>
+                            <td>进度条（填充百分比 = 已完成 / 总数，四舍五入取整）+ 文字「已完成 x/y」，如「已完成 0/0」（原型首屏为演示占位值）；百分比随任务完成数实时变化</td>
+                        </tr>
+                        <tr>
+                            <td>展开/收起箭头</td>
+                            <td>—</td>
+                            <td>▼ 表示当前已展开，点击切换为收起态（见 <a href="#sub-2-4-4">§2.4.4</a>）</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4 id="sub-2-4-2" style="margin:18px 0 8px;font-size:15px;color:var(--primary-color);">2.4.2 阶段卡片（阶段分组头部）字段</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>字段</th>
+                            <th>数据来源</th>
+                            <th>显示规则</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>阶段状态指示点（stage-dot）</td>
+                            <td>阶段聚合状态（按阶段内任务状态推导）</td>
+                            <td>实心（已完成，绿）/ 橙色（确认中）/ 空（未开始），直观指示阶段整体进度</td>
+                        </tr>
+                        <tr>
+                            <td>阶段名称</td>
+                            <td>stages.name</td>
+                            <td>完整显示，如「材料进场阶段」</td>
+                        </tr>
+                        <tr>
+                            <td>按序执行标识（sequential-icon）</td>
+                            <td>stages.sequential = true 时显示</td>
+                            <td>图标（悬浮提示「按序执行」），表示该阶段内任务须按录入顺序依次执行；非按序阶段不显示</td>
+                        </tr>
+                        <tr>
+                            <td>阶段进度摘要（stage-count）</td>
+                            <td>阶段内任务集合</td>
+                            <td>格式「已完成数 / 任务总数 + 聚合状态」，如「3/3 已完成」「3/5 进行中」「0/3 待开始」；若阶段含未配置任务则展示状态分布，如「待配置 1 · 待开始 2」</td>
+                        </tr>
+                        <tr>
+                            <td>展开/收起箭头</td>
+                            <td>—</td>
+                            <td>▼ 表示已展开，点击切换（见 <a href="#sub-2-4-4">§2.4.4</a>）</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4 id="sub-2-4-3" style="margin:18px 0 8px;font-size:15px;color:var(--primary-color);">2.4.3 任务卡片字段</h4>
                 <table>
                     <thead>
                         <tr>
@@ -620,6 +726,11 @@
                     </thead>
                     <tbody>
                         <tr>
+                            <td>状态图标</td>
+                            <td>tasks.status</td>
+                            <td>✓（已完成）/ ▶（执行中）/ ⏳（确认中）/ ○（待开始）/ ⚙（待配置），不同颜色区分</td>
+                        </tr>
+                        <tr>
                             <td>任务名称</td>
                             <td>tasks.name</td>
                             <td>完整显示，超长换行</td>
@@ -627,7 +738,7 @@
                         <tr>
                             <td>执行人</td>
                             <td>users.name（关联executor_id）</td>
-                            <td>显示姓名，若无数显示"待配置"</td>
+                            <td>显示姓名，若无数据显示「待配置」；执行中任务可显示「进行中」</td>
                         </tr>
                         <tr>
                             <td>确认人</td>
@@ -635,9 +746,52 @@
                             <td>显示姓名列表，如 李四、王五</td>
                         </tr>
                         <tr>
-                            <td>任务状态</td>
+                            <td>确认进度（仅确认中任务）</td>
+                            <td>确认记录计数 / 确认人数</td>
+                            <td>进度条 + 文字「x/y 已确认」（如「1/3 已确认」）；被任一确认人驳回时显示「已驳回 · 需重新执行」（红色），对应 §2.7 驳回回退说明</td>
+                        </tr>
+                        <tr>
+                            <td>任务状态文字</td>
                             <td>tasks.status</td>
-                            <td>状态标签（不同颜色）</td>
+                            <td>状态标签（图标 + 文字：已完成 / 执行中 / 确认中 / 待开始 / 待配置），不同颜色</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4 id="sub-2-4-4" style="margin:18px 0 8px;font-size:15px;color:var(--primary-color);">2.4.4 卡片交互描述</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>交互对象</th>
+                            <th>触发动作</th>
+                            <th>行为说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>合同卡片头部</td>
+                            <td>点击（toggleContract）</td>
+                            <td>展开 / 收起该合同下的「阶段分组」；箭头 ▼ 同步切换展开态。收起时仅显示合同卡片头部（名称、元信息、进度条），隐藏其下所有阶段与任务</td>
+                        </tr>
+                        <tr>
+                            <td>顶部「展开全部」</td>
+                            <td>点击（expandAllContracts）</td>
+                            <td>一键展开 / 收起所有合同的阶段分组，按钮文案在「展开全部 / 收起全部」间切换</td>
+                        </tr>
+                        <tr>
+                            <td>阶段卡片头部</td>
+                            <td>点击（toggleStage）</td>
+                            <td>展开 / 收起该阶段内的「任务列表」；箭头同步切换。收起时仅显示阶段卡片头部，隐藏其下任务</td>
+                        </tr>
+                        <tr>
+                            <td>任务卡片</td>
+                            <td>点击（goToTaskDetail）</td>
+                            <td>跳转任务详情页（task-detail.html?status=…）；临时任务（temp）或按状态筛选跳转时对应传入状态参数。若阶段内任务为「按序执行」且前置任务未完成，点击非已完成任务时弹出轻提示「当前阶段内任务为按序执行，存在未完成的前置任务，当前任务无法执行」且不跳转（约束见 <a href="#sub-2-5">§2.5</a> 排序陈列规则与 §一 主状态机）</td>
+                        </tr>
+                        <tr>
+                            <td>默认展开态（原型）</td>
+                            <td>页面加载</td>
+                            <td>默认展开首个合同及其首个阶段，便于直观查看；其余合同 / 阶段按收起态呈现。筛选（搜索 / 状态 / 参与）触发重渲染时会快照并恢复展开态</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1088,7 +1242,7 @@
             <div class="subsection-title" id="sub-3-9">3.9 任务详情页按状态分视角详述（服务方）</div>
             <p class="section-desc">本页基于服务方小程序原型（service-miniapp/task-detail.html）的<strong>示例数据</strong>，对任务详情页在<strong>每一种状态</strong>下的页面表现，结合<strong>三类操作视角</strong>（配置人 / 执行人 / 确认人）逐一展开描述，并补充<strong>不同场景下的演示效果</strong>。任务的<strong>主逻辑与状态流转已在前文（§一 主状态机、§3.1–§3.8）介绍</strong>，本节不再重复，仅聚焦「不同状态 × 不同视角」的页面呈现与各场景演示，涵盖逻辑、权限、效果、字段、交互五个维度。</p>
             <div class="note"><div class="note-title">演示数据与本页定位说明</div><p>原型页面均为<strong>示例数据</strong>，不代表真实产品的固定人员构成或唯一效果。原型内置的「角色切换器」仅提供<strong>配置人 / 执行人 / 确认人</strong> 三个视角，<strong>服务端任务详情页不提供独立的「业主」视角</strong>——业主在任务中仅以「确认人」或「其他用户」身份出现，其作为确认人的专属操作与查看体验由「第六章 任务详情页（业主）」专门说明，本节不再单列。演示数据含 项目总「张三」、设计师「赵六」、业主「王五」（三者均为确认人）、工长「李四」（执行人），仅用于演示多确认人、多轮确认流程，不代表真实产品人员构成。</p>
-            <p><strong>演示覆盖的场景：</strong>① <strong>有确认人（多确认人）</strong>：以 3 名确认人演示确认中 / 已完成及驳回回退的完整多轮确认流程（§3.15–§3.19）；② <strong>无确认人</strong>：执行人执行完毕直接转「已完成」（无需确认），原型通过各状态底部按钮文案（「提交确认」与「完成任务」随是否配置确认人切换）演示该快捷完成场景（见 §3.12、§3.19 交互）。</p></div>
+            <p><strong>演示覆盖的场景：</strong>① <strong>有确认人（多确认人）</strong>：以 3 名确认人演示确认中 / 已完成及驳回回退的完整多轮确认流程（§3.15–§3.19）；② <strong>无确认人</strong>：执行人执行完毕直接转「已完成」（无需确认），原型通过各状态底部按钮文案（「提交确认」与「完成任务」随是否配置确认人切换）演示该快捷完成场景（见 §3.12、§3.17 交互）。</p></div>
 
             <div class="note"><div class="note-title">原型演示链接（一对一核对）</div><p>本节每个状态小节（§3.11–§3.19）标题下方均提供「🔗 原型演示」链接，点击即可在浏览器中打开对应的服务方任务详情页原型，按状态与视角直接核对页面呈现。原型支持通过 URL 参数深链：<code>?status=&lt;状态枚举&gt;</code> 指定状态（取值见 §3.10 表格：configuring / pending / pending_blocked / in_progress / confirming / confirming_after_reject / completed / completed_with_reject / rejected_pending），<code>?role=&lt;视角枚举&gt;</code> 指定视角（configurer 配置人 / executor 执行人 / confirmer 确认人 / other 其他用户 / nonExecutor 非执行人 / nonConfirmer 非确认人）。进入原型后，也可使用页面顶部的「任务状态切换」与「用户视角切换」控件手动浏览全部状态与视角，无需修改链接。各状态链接已按该状态下<strong>真实有效</strong>的视角组合给出（只读类视角在原型中对应 非执行人 / 非确认人 / 其他用户 视角，故以原型实际视角命名，避免跳转到被 coerce 的非预期视图）。</p></div>
 
@@ -1108,7 +1262,7 @@
                         <tr><td>待开始（前置阻塞）</td><td>pending_blocked</td><td>待开始</td><td>设置了按序执行，前置任务未完成而被阻塞</td></tr>
                         <tr><td>执行中</td><td>in_progress</td><td>执行中</td><td>执行人已上传记录，尚未提交确认</td></tr>
                         <tr><td>确认中</td><td>confirming</td><td>确认中</td><td>执行人已提交，等待确认人确认</td></tr>
-                        <tr><td>确认中（被驳回后）</td><td>confirming_after_reject</td><td>确认中</td><td>被驳回后执行人重新提交，进入第 2 轮确认（确认结果=已驳回 的回退后再确认）</td></tr>
+                        <tr><td>确认中（被驳回后）</td><td>confirming_after_reject</td><td>确认中</td><td>被驳回后执行人重新提交，进入新一轮（第 N 轮）确认（确认结果=已驳回 的回退后再确认，轮次无上限）</td></tr>
                         <tr><td>已完成</td><td>completed</td><td>已完成</td><td>全部确认人确认通过</td></tr>
                         <tr><td>已完成（含驳回）</td><td>completed_with_reject</td><td>已完成</td><td>经历驳回后最终全部确认通过，历史含驳回记录</td></tr>
                         <tr><td>驳回后待开始</td><td>rejected_pending</td><td>待开始</td><td>确认中有人驳回，主状态回退为待开始（状态回退效果，确认记录留存）</td></tr>
@@ -1122,10 +1276,11 @@
                     </thead>
                     <tbody>
                         <tr><td>配置人</td><td>configurer</td><td>合同甲乙方 / 合同创建者（服务方）</td><td>配置执行人、增删确认人、修改执行人；驱动状态流转</td></tr>
-                        <tr><td>执行人</td><td>executor</td><td>项目内人员（可配置选择）</td><td>上传执行记录、提交确认 / 重新提交确认</td></tr>
+                        <tr><td>执行人</td><td>executor</td><td>项目内人员（可配置选择，含业主）</td><td>上传执行记录、提交确认 / 重新提交确认</td></tr>
                         <tr><td>确认人</td><td>confirmer</td><td>项目内人员（可配置选择）</td><td>在确认中阶段执行「确认通过 / 驳回（填原因）」</td></tr>
                     </tbody>
                 </table>
+                <div class="note"><div class="note-title">执行人可包含业主（业主自办类任务）</div><p>执行人（executor）的可选范围为「项目内人员」，<strong>包含业主本人</strong>。当任务属于「业主自办类」（典型如「室内业主个人用具占用施工场地，需在规定时间内搬移」），由配置人将业主选定为执行人，业主即承担执行人角色，在服务方小程序与服务方执行人视角一致地履行上传执行记录、提交确认 / 完成任务等职责。此类场景下业主同时具备「执行人」与「项目相关方」双重身份，但其确认人资格仍取决于是否被配置为确认人（业主自办类任务通常无需他人确认，走「完成任务」流程直接闭环）。详见第六章 <a href="#sub-6-3-1">§6.3.1</a>。</p></div>
                 <div class="note"><div class="note-title">视角切换机制</div><p>原型顶部「角色切换器」提供<strong>配置人 / 执行人 / 确认人</strong> 三个视角按钮，可在不退出页面的情况下预览不同角色看到的页面（待配置态隐藏通用角色切换器、改显「配置视角」专用切换器）。服务方任务详情页<strong>不提供独立的「业主」视角</strong>；业主在任务中作为确认人或相关方查看者时的专属体验，由「第六章 任务详情页（业主）」专门说明，本节聚焦上述三类视角。</p></div>
 
                 <h4>3. 页面通用区块（各状态共享骨架）</h4>
@@ -1134,8 +1289,8 @@
                     <li><strong>流程步骤条</strong>（4 步：待开始 → 执行中 → 确认中 → 已完成）：以 已完成（completed）/ 当前（current）/ 默认 三态高亮当前进度，并显示进度百分比（flowProgressBar）。</li>
                     <li><strong>人员区</strong>：执行人信息卡 + 确认人列表（含每人头像、姓名·角色、确认状态、确认时间）。</li>
                     <li><strong>三段标准卡片</strong>（standard-card）：执行标准（📝 可折叠）、确认标准（✅ 可折叠）、担责标准（⚠️ 可折叠）；以编号列表（standard-list / standard-item）呈现每条标准，数据来源于引用模板或合同编辑时定义（具体由模板内配置格式决定，非模板内任务由创建人添加结果决定），各状态只读展示；点击头部「收起」可折叠隐藏。</li>
-                    <li><strong>执行记录卡</strong>：执行人上传的图片/视频/文字，及「第 N 次执行」历史（含已驳回标识）。</li>
-                    <li><strong>确认记录卡</strong>：各确认人的确认/驳回结果、评语、标签、评分、附件，按轮次分组（第 2 轮 / 第 1 轮）。</li>
+                    <li><strong>执行记录卡</strong>：执行人上传的图片/视频/文字，及「第 N 次执行」历史（含已驳回标识）；每次被驳回后执行人重新上传，上传轮次（upload_round）递增（首次为 1，第 2 次、第 3 次……第 N 次，<strong>轮次无上限</strong>，最新一次为当前轮）。</li>
+                    <li><strong>确认记录卡</strong>：各确认人的确认/驳回结果、评语、标签、评分、附件，按轮次分组（第 1 轮 / 第 2 轮 / … / 第 N 轮，<strong>轮次无上限</strong>；最新轮为当前轮（进行中）、其余历史轮次半透明（opacity 0.6）留存）；轮次机制详见 §3.16「逻辑」。</li>
                     <li><strong>前置任务阻塞卡</strong>：仅前置阻塞态显示。</li>
                     <li><strong>底部操作栏 / 固定上传栏</strong>：随视角与状态变化的操作按钮。</li>
                 </ul>
@@ -1223,7 +1378,7 @@
                 <div class="subsection-title" id="sub-3-13">3.13 待开始（前置阻塞）</div>
             <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="service-miniapp/task-detail.html?status=pending_blocked&amp;role=executor" target="_blank">前置阻塞 · 执行人视角</a> ｜ <a href="service-miniapp/task-detail.html?status=pending_blocked&amp;role=confirmer" target="_blank">前置阻塞 · 确认人视角</a> ｜ <a href="service-miniapp/task-detail.html?status=pending_blocked&amp;role=configurer" target="_blank">前置阻塞 · 配置人视角</a> ｜ <a href="service-miniapp/task-detail.html?status=pending_blocked&amp;role=other" target="_blank">前置阻塞 · 其他用户视角</a></p>
                 <h4>逻辑</h4>
-                <p>任务设置了「按序执行」且前置任务未完成，进入阻塞。确认进度提示「等待前置任务完成」。显示<strong>前置任务阻塞卡</strong>（preTaskBlockCard）：列出前置任务名称、执行人、状态（如「进行中」）；卡片底部提示「完成后将自动通知执行人」。前置任务条目可点击，跳转至该前置任务的详情页。流程条第 1 步当前（current），进度 0%。</p>
+                <p>任务设置了「按序执行」且前置任务未完成，进入阻塞。确认进度提示「等待前置任务完成」。显示<strong>前置任务阻塞卡</strong>（preTaskBlockCard）：列出前置任务名称、执行人、状态（如「进行中」）；卡片底部提示「完成后将自动通知执行人」。前置任务条目可点击，跳转至<a href="service-miniapp/task-detail.html?status=in_progress&amp;role=executor" target="_blank">该前置任务的详情页</a>（原型以执行中示例态演示跳转，真实环境携带该前置任务的 taskId 参数）。流程条第 1 步当前（current），进度 0%。</p>
                 <h4>权限与用户视角</h4>
                 <table class="spec-table">
                     <thead><tr><th>视角</th><th>可见/可操作</th></tr></thead>
@@ -1295,7 +1450,7 @@
                 <p class="subflow-title">（4）动态记录生成规则（项目动态）</p>
                 <ul>
                     <li><strong>生成时机</strong>：与「提交动作」执行记录同时生成，时间 = 提交确认时间，归入「项目动态」（activity-list）对应日期分组（提交当天归入「今天（dateLabel）」）。</li>
-                    <li><strong>聚合规则</strong>：动态仅对执行记录中的<strong>媒体文件做汇总</strong>——将本次提交全部执行记录的媒体文件合并为一条媒体集合（是否有媒体（hasMedia）/ 媒体数量（mediaCount）据此取合并值）；<strong>文字描述不逐条汇总</strong>，统一为本次操作的标准动态文案：执行人「完成了{接单名称}{任务名称}的施工」（{接单名称}=所属合同 / 服务名称（来源），{任务名称}=当前任务名），不再生成「提交 N 条、含 M 个媒体」之类的逐条汇总描述。</li>
+                    <li><strong>聚合规则</strong>：动态仅对执行记录中的<strong>媒体文件做汇总</strong>——将本次提交全部执行记录的媒体文件合并为一条媒体集合（是否有媒体（hasMedia）/ 媒体数量（mediaCount）据此取合并值）；<strong>文字描述不逐条汇总</strong>，统一为本次操作的标准动态文案：执行人「完成了{阶段名称}{任务名称}的施工」（{阶段名称}=所属阶段名称（来源），{任务名称}=当前任务名），不再生成「提交 N 条、含 M 个媒体」之类的逐条汇总描述。</li>
                     <li><strong>动态记录字段</strong>（对应项目动态数据模型，系统自动生成，无需用户填写、无校验规则）：</li>
                 </ul>
                 <table class="spec-table">
@@ -1305,10 +1460,10 @@
                         <tr><td>角色（role）/ 角色样式（roleClass）</td><td>执行人所属角色名与样式类（如 施工（worker））</td><td>执行人角色</td></tr>
                         <tr><td>类型（type）</td><td>固定为任务类动态（task）</td><td>系统固定</td></tr>
                         <tr><td>类型标签（typeLabel）</td><td>提交确认为「任务提交」；完成任务为「任务完成」</td><td>由提交路径决定</td></tr>
-                        <tr><td>内容（content）</td><td>固定文案「完成了{接单名称}{任务名称}的施工」（{接单名称}=所属合同 / 服务名称（来源）、{任务名称}=当前任务名）；媒体文件按汇总后的媒体集合呈现（是否有媒体（hasMedia）/ 媒体数量（mediaCount）取合并值）</td><td>由提交动作记录 + 接单名称 + 任务名称生成</td></tr>
+                        <tr><td>内容（content）</td><td>固定文案「完成了{阶段名称}{任务名称}的施工」（{阶段名称}=所属阶段名称（来源）、{任务名称}=当前任务名）；</td><td>由提交动作记录 + 阶段名称 + 任务名称生成</td></tr>
                         <tr><td>来源（source）</td><td>所属合同 / 服务名称</td><td>任务所属合同</td></tr>
                         <tr><td>时间（time）/ 日期（date）/ 日期标签（dateLabel）</td><td>时间 = 提交确认时间（时:分）；日期与日期标签（今天 / 昨天 / …）按提交时间计算</td><td>提交确认时间</td></tr>
-                        <tr><td>是否有媒体（hasMedia）/ 媒体数量（mediaCount）</td><td>汇总执行记录的媒体总数大于 0 时 hasMedia 为 true，mediaCount 为该总数</td><td>由执行记录媒体聚合</td></tr>
+                        <tr><td>媒体文件（files）</td><td>确认人确认 / 驳回时上传的媒体附件（图片 / 视频 / 音频）；取确认人上传集合合并（若有），以 📷 / 🎬 / 🎵 标识呈现；未上传则为空集合</td><td>确认人上传的媒体附件</td></tr>
                         <tr><td>是否有权限查看（hasPermission）</td><td>按项目成员权限判定（默认项目内成员可查看）</td><td>系统权限</td></tr>
                     </tbody>
                 </table>
@@ -1316,8 +1471,18 @@
                     <li><strong>说明</strong>：动态记录与执行人提交动作一一对应，供项目成员在「项目动态」中按类型 / 日期筛选查看；动态为系统自动生成，不向用户暴露填写入口。</li>
                 </ul>
                 </div>
+                <div class="subflow">
+                <p class="subflow-title">（5）待办生成规则（确认人「任务确认」待办）</p>
+                <ul>
+                    <li><strong>生成时机</strong>：执行人点击「确认提交」（提交确认，有确认人时）使任务流转至「确认中（confirming）」后，系统为<strong>每一位已配置的确认人</strong>自动生成一条「任务确认」待办；生成时间 = 提交确认时间。点击「确认完成」（完成任务，无确认人时）<strong>不</strong>生成确认待办（无确认人可生成）。</li>
+                    <li><strong>待办类型与归属</strong>：对应 §4.3「合同任务确认」待办类型（标签「任务」，状态值 confirming，数据来源「任务状态为确认中且当前用户为确认人」）；待办仅对「当前用户为该任务确认人」的成员可见，每位确认人各得一条、互不重复。</li>
+                    <li><strong>跳转目标</strong>：点击待办卡片跳转 <a href="service-miniapp/task-detail.html?status=confirming&amp;role=confirmer" target="_blank">task-detail.html?status=confirming&amp;role=confirmer</a>，进入本人确认视角直接执行 §3.15 确认 / 驳回。</li>
+                    <li><strong>状态联动</strong>：确认人完成本人确认后，其对应的「任务确认」待办自动标记 completed（从「待处理」移至「已处理」）；若任务被驳回回退「驳回后待开始」，原 confirming 来源的待办随状态变更不再匹配而移出待处理，待执行人「重新提交确认」后再次进入确认中时由本规则重新生成。</li>
+                    <li><strong>说明</strong>：待办由系统自动生成，本规则仅新增「执行人提交确认 → 确认人确认待办」这一待办来源，不改变 §4.3 其他既有待办类型及功能描述。</li>
+                </ul>
+                </div>
                 <p>执行人「上传记录 / ✎ 上传」→ 继续追加执行记录（轮次递增），详见下方执行记录区说明。</p>
-                <div class="note"><p>提交后执行记录进入只读（不可再编辑 / 删除），由弹窗警示文案体现；执行人视角在「确认中 / 已完成」等后续状态不再提供提交入口，详见 §3.15、§3.16。执行记录区的逐条操作项（上传记录 / 继续上传 / 编辑 / 删除）的字段结构、展示形式与完整流程交互，详见 §3.12「上传记录（数据结构与提交交互）」「执行记录区展示与操作项」。</p></div>
+                <div class="note"><p>提交后执行记录进入只读（不可再编辑 / 删除），由弹窗警示文案体现；执行人视角在「确认中 / 已完成」等后续状态不再提供提交入口，详见 §3.15、§3.18。执行记录区的逐条操作项（上传记录 / 继续上传 / 编辑 / 删除）的字段结构、展示形式与完整流程交互，详见 §3.12「上传记录（数据结构与提交交互）」「执行记录区展示与操作项」。</p></div>
                 <h4>效果</h4>
                 <p>头部执行中（in-progress）配色；流程条进度 25%；执行记录区绿色提示块强化「已提交结果，待确认」氛围。</p>
             </div>
@@ -1347,12 +1512,12 @@
                 <table class="spec-table">
                     <thead><tr><th>表单</th><th>字段</th><th>必填性</th><th>校验规则</th><th>说明</th></tr></thead>
                     <tbody>
-                        <tr><td rowspan="5">确认通过<br>（确认弹窗）</td><td>媒体附件（图片 / 视频 / 音频）</td><td>选填</td><td>无</td><td>点击「添加图片 / 视频 / 音频」调起系统文件选择，按类型附加；可不上传。</td></tr>
-                        <tr><td>评语（文本域）</td><td>选填</td><td>无</td><td>占位提示「请填写真实评语」；纯文本，原型 <code>confirmTask</code> 不校验长度或空值。</td></tr>
-                        <tr><td>综合评星</td><td>选填</td><td>无</td><td>1–5 星（含 0.5 半星步进），点击半星 / 整星设置；不评分亦可提交。</td></tr>
-                        <tr><td>评价标签</td><td>选填</td><td>无</td><td>可多选：责任心棒 / 服务态度好 / 专业能力强；点击切换选中态。</td></tr>
+                        <tr><td rowspan="5">确认通过<br>（确认弹窗）</td><td>媒体附件（图片 / 视频 / 音频）</td><td>选填</td><td>图片 jpg/jpeg/png/webp、视频 mp4/mov、音频 mp3/m4a/wav（MIME 须为 <code>image/*</code> / <code>video/*</code> / <code>audio/*</code> 之一）；单文件 ≤20MB，数量 / 时长受 §3.5 限制（图片 ≤9 张、视频 ≤1 个且 ≤3 分钟、音频 ≤3 个且每条 ≤60 秒）；name（文件名）/ type（MIME 类型）/ size（文件大小）三项须齐全；选填，未上传不校验，超出限制提示并丢弃</td><td>点击「添加图片 / 视频 / 音频」调起系统文件选择，按类型附加；可不上传。</td></tr>
+                        <tr><td>评语（文本域）</td><td>选填</td><td>若填写则 1–500 字符（对应 §8.3 确认备注 remark，String(500)）；超出拦截并轻提示「备注不能超过500个字符」（<code>Validation.validate.textLength</code>，最大 500、非必填）；留空不校验</td><td>占位提示「请填写真实评语」；纯文本。</td></tr>
+                        <tr><td>综合评星</td><td>选填</td><td>若评分，取值须为 0.5–5 之间、以 0.5 为步进的合法星值（1 / 1.5 / 2 / … / 5），控件已限定范围，无需额外交互校验；不评分亦可提交</td><td>1–5 星（含 0.5 半星步进），点击半星 / 整星设置；不评分亦可提交。</td></tr>
+                        <tr><td>评价标签</td><td>选填</td><td>仅可从预置标签集合（责任心棒 / 服务态度好 / 专业能力强）中多选，不支持自定义输入；不选亦可提交</td><td>可多选：责任心棒 / 服务态度好 / 专业能力强；点击切换选中态。</td></tr>
                         <tr><td>按钮项</td><td>—</td><td>—</td><td>「取消」关闭弹窗、无任何变更；「确认通过」记录该人确认（确认弹窗所有字段均无强制必填项，点击即记录）。</td></tr>
-                        <tr><td rowspan="3">驳回<br>（驳回弹窗）</td><td>媒体附件（图片 / 视频 / 音频）</td><td>选填</td><td>无</td><td>同确认弹窗，可不上传。</td></tr>
+                        <tr><td rowspan="3">驳回<br>（驳回弹窗）</td><td>媒体附件（图片 / 视频 / 音频）</td><td>选填</td><td>同确认弹窗媒体约束（图片 jpg/jpeg/png/webp、视频 mp4/mov、音频 mp3/m4a/wav；单文件 ≤20MB，数量 / 时长受 §3.5 限制；name/type/size 三项须齐全）；选填，未上传不校验，超出限制提示并丢弃</td><td>同确认弹窗，可不上传。</td></tr>
                         <tr><td>驳回原因（文本域）</td><td>必填</td><td>必填且不超过 500 字符；为空或超出均拦截并轻提示（由 <code>Validation.validate.textLength</code> 统一校验：最大 500、必填）</td><td>占位提示「请输入驳回原因（必填）」；为驳回流程唯一强制项，校验由 <code>rejectTask</code> 调用统一校验器完成。</td></tr>
                         <tr><td>按钮项</td><td>—</td><td>—</td><td>「取消」关闭弹窗、无任何变更；「确认驳回」校验通过后流转「驳回后待开始（rejected_pending）」，并通知执行人重新执行。</td></tr>
                     </tbody>
@@ -1372,8 +1537,7 @@
                 <p class="subflow-title">（4）动态记录生成规则（项目动态）</p>
                 <ul>
                     <li><strong>生成时机</strong>：与「确认结果」记录同时生成，时间 = 该确认人确认时间，归入「项目动态」（activity-list）对应日期分组（确认当天归入「今天（dateLabel）」）。</li>
-                    <li><strong>聚合规则</strong>：确认 / 驳回动作本身<strong>不产生媒体文件</strong>，因此动态是否有媒体（hasMedia）取 false、媒体数量（mediaCount）为 0（确认人上传的媒体附件在「确认记录卡」独立展示，不汇入项目动态媒体汇总）；<strong>文字描述不逐条汇总</strong>，统一为本次操作的标准动态文案（见下方细分）。</li>
-                    <li><strong>动态文案细分</strong>：① 单条确认（非全部完成）：「{确认人姓名} 确认了 {接单名称}{任务名称}」（类型标签（typeLabel）=「任务确认」）；② 驳回：「{确认人姓名} 驳回了 {接单名称}{任务名称}」（类型标签（typeLabel）=「任务驳回」）；③ <strong>最后一人确认（全部确认）→ 任务已完成</strong>：「完成了 {接单名称}{任务名称}的施工」（类型标签（typeLabel）=「任务完成」，与 §3.14 完成任务动态完全一致，但此处由确认流程驱动）。</li>
+                    <li><strong>动态文案细分</strong>：① 单条确认（非全部完成）：「{确认人姓名} 确认了 {阶段名称}{任务名称}」（类型标签（typeLabel）=「任务确认」）；② 驳回：「{确认人姓名} 驳回了 {阶段名称}{任务名称}」（类型标签（typeLabel）=「任务驳回」）；③ <strong>最后一人确认（全部确认）→ 任务已完成</strong>：「完成了 {阶段名称}{任务名称}的施工」（类型标签（typeLabel）=「任务完成」，与 §3.14 完成任务动态完全一致，但此处由确认流程驱动）。</li>
                     <li><strong>动态记录字段</strong>（对应项目动态数据模型，系统自动生成，无需用户填写、无校验规则）：</li>
                 </ul>
                 <table class="spec-table">
@@ -1383,15 +1547,25 @@
                         <tr><td>角色（role）/ 角色样式（roleClass）</td><td>确认人所属角色名与样式类（如 项目总 / 业主 / 设计师）</td><td>确认人角色</td></tr>
                         <tr><td>类型（type）</td><td>固定为任务类动态（task）</td><td>系统固定</td></tr>
                         <tr><td>类型标签（typeLabel）</td><td>单条确认为「任务确认」；驳回为「任务驳回」；全部确认（最后一人）为「任务完成」</td><td>由确认动作决定</td></tr>
-                        <tr><td>内容（content）</td><td>标准文案：单条确认「{确认人姓名} 确认了 {接单名称}{任务名称}」；驳回「{确认人姓名} 驳回了 {接单名称}{任务名称}」；全部确认（最后一人确认）「完成了 {接单名称}{任务名称}的施工」（{接单名称}=所属合同 / 服务名称（来源）、{任务名称}=当前任务名）；媒体文件不汇入，是否有媒体（hasMedia）= false、媒体数量（mediaCount）= 0</td><td>由确认动作 + 确认人 + 接单名称 + 任务名称生成</td></tr>
+                        <tr><td>内容（content）</td><td>标准文案：单条确认「{确认人姓名} 确认了 {阶段名称}{任务名称}」；驳回「{确认人姓名} 驳回了 {阶段名称}{任务名称}」；全部确认（最后一人确认）「完成了 {阶段名称}{任务名称}的施工」（{阶段名称}=所属阶段名称（来源）、{任务名称}=当前任务名）；</td><td>由确认动作 + 确认人 + 阶段名称 + 任务名称生成</td></tr>
                         <tr><td>来源（source）</td><td>所属合同 / 服务名称</td><td>任务所属合同</td></tr>
                         <tr><td>时间（time）/ 日期（date）/ 日期标签（dateLabel）</td><td>时间 = 该确认人确认时间（时:分）；日期与日期标签（今天 / 昨天 / …）按确认时间计算</td><td>确认时间</td></tr>
-                        <tr><td>是否有媒体（hasMedia）/ 媒体数量（mediaCount）</td><td>确认 / 驳回动作不产生媒体，固定 是否有媒体（hasMedia）= false、媒体数量（mediaCount）= 0</td><td>系统固定</td></tr>
+                        <tr><td>媒体文件（files）</td><td>确认人确认 / 驳回时上传的媒体附件（图片 / 视频 / 音频）；取确认人上传集合合并（若有），以 📷 / 🎬 / 🎵 标识呈现；未上传则为空集合</td><td>确认人上传的媒体附件</td></tr>
                         <tr><td>是否有权限查看（hasPermission）</td><td>按项目成员权限判定（默认项目内成员可查看）</td><td>系统权限</td></tr>
                     </tbody>
                 </table>
                 <ul>
-                    <li><strong>说明</strong>：动态记录与确认人确认动作一一对应，供项目成员在「项目动态」中按类型 / 日期筛选查看；动态为系统自动生成，不向用户暴露填写入口。全部确认对应的「任务已完成」动态与逐条确认动态并列存在，既呈现逐人确认过程，又在最后标记任务闭环完成。</li>
+                    <li><strong>说明</strong>：动态记录与确认人确认动作一一对应，供项目成员在「项目动态」中按类型 / 日期筛选查看；动态为系统自动生成，不向用户暴露填写入口。确认 / 驳回动态现包含确认人上传的图片 / 视频 / 音频媒体（见上表 媒体文件（files）），与 §3.14 执行人上传媒体区分来源。全部确认对应的「任务已完成」动态与逐条确认动态并列存在，既呈现逐人确认过程，又在最后标记任务闭环完成。</li>
+                </ul>
+                </div>
+                <div class="subflow">
+                <p class="subflow-title">（5）待办生成规则（执行人「任务执行 / 重新执行」待办）</p>
+                <ul>
+                    <li><strong>生成时机</strong>：确认人点击「确认驳回」提交、使任务主状态回退为「驳回后待开始（rejected_pending）」后，系统为<strong>该任务的执行人</strong>自动生成一条「任务执行」待办（即「重新执行」待办）；生成时间 = 驳回时间。单条确认（非全部完成 / 非驳回）不生成执行人待办。</li>
+                    <li><strong>待办类型与归属</strong>：对应 §4.3「合同任务执行」待办类型（标签「任务」，状态值 pending，数据来源「任务状态为待开始且当前用户为执行人」）；待办仅对该任务执行人可见。注：驳回回退态（rejected_pending）属「待开始」主状态家族，满足「待开始 + 执行人」的待办来源条件，故复用同一「合同任务执行」类型，不新增类型。</li>
+                    <li><strong>跳转目标</strong>：点击待办卡片跳转 <a href="service-miniapp/task-detail.html?status=rejected_pending&amp;role=executor" target="_blank">task-detail.html?status=rejected_pending&amp;role=executor</a>，进入执行人视角重新上传记录并提交。</li>
+                    <li><strong>状态联动</strong>：执行人重新提交确认 / 完成任务后，原「任务执行」待办自动标记 completed（移出待处理）；该待办随任务离开「待开始 / 驳回后待开始」态即不再匹配来源而移出，重新进入时由本规则（或 §3.14 提交确认规则）重新生成。</li>
+                    <li><strong>说明</strong>：待办由系统自动生成，本规则仅新增「确认人驳回 → 执行人重新执行待办」这一待办来源，不改变 §4.3 其他既有待办类型及功能描述。</li>
                 </ul>
                 </div>
                 <h4>效果</h4>
@@ -1399,76 +1573,45 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-3-16">3.16 确认中（被驳回后）</div>
-            <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="service-miniapp/task-detail.html?status=confirming_after_reject&amp;role=confirmer" target="_blank">确认中（被驳回后） · 确认人视角</a> ｜ <a href="service-miniapp/task-detail.html?status=confirming_after_reject&amp;role=nonConfirmer" target="_blank">确认中（被驳回后） · 只读（非确认人视角）</a></p>
-                <h4>逻辑</h4>
-                <p>任务曾被驳回（主状态回退为待开始），执行人重新提交后进入<strong>第 2 轮确认</strong>。状态徽标仍显示「确认中」，确认进度「1/3」。与「确认中」同属确认中主状态，但页面额外展示<strong>历史记录</strong>：第 1 次执行（带「已驳回」红色标签）+ 驳回原因块（红底），确认记录卡按「第 2 轮 / 第 1 轮」分组，第 1 轮中被驳回项以半透明呈现。</p>
-                <h4>权限与用户视角</h4>
-                <table class="spec-table">
-                    <thead><tr><th>视角</th><th>可见/可操作</th></tr></thead>
-                    <tbody>
-                        <tr><td>确认人</td><td>同确认中：底部「驳回」「确认通过」；当前轮到自己时操作</td></tr>
-                        <tr><td>配置人 / 执行人</td><td>与确认中一致；执行人此态固定上传栏隐藏（已重新提交）</td></tr>
-                    </tbody>
-                </table>
-                <h4>字段</h4>
-                <p>历史记录区（historyRecords）显示：第 1 次执行内容 + 红色「已驳回」标签 + 驳回原因（含驳回人、时间）；确认记录卡：第 2 轮为当前确认（张三已确认附新评语，王五/赵六待确认），第 1 轮为历史（张三已确认、王五已驳回，半透明）。</p>
-                <h4>交互</h4>
-                <p>确认人操作与「确认中」一致。本轮全部确认通过则转「已完成（含驳回）」；若再次有人驳回，则再次回退「驳回后待开始」（记录继续留存）。</p>
-                <h4>效果</h4>
-                <p>历史记录区半透明 + 灰底，突出「历史」；第 1 轮被驳回归项红底「驳回原因」块，强化「为何重做」的上下文；流程条与确认中相同（第 3 步当前（current），50%）。</p>
-            </div>
-
-            <div class="subsection">
-                <div class="subsection-title" id="sub-3-17">3.17 已完成</div>
+                <div class="subsection-title" id="sub-3-16">3.16 已完成</div>
             <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="service-miniapp/task-detail.html?status=completed&amp;role=confirmer" target="_blank">已完成 · 确认人视角</a> ｜ <a href="service-miniapp/task-detail.html?status=completed&amp;role=nonConfirmer" target="_blank">已完成 · 只读（非确认人视角）</a></p>
                 <h4>逻辑</h4>
-                <p>全部确认人确认通过。头部 completed 配色，状态徽标「已完成」，确认进度「全部确认人已确认」。流程条 4 步全 completed，进度 100%。执行记录卡 + 确认记录卡均显示；历史记录区隐藏（无驳回，无需留存历史轮次）。</p>
+                <p>全部确认人确认通过（最后一人确认触发的「任务已完成」动态，详见 §3.15「确认 / 驳回后记录生成规则」）。头部 completed 配色，状态徽标「已完成」，确认进度「全部确认人已确认」。流程条 4 步全 completed，进度 100%。执行记录卡 + 确认记录卡均显示；历史记录区隐藏（无驳回，无需留存历史轮次）。</p>
                 <h4>权限与用户视角</h4>
                 <table class="spec-table">
                     <thead><tr><th>视角</th><th>可见/可操作</th></tr></thead>
                     <tbody>
                         <tr><td>确认人</td><td>操作栏「查看评价」；若本人已确认但尚未评价，其确认记录项显「去评价」入口（仅本人可见）</td></tr>
-                        <tr><td>配置人 / 执行人</td><td>只读；操作栏「查看评价」</td></tr>
+                        <tr><td>配置人</td><td>只读；操作栏「查看评价」</td></tr>
+                        <tr><td>执行人</td><td>只读；操作栏「查看评价」</td></tr>
                     </tbody>
                 </table>
                 <h4>字段</h4>
-                <p>确认人列表三人全「已确认」；确认记录卡列出每人评语、标签、评分、附件（如张三附图、王五「暂未评价」占位）；无「已驳回」标识。</p>
+                <p>确认人列表三人全「已确认」；确认记录卡列出每人评语、标签、评分、附件（如张三附图、王五「暂未评价」占位、赵六附星评）；无「已驳回」标识；历史记录区隐藏。</p>
                 <h4>交互</h4>
                 <ul>
-                    <li>任意视角「查看评价」→ 打开评价列表弹窗，查看各确认人对执行人的评价。</li>
-                    <li>确认人本人「去评价」→ 打开评价弹窗（维度评分 + 标签），提交后留存。</li>
+                    <li>任意视角「查看评价」→ 打开评价列表弹窗（<code>showEvaluationListModal</code>），查看各确认人对执行人的评价（评语 / 标签 / 评分 / 附件）。</li>
+                    <li>确认人本人「去评价」→ 打开评价弹窗（综合评星 + 评价标签 + 评语），提交后<strong>补充更新本人对应的确认记录（追加评语 / 标签 / 评分），不新增确认记录、不新增动态</strong>。</li>
                 </ul>
-                <h4>效果</h4>
-                <p>头部 completed 配色（绿色调）；流程条满进度 100%、4 步全绿勾；确认记录以绿色状态标签为主，整体呈现「闭环完成」。</p>
-            </div>
-
-            <div class="subsection">
-                <div class="subsection-title" id="sub-3-18">3.18 已完成（含驳回）</div>
-            <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="service-miniapp/task-detail.html?status=completed_with_reject&amp;role=confirmer" target="_blank">已完成（含驳回） · 确认人视角</a> ｜ <a href="service-miniapp/task-detail.html?status=completed_with_reject&amp;role=nonConfirmer" target="_blank">已完成（含驳回） · 只读（非确认人视角）</a></p>
-                <h4>逻辑</h4>
-                <p>任务经历过驳回、执行人重新提交后最终全部确认通过。状态徽标「已完成」，与「已完成」同属已完成主状态，但<strong>历史记录区显示第 1 次执行（带「已驳回」标签）+ 驳回原因</strong>，确认记录卡按「第 2 轮 / 第 1 轮」分组，第 1 轮被驳回归项半透明留存。</p>
-                <h4>权限与用户视角</h4>
+                <h4>评价表单字段规格</h4>
                 <table class="spec-table">
-                    <thead><tr><th>视角</th><th>可见/可操作</th></tr></thead>
+                    <thead><tr><th>表单</th><th>字段</th><th>必填性</th><th>校验规则</th><th>说明</th></tr></thead>
                     <tbody>
-                        <tr><td>确认人</td><td>操作栏「查看评价」；第 2 轮中本人可「去评价」</td></tr>
-                        <tr><td>配置人 / 执行人</td><td>只读；「查看评价」</td></tr>
+                        <tr><td rowspan="4">去评价<br>（评价弹窗）</td><td>综合评星</td><td>选填</td><td>无</td><td>1–5 星（含 0.5 半星步进），点击半星 / 整星设置；不评分亦可提交（与确认弹窗评分共用同一维度）。</td></tr>
+                        <tr><td>评价标签</td><td>选填</td><td>无</td><td>可多选：责任心棒 / 服务态度好 / 专业能力强；点击切换选中态。</td></tr>
+                        <tr><td>评语（文本域）</td><td>选填</td><td>无</td><td>占位提示「请填写真实评语」；纯文本，原型不校验长度或空值。</td></tr>
+                        <tr><td>按钮项</td><td>—</td><td>—</td><td>「取消」关闭弹窗、无任何变更；「提交评价」将评分 / 标签 / 评语回写本人确认记录（确认记录卡对应项由「暂未评价」转为已评价展示）。</td></tr>
                     </tbody>
                 </table>
-                <h4>字段</h4>
-                <p>历史记录区显示第 1 次执行 + 红底「驳回原因」；确认记录卡：第 2 轮（张三/王五/赵六均已确认，附评语评分）、第 1 轮（张三已确认、王五已驳回，半透明）。</p>
-                <h4>交互</h4>
-                <p>与「已完成」一致（查看评价 / 去评价）；历史记录仅作留存展示，不可编辑。</p>
                 <h4>效果</h4>
-                <p>头部 completed 配色；流程条满进度；通过半透明历史 + 红色「已驳回」标签，既展示「最终完成」又保留「曾驳回」的完整过程记录（记录留存要求）。</p>
+                <p>头部 completed 配色（绿色调）；流程条满进度 100%、4 步全绿勾；确认记录以绿色状态标签为主，整体呈现「闭环完成」；未评价确认人记录项以「暂未评价」占位，确认人本人可「去评价」补全。</p>
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-3-19">3.19 驳回后待开始</div>
+                <div class="subsection-title" id="sub-3-17">3.17 驳回后待开始</div>
             <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="service-miniapp/task-detail.html?status=rejected_pending&amp;role=executor" target="_blank">驳回后待开始 · 执行人视角</a> ｜ <a href="service-miniapp/task-detail.html?status=rejected_pending&amp;role=nonExecutor" target="_blank">驳回后待开始 · 只读（非执行人视角）</a></p>
                 <h4>逻辑</h4>
-                <p>确认中有人驳回后主状态<strong>回退</strong>为待开始（状态回退效果），但确认记录与驳回原因<strong>留存</strong>。状态徽标显示「待开始」，确认进度「任务已驳回，请重新执行」。流程条第 1 步当前（current）⏸、进度 0%。执行记录卡 + 确认记录卡均显示；<strong>历史记录区显示第 1 次执行（带「已驳回」标签）+ 驳回原因</strong>。</p>
+                <p>确认中有人驳回后主状态<strong>回退</strong>为待开始（状态回退效果），但确认记录与驳回原因<strong>留存</strong>。状态徽标显示「待开始」，确认进度「任务已驳回，请重新执行」。流程条第 1 步当前（current）⏸、进度 0%。执行记录卡 + 确认记录卡均显示；<strong>历史记录区显示第 1 次执行（半透明 + 灰底，带「已驳回」标签）+ 驳回原因</strong>。</p>
                 <h4>权限与用户视角</h4>
                 <table class="spec-table">
                     <thead><tr><th>视角</th><th>可见/可操作</th></tr></thead>
@@ -1479,15 +1622,101 @@
                     </tbody>
                 </table>
                 <h4>字段</h4>
-                <p>确认人列表：张三已确认（绿）、王五已驳回（红底红字「已驳回」）、赵六待确认（灰）；确认记录卡：张三已确认、王五已驳回（含原因）、赵六待确认。历史记录区：第 1 次执行 + 红色「已驳回」标签 + 驳回原因块。</p>
-                <h4>交互</h4>
+                <p>页面在「待开始」基础上叠加驳回上下文：</p>
                 <ul>
-                    <li>执行人「上传记录」→ 重新上传执行结果（轮次递增，进入第 2 次执行）。</li>
-                    <li>执行人「重新提交确认 / 完成任务」→ 流转至「确认中（被驳回后）」（有确认人，第 2 轮确认）或「已完成（含驳回）」（无确认人）。</li>
+                    <li><strong>执行记录卡（当前轮）</strong>：因已回退待开始，当前轮尚无新执行记录，显示「暂无执行记录，请点击上传」（执行人视角附「✎ 上传」入口）；历史第 1 次执行内容移至历史记录区展示。</li>
+                    <li><strong>历史记录区（historyRecords）</strong>：展示第 1 次执行（半透明 + 灰底），含「已驳回」红色状态标签与红底「驳回原因」块（含驳回人、时间）。</li>
+                    <li><strong>确认人列表</strong>：张三已确认（绿）、王五已驳回（红底红字「已驳回」）、赵六待确认（灰）。</li>
+                    <li><strong>确认记录卡（confirm-list）</strong>：张三已确认、王五已驳回（含原因）、赵六待确认；第 1 轮记录完整留存，被驳回确认人以红底红字突出。</li>
+                </ul>
+                <h4>交互</h4>
+                <p>执行人重新执行路径：</p>
+                <div class="subflow">
+                <p class="subflow-title">（1）执行人「上传记录」</p>
+                <ul>
+                    <li>点击「上传记录」/「✎ 上传」→ 调起上传记录弹窗（数据结构与提交交互同 §3.12「上传记录（数据结构与提交交互）」），重新上传执行结果，轮次递增（进入新一轮执行，如第 2 次执行；轮次无上限，第 N 次依此类推）。</li>
+                </ul>
+                </div>
+                <div class="subflow">
+                <p class="subflow-title">（2）执行人「重新提交确认 / 完成任务」</p>
+                <ul>
+                    <li><strong>提交前置校验</strong>：须至少已上传一条执行记录（否则「重新提交确认 / 完成任务」按钮置灰不可点击，提示先上传记录，同 §3.12「提交前置校验」）。</li>
+                    <li><strong>触发弹窗</strong>：点击底部「重新提交确认」（有确认人）/「完成任务」（无确认人）→ 弹出对应提交弹窗（标题与 §3.14「提交确认 / 完成任务」弹窗一致：顶部 📤 图标、主文案「确定要重新提交确认吗？」/「确定要完成任务吗？」、警示「⚠️ 提交后不支持修改执行记录」、有确认人时展示确认人列表区）。</li>
+                    <li><strong>弹窗按钮项</strong>：①「取消」→ 关闭弹窗，无任何变更；②「确认提交」/「确认完成」→ 执行提交。</li>
+                    <li><strong>点击「确认提交 / 确认完成」后续</strong>：弹窗关闭 → 轻提示 → 任务状态流转至「确认中（被驳回后）（confirming_after_reject）」（有确认人，第 2 轮确认）或「已完成（含驳回）（completed_with_reject）」（无确认人）；<strong>同时按 §3.14「提交后记录生成规则」生成一条「提交动作」执行记录与一条动态记录（时间 = 重新提交时间，第 2 轮），动态文案同 §3.14（任务提交 / 任务完成）</strong>。新一轮确认 / 驳回的确认记录与动态生成规则同 §3.15。</li>
+                </ul>
+                </div>
+                <div class="subflow">
+                <p class="subflow-title">（3）待办生成规则（确认人「任务确认」待办）</p>
+                <ul>
+                    <li><strong>生成时机</strong>：执行人点击「确认提交」（重新提交确认，有确认人时）使任务流转至「确认中（被驳回后）（confirming_after_reject）」后，系统为<strong>每一位已配置的确认人</strong>自动生成一条「任务确认」待办；生成时间 = 重新提交确认时间。点击「确认完成」（完成任务，无确认人时）<strong>不</strong>生成确认待办（无确认人可生成）。</li>
+                    <li><strong>待办类型与归属</strong>：对应 §4.3「合同任务确认」待办类型（<strong>标签「任务」</strong>，状态值 confirming_after_reject，数据来源「任务状态为确认中（被驳回后）且当前用户为确认人」）；待办仅对「当前用户为该任务确认人」的成员可见，每位确认人各得一条、互不重复。</li>
+                    <li><strong>跳转目标</strong>：点击待办卡片跳转 <a href="service-miniapp/task-detail.html?status=confirming_after_reject&amp;role=confirmer" target="_blank">task-detail.html?status=confirming_after_reject&amp;role=confirmer</a>，进入本人确认视角直接执行新一轮（第 N 轮）确认 / 驳回（同 §3.18、§3.15）。</li>
+                    <li><strong>状态联动</strong>：确认人完成本轮（第 N 轮）本人确认后，其对应的「任务确认」待办自动标记 completed（从「待处理」移至「已处理」）；若本轮再次被驳回回退「驳回后待开始」，该待办随状态变更不再匹配而移出待处理，待执行人再次「重新提交确认」后由本规则重新生成。</li>
+                    <li><strong>说明</strong>：本规则复用 §3.14「确认人任务确认待办」同一待办类型（标签「任务」），仅新增「驳回后重新提交 → 确认人确认待办」这一待办来源，不改变 §4.3 其他既有待办类型及功能描述。</li>
+                </ul>
+                </div>
+                <h4>效果</h4>
+                <p>头部默认配色（非 completed，强调「回退未完」）；流程条回到第 1 步当前（current）⏸、进度 0%，但历史记录区以红底「驳回原因」+「已驳回」标签明确呈现回退原因；确认记录卡中被驳回确认人以红底红字突出，使各角色清晰感知「为何回到待开始」。</p>
+                <div class="note"><div class="note-title">与 §一 主状态机的对应关系</div><p>「驳回后待开始」在详情页是独立渲染态，但在 §一 主状态机中它<strong>不是独立主状态</strong>——它对应「待开始」主状态的一种进入原因（确认结果=已驳回 触发回退）。详情页用独立态是为了把「已驳回」这一确认结果及其留存记录（截图式历史）完整呈现给四类用户。</p></div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="sub-3-18">3.18 确认中（被驳回后）</div>
+            <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="service-miniapp/task-detail.html?status=confirming_after_reject&amp;role=confirmer" target="_blank">确认中（被驳回后） · 确认人视角</a> ｜ <a href="service-miniapp/task-detail.html?status=confirming_after_reject&amp;role=nonConfirmer" target="_blank">确认中（被驳回后） · 只读（非确认人视角）</a></p>
+                <h4>逻辑</h4>
+                <p>任务曾被驳回（主状态回退为待开始），执行人重新提交后进入<strong>第 2 轮确认</strong>，与「确认中」同属确认中主状态。状态徽标仍显示「确认中」，确认进度「确认进度：1/3」。流程条第 1–2 步已完成（completed）、第 3 步当前（current），进度 50%。执行记录卡 + 确认记录卡均显示；页面额外展示<strong>历史记录</strong>：第 1 次执行（半透明（opacity 0.6） + 灰底，带「已驳回」红色标签）+ 驳回原因块（红底），确认记录卡按「第 1 轮 / 第 2 轮 / … / 第 N 轮（轮次无上限）」分组，历史轮次被驳回项以半透明呈现。</p>
+                <p><strong>轮次机制（支持多轮，无上限）</strong>：任务每被驳回一次、执行人重新提交一次，即进入新一轮（第 2 轮、第 3 轮……第 N 轮），系统对轮次数量<strong>不设上限</strong>；每一轮都对应一次完整的「执行人重新上传 → 提交确认 → 确认人确认 / 驳回」循环。确认记录卡与历史记录区按轮次分组，最新轮为「当前轮（进行中）」、其余轮次半透明（opacity 0.6）留存；当某轮全部确认通过则任务转「已完成（含驳回）」，若某轮仍被驳回则再次回退「驳回后待开始」并进入下一轮。示例中仅展示第 1 轮 / 第 2 轮，多轮往返时依次出现第 3 轮 / 第 4 轮……，每一轮均独立分组留存。</p>
+                <h4>权限与用户视角</h4>
+                <table class="spec-table">
+                    <thead><tr><th>视角</th><th>可见/可操作</th></tr></thead>
+                    <tbody>
+                        <tr><td>确认人</td><td>底部显「驳回」「确认通过」两个按钮（仅确认人视角有此操作）；新一轮（第 N 轮）轮到自己时操作；其余同 §3.15</td></tr>
+                        <tr><td>配置人</td><td>只读；操作栏「等待确认人确认」；本态不可增删确认人</td></tr>
+                        <tr><td>执行人</td><td>只读；操作栏「等待确认人确认」；固定上传栏隐藏（已重新提交，非编辑态）</td></tr>
+                    </tbody>
+                </table>
+                <h4>字段</h4>
+                <p>页面在「确认中」基础上叠加历史上下文：</p>
+                <ul>
+                    <li><strong>执行记录卡（当前轮）</strong>：展示第 2 次执行内容（图片网格 / 文字说明 / 提交人时间）（第 N 次执行依此类推），并附绿色「✓ 任务已完成」提示块「执行人已重新提交执行结果，等待确认人确认」（操作时间 / 操作人 = 重新提交动作）。</li>
+                    <li><strong>历史记录区（historyRecords）</strong>：展示第 1 次执行（半透明（opacity 0.6） + 灰底），含「已驳回」红色状态标签与红底「驳回原因」块（含驳回人、时间）；该区域为截图式历史，仅作留存展示，不可编辑。</li>
+                    <li><strong>确认记录卡（confirm-list）</strong>：按轮次分组（第 1 轮 / 第 2 轮 / … / 第 N 轮，轮次无上限）：当前轮（最新一轮）为进行中（如「第 2 轮确认记录」——张三已确认并附评语 + 标签 + 评分 + 附件，王五 / 赵六待确认）；其余历史轮次（如「第 1 轮确认记录」——张三已确认、王五已驳回）整体半透明留存；若经多轮往返，将依次出现第 3 轮 / 第 4 轮……，每一轮均独立分组留存。</li>
+                </ul>
+                <h4>交互</h4>
+                <p>新一轮（第 N 轮）确认人的「确认通过」/「驳回」操作与 §3.15「确认中」<strong>完全一致</strong>：</p>
+                <ul>
+                    <li>确认人「确认通过」→ 弹出确认弹窗（可填评语 / 标签 / 评分 / 附件）；提交后该人状态转「已确认」，进度 +1；全部通过则任务转「已完成（含驳回）」；<strong>同时按 §3.15「确认 / 驳回后记录生成规则」生成一条确认记录与一条动态记录（时间 = 该确认人确认时间；若本次为最后一人确认，则动态为「任务已完成」）</strong>。确认 / 驳回弹窗字段规格同 §3.15「确认 / 驳回表单字段规格」。</li>
+                    <li>确认人「驳回」→ 弹出驳回弹窗（必填原因）；提交后该确认结果 = 已驳回；<strong>只要有一人驳回，任务主状态再次回退为「驳回后待开始」</strong>，系统通知执行人重新执行；<strong>同时按 §3.15 规则生成一条驳回确认记录与一条「任务驳回」动态记录（时间 = 驳回时间）</strong>。第 1 轮历史记录继续留存，本轮（第 N 轮）被驳回项追加半透明呈现（多轮往返时各历史轮次均半透明留存）。</li>
                 </ul>
                 <h4>效果</h4>
-                <p>头部默认配色（非 completed，强调「回退未完」）；流程条回到第 1 步当前（current）、进度 0%，但历史记录区以红底「驳回原因」+「已驳回」标签明确呈现回退原因；确认记录卡中被驳回确认人以红底红字突出，使各角色清晰感知「为何回到待开始」。</p>
-                <div class="note"><div class="note-title">与 §一 主状态机的对应关系</div><p>「驳回后待开始」在详情页是独立渲染态，但在 §一 主状态机中它<strong>不是独立主状态</strong>——它对应「待开始」主状态的一种进入原因（确认结果=已驳回 触发回退）。详情页用独立态是为了把「已驳回」这一确认结果及其留存记录（截图式历史）完整呈现给四类用户。</p></div>
+                <p>历史记录区半透明 + 灰底，突出「历史」；第 1 轮被驳回归项红底「驳回原因」块，强化「为何重做」的上下文；确认记录卡以「第 1 轮 / 第 2 轮 / … / 第 N 轮（轮次无上限）」分组清晰区分当前确认与历史，第 1 轮被驳回归项以半透明留存；流程条与确认中相同（第 3 步当前（current），50%）。</p>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="sub-3-19">3.19 已完成（含驳回）</div>
+            <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="service-miniapp/task-detail.html?status=completed_with_reject&amp;role=confirmer" target="_blank">已完成（含驳回） · 确认人视角</a> ｜ <a href="service-miniapp/task-detail.html?status=completed_with_reject&amp;role=nonConfirmer" target="_blank">已完成（含驳回） · 只读（非确认人视角）</a></p>
+                <h4>逻辑</h4>
+                <p>任务经历过驳回、执行人重新提交后最终全部确认通过，与「已完成」同属已完成主状态。状态徽标「已完成」，确认进度「全部确认人已确认」。流程条 4 步全 completed，进度 100%。执行记录卡 + 确认记录卡均显示；<strong>历史记录区显示第 1 次执行（半透明 + 灰底，带「已驳回」标签）+ 驳回原因</strong>（留存曾驳回的完整过程）。</p>
+                <h4>权限与用户视角</h4>
+                <table class="spec-table">
+                    <thead><tr><th>视角</th><th>可见/可操作</th></tr></thead>
+                    <tbody>
+                        <tr><td>确认人</td><td>操作栏「查看评价」；第 N 轮中本人可「去评价」（若尚未评价）</td></tr>
+                        <tr><td>配置人</td><td>只读；「查看评价」</td></tr>
+                        <tr><td>执行人</td><td>只读；「查看评价」</td></tr>
+                    </tbody>
+                </table>
+                <h4>字段</h4>
+                <p>页面在「已完成」基础上叠加历史上下文：</p>
+                <ul>
+                    <li><strong>历史记录区（historyRecords）</strong>：展示第 1 次执行（半透明 + 灰底），含「已驳回」红色状态标签与红底「驳回原因」块（含驳回人、时间）；截图式历史，仅作留存展示，不可编辑。</li>
+                    <li><strong>确认记录卡（confirm-list）</strong>：按轮次分组（第 1 轮 / 第 2 轮 / … / 第 N 轮，轮次无上限）：当前轮（最新一轮）为最终确认（如「第 2 轮确认记录」——张三 / 王五 / 赵六均已确认，附评语 + 标签 + 评分 + 附件）；其余历史轮次（如「第 1 轮确认记录」——张三已确认、王五已驳回）整体半透明留存；多轮往返时依次出现第 3 轮 / 第 4 轮……，每一轮独立分组留存。</li>
+                </ul>
+                <h4>交互</h4>
+                <p>与「已完成（§3.16）」一致（查看评价 / 去评价）；历史记录仅作留存展示，不可编辑。评价弹窗字段规格同 §3.16「评价表单字段规格」；确认 / 驳回相关记录生成规则同 §3.15「确认 / 驳回后记录生成规则」。</p>
+                <h4>效果</h4>
+                <p>头部 completed 配色；流程条满进度；通过半透明历史 + 红色「已驳回」标签，既展示「最终完成」又保留「曾驳回」的完整过程记录（记录留存要求），整体仍呈「闭环完成」。</p>
             </div>
         
         </div>
@@ -1591,18 +1820,32 @@
                             <td>contract-detail.html?status=signing</td>
                         </tr>
                         <tr>
+                            <td>合同修改重提</td>
+                            <td>审核</td>
+                            <td>合同状态由 平台审核中 → 平台审核驳回（platform_rejected / reviewed_reject），发起方（被驳回方）需修改后重新提交</td>
+                            <td>pending</td>
+                            <td>contract-detail.html（编辑态，重新提交审核）</td>
+                        </tr>
+                        <tr>
                             <td>合同变更确认</td>
                             <td>变更</td>
                             <td>合同状态为"待确认变更内容"</td>
                             <td>pending</td>
-                            <td>contract-detail.html?status=changing</td>
+                            <td><a href="service-miniapp/contract-detail.html?status=changing" target="_blank">contract-detail.html?status=changing</a></td>
                         </tr>
                         <tr>
-                            <td>合同平台审核</td>
-                            <td>审核</td>
-                            <td>合同状态为"平台审核中"</td>
+                            <td>合同变更签约</td>
+                            <td>变更</td>
+                            <td>变更双方完成确认，状态由 变更确认中（change_confirming）→ 变更签约中（change_signing_wait），发起方需上传变更签约附件</td>
                             <td>pending</td>
-                            <td>contract-detail.html?status=platform_reviewing</td>
+                            <td>contract-detail.html?status=change_signing_wait</td>
+                        </tr>
+                        <tr>
+                            <td>变更合同修改</td>
+                            <td>变更</td>
+                            <td>变更状态由 变更审核中 → 变更审核驳回（change_platform_rejected），发起方（被驳回方）需重新发起变更</td>
+                            <td>pending</td>
+                            <td>contract-detail.html（变更编辑态，重新提交审核）</td>
                         </tr>
                         <tr>
                             <td>架构邀请处理</td>
@@ -1610,13 +1853,6 @@
                             <td>存在待处理的成员邀请</td>
                             <td>pending</td>
                             <td>architecture.html</td>
-                        </tr>
-                        <tr>
-                            <td>已完成任务</td>
-                            <td>合同</td>
-                            <td>任务状态为"已完成"</td>
-                            <td>completed</td>
-                            <td>task-detail.html?status=completed</td>
                         </tr>
                         <tr>
                             <td>对账单确认</td>
@@ -1687,7 +1923,7 @@
                         </tr>
                         <tr>
                             <td>状态标签</td>
-                            <td>右侧状态标签：待确认（蓝色）、待执行（绿色）、待签约（紫色）、待处理（橙色）、待审核（青色）、待接受（绿色）、已完成（绿色）</td>
+                            <td>右侧状态标签：待确认（蓝色）、待执行（绿色）、待签约（紫色）、待处理（橙色）、待审核（青色）、待接受（绿色）、已完成（绿色）；「已处理」中已完成态的待办按实际完成动作呈现具体文案（如 已执行 / 已确认 / 已上传），以表达"完成了什么操作"</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1746,6 +1982,297 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- ===== 4.8 待办类型详细规则（生成规则 · 页面逻辑 · 交互 · 字段规格） ===== -->
+            <div class="subsection">
+                <div class="subsection-title" id="sub-4-8">4.8 待办类型详细规则</div>
+                <p>本节依据 <a href="#page-todo-list-owner">§4.3 待办类型与来源</a> 及 PRD-合同模块 §6.3.2 / §6.3.3 / §10.3.2、PRD-任务模块 §3.14(5) / §3.15(5) / §3.17(3) / §7.7 的<strong>生成规则</strong>，为每类待办补充「生成规则 · 页面逻辑 · 交互 · 字段规格」详细规则。所有待办均由系统自动生成，用户无填写入口；原型以 <code>localStorage</code> 演示，正式产品以后端待办接口为准。以下规则不改变 §4.3 已列类型及口径。</p>
+
+                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-1">4.8.1 任务确认（confirming）</div>
+                <div class="info-grid">
+                    <div class="info-item"><div class="info-label">待办类型</div><div class="info-value">任务确认（合同任务确认）</div></div>
+                    <div class="info-item"><div class="info-label">类型标签</div><div class="info-value">合同（青色 #13C2C2 / 背景 #E6FFFB）</div></div>
+                    <div class="info-item"><div class="info-label">生成方</div><div class="info-value">执行人提交确认（系统自动）</div></div>
+                    <div class="info-item"><div class="info-label">接收方</div><div class="info-value">该任务已配置的每一位确认人</div></div>
+                    <div class="info-item"><div class="info-label">状态值</div><div class="info-value">confirming（待确认）</div></div>
+                    <div class="info-item"><div class="info-label">跳转目标</div><div class="info-value">task-detail.html?status=confirming</div></div>
+                </div>
+                <p><strong>生成规则：</strong>任务模块 <a href="#sub-3-14">§3.14(5)</a>、<a href="#sub-3-17">§3.17(3)</a>。执行人点击「确认提交」（任务配置有确认人时）使任务流转至「确认中（confirming）」后，系统为<strong>每一位已配置的确认人</strong>自动生成一条「任务确认」待办，生成时间 = 提交确认时间；无确认人时点击「确认完成」<strong>不</strong>生成确认待办。被驳回后执行人「重新提交确认」进入「确认中（被驳回后）」时，同样为每位确认人重新生成。</p>
+                <p><strong>页面逻辑：</strong>待办归属 = 确认人；仅当<strong>当前用户是任务确认人且任务处于确认中</strong>时展示；多确认人时每人各一条；计入「待处理」。</p>
+                <p><strong>交互与完成规则：</strong></p>
+                <div class="code-block">1. 点击待办卡片 → task-detail.html?status=confirming
+   - 服务方：查看执行详情并可操作（确认 / 驳回）
+   - 业主：进入确认视角，仅可确认通过或驳回
+2. 确认人完成本人确认后：
+   - 该待办自动标记 completed，从「待处理」移至「已处理」
+3. 若任务被驳回回退「驳回后待开始」：
+   - 原 confirming 来源待办随状态变更不再匹配而移出待处理
+   - 待执行人「重新提交确认」后由本规则重新生成</div>
+                <p><strong>字段规格：</strong></p>
+                <table>
+                    <thead><tr><th>字段</th><th>取值规则</th><th>示例</th></tr></thead>
+                    <tbody>
+                        <tr><td>标题</td><td>{阶段}{任务}确认</td><td>开槽布线确认</td></tr>
+                        <tr><td>类型标签</td><td>合同（青色）</td><td>合同</td></tr>
+                        <tr><td>元信息</td><td>{工作组} · 确认人：{确认人}</td><td>强电施工组 · 确认人：李监理</td></tr>
+                        <tr><td>状态标签</td><td>待确认（confirming，计入待处理）</td><td>待确认</td></tr>
+                        <tr><td>图标</td><td>🔵</td><td>🔵</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-2">4.8.2 任务执行（含重新执行）（pending）</div>
+                <div class="info-grid">
+                    <div class="info-item"><div class="info-label">待办类型</div><div class="info-value">任务执行 / 重新执行（合同任务执行）</div></div>
+                    <div class="info-item"><div class="info-label">类型标签</div><div class="info-value">合同（青色）</div></div>
+                    <div class="info-item"><div class="info-label">生成方</div><div class="info-value">任务状态变更（系统自动）</div></div>
+                    <div class="info-item"><div class="info-label">接收方</div><div class="info-value">该任务的执行人</div></div>
+                    <div class="info-item"><div class="info-label">状态值</div><div class="info-value">pending（待执行）</div></div>
+                    <div class="info-item"><div class="info-label">跳转目标</div><div class="info-value">task-detail.html?status=pending</div></div>
+                </div>
+                <p><strong>生成规则：</strong>任务模块 <a href="#sub-3-15">§3.15(5)</a> 与 <a href="#sub-4-3">§4.3</a>。任务处于「待开始（pending）」且<strong>当前用户为执行人</strong>时生成「任务执行」待办；确认人点击「确认驳回」使任务回退「驳回后待开始（rejected_pending）」后，系统为执行人重新生成「任务执行（重新执行）」待办，生成时间 = 驳回时间。</p>
+                <p><strong>页面逻辑：</strong>待办归属 = 执行人；任务进入待开始 / 驳回后待开始且当前用户为执行人时展示；计入「待处理」。</p>
+                <p><strong>交互与完成规则：</strong></p>
+                <div class="code-block">1. 点击待办卡片 → task-detail.html?status=pending
+   - 服务方执行人：进入执行、上传执行记录
+   - 业主若被配置为执行人（见 §6.3.1）：同理进入执行
+2. 执行人提交确认 / 完成任务后：
+   - 原「任务执行」待办标记 completed，移出待处理
+3. 任务离开「待开始 / 驳回后待开始」态即不再匹配而移出，重新进入时由本规则（或 §3.14 提交确认规则）重新生成</div>
+                <p><strong>字段规格：</strong></p>
+                <table>
+                    <thead><tr><th>字段</th><th>取值规则</th><th>示例</th></tr></thead>
+                    <tbody>
+                        <tr><td>标题</td><td>{阶段}{任务}</td><td>吊顶安装 / 地面找平</td></tr>
+                        <tr><td>类型标签</td><td>合同（青色）</td><td>合同</td></tr>
+                        <tr><td>元信息</td><td>{工作组} · 待执行</td><td>木工工作组 · 待执行</td></tr>
+                        <tr><td>状态标签</td><td>待执行（pending，计入待处理）</td><td>待执行</td></tr>
+                        <tr><td>图标</td><td>🟢</td><td>🟢</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-3">4.8.3 合同内容确认（pending）</div>
+                <div class="info-grid">
+                    <div class="info-item"><div class="info-label">待办类型</div><div class="info-value">合同内容确认（合同待确认）</div></div>
+                    <div class="info-item"><div class="info-label">类型标签</div><div class="info-value">合同（青色）</div></div>
+                    <div class="info-item"><div class="info-label">生成方</div><div class="info-value">合同状态流转（系统自动）</div></div>
+                    <div class="info-item"><div class="info-label">接收方</div><div class="info-value">业主（仅当合同甲方 partyA = 业主）</div></div>
+                    <div class="info-item"><div class="info-label">状态值</div><div class="info-value">pending（待确认）</div></div>
+                    <div class="info-item"><div class="info-label">跳转目标</div><div class="info-value">contract-detail.html?status=confirming_receiver</div></div>
+                </div>
+                <p><strong>生成规则：</strong>合同模块 <a href="#sub-6-3-2">§6.3.2</a>。合同状态由 平台审核中 → 确认中（<code>confirming</code>），<strong>且合同甲方 partyA 为业主</strong>时，系统为业主生成「合同内容确认」待办；若甲方为工长 / 非业主方，则不生成该业主待办（改由对应服务方人员待办）。</p>
+                <p><strong>页面逻辑：</strong>待办归属 = 业主（甲方）；仅甲方 = 业主时生成；计入「待处理」。</p>
+                <p><strong>交互与完成规则：</strong></p>
+                <div class="code-block">1. 点击待办卡片 → contract-detail.html?status=confirming_receiver
+2. 业主确认合同内容后：
+   - 该待办标记 completed，移至「已处理」
+3. 甲方非业主时不生成此待办（无悬空业主待办）</div>
+                <p><strong>字段规格：</strong></p>
+                <table>
+                    <thead><tr><th>字段</th><th>取值规则</th><th>示例</th></tr></thead>
+                    <tbody>
+                        <tr><td>标题</td><td>{合同名称}确认</td><td>泥瓦分包合同确认</td></tr>
+                        <tr><td>类型标签</td><td>合同（青色）</td><td>合同</td></tr>
+                        <tr><td>元信息</td><td>{合同所属工作组} · 待确认合同内容</td><td>泥瓦工作组 · 待确认合同内容</td></tr>
+                        <tr><td>状态标签</td><td>待确认（pending，计入待处理）</td><td>待确认</td></tr>
+                        <tr><td>图标</td><td>📄</td><td>📄</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-4">4.8.4 合同签约（pending）</div>
+                <div class="info-grid">
+                    <div class="info-item"><div class="info-label">待办类型</div><div class="info-value">合同签约（待上传签约附件）</div></div>
+                    <div class="info-item"><div class="info-label">类型标签</div><div class="info-value">合同（青色）</div></div>
+                    <div class="info-item"><div class="info-label">生成方</div><div class="info-value">合同状态流转（系统自动）</div></div>
+                    <div class="info-item"><div class="info-label">接收方</div><div class="info-value">发起方（合同创建人）</div></div>
+                    <div class="info-item"><div class="info-label">状态值</div><div class="info-value">pending（待签约）</div></div>
+                    <div class="info-item"><div class="info-label">跳转目标</div><div class="info-value">contract-detail.html?status=signing（基础/设计合同）<br>worker-sign-upload.html（工人合同，详见 §4.8.10）</div></div>
+                </div>
+                <p><strong>生成规则：</strong>合同模块 <a href="#sub-6-3-2">§6.3.2</a>。合同双方完成内容确认，状态由 确认中 → 已确认（<code>confirmed</code>）后，系统为<strong>发起方（合同创建人）</strong>生成「合同签约（待上传签约附件）」待办。</p>
+                <p><strong>页面逻辑：</strong>待办归属 = 发起方；合同进入已确认后生成；计入「待处理」。</p>
+                <p><strong>交互与完成规则：</strong></p>
+                <div class="code-block">1. 点击待办卡片 → contract-detail.html?status=signing（基础/设计合同）
+2. 发起方上传签约文件生效（状态 → 已签约 signed）后：
+   - 该待办标记 completed，移至「已处理」
+3. 工人合同同口径，跳转见 §4.8.10</div>
+                <p><strong>字段规格：</strong></p>
+                <table>
+                    <thead><tr><th>字段</th><th>取值规则</th><th>示例</th></tr></thead>
+                    <tbody>
+                        <tr><td>标题</td><td>{合同名称}签约</td><td>木工分包合同签约</td></tr>
+                        <tr><td>类型标签</td><td>合同（青色）</td><td>合同</td></tr>
+                        <tr><td>元信息</td><td>{工作组} · 待上传签约文件</td><td>木工工作组 · 待上传签约文件</td></tr>
+                        <tr><td>状态标签</td><td>待签约（pending，计入待处理）</td><td>待签约</td></tr>
+                        <tr><td>图标</td><td>📝</td><td>📝</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-5">4.8.5 合同修改重提（pending）</div>
+                <div class="info-grid">
+                    <div class="info-item"><div class="info-label">待办类型</div><div class="info-value">合同修改重提（待修改重新提交）</div></div>
+                    <div class="info-item"><div class="info-label">类型标签</div><div class="info-value">审核（青色）</div></div>
+                    <div class="info-item"><div class="info-label">生成方</div><div class="info-value">合同平台审核驳回（系统自动）</div></div>
+                    <div class="info-item"><div class="info-label">接收方</div><div class="info-value">发起方（被驳回方）</div></div>
+                    <div class="info-item"><div class="info-label">状态值</div><div class="info-value">pending（待处理）</div></div>
+                    <div class="info-item"><div class="info-label">跳转目标</div><div class="info-value">contract-detail.html（编辑态，重新提交审核）</div></div>
+                </div>
+                <p><strong>生成规则：</strong>合同模块 <a href="#sub-6-3-2">§6.3.2</a>。合同状态由 平台审核中 → 平台审核驳回（<code>platform_rejected</code> / <code>reviewed_reject</code>）后，系统为<strong>发起方（被驳回方）</strong>生成「合同修改重提（待修改重新提交）」待办。</p>
+                <p><strong>页面逻辑：</strong>待办归属 = 发起方（被驳回方）；计入「待处理」。</p>
+                <p><strong>交互与完成规则：</strong></p>
+                <div class="code-block">1. 点击待办卡片 → contract-detail.html（编辑态）
+2. 发起方修改合同并重新提交平台审核后：
+   - 该待办标记 completed，移至「已处理」</div>
+                <p><strong>字段规格：</strong></p>
+                <table>
+                    <thead><tr><th>字段</th><th>取值规则</th><th>示例</th></tr></thead>
+                    <tbody>
+                        <tr><td>标题</td><td>{合同名称}修改重提</td><td>水电分包合同修改重提</td></tr>
+                        <tr><td>类型标签</td><td>审核（青色）</td><td>审核</td></tr>
+                        <tr><td>元信息</td><td>{工作组} · 待修改重新提交</td><td>水电工作组 · 待修改重新提交</td></tr>
+                        <tr><td>状态标签</td><td>待处理（pending，计入待处理）</td><td>待处理</td></tr>
+                        <tr><td>图标</td><td>🔁</td><td>🔁</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-6">4.8.6 合同变更确认（pending）</div>
+                <div class="info-grid">
+                    <div class="info-item"><div class="info-label">待办类型</div><div class="info-value">合同变更确认（待确认变更）</div></div>
+                    <div class="info-item"><div class="info-label">类型标签</div><div class="info-value">变更（橙色 #FA8C16 / 背景 #FFF7E6）</div></div>
+                    <div class="info-item"><div class="info-label">生成方</div><div class="info-value">变更平台审核通过（系统自动）</div></div>
+                    <div class="info-item"><div class="info-label">接收方</div><div class="info-value">业主（仅当合同甲方 partyA = 业主）</div></div>
+                    <div class="info-item"><div class="info-label">状态值</div><div class="info-value">pending（待确认）</div></div>
+                    <div class="info-item"><div class="info-label">跳转目标</div><div class="info-value">contract-detail.html?status=change_confirming_receiver（业主）<br>contract-detail.html?status=change_confirming（服务方视角）</div></div>
+                </div>
+                <p><strong>生成规则：</strong>合同模块 <a href="#sub-6-3-3">§6.3.3</a>。变更状态由 变更审核中（<code>change_platform_reviewing</code>）→ 变更确认中（<code>change_confirming</code>），<strong>且合同甲方 partyA 为业主</strong>时，系统为业主生成「合同变更确认（待确认变更）」待办；甲方为工长 / 非业主方时不生成业主待办。</p>
+                <p><strong>页面逻辑：</strong>待办归属 = 业主（甲方）；仅甲方 = 业主时生成；计入「待处理」。</p>
+                <p><strong>交互与完成规则：</strong></p>
+                <div class="code-block">1. 点击待办卡片 → contract-detail.html?status=change_confirming_receiver（业主）
+2. 业主确认变更内容后：
+   - 该待办标记 completed，移至「已处理」</div>
+                <p><strong>字段规格：</strong></p>
+                <table>
+                    <thead><tr><th>字段</th><th>取值规则</th><th>示例</th></tr></thead>
+                    <tbody>
+                        <tr><td>标题</td><td>{合同名称}变更确认</td><td>水电合同变更确认</td></tr>
+                        <tr><td>类型标签</td><td>变更（橙色）</td><td>变更</td></tr>
+                        <tr><td>元信息</td><td>{工作组} · 待确认变更内容</td><td>水电工作组 · 待确认变更内容</td></tr>
+                        <tr><td>状态标签</td><td>待确认（pending，计入待处理）</td><td>待确认</td></tr>
+                        <tr><td>图标</td><td>📝</td><td>📝</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-7">4.8.7 合同变更签约（pending）</div>
+                <div class="info-grid">
+                    <div class="info-item"><div class="info-label">待办类型</div><div class="info-value">合同变更签约（待上传变更签约附件）</div></div>
+                    <div class="info-item"><div class="info-label">类型标签</div><div class="info-value">变更（橙色）</div></div>
+                    <div class="info-item"><div class="info-label">生成方</div><div class="info-value">变更确认后状态流转（系统自动）</div></div>
+                    <div class="info-item"><div class="info-label">接收方</div><div class="info-value">发起方（合同创建人）</div></div>
+                    <div class="info-item"><div class="info-label">状态值</div><div class="info-value">pending（待签约）</div></div>
+                    <div class="info-item"><div class="info-label">跳转目标</div><div class="info-value">contract-detail.html?status=change_signing_wait</div></div>
+                </div>
+                <p><strong>生成规则：</strong>合同模块 <a href="#sub-6-3-3">§6.3.3</a>。变更双方完成确认，状态由 变更确认中（<code>change_confirming</code>）→ 变更签约中（<code>change_signing_wait</code>）后，系统为<strong>发起方</strong>生成「合同变更签约（待上传变更签约附件）」待办。</p>
+                <p><strong>页面逻辑：</strong>待办归属 = 发起方；变更进入签约中后生成；计入「待处理」。</p>
+                <p><strong>交互与完成规则：</strong></p>
+                <div class="code-block">1. 点击待办卡片 → contract-detail.html?status=change_signing_wait
+2. 发起方上传变更签约文件后：
+   - 该待办标记 completed，移至「已处理」</div>
+                <p><strong>字段规格：</strong></p>
+                <table>
+                    <thead><tr><th>字段</th><th>取值规则</th><th>示例</th></tr></thead>
+                    <tbody>
+                        <tr><td>标题</td><td>{合同名称}变更签约</td><td>水电合同变更签约</td></tr>
+                        <tr><td>类型标签</td><td>变更（橙色）</td><td>变更</td></tr>
+                        <tr><td>元信息</td><td>{工作组} · 待上传变更签约附件</td><td>水电工作组 · 待上传变更签约附件</td></tr>
+                        <tr><td>状态标签</td><td>待签约（pending，计入待处理）</td><td>待签约</td></tr>
+                        <tr><td>图标</td><td>📝</td><td>📝</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-8">4.8.8 变更合同修改（pending）</div>
+                <div class="info-grid">
+                    <div class="info-item"><div class="info-label">待办类型</div><div class="info-value">变更合同修改（待重新发起变更）</div></div>
+                    <div class="info-item"><div class="info-label">类型标签</div><div class="info-value">变更（橙色）</div></div>
+                    <div class="info-item"><div class="info-label">生成方</div><div class="info-value">变更平台审核驳回（系统自动）</div></div>
+                    <div class="info-item"><div class="info-label">接收方</div><div class="info-value">发起方（被驳回方）</div></div>
+                    <div class="info-item"><div class="info-label">状态值</div><div class="info-value">pending（待处理）</div></div>
+                    <div class="info-item"><div class="info-label">跳转目标</div><div class="info-value">contract-detail.html（变更编辑态，重新提交审核）</div></div>
+                </div>
+                <p><strong>生成规则：</strong>合同模块 <a href="#sub-6-3-3">§6.3.3</a>。变更状态由 变更审核中（<code>change_platform_reviewing</code>）→ 变更审核驳回（<code>change_platform_rejected</code>）后，系统为<strong>发起方（被驳回方）</strong>生成「变更合同修改（待重新发起变更）」待办。</p>
+                <p><strong>页面逻辑：</strong>待办归属 = 发起方（被驳回方）；计入「待处理」。</p>
+                <p><strong>交互与完成规则：</strong></p>
+                <div class="code-block">1. 点击待办卡片 → contract-detail.html（变更编辑态）
+2. 发起方修改变更并重新提交审核后：
+   - 该待办标记 completed，移至「已处理」</div>
+                <p><strong>字段规格：</strong></p>
+                <table>
+                    <thead><tr><th>字段</th><th>取值规则</th><th>示例</th></tr></thead>
+                    <tbody>
+                        <tr><td>标题</td><td>{合同名称}变更修改</td><td>水电合同变更修改</td></tr>
+                        <tr><td>类型标签</td><td>变更（橙色）</td><td>变更</td></tr>
+                        <tr><td>元信息</td><td>{工作组} · 待重新发起变更</td><td>水电工作组 · 待重新发起变更</td></tr>
+                        <tr><td>状态标签</td><td>待处理（pending，计入待处理）</td><td>待处理</td></tr>
+                        <tr><td>图标</td><td>🔁</td><td>🔁</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-9">4.8.9 架构邀请处理（pending）</div>
+                <div class="info-grid">
+                    <div class="info-item"><div class="info-label">待办类型</div><div class="info-value">架构邀请处理</div></div>
+                    <div class="info-item"><div class="info-label">类型标签</div><div class="info-value">架构（橙色 #FA8C16 / 背景 #FFF7E6）</div></div>
+                    <div class="info-item"><div class="info-label">生成方</div><div class="info-value">成员邀请创建（系统自动）</div></div>
+                    <div class="info-item"><div class="info-label">接收方</div><div class="info-value">受邀处理人</div></div>
+                    <div class="info-item"><div class="info-label">状态值</div><div class="info-value">pending（待处理）</div></div>
+                    <div class="info-item"><div class="info-label">跳转目标</div><div class="info-value">architecture.html（或 invite-join.html?group={架构层级}）</div></div>
+                </div>
+                <p><strong>生成规则：</strong>项目架构模块。存在<strong>待处理的成员邀请</strong>（如「邀请加入强电施工组」）时，系统为受邀处理人生成「架构邀请处理」待办；接受 / 拒绝后移除。</p>
+                <p><strong>页面逻辑：</strong>待办归属 = 受邀处理人；存在待处理邀请时展示；计入「待处理」。</p>
+                <p><strong>交互与完成规则：</strong></p>
+                <div class="code-block">1. 点击待办卡片 → architecture.html（或 invite-join.html?group=强电施工组）
+2. 受邀方接受 / 拒绝，写入 localStorage['lzj_group_invite_{架构层级}'] 后：
+   - 该待办从列表移除，筛选角标重算
+   - 返回待办页同步刷新</div>
+                <p><strong>字段规格：</strong></p>
+                <table>
+                    <thead><tr><th>字段</th><th>取值规则</th><th>示例</th></tr></thead>
+                    <tbody>
+                        <tr><td>标题</td><td>邀请加入{架构层级}</td><td>邀请加入强电施工组</td></tr>
+                        <tr><td>类型标签</td><td>架构（橙色）</td><td>架构</td></tr>
+                        <tr><td>元信息</td><td>{来源工作组} · 邀请{姓名}加入</td><td>水电工作组 · 邀请李四加入</td></tr>
+                        <tr><td>状态标签</td><td>待处理（pending，计入待处理）</td><td>待处理</td></tr>
+                        <tr><td>图标</td><td>👥</td><td>👥</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-10">4.8.10 合同签约（工人合同）（worker_confirmed_sender）</div>
+                <div class="info-grid">
+                    <div class="info-item"><div class="info-label">待办类型</div><div class="info-value">合同签约（待上传签约文件 · 工人合同）</div></div>
+                    <div class="info-item"><div class="info-label">类型标签</div><div class="info-value">合同（青色）</div></div>
+                    <div class="info-item"><div class="info-label">生成方</div><div class="info-value">工人合同确认后状态流转（系统自动）</div></div>
+                    <div class="info-item"><div class="info-label">接收方</div><div class="info-value">发起方（工长·甲方，陈庄）</div></div>
+                    <div class="info-item"><div class="info-label">状态值</div><div class="info-value">worker_confirmed_sender（待签约）</div></div>
+                    <div class="info-item"><div class="info-label">跳转目标</div><div class="info-value">worker-sign-upload.html（或 worker-contract-detail.html 内联上传）</div></div>
+                </div>
+                <p><strong>生成规则：</strong>合同模块 <a href="#sub-10-3-2">§10.3.2</a>。工人合同双方确认后，发起方（工长·甲方）状态进入 已确认（<code>worker_confirmed_sender</code>），系统为<strong>发起方</strong>生成「合同签约（待上传签约文件）」待办；<strong>受邀方（worker_confirmed_receiver）不生成任何上传待办</strong>（仅只读等待，详见产品决策）。</p>
+                <p><strong>页面逻辑：</strong>待办归属 = 发起方（工长·甲方）；仅发起方生成；计入「待处理」。工人合同全程无平台审核，故不存在「业主合同待确认」待办（甲方固定为工长·陈庄）。</p>
+                <p><strong>交互与完成规则：</strong></p>
+                <div class="code-block">1. 点击待办卡片 → worker-sign-upload.html
+2. 发起方上传签约文件成功（状态 → 已签约 worker_signed）后：
+   - 该待办标记 completed，移至「已处理」
+3. 受邀方不生成任何应用内待办（经微信服务通知接单，详见 wechat-service-notice.html）</div>
+                <p><strong>字段规格：</strong></p>
+                <table>
+                    <thead><tr><th>字段</th><th>取值规则</th><th>示例</th></tr></thead>
+                    <tbody>
+                        <tr><td>标题</td><td>{工人合同名称}签约</td><td>泥瓦工班组服务合同签约</td></tr>
+                        <tr><td>类型标签</td><td>合同（青色）</td><td>合同</td></tr>
+                        <tr><td>元信息</td><td>{所属架构层级} · 待上传签约文件</td><td>泥瓦工程 · 待上传签约文件</td></tr>
+                        <tr><td>状态标签</td><td>待签约（worker_confirmed_sender，计入待处理）</td><td>待签约</td></tr>
+                        <tr><td>图标</td><td>📝</td><td>📝</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-11">4.8.11 对账单确认（confirming）</div>
+                <p>生成规则与字段规格详见 <a href="#sub-7-6">§7.6–§7.9（业主端对账单确认待办详规）</a>。此处仅列摘要：待办归属 = 确认人（业主）；状态 = confirming（待确认）；跳转 = <code>statement-detail.html?status=pending&amp;role=confirmer</code>；类型标签 = 对账单（金色 #FAAD14 / 背景 #FFFBE6）；图标 = 💰。服务方在「对账单」列表页新增并提交成功后，系统为对应业主确认人自动生成一条，重复提交不重复生成。</p>
+            </div>
         </div>
 
         <!-- ==================== 4. 全部任务（业主） ==================== -->
@@ -1774,6 +2301,7 @@
                         <div class="info-value">项目详情页「全部任务」入口</div>
                     </div>
                 </div>
+                <p style="margin:10px 0 0;color:var(--text-secondary);font-size:13px;">页面类型与业务目标与服务方 §2.1 一致（页面类型 = 列表页；业务目标 = 查看任务列表、筛选、查看任务详情）。</p>
             </div>
 
             <div class="subsection">
@@ -1789,8 +2317,8 @@
                     <tbody>
                         <tr>
                             <td>状态选项卡</td>
-                            <td>全部状态</td>
-                            <td>仅显示：全部、确认中、已完成</td>
+                            <td>全部状态（全部 / 待配置 / 待开始 / 执行中 / 确认中 / 已完成）</td>
+                            <td>全部状态选项卡，与服务方一致（筛选项见 §5.4）；差异在卡片操作权限（见 §5.2 验收 / 执行行与 §5.8）</td>
                         </tr>
                         <tr>
                             <td>任务配置</td>
@@ -1800,7 +2328,7 @@
                         <tr>
                             <td>任务执行</td>
                             <td>可上传执行记录</td>
-                            <td>❌ 无执行权限</td>
+                            <td>❌ 通常无执行权限；业主被配置为执行人时具备执行能力（见 <a href="#sub-6-3-1">§6.3.1</a>）</td>
                         </tr>
                         <tr>
                             <td>任务验收</td>
@@ -1815,6 +2343,47 @@
                     </tbody>
                 </table>
             </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="sub-5-3">5.3 页面结构</div>
+                <p class="section-desc">业主端「全部任务」页的版面结构与<strong>服务方 §2.2 完全一致</strong>：顶部导航标题为「全部任务」（服务方为「我的任务」，见 §2.2），其下依次为 <strong>搜索框 → 筛选栏（参与切换 + 状态筛选下拉框）→ 结果统计条 → 合同分组列表（可折叠，含合同头部、阶段分组、任务卡片）</strong>。页面结构 ASCII 示意图直接沿用 §2.2，此处不再重绘。</p>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="sub-5-4">5.4 状态筛选规格</div>
+                <p>业主端状态筛选下拉框提供的选项与服务方 §2.3 <strong>完全一致</strong>，共 6 项：全部状态 / 待配置（configuring） / 待开始（pending） / 执行中（in_progress） / 确认中（confirming） / 已完成（completed）。各状态的筛选用法、角标语义（设计预期）与下拉呈现方式<strong>引用 §2.3</strong>，不再赘述。</p>
+                <div class="note"><div class="note-title">与服务方的本质差异</div><p>业主端与服务方在「全部任务」页均提供完整的 6 个状态筛选项；二者差异不在筛选维度，而在<strong>卡片操作权限</strong>（见 §5.2 与 §5.8）——业主默认对任务卡片只读，仅作为确认人、或被配置为执行人（见 §6.3.1）时可操作。</p></div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="sub-5-5">5.5 任务卡片规格</div>
+                <p>任务卡片的字段构成（任务名称、执行人、确认人、任务状态）与<strong>服务方 §2.4 一致</strong>，数据来源与显示规则引用 §2.4，此处不重复列出。业主端卡片同样按合同分组、阶段内陈列；被驳回回退「待开始」的任务在其卡片上叠加「已驳回」标识（同 §2.7）。</p>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="sub-5-6">5.6 筛选规格</div>
+                <p>筛选交互（「参与」分段切换：全部 / 我参与；任务状态下拉；任务名称模糊搜索）及<strong>列表排序陈列规则</strong>（顶层按合同分组、合同内按阶段顺序、阶段内任务按录入顺序；被确认人驳回回退「待开始」的任务仍按原阶段与顺序陈列并叠加「已驳回」标识）均与服务方 §2.5 <strong>一致</strong>，引用 §2.5 即可，不再重复。</p>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="sub-5-7">5.7 分页规格</div>
+                <p>分页规则（每页 10 条、下拉加载更多、「加载中… / 没有更多了」提示）与服务方 §2.6 <strong>一致</strong>，引用 §2.6。</p>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="sub-5-8">5.8 任务状态详解（业主方）</div>
+                <p>各状态下的卡片样式、状态标识（⚙ 待配置 / ⏸ 待开始 / ▶ 执行中 / ⏳ 确认中 / ✓ 已完成）、确认进度（如「确认中 1/3」）与点击跳转详情等<strong>引用服务方 §2.7</strong>。以下仅补充业主端的<strong>角色差异</strong>：</p>
+                <table>
+                    <thead><tr><th style="width:14%">列表状态</th><th style="width:24%">业主角色站位</th><th>业主端操作 / 表现</th></tr></thead>
+                    <tbody>
+                        <tr><td>全部 / 待配置</td><td>相关方查看</td><td>只读；点击卡片跳转任务详情页。待配置任务业主<strong>无配置入口</strong>（见 §5.2）。</td></tr>
+                        <tr><td>待开始 / 执行中</td><td>相关方查看（默认）<br>执行人（被配置时）</td><td>默认只读查看；当本任务将业主<strong>配置为执行人</strong>（业主自办类，见 §6.3.1）时，业主具备上传执行记录、提交确认 / 完成任务等执行能力，与服务方执行人视角一致；<strong>被驳回回退「待开始」的任务叠加「已驳回」标识（同 §2.7）。</strong></td></tr>
+                        <tr><td>确认中</td><td>确认人之一</td><td>若业主在确认人列表中，可对任务执行<strong>确认通过 / 驳回</strong>（底部操作栏按钮规格见 §6.2）；卡片显示确认进度。</td></tr>
+                        <tr><td>已完成</td><td>相关方查看</td><td>只读查看详情；含业主评价时显示评价标签与星级（见 §6.2 / §6.8）。</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
 
         <!-- ==================== 六、任务详情页（业主） ==================== -->
@@ -1843,7 +2412,7 @@
                         <tr>
                             <td>执行记录上传</td>
                             <td>✅ 可上传</td>
-                            <td>❌ 仅可查看</td>
+                            <td>❌ 通常仅可查看；当本任务将业主配置为执行人（业主自办类）时具备上传能力（见 <a href="#sub-6-3-1">§6.3.1</a>）</td>
                         </tr>
                         <tr>
                             <td>确认通过/驳回</td>
@@ -1854,12 +2423,7 @@
                             <td>评价功能</td>
                             <td>确认时可评价</td>
                             <td>✅ 确认时可评价（业主专属）</td>
-                        </tr>
-                        <tr>
-                            <td>分享功能</td>
-                            <td>✅</td>
-                            <td>❌ 不支持分享任务</td>
-                        </tr>
+                        </tr> 
                     </tbody>
                 </table>
             </div>
@@ -1888,11 +2452,15 @@
                         </tr>
                         <tr>
                             <td>确认通过后</td>
-                            <td>显示评价弹窗（必填星级，选填评语和标签）</td>
+                            <td>显示「确认通过」弹窗（业主专属，可上传媒体、填写评语、打综合评星与选择评价标签；综合评星为<strong>选填</strong>，非强制，详见 §6.8 表单字段规格）</td>
                         </tr>
                         <tr>
-                            <td>评价星级</td>
-                            <td>1-5星，支持半星，<span class="tag tag-required">必填</span></td>
+                            <td>综合评星（确认弹窗）</td>
+                            <td>1-5星，支持半星，<span class="tag tag-optional">选填</span>（仅「去评价」补评时方为必填，见 §6.9）</td>
+                        </tr>
+                        <tr>
+                            <td>驳回按钮</td>
+                            <td>底部操作栏「驳回」；点击弹出「驳回任务」弹窗（含媒体上传与驳回原因，驳回原因<span class="tag tag-required">必填</span>，≤500 字符，校验不通过禁止提交）</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1900,8 +2468,7 @@
 
             <div class="subsection">
                 <div class="subsection-title" id="sub-6-3">6.3 任务详情页按状态分视角详述（业主方）</div>
-                <p class="section-desc">本章基于业主小程序原型（owner-miniapp/task-detail.html）对任务详情页在<strong>每一种状态</strong>下的页面表现，结合<strong>业主视角</strong>单独展开描述，涵盖逻辑、权限、效果、字段、交互五个维度。与「三、任务详情页（服务方）」不同，业主端原型<strong>不提供「配置人视角」</strong>（配置人导航项已隐藏）；在「待配置」之外的所有状态，原型顶部保留演示用视角切换（执行人 / 确认人 / 其他用户），用于演示业主在任务中的两种关键站位——作为<strong>确认人</strong>可操作确认 / 评价，或作为<strong>其他相关方</strong>只读等待。亦可通过 URL 参数 <code>?role=</code> 直接锁定视角（见下方「原型演示链接」）。业主在任务中扮演的角色是<strong>确认人之一</strong>（以及任务相关方查看者），不具备配置 / 执行能力。</p>
-                <div class="note"><div class="note-title">业主不支持配置任务（与 2.7 待配置角色操作的区别）</div><p>「2.7 任务状态详解（服务方全部任务列表）」中「待配置」状态的角色操作写明「合同甲乙方及合同创建者可配置执行人、配置确认人、提交任务」——这是<strong>服务方</strong>配置人（合同甲乙方 / 合同创建者）的能力。业主端<strong>不存在配置人角色、不提供任何任务配置入口</strong>：业主查看「待配置」态任务时仅能只读等待（提示"任务正在配置中，请等待配置完成"），既不能配置执行人 / 确认人，也不能提交任务。此为产品设计特殊约定，<strong>业主特殊不支持配置</strong>，特此说明。</p></div>
+                <p class="section-desc">本章基于业主小程序原型（owner-miniapp/task-detail.html）对任务详情页在<strong>每一种状态</strong>下的页面表现，结合<strong>业主视角</strong>单独展开描述，涵盖逻辑、权限、效果、字段、交互五个维度。与「三、任务详情页（服务方）」不同，业主端原型<strong>不提供「配置人视角」</strong>（配置人导航项已隐藏）；在「待配置」之外的所有状态，原型顶部保留演示用视角切换（执行人 / 确认人 / 其他用户），用于演示业主在任务中的两种关键站位——作为<strong>确认人</strong>可操作确认 / 评价，或作为<strong>其他相关方</strong>只读等待。亦可通过 URL 参数 <code>?role=</code> 直接锁定视角（见下方「原型演示链接」）。业主在任务中扮演的角色通常是<strong>确认人之一</strong>（以及任务相关方查看者）；但当任务将业主<strong>配置为执行人</strong>（业主自办类任务，如室内个人用具搬移）时，业主具备真实执行人能力（上传执行记录、提交确认 / 完成任务、驳回后重新提交等，与服务方执行人视角一致，详见 <a href="#sub-6-3-1">§6.3.1</a>）。业主<strong>始终不具备配置（任务配置）能力</strong>。</p>
                 <h4>业主端页面通用区块</h4>
                 <ul>
                     <li><strong>头部状态卡</strong>：任务名称、所属阶段路径、状态徽标、确认进度提示（与服务方同构；业主端顶部演示视角切换不含「配置人视角」，详见下方链接说明）。</li>
@@ -1909,18 +2476,56 @@
                     <li><strong>人员区</strong>：执行人信息卡 + 确认人列表（含业主本人），只读。</li>
                     <li><strong>三段标准卡片</strong>：执行标准 / 确认标准 / 担责标准（可折叠，只读查看），与服务方同构。</li>
                     <li><strong>执行记录卡 / 确认记录卡</strong>：只读查看。</li>
+                    <li><strong>历史记录区</strong>：仅「确认中（被驳回后）/ 已完成（含驳回）/ 驳回后待开始」等含驳回过程的状态展示，呈现第 1 轮执行（带「已驳回」标签）与驳回原因，半透明（opacity 0.6）留存；与服务方同构。</li>
                     <li><strong>底部操作栏</strong>：仅「确认中」且轮到业主确认时显示「确认通过 / 驳回」；其余状态为只读或无操作。</li>
                 </ul>
                 <div class="note"><div class="note-title">原型演示链接（一对一核对）</div><p>本页每个状态小节标题下方均提供「🔗 原型演示」链接，点击直接打开业主小程序原型（owner-miniapp/task-detail.html）对应状态与视角的页面，便于与 PRD 描述逐项核对。链接格式为 <code>owner-miniapp/task-detail.html?status=&lt;状态枚举&gt;&amp;role=&lt;视角枚举&gt;</code>：<code>status</code> 取值为 <code>configuring / pending / pending_blocked / in_progress / confirming / confirming_after_reject / completed / completed_with_reject / rejected_pending</code>；<code>role</code> 取值见各链接标注——多为 <code>other</code>（其他相关方只读）或 <code>confirmer</code>（业主作为确认人可操作 / 可评价）、<code>nonConfirmer</code>（业主等待他人确认）、<code>nonExecutor</code>（业主非执行人只读）。业主端原型无「配置人视角」；确认类与相关回退状态顶部保留演示用视角切换（执行人 / 确认人 / 其他用户），即可在原型内手动浏览全部状态与视角，也可用 <code>?role=</code> 参数直接锁定某一视角。原型默认将业主配置为确认人之一（王五 · 业主），若该任务未将业主配置为确认人，则其在前置 / 执行等阶段仅作为其他相关方只读查看（对应 role=other 链接）。</p></div>
+
+                <h4 id="sub-6-3-1">业主作为执行人场景（§6.3.1）</h4>
+                <div class="note">
+                    <div class="note-title">场景概述</div>
+                    <p>部分任务需由<strong>业主自行完成</strong>而非交由服务方执行，典型如「室内业主个人用具占用施工场地，需在规定时间内进行搬移」。此类「业主自办类任务」由配置人（服务方 · 工长）在配置阶段将<strong>业主本人</strong>选定为执行人，业主即承担「执行人」角色，在服务方小程序与服务方执行人视角一致地履行执行职责。业主在自办类任务中同时具备「执行人」与「项目相关方」双重身份；因其为任务执行方，通常<strong>不再单独配置确认人</strong>，走「完成任务」流程由系统直接闭环（亦可按需在确认人列表中加入服务方人员做验收）。</p>
+                </div>
+                <h4 style="margin-top:14px;">配置方式</h4>
+                <p>与 <a href="#sub-3-11">§3.11 待配置</a> 完全一致——配置人点击「添加执行人」时，执行人选择器可选范围含项目内人员，<strong>含业主</strong>（按姓名（name）/ 角色（role）模糊匹配，搜索「业主」或业主姓名即可命中）。选定业主后任务流转至「待开始」，该业主成为本任务的执行人；若为自办类任务可不配置确认人。</p>
+                <h4 style="margin-top:14px;">权限（业主被配置为执行人时）</h4>
+                <table class="spec-table">
+                    <thead><tr><th>任务状态</th><th>业主（作为执行人）可见 / 可操作</th></tr></thead>
+                    <tbody>
+                        <tr><td>待开始</td><td>可「上传记录」，并「提交确认 / 完成任务」（有确认人显「提交确认」、无确认人显「完成任务」）；提交前置校验：须 ≥1 条执行记录。</td></tr>
+                        <tr><td>待开始（前置阻塞）</td><td>阻塞解除后可「上传记录」「提交确认 / 完成任务」；阻塞态本身不可执行（解除由前置任务完成驱动）。</td></tr>
+                        <tr><td>执行中</td><td>可继续上传 / 编辑 / 删除执行记录，并「提交确认 / 完成任务」。</td></tr>
+                        <tr><td>驳回后待开始</td><td>可重新「上传记录」并「重新提交确认 / 完成任务」。</td></tr>
+                        <tr><td>确认中 / 已完成 / 确认中（被驳回后）/ 已完成（含驳回）</td><td>执行人侧为只读；确认 / 评价 / 查看等能力取决于该业主是否同时被配置为确认人（见 §6.5~§6.12）。</td></tr>
+                    </tbody>
+                </table>
+                <h4 style="margin-top:14px;">交互与记录生成</h4>
+                <p>业主作为执行人的全部上传、提交、重新提交交互与记录生成规则，与服务方执行人视角<strong>完全一致</strong>，直接复用：</p>
+                <ul>
+                    <li>待开始上传 / 提交前置校验：<a href="#sub-3-12">§3.12 待开始</a>；</li>
+                    <li>执行中上传记录、提交确认 / 完成任务、提交后生成执行记录 + 动态、提交确认后为确认人生成待办：<a href="#sub-3-14">§3.14 执行中</a>；</li>
+                    <li>驳回后待开始重新上传 / 重新提交、重新提交后为确认人生成待办：<a href="#sub-3-17">§3.17 驳回后待开始</a>；</li>
+                    <li>确认 / 驳回（若自办类任务配置了确认人）的规则同 <a href="#sub-3-15">§3.15</a>。</li>
+                </ul>
+                <h4 style="margin-top:14px;">原型支持说明</h4>
+                <p>业主端原型（owner-miniapp/task-detail.html）已支持业主作为执行人的真实操作：当视角为执行人（role=executor，或 pending / rejected_pending 态下非 nonExecutor 角色）时，底部操作栏渲染真实「上传记录」「提交确认 / 完成任务」按钮，执行记录区渲染「✎ 上传 / + 继续上传」入口（见 owner-miniapp 渲染逻辑 currentUserRole === 'executor' 分支）。</p>
+                <div class="note"><div class="note-title">与各状态小节「执行人（仅原型演示切换查看）」行的关系</div><p>本章各状态小节（§6.4~§6.12）权限表中的「执行人（仅原型演示切换查看）」行，描述的是业主作为<strong>默认站位</strong>（确认人 / 相关方查看者）时的演示视角——即业主<strong>并非</strong>本任务执行人时，仅可通过顶部视角切换预览执行人态、无真实操作权限。当某任务<strong>实际将业主配置为执行人</strong>时，该业主在本任务中按本场景（§6.3.1）具备真实执行人能力，<strong>不受前述演示视角限制</strong>；其各状态下的可见 / 可操作以本场景与服务方执行人视角（§3.12 / §3.14 / §3.17）为准。</p></div>
             </div>
 
             <div class="subsection">
                 <div class="subsection-title" id="sub-6-4">6.4 待配置（业主只读）</div>
-            <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="owner-miniapp/task-detail.html?status=configuring&amp;role=other" target="_blank">待配置 · 业主只读等待（其他相关方视角）</a></p>
+            <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="owner-miniapp/task-detail.html?status=configuring&amp;role=other" target="_blank">待配置 · 业主只读等待</a></p>
                 <h4>逻辑</h4>
-                <p>任务已生成但尚未配置执行人与确认人。业主在原型中作为「未来确认人」被动等待，页面无任何配置入口。</p>
+                <p>任务已生成但尚未配置执行人与确认人。业主在原型中作为「未来确认人」被动等待，页面无任何配置入口（业主端不存在配置人角色，详见 §6.1 差异说明与 §6.3「业主不支持配置任务」说明）。</p>
                 <h4>权限与用户视角</h4>
-                <p>业主：<strong>仅只读查看</strong>，无任何配置 / 编辑 / 提交按钮。配置动作由服务方配置人完成（参见 2.7 待配置角色操作）。</p>
+                <table class="spec-table">
+                    <thead><tr><th>视角</th><th>可见/可操作</th></tr></thead>
+                    <tbody>
+                        <tr><td>其他相关方（业主，默认视角）</td><td>仅只读查看，无任何配置 / 编辑 / 提交按钮；提示「任务正在配置中，请等待配置完成」。</td></tr>
+                        <tr><td>确认人（业主，未来确认人）</td><td>本态尚未配置确认人，仅占位只读等待，无确认入口。</td></tr>
+                        <tr><td>执行人（仅原型演示切换查看）</td><td>业主端此视角仅为查看演示，无配置 / 执行能力，与真实权限一致（业主无配置权限）。</td></tr>
+                    </tbody>
+                </table>
                 <h4>字段</h4>
                 <p>头部状态徽标「待配置」；人员区显示「执行人（待配置）/ 确认人（待配置）」占位；执行记录卡与确认记录卡隐藏；顶部视角切换仅显「其他用户视角」（业主端不提供配置人视角）。</p>
                 <h4>交互</h4>
@@ -1930,27 +2535,49 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-6-5">6.5 待开始（业主只读）</div>
-            <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="owner-miniapp/task-detail.html?status=pending&amp;role=nonExecutor" target="_blank">待开始 · 业主只读（非执行人视角）</a></p>
+                <div class="subsection-title" id="sub-6-5">6.5 待开始</div>
+            <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="owner-miniapp/task-detail.html?status=pending&amp;role=nonExecutor" target="_blank">待开始 · 业主只读（默认）</a> ｜ <a href="owner-miniapp/task-detail.html?status=pending&amp;role=executor" target="_blank">待开始 · 业主作为执行人</a></p>
                 <h4>逻辑</h4>
                 <p>执行人已配置，等待执行人开始执行。业主作为未来确认人只读等待。</p>
                 <h4>权限与用户视角</h4>
-                <p>业主：仅只读查看。「开始执行」操作仅执行人可见，业主底部无操作按钮。</p>
+                <table class="spec-table">
+                    <thead><tr><th>视角</th><th>可见/可操作</th></tr></thead>
+                    <tbody>
+                        <tr><td>其他相关方（业主，默认视角）</td><td>仅只读查看；「开始执行」操作仅执行人可见，业主底部无操作按钮。</td></tr>
+                        <tr><td>确认人（业主，本态尚未轮到）</td><td>本态确认人未进入确认环节，仅只读查看确认人列表占位，无确认入口。</td></tr>
+                        <tr><td>执行人（仅原型演示切换查看）</td><td>业主端此视角仅为查看演示；「开始执行」「上传记录」等操作仅真实执行人可用，业主无执行能力。</td></tr>
+                    </tbody>
+                </table>
                 <h4>字段</h4>
                 <p>头部状态徽标「待开始」；人员区显示执行人卡与确认人列表（只读，无删除按钮）；执行记录卡 / 确认记录卡隐藏。</p>
                 <h4>交互</h4>
                 <p>无业主操作；展示「等待执行人执行」。</p>
                 <h4>效果</h4>
                 <p>头部默认配色；流程条第 1 步当前（current）。</p>
+                <h4 style="margin-top:16px;">执行人 = 业主时（业主自办类任务）</h4>
+                <p>当本任务将<strong>业主配置为执行人</strong>（如室内个人用具搬移；配置方式与权限见 <a href="#sub-6-3-1">§6.3.1</a>）时，业主在本态具备与服务方执行人视角<strong>完全一致</strong>的真实执行能力——不再仅停留于顶部视角切换演示。其逻辑、字段、效果对齐 <a href="#sub-3-12">§3.12 待开始（执行人视角）</a>，此处仅列要点并复用其细则，避免重复：</p>
+                <ul>
+                    <li><strong>权限</strong>：底部「上传记录」与「提交确认 / 完成任务」（有确认人显「提交确认」、无确认人显「完成任务」）均可见可操作；固定上传栏显示；人员区 / 三段标准 / 流程条只读。</li>
+                    <li><strong>提交前置校验</strong>：<strong>未上传 ≥ 1 条执行记录时</strong>「提交确认 / 完成任务」主按钮置灰不可点击（提示「请先上传执行记录」），上传并流转「执行中」后方可点击提交（校验细则见 §3.12「提交前置校验」）。</li>
+                    <li><strong>上传记录交互</strong>：点击「上传记录」/「✎ 上传」打开上传弹窗（图片 / 视频 / 音频 + 执行说明；数据结构与提交交互同 §3.12「上传记录（数据结构与提交交互）」）；首条记录入库后任务自动流转至「执行中」，执行记录卡出现并逐条展示（操作项同 §3.12「执行记录区展示与操作项」）。</li>
+                    <li><strong>确认人名单</strong>：业主作为执行人时，确认人名单<strong>不含业主本人</strong>（默认张三 · 项目总、赵六 · 设计师），避免同一任务内业主既当执行人又当确认人。（规则内暂不做限制）</li>
+                </ul>
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-6-6">6.6 待开始（前置阻塞）（业主只读）</div>
-            <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="owner-miniapp/task-detail.html?status=pending_blocked&amp;role=other" target="_blank">待开始（前置阻塞）· 业主只读查看阻塞（其他相关方视角）</a></p>
+                <div class="subsection-title" id="sub-6-6">6.6 待开始（前置阻塞）</div>
+            <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="owner-miniapp/task-detail.html?status=pending_blocked&amp;role=other" target="_blank">待开始（前置阻塞）</a></p>
                 <h4>逻辑</h4>
                 <p>任务设置了「按序执行」且前置任务未完成，进入阻塞。业主只读查看阻塞信息。</p>
                 <h4>权限与用户视角</h4>
-                <p>业主：仅只读查看；无任何执行 / 解除阻塞操作。</p>
+                <table class="spec-table">
+                    <thead><tr><th>视角</th><th>可见/可操作</th></tr></thead>
+                    <tbody>
+                        <tr><td>其他相关方（业主，默认视角）</td><td>仅只读查看；无任何执行 / 解除阻塞操作。</td></tr>
+                        <tr><td>确认人（业主，本态非确认人）</td><td>本态非确认环节，仅只读查看阻塞信息。</td></tr>
+                        <tr><td>执行人（仅原型演示切换查看）</td><td>业主端此视角仅为查看演示；解除阻塞仅真实执行人 / 配置人可操作，业主无权限。</td></tr>
+                    </tbody>
+                </table>
                 <h4>字段</h4>
                 <p>头部状态徽标仍为「待开始」；前置任务阻塞卡显示（锁形图标 + 前置任务列表及状态）；执行 / 确认记录卡隐藏。</p>
                 <h4>交互</h4>
@@ -1960,100 +2587,181 @@
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-6-7">6.7 执行中（业主只读）</div>
-            <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="owner-miniapp/task-detail.html?status=in_progress&amp;role=other" target="_blank">执行中 · 业主只读查看（其他相关方视角）</a></p>
+                <div class="subsection-title" id="sub-6-7">6.7 执行中</div>
+            <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="owner-miniapp/task-detail.html?status=in_progress&amp;role=other" target="_blank">执行中 · 业主只读（默认）</a> ｜ <a href="owner-miniapp/task-detail.html?status=in_progress&amp;role=executor" target="_blank">执行中 · 业主作为执行人</a></p>
                 <h4>逻辑</h4>
                 <p>执行人已上传记录尚未提交确认。业主可查看执行人提交的进度与内容。</p>
                 <h4>权限与用户视角</h4>
-                <p>业主：仅只读查看执行记录；无上传 / 提交操作。</p>
+                <table class="spec-table">
+                    <thead><tr><th>视角</th><th>可见/可操作</th></tr></thead>
+                    <tbody>
+                        <tr><td>其他相关方（业主，默认视角）</td><td>仅只读查看执行记录；无上传 / 提交操作。</td></tr>
+                        <tr><td>确认人（业主，本态非确认人）</td><td>本态非确认环节，仅只读查看执行记录与确认人列表占位。</td></tr>
+                        <tr><td>执行人（仅原型演示切换查看）</td><td>业主端此视角仅为查看演示；上传 / 编辑 / 提交执行记录仅真实执行人可用，业主无权限。</td></tr>
+                    </tbody>
+                </table>
                 <h4>字段</h4>
-                <p>头部状态徽标「执行中」；执行记录卡显示当前轮上传内容（图片网格 / 文字说明 / 提交人时间）；确认记录卡隐藏。</p>
+                <p>头部状态徽标「执行中」；<strong>执行记录卡（只读）</strong>显示当前轮上传内容：逐条「执行记录 #N · 提交时间」，媒体网格（图片 📷 / 视频 🎬 / 音频 🎵）与说明文字（desc），业主端仅查看、无上传 / 编辑 / 删除操作项；确认记录卡隐藏。</p>
                 <h4>交互</h4>
                 <p>无业主操作；展示「执行人正在执行中…」。</p>
                 <h4>效果</h4>
                 <p>头部 in-progress 配色；流程条第 1 步已完成（completed）、第 2 步当前（current），进度 25%。</p>
+                <h4 style="margin-top:16px;">执行人 = 业主时</h4>
+                <p>当本任务将<strong>业主配置为执行人</strong>时，业主在本态具备与服务方执行人视角一致的真实执行能力（权限与配置方式见 <a href="#sub-6-3-1">§6.3.1</a>），逻辑、字段、效果对齐 <a href="#sub-3-14">§3.14 执行中（执行人视角）</a>，要点如下（细则复用 §3.14，不再展开）：</p>
+                <ul>
+                    <li><strong>权限</strong>：底部「上传记录」「提交确认 / 完成任务」均可见可操作；执行记录卡显「✎ 上传」编辑入口；可继续补充 / 编辑 / 删除执行记录（删除至空则退回「待开始」，同 §3.12）；固定上传栏显示。</li>
+                    <li><strong>提交确认 / 完成任务</strong>：按钮文案随「是否配置确认人」切换（有确认人「提交确认」、无确认人「完成任务」），共用同一提交确认弹窗；弹窗内容、提交后状态流转、记录与动态生成、确认人待办生成均同 §3.14「交互」「提交后记录生成规则」「待办生成规则」。</li>
+                    <li><strong>提交前置校验</strong>：须 ≥ 1 条执行记录，否则按钮置灰（同 §3.12「提交前置校验」、§3.14 说明）。</li>
+                </ul>
+                <div class="note"><p>本态「执行人（仅原型演示切换查看）」行同 §6.5 说明——仅适用于业主<strong>非</strong>本任务执行人的默认演示视角；业主被配置为执行人时以本补充场景与 <a href="#sub-3-14">§3.14</a> 为准（原型验证：<code>owner-miniapp/task-detail.html?status=in_progress&amp;role=executor</code>）。</p></div>
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-6-8">6.8 确认中（业主可确认）</div>
+                <div class="subsection-title" id="sub-6-8">6.8 确认中</div>
             <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="owner-miniapp/task-detail.html?status=confirming&amp;role=confirmer" target="_blank">确认中 · 业主轮到确认（确认人视角）</a> ｜ <a href="owner-miniapp/task-detail.html?status=confirming&amp;role=nonConfirmer" target="_blank">确认中 · 业主等待他人确认（非确认人视角）</a></p>
                 <h4>逻辑</h4>
                 <p>执行人已提交，等待确认人确认。业主在确认人列表中且轮到其确认时，底部显示「确认通过 / 驳回」。</p>
                 <h4>权限与用户视角</h4>
-                <p>业主（作为确认人）：当轮到本人确认时，底部显「确认通过 / 驳回」可操作；否则只读等待。与服务方「确认人」视角一致。</p>
+                <table class="spec-table">
+                    <thead><tr><th>视角</th><th>可见/可操作</th></tr></thead>
+                    <tbody>
+                        <tr><td>确认人（业主，轮到本人确认）</td><td>底部显「确认通过 / 驳回」可操作；其余确认人未轮到时只读等待。</td></tr>
+                        <tr><td>其他相关方（业主，非本轮确认人或等待他人确认）</td><td>只读等待，无确认 / 驳回入口。</td></tr>
+                        <tr><td>执行人（仅原型演示切换查看）</td><td>业主端此视角仅为查看演示；确认 / 驳回仅确认人可用，业主无执行能力。</td></tr>
+                    </tbody>
+                </table>
                 <h4>字段</h4>
-                <p>头部状态徽标「确认中」，确认进度「确认进度：1/3」；确认人列表显示每人状态（已确认绿 / 待确认灰），业主本人待确认时高亮。</p>
+                <p>头部状态徽标「确认中」，确认进度「确认进度：1/3」；<strong>确认人列表</strong>显示每人状态（已确认绿 / 待确认灰），业主本人待确认时高亮；<strong>执行记录卡（只读）</strong>显示当前轮上传内容（图片网格 / 文字说明 / 提交人时间）；<strong>确认记录卡</strong>列出已确认者评语 / 标签 / 评分 / 附件，及待确认者占位；<strong>历史记录区</strong>隐藏（无驳回，无需留存历史轮次）。</p>
                 <h4>交互</h4>
                 <ul>
-                    <li>业主「确认通过」→ 弹出评价弹窗（必填星级，选填评语 / 标签）；提交后状态转「已确认」，进度 +1；全部通过则任务转「已完成」。</li>
-                    <li>业主「驳回」→ 弹出驳回弹窗（必填原因）；提交后确认结果=已驳回，只要有一人驳回任务主状态回退为「驳回后待开始」，系统通知执行人重新执行。</li>
+                    <li>业主「确认通过」→ 弹出「确认通过」弹窗（业主专属，含媒体上传 / 评语 / 综合评星 / 评价标签，见下方表单字段规格）；提交后该人状态转「已确认」，进度 +1；全部通过则任务转「已完成」，并同时按 <a href="#sub-3-15">§3.15 确认 / 驳回后记录生成规则</a> 生成一条确认记录与一条动态记录（时间=该确认人确认时间；若本次为最后一人确认，则动态为「任务已完成」）。</li>
+                    <li>业主「驳回」→ 弹出「驳回任务」弹窗（含媒体上传与驳回原因，见下方表单字段规格）；提交后该确认结果=已驳回；<strong>只要有一人驳回，任务主状态回退为「驳回后待开始」</strong>，系统通知执行人重新执行（轻提示：「已驳回！系统已通知执行人重新执行。」），同时生成一条驳回确认记录与一条「任务驳回」动态记录（时间=驳回时间）。</li>
                 </ul>
+                <h4>确认 / 驳回表单字段规格</h4>
+                <table class="spec-table">
+                    <thead><tr><th>表单</th><th>字段</th><th>类型·取值</th><th>必填性</th><th>校验规则</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td rowspan="4">确认通过弹窗（业主专属）</td><td>媒体文件（files）</td><td>图片 / 视频 / 音频</td><td>选填</td><td>图片：jpg/jpeg/png/webp，单张≤10MB；视频：mp4/mov，单个≤100MB；音频：原型仅记录未强制校验</td><td>确认时附带的现场佐证</td></tr>
+                        <tr><td>评语（desc）</td><td>文本</td><td>选填</td><td>1-1000 字符</td><td>placeholder「请填写真实评语」</td></tr>
+                        <tr><td>综合评星（rating）</td><td>数值 0.5–5（支持半星）</td><td>选填</td><td>1-5 星，支持半星；非必填</td><td>业主专属：确认时顺带评价，非强制；真正必填的评价见「去评价」入口（§6.9）</td></tr>
+                        <tr><td>评价标签（tags）</td><td>多选：责任心棒 / 服务态度好 / 专业能力强</td><td>选填</td><td>可多选，不强制</td><td>—</td></tr>
+                        <tr><td rowspan="2">驳回任务弹窗</td><td>媒体文件（files）</td><td>图片 / 视频 / 音频</td><td>选填</td><td>同确认弹窗格式约束</td><td>驳回时附带的现场佐证</td></tr>
+                        <tr><td>驳回原因（reject_reason）</td><td>文本</td><td>必填</td><td>1-500 字符，<code>Validation.validate.textLength(reason, 500, true, '驳回原因')</code></td><td>placeholder「请输入驳回原因（必填）」；校验不通过禁止提交</td></tr>
+                    </tbody>
+                </table>
+                <h4>确认 / 驳回后记录生成规则</h4>
+                <p>业主确认 / 驳回的记录生成与服务方「确认中」完全一致，详见 <a href="#sub-3-15">§3.15 确认 / 驳回后记录生成规则</a>：每位确认人确认 / 驳回各生成<strong>一条确认记录</strong>（对应 §8.3 确认记录表字段（task_confirmations）：确认人（confirmer_id）/ 确认结果（status）/ 确认备注（remark）/ 确认时间（confirmed_at）/ 媒体附件（files）等）；并各生成<strong>一条动态记录</strong>（项目动态（activity-list）），动态文案：单条确认「{确认人姓名} 确认了 {阶段名称}{任务名称}」（类型标签（typeLabel）=「任务确认」）、驳回「{确认人姓名} 驳回了 {阶段名称}{任务名称}」（类型标签 =「任务驳回」）、<strong>最后一人确认（全部确认）→ 任务已完成</strong>「完成了 {阶段名称}{任务名称}的施工」（类型标签 =「任务完成」）；确认 / 驳回动态现包含确认人上传的媒体（见 §3.15 动态记录字段 媒体文件（files））：若确认 / 驳回时上传媒体则 是否有媒体（hasMedia）= true、媒体数量（mediaCount）= 上传总数，否则 false / 0。业主确认时填写的综合评星 / 评价标签 / 评语回写至本人确认记录（对应 §8.3 的评分 / 标签字段）。</p>
                 <h4>效果</h4>
                 <p>头部 confirming 配色；流程条第 3 步当前（current），进度 50%；确认记录卡中已确认者绿色、待确认者灰色对比清晰。</p>
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-6-9">6.9 确认中（被驳回后）（业主可确认）</div>
-            <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="owner-miniapp/task-detail.html?status=confirming_after_reject&amp;role=confirmer" target="_blank">确认中（被驳回后）· 业主轮到确认（确认人视角）</a> ｜ <a href="owner-miniapp/task-detail.html?status=confirming_after_reject&amp;role=nonConfirmer" target="_blank">确认中（被驳回后）· 业主等待他人确认（非确认人视角）</a></p>
-                <h4>逻辑</h4>
-                <p>任务曾被驳回（主状态回退待开始），执行人重新提交后进入第 2 轮确认。业主视角与服务方「确认中（被驳回后）」一致，并额外可见历史记录。</p>
-                <h4>权限与用户视角</h4>
-                <p>业主（作为确认人）：轮到本人确认时显「确认通过 / 驳回」；否则只读。</p>
-                <h4>字段</h4>
-                <p>历史记录区显示第 1 次执行（带红色「已驳回」标签）+ 驳回原因块；确认记录卡按「第 2 轮 / 第 1 轮」分组，第 1 轮被驳回归项半透明留存。</p>
-                <h4>交互</h4>
-                <p>业主确认操作与「确认中」一致；本轮全部通过则转「已完成（含驳回）」，再次驳回则再次回退「驳回后待开始」。</p>
-                <h4>效果</h4>
-                <p>历史记录区半透明 + 灰底突出「历史」；第 1 轮被驳回归项红底「驳回原因」块强化上下文。</p>
-            </div>
-
-            <div class="subsection">
-                <div class="subsection-title" id="sub-6-10">6.10 已完成（业主可评价）</div>
+                <div class="subsection-title" id="sub-6-9">6.9 已完成</div>
             <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="owner-miniapp/task-detail.html?status=completed&amp;role=confirmer" target="_blank">已完成 · 业主已确认可评价（确认人视角）</a> ｜ <a href="owner-miniapp/task-detail.html?status=completed&amp;role=nonConfirmer" target="_blank">已完成 · 业主查看确认记录（非确认人视角）</a></p>
                 <h4>逻辑</h4>
-                <p>全部确认人确认通过。业主作为确认人可对执行人进行评价。</p>
+                <p>全部确认人确认通过，触发「任务已完成」动态（见 §6.8 / <a href="#sub-3-15">§3.15</a>）。业主作为确认人可对执行人进行评价。</p>
                 <h4>权限与用户视角</h4>
-                <p>业主：操作栏「查看评价」；若本人已确认但尚未评价，其确认记录项显「去评价」入口（仅本人可见）。</p>
+                <table class="spec-table">
+                    <thead><tr><th>视角</th><th>可见/可操作</th></tr></thead>
+                    <tbody>
+                        <tr><td>确认人（业主）</td><td>操作栏「查看评价」；若本人已确认但尚未评价，其确认记录项显「去评价」入口（仅本人可见）。</td></tr>
+                        <tr><td>其他相关方（业主，非确认人）</td><td>只读查看确认记录与执行记录，无评价入口。</td></tr>
+                        <tr><td>执行人（仅原型演示切换查看）</td><td>业主端此视角仅为查看演示；无评价权限。</td></tr>
+                    </tbody>
+                </table>
                 <h4>字段</h4>
-                <p>确认人列表全「已确认」；确认记录卡列出每人评语 / 标签 / 评分 / 附件；无「已驳回」标识。</p>
+                <p><strong>执行记录卡（只读）</strong>显示当前轮上传内容；<strong>确认记录卡（只读）</strong>列出每人评语 / 标签 / 评分 / 附件（如张三附图、王五「暂未评价」占位）；无「已驳回」标识；<strong>历史记录区</strong>隐藏（无驳回，无需留存历史轮次）。</p>
                 <h4>交互</h4>
                 <ul>
-                    <li>业主「查看评价」→ 打开评价列表弹窗。</li>
-                    <li>业主本人「去评价」→ 打开评价弹窗（维度评分 + 标签），提交后留存。</li>
+                    <li>业主「查看评价」→ 打开「确认人评价」列表弹窗（showEvaluationListModal），查看各确认人对执行人的评价。</li>
+                    <li>业主本人「去评价」→ 打开「评价任务」弹窗（showEvaluationModal），提交后回写本人确认记录（不新增确认记录 / 动态）；若本人在确认通过时已顺带评价，则此处显示已评。</li>
                 </ul>
+                <h4>评价表单字段规格</h4>
+                <table class="spec-table">
+                    <thead><tr><th>表单</th><th>字段</th><th>类型·取值</th><th>必填性</th><th>校验规则</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td rowspan="3">评价任务弹窗（去评价）</td><td>综合评星（rating）</td><td>数值 0.5–5（支持半星）</td><td>必填</td><td>1-5 星，支持半星；未评星禁止提交</td><td>业主补充评价的强制项</td></tr>
+                        <tr><td>评语（desc）</td><td>文本</td><td>选填</td><td>1-1000 字符</td><td>placeholder「请填写真实评语」</td></tr>
+                        <tr><td>评价标签（tags）</td><td>多选：责任心棒 / 服务态度好 / 专业能力强</td><td>选填</td><td>可多选，不强制</td><td>—</td></tr>
+                        <tr><td>确认人评价弹窗（查看评价）</td><td>—</td><td>展示各确认人已提交的综合评星 / 评语 / 标签</td><td>—</td><td>只读展示</td><td>无表单，仅查看</td></tr>
+                    </tbody>
+                </table>
                 <h4>效果</h4>
                 <p>头部 completed 配色（绿色调）；流程条满进度 100%、4 步全绿勾；整体呈现「闭环完成」。</p>
             </div>
 
             <div class="subsection">
-                <div class="subsection-title" id="sub-6-11">6.11 已完成（含驳回）（业主可评价）</div>
-            <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="owner-miniapp/task-detail.html?status=completed_with_reject&amp;role=confirmer" target="_blank">已完成（含驳回）· 业主已确认可评价（确认人视角）</a> ｜ <a href="owner-miniapp/task-detail.html?status=completed_with_reject&amp;role=nonConfirmer" target="_blank">已完成（含驳回）· 业主查看确认记录（非确认人视角）</a></p>
-                <h4>逻辑</h4>
-                <p>任务经历驳回、执行人重新提交后最终全部确认通过。业主视角与服务方「已完成（含驳回）」一致，历史记录区保留曾驳回过程。</p>
-                <h4>权限与用户视角</h4>
-                <p>业主：操作栏「查看评价」；第 2 轮中本人可「去评价」。</p>
-                <h4>字段</h4>
-                <p>历史记录区显示第 1 次执行（带红色「已驳回」标签）+ 驳回原因；确认记录卡按「第 2 轮 / 第 1 轮」分组，第 1 轮被驳回归项半透明留存。</p>
-                <h4>交互</h4>
-                <p>与「已完成」一致（查看评价 / 去评价）；历史记录仅作留存展示，不可编辑。</p>
-                <h4>效果</h4>
-                <p>头部 completed 配色；流程条满进度；半透明历史 + 红色「已驳回」标签展示「最终完成」且保留「曾驳回」完整记录。</p>
-            </div>
-
-            <div class="subsection">
-                <div class="subsection-title" id="sub-6-12">6.12 驳回后待开始（业主只读）</div>
-            <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="owner-miniapp/task-detail.html?status=rejected_pending&amp;role=nonExecutor" target="_blank">驳回后待开始 · 业主只读等待重新执行（非执行人视角）</a></p>
+                <div class="subsection-title" id="sub-6-10">6.10 驳回后待开始</div>
+            <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="owner-miniapp/task-detail.html?status=rejected_pending&amp;role=nonExecutor" target="_blank">驳回后待开始 · 业主只读（默认）</a></p>
                 <h4>逻辑</h4>
                 <p>确认中有人驳回后主状态<strong>回退</strong>为待开始（状态回退效果），确认记录与驳回原因<strong>留存</strong>。业主只读查看，等待执行人重新执行。</p>
                 <h4>权限与用户视角</h4>
-                <p>业主：仅只读查看；无重新执行 / 编辑操作（重新执行仅执行人可操作）。确认记录卡中本人被驳回项以红底「已驳回」呈现。</p>
+                <table class="spec-table">
+                    <thead><tr><th>视角</th><th>可见/可操作</th></tr></thead>
+                    <tbody>
+                        <tr><td>其他相关方（业主，默认视角）</td><td>仅只读查看；无重新执行 / 编辑操作（重新执行仅执行人可操作）。</td></tr>
+                        <tr><td>确认人（业主，曾确认 / 曾驳回）</td><td>只读查看；确认记录卡中本人被驳回项以红底「已驳回」呈现。</td></tr>
+                        <tr><td>执行人（仅原型演示切换查看）</td><td>业主端此视角仅为查看演示；重新执行仅真实执行人可操作，业主无权限。</td></tr>
+                    </tbody>
+                </table>
                 <h4>字段</h4>
-                <p>头部状态徽标「待开始」；历史记录区显示第 1 次执行（带「已驳回」标签）+ 驳回原因块；确认记录卡列出各确认人结果（含红底「已驳回」及原因）。</p>
+                <p>头部状态徽标「待开始」；<strong>执行记录卡（当前轮暂无）</strong>等待执行人重新上传；<strong>历史记录区（historyRecords）</strong>显示第 1 次执行（带「已驳回」标签）+ 红底「驳回原因」块；<strong>确认人列表</strong>显示各确认人结果（含红底「已驳回」及原因）；<strong>确认记录卡</strong>列出各确认人结果（含红底「已驳回」及原因）。</p>
                 <h4>交互</h4>
                 <p>无业主操作；展示「等待执行人重新执行」。</p>
                 <h4>效果</h4>
                 <p>头部默认配色（强调「回退未完」）；流程条回到第 1 步当前（current）、进度 0%，但历史记录区以红底「驳回原因」+「已驳回」标签明确回退原因。</p>
                 <div class="note"><div class="note-title">与 §一 主状态机的对应关系</div><p>「驳回后待开始」在详情页是独立渲染态，但在 §一 主状态机中<strong>不是独立主状态</strong>——它对应「待开始」主状态的一种进入原因（确认结果=已驳回 触发回退）。业主端以此态呈现「已驳回」确认结果及其留存记录。</p></div>
+                <h4 style="margin-top:16px;">执行人 = 业主时（业主自办类任务）</h4>
+                <p>当本任务将<strong>业主配置为执行人</strong>时，业主在本态具备与服务方执行人视角一致的真实重新执行能力（权限与配置方式见 <a href="#sub-6-3-1">§6.3.1</a>），逻辑、字段、效果对齐 <a href="#sub-3-17">§3.17 驳回后待开始（执行人视角）</a>，要点如下（细则复用 §3.17，不再展开）：</p>
+                <ul>
+                    <li><strong>权限</strong>：底部「上传记录」「重新提交确认 / 完成任务」均可见可操作（有确认人「重新提交确认」、无确认人「完成任务」）；固定上传栏显示；当前轮执行记录卡显「✎ 上传」入口；历史记录区（第 1 次执行 + 驳回原因）保留展示。</li>
+                    <li><strong>重新上传 / 重新提交</strong>：点击「上传记录」/「✎ 上传」重新上传执行结果（轮次递增，第 N 次依此类推，同 §3.17「（1）执行人『上传记录』」）；「重新提交确认 / 完成任务」弹窗、提交前置校验（须 ≥ 1 条执行记录）、提交后状态流转（确认中（被驳回后）/ 已完成（含驳回））、记录与动态生成、确认人待办生成均同 §3.17「（2）执行人『重新提交确认 / 完成任务』」「（3）待办生成规则」。</li>
+                </ul>
+                <div class="note"><p>本态「执行人（仅原型演示切换查看）」行同 §6.5 说明——仅适用于业主<strong>非</strong>本任务执行人的默认演示视角；业主被配置为执行人时以本补充场景与 <a href="#sub-3-17">§3.17</a> 为准。原型对「业主作为执行人」的重执行操作按钮已支持（见 §6.3.1「原型支持说明」），默认演示链接聚焦业主作为确认人 / 相关方的只读场景。</p></div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="sub-6-11">6.11 确认中（被驳回后）</div>
+            <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="owner-miniapp/task-detail.html?status=confirming_after_reject&amp;role=confirmer" target="_blank">确认中（被驳回后）· 业主轮到确认（确认人视角）</a> ｜ <a href="owner-miniapp/task-detail.html?status=confirming_after_reject&amp;role=nonConfirmer" target="_blank">确认中（被驳回后）· 业主等待他人确认（非确认人视角）</a></p>
+                <h4>逻辑</h4>
+                <p>任务曾被驳回（主状态回退待开始），执行人重新提交后进入新一轮（第 N 轮）确认。业主视角与服务方「确认中（被驳回后）」一致，并额外可见历史记录。</p>
+                <h4>权限与用户视角</h4>
+                <table class="spec-table">
+                    <thead><tr><th>视角</th><th>可见/可操作</th></tr></thead>
+                    <tbody>
+                        <tr><td>确认人（业主，轮到本人确认）</td><td>底部显「确认通过 / 驳回」可操作；否则只读。</td></tr>
+                        <tr><td>其他相关方（业主，非本轮确认人或等待他人）</td><td>只读等待，无确认 / 驳回入口。</td></tr>
+                        <tr><td>执行人（仅原型演示切换查看）</td><td>业主端此视角仅为查看演示；确认 / 驳回仅确认人可用。</td></tr>
+                    </tbody>
+                </table>
+                <h4>字段</h4>
+                <p><strong>执行记录卡（只读）</strong>显示当前轮（第 2 次执行）上传内容；<strong>历史记录区（historyRecords）</strong>显示第 1 次执行（带红色「已驳回」标签）+ 驳回原因块（红底），半透明（opacity 0.6）突出「历史」；<strong>确认记录卡（confirm-list）</strong>按「第 1 轮 / 第 2 轮 / … / 第 N 轮（轮次无上限）」分组，历史轮次被驳回归项半透明留存；确认人列表显示各确认人当前轮状态。</p>
+                <h4>交互</h4>
+                <p>业主确认 / 驳回操作与「确认中」一致（确认 / 驳回表单字段规格见 §6.8，记录生成规则见 §6.8 / <a href="#sub-3-15">§3.15</a>）；本轮全部通过则转「已完成（含驳回）」，再次驳回则再次回退「驳回后待开始」。</p>
+                <h4>效果</h4>
+                <p>历史记录区半透明 + 灰底突出「历史」；第 1 轮被驳回归项红底「驳回原因」块强化上下文。</p>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title" id="sub-6-12">6.12 已完成（含驳回）</div>
+            <p style="margin:8px 0;padding:8px 12px;background:#F6F8FF;border-left:3px solid #2F6BFF;border-radius:6px;font-size:13px;line-height:2;">🔗 原型演示：<a href="owner-miniapp/task-detail.html?status=completed_with_reject&amp;role=confirmer" target="_blank">已完成（含驳回）· 业主已确认可评价（确认人视角）</a> ｜ <a href="owner-miniapp/task-detail.html?status=completed_with_reject&amp;role=nonConfirmer" target="_blank">已完成（含驳回）· 业主查看确认记录（非确认人视角）</a></p>
+                <h4>逻辑</h4>
+                <p>任务经历驳回、执行人重新提交后最终全部确认通过。业主视角与服务方「已完成（含驳回）」一致，历史记录区保留曾驳回过程。</p>
+                <h4>权限与用户视角</h4>
+                <table class="spec-table">
+                    <thead><tr><th>视角</th><th>可见/可操作</th></tr></thead>
+                    <tbody>
+                        <tr><td>确认人（业主）</td><td>操作栏「查看评价」；第 N 轮中本人可「去评价」。</td></tr>
+                        <tr><td>其他相关方（业主，非确认人）</td><td>只读查看，无评价入口。</td></tr>
+                        <tr><td>执行人（仅原型演示切换查看）</td><td>业主端此视角仅为查看演示；无评价权限。</td></tr>
+                    </tbody>
+                </table>
+                <h4>字段</h4>
+                <p><strong>历史记录区（historyRecords）</strong>显示第 1 次执行（带红色「已驳回」标签）+ 红底「驳回原因」；<strong>确认记录卡（confirm-list）</strong>按「第 1 轮 / 第 2 轮 / … / 第 N 轮（轮次无上限）」分组，当前轮（最新一轮）为最终确认（评语 / 标签 / 评分 / 附件），历史轮次被驳回归项半透明留存；<strong>执行记录卡（只读）</strong>显示当前轮内容。</p>
+                <h4>交互</h4>
+                <p>与「已完成」一致（查看评价 / 去评价，评价表单字段规格见 §6.9）；历史记录仅作留存展示，不可编辑。</p>
+                <h4>效果</h4>
+                <p>头部 completed 配色；流程条满进度；半透明历史 + 红色「已驳回」标签展示「最终完成」且保留「曾驳回」完整记录。</p>
             </div>
 
         </div>
@@ -2112,18 +2820,18 @@
                         </tr>
                         <tr>
                             <td>任务确认跳转</td>
-                            <td>跳转 task-detail.html 查看执行详情并操作</td>
-                            <td>跳转 task-detail.html 进入业主确认视角，仅可确认通过或驳回</td>
+                            <td>跳转 <a href="service-miniapp/task-detail.html" target="_blank">task-detail.html</a> 查看执行详情并操作</td>
+                            <td>跳转 <a href="owner-miniapp/task-detail.html" target="_blank">task-detail.html</a> 进入业主确认视角，仅可确认通过或驳回</td>
                         </tr>
                         <tr>
                             <td>已完成任务跳转</td>
-                            <td>跳转 task-detail.html?status=completed</td>
-                            <td>跳转 task-detail.html?status=confirming（业主查看已确认记录）</td>
+                            <td>跳转 <a href="service-miniapp/task-detail.html?status=completed" target="_blank">task-detail.html?status=completed</a></td>
+                            <td>跳转 <a href="owner-miniapp/task-detail.html?status=confirming" target="_blank">task-detail.html?status=confirming</a>（业主查看已确认记录）</td>
                         </tr>
                         <tr>
                             <td>合同变更跳转参数</td>
-                            <td>contract-detail.html?status=changing</td>
-                            <td>contract-detail.html?status=change_confirming</td>
+                            <td><a href="service-miniapp/contract-detail.html?status=changing" target="_blank">contract-detail.html?status=changing</a></td>
+                            <td><a href="owner-miniapp/contract-detail.html?status=change_confirming" target="_blank">contract-detail.html?status=change_confirming</a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -2166,9 +2874,9 @@
    - 与服务方一致，按状态过滤显示
    - 无匹配项时显示空状态
 3. 点击待办卡片
-   - 任务类待办：跳转业主端 task-detail.html 进入确认视角
-   - 合同类待办：跳转业主端 contract-detail.html 进入对应确认状态
-   - 变更类待办：跳转业主端 contract-detail.html?status=change_confirming
+   - 任务类待办：跳转业主端 <a href="owner-miniapp/task-detail.html" target="_blank">task-detail.html</a> 进入确认视角
+   - 合同类待办：跳转业主端 <a href="owner-miniapp/contract-detail.html" target="_blank">contract-detail.html</a> 进入对应确认状态
+   - 变更类待办：跳转业主端 <a href="owner-miniapp/contract-detail.html?status=change_confirming" target="_blank">contract-detail.html?status=change_confirming</a>
 4. 返回页面
    - 从详情页返回后刷新数据，已确认事项移至"已处理"
                 </div>
@@ -2260,6 +2968,23 @@
 4. 返回待办页后列表刷新，已处理事项移至"已处理"
                 </div>
                 <p>说明：原型演示使用浏览器端临时持久化（<code>localStorage</code>）作为演示数据源，正式产品请以后端消息推送 / 待办接口为准。以上规则仅新增"对账单确认"待办类型，不改变其他已有待办类型及功能描述。</p>
+            </div>
+
+            <!-- ===== 7.10 业主端待办类型详细规则与范围 ===== -->
+            <div class="subsection">
+                <div class="subsection-title" id="sub-7-10">7.10 业主端待办类型详细规则与范围</div>
+                <p>业主端「全部待办」页<strong>仅展示需业主确认 / 处理的待办类型</strong>，其余发起方 / 服务方视角待办默认不出现。各类型的生成规则、页面逻辑、交互与字段规格详见 <a href="#sub-4-8">§4.8 待办类型详细规则</a>（服务方口径一致），对账单确认另见 <a href="#sub-7-6">§7.6–§7.9</a>。</p>
+                <table>
+                    <thead><tr><th>业主端可见待办类型</th><th>归属角色</th><th>详细规则</th><th>是否计入待处理</th></tr></thead>
+                    <tbody>
+                        <tr><td>任务确认</td><td>业主作为确认人</td><td><a href="#sub-4-8-1">§4.8.1</a></td><td>是（confirming）</td></tr>
+                        <tr><td>合同内容确认</td><td>业主（甲方 = 业主时）</td><td><a href="#sub-4-8-3">§4.8.3</a></td><td>是（pending）</td></tr>
+                        <tr><td>合同变更确认</td><td>业主（甲方 = 业主时）</td><td><a href="#sub-4-8-6">§4.8.6</a></td><td>是（pending）</td></tr>
+                        <tr><td>对账单确认</td><td>业主确认人</td><td><a href="#sub-7-6">§7.6–§7.9</a></td><td>是（confirming）</td></tr>
+                    </tbody>
+                </table>
+                <div class="note"><div class="note-title">业主端不包含的待办类型（默认）</div><p>以下类型仅面向发起方 / 服务方或执行人，<strong>默认不计入业主端「全部待办」</strong>：<br>① 架构邀请处理（§4.8.9，受邀处理人视角）；<br>② 合同签约（§4.8.4 / §4.8.10，发起方视角）、合同修改重提（§4.8.5，发起方被驳回方）、合同变更签约（§4.8.7，发起方）、变更合同修改（§4.8.8，发起方被驳回方）；<br>③ 任务执行 / 重新执行（§4.8.2）：业主端默认不含（执行人通常为服务方）；但当<strong>业主被配置为任务执行人时（见 §6.3.1）</strong>会生成「任务执行」待办并出现在业主端全部待办（原型示例中的「吊顶安装 / 墙面腻子批刮 · 待执行」即此场景）。<br>即业主端默认范围 = 任务确认 + 合同内容确认 + 合同变更确认 + 对账单确认，与 <a href="#sub-7-2">§7.2</a> 差异说明一致。</p></div>
+                <p><strong>已处理规则：</strong>业主完成确认 / 处理后，对应待办标记 completed 自动从「待处理」移至「已处理」；业主端「已处理」亦含其他任务类待办（任务确认 / 任务执行）完成后归档项，并非独立生成的「已完成任务」类型（该类型已从 §4.3 移除，因其非由独立事件生成，而是既有待办完成后的状态呈现）。</p>
             </div>
         </div>
 

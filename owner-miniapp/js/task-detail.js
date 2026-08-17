@@ -303,7 +303,19 @@ const TaskDetailPage = (function() {
             updateTaskStatus(TaskStatus.PENDING);
         }, 500);
     }
-    
+
+    // 依据当前演示执行人（window.currentExecutorId）渲染「执行人」卡片，保证状态切换时不残留旧身份
+    function renderExecutorCard() {
+        const executorItem = document.getElementById('executorItem');
+        if (!executorItem) return;
+        const member = projectMembers.find(m => m.id === window.currentExecutorId);
+        if (!member) return;
+        const avatarEl = executorItem.querySelector('.person-avatar');
+        const nameEl = executorItem.querySelector('.person-name');
+        if (avatarEl) avatarEl.textContent = member.avatar;
+        if (nameEl) nameEl.innerHTML = member.name + ' <span class="role-badge ' + getRoleBadgeClass(member.role) + '">' + member.role + '</span>';
+    }
+
     function showConfirmerSelector() {
         const modal = document.getElementById('confirmerSelectorModal');
         const searchInput = document.getElementById('confirmerSearchInput');
@@ -1072,6 +1084,35 @@ const TaskDetailPage = (function() {
     
     function updateTaskStatus(status) {
         currentTaskStatus = status;
+        // 演示数据：按状态设置执行人身份与确认人名单，并同步渲染执行人卡片。
+        // 业主端「业主为执行人」场景：待开始(pending)/执行中(in_progress) 的执行人明确为业主（王五，id=3），
+        // 对应确认人不包含业主本人（张三·项目总、赵六·设计师）；
+        // 其余状态保持工长李四（id=2）为执行人、确认人含业主，不影响其他已有流程。
+        if (status === TaskStatus.CONFIGURING) {
+            window.currentHasExecutor = false;
+            currentConfirmers = [];
+        } else {
+            window.currentHasExecutor = true;
+            if (status === TaskStatus.PENDING || status === TaskStatus.IN_PROGRESS) {
+                window.currentExecutorId = 3;
+                currentConfirmers = [
+                    { id: 1, name: '张三', role: '项目总', avatar: '张', status: 'pending' },
+                    { id: 4, name: '赵六', role: '设计师', avatar: '赵', status: 'pending' }
+                ];
+            } else {
+                window.currentExecutorId = 2;
+                currentConfirmers = [
+                    { id: 1, name: '张三', role: '项目总', avatar: '张', status: 'pending' },
+                    { id: 3, name: '王五', role: '业主', avatar: '王', status: 'pending' },
+                    { id: 4, name: '赵六', role: '设计师', avatar: '赵', status: 'pending' }
+                ];
+            }
+            const _exec = projectMembers.find(m => m.id === window.currentExecutorId);
+            window.currentExecutorName = _exec ? _exec.name : '';
+            renderExecutorCard();
+            const execSubmitter = document.getElementById('executionSubmitter');
+            if (execSubmitter) execSubmitter.textContent = '提交人：' + (window.currentExecutorName || '') + ' · 2024-01-25 14:30';
+        }
         const cfgView = getConfigurerViewVisible(status);
         // 不支持配置任务的状态/端，配置人视角不可达，回退到合适的默认视角，避免渲染配置页内容
         if (currentUserRole === UserRoles.CONFIGURER && !cfgView.roleSwitcher && !cfgView.configuring) {
@@ -2632,20 +2673,6 @@ const TaskDetailPage = (function() {
             currentUserRole = role === 'nonConfirmer' ? 'nonConfirmer' : 'confirmer';
         } else if (status === TaskStatus.COMPLETED || status === TaskStatus.COMPLETED_WITH_REJECT) {
             currentUserRole = role === 'confirmer' ? 'confirmer' : 'nonConfirmer';
-        }
-        
-        if (status === TaskStatus.IN_PROGRESS || status === TaskStatus.PENDING || 
-            status === TaskStatus.CONFIRMING || status === TaskStatus.CONFIRMING_AFTER_REJECT ||
-            status === TaskStatus.COMPLETED || status === TaskStatus.COMPLETED_WITH_REJECT ||
-            status === TaskStatus.REJECTED_PENDING || status === TaskStatus.PENDING_BLOCKED) {
-            currentConfirmers = [
-                { id: 1, name: '张三', role: '项目总', avatar: '张', status: 'pending' },
-                { id: 3, name: '王五', role: '业主', avatar: '王', status: 'pending' },
-                { id: 4, name: '赵六', role: '设计师', avatar: '赵', status: 'pending' }
-            ];
-            window.currentHasExecutor = true;
-            window.currentExecutorId = 2;
-            window.currentExecutorName = '李四';
         }
         
         updateTaskStatus(status);
