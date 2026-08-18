@@ -352,6 +352,7 @@
                     <li><a href="#sub-3-10">3.10 已完成状态-页面概述</a></li>
                     <li><a href="#sub-3-11">3.11 已完成状态-差异</a></li>
                     <li><a href="#sub-3-12">3.12 已完成状态-交互逻辑</a></li>
+                    <li><a href="#sub-3-13">3.13 已完成状态-状态流转与回退规则</a></li>
                 </ul>
             </li>
             <li class="nav-item collapsed" id="nav-page-info-service">
@@ -413,7 +414,7 @@
                 <ul class="nav-sub">
                     <li><a href="#sub-8-1">8.1 页面概述</a></li>
                     <li><a href="#sub-8-2">8.2 页面结构</a></li>
-                    <li><a href="#sub-8-3">8.3 文件分类规格</a></li>
+                    <li><a href="#sub-8-3">8.3 文件类型筛选规格</a></li>
                     <li><a href="#sub-8-4">8.4 文件类型规格</a></li>
                     <li><a href="#sub-8-5">8.5 权限控制规则</a></li>
                 </ul>
@@ -480,6 +481,7 @@
                     <li><a href="#sub-12-7">12.7 已完成状态-页面概述</a></li>
                     <li><a href="#sub-12-8">12.8 已完成状态-差异</a></li>
                     <li><a href="#sub-12-9">12.9 已完成状态-交互逻辑</a></li>
+                    <li><a href="#sub-12-10">12.10 已完成状态-状态流转与回退规则</a></li>
                 </ul>
             </li>
             <li class="nav-item collapsed" id="nav-page-activity-owner">
@@ -523,7 +525,7 @@
                 <a href="#page-files-owner"><span class="nav-toggle">▼</span>十七、项目资料页</a>
                 <ul class="nav-sub">
                     <li><a href="#sub-17-1">17.1 页面概述</a></li>
-                    <li><a href="#sub-17-2">17.2 功能说明</a></li>
+                    <li><a href="#sub-17-2">17.2 业主端差异说明</a></li>
                 </ul>
             </li>
             <li class="nav-item collapsed" id="nav-page-statement-list-owner">
@@ -907,15 +909,15 @@
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">页面名称</div>
-                        <div class="info-value">项目详情页</div>
+                        <div class="info-value">项目详情页（进行中）</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面路径</div>
-                        <div class="info-value"><a href="service-miniapp/project-detail.html" target="_blank">service-miniapp/project-detail.html</a></div>
+                        <div class="info-value"><a href="service-miniapp/project-detail-ongoing-v2.html" target="_blank">service-miniapp/project-detail-ongoing-v2.html</a></div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
-                        <div class="info-value">已加入的全部用户</div>
+                        <div class="info-value">已加入项目的全部用户（业主、项目总、设计师、工长、各工种工等服务方成员）</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面入口</div>
@@ -924,51 +926,41 @@
                 </div>
             </div>
 
-            <div class="subsection" id="sub-3-2">
+<div class="subsection" id="sub-3-2">
                 <div class="subsection-title">3.2 页面结构</div>
                 <div class="code-block">
 ┌─────────────────────────────────────┐
 │  导航栏                              │
-│  - 返回 | 项目名称 | ⋯更多           │
+│  - 返回 | 项目名称 | 微信原生胶囊(⋯○)│
 ├─────────────────────────────────────┤
-│  快捷导航栏（可收起）                 │
-│  - 固定按钮 + 快捷入口               │
-│  - 项目信息 | 架构 | 成员 | 资料     │
-│  - 对账单                            │
-│  - 展开按钮                          │
+│  项目基本信息头部（整块可点击）       │
+│  - 左：新家已开工 N 天               │
+│  - 右：面积·户型 + 进入箭头          │
 ├─────────────────────────────────────┤
-│  层级选择器                          │
-│  - 当前层级图标 + 名称 + 类型        │
-│  - 面包屑导航                        │
-│  - 下拉切换层级                      │
+│  待办事项卡片（置于吸顶导航上方）     │
+│  - 待办列表（默认 2 条）+ 角标       │
+│  - 查看全部 → todo-list.html         │
 ├─────────────────────────────────────┤
-│  合同概览卡片                        │
-│  - 签约进度：已签约X/总数Y            │
-│  - 总进度：百分比                     │
-│  - 合同列表（可折叠）                 │
-│    * 合同名称 + 工作组 + 金额        │
-│    * 进度条                          │
+│  吸顶导航（毛玻璃 sticky）           │
+│  - 快捷入口：固定 + 架构/成员/资料/对账单（4 项）│
+│  - 展开 / 收起 切换按钮             │
+│  - 架构选择器（层级切换，高度减半）  │
 ├─────────────────────────────────────┤
-│  任务统计卡片                        │
-│  - 全部任务 X/Y                      │
-│  - 确认中任务 X                      │
-│  - 执行中任务 X                      │
-├─────────────────────────────────────┤
-│  待办事项卡片                        │
-│  - 待办列表（最新5条）                │
-│  - 点击跳转对应页面                  │
+│  合同概览 + 任务统计（上下堆叠）     │
+│  - 合同概览：签约 X/Y · 总进度% · 合同列表（可折叠）│
+│  - 任务统计：全部 X/Y · 确认中 X · 执行中 X │
 ├─────────────────────────────────────┤
 │  今日动态卡片                        │
-│  - 动态时间线展示                    │
-│  - 动态内容 + 操作人 + 时间          │
-│  - 支持图片/视频媒体展示             │
-│  - 点击"展开更多"查看全部动态         │
+│  - 时间线 + 角色/阶段标签 + 媒体     │
+│  - 展开更多 / 查看全部 → activity-list.html │
 └─────────────────────────────────────┘
                 </div>
+                <p style="margin-top:12px;color:var(--text-secondary);font-size:13px;">页面自上而下顺序为：<strong>项目基本信息 → 待办事项 → [快捷入口 + 架构切换 吸顶] → 合同 / 任务概览 → 今日动态</strong>。「待办事项」卡片<strong>不与架构切换联动</strong>，固定置于吸顶导航之前；「快捷入口 + 架构选择器」组合吸顶（毛玻璃），向下滚动时快捷入口自动收起（手动固定除外）。</p>
             </div>
 
-            <div class="subsection" id="sub-3-3">
+<div class="subsection" id="sub-3-3">
                 <div class="subsection-title">3.3 快捷导航规格</div>
+                <p style="color:var(--text-secondary);font-size:13px;">新版原型将「项目信息」入口上移至顶部「项目基本信息头部」，故快捷导航仅保留 4 个内容入口（架构 / 成员 / 资料 / 对账单）+「固定」按钮；并新增「展开 / 收起」切换按钮。</p>
                 <table>
                     <thead>
                         <tr>
@@ -983,13 +975,7 @@
                             <td>固定</td>
                             <td>📌</td>
                             <td>—</td>
-                            <td>将当前项目固定到首页</td>
-                        </tr>
-                        <tr>
-                            <td>项目信息</td>
-                            <td>📋</td>
-                            <td>project-info.html</td>
-                            <td>查看项目基本信息</td>
+                            <td>将当前项目固定到首页；固定后快捷导航在页面滚动时不自动收起，状态通过 <code>localStorage</code> 持久化；文案在「📌 固定 / 📌 取消固定」间切换</td>
                         </tr>
                         <tr>
                             <td>架构</td>
@@ -1007,7 +993,7 @@
                             <td>资料</td>
                             <td>📁</td>
                             <td>project-files.html</td>
-                            <td>查看项目文件</td>
+                            <td>查看项目文件库</td>
                         </tr>
                         <tr>
                             <td>对账单</td>
@@ -1015,11 +1001,23 @@
                             <td>statement-list.html</td>
                             <td>查看项目对账单（仅拥有全部数据权限可查看）</td>
                         </tr>
+                        <tr>
+                            <td>展开 / 收起（切换按钮）</td>
+                            <td>••••</td>
+                            <td>—</td>
+                            <td>切换快捷入口的显示 / 隐藏，文案随状态变化（「展开快捷入口」/「收起快捷入口」）；向下滚动时自动收起并显示该按钮，滚回顶部自动展开</td>
+                        </tr>
+                        <tr>
+                            <td>项目信息（已移出快捷导航）</td>
+                            <td>—</td>
+                            <td>project-info.html</td>
+                            <td>不再作为快捷导航入口；改由顶部「项目基本信息头部」整块点击进入（见 3.2 / 3.5 / 3.8）</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
 
-            <div class="subsection" id="sub-3-4">
+<div class="subsection" id="sub-3-4">
                 <div class="subsection-title">3.4 层级选择器</div>
                 <table>
                     <thead>
@@ -1031,29 +1029,41 @@
                     <tbody>
                         <tr>
                             <td>功能说明</td>
-                            <td>在项目多层级结构中切换查看（项目部→工作组）</td>
+                            <td>在项目多层级结构中切换查看（项目部 → 工作组 → 施工组）</td>
                         </tr>
                         <tr>
                             <td>显示内容</td>
-                            <td>层级图标 + 层级名称 + 层级类型标签</td>
+                            <td>层级图标 + 层级名称 + 层级类型标签（项目部 / 工作组 / 施工组）+ 面包屑导航</td>
                         </tr>
                         <tr>
                             <td>面包屑</td>
-                            <td>显示完整路径，如：项目部 > 水电工作组</td>
+                            <td>显示完整路径，如：项目部 › 水电工作组</td>
                         </tr>
                         <tr>
                             <td>切换方式</td>
-                            <td>点击下拉，显示所有可选层级</td>
+                            <td>点击下拉，显示所有可选层级；每个选项含层级类型与概要信息（如「4 个工作组 · 8 份合同」），当前层级带勾选标记</td>
                         </tr>
                         <tr>
                             <td>切换后</td>
-                            <td>刷新页面数据，显示对应层级的合同和任务</td>
+                            <td>更新面包屑导航，触发局部刷新（200ms 延迟 + loading 动画），显示对应层级的合同 / 任务 / 待办数据</td>
                         </tr>
                     </tbody>
                 </table>
+                <div class="note" style="margin-top: 16px;">
+                    <div class="note-title">层级选择器下方区域数据统计口径</div>
+                    <p>层级选择器下方的<strong>合同概览 / 任务统计 / 待办事项</strong>区域数据，均按<strong>当前所选架构层级及其隶属子层级</strong>聚合统计，而非全局项目数据；切换层级即切换统计范围（与 §3.5 数量统计来源说明一致）。</p>
+                    <p><strong>隶属关联关系：</strong>每份合同、每个任务包 / 任务项均通过 <code>belong_level_id</code> 归属到某一施工组（或工作组）；施工组归属到工作组，工作组归属到项目部，形成「项目部 › 工作组 › 施工组」三级树。</p>
+                    <p><strong>关联关系计算示例：</strong></p>
+                    <ul style="margin: 6px 0 0 18px; font-size: 13px; color: var(--text-secondary); line-height: 1.9;">
+                        <li>选中「项目部」：统计 = 项目部自身 + 其下全部工作组 + 全部施工组 的合同 / 任务 / 待办之和（最全）。</li>
+                        <li>选中「水电工作组」：统计 = 该工作组自身 + 其下全部施工组（如强电施工组、弱电施工组）之和，<strong>不含</strong>其他工作组。</li>
+                        <li>选中「强电施工组」：统计 = 仅该施工组自身 的合同 / 任务 / 待办，<strong>不含</strong>上级工作组及其他施工组。</li>
+                    </ul>
+                    <p style="margin-top: 6px;">聚合规则：沿 <code>belong_level_id</code> 向上追溯到所选层级即计入；不归属该层级树的合同 / 任务不计入。</p>
+                </div>
             </div>
 
-            <div class="subsection" id="sub-3-5">
+<div class="subsection" id="sub-3-5">
                 <div class="subsection-title">3.5 展示字段项及数量统计规则</div>
                 <table>
                     <thead>
@@ -1066,6 +1076,17 @@
                     </thead>
                     <tbody>
                         <tr>
+                            <td rowspan="2">项目基本信息头部</td>
+                            <td>新家已开工天数</td>
+                            <td><code>projects.started_days</code></td>
+                            <td>如「已开工 60 天」；项目未开工时显示「新家准备中」（初始态，见 3.9）；N（已开工天数）= 当前日期 − 项目内第一份「已签约」状态合同日期（不足 1 天按 1 天计；若项目尚无已签约合同则显示「新家准备中」）</td>
+                        </tr>
+                        <tr>
+                            <td>面积 · 户型</td>
+                            <td><code>projects.area</code> / <code>projects.layout</code></td>
+                            <td>如「75.0m² 2室1厅」；整块可点击跳转项目信息页（project-info.html）</td>
+                        </tr>
+                        <tr>
                             <td rowspan="4">合同概览卡片</td>
                             <td>签约进度</td>
                             <td><code>GET /api/v1/projects/:id/contracts</code></td>
@@ -1074,60 +1095,55 @@
                         <tr>
                             <td>总进度百分比</td>
                             <td><code>projects.progress</code></td>
-                            <td>所有任务完成进度加权平均</td>
+                            <td>已完成任务总数 / 已签约合同内有效任务总数 × 100%</td>
                         </tr>
                         <tr>
-                            <td>合同数量</td>
-                            <td><code>contracts.total</code></td>
-                            <td>项目下所有合同总数（含各级子项目）</td>
+                            <td>合同列表（可折叠）</td>
+                            <td><code>contracts.list</code></td>
+                            <td>每条含 合同名称 + 工作组 + 金额 + 进度条；点击「查看合同」展开 / 折叠；列表项点击跳 <a href="service-miniapp/contract-detail.html" target="_blank">合同详情页</a></td>
                         </tr>
                         <tr>
                             <td>查看全部合同</td>
                             <td>前端交互</td>
-                            <td>点击"查看合同"展开/折叠全部合同列表（即查看全部合同）；列表内合同项点击跳转对应<a href="service-miniapp/contract-detail.html" target="_blank">合同详情页</a></td>
+                            <td>「查看合同」展开 / 折叠全部合同列表；列表内合同项点击跳转对应 <a href="service-miniapp/contract-detail.html" target="_blank">合同详情页</a></td>
                         </tr>
                         <tr>
                             <td rowspan="4">任务统计卡片</td>
                             <td>全部任务</td>
                             <td><code>GET /api/v1/projects/:id/tasks/stats</code></td>
-                            <td>已完成任务数 / 总任务数</td>
+                            <td>已完成任务数 / 已签约合同内有效总任务数</td>
                         </tr>
                         <tr>
                             <td>确认中任务</td>
                             <td><code>tasks.status = 'confirming'</code></td>
-                            <td>状态为"确认中"的任务数量</td>
+                            <td>状态为「确认中」的任务数量</td>
                         </tr>
                         <tr>
                             <td>执行中任务</td>
                             <td><code>tasks.status = 'in_progress'</code></td>
-                            <td>状态为"执行中"的任务数量</td>
+                            <td>状态为「执行中」的任务数量</td>
                         </tr>
                         <tr>
                             <td>查看全部</td>
                             <td>前端交互</td>
-                            <td>点击"查看全部"跳转<a href="service-miniapp/task-list.html" target="_blank">任务列表页（服务方）</a></td>
+                            <td>点击「查看全部」跳转 <a href="service-miniapp/task-list.html" target="_blank">任务列表页（服务方）</a></td>
                         </tr>
                         <tr>
                             <td rowspan="2">待办事项卡片</td>
                             <td>待办数量</td>
                             <td><code>GET /api/v1/projects/:id/todos</code></td>
-                            <td>当前用户待处理的待办总数</td>
+                            <td>当前用户待处理的待办总数（角标展示）</td>
                         </tr>
                         <tr>
                             <td>显示条数</td>
                             <td>前端分页</td>
-                            <td>默认显示5条，点击"查看全部"跳转列表页，规格详见 <a href="PRD-任务模块详细规格.html#page-todo-list-service" target="_blank">全部待办页（服务方）</a></td>
+                            <td>默认显示 <strong>2 条</strong>（第 3 条起截断，不滚动展示），点击「查看全部」跳转列表页，规格详见 <a href="PRD-任务模块详细规格.html#page-todo-list-service" target="_blank">全部待办页（服务方）</a></td>
                         </tr>
                         <tr>
                             <td rowspan="5">快捷导航栏</td>
                             <td>入口数量</td>
                             <td>前端固定配置</td>
-                            <td>固定5个入口：项目信息、架构、成员、资料、对账单</td>
-                        </tr>
-                        <tr>
-                            <td>项目信息入口</td>
-                            <td>固定链接</td>
-                            <td>跳转项目信息详情页</td>
+                            <td>固定 1 个（📌）+ 内容入口 4 个：架构、成员、资料、对账单；「项目信息」入口已移至顶部基本信息头部</td>
                         </tr>
                         <tr>
                             <td>架构入口</td>
@@ -1144,17 +1160,22 @@
                             <td>固定链接</td>
                             <td>跳转项目文件库页</td>
                         </tr>
+                        <tr>
+                            <td>对账单入口</td>
+                            <td>固定链接</td>
+                            <td>跳转项目对账单页</td>
+                        </tr>
                     </tbody>
                 </table>
                 <div class="note" style="margin-top: 16px;">
                     <div class="note-title">数量统计来源说明</div>
                     <p><strong>合同数量：</strong>统计当前层级及其子层级下所有合同，包括项目部层级的工作组合同、施工组合同。</p>
                     <p><strong>任务数量：</strong>统计当前层级及其子层级下所有任务包中的任务项。</p>
-                    <p><strong>待办数量：</strong>仅统计当前登录用户需要处理的待办事项，不包含其他成员的待办。</p>
+                    <p><strong>待办数量：</strong>仅统计当前登录用户需要处理的待办事项，不包含其他成员的待办；卡片仅展示前 2 条，其余由「查看全部」进入列表页查看。</p>
                 </div>
             </div>
 
-            <div class="subsection" id="sub-3-6">
+<div class="subsection" id="sub-3-6">
                 <div class="subsection-title">3.6 数据刷新规则</div>
                 <table>
                     <thead>
@@ -1168,17 +1189,17 @@
                         <tr>
                             <td>页面加载</td>
                             <td>全部数据</td>
-                            <td>API请求</td>
+                            <td>API 请求；显示 loading 遮罩（加载中…），数据加载完成后隐藏</td>
                         </tr>
                         <tr>
                             <td>下拉刷新</td>
                             <td>全部数据</td>
-                            <td>API请求 + 轻提示</td>
+                            <td>API 请求 + 轻提示</td>
                         </tr>
                         <tr>
                             <td>切换层级</td>
                             <td>合同、任务、待办数据</td>
-                            <td>局部刷新（骨架屏过渡）</td>
+                            <td>局部刷新（骨架屏 / loading 过渡）</td>
                         </tr>
                         <tr>
                             <td>返回页面</td>
@@ -1189,7 +1210,7 @@
                 </table>
             </div>
 
-            <div class="subsection" id="sub-3-7">
+<div class="subsection" id="sub-3-7">
                 <div class="subsection-title">3.7 今日动态卡片规格</div>
                 <table>
                     <thead>
@@ -1242,7 +1263,7 @@
                 </div>
                 <div class="note" style="margin-top: 12px;">
                     <div class="note-title">展示规则补充</div>
-                    <p><strong>角色 / 阶段标签：</strong>今日动态每条记录头部可展示角色标签（监理 / 工长 / 施工 / 设计）与阶段标签（水电 / 设计 / 基础施工等），样式与"十一、项目动态页"保持一致。</p>
+                    <p><strong>角色 / 阶段标签：</strong>今日动态每条记录头部可展示角色标签（须与 <a href="PRD-完整文档.html" target="_blank">PRD-完整文档</a>「用户角色定义」及 §7.3 / §11.8 一致：项目总 / 设计师 / 工长 / 各工种工 / 业主）与阶段标签（取对应合同配置阶段，示例：水电 / 设计 / 基础施工等），样式与"十一、项目动态页"保持一致。</p>
                     <p><strong>媒体：</strong>含图文的动态展示施工现场照片缩略图（任务类、合同类均使用施工现场照片）；点击"查看全部动态"进入项目动态页查看大图与完整列表。</p>
                     <p><strong>展开更多：</strong>当今日动态超过默认一条半高度（即次条被截断、有内容未露全）时，列表底部显示"展开更多"，点击展开为今日全部动态并变为"收起"（箭头旋转）；仅 1 条或更少（不足一条半）时不显示该按钮（详见 3.8 交互规格）。</p>
                 </div>
@@ -1254,7 +1275,7 @@
 
             <div class="subsection" id="sub-3-8">
                 <div class="subsection-title">3.8 交互逻辑规格</div>
-                <p>以下为服务方项目详情页（进行中状态）的交互逻辑规格，描述各组件的用户操作与响应行为。</p>
+                <p>以下为服务方项目详情页（进行中状态，新版布局）的交互逻辑规格，描述各组件的用户操作与响应行为。</p>
                 <table>
                     <thead>
                         <tr>
@@ -1266,8 +1287,8 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td rowspan="4">导航栏</td>
-                            <td>左侧"返回"按钮</td>
+                            <td rowspan="3">导航栏</td>
+                            <td>左侧「返回」按钮</td>
                             <td>点击</td>
                             <td>返回上一页（<code>history.back</code>）</td>
                         </tr>
@@ -1277,40 +1298,36 @@
                             <td>显示当前项目名称</td>
                         </tr>
                         <tr>
-                            <td>右侧"⋯"按钮</td>
-                            <td>点击</td>
-                            <td>弹出操作菜单，菜单项含"分享给朋友"</td>
+                            <td>右侧微信原生胶囊（⋯ ○）</td>
+                            <td>—</td>
+                            <td>由微信客户端渲染，开发者不可自定义其内容；「⋯」触发微信系统菜单（分享等），「○」为关闭 / 回到微信；<strong>不再使用自定义「⋯ 分享菜单」与「✕ 关闭小程序」按钮</strong></td>
                         </tr>
                         <tr>
-                            <td>右侧"✕"按钮</td>
+                            <td>项目基本信息头部</td>
+                            <td>整块区域</td>
                             <td>点击</td>
-                            <td>关闭小程序，显示轻提示</td>
+                            <td>跳转 <a href="service-miniapp/project-info.html" target="_blank">项目信息页</a>（project-info.html）</td>
                         </tr>
                         <tr>
-                            <td rowspan="5">快捷导航</td>
-                            <td>快捷入口（项目信息、架构、成员、资料、对账单）</td>
+                            <td rowspan="4">快捷导航</td>
+                            <td>快捷入口（架构、成员、资料、对账单）</td>
                             <td>点击</td>
                             <td>跳转对应页面</td>
                         </tr>
                         <tr>
-                            <td>"固定"按钮</td>
+                            <td>「固定」按钮</td>
                             <td>点击</td>
-                            <td>切换固定状态；固定后快捷导航在滚动时不收起，状态通过<code>localStorage</code>持久化</td>
+                            <td>切换固定状态；固定后快捷导航滚动时不收起，状态通过 <code>localStorage</code> 持久化；文案在「📌 固定 / 📌 取消固定」间切换</td>
                         </tr>
                         <tr>
-                            <td>页面向下滚动</td>
-                            <td>滚动超过50px</td>
-                            <td>快捷导航自动收起（用户手动展开的除外）</td>
-                        </tr>
-                        <tr>
-                            <td>页面向上滚动</td>
-                            <td>滚回顶部</td>
-                            <td>快捷导航自动展开</td>
-                        </tr>
-                        <tr>
-                            <td>展开/收起按钮</td>
+                            <td>展开 / 收起切换按钮</td>
                             <td>点击</td>
-                            <td>切换快捷导航显示状态，文案随状态变化（"展开快捷入口"/"收起快捷入口"）</td>
+                            <td>切换快捷导航显示状态，文案随状态变化（「展开快捷入口」/「收起快捷入口」）</td>
+                        </tr>
+                        <tr>
+                            <td>页面滚动（吸顶行为）</td>
+                            <td>滚动超过 50px</td>
+                            <td>快捷导航自动收起并显示切换按钮（手动固定的除外）；滚回顶部自动展开并隐藏切换按钮</td>
                         </tr>
                         <tr>
                             <td rowspan="5">层级选择器</td>
@@ -1321,12 +1338,12 @@
                         <tr>
                             <td>选项列表</td>
                             <td>展示</td>
-                            <td>显示当前层级、父级、子级；当前层级有勾选标记；每个选项显示层级图标+层级名称+概要信息（如"4个工作组 · 8份合同"）</td>
+                            <td>显示当前层级、父级、子级；当前层级有勾选标记；每个选项显示层级图标 + 层级名称 + 类型标签 + 概要信息（如「4 个工作组 · 8 份合同」）</td>
                         </tr>
                         <tr>
-                            <td>选项项</td>
+                            <td>选项</td>
                             <td>点击</td>
-                            <td>关闭下拉，更新面包屑导航，触发局部刷新（200ms延迟+loading动画）</td>
+                            <td>关闭下拉，更新面包屑导航，触发局部刷新（200ms 延迟 + loading 动画）</td>
                         </tr>
                         <tr>
                             <td>面包屑中的层级名称</td>
@@ -1340,18 +1357,18 @@
                         </tr>
                         <tr>
                             <td rowspan="2">合同概览</td>
-                            <td>"查看合同"按钮</td>
+                            <td>「查看合同」按钮</td>
                             <td>点击</td>
-                            <td>切换合同列表的展开/折叠</td>
+                            <td>切换合同列表的展开 / 折叠</td>
                         </tr>
                         <tr>
                             <td>合同项</td>
                             <td>点击</td>
-                            <td>跳转到<a href="service-miniapp/contract-detail.html" target="_blank">对应合同详情页</a></td>
+                            <td>跳转到 <a href="service-miniapp/contract-detail.html" target="_blank">对应合同详情页</a></td>
                         </tr>
                         <tr>
                             <td>任务统计</td>
-                            <td>"查看全部"链接</td>
+                            <td>「查看全部」链接</td>
                             <td>点击</td>
                             <td>跳转到任务列表页（task-list.html）</td>
                         </tr>
@@ -1362,53 +1379,42 @@
                             <td>显示当前待办数量</td>
                         </tr>
                         <tr>
-                            <td>"查看全部"链接</td>
+                            <td>「查看全部」链接</td>
                             <td>点击</td>
                             <td>跳转到全部待办页（todo-list.html），规格详见 <a href="PRD-任务模块详细规格.html#page-todo-list-service" target="_blank">全部待办页（服务方）</a></td>
                         </tr>
                         <tr>
                             <td>待办项</td>
                             <td>点击</td>
-                            <td>跳转到<a href="service-miniapp/contract-detail.html" target="_blank">对应的合同详情或任务详情页</a></td>
+                            <td>跳转到对应的合同详情或任务详情页（卡片默认仅显示前 2 条，第 3 条起截断）</td>
                         </tr>
                         <tr>
                             <td rowspan="3">今日动态</td>
-                            <td>"展开更多"按钮</td>
+                            <td>「展开更多」按钮</td>
                             <td>点击</td>
-                            <td>展开时解除一条半折叠、显示今日全部动态；收起时恢复一条半折叠；文案随状态变化（"展开更多"/"收起"），箭头旋转。仅今日动态不足一条半（1 条或更少）时不显示该按钮</td>
+                            <td>展开时解除一条半折叠、显示今日全部动态；收起时恢复一条半折叠；文案随状态变化（「展开更多」/「收起」），箭头旋转。仅今日动态不足一条半（1 条或更少）时不显示该按钮</td>
                         </tr>
                         <tr>
-                            <td>"查看全部"链接</td>
+                            <td>「查看全部」链接</td>
                             <td>点击</td>
                             <td>跳转到项目动态页（activity-list.html），无需携带层级参数；进入后通过类型 + 日期筛选器过滤（详见 11.7）</td>
                         </tr>
                         <tr>
                             <td>动态项</td>
                             <td>点击</td>
-                            <td>跳转到<a href="service-miniapp/contract-detail.html" target="_blank">对应的任务详情或合同详情页</a></td>
-                        </tr>
-                        <tr>
-                            <td rowspan="2">操作菜单</td>
-                            <td>"分享给朋友"菜单项</td>
-                            <td>点击</td>
-                            <td>显示分享提示轻提示</td>
-                        </tr>
-                        <tr>
-                            <td>菜单外部区域</td>
-                            <td>点击</td>
-                            <td>关闭操作菜单</td>
+                            <td>跳转到对应的任务详情或合同详情页</td>
                         </tr>
                         <tr>
                             <td>页面加载</td>
                             <td>初始状态</td>
                             <td>—</td>
-                            <td>显示loading遮罩（加载中...），数据加载完成后隐藏</td>
+                            <td>显示 loading 遮罩（加载中…），数据加载完成后隐藏</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <div class="subsection" id="sub-3-9">
+<div class="subsection" id="sub-3-9">
                 <div class="subsection-title">3.9 初始项目详情页逻辑（原型/演示）</div>
                 <p>说明：原型页面在创建项目后使用浏览器端临时持久化（`localStorage.newProjectData`）作为演示数据源，以下规则适用于“初始项目详情页”及其关联页面（架构页、成员页、项目信息页）。正式产品请以后端接口为准。</p>
                 <table>
@@ -1456,15 +1462,15 @@
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">页面名称</div>
-                        <div class="info-value">项目详情页-已完成</div>
+                        <div class="info-value">项目详情页-已完成（新版）</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面路径</div>
-                        <div class="info-value"><a href="service-miniapp/project-detail-completed.html" target="_blank">/pages/project-detail-completed/index</a></div>
+                        <div class="info-value"><a href="service-miniapp/project-detail-completed-v2.html" target="_blank">/pages/project-detail-completed-v2/index</a></div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
-                        <div class="info-value">项目总、施工组长</div>
+                        <div class="info-value">项目总、施工组长、各工种工（与「进行中-新版」<a href="#sub-3-1">§3.1</a> 一致）</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面入口</div>
@@ -1473,21 +1479,27 @@
                 </div>
                 <div class="note" style="margin-top: 12px;">
                     <div class="note-title">状态说明</div>
-                    <p>本页面与"项目详情页（进行中）"共享相同的页面结构和交互逻辑，差异仅在于数据状态。项目状态为"completed"时展示本页面效果。</p>
+                    <p>本页面与「项目详情（进行中-新版）」(<a href="#sub-3-1">§3.1</a>) 共享相同的 <strong>v2 页面结构与交互逻辑</strong>：微信原生胶囊导航、顶部「基本信息头部」、待办事项卡<b>前置</b>（置于吸顶导航上方、不联动架构）、吸顶导航（📌固定 + 4 入口快捷导航：架构/成员/资料/对账单，项目信息已移至头部 + 展开/收起 + arch-half 紧凑层级选择器）、合同/任务统计上下堆叠 compact 卡片、今日动态 v2 样式与微动效。差异<strong>仅在于数据状态</strong>（详见 <a href="#sub-3-11">§3.11</a>）；具体交互逻辑引用 <a href="#sub-3-8">§3.8</a>。合同名称统一采用「班组服务合同」口径（见 <a href="#sub-3-5">§3.5</a>），动态角色使用「项目总」等权威角色（同 <a href="#sub-3-7">§3.7</a>）。</p>
                 </div>
             </div>
 
             <div class="subsection" id="sub-3-11">
                 <div class="subsection-title">3.11 已完成状态 - 与进行中状态的差异</div>
+                <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 10px;">本页面与「项目详情（进行中-新版）」(<a href="#sub-3-1">§3.1</a>) 采用同一套 v2 布局与交互（微信原生胶囊、基本信息头部、待办前置、吸顶导航、compact 堆叠统计、今日动态），下表仅列<strong>数据状态差异</strong>；数量统计口径（签约进度 / 总进度 / 全部任务）与 <a href="#sub-3-5">§3.5</a> 一致，合同名称采用「班组服务合同」口径。</p>
                 <table>
                     <thead>
                         <tr>
                             <th>展示区域</th>
-                            <th>进行中状态</th>
-                            <th>已完成状态</th>
+                            <th>进行中状态（v2）</th>
+                            <th>已完成状态（v2）</th>
                         </tr>
                     </thead>
                     <tbody>
+                        <tr>
+                            <td>基本信息头部</td>
+                            <td>左侧"已开工 N 天"（N = 当前日期 − 项目内第一份已签约合同日期），右侧面积户型（蓝色调）</td>
+                            <td>左侧"<b>项目已完工</b>"（绿色调，强调竣工），右侧面积户型；整块点击跳转项目信息页</td>
+                        </tr>
                         <tr>
                             <td>合同概览-签约进度</td>
                             <td>已签约X/总数Y（部分签约）</td>
@@ -1495,13 +1507,13 @@
                         </tr>
                         <tr>
                             <td>合同概览-总进度</td>
-                            <td>X%（进行中百分比）</td>
+                            <td>X%（已完成任务数 / 已签约合同内有效总任务数 × 100%）</td>
                             <td>100%</td>
                         </tr>
                         <tr>
                             <td>合同概览-合同列表</td>
-                            <td>各合同进度不同，状态各异</td>
-                            <td>所有合同进度100%，状态标签显示"已完成"</td>
+                            <td>各合同进度不同，状态各异（班组服务合同口径）</td>
+                            <td>所有合同进度100%（如水电/泥瓦工/木作/油漆工/防水/吊顶/橱柜/墙面 班组服务合同），状态标签显示"已完成"；合同项点击跳转 contract-detail.html?status=completed</td>
                         </tr>
                         <tr>
                             <td>任务统计-全部任务</td>
@@ -1520,13 +1532,13 @@
                         </tr>
                         <tr>
                             <td>待办事项</td>
-                            <td>显示待办列表，角标显示数量</td>
+                            <td>显示待办列表，角标显示数量（默认2条截断）</td>
                             <td>无待办，角标为0，显示空状态"暂无待办事项"</td>
                         </tr>
                         <tr>
                             <td>今日动态</td>
                             <td>任务验收、合同签署等动态</td>
-                            <td>项目完成相关动态（竣工验收、结算签署等），动态较少时无"展开更多"按钮</td>
+                            <td>项目完成相关动态（竣工验收、最终结算对账单、全部任务验收等），动态较少时无"展开更多"按钮；角色使用「项目总」等权威角色（如 陈庄/项目总）</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1557,6 +1569,72 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="subsection" id="sub-3-13">
+                <div class="subsection-title">3.13 已完成状态 - 状态流转与回退规则</div>
+                <p><strong>核心原则：</strong>项目进入“已完成”状态后，<strong>不锁定任何原有功能</strong>，入口与权限与“进行中”状态保持一致。用户仍可继续对合同<strong>发起变更</strong>、<strong>创建架构</strong>（添加工作组 / 施工组）、<strong>创建合同</strong>等操作。仅在满足特定触发条件时，项目状态才回退为“进行中”，并在全部任务再次完成后自动恢复为“已完成”。</p>
+
+                <p><strong>状态流转：</strong></p>
+                <div class="code-block">
+┌──────────┐
+│  已完成   │
+└────┬─────┘
+     │ ① 发起合同变更
+     │ ② 创建新合同（创建架构本身不单独触发）
+     ▼
+┌──────────┐
+│  进行中   │
+└────┬─────┘
+     │ 全部任务再次完成（口径同 §3.5）
+     ▼
+┌──────────┐
+│  已完成   │  ← 判定逻辑与首次进入一致
+└──────────┘
+                </div>
+
+                <p><strong>回退触发条件：</strong></p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>触发动作</th>
+                            <th>说明</th>
+                            <th>状态变化</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>发起合同变更</td>
+                            <td>对任意已签约合同发起变更流程，提交成功（合同进入变更中 / 变更确认中等变更态）</td>
+                            <td>已完成 → 进行中</td>
+                        </tr>
+                        <tr>
+                            <td>创建新合同</td>
+                            <td>在工作组节点创建新合同并提交成功（合同进入拟定中等），详见 <a href="#sub-6-6">§6.6 创建合同功能</a></td>
+                            <td>已完成 → 进行中</td>
+                        </tr>
+                        <tr>
+                            <td>创建架构</td>
+                            <td>仍支持操作（添加工作组 / 施工组）；本身不单独触发回退，但其下层级后续若创建新合同，按“创建新合同”规则回退</td>
+                            <td>不单独回退</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p><strong>回退后的表现：</strong></p>
+                <ul>
+                    <li>顶部状态标签由绿色“已完成”变为蓝色“进行中”。</li>
+                    <li>页面恢复“进行中”态布局与交互（§3.1–§3.9）：快捷导航、待办事项、今日动态等重新激活；已完成态专属收敛（如无待办项、收缩态展示）解除。</li>
+                    <li>进度 / 任务统计按 <a href="#sub-3-5">§3.5 数量统计规则</a> 重新计算——因新增变更任务或新合同任务，总任务数 / 已完成数相应变化。</li>
+                </ul>
+
+                <p><strong>再次完成：</strong></p>
+                <ul>
+                    <li>当项目内全部任务再次达到“已完成”（已完成任务数 = 已签约合同内有效总任务数，口径同 <a href="#sub-3-5">§3.5</a>），系统自动将项目状态由“进行中”更新回“已完成”。</li>
+                    <li>该判定逻辑与项目首次进入“已完成”完全一致，不另设特殊规则。</li>
+                </ul>
+
+                <p><strong>状态一致性：</strong>项目状态为全局字段（<code>projects.status</code>），服务方发起的回退 / 再次完成，业主端（见 <a href="#sub-12-10">§12.10</a>）同步呈现，两端状态标签与布局随状态联动，无需各自维护。</p>
             </div>
         </div>
 
@@ -1737,9 +1815,9 @@
                             <td>返回上一页</td>
                         </tr>
                         <tr>
-                            <td>⋯ 菜单</td>
-                            <td>点击</td>
-                            <td>弹出操作菜单（分享给朋友）</td>
+                            <td>微信原生胶囊（⋯○）</td>
+                            <td>点击 ⋯</td>
+                            <td>调起微信系统菜单（含「转发给朋友」「收藏」等），由微信客户端提供，业务侧无自定义分享菜单；○ 为关闭（退出小程序 / 返回桌面）</td>
                         </tr>
                         <tr>
                             <td rowspan="2">info-header编辑按钮</td>
@@ -2878,18 +2956,18 @@
 步骤1：前端校验
   - 施工组名称为空 → 轻提示"请输入施工组名称"，中断
   - 与已有施工组重名 → 轻提示"该施工组名称已存在"，中断
-                </br>
+                <br>
 步骤2：二次确认
   - 弹出确认弹窗"确定要在'XX工作组'下创建施工组'XX'吗？"
   - 确认 → 调用API创建
   - 取消 → 关闭确认弹窗
-</br>
+<br>
 步骤3：创建成功
   - 轻提示"创建成功！创建人：XX"
   - 关闭创建弹窗
   - 自动刷新架构树，新施工组节点显示在对应工作组下，节点展示"创建人：当前操作用户"
   - 新施工组默认：显示创建人+0人
-</br>
+<br>
 步骤4：创建失败
   - 轻提示具体错误信息
   - 保留创建弹窗和表单数据
@@ -3809,8 +3887,8 @@
                         <div class="info-value">项目文件管理页</div>
                     </div>
                     <div class="info-item">
-                        <div class="info-label">业务目标</div>
-                        <div class="info-value">管理项目文件，按分类和合同查看文件</div>
+                    <div class="info-label">业务目标</div>
+                    <div class="info-value">集中收纳项目全部资料文件，按来源/合同分组（可折叠）浏览，按文件类型筛选检索，并对无权限合同做隔离展示</div>
                     </div>
                 </div>
             </div>
@@ -3823,70 +3901,83 @@
 │  - 返回 | 项目资料 | ⋯更多           │
 ├─────────────────────────────────────┤
 │  筛选栏                              │
-│  - 搜索栏（文件名称搜索）             │
-│  - 分类网格（全部/图纸/合同/验收/     │
-│    照片/变更）                        │
+│  - 搜索栏（按文件名称搜索）            │
+│  - 类型筛选（全部/图片/视频/音频/文档） │
 ├─────────────────────────────────────┤
-│  文件列表                            │
-│  - 项目信息附件（网格展示）            │
-│  - 各合同关联文件（按合同分组）        │
-│    * 合同名称 + 状态标签              │
-│    * 文件网格（图片/视频/音频/文档）   │
-│    * 权限控制（无权限时加密显示）      │
+│  文件分组列表（按来源/合同分组）        │
+│  ▾ 项目信息（3）                      │
+│     🖼 户型图.jpg        项目信息·日期 │
+│     📄 设计说明书.pdf    项目信息·大小 │
+│     📄 装修合同.docx    项目信息·大小 │
+│  ▾ 水电合同 · 执行中（5）             │
+│     🖼 现场照片1.jpg   材料进场阶段    │
+│     🎬 施工过程.mp4   布管布线·时长    │
+│     🎵 验收说明.mp3   布管布线·时长    │
+│     🖼 验收照片.jpg    布管布线阶段    │
+│     📊 材料清单.xlsx  材料进场·大小    │
+│  ▾ 泥瓦合同 · 执行中（2）             │
+│     🖼 瓷砖铺贴.jpg    铺贴阶段        │
+│     🎬 施工记录.mp4   铺贴阶段·时长    │
+│  🔒 木工合同 · 无权限（3）  ← 整组标灰 │
+│     🔒 文件已加密      无权限          │
+│     🔒 文件已加密      无权限          │
+│     🔒 文件已加密      无权限          │
 ├─────────────────────────────────────┤
-│  权限提示按钮（右下角）                │
-│  - 点击显示权限说明                   │
+│  权限说明悬浮（⚠️ 右下角）            │
+│  - 点击显示权限说明气泡               │
 └─────────────────────────────────────┘
                 </div>
+                <p><strong>布局说明</strong></p>
+                <ul>
+                    <li><strong>顶部筛选栏</strong>：搜索栏按文件名称模糊匹配；类型筛选条（全部 / 图片 / 视频 / 音频 / 文档）按文件类型实时显示/隐藏文件行，并与搜索关键词叠加生效；切换筛选或输入搜索时自动展开全部分组，保证结果可见。</li>
+                    <li><strong>文件分组列表</strong>：按"来源 / 合同"分组（项目信息 → 各合同），每组标题可点击<strong>折叠 / 展开</strong>（▾ 箭头旋转）；组内一行一项展示「类型图标 + 文件名 + 来源·时间」，单手竖向扫读。</li>
+                    <li><strong>无权限分组</strong>：无权限合同整组标灰并带 🔒 与灰色「无权限」badge，组内文件行半透明、🔒 图标、文件名「文件已加密」、点击提示无权限（详见 8.5）。</li>
+                    <li><strong>权限说明悬浮</strong>：右下角 ⚠️ 按钮，点击弹出「权限说明」气泡，点击空白处自动收起。</li>
+                </ul>
             </div>
 
             <div class="subsection" id="sub-8-3">
-                <div class="subsection-title">8.3 文件分类规格</div>
+                <div class="subsection-title">8.3 文件类型筛选规格</div>
+                <p>页面顶部类型筛选条按<strong>文件类型</strong>对列表做实时过滤（与搜索关键词叠加生效），替代旧版的"图纸/合同/验收/照片/变更"分类网格。</p>
                 <table>
                     <thead>
                         <tr>
-                            <th>分类</th>
+                            <th>类型筛选</th>
                             <th>图标</th>
-                            <th>颜色标识</th>
                             <th>说明</th>
+                            <th>对应文件行图标底色</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>全部</td>
                             <td>-</td>
+                            <td>显示所有类型文件（默认态）</td>
                             <td>-</td>
-                            <td>显示所有文件</td>
                         </tr>
                         <tr>
-                            <td>图纸</td>
-                            <td>📐</td>
-                            <td>蓝色</td>
-                            <td>户型图、设计图等</td>
+                            <td>图片</td>
+                            <td>🖼️</td>
+                            <td>户型图、现场照片、验收照片等图片文件</td>
+                            <td>浅蓝</td>
                         </tr>
                         <tr>
-                            <td>合同</td>
+                            <td>视频</td>
+                            <td>🎬</td>
+                            <td>施工过程、施工记录等视频文件</td>
+                            <td>浅绿</td>
+                        </tr>
+                        <tr>
+                            <td>音频</td>
+                            <td>🎵</td>
+                            <td>验收说明等音频文件</td>
+                            <td>浅紫</td>
+                        </tr>
+                        <tr>
+                            <td>文档</td>
                             <td>📄</td>
-                            <td>绿色</td>
-                            <td>各类合同文件</td>
-                        </tr>
-                        <tr>
-                            <td>验收</td>
-                            <td>✅</td>
-                            <td>橙色</td>
-                            <td>验收报告、验收照片</td>
-                        </tr>
-                        <tr>
-                            <td>照片</td>
-                            <td>📸</td>
-                            <td>紫色</td>
-                            <td>现场照片、进度照片</td>
-                        </tr>
-                        <tr>
-                            <td>变更</td>
-                            <td>📝</td>
-                            <td>红色</td>
-                            <td>变更单、变更记录</td>
+                            <td>设计说明书、装修合同、材料清单等文档</td>
+                            <td>浅橙</td>
                         </tr>
                     </tbody>
                 </table>
@@ -3925,7 +4016,7 @@
                         <tr>
                             <td>文档</td>
                             <td>渐变背景+扩展名</td>
-                            <td>PDF、DOC、XLS</td>
+                            <td>PDF、DOC、DOCX、XLS、XLSX</td>
                             <td>点击预览文档</td>
                         </tr>
                     </tbody>
@@ -3952,9 +4043,9 @@
                         </tr>
                         <tr>
                             <td>无权限</td>
-                            <td>半透明 + 🔒图标</td>
-                            <td>不可点击，提示无权限</td>
-                            <td>部分合同资料因权限限制无法查看</td>
+                            <td>分组级：整组标灰背景 + 🔒 + 灰色「无权限」badge；组内文件行半透明、🔒 图标、文件名显示「文件已加密」、meta 显示「无权限」</td>
+                            <td>组内文件行不可点击，点击提示「无权限查看此合同资料」</td>
+                            <td>无权限合同（如木工合同）整组做隔离展示，部分合同资料因权限限制无法查看</td>
                         </tr>
                     </tbody>
                 </table>
@@ -4361,6 +4452,7 @@
                     <li><strong>通知</strong>：向对方（业主）推送"新的对账单待确认"通知；提交方（服务方）收到"已通知对方确认"反馈。</li>
                     <li><strong>操作记录</strong>：详情页"操作记录"新增"XX 提交了对账单"及提交时间。</li>
                     <li><strong>金额汇总</strong>：列表顶部"合同总额 / 已支付 / 待支付"按当前筛选项重新聚合，新账单计入对应合同（见 9.2 数据展示规则）。</li>
+                    <li><strong>待办生成</strong>：提交成功后系统为当前对账单的<strong>确认人（业主）</strong>自动生成一条「对账单确认」待办项（每个成功提交的对账单仅生成一条，重复提交<strong>不重复生成</strong>；提交后该待办出现在业主「全部待办」页，业主确认后标记完成）。该待办的生成规则与待办卡片字段规格（标题 / 类型标签 / 元信息 / 状态标签 / 图标）详见 <a href="PRD-任务模块详细规格.html#sub-4-8-10" target="_blank">PRD-任务模块 §4.8.10</a> 与 <a href="PRD-任务模块详细规格.html#sub-7-6" target="_blank">§7.6–§7.9</a>。</li>
                 </ul>
             </div>
         </div>
@@ -4759,7 +4851,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
-                        <div class="info-value">项目总、施工组长、设计师</div>
+                        <div class="info-value">项目内全员</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面入口</div>
@@ -4806,7 +4898,7 @@
                     <thead><tr><th>动态类型（typeLabel）</th><th>枚举值（type）</th><th>生成时机 / 触发动作</th><th>动态文案（content 模板）</th><th>跳转目标</th><th>源章节</th></tr></thead>
                     <tbody>
                         <tr><td>任务提交</td><td><code>task_submitted</code></td><td>执行人点击「提交确认」（有确认人）→ 任务流转至确认中（confirming）</td><td>完成了{阶段名称}{任务名称}的施工</td><td><a href="service-miniapp/task-detail.html" target="_blank">task-detail.html</a></td><td>任务 §3.14(4)</td></tr>
-                        <tr><td>任务完成</td><td><code>task_completed</code></td><td>① 执行人「完成任务」（无确认人）→ 已完成；② 最后一位确认人确认通过 → 任务闭环（由确认流程驱动）</td><td>完成了{阶段名称}{任务名称}的施工</td><td><a href="service-miniapp/task-detail.html" target="_blank">task-detail.html</a></td><td>任务 §3.14(4)/§3.15(4)</td></tr>
+                        <tr><td>任务完成</td><td><code>task_completed</code></td><td>① 执行人「完成任务」（无确认人）→ 已完成；② 多人确认场景下<strong>最后一位确认人确认通过 → 任务闭环</strong>（即「任务已完成」完成事件，由确认流程驱动）</td><td>{阶段名称}{任务名称} 已完成</td><td><a href="service-miniapp/task-detail.html" target="_blank">task-detail.html</a></td><td>任务 §3.14(4)/§3.15(4)</td></tr>
                         <tr><td>任务确认</td><td><code>task_confirm</code></td><td>单条确认人点击「确认通过」</td><td>{确认人姓名} 确认了 {阶段名称}{任务名称}</td><td><a href="service-miniapp/task-detail.html" target="_blank">task-detail.html</a></td><td>任务 §3.15(4)</td></tr>
                         <tr><td>任务驳回</td><td><code>task_rejected</code></td><td>单条确认人点击「驳回」</td><td>{确认人姓名} 驳回了 {阶段名称}{任务名称}</td><td><a href="service-miniapp/task-detail.html" target="_blank">task-detail.html</a></td><td>任务 §3.15(4)</td></tr>
                         <tr><td>合同签约</td><td><code>contract_signed</code></td><td>① 非工人合同：confirmed → signed（乙方上传签约文件）；② 工人合同：worker_confirmed → worker_signed（发起方上传签约文件）</td><td>{合同名称}签约完成</td><td>非工人：<a href="service-miniapp/contract-detail.html" target="_blank">contract-detail.html</a>；工人：<a href="service-miniapp/worker-contract-detail.html" target="_blank">worker-contract-detail.html</a></td><td>合同 §6.3.4/§10.3.3</td></tr>
@@ -4822,11 +4914,11 @@
                     <thead><tr><th>字段</th><th>取值 / 说明</th><th>来源</th></tr></thead>
                     <tbody>
                         <tr><td>操作人（user）</td><td>动作执行人姓名；头像（avatar）取姓名首字，头像底色（avatarColor）按角色预设</td><td>当前操作人</td></tr>
-                        <tr><td>角色（role）/ 角色样式（roleClass）</td><td>操作人所属角色名与样式类（监理 supervisor / 工长 foreman / 施工 worker / 设计 designer / 业主 owner）</td><td>操作人角色</td></tr>
+                        <tr><td>角色（role）/ 角色样式（roleClass）</td><td>操作人所属角色名与样式类，须与 <a href="PRD-完整文档.html" target="_blank">PRD-完整文档</a>「用户角色定义」（及本项目 §7.3 角色标签规格）保持一致，取值：项目总 / 设计师 / 工长 / 拆除工 / 水电工 / 木作工 / 泥瓦工 / 油漆工 / 小零工 / 业主（配色以 §7.3 为准）。</td><td>操作人角色</td></tr>
                         <tr><td>类型（type）</td><td>固定枚举：task_submitted / task_completed / task_confirm / task_rejected / contract_signed</td><td>系统固定</td></tr>
                         <tr><td>类型标签（typeLabel）</td><td>任务提交 / 任务完成 / 任务确认 / 任务驳回 / 合同签约</td><td>由触发动作决定</td></tr>
                         <tr><td>内容（content）</td><td>按上表「动态文案」模板生成（含 {阶段名称}/{任务名称}/{确认人姓名}/{合同名称} 占位符）</td><td>由触发动作 + 业务对象生成</td></tr>
-                        <tr><td>来源（source）</td><td>任务类：所属合同 / 服务名称；合同类：所属项目 / 合同名称</td><td>业务对象所属</td></tr>
+                        <tr><td>来源（source）</td><td>任务类：所属合同 / 服务名称；合同类：所属项目 / 合同名称（合同类 source 的合同名称，其所属合同类型须与 <a href="PRD-完整文档.html" target="_blank">PRD-完整文档</a>「合同类型」8 类一致：基础施工服务合同 / 设计服务合同 / 拆除·水电·木作·泥瓦工·油漆工班组服务合同 / 小零工服务合同）</td><td>业务对象所属</td></tr>
                         <tr><td>时间（time）/ 日期（date）/ 日期标签（dateLabel）</td><td>时间 = 动作完成时间（时:分）；日期与日期标签（今天 / 昨天 / …）按动作时间计算，归入「项目动态」对应日期分组（当天归入「今天」）</td><td>动作完成时间</td></tr>
                         <tr><td>媒体文件（files）</td><td>任务类取执行人 / 确认人上传的图片 / 视频 / 音频合并集合（📷/🎬/🎵）；合同签约默认空集合</td><td>动作上传的媒体附件</td></tr>
                         <tr><td>是否有权限查看（hasPermission）</td><td>按项目成员权限判定（默认项目内成员可查看）；合同类对非授权角色置 false（见 §11.9 锁定态）</td><td>系统权限</td></tr>
@@ -4836,7 +4928,7 @@
                 <ul>
                     <li><strong>生成时机</strong>：动态与对应业务动作（执行记录 / 确认结果 / 签约）<strong>一一对应</strong>，于动作完成时由系统生成；归入「项目动态」对应日期分组。</li>
                     <li><strong>聚合规则</strong>：任务提交 / 完成动态仅对执行记录的<strong>媒体文件做汇总合并</strong>（hasMedia / mediaCount），<strong>文字不逐条汇总</strong>，统一为标准 content 文案（任务 §3.14 聚合规则）。</li>
-                    <li><strong>跳转逻辑</strong>：点击动态项按 <code>type</code> 跳转——任务类 → <code>task-detail.html</code>；合同类 → <code>contract-detail.html</code>（工人合同 → <code>worker-contract-detail.html</code>）；业主端跳转后仅查看（§13）。</li>
+                    <li><strong>跳转逻辑</strong>：点击动态项按 <code>type</code> 跳转——任务类 → <a class="proto-link" href="service-miniapp/task-detail.html" target="_blank">task-detail.html</a>；合同类 → <a class="proto-link" href="service-miniapp/contract-detail.html" target="_blank">contract-detail.html</a>（工人合同 → <a class="proto-link" href="service-miniapp/worker-contract-detail.html" target="_blank">worker-contract-detail.html</a>）；业主端跳转后的操作权限依其业务身份而定，非一律纯查看（详见 <a href="#sub-13-2">13.2 权限说明</a>）。</li>
                     <li><strong>可见性（hasPermission）</strong>：默认项目内成员可见；合同类动态对非授权角色显示「🔒 无查看权限」并弹窗（§11.9）；工人合同动态仅对<strong>已在项目内的成员</strong>（含已确认加入架构层级的乙方工人）可见，受邀方未加入项目前不可见（与 §10.3.2「不向受邀方生成应用内待办」一致）。</li>
                     <li><strong>今日动态联动</strong>：当日生成的动态同步出现在项目详情页「今日动态」卡片（§3.7），按时间倒序、默认折叠一条半；今日无动态时整块不展示。</li>
                 </ul>            </div>
@@ -4964,8 +5056,8 @@
                 <table>
                     <thead><tr><th>标签</th><th>取值 / 样式</th><th>说明</th></tr></thead>
                     <tbody>
-                        <tr><td>角色标签（<code>activity-role-tag</code>）</td><td>监理(supervisor) / 工长(foreman) / 施工(worker) / 设计(designer) / 业主(owner)</td><td>动态含 <code>roleClass</code> 时于头部渲染对应彩色标签；五色区分（监理蓝 / 工长绿 / 施工橙 / 设计紫 / 业主红）。与项目详情页（进行中-新版）保持一致。</td></tr>
-                        <tr><td>阶段标签（<code>activity-stage-tag</code>）</td><td>拆除(demolition) / 水电(plumbing) / 木作(carpentry) / 泥瓦(tiling) / 油漆(painting) / 安装(installation) / 清理(cleanup) / 设计(design) / 基础施工(base)</td><td>在动态内容中以 <code>&lt;span&gt;</code> 内联展示，如"提交了[基础施工]阶段开工申请"。样式与项目详情页一致，只读展示。</td></tr>
+                        <tr><td>角色标签（<code>activity-role-tag</code>）</td><td>动态头部渲染<strong>操作人所属角色</strong>的彩色标签；角色取值须与 <a href="PRD-完整文档.html" target="_blank">PRD-完整文档</a>「用户角色定义」（及本项目 §7.3 角色标签规格）保持一致：项目总 / 设计师 / 工长 / 拆除工 / 水电工 / 木作工 / 泥瓦工 / 油漆工 / 小零工 / 业主。颜色与样式以 §7.3 角色标签规格为准（项目总紫 / 设计师蓝 / 工长绿 / 各工种工按 §7.3 配色）。</td><td>动态含 <code>roleClass</code> 时于头部渲染；与 §7.3 角色标签规格、项目详情页（进行中-新版）保持一致。</td></tr>
+                        <tr><td>阶段标签（<code>activity-stage-tag</code>）</td><td>阶段标签由<strong>该动态所属合同内配置的阶段</strong>决定（非固定枚举）：动态内容中的阶段名须与对应合同的阶段配置对齐。以下为<strong>示例</strong>（常见阶段）：拆除 / 水电 / 木作 / 泥瓦 / 油漆 / 安装 / 清理 / 设计 / 基础施工。</td><td>在动态内容中以 <code>&lt;span&gt;</code> 内联展示，如"提交了[基础施工]阶段开工申请"；阶段名取<strong>合同配置值</strong>。样式与项目详情页一致，只读展示。</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -4976,8 +5068,8 @@
                     <thead><tr><th>要素</th><th>行为</th><th>说明</th></tr></thead>
                     <tbody>
                         <tr><td>锁定态展示</td><td>🔒 无查看权限</td><td>动态 <code>hasPermission=false</code> 时，卡片加 <code>no-permission</code> 类（半透明），底部显示"🔒 无查看权限"，不可点开详情。</td></tr>
-                        <tr><td>点击无权限卡片</td><td>弹出"无查看权限"模态框</td><td>调用 <code>showPermissionModal()</code> 弹出 <code>permissionModal</code>，文案"您没有权限查看该合同记录，请联系项目管理人员获取权限"；按钮"知道了"关闭。</td></tr>
-                        <tr><td>适用场景</td><td>合同类动态对非授权角色</td><td>如业主查看特定合同动态时展示锁定态；有权限时点击跳转对应详情页（任务 / 合同）。</td></tr>
+                        <tr><td>点击无权限卡片</td><td>弹出"无查看权限"模态框</td><td>调用 <code>showPermissionModal()</code> 弹出 <code>permissionModal</code>，文案"您没有权限查看该动态记录，请联系项目管理人员获取权限"；按钮"知道了"关闭。</td></tr>
+                        <tr><td>适用场景</td><td>超范围角色 / 超架构权限</td><td>① 合同类动态对非授权角色（如非该合同甲乙方成员）；② 业主默认可见项目全部动态，仅配置「仅部分架构权限」时超出授权架构层级的动态锁定（详见 <a href="#sub-13-2">13.2</a>）。</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -5011,7 +5103,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面路径</div>
-                        <div class="info-value"><a href="owner-miniapp/project-detail.html" target="_blank">owner-miniapp/project-detail.html</a></div>
+                        <div class="info-value"><a href="owner-miniapp/project-detail-ongoing-v2.html" target="_blank">owner-miniapp/project-detail-ongoing-v2.html</a></div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
@@ -5026,38 +5118,49 @@
                     <div class="note-title">设计说明</div>
                     <p>业主端"我的家"直接打开项目详情页，省略项目列表页。因为业主通常只有一个项目，直接展示项目详情可减少操作步骤，提升用户体验。</p>
                 </div>
+                <div class="note" style="margin-top: 12px;">
+                    <div class="note-title">基本信息头部</div>
+                    <p>页面顶部新增「项目基本信息头部」：左侧展示<strong>新家已开工 N 天</strong>（N = 当前日期 − 项目内第一份已签约状态合同日期，不足 1 天按 1 天计；无已签约合同时显示「新家准备中」），右侧展示面积户型（如「75.0m² 2室1厅」）。整块可点击跳转项目信息页 <a href="owner-miniapp/project-info.html" target="_blank">project-info.html</a>，该头部结构与服务方 <a href="#sub-3-1">§3.1</a> 一致。</p>
+                </div>
             </div>
 
             <div class="subsection" id="sub-12-2">
                 <div class="subsection-title">12.2 页面结构</div>
                 <div class="code-block">
-┌─────────────────────────────────────┐
-│  导航栏                              │
-│  - 标题：项目名称                    │
-│  - 右侧：⋯更多 | ✕关闭              │
-├─────────────────────────────────────┤
-│  快捷导航栏（可收起）                 │
-│  - 固定按钮 + 项目信息|架构|成员|资料 │
-│  - 对账单                            │
-│  - 展开按钮                          │
-├─────────────────────────────────────┤
-│  层级选择器                          │
-│  - 下拉选择项目部/工作组/施工组       │
-├─────────────────────────────────────┤
-│  今日动态卡片                        │
-│  - 动态列表（验收完成、提交申请等）   │
-│  - 展开更多按钮                      │
-├─────────────────────────────────────┤
-│  合同概览卡片                        │
-│  - 合同签约数、总进度统计            │
-│  - 合同列表（点击查看详情）          │
-├─────────────────────────────────────┤
-│  任务统计卡片                        │
-│  - 全部任务、确认中任务、执行中任务   │
-├─────────────────────────────────────┤
-│  底部TabBar                          │
-│  - 首页 | 我的家（激活）| 消息       │
-└─────────────────────────────────────┘
+┌─────────────────────────────────────────┐
+│  导航栏                                  │
+│  - 标题：项目名称                        │
+│  - 右侧：微信原生胶囊（⋯○）                  │
+├─────────────────────────────────────────┤
+│  项目基本信息头部（可点击跳项目信息）         │
+│  - 新家已开工 N 天                        │
+│  - 面积户型（如 75.0m² 2室1厅）            │
+├─────────────────────────────────────────┤
+│  待办事项卡片（置于吸顶导航上方，           │
+│  不与架构切换联动）                       │
+│  - 待办事项 + 数量角标 + 查看全部          │
+│  - 默认显示 2 条（第 3 条起截断）           │
+├─────────────────────────────────────────┤
+│  吸顶导航（滚动吸顶）                     │
+│  - 快捷导航栏（📌固定 + 架构|成员|         │
+│    资料|对账单 4入口 + 展开/收起）         │
+│  - 层级选择器（项目部/工作组/施工组）       │
+├─────────────────────────────────────────┤
+│  今日动态卡片                            │
+│  - 动态列表（一条半折叠）                 │
+│  - 展开更多 / 查看全部                    │
+├─────────────────────────────────────────┤
+│  合同概览卡片 + 任务统计卡片（上下堆叠）    │
+│  - 合同签约数、总进度、合同列表            │
+│  - 全部任务、确认中任务、执行中任务        │
+├─────────────────────────────────────────┤
+│  底部TabBar                              │
+│  - 首页 | 我的家（激活）| 消息 | 我的      │
+└─────────────────────────────────────────┘
+                </div>
+                <div class="note" style="margin-top: 12px;">
+                    <div class="note-title">与服务方结构对齐</div>
+                    <p>本节页面区块构成与服务方 <a href="#sub-3-2">§3.2 页面结构</a> 基本一致（均含基本信息头部、待办事项、吸顶导航、今日动态、合同/任务概览），业主端差异仅在于：待办事项仅展示业主需确认项、合同列表项额外显示状态标签、不支持分享。详细交互矩阵请参阅 <a href="#sub-3-8">§3.8 交互逻辑规格</a>。</p>
                 </div>
             </div>
 
@@ -5088,6 +5191,11 @@
                             <td>可查看项目部/工作组/施工组</td>
                         </tr>
                         <tr>
+                            <td>基本信息头部（已开工天数/面积户型）</td>
+                            <td>✅</td>
+                            <td>✅ 同服务方</td>
+                        </tr>
+                        <tr>
                             <td>分享项目</td>
                             <td>✅</td>
                             <td>❌ 不支持分享</td>
@@ -5098,7 +5206,7 @@
 
             <div class="subsection" id="sub-12-4">
                 <div class="subsection-title">12.4 交互逻辑规格</div>
-                <p>以下为业主端项目详情页（进行中状态）的交互逻辑规格，描述各组件的用户操作与响应行为。</p>
+                <p>业主端项目详情页（进行中状态）的交互逻辑与服务方 <a href="#sub-3-8">§3.8 交互逻辑规格</a> 基本一致，以下仅列出<strong>业主端专属 / 差异项</strong>与<strong>新增项</strong>；导航栏微信原生胶囊、快捷导航（固定 / 展开收起 / 滚动吸顶）、层级选择器、项目导航（施工路线抽屉）、今日动态（展开更多 / 查看全部）、合同概览（列表点击）、任务统计（查看全部）、页面加载（loading 遮罩）等共用交互均见 §3.8，本节不再复述。</p>
                 <table>
                     <thead>
                         <tr>
@@ -5110,98 +5218,21 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td rowspan="3">导航栏</td>
-                            <td>中间标题区域</td>
-                            <td>—</td>
-                            <td>显示当前项目名称</td>
-                        </tr>
-                        <tr>
-                            <td>右侧"⋯"按钮</td>
+                            <td>项目基本信息头部</td>
+                            <td>头部区域（已开工 N 天 + 面积户型）</td>
                             <td>点击</td>
-                            <td>弹出操作菜单，菜单项含"项目详情"（仅菜单框架，无分享功能）</td>
+                            <td>跳转 <a href="owner-miniapp/project-info.html" target="_blank">项目信息页 project-info.html</a></td>
                         </tr>
                         <tr>
-                            <td>右侧"✕"按钮</td>
+                            <td rowspan="2">待办事项卡片</td>
+                            <td>"查看全部"链接</td>
                             <td>点击</td>
-                            <td>关闭小程序</td>
+                            <td>跳转到业主端全部待办页，规格详见 <a href="PRD-任务模块详细规格.html#page-todo-list-owner" target="_blank">全部待办页（业主）</a></td>
                         </tr>
                         <tr>
-                            <td rowspan="5">快捷导航</td>
-                            <td>快捷入口（项目信息、架构、成员、资料、对账单）</td>
-                            <td>点击</td>
-                            <td>跳转对应页面</td>
-                        </tr>
-                        <tr>
-                            <td>"固定"按钮</td>
-                            <td>点击</td>
-                            <td>切换固定状态；固定后快捷导航在滚动时不收起，状态通过<code>localStorage</code>持久化</td>
-                        </tr>
-                        <tr>
-                            <td>页面向下滚动</td>
-                            <td>滚动超过50px</td>
-                            <td>快捷导航自动收起（用户手动展开的除外）</td>
-                        </tr>
-                        <tr>
-                            <td>页面向上滚动</td>
-                            <td>滚回顶部</td>
-                            <td>快捷导航自动展开</td>
-                        </tr>
-                        <tr>
-                            <td>展开/收起按钮</td>
-                            <td>点击</td>
-                            <td>切换快捷导航显示状态，文案随状态变化（"展开快捷入口"/"收起快捷入口"）</td>
-                        </tr>
-                        <tr>
-                            <td rowspan="5">层级选择器</td>
-                            <td>层级选择器区域</td>
-                            <td>点击</td>
-                            <td>展开下拉选项列表</td>
-                        </tr>
-                        <tr>
-                            <td>选项列表</td>
+                            <td>待办项</td>
                             <td>展示</td>
-                            <td>显示当前层级、父级、子级；当前层级有勾选标记；每个选项显示层级图标+层级名称+概要信息（如"4个工作组 · 8份合同"）</td>
-                        </tr>
-                        <tr>
-                            <td>选项项</td>
-                            <td>点击</td>
-                            <td>关闭下拉，更新面包屑导航，触发局部刷新（200ms延迟+loading动画）</td>
-                        </tr>
-                        <tr>
-                            <td>面包屑中的层级名称</td>
-                            <td>点击</td>
-                            <td>导航到对应层级</td>
-                        </tr>
-                        <tr>
-                            <td>选择器以外区域</td>
-                            <td>点击</td>
-                            <td>关闭下拉菜单</td>
-                        </tr>
-                        <tr>
-                            <td rowspan="5">项目导航（施工路线）</td>
-                            <td>右侧悬浮入口条</td>
-                            <td>展示</td>
-                            <td>显示"◀ 项目导航"文字条</td>
-                        </tr>
-                        <tr>
-                            <td>右侧悬浮入口条</td>
-                            <td>点击</td>
-                            <td>从右侧滑出抽屉面板</td>
-                        </tr>
-                        <tr>
-                            <td>施工路线时间轴</td>
-                            <td>展示</td>
-                            <td>展示阶段→任务列表的时间轴结构；已完成阶段/任务显示灰色，执行中显示蓝色高亮，即将执行显示橙色，待执行显示灰色边框</td>
-                        </tr>
-                        <tr>
-                            <td>执行中任务</td>
-                            <td>展示</td>
-                            <td>显示"← 当前"标签标记当前任务</td>
-                        </tr>
-                        <tr>
-                            <td>任务项</td>
-                            <td>点击</td>
-                            <td>关闭抽屉面板，跳转到对应任务详情页</td>
+                            <td>仅显示业主需要确认的待办（合同确认 + 任务确认），不包含执行相关待办</td>
                         </tr>
                         <tr>
                             <td rowspan="3">今日动态</td>
@@ -5217,18 +5248,18 @@
                         <tr>
                             <td>动态项</td>
                             <td>点击</td>
-                            <td>跳转到<a href="owner-miniapp/contract-detail.html" target="_blank">对应的任务详情或合同详情页</a></td>
+                            <td>跳转到对应的任务详情或合同详情页（业主端）</td>
                         </tr>
                         <tr>
                             <td rowspan="2">合同概览</td>
                             <td>合同列表</td>
                             <td>展示</td>
-                            <td>默认展开，每项显示：合同名称 + 工作组 + 金额 + 状态标签（如"拟定中""待我确认"）</td>
+                            <td>默认展开，每项显示：合同名称 + 工作组 + 金额 + 状态标签（如"拟定中""待我确认"，业主视角专属）</td>
                         </tr>
                         <tr>
                             <td>合同项</td>
                             <td>点击</td>
-                            <td>跳转到<a href="owner-miniapp/contract-detail.html" target="_blank">业主端合同详情页</a></td>
+                            <td>跳转到业主端合同详情页</td>
                         </tr>
                         <tr>
                             <td>任务统计</td>
@@ -5237,31 +5268,10 @@
                             <td>跳转到业主端任务列表页</td>
                         </tr>
                         <tr>
-                            <td rowspan="2">待办事项</td>
-                            <td>"查看全部"链接</td>
-                            <td>点击</td>
-                            <td>跳转到业主端全部待办页，规格详见 <a href="PRD-任务模块详细规格.html#page-todo-list-owner" target="_blank">全部待办页（业主）</a></td>
-                        </tr>
-                        <tr>
-                            <td>待办项</td>
-                            <td>展示</td>
-                            <td>仅显示业主需要确认的待办（合同确认 + 任务确认），不包含执行相关待办</td>
-                        </tr>
-                        <tr>
-                            <td rowspan="4">底部TabBar</td>
-                            <td>"首页"选项卡</td>
-                            <td>点击</td>
-                            <td>跳转业主端首页</td>
-                        </tr>
-                        <tr>
+                            <td rowspan="2">底部TabBar</td>
                             <td>"我的家"选项卡</td>
                             <td>展示</td>
                             <td>当前页面，显示为激活态</td>
-                        </tr>
-                        <tr>
-                            <td>"消息"选项卡</td>
-                            <td>点击</td>
-                            <td>跳转业主端消息页</td>
                         </tr>
                         <tr>
                             <td>"我的"选项卡</td>
@@ -5269,13 +5279,17 @@
                             <td>显示"个人中心开发中"提示</td>
                         </tr>
                         <tr>
-                            <td>页面加载</td>
-                            <td>初始状态</td>
-                            <td>—</td>
-                            <td>显示loading遮罩（加载中...），数据加载完成后隐藏</td>
+                            <td>分享</td>
+                            <td>微信原生胶囊 ⋯</td>
+                            <td>点击 ⋯</td>
+                            <td>仅调起微信系统菜单（转发 / 收藏等），<strong>不支持项目分享</strong>，业务侧无自定义分享菜单（详见 §12.3）</td>
                         </tr>
                     </tbody>
                 </table>
+                <div class="note" style="margin-top: 12px;">
+                    <div class="note-title">共用交互引用</div>
+                    <p>导航栏微信原生胶囊、快捷导航（固定 / 展开收起 / 滚动吸顶）、层级选择器（下拉 / 概要信息 / 面包屑）、项目导航（施工路线抽屉）、页面加载（loading 遮罩）等交互与服务方 <a href="#sub-3-8">§3.8 交互逻辑规格</a> 完全一致，本节不再复述，请交叉参阅。</p>
+                </div>
             </div>
 
             <div class="subsection" id="sub-12-5">
@@ -5291,6 +5305,23 @@
                     </thead>
                     <tbody>
                         <tr>
+                            <td rowspan="2">基本信息头部</td>
+                            <td>已开工天数</td>
+                            <td>前端计算</td>
+                            <td>N = 当前日期 − 项目内第一份「已签约」状态合同日期（不足 1 天按 1 天计；无已签约合同则显示「新家准备中」），口径与服务方 <a href="#sub-3-5">§3.5</a> 一致</td>
+                        </tr>
+                        <tr>
+                            <td>面积户型</td>
+                            <td>projects.area / projects.layout</td>
+                            <td>展示项目面积与户型（如「75.0m² 2室1厅」），点击头部整体跳转项目信息页</td>
+                        </tr>
+                        <tr>
+                            <td>层级选择器区域数据</td>
+                            <td>概要信息（如"N个工作组·M份合同"）</td>
+                            <td>前端聚合</td>
+                            <td>按当前所选架构层级及其隶属子层级聚合统计（belong_level_id 隶属关系），与服务方 <a href="#sub-3-4">§3.4</a> 口径一致</td>
+                        </tr>
+                        <tr>
                             <td rowspan="5">合同概览卡片</td>
                             <td>签约进度</td>
                             <td><code>GET /api/v1/projects/:id/contracts</code></td>
@@ -5299,7 +5330,7 @@
                         <tr>
                             <td>总进度百分比</td>
                             <td><code>projects.progress</code></td>
-                            <td>所有任务完成进度加权平均</td>
+                            <td>已完成任务总数 / 已签约合同内有效任务总数 × 100%</td>
                         </tr>
                         <tr>
                             <td>合同数量</td>
@@ -5320,7 +5351,7 @@
                             <td rowspan="4">任务统计卡片</td>
                             <td>全部任务</td>
                             <td><code>GET /api/v1/projects/:id/tasks/stats</code></td>
-                            <td>已完成任务数 / 总任务数</td>
+                            <td>已完成任务数 / 已签约合同内有效总任务数</td>
                         </tr>
                         <tr>
                             <td>确认中任务</td>
@@ -5346,18 +5377,13 @@
                         <tr>
                             <td>显示条数</td>
                             <td>前端分页</td>
-                            <td>默认显示5条，点击"查看全部"跳转业主端全部待办页，规格详见 <a href="PRD-任务模块详细规格.html#page-todo-list-owner" target="_blank">全部待办页（业主）</a></td>
+                            <td>默认显示 2 条（第 3 条起截断，不滚动展示），点击"查看全部"跳转业主端全部待办页，规格详见 <a href="PRD-任务模块详细规格.html#page-todo-list-owner" target="_blank">全部待办页（业主）</a></td>
                         </tr>
                         <tr>
                             <td rowspan="5">快捷导航栏</td>
                             <td>入口数量</td>
                             <td>前端固定配置</td>
-                            <td>固定5个入口：项目信息、架构、成员、资料、对账单</td>
-                        </tr>
-                        <tr>
-                            <td>项目信息入口</td>
-                            <td>固定链接</td>
-                            <td>跳转业主端项目信息详情页</td>
+                            <td>固定 1 个（📌 固定）+ 内容入口 4 个：架构、成员、资料、对账单；「项目信息」入口已移至顶部基本信息头部</td>
                         </tr>
                         <tr>
                             <td>架构入口</td>
@@ -5374,12 +5400,18 @@
                             <td>固定链接</td>
                             <td>跳转业主端项目文件库页</td>
                         </tr>
+                        <tr>
+                            <td>对账单入口</td>
+                            <td>固定链接</td>
+                            <td>跳转业主端项目对账单页</td>
+                        </tr>
                     </tbody>
                 </table>
                 <div class="note" style="margin-top: 16px;">
                     <div class="note-title">业主端与服务方差异说明</div>
                     <p><strong>待办事项：</strong>业主端仅显示业主需要确认的待办（合同确认 + 任务确认），不包含执行相关待办；服务方则包含全部待办类型。</p>
                     <p><strong>合同状态标签：</strong>业主端合同列表项额外显示状态标签（如"拟定中""待我确认"），便于业主快速了解合同当前状态；服务方不显示此标签。</p>
+                    <p><strong>数量统计公式：</strong>签约进度、总进度百分比、全部任务、已开工天数等公式与服务方 <a href="#sub-3-5">§3.5</a> 口径一致（已完成任务数 / 已签约合同内有效总任务数、当前日期 − 第一份已签约合同日期等）；层级选择器区域数据聚合口径与服务方 <a href="#sub-3-4">§3.4</a> 一致。</p>
                 </div>
             </div>
 
@@ -5427,15 +5459,15 @@
             </div>
 
             <div class="subsection" id="sub-12-7">
-                <div class="subsection-title">12.7 已完成状态 - 页面概述</div>
+                <div class="subsection-title">12.7 已完成状态（新版） - 页面概述</div>
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">页面名称</div>
-                        <div class="info-value">项目详情页-已完成（我的家）</div>
+                        <div class="info-value">项目详情页-已完成（新版）（我的家）</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面路径</div>
-                        <div class="info-value"><a href="owner-miniapp/project-detail-completed.html" target="_blank">owner-miniapp/project-detail-completed.html</a></div>
+                        <div class="info-value"><a href="owner-miniapp/project-detail-completed-v2.html" target="_blank">owner-miniapp/project-detail-completed-v2.html</a></div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
@@ -5446,38 +5478,44 @@
                         <div class="info-value">底部TabBar"我的家"直接进入（项目已完成状态）</div>
                     </div>
                 </div>
+                <p style="font-size: 13px; color: var(--text-secondary); margin: 10px 0 0;">本页采用「项目详情（进行中-新版）」的 v2 布局骨架（详见 <a href="#sub-12-1">§12.1 页面结构</a> 与 <a href="#sub-12-4">§12.4 交互逻辑</a>）：微信原生胶囊导航、顶部「项目基本信息头部」、待办事项卡片置于吸顶导航之前且不联动架构、吸顶导航含 4 入口快捷导航（项目信息已移顶）+ 展开/收起 + arch-half 紧凑层级选择器、合同/任务统计上下堆叠 compact 卡片、今日动态 v2 样式与微动效。与服务方 v2 已完成态（<a href="#sub-3-10">§3.10</a>）布局一致，差异仅数据状态；合同名称口径引用 <a href="#sub-12-5">§12.5</a>（班组服务合同），动态角色引用 <a href="#sub-13-2">§13.2</a>（陈庄/项目总，无监理）。</p>
             </div>
 
             <div class="subsection" id="sub-12-8">
-                <div class="subsection-title">12.8 已完成状态 - 与进行中状态的差异</div>
+                <div class="subsection-title">12.8 已完成状态（新版） - 与进行中（新版）状态的差异</div>
                 <table>
                     <thead>
                         <tr>
                             <th>展示区域</th>
-                            <th>进行中状态</th>
-                            <th>已完成状态</th>
+                            <th>进行中（新版）状态</th>
+                            <th>已完成（新版）状态</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
+                            <td>基本信息头部</td>
+                            <td>左「新家已开工 N 天」+ 右面积户型（蓝色调），整块点击跳项目信息页</td>
+                            <td>左「项目已完工」+ 右面积户型（绿色调），整块点击跳项目信息页</td>
+                        </tr>
+                        <tr>
                             <td>合同概览-签约进度</td>
                             <td>部分签约</td>
-                            <td>全部签约（如8/8）</td>
+                            <td>全部签约（如 8/8）</td>
                         </tr>
                         <tr>
                             <td>合同概览-总进度</td>
-                            <td>X%</td>
+                            <td>X%（公式见 <a href="#sub-12-5">§12.5</a>：已完成任务总数 / 已签约合同内有效任务总数 × 100%）</td>
                             <td>100%</td>
                         </tr>
                         <tr>
                             <td>合同概览-合同列表</td>
-                            <td>各合同进度不同，含状态标签（拟定中/待我确认等）</td>
-                            <td>所有合同进度100%，状态标签显示"已完成"</td>
+                            <td>各合同进度不同，含状态标签（拟定中/待我确认等）；合同名称采用「班组服务合同」口径</td>
+                            <td>所有合同进度 100%，状态标签显示"已完成"；合同名称采用「班组服务合同」口径；合同项点击跳转 <code>contract-detail.html?status=completed</code></td>
                         </tr>
                         <tr>
                             <td>任务统计-全部任务</td>
-                            <td>已完成X/总数Y</td>
-                            <td>总数/总数（全部完成）</td>
+                            <td>已完成 X / 总数 Y（公式见 <a href="#sub-12-5">§12.5</a>：已完成任务数 / 已签约合同内有效总任务数）</td>
+                            <td>总数 / 总数（全部完成，如 24/24）</td>
                         </tr>
                         <tr>
                             <td>任务统计-确认中/执行中</td>
@@ -5486,13 +5524,13 @@
                         </tr>
                         <tr>
                             <td>待办事项</td>
-                            <td>显示业主需确认的待办列表</td>
+                            <td>显示业主需确认的待办列表（默认 2 条截断，不滚动展示）</td>
                             <td>无待办，显示空状态"暂无待办事项"</td>
                         </tr>
                         <tr>
                             <td>今日动态</td>
-                            <td>验收/确认等动态</td>
-                            <td>项目完成相关动态（竣工验收、结算签署等）</td>
+                            <td>验收/确认等动态（查看全部跳业主端 <code>activity-list.html</code>）</td>
+                            <td>项目完成相关动态（竣工验收、结算签署等），查看全部跳业主端 <code>activity-list.html</code></td>
                         </tr>
                         <tr>
                             <td>项目导航（施工路线）</td>
@@ -5501,11 +5539,12 @@
                         </tr>
                     </tbody>
                 </table>
+                <p style="font-size: 12px; color: var(--text-tertiary); margin-top: 8px;">数量统计口径（签约进度 / 总进度 / 全部任务 / 已开工天数）与层级选择器区域数据统计均与服务方 <a href="#sub-3-5">§3.5</a> / <a href="#sub-3-4">§3.4</a> 一致；本表仅列数据状态差异。</p>
             </div>
 
             <div class="subsection" id="sub-12-9">
-                <div class="subsection-title">12.9 已完成状态 - 交互逻辑</div>
-                <p>与业主端项目详情页（进行中）交互逻辑一致，详见12.4节。差异点：</p>
+                <div class="subsection-title">12.9 已完成状态（新版） - 交互逻辑</div>
+                <p>共用交互（微信原生胶囊、基本信息头部点击跳项目信息页、快捷导航展开/收起、arch-half 层级选择器、项目导航抽屉、今日动态展开/收起、合同概览展开/收起、任务统计、loading 遮罩）与业主端项目详情页（进行中-新版）一致，详见 <a href="#sub-12-4">§12.4 交互逻辑</a>。业主专属 / 差异点：</p>
                 <table>
                     <thead>
                         <tr>
@@ -5515,12 +5554,20 @@
                     </thead>
                     <tbody>
                         <tr>
+                            <td>基本信息头部</td>
+                            <td>整块点击跳转 <code>project-info.html</code>（与进行中态一致）</td>
+                        </tr>
+                        <tr>
                             <td>合同概览</td>
-                            <td>合同列表默认展开，所有合同项点击跳转<a href="owner-miniapp/contract-detail.html" target="_blank">业主端合同详情页（已完成状态）</a></td>
+                            <td>合同列表默认展开，所有合同项点击跳转 <a href="owner-miniapp/contract-detail.html" target="_blank">业主端合同详情页（已完成状态）</a>（即 <code>contract-detail.html?status=completed</code>）</td>
                         </tr>
                         <tr>
                             <td>待办事项</td>
-                            <td>无待办项可点击，"查看全部"链接仍可跳转</td>
+                            <td>无待办项可点击，"查看全部"链接仍可跳转 <code>todo-list.html</code></td>
+                        </tr>
+                        <tr>
+                            <td>今日动态</td>
+                            <td>查看全部跳转业主端 <code>activity-list.html</code></td>
                         </tr>
                         <tr>
                             <td>项目导航（施工路线）</td>
@@ -5528,6 +5575,16 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="subsection" id="sub-12-10">
+                <div class="subsection-title">12.10 已完成状态（新版） - 状态流转与回退规则</div>
+                <p>项目状态为服务端与业主端共享的全局字段。完整的触发条件、回退表现、再次完成判定见服务方 <a href="#sub-3-13">§3.13 已完成状态-状态流转与回退规则</a>，本条仅列业主端差异与观察点：</p>
+                <ul>
+                    <li>业主端不直接发起“合同变更”，且架构页不支持创建合同（业主端仅可查看已签约工作组合同、施工组层级仅支持邀请成员），因此状态回退由服务方操作驱动。</li>
+                    <li>当项目因服务方动作回退为“进行中”时，业主端同步呈现“进行中（新版）”状态布局（§12.1–§12.6）；当服务方再次使全部任务完成，业主端同步恢复“已完成（新版）”布局（§12.7–§12.9）。</li>
+                    <li>业主端“我的家”入口仅在项目为“已完成”时进入（§12.7）；项目回退为“进行中”后，该入口不再以“已完成”态呈现，项目回到正常的进行中列表 / 详情。</li>
+                </ul>
             </div>
         </div>
 
@@ -5583,14 +5640,14 @@
                         </tr>
                         <tr>
                             <td>动态点击</td>
-                            <td>点击动态项跳转到对应详情页（任务/合同等），业主仅有查看权限</td>
+                            <td>点击动态项跳转到对应详情页（任务/合同等）；操作权限依业主业务身份而定（见下方权限说明）</td>
                         </tr>
                     </tbody>
                 </table>
                 <div class="note" style="margin-top: 12px;">
-                    <div class="note-title">权限说明</div>
-                    <p>业主端项目动态页为纯查看模式，不支持发起任何操作。动态内容展示规则与服务方一致，但跳转目标页面仅展示业主可见内容。</p>
-                    <p>业主端所呈现的全部动态项的<strong>生成规则（生成时机、content 模板、字段、跳转、可见性）</strong>与服务方同源，统一见 <a href="#sub-11-3">11.3 动态类型规格与生成规则</a>。</p>
+                    <div class="note-title">权限说明（业主端）</div>
+                    <p><strong>查看权限</strong>：业主默认拥有项目动态页<strong>全部查看权限</strong>；若业主被配置「仅部分架构权限」，则仅展示所授权架构层级范围内的动态（其余架构层级动态对其不可见，等同锁定态）。动态内容展示规则与服务方一致。</p>
+                    <p><strong>操作权限（点击动态）</strong>：业主点击某条动态后<strong>并非一律「无操作权限」</strong>——系统依据业主<strong>在该动态关联业务中的身份</strong>判断：若业主为<strong>合同甲方或乙方</strong>（甲/乙方视角），或为该<strong>任务的执行人或确认人</strong>，则跳转后展示对应操作入口（如合同签约 / 确认变更 / 任务验收等）；仅当业主与该业务无上述关系时为纯查看。动态项的生成规则、字段、跳转、可见性统一见 <a href="#sub-11-3">11.3 动态类型规格与生成规则</a>。</p>
                 </div>
             </div>
 
@@ -5613,7 +5670,7 @@
                         <tr>
                             <td>动态点击</td>
                             <td>跳转后可进行操作（如任务验收、合同签署）</td>
-                            <td>跳转后仅查看，无操作权限</td>
+                            <td>跳转后操作权限依业主业务身份而定（合同甲/乙方、任务执行人/确认人可操作，其余纯查看；详见 <a href="#sub-13-2">13.2 权限说明</a>）。</td>
                         </tr>
                         <tr>
                             <td>动态类型</td>
@@ -5631,12 +5688,12 @@
 
             <div class="subsection" id="sub-13-5">
                 <div class="subsection-title">13.5 角色标签与阶段标签（业主端）</div>
-                <p>同 11.8：动态头部展示角色标签（监理 / 工长 / 施工 / 设计 / 业主）与阶段标签（拆除 / 水电 / 木作 / 泥瓦 / 油漆 / 安装 / 清理 / 设计 / 基础施工），样式与项目详情页保持一致，只读展示。</p>
+                <p>同 11.8：动态头部渲染操作人角色标签与阶段标签。角色标签须与 <a href="PRD-完整文档.html" target="_blank">PRD-完整文档</a>「用户角色定义」一致（项目总 / 设计师 / 工长 / 各工种工 / 业主）；阶段标签取对应合同配置的阶段（示例：拆除 / 水电 / 木作 / 泥瓦 / 油漆 / 安装 / 清理 / 设计 / 基础施工），样式与项目详情页保持一致，只读展示。</p>
             </div>
 
             <div class="subsection" id="sub-13-6">
                 <div class="subsection-title">13.6 权限锁定（业主纯查看）</div>
-                <p>业主端动态整体为<strong>纯查看模式</strong>，无操作权限；若某动态 <code>hasPermission=false</code> 同样显示"🔒 无查看权限"并在点击时弹出无权限提示。跳转后目标页仅展示业主可见内容（详见 11.9）。</p>
+                <p>业主端动态默认全量查看；仅配置「仅部分架构权限」时，超出授权架构层级的动态显示"🔒 无查看权限"并弹窗（详见 <a href="#sub-11-9">11.9</a>）。业主点击动态后的操作权限依其业务身份而定（详见 <a href="#sub-13-2">13.2</a>），并非整体「无操作权限」。</p>
             </div>
         </div>
 
@@ -5810,10 +5867,10 @@
                             <td>关闭预览页</td>
                         </tr>
                         <tr>
-                            <td>导航栏菜单</td>
-                            <td>⋯ 按钮</td>
-                            <td>点击</td>
-                            <td>弹出操作菜单（仅含"项目信息"项，无分享功能）</td>
+                            <td>微信原生胶囊</td>
+                            <td>⋯○</td>
+                            <td>点击 ⋯</td>
+                            <td>调起微信系统菜单（由微信客户端提供，业务侧无自定义分享菜单）；○ 为关闭（退出小程序 / 返回桌面）</td>
                         </tr>
                     </tbody>
                 </table>
@@ -6132,11 +6189,19 @@
                         <div class="info-value">项目详情页快捷导航"资料"</div>
                     </div>
                 </div>
+                <div class="note" style="margin-top: 16px;">
+                    <div class="note-title">与服务端一致</div>
+                    <p>业主端项目资料页的<strong>页面结构、文件类型筛选、分组列表、权限控制</strong>与服务方完全一致（两端原型已同步）。上述共享规格不再在本章重复展开，请参考"<a href="#sub-8-2" style="color: var(--primary-color);">8.2 页面结构</a>" / "<a href="#sub-8-3" style="color: var(--primary-color);">8.3 文件类型筛选规格</a>" / "<a href="#sub-8-4" style="color: var(--primary-color);">8.4 文件类型规格</a>" / "<a href="#sub-8-5" style="color: var(--primary-color);">8.5 权限控制规则</a>"。以下仅列业主端差异。</p>
+                </div>
             </div>
 
             <div class="subsection" id="sub-17-2">
-                <div class="subsection-title">17.2 功能说明</div>
-                <p>业主端项目资料页为只读模式，可查看项目相关资料文件，但不支持上传、编辑、删除操作。</p>
+                <div class="subsection-title">17.2 业主端差异说明</div>
+                <ul>
+                    <li><strong>只读模式</strong>：业主端为只读，可查看项目相关资料文件，但不支持上传、编辑、删除操作（与服务方存在上传/管理权限的差异，具体文件增删改接口见"<a href="#sub-21-5" style="color: var(--primary-color);">21.5 项目资料接口</a>"）。</li>
+                    <li><strong>权限隔离一致</strong>：无权限合同（如木工合同）同样整组标灰 + 🔒 + 灰色「无权限」badge，组内文件行加密态展示，点击提示「无权限查看此合同资料」，与服务端同一套权限表现（详见 <a href="#sub-8-5" style="color: var(--primary-color);">8.5 权限控制规则</a>）。</li>
+                    <li><strong>权限说明悬浮一致</strong>：右下角 ⚠️「权限说明」气泡文案与交互同服务端。</li>
+                </ul>
             </div>
         </div>
 
@@ -6851,14 +6916,14 @@
                             <td>动态内容（content）</td>
                             <td>String(500)</td>
                             <td><span class="tag tag-system">系统生成</span></td>
-                            <td>由生成规则模板生成（如「完成了{阶段名称}{任务名称}的施工」「{合同名称}签约完成」）；与 description 同源</td>
+                            <td>由生成规则模板生成（如「完成了{阶段名称}{任务名称}的施工」（任务提交）、「{阶段名称}{任务名称} 已完成」（任务完成）、「{合同名称}签约完成」（合同签约））；与 description 同源</td>
                             <td>—</td>
                         </tr>
                         <tr>
                             <td>来源（source）</td>
                             <td>String(200)</td>
                             <td><span class="tag tag-optional">选填</span></td>
-                            <td>任务类：所属合同 / 服务名称；合同类：所属项目 / 合同名称</td>
+                            <td>任务类：所属合同 / 服务名称；合同类：所属项目 / 合同名称（合同类 source 的合同名称，其所属合同类型须与 <a href="PRD-完整文档.html" target="_blank">PRD-完整文档</a>「合同类型」8 类一致：基础施工服务合同 / 设计服务合同 / 拆除·水电·木作·泥瓦工·油漆工班组服务合同 / 小零工服务合同）</td>
                             <td>—</td>
                         </tr>
                         <tr>
@@ -6872,7 +6937,7 @@
                             <td>角色（role）/ 角色样式（roleClass）</td>
                             <td>String</td>
                             <td><span class="tag tag-system">系统填充</span></td>
-                            <td>操作人角色（监理 / 工长 / 施工 / 设计 / 业主）</td>
+                            <td>操作人角色（项目总 / 设计师 / 工长 / 拆除工 / 水电工 / 木作工 / 泥瓦工 / 油漆工 / 小零工 / 业主），须与 <a href="PRD-完整文档.html" target="_blank">PRD-完整文档</a>「用户角色定义」一致</td>
                             <td>—</td>
                         </tr>
                         <tr>

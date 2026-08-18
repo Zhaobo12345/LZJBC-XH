@@ -44,23 +44,6 @@
     }
     
     /**
-     * 分享报告
-     */
-    function shareReport() {
-        if (navigator.share) {
-            navigator.share({
-                title: '施工任务报告单',
-                text: '任务已完成，点击查看详细报告',
-                url: window.location.href
-            }).catch(err => {
-                console.log('分享取消', err);
-            });
-        } else {
-            showCustomToast('分享功能暂不支持，请手动复制链接');
-        }
-    }
-    
-    /**
      * 显示提示
      */
     function showCustomToast(message) {
@@ -115,7 +98,6 @@
     window.toggleActionMenu = toggleActionMenu;
     window.closeActionMenu = closeActionMenu;
     window.downloadReport = downloadReport;
-    window.shareReport = shareReport;
     
     // 页面加载完成后初始化
     document.addEventListener('DOMContentLoaded', init);

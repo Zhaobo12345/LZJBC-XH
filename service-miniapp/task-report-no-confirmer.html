@@ -14,41 +14,57 @@
            原页面 contract-detail.html / task-report.html 保持原样，未做任何改动
            ============================================================ */
 
-        /* 微信原生胶囊占位（不可点击，仅标注真机上由微信渲染的位置） */
-            /* 微信原生胶囊占位（样式参考真机效果，由微信客户端实际渲染） */
-    .nav-bar .native-capsule {
-        display: inline-flex;
-        align-items: center;
-        justify-content: space-between;
-        min-width: 56px;
-        height: 28px;
-        padding: 0 10px;
-        border: 1px solid rgba(0, 0, 0, 0.08);
-        border-radius: 14px;
-        background: rgba(255, 255, 255, 0.7);
-        color: rgba(0, 0, 0, 0.6);
-        font-size: 12px;
-        line-height: 1;
-        user-select: none;
-        box-sizing: border-box;
-    }
-    .nav-bar .native-capsule .nc-left,
-    .nav-bar .native-capsule .nc-right {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        flex: 1;
-        min-width: 16px;
-    }
-    .nav-bar .native-capsule .nc-right {
-        font-size: 10px;
-    }
-    .nav-bar .native-capsule .nc-divider {
-        width: 1px;
-        height: 14px;
-        background: rgba(0, 0, 0, 0.1);
-        margin: 0 4px;
-    }
+/* 微信原生胶囊占位（样式参考真机效果，由微信客户端实际渲染） */
+.nav-bar .native-capsule {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 56px;
+    height: 28px;
+    padding: 0 10px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.7);
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 12px;
+    line-height: 1;
+    user-select: none;
+    box-sizing: border-box;
+}
+.nav-bar .native-capsule .nc-left,
+.nav-bar .native-capsule .nc-right {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-width: 16px;
+}
+.nav-bar .native-capsule .nc-right {
+    font-size: 10px;
+}
+.nav-bar .native-capsule .nc-divider {
+    width: 1px;
+    height: 14px;
+    background: rgba(0, 0, 0, 0.1);
+    margin: 0 4px;
+}
+        .nav-bar .native-capsule .nc-left,
+        .nav-bar .native-capsule .nc-right {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            min-width: 16px;
+        }
+        .nav-bar .native-capsule .nc-right {
+            font-size: 10px;
+        }
+        .nav-bar .native-capsule .nc-divider {
+            width: 1px;
+            height: 14px;
+            background: rgba(0, 0, 0, 0.1);
+            margin: 0 4px;
+        }
 
         /* 页内文字版「更多」按钮 —— 位于内容区，不在导航栏，避开仿冒界面风险 */
         .content-toolbar {
@@ -159,6 +175,7 @@
         }
 
         .report-actions .report-btn:active { opacity: 0.85; }
+
     </style>
 </head>
 <body>
@@ -195,7 +212,7 @@
                 
                 <!-- 编号和日期 -->
                 <div class="document-meta">
-                    <div class="meta-item">编号：HT-2024-001-001</div>
+                    <div class="meta-item">编号：HT-2024-001-002</div>
                     <div class="meta-item">日期：2024年01月25日</div>
                 </div>
                 
@@ -304,104 +321,9 @@
                     </div>
                 </div>
                 
-                <!-- 分隔线 -->
-                <div class="divider"></div>
-                
-                <!-- 确认记录 -->
-                <div class="section">
-                    <div class="section-title">六、确认记录</div>
-                    <div class="confirm-table">
-                        <div class="table-row header">
-                            <div class="table-cell">确认人</div>
-                            <div class="table-cell">角色</div>
-                            <div class="table-cell">确认结果</div>
-                            <div class="table-cell">确认时间</div>
-                        </div>
-                        <div class="table-row">
-                            <div class="table-cell">张三</div>
-                            <div class="table-cell">项目总</div>
-                            <div class="table-cell result-pass">合格</div>
-                            <div class="table-cell">01-25 15:20</div>
-                        </div>
-                        <div class="table-row">
-                            <div class="table-cell">王五</div>
-                            <div class="table-cell">业主</div>
-                            <div class="table-cell result-pass">合格</div>
-                            <div class="table-cell">01-25 16:30</div>
-                        </div>
-                        <div class="table-row">
-                            <div class="table-cell">赵六</div>
-                            <div class="table-cell">设计师</div>
-                            <div class="table-cell result-pass">合格</div>
-                            <div class="table-cell">01-25 17:00</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 分隔线 -->
-                <div class="divider"></div>
-                
-                <!-- 确认人评价及附件 -->
-                <div class="section">
-                    <div class="section-title">七、确认人评价及附件</div>
-                    
-                    <!-- 确认人1 -->
-                    <div class="evaluator-block">
-                        <div class="evaluation-header">
-                            <span class="evaluator-name">张三</span>
-                            <span class="evaluator-role">项目总</span>
-                            <span class="eval-rating">★★★★☆</span>
-                        </div>
-                        <div class="evaluation-content">穿线工作符合标准，绝缘测试数据合格。</div>
-                        <div class="evaluator-media">
-                            <div class="media-label">确认人上传的图片：</div>
-                            <div class="photo-grid small">
-                                <div class="photo-item">
-                                    <div class="photo-placeholder">📷 确认照片1</div>
-                                </div>
-                                <div class="photo-item">
-                                    <div class="photo-placeholder">📷 确认照片2</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="evaluation-time">2024-01-25 15:20</div>
-                    </div>
-                    
-                    <!-- 确认人2 -->
-                    <div class="evaluator-block">
-                        <div class="evaluation-header">
-                            <span class="evaluator-name">王五</span>
-                            <span class="evaluator-role">业主</span>
-                            <span class="eval-no-rating">未评价</span>
-                        </div>
-                        <div class="evaluation-content no-content">暂无评价内容</div>
-                        <div class="evaluation-time">2024-01-25 16:30</div>
-                    </div>
-                    
-                    <!-- 确认人3 -->
-                    <div class="evaluator-block">
-                        <div class="evaluation-header">
-                            <span class="evaluator-name">赵六</span>
-                            <span class="evaluator-role">设计师</span>
-                            <span class="eval-rating">★★★★★</span>
-                        </div>
-                        <div class="evaluation-content">符合设计要求，确认。</div>
-                        <div class="evaluator-media">
-                            <div class="media-label">确认人上传的视频：</div>
-                            <div class="photo-grid small">
-                                <div class="photo-item video">
-                                    <div class="video-icon">▶</div>
-                                    <div class="video-duration">0:08</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="evaluation-time">2024-01-25 17:00</div>
-                    </div>
-                </div>
-                
                 <!-- 底部说明 -->
                 <div class="document-footer">
-                    <div class="footer-text">报告生成时间：2024年01月25日 17:05:30</div>
+                    <div class="footer-text">报告生成时间：2024年01月25日 17:00:00</div>
                 </div>
             </div>
         </div>

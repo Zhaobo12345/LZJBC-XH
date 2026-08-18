@@ -138,7 +138,7 @@
     </style>
 
     <style>
-        /* 报告操作栏：「下载报告 / 分享报告」由导航栏菜单平移为底部并排按钮 */
+        /* 报告操作栏：「下载报告」由导航栏菜单平移为底部按钮 */
         .content-area { height: calc(100% - 88px - 62px); }
 
         .report-actions {
@@ -423,11 +423,25 @@
         </div>
         <!-- 报告操作：由导航栏 ⋯ 菜单平移为底部并排按钮 -->
         <div class="report-actions">
-            <div class="report-btn" onclick="downloadReport()"><span>📥</span><span>下载报告</span></div>
-            <div class="report-btn primary" onclick="shareReport()"><span>📤</span><span>分享报告</span></div>
+            <div class="report-btn primary" onclick="downloadReport()"><span>📥</span><span>下载报告</span></div>
+        </div>
+    </div>
+    
+    <div class="page-nav">
+        <div class="page-nav-title">原型导航</div>
+        <a href="home.html" class="page-nav-item">首页</a>
+        <a href="project-list.html" class="page-nav-item">项目列表</a>
+        <a href="project-detail.html" class="page-nav-item">项目详情</a>
+        <a href="task-detail.html" class="page-nav-item">任务详情</a>
+        <a href="task-report.html" class="page-nav-item active">任务报告单</a>
+        <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #E8E8E8;">
+            <div class="page-nav-title">报告单场景</div>
+            <a href="task-report.html" class="page-nav-item">报告单-有确认人</a>
+            <a href="task-report-no-confirmer.html" class="page-nav-item">报告单-无确认人任务</a>
         </div>
     </div>
     
     <script src="js/task-report.js"></script>
+    <script src="js/page-nav.js"></script>
 </body>
 </html>

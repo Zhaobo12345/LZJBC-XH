@@ -172,6 +172,76 @@
             font-size: 14px;
         }
 
+        .todo-item.invalidated {
+            opacity: 0.7;
+            border-left: 3px solid var(--border-color);
+            cursor: default;
+        }
+
+        .todo-item.invalidated:hover {
+            background-color: transparent;
+        }
+
+        .todo-item.invalidated .item-icon {
+            background: #F0F0F0 !important;
+            color: #BFBFBF !important;
+        }
+
+        .todo-item.invalidated .task-tag {
+            background-color: #F0F0F0 !important;
+            color: #8C8C8C !important;
+        }
+
+        .todo-item.invalidated .item-title {
+            color: var(--text-secondary);
+        }
+
+        .todo-item.invalidated .item-status {
+            background-color: #F0F0F0 !important;
+            color: #8C8C8C !important;
+        }
+
+        /* 失效待办弹窗（在手机框内居中） */
+        .todo-modal-mask {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        .todo-modal {
+            width: 78%;
+            max-width: 280px;
+            background: #FFFFFF;
+            border-radius: 14px;
+            padding: 22px 18px 18px;
+            text-align: center;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+        }
+        .todo-modal-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #262626;
+            margin-bottom: 10px;
+        }
+        .todo-modal-desc {
+            font-size: 13px;
+            color: #595959;
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+        .todo-modal-btn {
+            display: inline-block;
+            min-width: 96px;
+            padding: 8px 16px;
+            background: var(--primary-color, #1890FF);
+            color: #FFFFFF;
+            border-radius: 18px;
+            font-size: 14px;
+            cursor: pointer;
+        }
     </style>
 <style>
 /* 微信原生胶囊占位（样式参考真机效果，由微信客户端实际渲染） */
@@ -247,14 +317,14 @@
         
         <div class="page-content">
             <div class="todo-filter-bar">
-                <div class="todo-filter-btn active" onclick="filterTodo('all', this)">
-                    全部 <span class="badge">14</span>
-                </div>
-                <div class="todo-filter-btn" onclick="filterTodo('pending', this)">
-                    待处理 <span class="badge">11</span>
+                <div class="todo-filter-btn active" onclick="filterTodo('pending', this)">
+                    待处理 <span class="badge">14</span>
                 </div>
                 <div class="todo-filter-btn" onclick="filterTodo('completed', this)">
                     已处理 <span class="badge">3</span>
+                </div>
+                <div class="todo-filter-btn" onclick="filterTodo('invalidated', this)">
+                    已失效 <span class="badge">3</span>
                 </div>
             </div>
 
@@ -314,17 +384,6 @@
                             <div class="item-meta">木工工作组 · 待上传签约文件</div>
                         </div>
                         <div class="item-status" style="background-color: #F9F0FF; color: #722ED1;">待签约</div>
-                    </div>
-                    <div class="todo-item" id="todoInviteGroup" data-status="pending" onclick="location.href='invite-join.html?group=强电施工组'">
-                        <div class="item-icon" style="background: linear-gradient(135deg, #FA8C16 0%, #FFA940 100%);">👥</div>
-                        <div class="item-content">
-                            <div class="item-title">
-                                邀请加入强电施工组
-                                <span class="task-tag" style="background-color: #FFF7E6; color: #FA8C16;">架构</span>
-                            </div>
-                            <div class="item-meta">水电工作组 · 邀请李四加入</div>
-                        </div>
-                        <div class="item-status" style="background-color: #FFF7E6; color: #FA8C16;">待处理</div>
                     </div>
                     <div class="todo-item" data-status="pending" onclick="location.href='task-detail.html?status=pending'">
                         <div class="item-icon contract">🟢</div>
@@ -390,7 +449,51 @@
                             </div>
                             <div class="item-meta">水电工作组 · 待确认变更内容</div>
                         </div>
-                        <div class="item-status" style="background-color: #FFF7E6; color: #FA8C16;">待确认</div>
+                                <div class="item-status" style="background-color: #FFF7E6; color: #FA8C16;">待确认</div>
+                    </div>
+                    <div class="todo-item" data-status="pending" onclick="location.href='contract-detail.html?status=change_signing_wait'">
+                        <div class="item-icon" style="background: linear-gradient(135deg, #FA8C16 0%, #FFA940 100%);">📝</div>
+                        <div class="item-content">
+                            <div class="item-title">
+                                水电合同变更签约
+                                <span class="task-tag" style="background-color: #FFF7E6; color: #FA8C16;">变更</span>
+                            </div>
+                            <div class="item-meta">水电工作组 · 待上传变更签约附件</div>
+                        </div>
+                        <div class="item-status" style="background-color: #FFF7E6; color: #FA8C16;">待签约</div>
+                    </div>
+                    <div class="todo-item" data-status="pending" onclick="location.href='contract-detail.html?status=change_platform_rejected'">
+                        <div class="item-icon" style="background: linear-gradient(135deg, #FA8C16 0%, #FFA940 100%);">🔁</div>
+                        <div class="item-content">
+                            <div class="item-title">
+                                水电合同变更修改
+                                <span class="task-tag" style="background-color: #FFF7E6; color: #FA8C16;">变更</span>
+                            </div>
+                            <div class="item-meta">水电工作组 · 待重新发起变更</div>
+                        </div>
+                        <div class="item-status" style="background-color: #FFF7E6; color: #FA8C16;">待处理</div>
+                    </div>
+                    <div class="todo-item" data-status="pending" onclick="location.href='contract-detail.html?status=platform_rejected'">
+                        <div class="item-icon" style="background: linear-gradient(135deg, #13C2C2 0%, #36CFC9 100%);">🔁</div>
+                        <div class="item-content">
+                            <div class="item-title">
+                                水电分包合同修改重提
+                                <span class="task-tag" style="background-color: #E6FFFB; color: #13C2C2;">审核</span>
+                            </div>
+                            <div class="item-meta">水电工作组 · 待修改重新提交</div>
+                        </div>
+                        <div class="item-status" style="background-color: #E6FFFB; color: #13C2C2;">待处理</div>
+                    </div>
+                    <div class="todo-item" data-status="pending" onclick="location.href='worker-sign-upload.html'">
+                        <div class="item-icon" style="background: linear-gradient(135deg, #13C2C2 0%, #36CFC9 100%);">📝</div>
+                        <div class="item-content">
+                            <div class="item-title">
+                                泥瓦工班组服务合同签约
+                                <span class="task-tag" style="background-color: #E6FFFB; color: #13C2C2;">合同</span>
+                            </div>
+                            <div class="item-meta">泥瓦工程 · 待上传签约文件</div>
+                        </div>
+                        <div class="item-status" style="background-color: #E6FFFB; color: #13C2C2;">待签约</div>
                     </div>
                     <div class="todo-item" data-status="confirming" onclick="location.href='task-detail.html?status=confirming'">
                         <div class="item-icon contract">🔵</div>
@@ -413,6 +516,39 @@
                             <div class="item-meta">木工工作组 · 执行人：赵六</div>
                         </div>
                         <div class="item-status confirming">待确认</div>
+                    </div>
+                    <div class="todo-item invalidated" data-status="invalidated" onclick="onInvalidTodo('强电施工组 · 执行人已变更为孙工')">
+                        <div class="item-icon">执</div>
+                        <div class="item-content">
+                            <div class="item-title">
+                                卧室网线布线
+                                <span class="task-tag" style="background-color: #E6F7FF; color: #1890FF;">任务</span>
+                            </div>
+                            <div class="item-meta">强电施工组 · 执行人已变更为孙工</div>
+                        </div>
+                        <div class="item-status">已失效</div>
+                    </div>
+                    <div class="todo-item invalidated" data-status="invalidated" onclick="onInvalidTodo('泥瓦组 · 确认人已变更为周监理')">
+                        <div class="item-icon">确</div>
+                        <div class="item-content">
+                            <div class="item-title">
+                                卫浴防水验收
+                                <span class="task-tag" style="background-color: #E6F7FF; color: #1890FF;">任务</span>
+                            </div>
+                            <div class="item-meta">泥瓦组 · 确认人已变更为周监理</div>
+                        </div>
+                        <div class="item-status">已失效</div>
+                    </div>
+                    <div class="todo-item invalidated" data-status="invalidated" onclick="onInvalidTodo('水电组 · 甲方已变更')">
+                        <div class="item-icon">合</div>
+                        <div class="item-content">
+                            <div class="item-title">
+                                水电分包合同确认
+                                <span class="task-tag" style="background-color: #E6FFFB; color: #13C2C2;">合同</span>
+                            </div>
+                            <div class="item-meta">水电组 · 甲方已变更</div>
+                        </div>
+                        <div class="item-status">已失效</div>
                     </div>
                 </div>
             </div>
@@ -452,12 +588,12 @@
                 
                 let visible = false;
                 
-                if (type === 'all') {
-                    visible = true;
-                } else if (type === 'pending') {
-                    visible = itemStatus !== 'completed';
+                if (type === 'pending') {
+                    visible = (itemStatus === 'pending' || itemStatus === 'confirming');
                 } else if (type === 'completed') {
                     visible = itemStatus === 'completed';
+                } else if (type === 'invalidated') {
+                    visible = itemStatus === 'invalidated';
                 }
                 
                 item.style.display = visible ? 'flex' : 'none';
@@ -476,30 +612,40 @@
             }
         }
 
-        filterTodo('all', document.querySelector('.todo-filter-btn.active'));
+        filterTodo('pending', document.querySelector('.todo-filter-btn.active'));
+        updateTodoBadges();
 
-        // 「邀请加入强电施工组」闭环：若已接受/拒绝，移除该项并重算角标（不影响其他待办）
-        (function resolveGroupInvite() {
-            var KEY = 'lzj_group_invite_强电施工组';
-            var d = null;
-            try { d = localStorage.getItem(KEY); } catch (e) {}
-            if (!d) return;
-            var item = document.getElementById('todoInviteGroup');
-            if (item) item.remove();
+        function updateTodoBadges() {
             var items = document.querySelectorAll('#todoList .todo-item');
-            var all = items.length, pending = 0;
-            items.forEach(function (it) { if (it.dataset.status !== 'completed') pending++; });
-            var completed = all - pending;
+            var pending = 0, completed = 0, invalidated = 0;
+            items.forEach(function(it) {
+                var st = it.dataset.status;
+                if (st === 'pending' || st === 'confirming') pending++;
+                else if (st === 'completed') completed++;
+                else if (st === 'invalidated') invalidated++;
+            });
             var badges = document.querySelectorAll('.todo-filter-btn .badge');
             if (badges.length >= 3) {
-                badges[0].textContent = all;
-                badges[1].textContent = pending;
-                badges[2].textContent = completed;
+                badges[0].textContent = pending;
+                badges[1].textContent = completed;
+                badges[2].textContent = invalidated;
             }
-        })();
-        
-        
-        
+        }
+
+        function onInvalidTodo(reason) {
+            var frame = document.querySelector('.phone-frame');
+            if (!frame) return;
+            var mask = document.createElement('div');
+            mask.className = 'todo-modal-mask';
+            mask.innerHTML = '<div class="todo-modal"><div class="todo-modal-title">待办已失效</div><div class="todo-modal-desc">该待办已失效：' + reason + '，相关工作已由新指派方处理。</div><div class="todo-modal-btn">我知道了</div></div>';
+            mask.addEventListener('click', function (e) {
+                if (e.target === mask || e.target.classList.contains('todo-modal-btn')) {
+                    mask.remove();
+                }
+            });
+            frame.appendChild(mask);
+        }
+
         function closeActionMenu() {
             const actionMenu = document.getElementById('actionMenu');
             if (actionMenu) {

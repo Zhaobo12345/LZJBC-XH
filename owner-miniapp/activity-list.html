@@ -516,11 +516,16 @@
             height: 14px;
             font-weight: 500;
         }
-        .activity-role-tag.supervisor { background-color: #E6F7FF; color: #1890FF; }
-        .activity-role-tag.foreman { background-color: #F6FFED; color: #52C41A; }
-        .activity-role-tag.worker { background-color: #FFF7E6; color: #FA8C16; }
+        .activity-role-tag.project-manager { background-color: #E6F7FF; color: #1890FF; }
         .activity-role-tag.designer { background-color: #F9F0FF; color: #722ED1; }
-        .activity-role-tag.owner { background-color: #FFF1F0; color: #F5222D; }
+        .activity-role-tag.foreman { background-color: #F6FFED; color: #52C41A; }
+        .activity-role-tag.demolish-worker { background-color: #FFF1F0; color: #F5222D; }
+        .activity-role-tag.plumbing-worker { background-color: #E6FFFB; color: #13C2C2; }
+        .activity-role-tag.carpentry-worker { background-color: #FFF7E6; color: #FA8C16; }
+        .activity-role-tag.tiling-worker { background-color: #FFF0F6; color: #C41D7F; }
+        .activity-role-tag.painting-worker { background-color: #FCFABE; color: #D4B106; }
+        .activity-role-tag.oddjob-worker { background-color: #F0F5FF; color: #2F54EB; }
+        .activity-role-tag.owner { background-color: #FFF2E8; color: #FA541C; }
 
         /* ===== 动态阶段标签（与项目详情页（进行中-新版）保持一致） ===== */
         .activity-stage-tag {
@@ -605,7 +610,7 @@
         <div class="app-modal" id="permissionModal">
             <div class="modal-box">
                 <div class="modal-title">无查看权限</div>
-                <div class="modal-content" id="permissionContent">您没有权限查看该合同记录，请联系项目管理人员获取权限。</div>
+                <div class="modal-content" id="permissionContent">您没有权限查看该动态记录，请联系项目管理人员获取权限。</div>
                 <div class="modal-actions">
                     <button class="modal-btn confirm" onclick="closePermissionModal()">知道了</button>
                 </div>
@@ -637,16 +642,16 @@
                 id: 1,
                 date: getDateString(0),
                 dateLabel: '今天',
-                user: '李监理',
-                avatar: '李',
+                user: '陈庄',
+                avatar: '陈',
                 avatarColor: 'linear-gradient(135deg, #1890FF 0%, #40A9FF 100%)',
                 time: '10:30',
-                role: '监理',
-                roleClass: 'supervisor',
+                role: '项目总',
+                roleClass: 'project-manager',
                 type: 'task',
                 typeLabel: '任务确认',
                 content: '确认了<span class="activity-stage-tag plumbing">水电</span>开槽布线',
-                source: '水电分包合同',
+                source: '水电班组服务合同',
                 hasMedia: true,
                 mediaCount: 3,
                 hasPermission: true
@@ -664,7 +669,7 @@
                 type: 'task',
                 typeLabel: '任务提交',
                 content: '完成了<span class="activity-stage-tag plumbing">水电</span>开槽布线 的施工',
-                source: '水电分包合同',
+                source: '水电班组服务合同',
                 hasMedia: true,
                 mediaCount: 2,
                 hasPermission: true
@@ -673,16 +678,16 @@
                 id: 3,
                 date: getDateString(0),
                 dateLabel: '今天',
-                user: '王施工',
+                user: '王水电',
                 avatar: '王',
-                avatarColor: 'linear-gradient(135deg, #FA8C16 0%, #FFA940 100%)',
+                avatarColor: 'linear-gradient(135deg, #13C2C2 0%, #36CFC9 100%)',
                 time: '08:30',
-                role: '施工',
-                roleClass: 'worker',
+                role: '水电工',
+                roleClass: 'plumbing-worker',
                 type: 'task',
                 typeLabel: '任务完成',
-                content: '完成了<span class="activity-stage-tag plumbing">水电</span>水电改造 的施工',
-                source: '水电分包合同',
+                content: '水电改造 已完成',
+                source: '水电班组服务合同',
                 hasMedia: false,
                 mediaCount: 0,
                 hasPermission: true
@@ -695,7 +700,7 @@
                 avatar: '陈',
                 avatarColor: 'linear-gradient(135deg, #722ED1 0%, #9254DE 100%)',
                 time: '08:00',
-                role: '设计',
+                role: '设计师',
                 roleClass: 'designer',
                 type: 'contract',
                 typeLabel: '合同签约',
@@ -709,16 +714,16 @@
                 id: 5,
                 date: getDateString(1),
                 dateLabel: '昨天',
-                user: '李监理',
-                avatar: '李',
+                user: '陈庄',
+                avatar: '陈',
                 avatarColor: 'linear-gradient(135deg, #1890FF 0%, #40A9FF 100%)',
                 time: '16:20',
-                role: '监理',
-                roleClass: 'supervisor',
+                role: '项目总',
+                roleClass: 'project-manager',
                 type: 'task',
                 typeLabel: '任务确认',
                 content: '确认了<span class="activity-stage-tag plumbing">水电</span>材料进场',
-                source: '水电分包合同',
+                source: '水电班组服务合同',
                 hasMedia: false,
                 mediaCount: 0,
                 hasPermission: true
@@ -727,16 +732,16 @@
                 id: 6,
                 date: getDateString(1),
                 dateLabel: '昨天',
-                user: '项目总',
-                avatar: '项',
-                avatarColor: 'linear-gradient(135deg, #722ED1 0%, #9254DE 100%)',
+                user: '张工长',
+                avatar: '张',
+                avatarColor: 'linear-gradient(135deg, #52C41A 0%, #73D13D 100%)',
                 time: '14:00',
                 role: '工长',
                 roleClass: 'foreman',
                 type: 'contract',
                 typeLabel: '合同签约',
-                content: '签署了 水电分包合同',
-                source: '水电分包合同',
+                content: '水电班组服务合同签约完成',
+                source: '水电班组服务合同',
                 hasMedia: true,
                 mediaCount: 1,
                 hasPermission: true
@@ -745,16 +750,16 @@
                 id: 7,
                 date: getDateString(1),
                 dateLabel: '昨天',
-                user: '王工头',
-                avatar: '王',
-                avatarColor: 'linear-gradient(135deg, #13C2C2 0%, #36CFC9 100%)',
+                user: '赵泥瓦',
+                avatar: '赵',
+                avatarColor: 'linear-gradient(135deg, #C41D7F 0%, #EB2F96 100%)',
                 time: '10:20',
-                role: null,
-                roleClass: null,
+                role: '泥瓦工',
+                roleClass: 'tiling-worker',
                 type: 'contract',
-                typeLabel: '合同变更',
-                content: '泥瓦分包合同变更成功',
-                source: '泥瓦分包合同',
+                typeLabel: '合同签约',
+                content: '泥瓦工班组服务合同签约完成',
+                source: '泥瓦工班组服务合同',
                 hasMedia: false,
                 mediaCount: 0,
                 hasPermission: false
@@ -778,21 +783,21 @@
                 hasPermission: true
             },
             {
-                id: 10,
-                date: getDateString(5),
-                dateLabel: '5天前',
-                user: '张经理',
-                avatar: '张',
-                avatarColor: 'linear-gradient(135deg, #FA8C16 0%, #FFA940 100%)',
-                time: '16:00',
-                role: '工长',
-                roleClass: 'foreman',
-                type: 'contract',
-                typeLabel: '合同确认',
-                content: '确认了 木工分包合同 的签署文件',
-                source: '木工分包合同',
-                hasMedia: true,
-                mediaCount: 2,
+                id: 9,
+                date: getDateString(3),
+                dateLabel: '3天前',
+                user: '陈庄',
+                avatar: '陈',
+                avatarColor: 'linear-gradient(135deg, #1890FF 0%, #40A9FF 100%)',
+                time: '15:10',
+                role: '项目总',
+                roleClass: 'project-manager',
+                type: 'task',
+                typeLabel: '任务驳回',
+                content: '驳回了<span class="activity-stage-tag carpentry">木作</span>柜体安装',
+                source: '木作班组服务合同',
+                hasMedia: false,
+                mediaCount: 0,
                 hasPermission: true
             },
             {
@@ -803,7 +808,7 @@
                 avatar: '陈',
                 avatarColor: 'linear-gradient(135deg, #722ED1 0%, #9254DE 100%)',
                 time: '11:40',
-                role: '设计',
+                role: '设计师',
                 roleClass: 'designer',
                 type: 'contract',
                 typeLabel: '合同签约',
@@ -1062,7 +1067,7 @@
 
         function showPermissionModal() {
             document.getElementById('permissionContent').textContent =
-                '您没有权限查看该合同记录，请联系项目管理人员获取权限。';
+                '您没有权限查看该动态记录，请联系项目管理人员获取权限。';
             document.getElementById('permissionModal').classList.add('show');
         }
 

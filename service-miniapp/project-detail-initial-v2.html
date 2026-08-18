@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>家装平台小程序原型 - 项目详情（进行中-新版）</title>
+    <title>家装平台小程序原型 - 项目详情（初始-新版）</title>
     <link rel="stylesheet" href="common.css">
     <link rel="stylesheet" href="css/project-detail.css">
     <style>
-        /* 项目基本信息头部（参考上传图片效果：左「新家已开工 N 天」、右「面积户型」） */
+        /* 项目基本信息头部（参考上传图片效果：左「新家准备中」、右「面积户型」） */
         .project-basic-header {
             display: flex;
             align-items: center;
@@ -265,8 +265,7 @@
         .card { padding: 10px 12px; margin: 8px 10px; border-radius: 12px; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06); }
         .card .card-title { margin-bottom: 8px; font-size: 14px; font-weight: 600; }
 
-        /* 5. 待办事项：默认 2 条，行距舒适 */
-        .todo-content .todo-item:nth-child(n+3) { display: none; }
+        /* 5. 待办事项：初始态为空，行距舒适 */
         .todo-item { padding: 7px 8px; margin-bottom: 4px; }
         .todo-item .icon { width: 26px; height: 26px; font-size: 12px; margin-right: 8px; }
         .todo-item .title { font-size: 13px; }
@@ -283,11 +282,6 @@
         .card.contract-half .contract-stat { flex: 1; flex-direction: column; align-items: center; }
         .card.contract-half .contract-stat .value { font-size: 18px; }
         .card.contract-half .contract-stat .label { font-size: 11px; margin-top: 2px; }
-        .card.contract-half .contract-list.show { max-height: 110px; overflow-y: auto; }
-        .card.contract-half .contract-item { padding: 5px 0; }
-        .card.contract-half .contract-item .name { font-size: 13px; }
-        .card.contract-half .contract-item .meta { font-size: 11px; margin-top: 1px; }
-        .card.contract-half .contract-item .percent { font-size: 13px; }
         /* 任务统计：3 项横排（全宽，icon 在上、文字居中） */
         .card.task-half .task-stats { display: flex; flex-direction: row; gap: 8px; }
         .card.task-half .task-stat-item { flex: 1; flex-direction: column; align-items: center; padding: 6px 4px; }
@@ -313,11 +307,7 @@
         .contract-half .card-title .badge,
         .task-half .card-title .badge { display: none; }
 
-        /* 9. 色彩优先级系统：待办紧急度左侧色条 + 卡片标题品牌锚点 */
-        .todo-item { border-left: 3px solid transparent; }
-        .todo-item:has(.status.urgent) { border-left-color: #FF4D4F; }
-        .todo-item:has(.status.pending) { border-left-color: #FA8C16; }
-        .todo-item:has(.status.in-progress) { border-left-color: #1890FF; }
+        /* 9. 色彩优先级系统：卡片标题品牌锚点；待办/动态为空时去除色条 */
         .card .card-title { position: relative; padding-left: 12px; }
         .card .card-title::before {
             content: '';
@@ -360,16 +350,56 @@
         .card.task-half .task-stat-item:nth-of-type(1) .value { color: var(--primary-color); }
         .card.task-half .task-stat-item:nth-of-type(2) .value { color: var(--warning-color); }
         .card.task-half .task-stat-item:nth-of-type(3) .value { color: var(--orange-color); }
-        /* 项目头部开工天数数字微光影 */
+        /* 项目头部数字微光影 */
         .project-basic-header .left-info .highlight { text-shadow: 0 1px 3px rgba(250, 140, 22, 0.25); }
-        /* 今日动态头像精致描边 */
-        .activity-avatar { box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85), 0 1px 4px rgba(0, 0, 0, 0.12); }
         /* 卡片按压反馈 */
         .card { transition: transform 0.15s ease, box-shadow 0.15s ease; }
         .card:active { transform: scale(0.99); }
         /* "更多"链接统一为弱化色，按压转品牌色 */
         .card .card-title .more { color: var(--text-tertiary); font-size: 11px; }
         .card .card-title .more:active { color: var(--primary-color); }
+
+        /* ===== 初始态空数据提示 ===== */
+        .empty-tip {
+            padding: 14px 4px;
+            text-align: center;
+            color: var(--text-tertiary, #B0B3B8);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        .empty-tip .emoji { font-size: 22px; display: block; margin-bottom: 4px; opacity: 0.7; }
+
+        /* 架构区初始引导提示 */
+        .level-hint {
+            font-size: 11px;
+            color: #874D00;
+            background: rgba(250, 140, 22, 0.08);
+            border: 1px dashed rgba(250, 140, 22, 0.35);
+            border-radius: 8px;
+            padding: 6px 10px;
+            margin: 0 12px 8px;
+        }
+        .level-hint b { color: var(--orange-color); }
+
+        /* 添加架构入口按钮（点击跳转到架构页，不新增创建交互） */
+        .add-arch-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            margin-top: 8px;
+            padding: 10px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(24, 144, 255, 0.25);
+        }
+        .add-arch-btn:active { transform: scale(0.98); }
     </style>
 <style>
 /* 微信原生胶囊占位（样式参考真机效果，由微信客户端实际渲染） */
@@ -434,65 +464,44 @@
 
         <div class="nav-bar">
             <div class="back">← 返回</div>
-            <div class="title centered">XX小区整体装修</div>
-            
-            
-        
+            <div class="title centered" id="navTitle">XX小区整体装修</div>
+
+
             <div class="actions"><div class="native-capsule" title="微信原生胶囊：由微信客户端渲染，开发者不可自定义其内容"><span class="nc-left">⋯</span><span class="nc-divider"></span><span class="nc-right">○</span></div></div>
         </div>
-            
+
 
 
         <div class="page-content page-content--full" id="pageContent">
-            <div class="loading-overlay" id="loadingOverlay" style="display:none;">
+            <div class="loading-overlay" id="loadingOverlay" style="display:flex;">
                 <div class="loading-spinner"></div>
                 <div class="loading-text">加载中...</div>
             </div>
 
-            <!-- 项目基本信息（参考图片效果，置于最上方；整块可点击跳转项目信息页） -->
+            <!-- 项目基本信息（初始态：项目已创建、尚未开工；整块可点击跳转项目信息页；数据来自 localStorage.newProjectData） -->
             <div class="project-basic-header clickable" data-href="project-info.html">
-                <div class="left-info">
-                    新家已开工<span class="highlight">60</span>天
+                <div class="left-info" id="headerLeft">
+                    新家准备中
                 </div>
                 <div class="right-wrap">
-                    <div class="right-info">
+                    <div class="right-info" id="headerRight">
                         75.0m² 2室1厅
                     </div>
                     <span class="enter-arrow">›</span>
                 </div>
             </div>
 
-            <!-- 待办事项（与架构切换无联动，置于吸顶导航上方） -->
+            <!-- 待办事项（初始态：项目刚创建，暂无待办；与架构切换无联动，置于吸顶导航上方） -->
             <div class="card">
                 <div class="card-title">
                     <span>📋 待办事项</span>
-                    <span class="badge-wrap"><span class="badge" id="todoBadge">3</span></span>
-                    <span class="more" data-href="todo-list.html">查看全部 ></span>
+                    <span class="badge-wrap"><span class="badge" id="todoBadge">0</span></span>
+                    <span class="more" data-href="todo-list-empty.html">查看全部 ></span>
                 </div>
                 <div class="todo-content show" id="todoContent">
-                    <div class="todo-item" data-href="contract-detail.html?status=confirming_receiver">
-                        <div class="icon" style="background-color: #E6F7FF;">🔵</div>
-                        <div class="content">
-                            <div class="title">泥瓦工班组服务合同确认 <span class="task-tag contract">合同</span></div>
-                            <div class="desc">泥瓦工作组 | 待确认</div>
-                        </div>
-                        <div class="status urgent">待确认</div>
-                    </div>
-                    <div class="todo-item" data-href="contract-detail.html?status=signing">
-                        <div class="icon" style="background-color: #E6F7FF;">🔵</div>
-                        <div class="content">
-                            <div class="title">木作班组服务合同签约 <span class="task-tag contract">合同</span></div>
-                            <div class="desc">木工工作组 | 待签约</div>
-                        </div>
-                        <div class="status pending">待确认</div>
-                    </div>
-                    <div class="todo-item" data-href="task-detail.html?status=in_progress">
-                        <div class="icon" style="background-color: #FFF7E6;">🟡</div>
-                        <div class="content">
-                            <div class="title">吊顶安装 <span class="task-tag task">任务</span></div>
-                            <div class="desc">木工工作组 | 张三执行中</div>
-                        </div>
-                        <div class="status in-progress">执行中</div>
+                    <div class="empty-tip">
+                        <span class="emoji">🗒️</span>
+                        项目刚创建，暂无待办<br>完善信息、搭建架构后将自动生成
                     </div>
                 </div>
             </div>
@@ -501,19 +510,19 @@
             <div class="sticky-header" id="stickyHeader">
                 <div class="quick-nav" id="quickNav">
                     <div class="pin-btn" id="pinBtn">📌 固定</div>
-                    <div class="quick-nav-item" data-href="architecture.html">
+                    <div class="quick-nav-item" data-href="architecture-empty.html">
                         <div class="icon structure">🏗️</div>
                         <div class="label">架构</div>
                     </div>
-                    <div class="quick-nav-item" data-href="member.html">
+                    <div class="quick-nav-item" data-href="member-empty.html">
                         <div class="icon member">👥</div>
                         <div class="label">成员</div>
                     </div>
-                    <div class="quick-nav-item" data-href="project-files.html">
+                    <div class="quick-nav-item" data-href="project-files-empty.html">
                         <div class="icon file">📁</div>
                         <div class="label">资料</div>
                     </div>
-                    <div class="quick-nav-item" data-href="statement-list.html">
+                    <div class="quick-nav-item" data-href="statement-list-empty.html">
                         <div class="icon statement">💰</div>
                         <div class="label">对账单</div>
                     </div>
@@ -532,7 +541,7 @@
                     </div>
                 </div>
 
-                <!-- 架构选择区域（高度减半） -->
+                <!-- 架构选择区域（初始态：仅项目部，工作组数量为 0） -->
                 <div class="level-selector arch-half" id="levelSelector">
                     <div class="level-dropdown" id="levelDropdown">
                         <div class="current">
@@ -554,47 +563,21 @@
                             <div class="icon">🏢</div>
                             <div class="info">
                                 <div class="name">项目部</div>
-                                <div class="count">4个工作组 · 8份合同</div>
+                                <div class="count" id="projectDeptCount">0个工作组 · 0份合同</div>
                             </div>
                             <div class="check" style="visibility:visible;">✓</div>
-                        </div>
-                        <div class="level-option" data-level="水电工作组">
-                            <div class="icon">⚡</div>
-                            <div class="info">
-                                <div class="name">水电工作组</div>
-                                <div class="count">3个施工组 · 2份合同</div>
-                            </div>
-                            <div class="check" style="visibility:hidden;">✓</div>
-                        </div>
-                        <div class="level-option" data-level="泥瓦工作组">
-                            <div class="icon">⚡</div>
-                            <div class="info">
-                                <div class="name">泥瓦工作组</div>
-                                <div class="count">2个施工组 · 1份合同</div>
-                            </div>
-                            <div class="check" style="visibility:hidden;">✓</div>
-                        </div>
-                        <div class="level-option" data-level="木工工作组">
-                            <div class="icon">⚡</div>
-                            <div class="info">
-                                <div class="name">木工工作组</div>
-                                <div class="count">2个施工组 · 1份合同</div>
-                            </div>
-                            <div class="check" style="visibility:hidden;">✓</div>
-                        </div>
-                        <div class="level-option" data-level="油漆工作组">
-                            <div class="icon">⚡</div>
-                            <div class="info">
-                                <div class="name">油漆工作组</div>
-                                <div class="count">1个施工组 · 1份合同</div>
-                            </div>
-                            <div class="check" style="visibility:hidden;">✓</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 合同概览 + 任务统计（紧凑堆叠） -->
+            <!-- 初始态架构引导 + 添加架构入口 -->
+            <div class="level-hint">
+                项目刚创建 · 点击下方按钮开始搭建工作组与施工组
+                <button class="add-arch-btn" id="addArchBtn" data-href="architecture-empty.html">＋ 创建工作组 / 施工组</button>
+            </div>
+
+            <!-- 合同概览 + 任务统计（初始态：均为 0） -->
             <div class="stats-row">
             <div class="card contract-half">
                 <div class="card-title">
@@ -606,65 +589,47 @@
                 </div>
                 <div class="contract-summary">
                     <div class="contract-stat">
-                        <div class="value"><span class="current">6</span><span class="separator">/</span><span class="total">8</span></div>
+                        <div class="value"><span class="current">0</span><span class="separator">/</span><span class="total">0</span></div>
                         <div class="label">合同签约</div>
                     </div>
                     <div class="contract-stat">
-                        <div class="value"><span class="current">65</span><span class="total">%</span></div>
+                        <div class="value"><span class="current">0</span><span class="total">%</span></div>
                         <div class="label">总进度</div>
                     </div>
                 </div>
                 <div class="contract-list" id="contractList">
-                    <div style="margin-top: 2px; padding-top: 2px; border-top: 1px solid #E8E8E8;">
-                        <div class="contract-item" data-href="contract-detail.html?status=draft">
-                            <div class="info">
-                                <div class="name">水电班组服务合同</div>
-                                <div class="meta">水电工作组 | 金额：8万</div>
-                            </div>
-                            <div class="progress-wrap">
-                                <div class="percent">65%</div>
-                                <div class="bar"><div class="fill" style="width: 65%;"></div></div>
-                            </div>
-                        </div>
-                        <div class="contract-item" data-href="contract-detail.html?status=confirming_sender">
-                            <div class="info">
-                                <div class="name">泥瓦工班组服务合同</div>
-                                <div class="meta">泥瓦工作组 | 金额：12万</div>
-                            </div>
-                            <div class="progress-wrap">
-                                <div class="percent">30%</div>
-                                <div class="bar"><div class="fill" style="width: 30%;"></div></div>
-                            </div>
-                        </div>
+                    <div class="empty-tip">
+                        <span class="emoji">📄</span>
+                        暂无合同，前往「架构」创建工作组后可发起
                     </div>
                 </div>
             </div>
 
-            <!-- 任务统计（高度减半） -->
+            <!-- 任务统计（初始态：均为 0） -->
             <div class="card task-half">
                 <div class="card-title">
                     <span>📊 任务统计</span>
-                    <span class="more" data-href="task-list.html">查看全部 ></span>
+                    <span class="more" data-href="task-list-empty.html">查看全部 ></span>
                 </div>
                 <div class="task-stats">
                     <div class="task-stat-item">
                         <div class="icon-wrap all">📋</div>
                         <div class="info">
-                            <div class="value"><span class="current" id="overallCompleted">18</span><span class="separator">/</span><span class="total" id="overallTotal">24</span></div>
+                            <div class="value"><span class="current" id="overallCompleted">0</span><span class="separator">/</span><span class="total" id="overallTotal">0</span></div>
                             <div class="label">全部任务</div>
                         </div>
                     </div>
                     <div class="task-stat-item">
                         <div class="icon-wrap accept">⏳</div>
                         <div class="info">
-                            <div class="value" id="overallConfirming">3</div>
+                            <div class="value" id="overallConfirming">0</div>
                             <div class="label">确认中任务</div>
                         </div>
                     </div>
                     <div class="task-stat-item">
                         <div class="icon-wrap contract">▶</div>
                         <div class="info">
-                            <div class="value" id="overallInProgress">2</div>
+                            <div class="value" id="overallInProgress">0</div>
                             <div class="label">执行中任务</div>
                         </div>
                     </div>
@@ -672,71 +637,17 @@
             </div>
             </div>
 
-            <!-- 今日动态 -->
+            <!-- 今日动态（初始态：暂无动态） -->
             <div class="card">
                 <div class="card-title">
                     <span>📝 今日动态</span>
-                    <span class="more" data-href="activity-list.html">查看全部 ></span>
+                    <span class="more" data-href="activity-list-empty.html">查看全部 ></span>
                 </div>
                 <div class="activity-list" id="activityList">
-                    <div class="activity-item" data-href="task-detail.html">
-                        <div class="activity-header">
-                            <div class="activity-avatar" style="background: linear-gradient(135deg, #1890FF 0%, #40A9FF 100%);">陈</div>
-                            <div class="activity-info">
-                                <div class="activity-user">陈庄<span class="activity-role-tag project-manager">项目总</span></div>
-                                <div class="activity-time">01-15 10:30</div>
-                            </div>
-                        </div>
-                        <div class="activity-content">确认了<span class="activity-stage-tag plumbing">水电</span>开槽布线</div>
-                        <div class="activity-media">
-                            <div class="activity-media-item" style="background: url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=120&h=120&fit=crop') center/cover; border-radius: 6px;"></div>
-                            <div class="activity-media-item" style="background: url('https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=120&h=120&fit=crop') center/cover; border-radius: 6px;"></div>
-                            <div class="activity-media-item video" style="background: url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=120&h=120&fit=crop') center/cover; border-radius: 6px; position: relative;">
-                                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 24px; height: 24px; background: rgba(0,0,0,0.5); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 10px;">▶</div>
-                            </div>
-                        </div>
+                    <div class="empty-tip">
+                        <span class="emoji">📭</span>
+                        暂无动态，项目开工后将在此展示进展
                     </div>
-                    <div class="activity-item secondary" data-href="task-detail.html">
-                        <div class="activity-header">
-                            <div class="activity-avatar" style="background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%);">张</div>
-                            <div class="activity-info">
-                                <div class="activity-user">张工长<span class="activity-role-tag foreman">工长</span></div>
-                                <div class="activity-time">01-15 09:15</div>
-                            </div>
-                        </div>
-                        <div class="activity-content">完成了<span class="activity-stage-tag plumbing">水电</span>开槽布线 的施工</div>
-                        <div class="activity-media">
-                            <div class="activity-media-item" style="background: url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=120&h=120&fit=crop') center/cover; border-radius: 6px;"></div>
-                            <div class="activity-media-item" style="background: url('https://images.unsplash.com/photo-1585232351009-aa654f89dfed?w=120&h=120&fit=crop') center/cover; border-radius: 6px;"></div>
-                        </div>
-                    </div>
-                    <div class="activity-item hidden tertiary" data-href="task-detail.html">
-                        <div class="activity-header">
-                            <div class="activity-avatar" style="background: linear-gradient(135deg, #13C2C2 0%, #36CFC9 100%);">王</div>
-                            <div class="activity-info">
-                                <div class="activity-user">王水电<span class="activity-role-tag plumbing-worker">水电工</span></div>
-                                <div class="activity-time">01-15 08:30</div>
-                            </div>
-                        </div>
-                        <div class="activity-content">水电改造 已完成</div>
-                    </div>
-                    <div class="activity-item hidden quaternary" data-href="contract-detail.html">
-                        <div class="activity-header">
-                            <div class="activity-avatar" style="background: linear-gradient(135deg, #722ED1 0%, #9254DE 100%);">陈</div>
-                            <div class="activity-info">
-                                <div class="activity-user">陈设计<span class="activity-role-tag designer">设计师</span></div>
-                                <div class="activity-time">01-15 08:00</div>
-                            </div>
-                        </div>
-                        <div class="activity-content">设计服务合同签约完成</div>
-                        <div class="activity-media">
-                            <div class="activity-media-item" style="background: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=120&h=120&fit=crop') center/cover; border-radius: 6px;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="activity-more-btn" id="activityMoreBtn">
-                    <span id="activityMoreText">展开更多</span>
-                    <span class="arrow" id="activityMoreArrow">▼</span>
                 </div>
             </div>
 
@@ -753,6 +664,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 
     <div class="page-nav">
@@ -760,8 +672,8 @@
         <a href="home.html" class="page-nav-item">首页</a>
         <a href="project-list.html" class="page-nav-item">项目列表</a>
         <a href="project-detail.html" class="page-nav-item">项目详情（进行中）</a>
-        <a href="project-detail-ongoing-v2.html" class="page-nav-item active">项目详情（进行中-新版）</a>
-        <a href="project-detail-initial-v2.html" class="page-nav-item">项目详情（初始-新版）</a>
+        <a href="project-detail-ongoing-v2.html" class="page-nav-item">项目详情（进行中-新版）</a>
+        <a href="project-detail-initial-v2.html" class="page-nav-item active">项目详情（初始-新版）</a>
         <a href="project-detail-completed.html" class="page-nav-item">项目详情（已完成）</a>
         <a href="project-detail-completed-v2.html" class="page-nav-item">项目详情（已完成-新版）</a>
         <a href="project-info.html" class="page-nav-item">项目信息</a>
@@ -798,6 +710,33 @@
             var activityExpanded = false;
             var userManualExpand = false;
             var lastScrollTop = 0;
+
+            // ===== 初始项目详情页：读取 localStorage.newProjectData 填充演示数据（PRD §3.9） =====
+            function loadInitialData() {
+                var data = null;
+                try { data = JSON.parse(localStorage.getItem('newProjectData')); } catch (e) { data = null; }
+                if (!data) data = {};
+
+                var navTitle = document.getElementById('navTitle');
+                if (navTitle) navTitle.textContent = data.projectName || 'XX小区整体装修';
+
+                var headerRight = document.getElementById('headerRight');
+                if (headerRight) {
+                    var area = data.area ? (parseFloat(data.area).toFixed(1) + 'm²') : '75.0m²';
+                    var houseType = data.houseType || '2室1厅';
+                    headerRight.textContent = area + ' ' + houseType;
+                }
+                // 初始态项目尚未开工，左侧固定展示「新家准备中」
+                var headerLeft = document.getElementById('headerLeft');
+                if (headerLeft) headerLeft.textContent = '新家准备中';
+
+                // 架构项目部计数：初始态工作组为 0（工作组在「架构」页创建）
+                var countEl = document.getElementById('projectDeptCount');
+                if (countEl) {
+                    var groups = (data.groups && Array.isArray(data.groups)) ? data.groups.length : 0;
+                    countEl.textContent = groups + '个工作组 · 0份合同';
+                }
+            }
 
             function showCustomToast(message) {
                 if (customToastMessage && customToastModal) {
@@ -928,7 +867,7 @@
             if (quickNav) {
                 quickNav.addEventListener('click', function(e) {
                     var item = e.target.closest('.quick-nav-item');
-                    if (item) { navigate(item.dataset.href); return; }
+                    if (item) { return; } // 快捷入口由 [data-href] 通用处理跳转
                     var pin = e.target.closest('.pin-btn');
                     if (pin) {
                         if (quickNav.classList.contains('pinned')) {
@@ -964,7 +903,6 @@
 
             if (toastCloseBtn) toastCloseBtn.addEventListener('click', closeCustomToast);
 
-            ;
 
             var backBtn = document.querySelector('.nav-bar .back');
             if (backBtn) backBtn.addEventListener('click', function() { history.back(); });
@@ -1003,6 +941,13 @@
             }
 
             if (activityMoreBtn) activityMoreBtn.addEventListener('click', toggleActivityList);
+
+            // 初始项目详情页加载：读取数据后隐藏 loading 遮罩（PRD §3.x 页面加载规则）
+            loadInitialData();
+            setTimeout(function() {
+                var overlay = document.getElementById('loadingOverlay');
+                if (overlay) overlay.style.display = 'none';
+            }, 400);
         })();
     </script>
 </body>
