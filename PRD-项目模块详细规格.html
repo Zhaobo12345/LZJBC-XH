@@ -5476,47 +5476,46 @@
                         <tr>
                             <td><strong>展示条件</strong></td>
                             <td>当项目内存在「基础施工服务合同」且合同状态为「已签约」时，项目导航入口（右侧悬浮触发条）展示；未签约或不存在该合同时入口不展示。</td>
-                            <td>判定数据源：<code>contracts</code> 表中 <code>type = '基础施工服务合同'</code> 且 <code>status = 'signed'</code>；入口显隐由前端依据合同列表接口返回结果控制。</td>
+                            <td>入口显隐由前端依据合同列表接口返回结果控制。</td>
                         </tr>
                         <tr>
                             <td><strong>入口样式</strong></td>
-                            <td>右侧悬浮触发条（<code>.project-nav-trigger</code>），<code>position: absolute; right: 16px; top: 50%; transform: translateY(-50%)</code>；尺寸 32×64px；背景 <code>rgba(24,144,255,0.9)</code>（蓝色半透明）；圆角 8px；内容为「◀」箭头 + 竖排文字「项目导航」（<code>writing-mode: vertical-rl</code>）。</td>
-                            <td>触发条 <code>z-index: 1000</code>，带 <code>box-shadow: 0 2px 8px rgba(0,0,0,0.15)</code>；悬停/按下时 <code>scale(1.05)</code>；抽屉打开后触发条添加 <code>.hidden</code> 类隐藏。</td>
+                            <td>右侧悬浮触发条，固定在页面右侧垂直居中位置；尺寸 32×64px；蓝色半透明背景；圆角 8px；内容为「◀」箭头 + 竖排文字「项目导航」。</td>
+                            <td>触发条层级高于页面内容，带柔和阴影；悬停/按下时轻微放大；抽屉打开后触发条隐藏。</td>
                         </tr>
                         <tr>
                             <td rowspan="4"><strong>抽屉结构</strong></td>
-                            <td><strong>遮罩层</strong>（<code>.project-nav-overlay</code>）：全屏半透明遮罩 <code>rgba(0,0,0,0.5)</code>，<code>z-index: 1001</code>，<code>opacity/visibility</code> 过渡 0.3s；点击关闭抽屉。</td>
+                            <td><strong>遮罩层</strong>：全屏半透明遮罩，点击可关闭抽屉。</td>
                             <td>—</td>
                         </tr>
                         <tr>
-                            <td><strong>抽屉容器</strong>（<code>.project-nav-drawer</code>）：右侧滑出，<code>width: 85%; max-width: 375px; height: 100%</code>，背景 <code>#F5F6FA</code>，<code>z-index: 1002</code>，<code>transform: translateX(100%) → translateX(0)</code> 过渡 0.3s，左侧阴影 <code>-4px 0 16px rgba(0,0,0,0.2)</code>；<code>display: flex; flex-direction: column</code>。</td>
-                            <td>抽屉相对手机框定位（<code>position: absolute</code>），不超出手机框范围。</td>
+                            <td><strong>抽屉容器</strong>：右侧滑出，宽度为屏幕的 85%（最大 375px），占满全高；浅灰背景，带左侧阴影；纵向排列各区域。</td>
+                            <td>抽屉相对手机框定位，不超出手机框范围。</td>
                         </tr>
                         <tr>
-                            <td><strong>深色顶部导航栏</strong>（<code>.drawer-header-bar</code>）：渐变背景 <code>linear-gradient(135deg, #1F2A44 → #2C3E63)</code>，<code>padding: 14px 16px</code>。左侧：╌ 图标（22px 圆形白边）+「项目导航」标题（15px 白色加粗）+「施工路线」标签（10px 蓝底白字）。右侧：「全部展开/收起」按钮 +「×」关闭按钮。</td>
-                            <td>全部展开按钮 <code>.drawer-expand-btn</code>：12px 白字，<code>rgba(255,255,255,0.15)</code> 背景，4px 圆角，1px 白色半透明边框；点击调用 <code>ProjectNav.toggleExpandAll()</code>。</td>
+                            <td><strong>深色顶部导航栏</strong>：深蓝渐变背景。左侧：图标 +「项目导航」标题（白色加粗）+「施工路线」小标签。右侧：「全部展开/收起」按钮 +「×」关闭按钮。</td>
+                            <td>全部展开按钮：半透明背景、白色文字；点击批量展开/收起所有阶段。</td>
                         </tr>
                         <tr>
-                            <td><strong>统计信息栏</strong>（<code>.drawer-info-bar</code>）：白色背景，底部 1px 分隔线。左侧：渐变徽章（<code>linear-gradient(135deg, #4C6FFF → #7B61FF)</code>）显示「{N}大阶段 / {M}项工程节点」；右侧：「📍 定位施工项」按钮（蓝色圆角胶囊，点击调用 <code>ProjectNav.scrollToCurrentTask()</code>）。</td>
-                            <td>统计数字由 <code>ProjectNav.updateStats()</code> 从 <code>projectNavData.totalStages / totalTasks</code> 填充。</td>
+                            <td><strong>统计信息栏</strong>：白色背景，底部分隔线。左侧：渐变徽章显示「{N}大阶段 / {M}项工程节点」；右侧：「📍 定位施工项」按钮（蓝色圆角胶囊，点击定位到最新进行中任务）。</td>
+                            <td>统计数字由施工阶段配置数据自动汇总。</td>
                         </tr>
                         <tr>
                             <td><strong>内容区</strong></td>
-                            <td><code>.drawer-content</code>（<code>id="projectNavContent"</code>）：<code>flex: 1; overflow-y: auto</code>，阶段卡片列表由 <code>ProjectNav.renderStageList()</code> 动态生成。</td>
-                            <td>底部 <code>.drawer-footer-tip</code>：固定提示「点击阶段行可展开/收起；点击任务直达详情」。</td>
+                            <td>可滚动区域，展示阶段卡片列表。底部固定提示「点击阶段行可展开/收起；点击任务直达详情」。</td>
+                            <td>—</td>
                         </tr>
                     </tbody>
                 </table>
 
                 <div class="note" style="margin-top: 16px;">
                     <div class="note-title">数据来源与结构</div>
-                    <p>阶段与任务数据来自「基础施工服务合同」的施工阶段配置。数据结构（<code>projectNavData</code>）：</p>
+                    <p>阶段与任务数据来自「基础施工服务合同」的施工阶段配置，包含：</p>
                     <ul style="margin: 6px 0 0 18px; font-size: 13px; color: var(--text-secondary); line-height: 1.9;">
-                        <li><strong>顶层</strong>：<code>projectId / projectName / totalStages / totalTasks / stages[]</code></li>
-                        <li><strong>阶段（stage）</strong>：<code>id / name / status(completed|in_progress|pending) / collapsed(bool) / currentTaskId / tasks[]</code></li>
-                        <li><strong>任务（task）</strong>：<code>id / name / status(completed|in_progress|pending) / hasTag(bool)</code></li>
+                        <li><strong>阶段</strong>：阶段名称、阶段状态（已完成 / 进行中 / 待开始）、是否收起、任务列表</li>
+                        <li><strong>任务</strong>：任务名称、任务状态（已完成 / 进行中 / 待开始）</li>
                     </ul>
-                    <p style="margin-top: 6px;">阶段 <code>status</code> 由其下任务的聚合状态推导：全部完成 = <code>completed</code>，含进行中任务 = <code>in_progress</code>，全部待开始 = <code>pending</code>。</p>
+                    <p style="margin-top: 6px;">阶段状态由其下任务的聚合状态推导：全部完成 = 已完成，含进行中任务 = 进行中，全部待开始 = 待开始。</p>
                 </div>
 
                 <table style="margin-top: 16px;">
@@ -5526,25 +5525,25 @@
                         </tr>
                         <tr>
                             <th style="width:20%">状态</th>
-                            <th style="width:35%">状态点（<code>.stage-status-dot</code>）</th>
-                            <th>完成度角标（<code>.stage-count-badge</code>，格式「已完成数/总数」）</th>
+                            <th style="width:35%">状态点</th>
+                            <th>完成度角标（格式「已完成数/总数」）</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>已完成 completed</td>
-                            <td>背景 <code>#52C41A</code>（绿）+ 光晕 <code>rgba(82,196,26,0.18)</code></td>
-                            <td>文字 <code>#389E0D</code>，背景 <code>#F6FFED</code></td>
+                            <td>已完成</td>
+                            <td>绿色圆点，带柔和光晕</td>
+                            <td>绿色文字，浅绿底</td>
                         </tr>
                         <tr>
-                            <td>进行中 in_progress</td>
-                            <td>背景 <code>#FA8C16</code>（橙）+ 光晕 <code>rgba(250,140,22,0.18)</code></td>
-                            <td>文字 <code>#D46B08</code>，背景 <code>#FFF7E6</code></td>
+                            <td>进行中</td>
+                            <td>橙色圆点，带柔和光晕</td>
+                            <td>橙色文字，浅橙底</td>
                         </tr>
                         <tr>
-                            <td>待开始 pending</td>
-                            <td>背景 <code>#BFBFBF</code>（灰）+ 光晕 <code>rgba(191,191,191,0.18)</code></td>
-                            <td>文字 <code>#8C8C8C</code>，背景 <code>#F0F0F0</code></td>
+                            <td>待开始</td>
+                            <td>灰色圆点，带柔和光晕</td>
+                            <td>灰色文字，浅灰底</td>
                         </tr>
                     </tbody>
                 </table>
@@ -5556,25 +5555,25 @@
                         </tr>
                         <tr>
                             <th style="width:20%">状态</th>
-                            <th style="width:40%">状态图标（<code>.task-status-icon</code>，18px 圆形）</th>
-                            <th>任务名称（<code>.task-name</code>）</th>
+                            <th style="width:40%">状态图标（18px 圆形）</th>
+                            <th>任务名称</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>已完成 completed</td>
-                            <td>背景 <code>#F6FFED</code>，文字 <code>#52C41A</code>，边框 <code>1.5px solid #95DE64</code>，显示「✓」</td>
-                            <td>颜色 <code>#8C8C8C</code>，<code>text-decoration: line-through</code>（删除线，色 <code>#BFBFBF</code>）</td>
+                            <td>已完成</td>
+                            <td>浅绿底，绿色文字，显示「✓」</td>
+                            <td>灰色文字 + 删除线</td>
                         </tr>
                         <tr>
-                            <td>进行中 in_progress</td>
-                            <td>背景 <code>#FFF7E6</code>，文字 <code>#FA8C16</code>，边框 <code>1.5px solid #FFC069</code></td>
-                            <td>颜色 <code>#D46B08</code>，<code>font-weight: 500</code>（加粗高亮）</td>
+                            <td>进行中</td>
+                            <td>浅橙底，橙色文字</td>
+                            <td>橙色加粗高亮</td>
                         </tr>
                         <tr>
-                            <td>待开始 pending</td>
-                            <td>透明背景，边框 <code>1.5px solid #D9D9D9</code>，文字 <code>#BFBFBF</code></td>
-                            <td>默认颜色 <code>#262626</code></td>
+                            <td>待开始</td>
+                            <td>透明底，灰色文字</td>
+                            <td>默认深色文字</td>
                         </tr>
                     </tbody>
                 </table>
@@ -5591,32 +5590,32 @@
                         <tr>
                             <td>打开抽屉</td>
                             <td>点击触发条</td>
-                            <td>触发条添加 <code>.hidden</code> 隐藏 → 遮罩添加 <code>.show</code> 显示 → 抽屉添加 <code>.open</code> 滑入 → 延迟 150ms 后调用 <code>scrollToCurrentTask()</code> 定位到最新进行中任务</td>
+                            <td>触发条隐藏 → 遮罩显示 → 抽屉滑入 → 自动定位到最新进行中任务</td>
                         </tr>
                         <tr>
                             <td>关闭抽屉</td>
                             <td>点击 × / 点击遮罩 / 向右滑动</td>
-                            <td>移除 <code>.hidden</code>（触发条恢复）/ <code>.show</code>（遮罩隐藏）/ <code>.open</code>（抽屉滑出）</td>
+                            <td>触发条恢复显示 → 遮罩隐藏 → 抽屉滑出</td>
                         </tr>
                         <tr>
                             <td>阶段展开/收起</td>
                             <td>点击阶段头部</td>
-                            <td>切换 <code>.collapsed</code> 类，任务列表 <code>max-height</code> 在 0 ↔ (任务数×46+2)px 之间过渡 0.3s；箭头 <code>⌄</code> 旋转 -90°；同步更新 <code>updateExpandBtnState()</code> 按钮文字</td>
+                            <td>任务列表展开/收起动画；箭头旋转指示状态；同步更新全部展开按钮文字</td>
                         </tr>
                         <tr>
                             <td>全部展开/收起</td>
                             <td>点击「全部展开/收起」按钮</td>
-                            <td>批量切换所有阶段 <code>.collapsed</code>，按钮文字在「全部展开」↔「全部收起」间切换</td>
+                            <td>批量展开/收起所有阶段，按钮文字在「全部展开」↔「全部收起」间切换</td>
                         </tr>
                         <tr>
                             <td>定位施工项</td>
                             <td>点击「📍 定位施工项」/ 打开抽屉自动触发</td>
-                            <td>查找 <code>.stage-task-item.in_progress</code>（首个进行中任务）→ 若其所在阶段已收起则自动展开 → 延迟 350ms 后平滑滚动至内容区垂直中央位置</td>
+                            <td>查找首个进行中任务 → 若其所在阶段已收起则自动展开 → 平滑滚动至内容区垂直中央位置</td>
                         </tr>
                         <tr>
                             <td>任务点击</td>
                             <td>点击任务项</td>
-                            <td>关闭抽屉 → 延迟 300ms 跳转 <code>task-detail.html?taskId={taskId}</code></td>
+                            <td>关闭抽屉 → 跳转任务详情页</td>
                         </tr>
                     </tbody>
                 </table>
@@ -5625,29 +5624,11 @@
                     <div class="note-title">默认展开规则（核心需求）</div>
                     <p><strong>仅展开包含进行中任务的阶段，其余阶段默认收起。</strong>具体规则：</p>
                     <ol style="margin: 6px 0 0 18px; font-size: 13px; color: var(--text-secondary); line-height: 1.9;">
-                        <li>打开抽屉时，<code>status = in_progress</code> 的阶段默认展开（<code>collapsed = false</code>），其余阶段（<code>completed</code> / <code>pending</code>）默认收起（<code>collapsed = true</code>）。</li>
-                        <li>展开后自动调用 <code>scrollToCurrentTask()</code>，将首个 <code>in_progress</code> 任务滚动至内容区中央并高亮（文字 <code>#D46B08</code> + 加粗）。</li>
+                        <li>打开抽屉时，「进行中」阶段默认展开，「已完成」/「待开始」阶段默认收起。</li>
+                        <li>展开后自动将首个「进行中」任务滚动至内容区中央并高亮（橙色加粗）。</li>
                         <li>若不存在进行中任务（全部完成或全部待开始），默认展开首个阶段，不触发定位滚动。</li>
                         <li>用户手动展开/收起后，状态保持至抽屉关闭；重新打开抽屉时恢复默认展开规则。</li>
                     </ol>
-                </div>
-
-                <div class="note" style="margin-top: 12px;">
-                    <div class="note-title">原型函数清单</div>
-                    <p><code>ProjectNav</code> 对象（<code>owner-miniapp/js/project-detail.js</code>）：</p>
-                    <table style="margin-top: 6px;">
-                        <thead><tr><th style="width:30%">函数</th><th>职责</th></tr></thead>
-                        <tbody>
-                            <tr><td><code>init()</code></td><td>缓存页面元素、绑定事件、更新统计、渲染阶段列表、更新按钮状态</td></tr>
-                            <tr><td><code>open() / close()</code></td><td>打开/关闭抽屉（含触发条显隐、遮罩、滑入滑出动画）</td></tr>
-                            <tr><td><code>renderStageList()</code></td><td>按 <code>projectNavData.stages</code> 动态生成阶段卡片 + 任务项页面内容</td></tr>
-                            <tr><td><code>toggleStage(stageId)</code></td><td>切换单个阶段展开/收起（<code>max-height</code> 动画 + 同步数据）</td></tr>
-                            <tr><td><code>toggleExpandAll()</code></td><td>批量展开/收起所有阶段</td></tr>
-                            <tr><td><code>updateExpandBtnState(forceAll)</code></td><td>根据折叠状态更新按钮文字（全部展开/全部收起）</td></tr>
-                            <tr><td><code>scrollToCurrentTask()</code></td><td>定位到首个进行中任务：展开其阶段 + 滚动至中央</td></tr>
-                            <tr><td><code>goToTaskDetail(taskId)</code></td><td>关闭抽屉并跳转任务详情页</td></tr>
-                        </tbody>
-                    </table>
                 </div>
             </div>
 
