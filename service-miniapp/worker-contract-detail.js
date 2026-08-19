@@ -174,7 +174,8 @@
         status: 'worker_inviting_sender',
         editInvited: [],
         draftContentTab: 'contract-text',
-        tplKind: ''
+        tplKind: '',
+        fulfilled: false
     };
 
     var pendingConfirm = null; // { title, message, onConfirm, onCancel }
@@ -567,6 +568,28 @@
         }
     }
 
+    /**
+     * 演示：切到已签约并显示「已履约完成」徽标
+     * （仅原型演示用，用于直观呈现履约完成派生标识效果）
+     */
+    function demoFulfilled() {
+        updateStatus('worker_signed');
+        // 设置履约完成状态并重新渲染阶段任务
+        state.fulfilled = true;
+        renderStagesSection();
+        // 显示履约完成徽标
+        var fb = $('fulfilledBadge');
+        if (fb) fb.style.display = 'inline-flex';
+        // 仅高亮「已签约（已履约完成）」演示项
+        var items = document.querySelectorAll('.status-switch-item');
+        for (var i = 0; i < items.length; i++) {
+            items[i].classList.remove('active');
+            if (items[i].textContent.trim() === '已签约（已履约完成）') {
+                items[i].classList.add('active');
+            }
+        }
+    }
+
     function updateStatus(status) {
         state.status = status;
         updateStatusNavActive(status); // 同步导航状态项选中高亮
@@ -600,6 +623,11 @@
         $('bannerText').textContent = cfg.text;
         $('bannerDesc').textContent = cfg.desc;
         $('statusBanner').className = 'wc-banner ' + (cfg.bannerClass || 'draft');
+
+        // 切换状态时默认隐藏履约完成徽标（仅 demoFulfilled 时显示）
+        var fb = $('fulfilledBadge');
+        if (fb) fb.style.display = 'none';
+        state.fulfilled = false;
 
         // 变更已驳回（乙方）：展示乙方驳回原因
         var crr = $('changeRejectReason');
@@ -911,10 +939,11 @@
     function renderStagesSection() {
         var c = state.contract;
         var stages = getStages();
+        var isFulfilled = state.fulfilled;
         var stageHtml = stages.map(function (s, i) {
             var tasks = (s.tasks || []).map(function (t) {
                 return '<div class="task-item"><div class="task-info">' +
-                    '<div class="task-name">' + escapeHtml(t.name) + '</div>' +
+                    '<div class="task-name">' + escapeHtml(t.name) + (isFulfilled ? ' <span class="task-done-tag">✓ 已完成</span>' : '') + '</div>' +
                     '<div class="task-meta-row"><span class="task-meta-item"><span class="role-tag executor">执行</span> ' + escapeHtml(t.exec) + '</span>' +
                     '<span class="task-meta-item"><span class="role-tag confirmer">确认</span> ' + escapeHtml(t.conf) + '</span></div>' +
                     '</div></div>';
@@ -922,7 +951,7 @@
             return '<div class="stage-item"><div class="stage-header" onclick="WCP.toggleStage(this)">' +
                 '<div class="stage-icon">' + (i + 1) + '</div>' +
                 '<div class="stage-info"><div class="stage-name">' + escapeHtml(s.name) + '</div>' +
-                '<div class="stage-meta">' + (s.tasks ? s.tasks.length : 0) + '个任务 · 待开始</div>' +
+                '<div class="stage-meta">' + (s.tasks ? s.tasks.length : 0) + '个任务 · ' + (isFulfilled ? '已完成 100%' : '待开始') + '</div>' +
                 '<div class="stage-order-tag" style="background-color:#FFF7E6;color:#FA8C16;">' + escapeHtml(s.order || '并行执行') + '</div></div>' +
                 '<div class="arrow expanded">▼</div></div>' +
                 '<div class="stage-tasks show">' + tasks + '</div></div>';
@@ -2147,6 +2176,7 @@
     global.WCP = {
         init: init,
         updateStatus: updateStatus,
+        demoFulfilled: demoFulfilled,
         toggleStatusGroup: toggleStatusGroup,
         togglePageNav: togglePageNav,
         toggleEditPanel: toggleEditPanel,

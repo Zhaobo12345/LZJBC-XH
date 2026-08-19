@@ -940,5 +940,4 @@
     window.toggleActionMenu = toggleActionMenu;
     window.closeActionMenu = closeActionMenu;
     window.shareToFriend = shareToFriend;
-    window.goToProfile = goToProfile;
 })();

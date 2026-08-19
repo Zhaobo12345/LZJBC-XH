@@ -844,6 +844,16 @@
                         if (chk) chk.style.visibility = 'hidden';
                     }
                 });
+                // 架构层级联动：更新「任务概览 / 今日动态」查看全部链接（项目部=不带参数）
+                var isProjectLevel = (name === '项目部');
+                document.querySelectorAll('.card-title .more').forEach(function(m) {
+                    var h = m.dataset.href || '';
+                    if (h.indexOf('task-list.html') === 0) {
+                        m.dataset.href = isProjectLevel ? 'task-list.html' : 'task-list.html?level=' + encodeURIComponent(name);
+                    } else if (h.indexOf('activity-list.html') === 0) {
+                        m.dataset.href = isProjectLevel ? 'activity-list.html' : 'activity-list.html?level=' + encodeURIComponent(name);
+                    }
+                });
                 toggleLevelDropdown();
             }
 

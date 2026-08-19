@@ -25,7 +25,7 @@
 - service/owner 端「全部待办」不含「临时任务」示例项、不含「待审核」待办（仅 PC 运营端有）；所有任务类待办标签=「任务」（2026-08-04 统一更正，原误标「合约」），真实 合同/变更/架构/对账单 类标签保持原样。
 - 「邀请加入强电施工组」（架构标签）点击跳 `invite-join.html?group=强电施工组`，接受/拒绝写 `localStorage['lzj_group_invite_强电施工组']`，返回待办页移除并角标重算。
 - service 端角标硬编码（全部13/待处理10/已处理3）；owner 端角标由 `updateTodoBadges()` 动态算（含 localStorage 注入「对账单」待办）。
-- 消息页「合同邀约」Tab 仅 service-miniapp 有；owner-miniapp/message.html 仅 邀请/任务通知/系统消息 三 Tab，勿误加合同邀约。
+- 消息页 Tab 结构：service-miniapp 含 邀请/合同邀约 两 Tab（2026-08-19 已移除「任务通知」「系统消息」Tab）；owner-miniapp 仅"邀请"一类、**不展示分类 Tab 栏**（2026-08-19 移除「任务通知」「系统消息」，本日取消单 Tab 栏），消息直接列表渲染，未处理数量以底部导航"消息"项右上角红色角标（#navMsgBadge，由 updateBadge 维护）呈现。「合同邀约」Tab 仅 service-miniapp 有，勿误加至 owner；owner 端亦勿恢复「系统消息」Tab 或加回分类 Tab 栏。
 
 ## 合同邀约体验方案页面位置约定（被邀请人视角）
 - C方案（微信服务通知）独立页 `service-miniapp/wechat-service-notice.html`（绿色微信外壳，点开直达 `worker-contract-detail.html?viewer=receiver`），不可放小程序内消息页。
@@ -37,6 +37,12 @@
 ## 页面布局约定（项目详情进行中-新版）
 - `project-detail-ongoing-v2.html`（service/owner 两份）「待办事项」卡片不与架构切换联动，置于吸顶导航（快捷入口+架构切换）之前；改按 HTML 注释锚点整体移动，不改 CSS/JS，两份同步。
 - 现状顺序：项目基本信息 → 待办事项 → [快捷入口+架构切换 吸顶] → 合同/任务概览 → 今日动态（owner 版今日动态在吸顶后、合同概览前）。
+
+## 架构层级联动约定（2026-08-19 方案A）
+- 详情页 `selectLevel()` 末尾统一把「任务概览/今日动态」`.more` 链接改带 `?level=架构层级名`（encodeURIComponent；项目部=不带参）。已改 3 页：service ongoing-v2、service/owner completed-v2；**owner ongoing-v2 无层级切换 JS（静态展示），不携带、勿加交互**。
+- `task-list.html`：`.contract-section` 挂 `data-level`（合同↔工作组一一对应：水电/泥瓦/木工/油漆工作组）；`currentFilters.level`；`filterTasks()` 分组层早退；标签复用 `updateFilterTags`/`removeFilter`（文案「架构层级：XX」）。
+- `activity-list.html`：activities 加 `level` 字段（设计服务/基础施工→项目部）；`currentLevelFilter` 置 renderActivities 过滤链头部；`#levelFilterRow/#levelFilterTag` 可移除标签；`initLevelFilter()`/`clearLevelFilter()`。
+- 口径：层级与既有筛选 AND 叠加、计数联动；**全部待办 todo-list 不携带层级**（按人聚合，无对应关系）。
 
 ## 产品决策与功能取消记录
 - 已取消「引导到电脑端编辑合同内容」：基础施工合同 `contract-detail.*` 不再提供 PC 端编辑引导；已删 `editGuideBox`/`pcEditGuide` 及 `copyEditLink`/`fallbackCopy`/`showPCEditGuide`。勿恢复。

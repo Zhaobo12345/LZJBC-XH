@@ -329,6 +329,7 @@
             <li><a href="#sec-5-13">5.13 异常处理</a></li>
             <li><a href="#sec-5-14">5.14 相关接口</a></li>
             <li><a href="#sec-5-15">5.15 各变更状态页详述</a></li>
+            <li class="toc-leaf"><a href="#sec-5-15-lock">⚠️ 5.15.0 变更期间任务锁定规则（通用）</a></li>
             <li class="toc-leaf"><a href="#sec-5-15-1">5.15.1 变更中（发起方）</a></li>
             <li class="toc-leaf"><a href="#sec-5-15-2">5.15.2 待确认变更（确认方）</a></li>
             <li class="toc-leaf"><a href="#sec-5-15-3">5.15.3 变更审核中（双方）</a></li>
@@ -1014,39 +1015,40 @@
 
             <div class="subsection" id="sec-3-3">
                 <div class="subsection-title">3.3 功能差异（与PC端对比）</div>
+                <p style="margin:8px 0;color:var(--text-secondary);font-size:13px;">PC 端为<strong>运营审核端</strong>（只读审核，见 <a href="#sec-2-6">2.6</a> / <a href="#sec-2-7">2.7</a>）；服务方小程序为<strong>合同发起 / 确认 / 签约端</strong>（状态机见 <a href="#sec-3-12">3.12</a>）。两者职责不同，能力对比如下：</p>
                 <table>
                     <thead>
                         <tr>
                             <th>功能</th>
-                            <th>PC端</th>
+                            <th>PC端（运营审核端）</th>
                             <th>服务方小程序</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>审核功能</td>
-                            <td>运营可审核</td>
-                            <td>❌ 无审核功能</td>
+                            <td>运营审核（驳回 / 审核通过）</td>
+                            <td>提交审核（拟定中提交后进入「待平台审核」，审核动作由平台完成，服务方端无审核操作）</td>
                         </tr>
                         <tr>
                             <td>编辑功能</td>
-                            <td>可编辑合同</td>
-                            <td>❌ 无编辑功能</td>
+                            <td>只读（不编辑合同内容）</td>
+                            <td>拟定中可编辑（合同名称 / 金额 / 正文 / 阶段任务），提交后只读</td>
                         </tr>
                         <tr>
                             <td>变更功能</td>
-                            <td>可发起变更</td>
-                            <td>可发起变更（已签约状态）</td>
+                            <td>审核变更申请（驳回 / 审核通过）</td>
+                            <td>发起变更（已签约状态）</td>
                         </tr>
                         <tr>
                             <td>确认合同</td>
-                            <td>业主确认</td>
-                            <td>服务方可确认（待确认状态）</td>
+                            <td>不参与（确认在小程序端完成）</td>
+                            <td>由业主（甲方）最终确认；服务方（发起方）视角为「待对方确认」（见 <a href="#sec-3-12">3.12.10 / 3.12.11</a>）</td>
                         </tr>
                         <tr>
-                            <td>确认签约</td>
-                            <td>甲乙双方确认</td>
-                            <td>服务方可确认签约</td>
+                            <td>签约</td>
+                            <td>不涉及签约操作</td>
+                            <td>双方确认后由乙方（服务方）上传签约文件，合同正式生效（见 <a href="#sec-3-12">3.12.12</a>）</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1775,7 +1777,7 @@
                     </tbody>
                 </table>
 
-                <div class="subsection-title" style="font-size:14px;margin-top:20px;">3.12.14 已签约（signed）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>signed</code></span> &nbsp; <a class="proto-link" href="service-miniapp/contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（右侧导航「合同状态切换」→「已签约」）</a></div>
+                <div class="subsection-title" id="sec-3-12-14" style="font-size:14px;margin-top:20px;">3.12.14 已签约（signed）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>signed</code></span> &nbsp; <a class="proto-link" href="service-miniapp/contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（右侧导航「合同状态切换」→「已签约」）</a></div>
                 <table style="margin-top:8px;">
                     <thead><tr><th style="width:120px;">属性</th><th>说明</th></tr></thead>
                     <tbody>
@@ -1786,9 +1788,42 @@
                         <tr><td><strong>页面结构与可见模块</strong></td><td>只读内容区域，阶段任务选项卡显示进度百分比和任务状态，签约文件卡片显示已上传文件；变更记录选项卡可见</td></tr>
                         <tr><td><strong>底部操作按钮</strong></td><td>&bull; 「发起变更」（<code>primary</code> 样式，<code>fullWidth</code>）</td></tr>
                         <tr><td><strong>状态流转</strong></td><td>发起变更 &rarr; <code>changing</code> 或 <code>change_platform_reviewing</code>（依是否需平台审核，见 <a href="#sec-3-10">3.10</a> / 第五章）</td></tr>
-                        <tr><td><strong>关键交互与逻辑</strong></td><td>已签约后阶段任务恢复流转；变更记录选项卡在此态起可见</td></tr>
+                        <tr><td><strong>关键交互与逻辑</strong></td><td>
+                            <ul style="margin:4px 0;padding-left:18px;font-size:12px;line-height:1.8;">
+                                <li><strong>任务锁定解除（可施工态）</strong>：仅进入「已签约（<code>signed</code> / <code>worker_signed</code>）」后，合同下任务<strong>才解除锁定、恢复可执行</strong>（提交完成 / 确认 / 生成执行人待办）；签约前与变更期间的任务锁定语义见下方「⚠️ 任务锁定（签约前）」与 <a href="#sec-5-15-lock">第五章 变更期间任务锁定规则</a>，变更记录选项卡在此态起可见。</li>
+                                <li><strong>执行人待办生成（权威规则 · 非工人合同与工人合同通用）</strong>：合同进入可施工态（<code>signed</code> / <code>worker_signed</code>）后，系统为该合同下「已配置执行人且处于待开始（含前置阻塞）」的任务自动为对应执行人生成「任务执行」待办；生成时间 = 合同签约时间。细则：
+                                    <ul style="margin:4px 0;padding-left:18px;font-size:12px;line-height:1.8;">
+                                        <li style="color:#cf1322;"><strong>⚠️ 任务锁定（签约前）（重要）</strong>：合同处于「已确认（<code>confirmed</code> / <code>worker_confirmed</code>）」及之前态时，合同下任务<strong>锁定、不支持任何执行操作</strong>——即使任务已提前配置执行人并流转至「待开始」，执行人也<strong>无法提交完成 / 上传执行记录</strong>、确认人也<strong>无法确认</strong>，系统<strong>不生成任何执行人待办</strong>。待办须等待合同「已签约」解除锁定后才生成。非工人合同与工人合同均遵守此约束（工人合同见 §7.5.3.5）；变更期间的同类锁定见 <a href="#sec-5-15-lock">第五章 变更期间任务锁定规则</a>。</li>
+                                        <li><strong>签约一次性生成</strong>：合同由「已确认」→「已签约」后，系统<strong>扫描该合同下全部</strong>「已配置执行人 + 待开始」的任务，为每位执行人生成待办（覆盖签约前已配置执行人、受前置约束尚未生成待办的任务）。</li>
+                                        <li><strong>可施工态下补配置</strong>：若合同已处于「已签约」，后续才为某「待开始」任务配置执行人，任务流转至「待开始」时同步为该执行人生成待办（与签约扫描同一逻辑，避免遗漏）。</li>
+                                        <li><strong>待办归属与去重</strong>：对应「任务执行 / 重新执行」待办类型（标签「任务」、状态值 <code>pending</code>），仅该任务执行人可见，同一任务在可施工态下仅生成一条；待办类型定义、跳转目标与状态联动见 <a href="PRD-任务模块详细规格.html#sub-4-8-2" target="_blank">PRD-任务模块 §4.8.2</a>。</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td></tr>
                     </tbody>
                 </table>
+
+                <div class="note" style="margin:14px 0;border-color:#52C41A;">
+                    <div class="note-title" style="color:#389E0D;">✓ 履约完成派生标识（全部任务完成 · 无独立状态） &nbsp; <a class="proto-link" href="service-miniapp/contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（右侧导航「签约阶段」→「已签约（已履约完成）」）</a></div>
+                    <p>合同处于「已签约」后，当该合同下<strong>全部有效任务</strong>（未被软删除）均为「已完成」时，详情页状态横幅在「已签约」文案旁<strong>叠加绿色「已履约完成」标识</strong>。该标识为<strong>实时派生</strong>（无持久化状态、不入合同状态机）：任一任务被驳回回流 / 转回未完成，标识<strong>自动消失</strong>。</p>
+                    <ul style="margin:6px 0;padding-left:18px;line-height:1.9;">
+                        <li><strong>判定</strong>：合同状态 ∈ 已签约及变更各态（<code>signed</code> / <code>worker_signed</code> / 变更态），且合同下全部有效任务状态均为「已完成」。</li>
+                        <li><strong>呈现位置</strong>：① 合同详情页状态横幅「已签约」旁绿色徽标「已履约完成」；② 项目详情「合同概览」该合同行叠加「已完工」角标；③ 合同列表卡片状态列叠加「已履约完成」。</li>
+                        <li><strong>不阻断操作</strong>：履约完成<strong>不改变操作权限</strong>，已签约态仍可「发起变更」；任务驳回回流时标识自动消失（与任务状态实时联动）。</li>
+                        <li><strong>原型演示</strong>：合同详情页右侧导航「签约阶段」提供「已签约（已履约完成）」演示项，一键置全部任务为已完成并触发徽标。</li>
+                    </ul>
+                </div>
+
+                <div class="note" style="margin:14px 0;border-color:#cf1322;">
+                    <div class="note-title" style="color:#cf1322;">⚠️ 重要：合同任务「锁定 → 解锁」统一规则（签约前 / 变更期间）</div>
+                    <p>合同下任务的<strong>可执行性由合同状态闸门控制</strong>，存在两类锁定，解锁后才允许执行 / 确认并生成执行人待办：</p>
+                    <ul style="margin:6px 0;padding-left:18px;line-height:1.9;">
+                        <li><strong>① 签约前锁定</strong>：合同处于「已确认」及之前态，任务<strong>锁定</strong>，即使已配执行人也不支持执行 / 确认、不生成待办；进入「已签约」后解锁（本页 §3.12.14）。</li>
+                        <li><strong>② 变更期间锁定</strong>：合同发起变更后，全周期变更态下任务<strong>锁定</strong>，不支持执行 / 确认、不生成新待办；变更<strong>失败（驳回 / 撤回）</strong>或<strong>成功（生效）</strong>到达终态后解除锁定（<a href="#sec-5-15-lock">第五章 变更期间任务锁定规则</a>）。</li>
+                    </ul>
+                    <p>两类锁定本质一致（仅触发态不同），均禁止执行 / 确认且不生成执行人待办；非工人合同与工人合同通用。</p>
+                </div>
 
                 <!-- ===== 变更相关状态：详见第五章 §5.15 ===== -->
                 <p style="margin-top:20px;color:var(--text-secondary);font-size:13px;"><strong>变更流程相关状态（变更中 / 待确认变更 / 变更审核中 / 变更审核驳回 / 变更确认中 / 变更签约中 / 变更已生效）及各变更页面说明已统一收录于第五章</strong>：<a href="#sec-5-15">5.15 各变更状态页详述</a>（5.15.1&ndash;5.15.8），每节包含原型链接、适用方/视角、横幅文案、进入条件、页面结构、底部按钮、状态流转、关键交互逻辑与字段规格。为避免与第五章重复，本章不再另列变更态子节，请以第五章为权威出处核对变更态页面细节。</p>
@@ -2894,6 +2929,19 @@
                 <div class="subsection-title">5.15 各变更状态页详述</div>
                 <p style="margin:8px 0 12px;color:var(--text-secondary);font-size:13px;">以下按<strong>基础合同变更流程中的每个状态逐一说明</strong>，每节包含：原型页面链接（可跳转核对）、适用方/视角、横幅文案与说明、进入条件、页面结构与可见模块、底部操作按钮、状态流转路径、关键交互逻辑与字段规格。本节为第五章「发起变更功能」的状态页维度补充，与 §3.12 的非变更态分节共同构成合同详情页完整状态规格；<strong>§3.12.15–3.12.22 的变更态详细内容已统一收录于此</strong>，第三章仅保留导航索引。</p>
 
+                <!-- 5.15.0 变更期间任务锁定（通用规则） -->
+                <div class="subsection-title" id="sec-5-15-lock" style="font-size:14px;margin-top:18px;color:#cf1322;">⚠️ 变更期间任务锁定规则（通用 · 非工人合同与工人合同均适用）</div>
+                <div class="note" style="margin:12px 0;border-color:#cf1322;">
+                    <div class="note-title" style="color:#cf1322;">发起变更即锁定，到达终态才解锁</div>
+                    <p>合同由「已签约」发起变更后，合同下<strong>全部阶段任务进入锁定状态</strong>：执行人<strong>不可提交完成 / 上传执行记录</strong>，确认人<strong>不可确认</strong>，且锁定期间<strong>不生成新的执行人待办</strong>。锁定持续覆盖变更全周期，直至变更到达<strong>终态</strong>方才解锁：</p>
+                    <ul style="margin:6px 0;padding-left:18px;line-height:1.9;">
+                        <li><strong>锁定区间（变更全周期）</strong>：自发起方点击「发起变更」起，经 变更中（<code>changing</code>）/ 变更审核中（<code>change_platform_reviewing</code>，仅涉及金额 / 正文 / 附件变更的非工人合同）/ 待确认变更（<code>change_confirming</code>）/ 变更确认中（<code>change_confirming_sender</code> / <code>change_confirming_receiver</code>）/ 变更签约中（<code>change_signing_wait</code>）等中间态，直至终态。</li>
+                        <li><strong>变更失败 → 解锁（原 V1 继续执行 / 确认）</strong>：变更被驳回（<code>change_platform_rejected</code> / <code>change_rejected</code>）或发起方撤回（<code>change_withdrawn</code>）后，合同恢复「已签约（<code>signed</code> / <code>worker_signed</code>）」，任务解除锁定并按原 V1 版本继续执行 / 确认；期间暂停的任务自解锁时刻恢复流转。</li>
+                        <li><strong>变更成功 → 解锁（基于 V2 重新执行 / 确认）</strong>：变更生效（<code>change_confirmed</code>）后，任务解除锁定并按 V2 版本恢复流转；变更项任务的待办按 <a href="#sec-5-15-8">§5.15.8</a> 生成 / 失效（作用域限定为变更项）。</li>
+                        <li><strong>与签约前锁定的关系</strong>：本规则是「任务锁定」的变更态延伸，与 <a href="#sec-3-12-14">§3.12.14 任务锁定（签约前）</a> 同属锁定语义，区别仅触发态不同（签约前 vs 变更全周期）；两类锁定均禁止执行 / 确认且不生成执行人待办，非工人合同与工人合同通用。</li>
+                    </ul>
+                </div>
+
                 <!-- 5.15.1 变更中（changing） -->
                 <div class="subsection-title" id="sec-5-15-1" style="font-size:14px;margin-top:18px;">5.15.1 变更中（发起方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>changing</code></span> &nbsp; <a class="proto-link" href="service-miniapp/contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（右侧导航「合同状态切换」&rarr;「变更中(发起方)」）</a></div>
                 <table style="margin-top:8px;">
@@ -2919,7 +2967,7 @@
                         </td></tr>
                         <tr><td><strong>关键交互与逻辑</strong></td><td>
                             <ul style="margin:4px 0;padding-left:18px;font-size:12px;line-height:1.8;">
-                                <li><strong>阶段任务暂停流转</strong>：变更期间该合同下所有阶段任务暂停（执行人无法提交完成、确认人无法确认），详见 <a href="#sec-5-10">5.10</a>。</li>
+                                <li><strong>阶段任务锁定（暂停流转）</strong>：变更期间（本态及全部变更中间态）该合同下所有阶段任务<strong>锁定</strong>（执行人无法提交完成 / 上传执行记录、确认人无法确认），属「变更期间任务锁定」的一部分，规则详见 <a href="#sec-5-15-lock">第五章 变更期间任务锁定规则</a>。</li>
                                 <li><strong>变更原因必填</strong>：变更原因由发起方在变更弹窗内填写（1&ndash;500 字符），在此状态对双方可见。</li>
                                 <li><strong>仅阶段任务变更分支</strong>：此状态仅在「仅阶段任务变更」时出现；含其他内容变更的提案提交后直接进入平台审核（<code>change_platform_reviewing</code>），跳过此态。</li>
                                 <li><strong>受邀方对应视角</strong>：对方视角为「待确认变更」（<code>change_confirming</code>），见 <a href="#sec-5-15-2">5.15.2</a>。</li>
@@ -3164,7 +3212,15 @@
                                 <li><strong>V2 版本生效</strong>：变更后的合同内容（金额/正文/阶段任务）成为当前有效版本，所有后续操作基于 V2。</li>
                                 <li><strong>版本回溯</strong>：原 V1 版本保留于「更多 &rarr; 版本与流转」弹窗，可查看历史版本对比。</li>
                                 <li><strong>变更记录闭环</strong>：时间线追加最终节点「变更版本（V2）正式生效」（success 标签）。</li>
-                                <li><strong>阶段任务恢复</strong>：新增的阶段/任务解锁可执行，进度重新计算。</li>
+                                <li><strong>阶段任务解锁恢复</strong>：变更生效解除「变更期间任务锁定」，新增的阶段 / 任务解锁可执行（按 V2），进度重新计算；锁定规则详见 <a href="#sec-5-15-lock">第五章 变更期间任务锁定规则</a>。</li>
+                                <li><strong>执行人待办生成 / 失效（作用域限定为变更项 · 权威规则）</strong>：变更生效（<code>change_confirmed</code>）后，系统<strong>仅对本次变更项（变更新增 / 修改的阶段任务）中含执行人的任务</strong>进行待办处理；非变更项任务不重新处理。细则：
+                                    <ul style="margin:4px 0;padding-left:18px;font-size:12px;line-height:1.8;">
+                                        <li><strong>生成</strong>：变更项中「已配置执行人 + 待开始」的任务，为执行人生成「任务执行」待办（类型与逻辑同 <a href="#sec-3-12-14">§3.12.14 已签约触发规则</a>）。</li>
+                                        <li><strong>失效</strong>：变更项中若某任务被删除 / 改派，导致原执行人不再匹配，其既有「任务执行」待办按 <a href="PRD-任务模块详细规格.html#sub-4-8-11" target="_blank">PRD-任务模块 §4.8.11 待办失效规则</a> 标记 <code>invalidated</code>。</li>
+                                        <li><strong>非变更项不动</strong>：未纳入本次变更范围的既有任务，其执行人待办状态维持不变。</li>
+                                        <li><strong>通用前置约束同 §3.12.14</strong>：变更生效本身即「可施工态」的一种，签约前不生成待办的约束同样适用（工人合同变更生效同理，见 §9.5.5）。</li>
+                                    </ul>
+                                </li>
                                 <li><strong>可再次变更</strong>：底部「发起变更」按钮可用，新一轮变更将基于 V2 生成 V3，以此类推。</li>
                             </ul>
                         </td></tr>
@@ -3722,7 +3778,7 @@
             <p>视角通过 URL 参数 <code>?viewer=sender|receiver</code> 切换；无 id 进入时自动播种水电示例并以发起方视角渲染。</p>
             <div class="note" style="margin-top:12px;">
                 <div class="note-title">视角随状态自动推导（updateStatus 逻辑）</div>
-                <p style="margin:0;">右侧原型导航「合同状态切换（工人合同）」中点击任一状态项（如 <code>worker_inviting_receiver</code>），<code>updateStatus</code> 会<strong>依据状态 key 自动推导视角</strong>，无需手动切视角：</p>
+                <p style="margin:0;">右侧原型导航「合同状态切换（工人合同）」中点击任一状态项（如 <code>worker_confirmed_receiver</code>），<code>updateStatus</code> 会<strong>依据状态 key 自动推导视角</strong>，无需手动切视角：</p>
                 <ul style="margin:6px 0 0;">
                     <li>状态 key 含 <code>_receiver</code> → 受邀方（receiver）；</li>
                     <li>状态 key 含 <code>_sender</code> → 发起方（sender）；</li>
@@ -3772,7 +3828,7 @@
             <p style="margin:8px 0 0;color:var(--text-secondary);"><strong>变更流程相关状态（变更中 / 待确认变更 / 变更确认中 / 变更签约中 / 变更已驳回）及各变更页面说明已统一收录于第九章，本章不再另列变更态子节</strong>：其中<strong>发起方视角的变更态（变更中、变更确认中、变更签约中、变更已驳回）</strong>详见 <a href="#sec-9-5">9.5 各变更状态页详述</a>（9.5.1 / 9.5.3 / 9.5.4 / 9.5.5），<strong>受邀方视角的待确认变更</strong>详见 <a href="#sec-9-5-2">9.5.2</a>，发起变更的入口编辑面板详见 <a href="#sec-9-4">9.4</a>。请以第九章为权威出处核对变更态页面细节。</p>
 
             <!-- ===== 7.5.3.1 拟定中（初始）===== -->
-            <div class="subsection-title" style="font-size:14px;margin-top:18px;">7.5.3.1 拟定中（初始）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>worker_draft_initial</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（需在右侧导航切换至「拟定中(发起方)」预览）</a></div>
+            <div class="subsection-title" style="font-size:14px;margin-top:18px;">7.5.3.1 拟定中（初始）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>worker_draft_initial</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?status=worker_draft_initial" target="_blank" style="font-size:12px;">&#x1F517; 原型页</a></div>
             <table style="margin-top:8px;">
                 <thead><tr><th style="width:110px;">属性</th><th>说明</th></tr></thead>
                 <tbody>
@@ -3801,7 +3857,7 @@
             </table>
 
             <!-- ===== 7.5.3.2 拟定中（撤回后）===== -->
-            <div class="subsection-title" style="font-size:14px;margin-top:18px;">7.5.3.2 拟定中（撤回后）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>worker_draft</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（需在右侧导航切换至「拟定中(撤回后)」预览）</a></div>
+            <div class="subsection-title" style="font-size:14px;margin-top:18px;">7.5.3.2 拟定中（撤回后）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>worker_draft</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?status=worker_draft" target="_blank" style="font-size:12px;">&#x1F517; 原型页</a></div>
             <table style="margin-top:8px;">
                 <thead><tr><th style="width:110px;">属性</th><th>说明</th></tr></thead>
                 <tbody>
@@ -3816,7 +3872,7 @@
             </table>
 
             <!-- ===== 7.5.3.3 确认中（发起方）===== -->
-            <div class="subsection-title" style="font-size:14px;margin-top:18px;">7.5.3.3 确认中（发起方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>worker_inviting_sender</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（需在右侧导航切换至「确认中(发起方)」预览）</a></div>
+            <div class="subsection-title" style="font-size:14px;margin-top:18px;">7.5.3.3 确认中（发起方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>worker_inviting_sender</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?status=worker_inviting_sender" target="_blank" style="font-size:12px;">&#x1F517; 原型页</a></div>
             <table style="margin-top:8px;">
                 <thead><tr><th style="width:110px;">属性</th><th>说明</th></tr></thead>
                 <tbody>
@@ -3844,7 +3900,7 @@
             <div class="note" style="margin:12px 0;"><div class="note-title">接受邀约后的成员登记与权限分配</div><p>受邀方点击「确认加入」（即方案 E「接单体验」中的接单动作）并成为合同乙方；系统将其<strong>自动加入合同所属架构层级</strong>（<code>group</code> 字段更新）、<strong>登记入项目成员名册</strong>（若此前尚未在册则新增为项目成员）的同时，会<strong>同步完成权限分配</strong>，包含以下三层：</p><p>① <strong>项目成员名册登记</strong>：合同甲方 / 乙方候选人均须从「项目成员」中筛选（见 §3.7.1 拟定中编辑表单 · 签约双方），故成为本合同乙方的同时，系统将该工人<strong>登记入项目成员名册</strong>——若其此前未在项目成员列表中，则自动新增为项目成员；若已在册则仅更新其架构层级与乙方身份的关联。其项目成员身份与乙方身份、架构层级归属一并纳入成员关系管理。<strong>仅首位确认者（首胜者）登记入项目成员并成为乙方；其余受邀方（抢单失败 / 已拒绝）因未成为乙方，不触发项目成员登记。</strong></p><p>② <strong>架构层级基础权限</strong>：该工人作为成员被纳入合同所属架构层级（如「水电工程」），随即持有该层级的<strong>基础数据权限</strong>——即「所属架构及下属层级权限（含合同）」（权限模型见 §2.9 / §5.12 权限控制，以及基础施工服务合同 §3 合同金额展示受权限控制规则）；可在该架构子树内查看并参与项目数据，合同金额按其有权限规则<strong>展示实际金额</strong>（不再脱敏为 ***）。</p><p>③ <strong>乙方（party B）对应权限</strong>：系统为该工人绑定本合同的<strong>乙方身份权限</strong>，使其可查看本合同详情、接收并查看「乙方待确认 / 待签约」等乙方相关待办、参与本合同阶段任务的执行与确认流转；若处于变更流程，则作为乙方确认 / 驳回变更（详见 <a href="#worker-contract-change">第九章</a>）。</p><p>上述成员登记、权限与架构层级归属随乙方身份的变化而同步调整：发起方「撤回邀约」「重新选择乙方」或本受邀方「抢单失败 / 已拒绝」时，相应乙方身份与权限自动回收；因本次接单而新增的项目成员，在失去乙方身份后默认保留为普通项目成员（仅解绑乙方与架构层级归属）。</p></div>
 
             <!-- ===== 7.5.3.4 已确认（发起方）===== -->
-            <div class="subsection-title" style="font-size:14px;margin-top:18px;">7.5.3.4 已确认（发起方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>worker_confirmed_sender</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（需在右侧导航切换至「已确认(发起方)」预览）</a></div>
+            <div class="subsection-title" style="font-size:14px;margin-top:18px;">7.5.3.4 已确认（发起方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>worker_confirmed_sender</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?status=worker_confirmed_sender" target="_blank" style="font-size:12px;">&#x1F517; 原型页</a></div>
             <table style="margin-top:8px;">
                 <thead><tr><th style="width:110px;">属性</th><th>说明</th></tr></thead>
                 <tbody>
@@ -3873,7 +3929,7 @@
             </table>
 
             <!-- ===== 7.5.3.5 已签约 ===== -->
-            <div class="subsection-title" style="font-size:14px;margin-top:18px;">7.5.3.5 已签约<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>worker_signed</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（需在右侧导航切换至「已签约」预览）</a></div>
+            <div class="subsection-title" style="font-size:14px;margin-top:18px;">7.5.3.5 已签约<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>worker_signed</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?status=worker_signed" target="_blank" style="font-size:12px;">&#x1F517; 原型页</a></div>
             <table style="margin-top:8px;">
                 <thead><tr><th style="width:110px;">属性</th><th>说明</th></tr></thead>
                 <tbody>
@@ -3889,9 +3945,11 @@
                     <tr><td><strong>状态流转</strong></td><td>点击「发起变更」&rarr; <code>changing</code>（变更中）</td></tr>
                     <tr><td><strong>关键逻辑</strong></td><td>
                         <ul style="margin:4px 0;padding-left:18px;font-size:12px;line-height:1.8;">
-                            <li>阶段任务恢复正常流转（确认中/拟定中阶段任务暂停）。</li>
+                            <li>阶段任务恢复正常流转（确认中 / 拟定中阶段任务暂停）；工人合同同样遵循「任务锁定」语义——签约前锁定（见 <a href="#sec-3-12-14">§3.12.14 任务锁定（签约前）</a>）、变更期间锁定（见 <a href="#sec-5-15-lock">第五章 变更期间任务锁定规则</a>），与基础施工合同一致。</li>
                             <li>变更流程<strong>无需平台审核</strong>：双方确认即生效（区别于基础施工服务合同的平台审核制）。</li>
                             <li>更多菜单规则见 <a href="#sec-7-10">7.10 签约文件区与更多菜单按状态渲染规则</a>。</li>
+                            <li><strong>执行人待办生成</strong>：工人合同「已签约」同样触发执行人「任务执行」待办生成，规则（含「签约前配置执行人不生成待办」前置约束、签约扫描、补配置）与 <a href="#sec-3-12-14">§3.12.14 非工人合同已签约</a> 一致，本节不重复。</li>
+                            <li><strong>履约完成派生标识</strong>：工人合同「已签约」后，当合同下全部有效任务均为「已完成」时，状态横幅同样叠加绿色「已履约完成」标识（实时派生、无独立状态、不阻断变更），规则与 <a href="#sec-3-12-14">§3.12.14 履约完成派生标识</a> 一致。<strong>原型演示</strong>：工人合同详情页右侧导航「发起方视角」提供「已签约（已履约完成）」演示项，一键切换至已签约态并显示履约完成徽标。</li>
                         </ul>
                     </td></tr>
                 </tbody>
@@ -4208,7 +4266,7 @@
                 <p>主流程状态机与第七章共用；<strong>变更流程的受邀方状态（待确认变更 / 变更已驳回）及确认 / 驳回交互见第九章</strong>。以下按<strong>受邀方视角的各主流程状态逐一说明</strong>，每节包含：原型页面链接、横幅文案、触发条件、页面结构与可见模块、操作按钮、状态流转、关键逻辑。</p>
 
                 <!-- ===== 8.4.1 确认中（受邀方）===== -->
-                <div class="subsection-title" style="font-size:14px;margin-top:16px;">8.4.1 确认中（受邀方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>worker_inviting_receiver</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?viewer=receiver" target="_blank" style="font-size:12px;">&#x1F517; 原型页（需在右侧导航切换至「确认中(受邀方)」预览）</a> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-receive.html" target="_blank" style="font-size:12px;">&#x1F517; 接单体验 E 预览页</a></div>
+                <div class="subsection-title" style="font-size:14px;margin-top:16px;">8.4.1 确认中（受邀方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>worker_inviting_receiver</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-receive-inviting.html" target="_blank" style="font-size:12px;">&#x1F517; 接单体验 E 预览页</a></div>
                 <table style="margin-top:8px;">
                     <thead><tr><th style="width:110px;">属性</th><th>说明</th></tr></thead>
                     <tbody>
@@ -4242,7 +4300,7 @@
                 </table>
 
                 <!-- ===== 8.4.2 已确认（受邀方）===== -->
-                <div class="subsection-title" style="font-size:14px;margin-top:16px;">8.4.2 已确认（受邀方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>worker_confirmed_receiver</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?viewer=receiver" target="_blank" style="font-size:12px;">&#x1F517; 原型页（需在右侧导航切换至「已确认(受邀方)」预览）</a> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-receive-confirmed.html" target="_blank" style="font-size:12px;">&#x1F517; 接单体验 E 已确认页</a></div>
+                <div class="subsection-title" style="font-size:14px;margin-top:16px;">8.4.2 已确认（受邀方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>worker_confirmed_receiver</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?viewer=receiver&status=worker_confirmed_receiver" target="_blank" style="font-size:12px;">&#x1F517; 原型页</a></div>
                 <table style="margin-top:8px;">
                     <thead><tr><th style="width:110px;">属性</th><th>说明</th></tr></thead>
                     <tbody>
@@ -4261,7 +4319,6 @@
                             <ul style="margin:4px 0;padding-left:18px;font-size:12px;line-height:1.8;">
                                 <li>V1 版本的签约文件上传<strong>仅发起方可操作</strong>，受邀方全程只读等待。</li>
                                 <li>更多菜单按状态渲染规则见 <a href="#sec-7-10">7.10</a>（确认中受邀方仅「导出合同文件」一项）。</li>
-                                <li>方案 E 对应页面 <code>worker-contract-receive-confirmed.html</code> 以独立整页卡片流形式呈现此状态。</li>
                         </ul>
                     </td></tr>
                     </tbody>
@@ -4269,7 +4326,7 @@
             <div class="note" style="margin:12px 0;"><div class="note-title">成员登记与权限分配</div><p>本态「已自动加入项目架构层级」「已登记入项目成员名册」同步触发成员登记与权限分配：该工人新增为项目成员、成为架构层级成员并持有其基础数据权限，同时绑定本合同乙方（party B）身份权限（可查看本合同、接收乙方相关待办、参与阶段任务与确认流转）。成员登记、权限分配与回收的完整规则详见第七章 §7.5.3.3 并发首胜机制说明，权限模型见 §2.9 / §5.12 权限控制。</p></div>
 
                 <!-- ===== 8.4.3 抢单失败（受邀方终态）===== -->
-                <div class="subsection-title" style="font-size:14px;margin-top:16px;">8.4.3 抢单失败（受邀方终态）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>worker_lost_receiver</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?viewer=receiver" target="_blank" style="font-size:12px;">&#x1F517; 原型页（需在右侧导航切换至「抢单失败(受邀方)」预览）</a></div>
+                <div class="subsection-title" style="font-size:14px;margin-top:16px;">8.4.3 抢单失败（受邀方终态）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>worker_lost_receiver</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?viewer=receiver&status=worker_lost_receiver" target="_blank" style="font-size:12px;">&#x1F517; 原型页</a></div>
                 <table style="margin-top:8px;">
                     <thead><tr><th style="width:110px;">属性</th><th>说明</th></tr></thead>
                     <tbody>
@@ -4292,7 +4349,7 @@
                 </table>
 
                 <!-- ===== 8.4.4 已拒绝（受邀方终态）===== -->
-                <div class="subsection-title" style="font-size:14px;margin-top:16px;">8.4.4 已拒绝（受邀方终态）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>worker_rejected_receiver</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?viewer=receiver" target="_blank" style="font-size:12px;">&#x1F517; 原型页（需在右侧导航切换至「已拒绝(受邀方)」预览）</a></div>
+                <div class="subsection-title" style="font-size:14px;margin-top:16px;">8.4.4 已拒绝（受邀方终态）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>worker_rejected_receiver</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?viewer=receiver&status=worker_rejected_receiver" target="_blank" style="font-size:12px;">&#x1F517; 原型页</a></div>
                 <table style="margin-top:8px;">
                     <thead><tr><th style="width:110px;">属性</th><th>说明</th></tr></thead>
                     <tbody>
@@ -4313,7 +4370,7 @@
                 </table>
 
                 <!-- ===== 8.4.5 方案 E 接单体验预览态 ===== -->
-                <div class="subsection-title" style="font-size:14px;margin-top:16px;">8.4.5 方案 E 接单体验预览态<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 独立页面，非 worker-contract-detail 内状态</span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-receive.html" target="_blank" style="font-size:12px;">&#x1F517; E 验证主页</a> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-receive-inviting.html" target="_blank" style="font-size:12px;">&#x1F517; E 确认中页</a> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-receive-confirmed.html" target="_blank" style="font-size:12px;">&#x1F517; E 已确认页</a></div>
+                <div class="subsection-title" style="font-size:14px;margin-top:16px;">8.4.5 方案 E 接单体验预览态<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 独立页面，非 worker-contract-detail 内状态</span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-receive.html" target="_blank" style="font-size:12px;">&#x1F517; E 验证主页</a> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-receive-inviting.html" target="_blank" style="font-size:12px;">&#x1F517; E 确认中页</a></div>
                 <table style="margin-top:8px;">
                     <thead><tr><th style="width:110px;">属性</th><th>说明</th></tr></thead>
                     <tbody>
@@ -4322,12 +4379,8 @@
                             页面：<code>worker-contract-receive-inviting.html</code><br>
                             模拟工人打开邀约通知后的完整接单页面：顶部小程序导航 &rarr; 主接单卡（hero 卡：工种 + 合同名 + 金额 + 地址）&rarr; 纵向卡片流（合同关键条款 / 阶段任务 4 阶段 / 附件 4 项）&rarr; 吸底操作栏（「确认加入」主按钮 + 「暂不考虑」）。自带水电演示数据，无需外部传入编号。
                         </td></tr>
-                        <tr><td><strong>已确认预览态</strong></td><td>
-                            页面：<code>worker-contract-receive-confirmed.html</code><br>
-                            展示确认后的等待签约状态：吸底区域为状态提示（非按钮）「⏳ 等待发起方上传签约文件，合同将正式生效」。其余卡片流保持不变。
-                        </td></tr>
-                        <tr><td><strong>演示态切换</strong></td><td>E 验证主页（<code>worker-contract-receive.html</code>）顶部提供「确认中 / 已确认」演示态切换条，方便快速预览两种状态。</td></tr>
-                        <tr><td><strong>原型导航入口</strong></td><td>挂载于 <code>worker-contract-detail.html</code> 右侧原型导航「受邀方视角」分组底部（分隔线后），以链接形式跳转到各 E 页面。</td></tr>
+                        <tr><td><strong>演示态切换</strong></td><td>E 验证主页（<code>worker-contract-receive.html</code>）顶部提供「确认中」演示态切换条，方便快速预览。</td></tr>
+                        <tr><td><strong>原型导航入口</strong></td><td>挂载于 <code>worker-contract-detail.html</code> 右侧原型导航「受邀方视角」分组底部（分隔线后），以链接形式跳转至 E 确认中页面。</td></tr>
                         <tr><td><strong>耦合性</strong></td><td>E 页面为零耦合独立页面，不影响 <code>worker-contract-detail.html</code> 的任何已有功能。</td></tr>
                     </tbody>
                 </table>
@@ -4371,7 +4424,7 @@
                     <tbody>
                         <tr><td>方案 C · 微信服务通知</td><td><code><a class="proto-link" href="service-miniapp/wechat-service-notice.html">wechat-service-notice.html</a></code></td><td>微信客户端层「服务通知」会话，点合同邀约气泡直达 <code><a class="proto-link" href="service-miniapp/worker-contract-detail.html?viewer=receiver">worker-contract-detail.html?viewer=receiver</a></code>。</td></tr>
                         <tr><td>方案 A · 应用内顶部通知条</td><td><code><a class="proto-link" href="service-miniapp/invite-banner-demo.html">invite-banner-demo.html</a></code></td><td>phone-frame 小程序外壳，进入时顶部滑出邀约通知条，参考滴滴抢单实时提醒、不阻断操作。</td></tr>
-                        <tr><td>方案 E · 整页接单卡片流</td><td><code><a class="proto-link" href="service-miniapp/worker-contract-receive.html">worker-contract-receive.html</a></code> / <code><a class="proto-link" href="service-miniapp/worker-contract-receive-inviting.html">-inviting.html</a></code> / <code><a class="proto-link" href="service-miniapp/worker-contract-receive-confirmed.html">-confirmed.html</a></code></td><td>模拟真实工人接单视角：顶部小程序导航 + 主接单卡 hero + 纵向卡片流 + 吸底 CTA，自带水电演示数据，完整保留阶段任务（4 阶段）与附件（4 项）；含确认中 / 已确认演示态切换条。</td></tr>
+                        <tr><td>方案 E · 整页接单卡片流</td><td><code><a class="proto-link" href="service-miniapp/worker-contract-receive.html">worker-contract-receive.html</a></code> / <code><a class="proto-link" href="service-miniapp/worker-contract-receive-inviting.html">-inviting.html</a></code></td><td>模拟真实工人接单视角：顶部小程序导航 + 主接单卡 hero + 纵向卡片流 + 吸底 CTA，自带水电演示数据，完整保留阶段任务（4 阶段）与附件（4 项）；含确认中演示态切换条。</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -4382,7 +4435,7 @@
                 <table>
                     <thead><tr><th>分组</th><th>内容</th></tr></thead>
                     <tbody>
-                        <tr><td>受邀方视角</td><td>确认中(受邀方) / 已确认(受邀方) / 抢单失败(受邀方) / 已拒绝(受邀方) / 确认中·接单体验E / 已确认·接单体验E</td></tr>
+                        <tr><td>受邀方视角</td><td>已确认(受邀方) / 抢单失败(受邀方) / 已拒绝(受邀方) / 确认中·接单体验E</td></tr>
                         <tr><td>演示数据</td><td>微信服务通知（C方案）/ 应用内顶部通知条（A方案）</td></tr>
                     </tbody>
                 </table>
@@ -4470,7 +4523,7 @@
                 <p>以下按<strong>变更流程的每个状态 / 页面</strong>逐一说明，每节包含：原型页面链接（可跳转核对）、横幅文案、进入条件、页面结构与可见模块、底部操作按钮、状态流转路径、关键交互逻辑。其中「待确认变更」为<strong>受邀方（乙方）视角</strong>，其余变更态（变更中 / 变更确认中 / 变更签约中 / 变更已驳回）均以<strong>发起方视角</strong>预览（<code>change_rejected</code> 虽由乙方驳回，但详情页以发起方视角展示驳回结果，见 <a href="#sec-7-3">7.3</a> 视角推导）；「上传变更签约文件」为<strong>独立整页</strong>（非状态切换）。</p>
 
                 <!-- ===== 9.5.1 变更中（发起方）===== -->
-                <div class="subsection-title" id="sec-9-5-1" style="font-size:14px;margin-top:18px;">9.5.1 变更中（发起方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>changing</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（需在右侧导航切换至「变更中(发起方)」预览）</a></div>
+                <div class="subsection-title" id="sec-9-5-1" style="font-size:14px;margin-top:18px;">9.5.1 变更中（发起方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>changing</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?status=changing" target="_blank" style="font-size:12px;">&#x1F517; 原型页</a></div>
                 <table style="margin-top:8px;">
                     <thead><tr><th style="width:110px;">属性</th><th>说明</th></tr></thead>
                     <tbody>
@@ -4491,7 +4544,7 @@
                             <ul style="margin:4px 0;padding-left:18px;font-size:12px;line-height:1.8;">
                                 <li><strong>变更内容对比高亮</strong>：以「旧值 → 新值」形式对比高亮，方便双方快速识别差异（金额红色新值、新增条款绿色标签）。</li>
                                 <li><strong>受邀方对应态</strong>：受邀方在此阶段的视角为 <code>change_confirming</code>（待确认变更，见 <a href="#sec-9-5-2">9.5.2</a>）。</li>
-                                <li><strong>阶段任务暂停流转</strong>：变更期间（changing / change_confirming / change_confirming_sender）不可推进 / 完成任务。</li>
+                                <li><strong>阶段任务锁定（暂停流转）</strong>：变更期间（changing / change_confirming / change_confirming_sender）任务<strong>锁定</strong>，不可推进 / 完成任务，属「变更期间任务锁定」的一部分，规则详见 <a href="#sec-5-15-lock">第五章 变更期间任务锁定规则</a>。</li>
                                 <li><strong>撤回确认弹窗</strong>：点击「撤回变更」弹出 <code>ACTION_TEXT.withdraw_change</code>：「确定要撤回变更申请吗？撤回后合同恢复已签约状态，阶段任务恢复流转。」</li>
                             </ul>
                         </td></tr>
@@ -4499,7 +4552,7 @@
                 </table>
 
                 <!-- ===== 9.5.2 待确认变更（受邀方）===== -->
-                <div class="subsection-title" id="sec-9-5-2" style="font-size:14px;margin-top:18px;">9.5.2 待确认变更（受邀方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_confirming</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（需在右侧导航切换至「待确认变更(受邀方)」预览）</a></div>
+                <div class="subsection-title" id="sec-9-5-2" style="font-size:14px;margin-top:18px;">9.5.2 待确认变更（受邀方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_confirming</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?viewer=receiver&status=change_confirming" target="_blank" style="font-size:12px;">&#x1F517; 原型页</a></div>
                 <table style="margin-top:8px;">
                     <thead><tr><th style="width:110px;">属性</th><th>说明</th></tr></thead>
                     <tbody>
@@ -4529,7 +4582,7 @@
                 </table>
 
                 <!-- ===== 9.5.3 变更已驳回（发起方视角）===== -->
-                <div class="subsection-title" id="sec-9-5-3" style="font-size:14px;margin-top:18px;">9.5.3 变更已驳回（发起方视角）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_rejected</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（需在右侧导航切换至「变更已驳回(受邀方驳回)」预览）</a></div>
+                <div class="subsection-title" id="sec-9-5-3" style="font-size:14px;margin-top:18px;">9.5.3 变更已驳回（发起方视角）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_rejected</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?status=change_rejected" target="_blank" style="font-size:12px;">&#x1F517; 原型页</a></div>
                 <table style="margin-top:8px;">
                     <thead><tr><th style="width:110px;">属性</th><th>说明</th></tr></thead>
                     <tbody>
@@ -4557,7 +4610,7 @@
                 </table>
 
                 <!-- ===== 9.5.4 变更确认中（发起方）===== -->
-                <div class="subsection-title" id="sec-9-5-4" style="font-size:14px;margin-top:18px;">9.5.4 变更确认中（发起方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_confirming_sender</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（需在右侧导航切换至「变更确认中(发起方)」预览）</a></div>
+                <div class="subsection-title" id="sec-9-5-4" style="font-size:14px;margin-top:18px;">9.5.4 变更确认中（发起方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_confirming_sender</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?status=change_confirming_sender" target="_blank" style="font-size:12px;">&#x1F517; 原型页</a></div>
                 <table style="margin-top:8px;">
                     <thead><tr><th style="width:110px;">属性</th><th>说明</th></tr></thead>
                     <tbody>
@@ -4578,14 +4631,14 @@
                 </table>
 
                 <!-- ===== 9.5.5 变更签约中（双方）===== -->
-                <div class="subsection-title" id="sec-9-5-5" style="font-size:14px;margin-top:18px;">9.5.5 变更签约中（双方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_signing_wait</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（需在右侧导航切换至「变更签约中」预览）</a></div>
+                <div class="subsection-title" id="sec-9-5-5" style="font-size:14px;margin-top:18px;">9.5.5 变更签约中（双方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_signing_wait</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?status=change_signing_wait" target="_blank" style="font-size:12px;">&#x1F517; 原型页</a></div>
                 <table style="margin-top:8px;">
                     <thead><tr><th style="width:110px;">属性</th><th>说明</th></tr></thead>
                     <tbody>
                         <tr><td><strong>横幅状态文案</strong></td><td>变更签约中</td></tr>
                         <tr><td><strong>横幅说明文字</strong></td><td>变更已确认，请上传线下已签约的合同变更文件，上传后变更正式生效（生成 V2 版本）。</td></tr>
                         <tr><td><strong>触发条件（如何进入此状态）</strong></td><td>发起方在「变更确认中」（<code>change_confirming_sender</code>）准备上传变更签约文件；底部按钮跳转整页 <code>worker-change-sign-upload.html</code>（见 <a href="#sec-9-5-6">9.5.6</a>）。</td></tr>
-                        <tr><td><strong>页面结构与可见模块</strong></td><td>变更摘要卡片保持展示。签约文件区显示「暂无签约文件。」（等待上传变更签约文件）。更多菜单包含版本记录 / 变更记录 / 导出合同文件三项。阶段任务仍暂停流转（待 V2 生效后恢复）。</td></tr>
+                        <tr><td><strong>页面结构与可见模块</strong></td><td>变更摘要卡片保持展示。签约文件区显示「暂无签约文件。」（等待上传变更签约文件）。更多菜单包含版本记录 / 变更记录 / 导出合同文件三项。阶段任务仍暂停流转（变更期间锁定，待 V2 生效后解除锁定恢复，见 <a href="#sec-5-15-lock">第五章 变更期间任务锁定规则</a>）。</td></tr>
                         <tr><td><strong>底部操作按钮</strong></td><td>&bull; <strong>上传变更签约文件</strong>（主按钮）&mdash; 跳转整页上传（<a href="#sec-9-5-6">9.5.6</a>）。</td></tr>
                         <tr><td><strong>状态流转</strong></td><td>上传成功 &rarr; <code>worker_signed</code>（已签约，V2 版本生效，阶段任务恢复流转）</td></tr>
                         <tr><td><strong>关键逻辑与交互细节</strong></td><td>
@@ -4593,6 +4646,7 @@
                                 <li><strong>V2 版本生成</strong>：上传成功后生成 V2 版本，覆盖原合同内容（变更后的金额 / 条款 / 阶段任务生效），原 V1 保留于「版本与流转」记录中可回溯。</li>
                                 <li><strong>独立上传页</strong>：与 V1 上传页 <code>worker-sign-upload.html</code> 对称，但内容适配变更提案（金额新旧对比、变更正文、阶段任务）。</li>
                                 <li><strong>更多菜单规则</strong>：见 <a href="#sec-7-10">7.10 签约文件区与更多菜单按状态渲染规则</a>。</li>
+                                <li><strong>执行人待办生成 / 失效</strong>：V2 生效后，系统仅对本次变更项（含执行人的任务）按 <a href="#sec-5-15-8">§5.15.8 变更生效规则</a> 生成 / 失效执行人待办（非变更项不动）；签约前不生成待办的约束同样适用。</li>
                             </ul>
                         </td></tr>
                     </tbody>

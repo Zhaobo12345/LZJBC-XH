@@ -312,7 +312,10 @@
                 </div>
 
             <div class="card status-banner draft" id="statusBanner">
-                <div class="status-text" id="statusText">拟定中</div>
+                <div class="status-text-line">
+                    <div class="status-text" id="statusText">拟定中</div>
+                    <span class="fulfilled-badge" id="fulfilledBadge" style="display:none;">✓ 已履约完成</span>
+                </div>
                 <div class="status-desc" id="statusDesc">合同正在编辑中，编辑完成后可提交确认</div>
                 <div class="reject-reason-box" id="rejectReasonBox" style="display: none;">
                     <div class="reject-reason-title">⚠️ 驳回原因</div>
@@ -2336,10 +2339,11 @@
                 <div class="status-group-header" onclick="toggleStatusGroup(this)">
                     <span class="status-group-icon">▶</span>
                     <span class="status-group-title">签约阶段</span>
-                    <span class="status-group-count">1</span>
+                    <span class="status-group-count">2</span>
                 </div>
                 <div class="status-group-content" style="display: none;">
-                    <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('signed')">已签约</div>
+                    <div class="status-switch-item" onclick="ContractDetailPage.demoSigned()">已签约</div>
+                    <div class="status-switch-item" onclick="ContractDetailPage.demoFulfilled()">已签约（已履约完成）</div>
                 </div>
             </div>
             

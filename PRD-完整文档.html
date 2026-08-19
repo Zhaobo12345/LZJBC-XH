@@ -857,7 +857,7 @@
                     <tr><td>对账单确认与凭证</td><td><a href="PRD-项目模块详细规格.html#page-statement-detail-service" target="_blank">服务方小程序</a>、<a href="PRD-项目模块详细规格.html#page-statement-detail-owner" target="_blank">业主小程序</a></td><td>对账单详情页</td><td>业主确认/驳回对账单；服务方上传支付凭证</td></tr>
 
                     <!-- 其他功能 -->
-                    <tr><td rowspan="2">其他功能</td><td>消息通知</td><td><a href="PRD-项目模块详细规格.html#page-home-service" target="_blank">服务方小程序</a>、<a href="PRD-项目模块详细规格.html#page-detail-owner" target="_blank">业主小程序</a></td><td>消息页</td><td>系统消息、通知列表；邀请接收与角色确认规则详见 <a href="#message-feature">七、消息功能</a></td></tr>
+                    <tr><td rowspan="2">其他功能</td><td>消息通知</td><td><a href="PRD-项目模块详细规格.html#page-home-service" target="_blank">服务方小程序</a>、<a href="PRD-项目模块详细规格.html#page-detail-owner" target="_blank">业主小程序</a></td><td>消息页</td><td>邀请（含角色确认，默认 Tab）/ 合同邀约（仅服务方）；业主端仅含邀请一个 Tab，任务类提醒归口「待办」。邀请接收与角色确认规则详见 <a href="#message-feature">七、消息功能</a></td></tr>
                     <tr><td>分享导航</td><td>服务方小程序、业主小程序</td><td>分享导航页</td><td>分享链接导航</td></tr>
                 </tbody>
             </table>
@@ -866,10 +866,156 @@
         <!-- 消息功能（独立功能，跨模块） -->
         <div class="section" id="message-feature">
             <div class="section-title">七、消息功能</div>
-            <p>消息是平台内<strong>跨功能模块的独立能力</strong>，承载系统通知与各类业务提醒（加入项目邀请、任务指派、合同变更、对账单确认等），可联动全部其他功能项。本说明聚焦"加入项目类邀请"的<strong>接收与角色确认规则</strong>；其余消息类型的交互遵循各对应功能模块的处理约定。</p>
+            <p>消息是平台内<strong>跨功能模块的独立能力</strong>，承载系统通知与各类业务提醒（加入项目邀请、工人合同邀约、系统公告等），可联动全部其他功能项。其中"任务指派 / 确认 / 驳回"等<strong>任务类提醒不再以消息 Tab 呈现，统一归口「待办」</strong>（详见《PRD-任务模块详细规格》）；消息页的<strong>布局、列表项与字段规格仅在本节描述</strong>（其他模块文档不重复），相关跨模块规则以引用为主以减少冗余。</p>
+
             <div class="subsection" style="margin-bottom: 24px;">
-                <div class="subsection-title">邀请接收与角色确认规则（type=invite）</div>
-                <p>消息中心收到的"加入项目"类邀请（type=invite），无论其发起方式为<strong>平台内选择 / 二维码 / 微信好友</strong>，被邀请人点击"接受邀请"后的处理统一遵循本规则。本规则是"邀请链路"在接收侧的闭环，与《PRD-项目模块详细规格》7.5（邀请方式）、7.6（邀请身份区分与默认权限）同源。</p>
+                <div class="subsection-title">7.0 页面定位与范围</div>
+                <p>消息页是服务方 / 业主小程序的统一消息中心，负责聚合来自各功能模块的业务消息并承载接收侧交互。其范围边界：</p>
+                <ul>
+                    <li><strong>覆盖范围</strong>：加入项目类邀请（两端）、工人合同邀约（仅服务方）。</li>
+                    <li><strong>不覆盖范围</strong>：任务类提醒（归口「待办」）；合同正文编辑 / 变更流程本身（归口《PRD-合同模块详细规格》）；邀请的发起方式与权限（归口《PRD-项目模块详细规格》7.5 / 7.6，本节仅描述接收侧）。</li>
+                    <li><strong>布局专有</strong>：消息页布局、列表项结构、卡片字段规格属消息页专有，仅在本节展开，其他文档不重复。</li>
+                </ul>
+            </div>
+
+            <div class="subsection" style="margin-bottom: 24px;">
+                <div class="subsection-title">7.1 消息页面布局</div>
+                <p>消息页采用标准小程序页面骨架（自顶向下）：</p>
+                <table class="param-table">
+                    <thead><tr><th>区域 / 组件</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td>状态栏 + 导航栏</td><td>导航栏标题固定为"消息"；右侧为<strong>微信原生胶囊（⋯ ○）</strong>，由微信客户端渲染、开发者不可自定义其内容（仅占位展示）。</td></tr>
+                        <tr><td>消息分类 Tab 栏</td><td>位于导航栏下方，横向排列各消息分类（见 7.2）；当前 Tab 高亮，点击切换并重新渲染列表；支持 URL 参数 <code>?tab=</code> 直接定位（服务方）。<strong>仅当消息分类多于一个时展示</strong>：业主端仅含"邀请"一类，不展示分类 Tab 栏，消息直接列表渲染，未处理数量改由底部导航"消息"项角标呈现（见 7.4.3）。</td></tr>
+                        <tr><td>消息列表</td><td>中部可滚动区域，消息按<strong>日期（date）分组</strong>展示（分组标签如"今天 / 昨天 / 2024-01-15"），组内纵向排列消息卡片（Card）。</td></tr>
+                        <tr><td>消息卡片（Card）</td><td>单条消息的最小展示单元，结构见 7.3；含未读态视觉（左侧高亮条 / 强调底色）、状态徽标与操作按钮。</td></tr>
+                        <tr><td>底部 TabBar</td><td>小程序主导航（首页 / 项目或我的家 / 消息[高亮] / 我的）；消息页固定高亮"消息"项。</td></tr>
+                        <tr><td>弹窗（Modal）与轻提示（Toast）</td><td>覆盖于内容之上的通用层：确认弹窗（接受 / 拒绝邀请）、提示弹窗、选择加入角色弹窗；Toast 用于操作反馈（约 2s 自动消失）。</td></tr>
+                        <tr><td>原型导航 / 演示面板</td><td>仅原型页附加：侧边"原型导航"列出同端页面；"接受邀请演示控制"面板支持切换接收人已认证角色数（单 / 多角色）与扫码 / 微信邀请演示入口，属演示辅助、不计入产品范围。</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection" style="margin-bottom: 24px;">
+                <div class="subsection-title">7.2 消息分类与 Tab 结构</div>
+                <p>两端 Tab 配置不同，默认均进入<strong>邀请</strong> Tab；各 Tab 仅渲染本分类消息，空分类显示"暂无消息"空状态。</p>
+                <table class="param-table">
+                    <thead><tr><th>端</th><th>Tab（默认）</th><th>数据来源</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td>业主端</td><td>无分类 Tab（仅"邀请"一类）</td><td>本地 <code>messages.invite</code></td><td>仅一类消息，不展示分类 Tab 栏，直接列表渲染；未处理数量以底部导航"消息"项角标呈现（见 7.4.3）。</td></tr>
+                        <tr><td rowspan="2">服务方</td><td>邀请（默认）</td><td>本地 <code>messages.invite</code></td><td>同业主端；带未读角标。</td></tr>
+                        <tr><td>合同邀约</td><td><code>ContractStore</code>（合同邀约消息）</td><td>工人合同邀约，数据持久化于 localStorage；带未读角标。仅服务方含此 Tab。</td></tr>
+                    </tbody>
+                </table>
+                <div class="note" style="margin-top: 16px;">
+                    <div class="note-title">说明</div>
+                    <p>服务方消息页含<strong>邀请 / 合同邀约</strong>两个 Tab（不含系统消息、任务通知）；业主端仅"邀请"一类，<strong>不展示分类 Tab 栏</strong>，消息直接列表渲染、未处理数量以底部导航"消息"项角标呈现。两端均不设"任务通知"Tab，任务相关提醒归口「待办」。</p>
+                </div>
+            </div>
+
+            <div class="subsection" style="margin-bottom: 24px;">
+                <div class="subsection-title">7.3 消息列表项与字段规格</div>
+                <p>消息卡片通用展示：消息类型图标、发送方头像 / 名称、时间、标题、正文、详情区（按类型）、状态徽标 / 操作区。按消息类型分字段如下。</p>
+
+                <p style="margin-top: 16px;"><strong>7.3.1 邀请消息（<code>type=invite</code>）</strong></p>
+                <table class="param-table">
+                    <thead><tr><th>字段（标识符）</th><th>类型</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td>消息标识（id）</td><td>字符串</td><td>消息唯一标识。</td></tr>
+                        <tr><td>发送方（sender）</td><td>字符串</td><td>邀请人姓名。</td></tr>
+                        <tr><td>发送方头像（senderAvatar）</td><td>字符串</td><td>头像（姓名首字或 emoji）。</td></tr>
+                        <tr><td>类型（type）</td><td>枚举</td><td>固定 <code>invite</code>。</td></tr>
+                        <tr><td>标题（title）</td><td>字符串</td><td>如"邀请您加入项目"。</td></tr>
+                        <tr><td>正文（content）</td><td>字符串</td><td>邀请摘要文案。</td></tr>
+                        <tr><td>时间（time）</td><td>字符串</td><td>展示时间（如"10:30""昨天 16:45"）。</td></tr>
+                        <tr><td>日期分组（date）</td><td>字符串</td><td>列表分组键（如"今天""昨天""2024-01-15"）。</td></tr>
+                        <tr><td>未读（unread）</td><td>布尔</td><td>未读态驱动卡片高亮与 Tab 角标。</td></tr>
+                        <tr><td>状态（status）</td><td>枚举</td><td>待处理（pending）/ 已接受（accepted）/ 已拒绝（rejected）/ 已过期（expired），见 7.4.1。</td></tr>
+                        <tr><td>项目（project）</td><td>对象</td><td>含 名称（name）/ 地址（address）/ 图标（icon）；已接受后可点击进入。</td></tr>
+                        <tr><td>邀请加入（group）</td><td>字符串</td><td>被邀请加入的组 / 工作组（如"水电工作组"）。</td></tr>
+                        <tr><td>邀请人（inviter）</td><td>字符串</td><td>邀请人及身份（如"张三（项目经理）"）。</td></tr>
+                    </tbody>
+                </table>
+
+                <p style="margin-top: 16px;"><strong>7.3.2 合同邀约消息（<code>type=contract_invite</code>，仅服务方）</strong></p>
+                <table class="param-table">
+                    <thead><tr><th>字段（标识符）</th><th>类型</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td>消息标识（id）</td><td>字符串</td><td>如 <code>cmsg-{contractId}-{userId}</code>。</td></tr>
+                        <tr><td>类型（type）</td><td>枚举</td><td>固定 <code>contract_invite</code>。</td></tr>
+                        <tr><td>合同标识（contractId）</td><td>字符串</td><td>关联工人合同 id；点击"查看邀约"据此跳转。</td></tr>
+                        <tr><td>接收用户（toUserId）</td><td>字符串</td><td>被邀请人用户 id（接收方视角入参）。</td></tr>
+                        <tr><td>接收用户名（toUserName）</td><td>字符串</td><td>被邀请人姓名。</td></tr>
+                        <tr><td>发起方用户名（fromUserName）</td><td>字符串</td><td>发起方（工长·甲方）；运行时迁移旧"陈业主"→"陈庄（工长）"。</td></tr>
+                        <tr><td>发起方角色（fromUserRole）</td><td>字符串</td><td>如"工长"。</td></tr>
+                        <tr><td>合同名称（contractName）</td><td>字符串</td><td>工人合同名称。</td></tr>
+                        <tr><td>合同类型（contractType）</td><td>字符串</td><td>如"水电班组服务合同"。</td></tr>
+                        <tr><td>关联架构（group）</td><td>字符串</td><td>所属工程 / 架构层级（如"水电工程"）。</td></tr>
+                        <tr><td>状态（status）</td><td>枚举</td><td>待处理（pending）/ 已确认（accepted）/ 已拒绝（rejected）/ 已撤回（withdrawn）/ 抢单失败（lost），见 7.4.2。</td></tr>
+                        <tr><td>时间（time）/ 日期分组（date）/ 未读（unread）</td><td>字符串 / 布尔</td><td>同前；未读驱动 Tab 角标。</td></tr>
+                    </tbody>
+                </table>
+                <div class="note" style="margin-top: 16px;">
+                    <div class="note-title">说明</div>
+                    <p>合同邀约消息字段由 <code>ContractStore.addMessage</code> 写入（底层生成逻辑见《PRD-合同模块详细规格》服务方小程序工人合同章节，#page-mini-service，3.7–3.13）；消息页为只读渲染与跳转，不反向修改合同数据。</p>
+                </div>
+            </div>
+
+            <div class="subsection" style="margin-bottom: 24px;">
+                <div class="subsection-title">7.4 消息状态与展示规则</div>
+
+                <p style="margin-top: 8px;"><strong>7.4.1 邀请消息状态（<code>type=invite</code>）</strong></p>
+                <table class="param-table">
+                    <thead><tr><th>状态值（status）</th><th>文案</th><th>状态徽标</th><th>操作区</th></tr></thead>
+                    <tbody>
+                        <tr><td>待处理（pending）</td><td>待处理</td><td>无（卡片左侧未读条）</td><td>"拒绝" + "接受邀请" 按钮</td></tr>
+                        <tr><td>已接受（accepted）</td><td>已接受（✓）</td><td>绿色"已接受"</td><td>项目卡可点击"进入 ›"，无按钮</td></tr>
+                        <tr><td>已拒绝（rejected）</td><td>已拒绝（✕）</td><td>红色"已拒绝"</td><td>无</td></tr>
+                        <tr><td>已过期（expired）</td><td>已过期（⏰）</td><td>灰色"已过期"</td><td>无</td></tr>
+                    </tbody>
+                </table>
+
+                <p style="margin-top: 16px;"><strong>7.4.2 合同邀约消息状态（type=contract_invite，服务方）</strong></p>
+                <table class="param-table">
+                    <thead><tr><th>状态值（status）</th><th>文案</th><th>状态徽标 / 降级</th><th>操作区</th></tr></thead>
+                    <tbody>
+                        <tr><td>待处理（pending）</td><td>待处理</td><td>无（未读条）</td><td>"查看邀约" 按钮</td></tr>
+                        <tr><td>已确认（accepted）</td><td>已确认（✓）</td><td>绿色"已确认"</td><td>"查看邀约"</td></tr>
+                        <tr><td>已拒绝（rejected）</td><td>已拒绝（✕）</td><td>红色"已拒绝"（视觉降级）</td><td>无</td></tr>
+                        <tr><td>已撤回（withdrawn）</td><td>已撤回（↩）</td><td>灰色"已撤回" + 提示"该邀约已被发起方撤回，无需处理"</td><td>无</td></tr>
+                        <tr><td>抢单失败（lost）</td><td>抢单失败（⚡）</td><td>灰色"抢单失败" + 提示"该合同已被其他人员确认，您未获得本次合作"</td><td>无</td></tr>
+                    </tbody>
+                </table>
+                <div class="note" style="margin-top: 16px;">
+                    <div class="note-title">说明</div>
+                    <p>撤回（withdrawn）/ 抢单失败（lost）为合同侧并发首胜与发起方撤回的衍生态，消息页将其整体视觉降级（无操作按钮），仅作结果告知；底层状态机见《PRD-合同模块详细规格》工人合同确认 / 撤回 / 抢单失败（并发首胜）章节。</p>
+                </div>
+
+                <p style="margin-top: 16px;"><strong>7.4.3 未读角标规则</strong></p>
+                <ul>
+                    <li><strong>服务方 邀请 Tab 角标</strong>：未读（unread=true）的邀请消息计数；为 0 时隐藏。</li>
+                    <li><strong>合同邀约 Tab 角标</strong>：未读且状态为待处理（pending）的合同邀约计数；为 0 时隐藏。</li>
+                    <li><strong>业主端 底部导航"消息"角标</strong>：因业主端仅"邀请"一类、不展示分类 Tab 栏，未读（未处理）邀请消息计数直接展示于底部 TabBar"消息"项右上角（红色圆角角标）；为 0 时隐藏。该角标随"全部已读"或单条已读实时更新（<code>updateBadge</code> 统一维护）。</li>
+                </ul>
+            </div>
+
+            <div class="subsection" style="margin-bottom: 24px;">
+                <div class="subsection-title">7.5 交互逻辑与效果</div>
+                <ul>
+                    <li><strong>Tab 切换</strong>：<code>switchTab(tab)</code> 切换 active 并重渲染本分类列表；服务方演示面板仅"邀请"Tab 展示。</li>
+                    <li><strong>邀请接受 / 拒绝</strong>：点击"接受邀请"/"拒绝"→ 弹出确认弹窗（文案含项目名）→ 确认后消息状态更新、清除未读、刷新角标、重渲染；接受按 7.6 角色分支进入项目，拒绝轻提示"已拒绝邀请"。</li>
+                    <li><strong>角色分支选择</strong>：多角色弹"选择加入角色"弹窗；"取消"则停留列表、消息仍为"已接受"、可再次进入项目。</li>
+                    <li><strong>已接受进入项目</strong>：点项目卡或角色选择后调用 <code>goToProject(projectName)</code> 跳转项目详情页（轻提示"正在进入…"后约 0.6s 跳转）。</li>
+                    <li><strong>合同邀约查看</strong>：点"查看邀约"→ 跳转 <a href="service-miniapp/worker-contract-detail.html?viewer=receiver"><code>worker-contract-detail.html?viewer=receiver</code></a>（接收方视角，实际带 asUserId 参数），查看并响应工人合同邀约。</li>
+                    <li><strong>空状态</strong>：列表为空显示"暂无消息"图标与文案。</li>
+                    <li><strong>轻提示（Toast）</strong>：操作反馈（如"已加入…正在进入…""已全部标记为已读"）约 2s 自动消失。</li>
+                    <li><strong>外部跳转定位</strong>：支持 URL 参数 <code>?tab=contract</code> 直接进入对应 Tab（服务方）。</li>
+                    <li><strong>演示控制（仅原型）</strong>：单 / 多角色切换、扫码 / 微信好友邀请接收演示入口，便于演示角色分支差异。</li>
+                </ul>
+            </div>
+
+            <div class="subsection" style="margin-bottom: 24px;">
+                <div class="subsection-title">7.6 邀请接收与角色确认规则（<code>type=invite</code>）</div>
+                <p>消息中心收到的"加入项目"类邀请（type=invite），无论其发起方式为<strong>平台内选择 / 二维码 / 微信好友</strong>，被邀请人点击"接受邀请"后的处理统一遵循本规则（两端"邀请" Tab 共用）。本规则是"邀请链路"在接收侧的闭环，与《PRD-项目模块详细规格》7.5（邀请方式）、7.6（邀请身份区分与默认权限）同源。</p>
                 <table class="param-table">
                     <thead><tr><th>步骤</th><th>行为</th><th>说明</th></tr></thead>
                     <tbody>
@@ -895,6 +1041,26 @@
                     <div class="note-title">说明</div>
                     <p>"已认证角色"指用户在平台已完成认证的角色（如水电工、木工、项目经理等），数量来源于 <code>users.certified_role_count</code>。仅当数量 ≥ 2 时触发角色选择，避免单角色 / 无角色用户产生多余操作步骤。</p>
                 </div>
+            </div>
+
+            <div class="subsection" style="margin-bottom: 24px;">
+                <div class="subsection-title">7.7 合同邀约消息（来自 ContractStore）</div>
+                <p>服务方"合同邀约" Tab 的数据由 <code>ContractStore</code> 提供：每创建一份工人合同并向被邀请人发出邀约时，由 <code>ContractStore.addMessage</code> 生成一条 <code>type=contract_invite</code> 消息（字段见 7.3.2）。其<strong>生成、确认（并发首胜）、撤回、抢单失败</strong>的底层逻辑归口《PRD-合同模块详细规格》服务方小程序工人合同章节（#page-mini-service，3.7–3.13），消息页仅负责：</p>
+                <ul>
+                    <li>按 <code>status</code> 渲染状态徽标与"查看邀约"跳转（见 7.4.2 / 7.5）；</li>
+                    <li>未读角标计算与"全部已读"清理（与邀请消息一并 <code>markAllRead</code>）；</li>
+                    <li>运行时数据迁移：自动将旧 localStorage 中残留的"陈业主"修正为"陈庄（工长）"；</li>
+                    <li>首次进入由 <code>ensureContractInviteDemo</code> 注入示例并强制对齐合同底层状态，保证卡片与合同详情视角一致。</li>
+                </ul>
+            </div>
+
+            <div class="subsection" style="margin-bottom: 24px;">
+                <div class="subsection-title">7.8 数据来源与持久化</div>
+                <ul>
+                    <li><strong>邀请消息</strong>：本地内存示例数据（<code>messages</code> 对象），演示用，刷新后重置；未读态在会话内维护。</li>
+                    <li><strong>合同邀约消息</strong>：持久化于 localStorage（<code>ContractStore</code>），跨会话保留；首次进入由示例脚本注入 6 条覆盖 查看邀约 / 已撤回 / 已拒绝 / 抢单失败 / 已确认 五类效果的示例。</li>
+                    <li><strong>未读同步</strong>：邀请消息未读在会话内维护；合同邀约未读持久化于 <code>ContractStore</code>，<code>markAllRead</code> 一并清除两类未读并刷新角标。</li>
+                </ul>
             </div>
         </div>
 
@@ -972,11 +1138,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td>PRD-完整文档.html</td><td>本文档，总览和导航</td></tr>
-                    <tr><td>PRD-合同模块详细规格.html</td><td>合同模块页面规格（列表/详情PC完整规格/服务方/业主）</td></tr>
-                    <tr><td>PRD-任务模块详细规格.html</td><td>任务模块6个页面规格</td></tr>
-                    <tr><td>PRD-项目模块详细规格.html</td><td>项目模块17个页面规格</td></tr>
-                    <tr><td>PRD-PC端其他模块详细规格.html</td><td>PC端其他模块规格</td></tr>
+                    <tr><td><a href="PRD-完整文档.html">PRD-完整文档.html</a></td><td>本文档，总览和导航</td></tr>
+                    <tr><td><a href="PRD-合同模块详细规格.html">PRD-合同模块详细规格.html</a></td><td>合同模块页面规格（列表/详情PC完整规格/服务方/业主）</td></tr>
+                    <tr><td><a href="PRD-任务模块详细规格.html">PRD-任务模块详细规格.html</a></td><td>任务模块6个页面规格</td></tr>
+                    <tr><td><a href="PRD-项目模块详细规格.html">PRD-项目模块详细规格.html</a></td><td>项目模块17个页面规格</td></tr>
+                    <tr><td><a href="PRD-PC端其他模块详细规格.html">PRD-PC端其他模块详细规格.html</a></td><td>PC端其他模块规格</td></tr>
                 </tbody>
             </table>
         </div>

@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -1197,17 +1197,19 @@
                 </div>
             </div>
 
+            <div class="filter-tags" id="filterTags" style="display: none;"></div>
+
             <div class="result-bar">
                 <span id="resultCount">共 24 个任务</span>
                 <span class="expand-all-btn" onclick="expandAllContracts()">展开全部</span>
             </div>
             
             <div id="taskContainer">
-                <div class="contract-section" data-contract="contract-1">
+                <div class="contract-section" data-contract="contract-1" data-level="水电工作组">
                     <div class="contract-header" onclick="toggleContract(this)">
                         <div class="contract-icon">📄</div>
                         <div class="contract-main">
-                            <div class="contract-name">水电分包合同</div>
+                            <div class="contract-name">水电班组服务合同</div>
                             <div class="contract-footer-row">
                                 <div class="contract-meta">水电工作组 · 4个阶段 · 13个任务</div>
                                 <div class="contract-progress">
@@ -1376,11 +1378,11 @@
                     </div>
                 </div>
                 
-                <div class="contract-section" data-contract="contract-2">
+                <div class="contract-section" data-contract="contract-2" data-level="泥瓦工作组">
                     <div class="contract-header" onclick="toggleContract(this)">
                         <div class="contract-icon" style="background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%);">📄</div>
                         <div class="contract-main">
-                            <div class="contract-name">泥瓦分包合同</div>
+                            <div class="contract-name">泥瓦工班组服务合同</div>
                             <div class="contract-footer-row">
                                 <div class="contract-meta">泥瓦工作组 · 3个阶段 · 8个任务</div>
                                 <div class="contract-progress">
@@ -1464,11 +1466,11 @@
                     </div>
                 </div>
                 
-                <div class="contract-section" data-contract="contract-3">
+                <div class="contract-section" data-contract="contract-3" data-level="木工工作组">
                     <div class="contract-header" onclick="toggleContract(this)">
                         <div class="contract-icon" style="background: linear-gradient(135deg, #FA8C16 0%, #FFA940 100%);">📄</div>
                         <div class="contract-main">
-                            <div class="contract-name">木工分包合同</div>
+                            <div class="contract-name">木作班组服务合同</div>
                             <div class="contract-footer-row">
                                 <div class="contract-meta">木工工作组 · 2个阶段 · 4个任务</div>
                                 <div class="contract-progress">
@@ -1509,11 +1511,11 @@
                     </div>
                 </div>
                 
-                <div class="contract-section" data-contract="contract-4">
+                <div class="contract-section" data-contract="contract-4" data-level="油漆工作组">
                     <div class="contract-header" onclick="toggleContract(this)">
                         <div class="contract-icon" style="background: linear-gradient(135deg, #722ED1 0%, #9254DE 100%);">📄</div>
                         <div class="contract-main">
-                            <div class="contract-name">油漆分包合同</div>
+                            <div class="contract-name">油漆工班组服务合同</div>
                             <div class="contract-footer-row">
                                 <div class="contract-meta">油漆工作组 · 2个阶段 · 4个任务</div>
                                 <div class="contract-progress">
@@ -1566,7 +1568,7 @@
                     <div class="task-info">
                         <div class="task-name">材料采购</div>
                         <div class="task-meta">
-                            <span class="contract-name">水电分包合同</span>
+                            <span class="contract-name">水电班组服务合同</span>
                             <span>执行人：张三</span>
                         </div>
                     </div>
@@ -1577,7 +1579,7 @@
                     <div class="task-info">
                         <div class="task-name">穿线</div>
                         <div class="task-meta">
-                            <span class="contract-name">水电分包合同</span>
+                            <span class="contract-name">水电班组服务合同</span>
                             <span>执行人：李四</span>
                             <span>确认中 1/3</span>
                         </div>
@@ -1589,7 +1591,7 @@
                     <div class="task-info">
                         <div class="task-name">墙面贴砖</div>
                         <div class="task-meta">
-                            <span class="contract-name">泥瓦分包合同</span>
+                            <span class="contract-name">泥瓦工班组服务合同</span>
                             <span>执行人：王五</span>
                             <span>确认中 2/3</span>
                         </div>
@@ -1601,7 +1603,7 @@
                     <div class="task-info">
                         <div class="task-name">吊顶施工</div>
                         <div class="task-meta">
-                            <span class="contract-name">木工分包合同</span>
+                            <span class="contract-name">木作班组服务合同</span>
                             <span>执行人：赵六</span>
                         </div>
                     </div>
@@ -1612,7 +1614,7 @@
                     <div class="task-info">
                         <div class="task-name">墙面批刮</div>
                         <div class="task-meta">
-                            <span class="contract-name">油漆分包合同</span>
+                            <span class="contract-name">油漆工班组服务合同</span>
                             <span>执行人：钱七</span>
                         </div>
                     </div>
@@ -1639,7 +1641,8 @@
             typeText: '全部类型',
             status: 'all',
             statusText: '全部状态',
-            mine: false
+            mine: false,
+            level: null
         };
         
         let allExpanded = true;
@@ -1740,13 +1743,16 @@
             if (currentFilters.status !== 'all') {
                 tags.push({ type: 'status', text: currentFilters.statusText });
             }
+            if (currentFilters.level) {
+                tags.push({ type: 'level', text: '架构层级：' + currentFilters.level });
+            }
             
             if (tags.length > 0) {
                 filterTags.style.display = 'flex';
                 filterTags.innerHTML = tags.map(tag => `
                     <div class="filter-tag">
                         <span>${tag.text}</span>
-                        <span class="remove" onclick="removeFilter('${tag.type}')">×</span>
+                        ${tag.type !== 'level' ? `<span class="remove" onclick="removeFilter('${tag.type}')">×</span>` : ''}
                     </div>
                 `).join('');
             } else {
@@ -1754,10 +1760,12 @@
             }
             
             const filterBtn = document.getElementById('filterBtn');
-            if (tags.length > 0) {
-                filterBtn.classList.add('active');
-            } else {
-                filterBtn.classList.remove('active');
+            if (filterBtn) {
+                if (tags.length > 0) {
+                    filterBtn.classList.add('active');
+                } else {
+                    filterBtn.classList.remove('active');
+                }
             }
         }
         
@@ -1774,6 +1782,8 @@
                 currentFilters.status = 'all';
                 currentFilters.statusText = '全部状态';
                 updateFilterOptions('statusOptions', 'all');
+            } else if (type === 'level') {
+                currentFilters.level = null;
             }
             updateFilterTags();
             filterTasks();
@@ -1910,6 +1920,11 @@
             
             contractSections.forEach(section => {
                 const contractId = section.dataset.contract;
+                // 架构层级过滤（来自项目详情跳转携带）：整组显隐，不改变任务级过滤逻辑
+                if (currentFilters.level && section.dataset.level !== currentFilters.level) {
+                    section.style.display = 'none';
+                    return;
+                }
                 const stages = section.querySelectorAll('.stage-item');
                 const tempTasksSection = section.querySelector('.temp-tasks-section');
                 let contractVisibleCount = 0;
@@ -2309,7 +2324,17 @@
         document.addEventListener('DOMContentLoaded', function() {
             checkSequentialTasks();
             renderContractProgress();
-            
+
+            // 架构层级初始化（来自项目详情跳转携带；项目部=不带参数）
+            try {
+                var lv = new URLSearchParams(location.search).get('level');
+                if (lv && lv !== '项目部') {
+                    currentFilters.level = lv;
+                    updateFilterTags();
+                    filterTasks();
+                }
+            } catch (e) {}
+
             const participantOptions = document.querySelectorAll('.filter-option');
             participantOptions.forEach(function(option) {
                 option.addEventListener('click', function(e) {

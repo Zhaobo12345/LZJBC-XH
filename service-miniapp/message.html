@@ -662,12 +662,6 @@
                 邀请
                 <span class="badge" id="inviteBadge">4</span>
             </div>
-            <div class="message-tab" onclick="switchTab('task')">
-                任务通知
-            </div>
-            <div class="message-tab" onclick="switchTab('system')">
-                系统消息
-            </div>
             <div class="message-tab" onclick="switchTab('contract')">
                 合同邀约
                 <span class="badge" id="contractBadge" style="display:none;">0</span>
@@ -737,7 +731,7 @@
         <div class="page-nav-title">原型导航</div>
         <a href="home.html" class="page-nav-item">首页</a>
         <a href="project-list.html" class="page-nav-item">项目列表</a>
-        <a href="project-detail.html" class="page-nav-item">项目详情</a>
+        <a href="project-detail-ongoing-v2.html" class="page-nav-item">项目详情</a>
         <a href="member.html" class="page-nav-item">项目成员</a>
         <a href="message.html" class="page-nav-item active">消息</a>
         <a href="architecture.html" class="page-nav-item">项目架构</a>
@@ -896,60 +890,6 @@
                     },
                     group: '强电施工组',
                     inviter: '陈庄（工长）'
-                }
-            ],
-            task: [
-                {
-                    id: 'task1',
-                    sender: '系统',
-                    senderAvatar: '🔔',
-                    type: 'task',
-                    title: '任务派发通知',
-                    content: '您有新的任务待处理："客厅吊顶安装"，请及时查看',
-                    time: '09:15',
-                    date: '今天',
-                    unread: true,
-                    status: 'pending',
-                    project: {
-                        name: 'XX小区整体装修',
-                        icon: '🏢'
-                    }
-                },
-                {
-                    id: 'task2',
-                    sender: '系统',
-                    senderAvatar: '🔔',
-                    type: 'task',
-                    title: '任务确认提醒',
-                    content: '任务"水电验收"已进入确认阶段，请及时确认',
-                    time: '昨天 14:30',
-                    date: '昨天',
-                    unread: false,
-                    status: 'pending'
-                }
-            ],
-            system: [
-                {
-                    id: 'sys1',
-                    sender: '系统',
-                    senderAvatar: '📢',
-                    type: 'system',
-                    title: '系统公告',
-                    content: '平台将于2024年1月20日进行系统升级，届时部分功能可能暂时无法使用，敬请谅解。',
-                    time: '2024-01-18',
-                    date: '2024-01-18',
-                    unread: false
-                },
-                {
-                    id: 'sys2',
-                    sender: '系统',
-                    senderAvatar: '📢',
-                    type: 'system',
-                    title: '功能更新通知',
-                    content: '新增合同变更功能，支持合同执行过程中的变更申请与确认。',
-                    time: '2024-01-15',
-                    date: '2024-01-15',
-                    unread: false
                 }
             ]
         };
@@ -1184,18 +1124,6 @@
                         </div>
                     `;
                 }
-            } else if (msg.type === 'task') {
-                actionsHtml = `
-                    <div class="message-actions">
-                        <button class="message-action-btn view" onclick="viewTask('${msg.id}')">查看详情</button>
-                    </div>
-                `;
-            } else if (msg.type === 'system') {
-                actionsHtml = `
-                    <div class="message-actions">
-                        <button class="message-action-btn view" onclick="viewDetail('${msg.id}')">查看详情</button>
-                    </div>
-                `;
             }
 
             let detailHtml = '';
@@ -1233,7 +1161,7 @@
                             <div class="time">${msg.time}</div>
                         </div>
                         <div class="message-type-icon ${msg.type}">
-                            ${msg.type === 'invite' ? '✉️' : (msg.type === 'task' ? '📋' : '📢')}
+                            ${msg.type === 'invite' ? '✉️' : '📢'}
                         </div>
                     </div>
                     <div class="message-body">
@@ -1375,14 +1303,6 @@
             }, 2000);
         }
 
-        function viewTask(messageId) {
-            location.href = 'task-list.html';
-        }
-
-        function viewDetail(messageId) {
-            showToast('查看详情');
-        }
-
         function markAllRead() {
             Object.keys(messages).forEach(type => {
                 messages[type].forEach(msg => {
@@ -1435,7 +1355,7 @@
         function goToProject(projectName) {
             showToast(`正在跳转到"${projectName}"项目详情...`);
             setTimeout(() => {
-                location.href = 'project-detail.html';
+                location.href = 'project-detail-ongoing-v2.html';
             }, 500);
         }
 

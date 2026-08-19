@@ -102,8 +102,38 @@
         /* 补充条款 / 阶段任务 变更高亮 */
         .text-content-change { background: #FFFBE6; border-bottom: 2px solid #FFD591; padding: 0 2px; border-radius: 3px; }
         .text-content-change-tag { display: inline-block; margin-left: 6px; font-size: 10px; padding: 1px 6px; border-radius: 8px; background: #FFF1B8; color: #AD6800; vertical-align: middle; }
-        .wc-banner-text { font-size: 18px; font-weight: 700; }
+        .wc-banner-text { font-size: 18px; font-weight: 700; display: inline-block; }
         .wc-banner-desc { font-size: 12px; margin-top: 6px; line-height: 1.5; opacity: 0.95; }
+
+        /* 履约完成：任务项已完成标记 */
+        .task-done-tag {
+            display: inline-block;
+            margin-left: 6px;
+            padding: 0 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #52C41A;
+            background: #F6FFED;
+            border: 1px solid #B7EB8F;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+
+        /* 履约完成派生标识（已签约态 + 全部任务已完成，实时派生无持久化） */
+        .wc-fulfilled-badge {
+            display: inline-flex;
+            align-items: center;
+            margin-left: 8px;
+            padding: 1px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 1.5;
+            color: #FFFFFF;
+            background: rgba(255, 255, 255, 0.20);
+            border: 1px solid rgba(255, 255, 255, 0.55);
+            border-radius: 10px;
+            vertical-align: middle;
+        }
 
         /* 邀约卡片 */
         .worker-invite-card {
@@ -678,6 +708,7 @@
             <div id="mainView" style="display:none;">
                 <div class="wc-banner draft" id="statusBanner">
                     <div class="wc-banner-text" id="bannerText"></div>
+                    <span class="wc-fulfilled-badge" id="fulfilledBadge" style="display:none;">✓ 已履约完成</span>
                     <div class="wc-banner-desc" id="bannerDesc"></div>
                 </div>
                 <!-- 变更阶段：在已签约内容基础上高亮标记变更点（发起变更后 / 导航预览变更阶段时显示） -->
@@ -1077,7 +1108,7 @@
                 <div class="status-group-header" onclick="WCP.toggleStatusGroup(this)">
                     <span class="status-group-icon">▼</span>
                     <span class="status-group-title">发起方视角</span>
-                    <span class="status-group-count">6</span>
+                    <span class="status-group-count">7</span>
                 </div>
                 <div class="status-group-content">
                     <div class="status-switch-item" data-status="worker_draft_initial" onclick="WCP.updateStatus('worker_draft_initial')">拟定中(发起方)</div>
@@ -1086,6 +1117,7 @@
                     <a class="status-switch-item" href="worker-sign-upload.html" style="text-decoration:none;">上传签约文件（新页面）</a>
                     <div class="status-switch-item" data-status="worker_draft" onclick="WCP.updateStatus('worker_draft')">拟定中(撤回后)</div>
                     <div class="status-switch-item" data-status="worker_signed" onclick="WCP.updateStatus('worker_signed')">已签约</div>
+                    <div class="status-switch-item" onclick="WCP.demoFulfilled()">已签约（已履约完成）</div>
                 </div>
             </div>
 
@@ -1094,16 +1126,14 @@
                 <div class="status-group-header" onclick="WCP.toggleStatusGroup(this)">
                     <span class="status-group-icon">▶</span>
                     <span class="status-group-title">受邀方视角</span>
-                    <span class="status-group-count">5</span>
+                    <span class="status-group-count">3</span>
                 </div>
                 <div class="status-group-content" style="display:none;">
-                    <div class="status-switch-item" data-status="worker_inviting_receiver" onclick="WCP.updateStatus('worker_inviting_receiver')">确认中(受邀方)</div>
                     <div class="status-switch-item" data-status="worker_confirmed_receiver" onclick="WCP.updateStatus('worker_confirmed_receiver')">已确认(受邀方)</div>
                     <div class="status-switch-item" data-status="worker_lost_receiver" onclick="WCP.updateStatus('worker_lost_receiver')">抢单失败(受邀方)</div>
                     <div class="status-switch-item" data-status="worker_rejected_receiver" onclick="WCP.updateStatus('worker_rejected_receiver')">已拒绝(受邀方)</div>
                     <div class="status-switch-divider"></div>
                     <a class="status-switch-item" href="worker-contract-receive-inviting.html" style="text-decoration:none;">确认中（接单体验 E）</a>
-                    <a class="status-switch-item" href="worker-contract-receive-confirmed.html" style="text-decoration:none;">已确认（接单体验 E）</a>
                 </div>
             </div>
 

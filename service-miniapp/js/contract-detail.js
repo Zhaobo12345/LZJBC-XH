@@ -621,6 +621,9 @@ const ContractDetailPage = (function() {
         // 更新阶段任务显示（已签约前不显示进度和状态）
         updateStageTasksDisplay(status);
 
+        // 派生"已履约完成"标识（已签约态 + 全部任务已完成）
+        updateFulfilledBadge(status);
+
         // 工人合同：签约后回写合约库，并渲染邀请名单
         if (state.isWorker) {
             if (status === 'signed') {
@@ -662,6 +665,100 @@ const ContractDetailPage = (function() {
         taskDescElements.forEach(el => {
             el.style.display = showProgress ? 'block' : 'none';
         });
+    }
+    
+    /**
+     * 派生"已履约完成"标识：已签约态 + 全部有效任务均为"已完成"
+     * 实时派生（无持久化）；任一任务非 completed 即隐藏
+     * @param {string} status - 状态标识
+     */
+    function updateFulfilledBadge(status) {
+        const badge = document.getElementById('fulfilledBadge');
+        if (!badge) return;
+        const signedStates = ['signed', 'changing', 'change_confirming', 'change_platform_reviewing', 'change_platform_rejected', 'change_confirming_sender', 'change_confirming_receiver', 'change_signing_wait', 'change_confirmed'];
+        const taskStatusEls = document.querySelectorAll('.task-status');
+        const allCompleted = taskStatusEls.length > 0 && Array.from(taskStatusEls).every(function (el) {
+            return el.classList.contains('completed');
+        });
+        const show = signedStates.indexOf(status) > -1 && allCompleted;
+        badge.style.display = show ? 'inline-flex' : 'none';
+    }
+    
+    // 履约完成演示：原始任务状态快照（供「已签约」切回非履约完成态时恢复）
+    let _fulfilledSnapshot = null;
+
+    function snapshotTaskState() {
+        if (_fulfilledSnapshot) return;
+        _fulfilledSnapshot = {
+            statusClass: Array.from(document.querySelectorAll('.task-status')).map(function (el) { return el.className; }),
+            statusText: Array.from(document.querySelectorAll('.task-status')).map(function (el) { return el.textContent; }),
+            desc: Array.from(document.querySelectorAll('.task-desc')).map(function (el) { return el.textContent; }),
+            meta: Array.from(document.querySelectorAll('.stage-meta')).map(function (el) { return el.textContent; }),
+            pct: Array.from(document.querySelectorAll('.stage-progress .percent')).map(function (el) { return el.textContent; }),
+            pctColor: Array.from(document.querySelectorAll('.stage-progress .percent')).map(function (el) { return el.style.color; })
+        };
+    }
+
+    function applyFulfilledState() {
+        document.querySelectorAll('.task-status').forEach(function (el) {
+            el.classList.remove('in-progress', 'pending');
+            el.classList.add('completed');
+            el.textContent = '✓';
+        });
+        document.querySelectorAll('.task-desc').forEach(function (el) {
+            el.textContent = '已完成 · 2024-03-20';
+        });
+        document.querySelectorAll('.stage-meta').forEach(function (el) {
+            var m = el.textContent.match(/(\d+)个任务/);
+            el.textContent = (m ? m[1] : '') + '个任务 · 已完成';
+        });
+        document.querySelectorAll('.stage-progress .percent').forEach(function (el) {
+            el.textContent = '100%';
+            el.style.color = '#52C41A';
+        });
+    }
+
+    function restoreTaskState() {
+        if (!_fulfilledSnapshot) return;
+        document.querySelectorAll('.task-status').forEach(function (el, i) {
+            el.className = _fulfilledSnapshot.statusClass[i] || '';
+            el.textContent = _fulfilledSnapshot.statusText[i] || '';
+        });
+        document.querySelectorAll('.task-desc').forEach(function (el, i) {
+            el.textContent = _fulfilledSnapshot.desc[i] || '';
+        });
+        document.querySelectorAll('.stage-meta').forEach(function (el, i) {
+            el.textContent = _fulfilledSnapshot.meta[i] || '';
+        });
+        document.querySelectorAll('.stage-progress .percent').forEach(function (el, i) {
+            el.textContent = _fulfilledSnapshot.pct[i] || '';
+            el.style.color = _fulfilledSnapshot.pctColor[i] || '';
+        });
+    }
+
+    /**
+     * 演示：切到已签约并置全部任务为"已完成"，触发"已履约完成"徽标
+     * （仅原型演示用，用于直观呈现履约完成派生标识效果）
+     */
+    function demoFulfilled() {
+        snapshotTaskState();
+        applyFulfilledState();
+        updateContractStatus('signed');
+        // 只高亮「已签约（已履约完成）」演示项（先清掉其他项 active，避免与「已签约」同时高亮）
+        document.querySelectorAll('.status-switch-item').forEach(function (item) {
+            item.classList.remove('active');
+            if (item.textContent.trim() === '已签约（已履约完成）') {
+                item.classList.add('active');
+            }
+        });
+    }
+
+    /**
+     * 演示：切回普通「已签约」（恢复原始任务状态，徽标按真实派生规则显隐）
+     */
+    function demoSigned() {
+        restoreTaskState();
+        updateContractStatus('signed');
     }
     
     /**
@@ -3722,6 +3819,9 @@ const ContractDetailPage = (function() {
         
         // 状态更新
         updateContractStatus,
+        demoFulfilled,
+        demoSigned,
+        updateFulfilledBadge,
         
         // 交互函数
         switchSection,
@@ -3851,6 +3951,8 @@ window.showCustomConfirm = ContractDetailPage.showCustomConfirm;
 window.closeCustomConfirm = ContractDetailPage.closeCustomConfirm;
 window.confirmCustomConfirm = ContractDetailPage.confirmCustomConfirm;
 window.updateContractStatus = ContractDetailPage.updateContractStatus;
+window.demoFulfilled = ContractDetailPage.demoFulfilled;
+window.demoSigned = ContractDetailPage.demoSigned;
 window.switchSection = ContractDetailPage.switchSection;
 window.toggleStage = ContractDetailPage.toggleStage;
 window.showFullText = ContractDetailPage.showFullText;

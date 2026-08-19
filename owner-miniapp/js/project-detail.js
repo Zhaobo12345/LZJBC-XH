@@ -364,8 +364,28 @@
             updatePageData(level);
             updateBreadcrumb(level);
             state.currentLevel = level;
+            updateMoreLinks(level, data);
             hidePartialLoading();
         }, LOADING_DELAY);
+    }
+
+    /**
+     * 架构层级联动：更新「任务概览 / 今日动态」查看全部链接
+     * 项目部=不带参数；施工组映射到所属工作组（任务/动态按工作组分组）
+     */
+    function updateMoreLinks(level, data) {
+        var linkLevel = null;
+        if (level !== '项目部') {
+            linkLevel = (data.type === 'team' && data.parent) ? data.parent : level;
+        }
+        document.querySelectorAll('.card-title .more').forEach(function(m) {
+            var h = m.dataset.href || '';
+            if (h.indexOf('task-list.html') === 0) {
+                m.dataset.href = linkLevel ? 'task-list.html?level=' + encodeURIComponent(linkLevel) : 'task-list.html';
+            } else if (h.indexOf('activity-list.html') === 0) {
+                m.dataset.href = linkLevel ? 'activity-list.html?level=' + encodeURIComponent(linkLevel) : 'activity-list.html';
+            }
+        });
     }
     
     /**
@@ -479,6 +499,7 @@
             updatePageData(name);
             updateBreadcrumb(name);
             state.currentLevel = name;
+            updateMoreLinks(name, data);
             hidePartialLoading();
         }, LOADING_DELAY);
     }
@@ -567,16 +588,7 @@
     function shareToFriend() {
         showCustomToast('分享功能已触发，请选择分享方式');
     }
-    
-    function getMemberIdByAvatar(avatarText) {
-        const avatarToId = { '张': '1', '李': '2', '王': '3', '赵': '4', '孙': '5', '钱': '6', '周': '7', '吴': '8', '郑': '9', '项': '1' };
-        return avatarToId[avatarText] || '1';
-    }
 
-    function goToProfile(id, name, role) {
-        location.href = 'member-profile.html?id=' + encodeURIComponent(id) + '&name=' + encodeURIComponent(name) + '&role=' + encodeURIComponent(role);
-    }
-    
     function initProfileClickEvents() {
         document.querySelectorAll('.activity-avatar, .activity-user').forEach(el => {
             el.addEventListener('click', function(e) {
@@ -918,7 +930,6 @@
     window.toggleActionMenu = toggleActionMenu;
     window.closeActionMenu = closeActionMenu;
     window.shareToFriend = shareToFriend;
-    window.goToProfile = goToProfile;
 })();
 
 /**

@@ -457,7 +457,7 @@
                     <li><a href="#sub-11-4">11.4 数据加载规则</a></li>
                     <li><a href="#sub-11-5">11.5 交互规格</a></li>
                     <li><a href="#sub-11-6">11.6 时间显示规则</a></li>
-                    <li><a href="#sub-11-7">11.7 类型与日期筛选规格</a></li>
+                    <li><a href="#sub-11-7">11.7 架构层级 / 类型与日期筛选规格</a></li>
                     <li><a href="#sub-11-8">11.8 角色标签与阶段标签</a></li>
                     <li><a href="#sub-11-9">11.9 权限锁定与无权限弹窗</a></li>
                     <li><a href="#sub-11-10">11.10 媒体展示（施工现场照片）</a></li>
@@ -478,10 +478,11 @@
                     <li><a href="#sub-12-4">12.4 交互逻辑规格</a></li>
                     <li><a href="#sub-12-5">12.5 展示字段项及数量统计规则</a></li>
                     <li><a href="#sub-12-6">12.6 初始项目详情页逻辑</a></li>
-                    <li><a href="#sub-12-7">12.7 已完成状态-页面概述</a></li>
-                    <li><a href="#sub-12-8">12.8 已完成状态-差异</a></li>
-                    <li><a href="#sub-12-9">12.9 已完成状态-交互逻辑</a></li>
-                    <li><a href="#sub-12-10">12.10 已完成状态-状态流转与回退规则</a></li>
+                    <li><a href="#sub-12-7">12.7 项目导航（施工路线抽屉）</a></li>
+                    <li><a href="#sub-12-8">12.8 已完成状态-页面概述</a></li>
+                    <li><a href="#sub-12-9">12.9 已完成状态-差异</a></li>
+                    <li><a href="#sub-12-10">12.10 已完成状态-交互逻辑</a></li>
+                    <li><a href="#sub-12-11">12.11 已完成状态-状态流转与回退规则</a></li>
                 </ul>
             </li>
             <li class="nav-item collapsed" id="nav-page-activity-owner">
@@ -490,7 +491,7 @@
                     <li><a href="#sub-13-1">13.1 页面概述</a></li>
                     <li><a href="#sub-13-2">13.2 功能说明</a></li>
                     <li><a href="#sub-13-3">13.3 功能差异</a></li>
-                    <li><a href="#sub-13-4">13.4 类型与日期筛选（业主端）</a></li>
+                    <li><a href="#sub-13-4">13.4 架构层级 / 类型与日期筛选（业主端）</a></li>
                     <li><a href="#sub-13-5">13.5 角色标签与阶段标签（业主端）</a></li>
                     <li><a href="#sub-13-6">13.6 权限锁定（业主纯查看）</a></li>
                 </ul>
@@ -1100,7 +1101,7 @@
                         <tr>
                             <td>合同列表（可折叠）</td>
                             <td><code>contracts.list</code></td>
-                            <td>每条含 合同名称 + 工作组 + 金额 + 进度条；点击「查看合同」展开 / 折叠；列表项点击跳 <a href="service-miniapp/contract-detail.html" target="_blank">合同详情页</a></td>
+                            <td>每条含 合同名称 + 工作组 + 金额 + 进度条；点击「查看合同」展开 / 折叠；列表项点击跳 <a href="service-miniapp/contract-detail.html" target="_blank">合同详情页</a>。当该合同下全部有效任务均为「已完成」时，列表项叠加绿色「已完工」角标（履约完成派生标识，规则见 <a href="PRD-合同模块详细规格.html#sec-3-12-14" target="_blank">PRD-合同模块 §3.12.14</a>）</td>
                         </tr>
                         <tr>
                             <td>查看全部合同</td>
@@ -1126,7 +1127,7 @@
                         <tr>
                             <td>查看全部</td>
                             <td>前端交互</td>
-                            <td>点击「查看全部」跳转 <a href="service-miniapp/task-list.html" target="_blank">任务列表页（服务方）</a></td>
+                            <td>点击「查看全部」跳转 <a href="service-miniapp/task-list.html" target="_blank">任务列表页（服务方）</a>；当前架构切换选中具体工作组层级时携带 <code>?level=架构层级名</code>（项目部 = 不携带），目标页按层级过滤（规则见 <a href="PRD-任务模块详细规格.html#sub-2-5" target="_blank">PRD-任务模块 §2.5</a>）</td>
                         </tr>
                         <tr>
                             <td rowspan="2">待办事项卡片</td>
@@ -1250,7 +1251,7 @@
                         </tr>
                         <tr>
                             <td>查看全部动态</td>
-                            <td>点击"查看全部动态"按钮，跳转到项目动态页（activity-list.html），默认展示全部动态；进入后可通过页头类型筛选（全部 / 任务 / 合同）与日期筛选（全部时间 / 今天 / 昨天 / 近7天 / 近30天 / 自定义）自行过滤</td>
+                            <td>点击"查看全部动态"按钮，跳转到项目动态页（activity-list.html）；若当前架构切换选中具体工作组层级，则携带 ?level=架构层级名 参数并在目标页按层级过滤（详见 11.7 架构层级筛选），选中「项目部」时不携带参数（= 全部层级）；进入后可叠加页头类型筛选（全部 / 任务 / 合同）与日期筛选（全部时间 / 今天 / 昨天 / 近7天 / 近30天 / 自定义）自行过滤</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1258,8 +1259,8 @@
                     <div class="note-title">跳转逻辑说明</div>
                     <p><strong>跳转条件：</strong>点击"查看全部动态"按钮时触发跳转</p>
                     <p><strong>跳转目标：</strong>activity-list.html</p>
-                    <p><strong>参数传递：</strong>无需传递层级参数；项目动态页默认展示全部动态，用户在页内通过类型 + 日期筛选器自行过滤（详见 11.7）</p>
-                    <p><strong>页面逻辑：</strong>项目动态页提供类型筛选 + 日期筛选，详见 11.7「类型与日期筛选规格」</p>
+                    <p><strong>参数传递：</strong>按当前架构切换所选层级传递：选中具体工作组（水电 / 泥瓦 / 木工 / 油漆工作组）时携带 <code>?level=架构层级名</code>；选中「项目部」（= 全部层级）时不携带参数，项目动态页展示全部动态；层级标签在目标页只读展示（详见 11.7）</p>
+                    <p><strong>页面逻辑：</strong>项目动态页提供架构层级筛选 + 类型筛选 + 日期筛选，三者叠加生效，详见 11.7「架构层级 / 类型与日期筛选规格」</p>
                 </div>
                 <div class="note" style="margin-top: 12px;">
                     <div class="note-title">展示规则补充</div>
@@ -1370,7 +1371,7 @@
                             <td>任务统计</td>
                             <td>「查看全部」链接</td>
                             <td>点击</td>
-                            <td>跳转到任务列表页（task-list.html）</td>
+                            <td>跳转到任务列表页（task-list.html）；当前架构切换选中具体工作组层级时携带 ?level= 参数（项目部 = 不携带），目标页按层级过滤（详见 <a href="PRD-任务模块详细规格.html#sub-2-5" target="_blank">PRD-任务模块 §2.5</a>）</td>
                         </tr>
                         <tr>
                             <td rowspan="3">待办事项</td>
@@ -1397,7 +1398,7 @@
                         <tr>
                             <td>「查看全部」链接</td>
                             <td>点击</td>
-                            <td>跳转到项目动态页（activity-list.html），无需携带层级参数；进入后通过类型 + 日期筛选器过滤（详见 11.7）</td>
+                            <td>跳转到项目动态页（activity-list.html）；当前架构切换选中具体工作组层级时携带 ?level= 参数（项目部 = 不携带），进入后可叠加类型 + 日期筛选器过滤（详见 11.7）</td>
                         </tr>
                         <tr>
                             <td>动态项</td>
@@ -1634,7 +1635,7 @@
                     <li>该判定逻辑与项目首次进入“已完成”完全一致，不另设特殊规则。</li>
                 </ul>
 
-                <p><strong>状态一致性：</strong>项目状态为全局字段（<code>projects.status</code>），服务方发起的回退 / 再次完成，业主端（见 <a href="#sub-12-10">§12.10</a>）同步呈现，两端状态标签与布局随状态联动，无需各自维护。</p>
+                <p><strong>状态一致性：</strong>项目状态为全局字段（<code>projects.status</code>），服务方发起的回退 / 再次完成，业主端（见 <a href="#sub-12-11">§12.11</a>）同步呈现，两端状态标签与布局随状态联动，无需各自维护。</p>
             </div>
         </div>
 
@@ -5035,19 +5036,20 @@
                 </table>
             </div>
             <div class="subsection" id="sub-11-7">
-                <div class="subsection-title">11.7 类型与日期筛选规格</div>
+                <div class="subsection-title">11.7 架构层级 / 类型与日期筛选规格</div>
                 <table>
                     <thead><tr><th>筛选维度</th><th>选项 / 交互</th><th>说明</th></tr></thead>
                     <tbody>
+                        <tr><td>架构层级筛选（跳转携带）</td><td>项目部（= 全部层级，不携带参数）/ 水电工作组 / 泥瓦工作组 / 木工工作组 / 油漆工作组</td><td>仅由项目详情页「今日动态 - 查看全部」按当前架构切换层级携带 <code>?level=架构层级名</code>（选中「项目部」时不携带）；携带时页头展示「架构层级：XX」只读标签（不支持移除）；按动态所属工作组过滤，结果计数同步联动。原型函数 <code>initLevelFilter()</code>。</td></tr>
                         <tr><td>类型筛选（顶部标签 chips）</td><td>全部 / 任务 / 合同</td><td>点击切换当前类型，按动态 <code>type</code> 字段过滤；默认"全部"。原型函数 <code>filterByType(type, el)</code>。</td></tr>
                         <tr><td>日期筛选（下拉 + 自定义）</td><td>全部时间 / 今天 / 昨天 / 近7天 / 近30天 / 自定义（起止日期）</td><td>下拉切换 <code>filterByDate(value)</code>；选择"自定义"后通过起止 <code>input[type=date]</code> 调用 <code>applyCustomDateFilter()</code> 按日期区间过滤。</td></tr>
-                        <tr><td>筛选联动</td><td>类型 × 日期 叠加</td><td>两类筛选可同时生效；筛选结果为空时展示空状态"无动态"。</td></tr>
-                        <tr><td>结果计数</td><td>筛选区右侧 <code>totalCount</code></td><td>实时显示当前筛选结果条数。</td></tr>
+                        <tr><td>筛选联动</td><td>架构层级 × 类型 × 日期 叠加</td><td>三类筛选可同时生效（AND）；筛选结果为空时展示空状态"无动态"。</td></tr>
+                        <tr><td>结果计数</td><td>筛选区右侧 <code>totalCount</code></td><td>实时显示当前筛选结果条数（含架构层级过滤后的计数）。</td></tr>
                     </tbody>
                 </table>
                 <div class="note" style="margin-top: 12px;">
                     <div class="note-title">与 11.2 / 11.4 的一致性说明</div>
-                    <p>11.2 页面结构图与 11.4 数据加载规则已<strong>按原型落地修订为「类型筛选 + 日期筛选」</strong>（项目部 / 工作组 / 施工组下拉的层级筛选未实现，已移除）。本小节（11.7）为筛选维度的详细规格，与 11.2 / 11.4 完全一致。</p>
+                    <p>11.2 页面结构图与 11.4 数据加载规则以「类型筛选 + 日期筛选」为基础呈现；架构层级筛选以<strong>「项目详情跳转携带 + 只读标签」</strong>形式落地（替代早期方案中未实现的「项目部 / 工作组 / 施工组下拉层级筛选」），直接打开页面（无参数）时展示全部层级，不改变类型 / 日期筛选的任何交互。本小节（11.7）为筛选维度的详细规格，与 11.2 / 11.4 完全一致。</p>
                 </div>
             </div>
 
@@ -5243,7 +5245,7 @@
                         <tr>
                             <td>"查看全部"链接</td>
                             <td>点击</td>
-                            <td>跳转到业主端项目动态页</td>
+                            <td>跳转到业主端项目动态页；业主端进行中详情页无层级切换交互，不携带参数（已完成-新版详情页选中工作组层级时携带 ?level=，规则见 <a href="#sub-13-4">13.4</a>）</td>
                         </tr>
                         <tr>
                             <td>动态项</td>
@@ -5288,7 +5290,7 @@
                 </table>
                 <div class="note" style="margin-top: 12px;">
                     <div class="note-title">共用交互引用</div>
-                    <p>导航栏微信原生胶囊、快捷导航（固定 / 展开收起 / 滚动吸顶）、层级选择器（下拉 / 概要信息 / 面包屑）、项目导航（施工路线抽屉）、页面加载（loading 遮罩）等交互与服务方 <a href="#sub-3-8">§3.8 交互逻辑规格</a> 完全一致，本节不再复述，请交叉参阅。</p>
+                    <p>导航栏微信原生胶囊、快捷导航（固定 / 展开收起 / 滚动吸顶）、层级选择器（下拉 / 概要信息 / 面包屑）、项目导航（施工路线抽屉，详见 <a href="#sub-12-7">§12.7</a>）、页面加载（loading 遮罩）等交互与服务方 <a href="#sub-3-8">§3.8 交互逻辑规格</a> 基本一致，项目导航业主端完整规格见 §12.7，本节不再复述。</p>
                 </div>
             </div>
 
@@ -5366,7 +5368,7 @@
                         <tr>
                             <td>查看全部</td>
                             <td>前端交互</td>
-                            <td>点击"查看全部"跳转<a href="owner-miniapp/task-list.html" target="_blank">任务列表页（业主端）</a></td>
+                            <td>点击"查看全部"跳转<a href="owner-miniapp/task-list.html" target="_blank">任务列表页（业主端）</a>；业主端进行中详情页无层级切换交互，不携带参数（已完成-新版详情页选中工作组层级时携带 <code>?level=</code>，规则同服务端，见 <a href="PRD-任务模块详细规格.html#sub-5-6" target="_blank">PRD-任务模块 §5.6</a>）</td>
                         </tr>
                         <tr>
                             <td rowspan="2">待办事项卡片</td>
@@ -5459,7 +5461,198 @@
             </div>
 
             <div class="subsection" id="sub-12-7">
-                <div class="subsection-title">12.7 已完成状态（新版） - 页面概述</div>
+                <div class="subsection-title">12.7 项目导航（施工路线抽屉）</div>
+                <p>项目导航是业主端项目详情页（进行中-新版）的右侧滑出式抽屉组件，以施工路线树（阶段 → 任务）形式展示「基础施工服务合同」内的全部施工阶段与工程节点任务，帮助业主快速纵览施工全貌并直达具体任务。本节为业主端项目导航的<strong>完整独立规格</strong>，不再仅引用服务方 §3.8。</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:18%">规格项</th>
+                            <th style="width:32%">规格说明</th>
+                            <th>补充</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>展示条件</strong></td>
+                            <td>当项目内存在「基础施工服务合同」且合同状态为「已签约」时，项目导航入口（右侧悬浮触发条）展示；未签约或不存在该合同时入口不展示。</td>
+                            <td>判定数据源：<code>contracts</code> 表中 <code>type = '基础施工服务合同'</code> 且 <code>status = 'signed'</code>；入口显隐由前端依据合同列表接口返回结果控制。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>入口样式</strong></td>
+                            <td>右侧悬浮触发条（<code>.project-nav-trigger</code>），<code>position: absolute; right: 16px; top: 50%; transform: translateY(-50%)</code>；尺寸 32×64px；背景 <code>rgba(24,144,255,0.9)</code>（蓝色半透明）；圆角 8px；内容为「◀」箭头 + 竖排文字「项目导航」（<code>writing-mode: vertical-rl</code>）。</td>
+                            <td>触发条 <code>z-index: 1000</code>，带 <code>box-shadow: 0 2px 8px rgba(0,0,0,0.15)</code>；hover/active 时 <code>scale(1.05)</code>；抽屉打开后触发条添加 <code>.hidden</code> 类隐藏。</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4"><strong>抽屉结构</strong></td>
+                            <td><strong>遮罩层</strong>（<code>.project-nav-overlay</code>）：全屏半透明遮罩 <code>rgba(0,0,0,0.5)</code>，<code>z-index: 1001</code>，<code>opacity/visibility</code> 过渡 0.3s；点击关闭抽屉。</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td><strong>抽屉容器</strong>（<code>.project-nav-drawer</code>）：右侧滑出，<code>width: 85%; max-width: 375px; height: 100%</code>，背景 <code>#F5F6FA</code>，<code>z-index: 1002</code>，<code>transform: translateX(100%) → translateX(0)</code> 过渡 0.3s，左侧阴影 <code>-4px 0 16px rgba(0,0,0,0.2)</code>；<code>display: flex; flex-direction: column</code>。</td>
+                            <td>抽屉相对手机框定位（<code>position: absolute</code>），不超出手机框范围。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>深色顶部导航栏</strong>（<code>.drawer-header-bar</code>）：渐变背景 <code>linear-gradient(135deg, #1F2A44 → #2C3E63)</code>，padding 14px 16px。左侧：╌ 图标（22px 圆形白边）+「项目导航」标题（15px 白色加粗）+「施工路线」标签（10px 蓝底白字）。右侧：「全部展开/收起」按钮 +「×」关闭按钮。</td>
+                            <td>全部展开按钮 <code>.drawer-expand-btn</code>：12px 白字，<code>rgba(255,255,255,0.15)</code> 背景，4px 圆角，1px 白色半透明边框；点击调用 <code>ProjectNav.toggleExpandAll()</code>。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>统计信息栏</strong>（<code>.drawer-info-bar</code>）：白色背景，底部 1px 分隔线。左侧：渐变徽章（<code>linear-gradient(135deg, #4C6FFF → #7B61FF)</code>）显示「{N}大阶段 / {M}项工程节点」；右侧：「📍 定位施工项」按钮（蓝色圆角胶囊，点击调用 <code>ProjectNav.scrollToCurrentTask()</code>）。</td>
+                            <td>统计数字由 <code>ProjectNav.updateStats()</code> 从 <code>projectNavData.totalStages / totalTasks</code> 填充。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>内容区</strong></td>
+                            <td><code>.drawer-content</code>（<code>id="projectNavContent"</code>）：<code>flex: 1; overflow-y: auto</code>，阶段卡片列表由 <code>ProjectNav.renderStageList()</code> 动态生成。</td>
+                            <td>底部 <code>.drawer-footer-tip</code>：固定提示「点击阶段行可展开/收起；点击任务直达详情」。</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="note" style="margin-top: 16px;">
+                    <div class="note-title">数据来源与结构</div>
+                    <p>阶段与任务数据来自「基础施工服务合同」的施工阶段配置。数据结构（<code>projectNavData</code>）：</p>
+                    <ul style="margin: 6px 0 0 18px; font-size: 13px; color: var(--text-secondary); line-height: 1.9;">
+                        <li><strong>顶层</strong>：<code>projectId / projectName / totalStages / totalTasks / stages[]</code></li>
+                        <li><strong>阶段（stage）</strong>：<code>id / name / status(completed|in_progress|pending) / collapsed(bool) / currentTaskId / tasks[]</code></li>
+                        <li><strong>任务（task）</strong>：<code>id / name / status(completed|in_progress|pending) / hasTag(bool)</code></li>
+                    </ul>
+                    <p style="margin-top: 6px;">阶段 <code>status</code> 由其下任务的聚合状态推导：全部完成 = <code>completed</code>，含进行中任务 = <code>in_progress</code>，全部待开始 = <code>pending</code>。</p>
+                </div>
+
+                <table style="margin-top: 16px;">
+                    <thead>
+                        <tr>
+                            <th colspan="3">阶段状态样式</th>
+                        </tr>
+                        <tr>
+                            <th style="width:20%">状态</th>
+                            <th style="width:35%">状态点（.stage-status-dot）</th>
+                            <th>完成度角标（.stage-count-badge，格式「已完成数/总数」）</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>已完成 completed</td>
+                            <td>背景 <code>#52C41A</code>（绿）+ 光晕 <code>rgba(82,196,26,0.18)</code></td>
+                            <td>文字 <code>#389E0D</code>，背景 <code>#F6FFED</code></td>
+                        </tr>
+                        <tr>
+                            <td>进行中 in_progress</td>
+                            <td>背景 <code>#FA8C16</code>（橙）+ 光晕 <code>rgba(250,140,22,0.18)</code></td>
+                            <td>文字 <code>#D46B08</code>，背景 <code>#FFF7E6</code></td>
+                        </tr>
+                        <tr>
+                            <td>待开始 pending</td>
+                            <td>背景 <code>#BFBFBF</code>（灰）+ 光晕 <code>rgba(191,191,191,0.18)</code></td>
+                            <td>文字 <code>#8C8C8C</code>，背景 <code>#F0F0F0</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table style="margin-top: 12px;">
+                    <thead>
+                        <tr>
+                            <th colspan="3">任务状态样式</th>
+                        </tr>
+                        <tr>
+                            <th style="width:20%">状态</th>
+                            <th style="width:40%">状态图标（.task-status-icon，18px 圆形）</th>
+                            <th>任务名称（.task-name）</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>已完成 completed</td>
+                            <td>背景 <code>#F6FFED</code>，文字 <code>#52C41A</code>，边框 <code>1.5px solid #95DE64</code>，显示「✓」</td>
+                            <td>颜色 <code>#8C8C8C</code>，<code>text-decoration: line-through</code>（删除线，色 <code>#BFBFBF</code>）</td>
+                        </tr>
+                        <tr>
+                            <td>进行中 in_progress</td>
+                            <td>背景 <code>#FFF7E6</code>，文字 <code>#FA8C16</code>，边框 <code>1.5px solid #FFC069</code></td>
+                            <td>颜色 <code>#D46B08</code>，<code>font-weight: 500</code>（加粗高亮）</td>
+                        </tr>
+                        <tr>
+                            <td>待开始 pending</td>
+                            <td>透明背景，边框 <code>1.5px solid #D9D9D9</code>，文字 <code>#BFBFBF</code></td>
+                            <td>默认颜色 <code>#262626</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table style="margin-top: 16px;">
+                    <thead>
+                        <tr>
+                            <th style="width:20%">交互</th>
+                            <th style="width:25%">触发操作</th>
+                            <th>响应行为</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>打开抽屉</td>
+                            <td>点击触发条</td>
+                            <td>触发条添加 <code>.hidden</code> 隐藏 → 遮罩添加 <code>.show</code> 显示 → 抽屉添加 <code>.open</code> 滑入 → 延迟 150ms 后调用 <code>scrollToCurrentTask()</code> 定位到最新进行中任务</td>
+                        </tr>
+                        <tr>
+                            <td>关闭抽屉</td>
+                            <td>点击 × / 点击遮罩 / 向右滑动</td>
+                            <td>移除 <code>.hidden</code>（触发条恢复）/ <code>.show</code>（遮罩隐藏）/ <code>.open</code>（抽屉滑出）</td>
+                        </tr>
+                        <tr>
+                            <td>阶段展开/收起</td>
+                            <td>点击阶段头部</td>
+                            <td>切换 <code>.collapsed</code> 类，任务列表 <code>max-height</code> 在 0 ↔ (任务数×46+2)px 之间过渡 0.3s；箭头 <code>⌄</code> 旋转 -90°；同步更新 <code>updateExpandBtnState()</code> 按钮文字</td>
+                        </tr>
+                        <tr>
+                            <td>全部展开/收起</td>
+                            <td>点击「全部展开/收起」按钮</td>
+                            <td>批量切换所有阶段 <code>.collapsed</code>，按钮文字在「全部展开」↔「全部收起」间切换</td>
+                        </tr>
+                        <tr>
+                            <td>定位施工项</td>
+                            <td>点击「📍 定位施工项」/ 打开抽屉自动触发</td>
+                            <td>查找 <code>.stage-task-item.in_progress</code>（首个进行中任务）→ 若其所在阶段已收起则自动展开 → 延迟 350ms 后平滑滚动至内容区垂直中央位置</td>
+                        </tr>
+                        <tr>
+                            <td>任务点击</td>
+                            <td>点击任务项</td>
+                            <td>关闭抽屉 → 延迟 300ms 跳转 <code>task-detail.html?taskId={taskId}</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="note" style="margin-top: 16px;">
+                    <div class="note-title">默认展开规则（核心需求）</div>
+                    <p><strong>仅展开包含进行中任务的阶段，其余阶段默认收起。</strong>具体规则：</p>
+                    <ol style="margin: 6px 0 0 18px; font-size: 13px; color: var(--text-secondary); line-height: 1.9;">
+                        <li>打开抽屉时，<code>status = in_progress</code> 的阶段默认展开（<code>collapsed = false</code>），其余阶段（<code>completed</code> / <code>pending</code>）默认收起（<code>collapsed = true</code>）。</li>
+                        <li>展开后自动调用 <code>scrollToCurrentTask()</code>，将首个 <code>in_progress</code> 任务滚动至内容区中央并高亮（文字 <code>#D46B08</code> + 加粗）。</li>
+                        <li>若不存在进行中任务（全部完成或全部待开始），默认展开首个阶段，不触发定位滚动。</li>
+                        <li>用户手动展开/收起后，状态保持至抽屉关闭；重新打开抽屉时恢复默认展开规则。</li>
+                    </ol>
+                </div>
+
+                <div class="note" style="margin-top: 12px;">
+                    <div class="note-title">原型函数清单</div>
+                    <p><code>ProjectNav</code> 对象（<code>owner-miniapp/js/project-detail.js</code>）：</p>
+                    <table style="margin-top: 6px;">
+                        <thead><tr><th style="width:30%">函数</th><th>职责</th></tr></thead>
+                        <tbody>
+                            <tr><td><code>init()</code></td><td>缓存 DOM、绑定事件、更新统计、渲染阶段列表、更新按钮状态</td></tr>
+                            <tr><td><code>open() / close()</code></td><td>打开/关闭抽屉（含触发条显隐、遮罩、滑入滑出动画）</td></tr>
+                            <tr><td><code>renderStageList()</code></td><td>按 <code>projectNavData.stages</code> 动态生成阶段卡片 + 任务项 HTML</td></tr>
+                            <tr><td><code>toggleStage(stageId)</code></td><td>切换单个阶段展开/收起（max-height 动画 + 同步数据）</td></tr>
+                            <tr><td><code>toggleExpandAll()</code></td><td>批量展开/收起所有阶段</td></tr>
+                            <tr><td><code>updateExpandBtnState(forceAll)</code></td><td>根据折叠状态更新按钮文字（全部展开/全部收起）</td></tr>
+                            <tr><td><code>scrollToCurrentTask()</code></td><td>定位到首个进行中任务：展开其阶段 + 滚动至中央</td></tr>
+                            <tr><td><code>goToTaskDetail(taskId)</code></td><td>关闭抽屉并跳转任务详情页</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection" id="sub-12-8">
+                <div class="subsection-title">12.8 已完成状态（新版） - 页面概述</div>
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">页面名称</div>
@@ -5481,8 +5674,8 @@
                 <p style="font-size: 13px; color: var(--text-secondary); margin: 10px 0 0;">本页采用「项目详情（进行中-新版）」的 v2 布局骨架（详见 <a href="#sub-12-1">§12.1 页面结构</a> 与 <a href="#sub-12-4">§12.4 交互逻辑</a>）：微信原生胶囊导航、顶部「项目基本信息头部」、待办事项卡片置于吸顶导航之前且不联动架构、吸顶导航含 4 入口快捷导航（项目信息已移顶）+ 展开/收起 + arch-half 紧凑层级选择器、合同/任务统计上下堆叠 compact 卡片、今日动态 v2 样式与微动效。与服务方 v2 已完成态（<a href="#sub-3-10">§3.10</a>）布局一致，差异仅数据状态；合同名称口径引用 <a href="#sub-12-5">§12.5</a>（班组服务合同），动态角色引用 <a href="#sub-13-2">§13.2</a>（陈庄/项目总，无监理）。</p>
             </div>
 
-            <div class="subsection" id="sub-12-8">
-                <div class="subsection-title">12.8 已完成状态（新版） - 与进行中（新版）状态的差异</div>
+            <div class="subsection" id="sub-12-9">
+                <div class="subsection-title">12.9 已完成状态（新版） - 与进行中（新版）状态的差异</div>
                 <table>
                     <thead>
                         <tr>
@@ -5542,9 +5735,9 @@
                 <p style="font-size: 12px; color: var(--text-tertiary); margin-top: 8px;">数量统计口径（签约进度 / 总进度 / 全部任务 / 已开工天数）与层级选择器区域数据统计均与服务方 <a href="#sub-3-5">§3.5</a> / <a href="#sub-3-4">§3.4</a> 一致；本表仅列数据状态差异。</p>
             </div>
 
-            <div class="subsection" id="sub-12-9">
-                <div class="subsection-title">12.9 已完成状态（新版） - 交互逻辑</div>
-                <p>共用交互（微信原生胶囊、基本信息头部点击跳项目信息页、快捷导航展开/收起、arch-half 层级选择器、项目导航抽屉、今日动态展开/收起、合同概览展开/收起、任务统计、loading 遮罩）与业主端项目详情页（进行中-新版）一致，详见 <a href="#sub-12-4">§12.4 交互逻辑</a>。业主专属 / 差异点：</p>
+            <div class="subsection" id="sub-12-10">
+                <div class="subsection-title">12.10 已完成状态（新版） - 交互逻辑</div>
+                <p>共用交互（微信原生胶囊、基本信息头部点击跳项目信息页、快捷导航展开/收起、arch-half 层级选择器、项目导航抽屉（详见 <a href="#sub-12-7">§12.7</a>）、今日动态展开/收起、合同概览展开/收起、任务统计、loading 遮罩）与业主端项目详情页（进行中-新版）一致，详见 <a href="#sub-12-4">§12.4 交互逻辑</a>。业主专属 / 差异点：</p>
                 <table>
                     <thead>
                         <tr>
@@ -5577,13 +5770,13 @@
                 </table>
             </div>
 
-            <div class="subsection" id="sub-12-10">
-                <div class="subsection-title">12.10 已完成状态（新版） - 状态流转与回退规则</div>
+            <div class="subsection" id="sub-12-11">
+                <div class="subsection-title">12.11 已完成状态（新版） - 状态流转与回退规则</div>
                 <p>项目状态为服务端与业主端共享的全局字段。完整的触发条件、回退表现、再次完成判定见服务方 <a href="#sub-3-13">§3.13 已完成状态-状态流转与回退规则</a>，本条仅列业主端差异与观察点：</p>
                 <ul>
                     <li>业主端不直接发起“合同变更”，且架构页不支持创建合同（业主端仅可查看已签约工作组合同、施工组层级仅支持邀请成员），因此状态回退由服务方操作驱动。</li>
-                    <li>当项目因服务方动作回退为“进行中”时，业主端同步呈现“进行中（新版）”状态布局（§12.1–§12.6）；当服务方再次使全部任务完成，业主端同步恢复“已完成（新版）”布局（§12.7–§12.9）。</li>
-                    <li>业主端“我的家”入口仅在项目为“已完成”时进入（§12.7）；项目回退为“进行中”后，该入口不再以“已完成”态呈现，项目回到正常的进行中列表 / 详情。</li>
+                    <li>当项目因服务方动作回退为“进行中”时，业主端同步呈现“进行中（新版）”状态布局（§12.1–§12.6）；当服务方再次使全部任务完成，业主端同步恢复“已完成（新版）”布局（§12.8–§12.10）。</li>
+                    <li>业主端“我的家”入口仅在项目为“已完成”时进入（§12.8）；项目回退为“进行中”后，该入口不再以“已完成”态呈现，项目回到正常的进行中列表 / 详情。</li>
                 </ul>
             </div>
         </div>
@@ -5682,8 +5875,8 @@
             </div>
 
             <div class="subsection" id="sub-13-4">
-                <div class="subsection-title">13.4 类型与日期筛选（业主端）</div>
-                <p>业主端项目动态页结构与服务端一致，顶部同样提供<strong>类型（全部 / 任务 / 合同）</strong>与<strong>日期（全部时间 / 今天 / 昨天 / 近7天 / 近30天 / 自定义）</strong>筛选，二者叠加生效；业主仅查看本人可见的动态。</p>
+                <div class="subsection-title">13.4 架构层级 / 类型与日期筛选（业主端）</div>
+                <p>业主端项目动态页结构与服务端一致，顶部同样提供<strong>类型（全部 / 任务 / 合同）</strong>与<strong>日期（全部时间 / 今天 / 昨天 / 近7天 / 近30天 / 自定义）</strong>筛选，并支持<strong>架构层级筛选</strong>（项目详情页跳转携带 <code>?level=</code> 参数 + 只读标签，规则同 <a href="#sub-11-7">11.7</a>）；三者叠加生效；业主仅查看本人可见的动态。注：业主端进行中项目详情页无层级切换交互，「查看全部」不携带参数；业主端已完成-新版详情页选中工作组层级时携带参数（与服务端一致）。</p>
             </div>
 
             <div class="subsection" id="sub-13-5">

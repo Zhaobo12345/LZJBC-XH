@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>应用内顶部邀约通知条（A方案）演示</title>
+    <title>应用内顶部邀约通知条演示</title>
     <!-- 复用全局公共样式（状态栏/导航栏/底部Tab/设计变量与原 message.html 完全一致） -->
     <link rel="stylesheet" href="common.css">
     <style>
@@ -278,8 +278,6 @@
         <!-- 消息分类 Tab（合同邀约为当前展示） -->
         <div class="message-tabs">
             <div class="message-tab">邀请<span class="badge">4</span></div>
-            <div class="message-tab">任务通知</div>
-            <div class="message-tab">系统消息</div>
             <div class="message-tab active">合同邀约</div>
         </div>
 
@@ -401,7 +399,7 @@
             </div>
         </div>
 
-        <!-- 顶部邀约通知条（A方案，从框内顶部滑出） -->
+        <!-- 顶部邀约通知条（从框内顶部滑出） -->
         <div class="invite-banner" id="inviteBanner">
             <div class="ib-icon">&#128276;</div>
             <div class="ib-body">
@@ -417,11 +415,10 @@
 
     <!-- 右侧演示说明面板 -->
     <div class="demo-panel">
-        <h3>应用内顶部邀约通知条（A方案）</h3>
+        <h3>应用内顶部邀约通知条</h3>
         <p>进入小程序前台（消息/首页）时，若存在待确认合同邀约，顶部自动<strong>滑出通知条</strong>：工种 + 合同名 + 金额 +「立即响应」。参考滴滴抢单的实时提醒，<strong>不阻断操作</strong>、不打断当前浏览；点「立即响应」直达合同详情响应页。</p>
-        <p style="color:#999;">背景为消息页「合同邀约」Tab 的真实内容（复用 common.css 与消息卡片样式，与原 message.html 视觉一致），已按 812px 精确分区，无内嵌原型导航、无溢出。</p>
         <button class="replay" onclick="replayBanner()">重新演示滑出</button>
-        <div class="note">说明：此界面为小程序<strong>应用内（前台）</strong>层级，与「微信服务通知（C方案）」的微信客户端层互补——A 解决「打开小程序时即时提醒」，C 解决「离开小程序也能收到」。</div>
+        <div class="note">说明：此界面为小程序<strong>应用内（前台）</strong>层级（解决「打开小程序时即时提醒」），与「微信服务通知」的微信客户端层（解决「离开小程序也能收到」）互补。</div>
     </div>
 
     <script>
