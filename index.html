@@ -194,6 +194,38 @@
             font-size: 12px;
         }
 
+        .prd-link {
+            display: flex;
+            justify-content: center;
+            margin-top: 28px;
+        }
+
+        .prd-link a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 32px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 24px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .prd-link a:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+
+        .prd-link .prd-icon {
+            font-size: 18px;
+        }
+
         @media (max-width: 900px) {
             .nav-grid {
                 grid-template-columns: 1fr;
@@ -250,6 +282,13 @@
                     <li>验收确认与评价</li>
                 </ul>
                 <span class="nav-btn">进入业主端</span>
+            </a>
+        </div>
+
+        <div class="prd-link">
+            <a href="PRD-完整文档.html" target="_blank">
+                <span class="prd-icon">📋</span>
+                <span>PRD 完整文档</span>
             </a>
         </div>
 
