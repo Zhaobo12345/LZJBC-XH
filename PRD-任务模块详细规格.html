@@ -651,7 +651,7 @@
                     <div style="font-weight:600;color:#D46B08;margin-bottom:4px;">⚠️ 任务列表数据范围（全部任务来源 · 重要）</div>
                     <p style="margin:4px 0;font-size:13px;line-height:1.8;color:#614700;">任务列表（服务方 §2.4 / 业主方 §5.5）所展示的<strong>全部任务</strong>，其数据来源统一限定为：<strong>「已签约的合同」内的「全部有效任务」</strong>。</p>
                     <ul style="margin:4px 0 0;padding-left:18px;font-size:13px;line-height:1.8;color:#614700;">
-                        <li><strong>已签约</strong>：仅合同状态为 <code>signed</code> / <code>worker_signed</code>（含变更生效后 V2 版本）时，其下任务才纳入任务列表；处于「已确认」及之前态、或处于变更锁定中的合同，其任务<strong>不进入</strong>任务列表（与 <a href="PRD-合同模块详细规格.html#sec-3-12-14" target="_blank">合同模块 §3.12.14「签约前锁定」</a> 一致）。</li>
+                        <li><strong>已签约</strong>：仅合同状态为 <code>signed</code> / <code>worker_signed</code>（含变更生效后 V2 版本）时，其下任务才纳入任务列表；处于「已确认」及之前态、或处于变更锁定中的合同，其任务<strong>不进入</strong>任务列表（与 <a href="PRD-合同模块详细规格.html#sec-3-10-14" target="_blank">合同模块 §3.10.14「签约前锁定」</a> 一致）。</li>
                         <li><strong>有效（= 未被删除）</strong>：仅展示逻辑上未被删除的任务；被删除（软删除）的任务不出现在列表中。</li>
                     </ul>
                 </div>
@@ -1403,7 +1403,7 @@
                 <p>头部默认配色；流程条第 1 步「⏸ 待开始」当前（current）；底部主按钮为品牌主色（primary）；<strong>尚未上传执行记录时</strong>「提交确认 / 完成任务」主按钮置灰（disabled），待上传并进入「执行中」后恢复可点击。</p>
                 <h4>待办生成规则（执行人「任务执行」待办 · 触发来源）</h4>
                 <p>执行人「任务执行」待办的<strong>首次生成由合同进入可施工态触发</strong>：合同已签约（<code>signed</code> / <code>worker_signed</code>）或变更已生效（<code>change_confirmed</code>）后，系统为对应合同下「已配置执行人 + 待开始」的任务自动生成（生成时间 = 签约 / 变更生效时间）。</p>
-                <p><strong>完整规则与前置约束（签约前配置执行人不生成待办）、变更作用域（仅变更项任务）以合同模块为权威出处</strong>：见 <a href="PRD-合同模块详细规格.html#sec-3-12-14" target="_blank">PRD-合同模块 §3.12.14 已签约</a> / <a href="PRD-合同模块详细规格.html#sec-5-15-8" target="_blank">§5.15.8 变更已生效</a>，本节不再重复细节。</p>
+                <p><strong>完整规则与前置约束（签约前配置执行人不生成待办）、变更作用域（仅变更项任务）以合同模块为权威出处</strong>：见 <a href="PRD-合同模块详细规格.html#sec-3-10-14" target="_blank">PRD-合同模块 §3.10.14 已签约</a> / <a href="PRD-合同模块详细规格.html#sec-5-15-8" target="_blank">§5.15.8 变更已生效</a>，本节不再重复细节。</p>
                 <p>待办类型、标签、归属、跳转目标与状态联动见 <a href="#sub-4-8-2">§4.8.2</a>；确认人驳回触发的「重新执行」待办见 <a href="#sub-3-15">§3.15(5)</a>。</p>
             </div>
 
@@ -2059,7 +2059,7 @@
                     <div class="info-item"><div class="info-label">状态值</div><div class="info-value">pending（待执行）</div></div>
                     <div class="info-item"><div class="info-label">跳转目标</div><div class="info-value">task-detail.html?status=pending</div></div>
                 </div>
-                <p><strong>生成规则：</strong>「任务执行」待办存在两类生成来源——① <strong>合同可施工触发（首次 · 权威规则见合同模块）</strong>：合同已签约（<code>signed</code> / <code>worker_signed</code>）或变更已生效（<code>change_confirmed</code>）后，系统为合同下「已配置执行人 + 待开始」的任务自动生成，完整触发条件、前置约束（签约前配置执行人不生成待办）与变更作用域（仅变更项）见 <a href="PRD-合同模块详细规格.html#sec-3-12-14" target="_blank">PRD-合同模块 §3.12.14</a> / <a href="PRD-合同模块详细规格.html#sec-5-15-8" target="_blank">§5.15.8</a>；② <strong>确认人驳回触发（重新执行）</strong>：见 <a href="#sub-3-15">§3.15(5)</a>（驳回回退至「驳回后待开始」后生成）。本节仅描述其在「全部待办」页的呈现与完成联动，触发规则以合同模块 §3.12.14 / §5.15.8 与 §3 为准。</p>
+                <p><strong>生成规则：</strong>「任务执行」待办存在两类生成来源——① <strong>合同可施工触发（首次 · 权威规则见合同模块）</strong>：合同已签约（<code>signed</code> / <code>worker_signed</code>）或变更已生效（<code>change_confirmed</code>）后，系统为合同下「已配置执行人 + 待开始」的任务自动生成，完整触发条件、前置约束（签约前配置执行人不生成待办）与变更作用域（仅变更项）见 <a href="PRD-合同模块详细规格.html#sec-3-10-14" target="_blank">PRD-合同模块 §3.10.14</a> / <a href="PRD-合同模块详细规格.html#sec-5-15-8" target="_blank">§5.15.8</a>；② <strong>确认人驳回触发（重新执行）</strong>：见 <a href="#sub-3-15">§3.15(5)</a>（驳回回退至「驳回后待开始」后生成）。本节仅描述其在「全部待办」页的呈现与完成联动，触发规则以合同模块 §3.10.14 / §5.15.8 与 §3 为准。</p>
                 <p><strong>页面逻辑：</strong>待办归属 = 执行人；任务进入待开始 / 驳回后待开始且当前用户为执行人时展示（首次生成于合同已签约 / 变更生效，重新执行生成于确认人驳回）；计入「待处理」。</p>
                 <p><strong>交互与完成规则：</strong></p>
                 <div class="code-block">1. 点击待办卡片 → task-detail.html?status=pending

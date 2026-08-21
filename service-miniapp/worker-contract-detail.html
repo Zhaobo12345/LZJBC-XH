@@ -477,7 +477,7 @@
         .wc-toast {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             background: rgba(0,0,0,0.7); color: #fff; padding: 12px 20px; border-radius: 8px;
-            font-size: 14px; z-index: 300; display: none; text-align: center; max-width: 220px;
+            font-size: 14px; z-index: 2000; display: none; text-align: center; max-width: 220px;
         }
         .wc-toast.show { display: block; }
 
@@ -669,6 +669,14 @@
         .re-ended-reason .rr-label { color: var(--text-tertiary); margin-right: 6px; }
         .invite-reason { font-size: 11px; color: var(--text-tertiary); margin-top: 3px; line-height: 1.5; }
 
+    </style>
+
+    <!-- 弹窗在手机框内的尺寸约束（覆盖 contract-detail.css 的 80vh，改为相对手机框高度） -->
+    <style>
+        .task-detail-modal .modal-content,
+        .edit-task-modal .modal-content {
+            max-height: calc(100% - 32px);
+        }
     </style>
 </head>
 <body>
@@ -1090,6 +1098,93 @@
                 </div>
             </div>
         </div>
+
+        <!-- 任务详情（只读）弹窗：位于 phone-frame 内 -->
+        <div class="task-detail-modal" id="taskDetailModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">任务详情</div>
+                    <div class="modal-close" onclick="WCP.closeTaskDetailModal()">✕</div>
+                </div>
+                <div class="modal-body">
+                    <div class="detail-section"><div class="detail-label">任务名称</div><div class="detail-value" id="detailTaskName">—</div></div>
+                    <div class="detail-section"><div class="detail-label">执行人</div><div class="detail-value" id="detailExecutor">—</div></div>
+                    <div class="detail-section"><div class="detail-label">确认人</div><div class="detail-value" id="detailConfirmers">—</div></div>
+                    <div class="detail-section"><div class="detail-label">执行标准</div><div class="detail-value" id="detailExecStandard">—</div></div>
+                    <div class="detail-section"><div class="detail-label">确认标准</div><div class="detail-value" id="detailConfirmStandard">—</div></div>
+                    <div class="detail-section"><div class="detail-label">担责标准</div><div class="detail-value" id="detailLiableStandard">—</div></div>
+                </div>
+                <div class="modal-footer"><button class="submit-btn" onclick="WCP.closeTaskDetailModal()">关闭</button></div>
+            </div>
+        </div>
+
+        <!-- 编辑任务弹窗：执行人/确认人搜索下拉 + 三标准必填（与合同详情·合规版一致） -->
+        <div class="edit-task-modal" id="editTaskModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">编辑任务</div>
+                    <div class="modal-close" onclick="WCP.closeEditTaskModal()">✕</div>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">任务名称 <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="editTaskName" placeholder="请输入任务名称">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">执行人</label>
+                        <div class="confirm-person-tags" id="editTaskExecutorTags" style="margin-bottom: 8px;"></div>
+                        <div class="search-select">
+                            <div class="search-input-wrap">
+                                <input type="text" class="search-input" id="editTaskExecutorSearch" placeholder="请选择执行人" oninput="WCP.filterExecutorList('edit')" onfocus="WCP.toggleExecutorSearch('edit')">
+                                <span class="arrow" onclick="WCP.toggleExecutorSearch('edit')">▼</span>
+                            </div>
+                            <div class="search-dropdown" id="editTaskExecutorDropdown">
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '陈庄', '工长')"><div class="avatar">陈</div><div class="name">陈庄</div><div class="role-tag">工长</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '张水电', '水电工')"><div class="avatar">张</div><div class="name">张水电</div><div class="role-tag">水电工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '钱拆除', '拆除工')"><div class="avatar">钱</div><div class="name">钱拆除</div><div class="role-tag">拆除工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '李木作', '木作工')"><div class="avatar">李</div><div class="name">李木作</div><div class="role-tag">木作工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '周泥瓦', '泥瓦工')"><div class="avatar">周</div><div class="name">周泥瓦</div><div class="role-tag">泥瓦工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '吴油漆', '油漆工')"><div class="avatar">吴</div><div class="name">吴油漆</div><div class="role-tag">油漆工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '郑零工', '小零工')"><div class="avatar">郑</div><div class="name">郑零工</div><div class="role-tag">小零工</div></div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="editTaskExecutor">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">确认人（最多5人）</label>
+                        <div class="confirm-person-tags" id="editTaskConfirmPersons"></div>
+                        <div class="search-select">
+                            <div class="search-input-wrap">
+                                <input type="text" class="search-input" id="editTaskConfirmerSearch" placeholder="添加确认人" oninput="WCP.filterConfirmerList('edit')" onfocus="WCP.toggleConfirmerSearch('edit')">
+                                <span class="arrow" onclick="WCP.toggleConfirmerSearch('edit')">▼</span>
+                            </div>
+                            <div class="search-dropdown" id="editTaskConfirmerDropdown">
+                                <div class="person-option" onclick="WCP.selectConfirmer('edit', '陈庄', '工长')"><div class="avatar">陈</div><div class="name">陈庄</div><div class="role-tag">工长</div></div>
+                                <div class="person-option" onclick="WCP.selectConfirmer('edit', '张水电', '水电工')"><div class="avatar">张</div><div class="name">张水电</div><div class="role-tag">水电工</div></div>
+                                <div class="person-option" onclick="WCP.selectConfirmer('edit', '钱拆除', '拆除工')"><div class="avatar">钱</div><div class="name">钱拆除</div><div class="role-tag">拆除工</div></div>
+                                <div class="person-option" onclick="WCP.selectConfirmer('edit', '李木作', '木作工')"><div class="avatar">李</div><div class="name">李木作</div><div class="role-tag">木作工</div></div>
+                                <div class="person-option" onclick="WCP.selectConfirmer('edit', '周泥瓦', '泥瓦工')"><div class="avatar">周</div><div class="name">周泥瓦</div><div class="role-tag">泥瓦工</div></div>
+                                <div class="person-option" onclick="WCP.selectConfirmer('edit', '吴油漆', '油漆工')"><div class="avatar">吴</div><div class="name">吴油漆</div><div class="role-tag">油漆工</div></div>
+                                <div class="person-option" onclick="WCP.selectConfirmer('edit', '郑零工', '小零工')"><div class="avatar">郑</div><div class="name">郑零工</div><div class="role-tag">小零工</div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">执行标准 <span class="required">*</span></label>
+                        <textarea class="form-textarea" id="editTaskExecStandard" placeholder="请输入执行标准"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">确认标准 <span class="required">*</span></label>
+                        <textarea class="form-textarea" id="editTaskConfirmStandard" placeholder="请输入确认标准"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">担责标准 <span class="required">*</span></label>
+                        <textarea class="form-textarea" id="editTaskLiableStandard" placeholder="请输入担责标准"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer"><button class="submit-btn" onclick="WCP.confirmEditTask()">保存修改</button></div>
+            </div>
+        </div>
     </div>
 
     <div class="page-nav">
@@ -1116,7 +1211,7 @@
                     <div class="status-switch-item" data-status="worker_confirmed_sender" onclick="WCP.updateStatus('worker_confirmed_sender')">已确认(发起方)</div>
                     <a class="status-switch-item" href="worker-sign-upload.html" style="text-decoration:none;">上传签约文件（新页面）</a>
                     <div class="status-switch-item" data-status="worker_draft" onclick="WCP.updateStatus('worker_draft')">拟定中(撤回后)</div>
-                    <div class="status-switch-item" data-status="worker_signed" onclick="WCP.updateStatus('worker_signed')">已签约</div>
+                    <div class="status-switch-item" data-status="worker_signed" data-viewer="sender" onclick="WCP.updateStatus('worker_signed', 'sender')">已签约</div>
                     <div class="status-switch-item" onclick="WCP.demoFulfilled()">已签约（已履约完成）</div>
                 </div>
             </div>
@@ -1126,7 +1221,7 @@
                 <div class="status-group-header" onclick="WCP.toggleStatusGroup(this)">
                     <span class="status-group-icon">▶</span>
                     <span class="status-group-title">受邀方视角</span>
-                    <span class="status-group-count">3</span>
+                    <span class="status-group-count">4</span>
                 </div>
                 <div class="status-group-content" style="display:none;">
                     <div class="status-switch-item" data-status="worker_confirmed_receiver" onclick="WCP.updateStatus('worker_confirmed_receiver')">已确认(受邀方)</div>
@@ -1134,6 +1229,7 @@
                     <div class="status-switch-item" data-status="worker_rejected_receiver" onclick="WCP.updateStatus('worker_rejected_receiver')">已拒绝(受邀方)</div>
                     <div class="status-switch-divider"></div>
                     <a class="status-switch-item" href="worker-contract-receive-inviting.html" style="text-decoration:none;">确认中（接单体验 E）</a>
+                    <a class="status-switch-item" data-status="worker_signed" data-viewer="receiver" href="worker-contract-detail.html?viewer=receiver&status=worker_signed" style="text-decoration:none;">已签约(受邀方)</a>
                 </div>
             </div>
 
@@ -1167,7 +1263,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div><!-- /page-nav -->
 
     <script src="contract-store.js"></script>
     <script src="worker-contract-detail.js"></script>

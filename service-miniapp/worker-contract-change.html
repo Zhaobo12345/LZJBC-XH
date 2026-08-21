@@ -53,28 +53,7 @@
         .change-item.diff .item-value { color: var(--primary-color); font-weight: 600; }
         .change-item.diff .item-value.down { color: var(--success-color); }
 
-        /* 阶段任务编辑（复用合规版 stage-edit-item / task-edit-item 视觉，字段以工人合同为准） */
-        .task-edit-item {
-            display: flex; align-items: center; gap: 8px; padding: 10px 0;
-            border-bottom: 1px solid var(--border-color, #F2F3F5);
-        }
-        .task-edit-item:last-child { border-bottom: none; }
-        .task-edit-main { flex: 1; }
-        .task-edit-name {
-            width: 100%; box-sizing: border-box; height: 34px; border: 1px solid var(--border-color, #E5E6EB);
-            border-radius: 6px; padding: 0 10px; font-size: 13px; outline: none; margin-bottom: 6px;
-        }
-        .task-edit-name:focus, .task-edit-role:focus { border-color: var(--primary-color); }
-        .task-edit-roles { display: flex; gap: 8px; }
-        .task-edit-role {
-            flex: 1; box-sizing: border-box; height: 30px; border: 1px solid var(--border-color, #E5E6EB);
-            border-radius: 6px; padding: 0 8px; font-size: 12px; outline: none;
-        }
-        .task-edit-del {
-            width: 28px; height: 28px; line-height: 26px; text-align: center; border-radius: 50%;
-            border: 1px solid var(--border-color, #E5E6EB); color: var(--text-tertiary); cursor: pointer; flex: none;
-        }
-        .task-edit-del:active { background: var(--bg-secondary); }
+        /* 阶段任务编辑：结构与样式完全复用合规版（css/contract-detail.css 的 stage-edit-item / task-edit-item 体系） */
 
         .add-attachment-btn {
             margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 6px;
@@ -275,6 +254,177 @@
                 <div class="info-modal-body" id="infoModalBody"></div>
             </div>
         </div>
+
+        <!-- 添加任务弹窗（对齐合规版） -->
+        <div class="add-task-modal" id="addTaskModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">添加新任务</div>
+                    <div class="modal-close" onclick="WCP.closeAddTaskModal()">✕</div>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">任务名称 <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="newTaskName" placeholder="请输入任务名称">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">执行人（选填）</label>
+                        <div class="confirm-person-tags" id="newTaskExecutorTags" style="margin-bottom: 8px;"></div>
+                        <div class="search-select">
+                            <div class="search-input-wrap">
+                                <input type="text" class="search-input" id="newTaskExecutorSearch" placeholder="请选择执行人" oninput="WCP.filterExecutorList('new')" onfocus="WCP.toggleExecutorSearch('new')">
+                                <span class="arrow" onclick="WCP.toggleExecutorSearch('new')">▼</span>
+                            </div>
+                            <div class="search-dropdown" id="newTaskExecutorDropdown"></div>
+                        </div>
+                        <input type="hidden" id="newTaskExecutor">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">确认人（最多5人）</label>
+                        <div class="confirm-person-tags" id="newTaskConfirmPersons"></div>
+                        <div class="search-select">
+                            <div class="search-input-wrap">
+                                <input type="text" class="search-input" id="newTaskConfirmerSearch" placeholder="添加确认人" oninput="WCP.filterConfirmerList('new')" onfocus="WCP.toggleConfirmerSearch('new')">
+                                <span class="arrow" onclick="WCP.toggleConfirmerSearch('new')">▼</span>
+                            </div>
+                            <div class="search-dropdown" id="newTaskConfirmerDropdown"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">执行标准 <span class="required">*</span></label>
+                        <textarea class="form-textarea" id="newTaskExecStandard" placeholder="请输入执行标准"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">确认标准 <span class="required">*</span></label>
+                        <textarea class="form-textarea" id="newTaskConfirmStandard" placeholder="请输入确认标准"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">担责标准 <span class="required">*</span></label>
+                        <textarea class="form-textarea" id="newTaskLiableStandard" placeholder="请输入担责标准"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="submit-btn" onclick="WCP.confirmAddTask()">确定添加</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 任务详情弹窗（只读，对齐合规版） -->
+        <div class="task-detail-modal" id="taskDetailModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">任务详情</div>
+                    <div class="modal-close" onclick="WCP.closeTaskDetailModal()">✕</div>
+                </div>
+                <div class="modal-body">
+                    <div class="detail-section">
+                        <div class="detail-label">任务名称</div>
+                        <div class="detail-value" id="detailTaskName">—</div>
+                    </div>
+                    <div class="detail-section">
+                        <div class="detail-label">执行人</div>
+                        <div class="detail-value" id="detailExecutor">—</div>
+                    </div>
+                    <div class="detail-section">
+                        <div class="detail-label">确认人</div>
+                        <div class="detail-value" id="detailConfirmers">—</div>
+                    </div>
+                    <div class="detail-section">
+                        <div class="detail-label">执行标准</div>
+                        <div class="detail-value" id="detailExecStandard">—</div>
+                    </div>
+                    <div class="detail-section">
+                        <div class="detail-label">确认标准</div>
+                        <div class="detail-value" id="detailConfirmStandard">—</div>
+                    </div>
+                    <div class="detail-section">
+                        <div class="detail-label">担责标准</div>
+                        <div class="detail-value" id="detailLiableStandard">—</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="submit-btn" onclick="WCP.closeTaskDetailModal()">关闭</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 编辑任务弹窗（对齐合规版） -->
+        <div class="edit-task-modal" id="editTaskModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">编辑任务</div>
+                    <div class="modal-close" onclick="WCP.closeEditTaskModal()">✕</div>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">任务名称 <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="editTaskName" placeholder="请输入任务名称">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">执行人（选填）</label>
+                        <div class="confirm-person-tags" id="editTaskExecutorTags" style="margin-bottom: 8px;"></div>
+                        <div class="search-select">
+                            <div class="search-input-wrap">
+                                <input type="text" class="search-input" id="editTaskExecutorSearch" placeholder="请选择执行人" oninput="WCP.filterExecutorList('edit')" onfocus="WCP.toggleExecutorSearch('edit')">
+                                <span class="arrow" onclick="WCP.toggleExecutorSearch('edit')">▼</span>
+                            </div>
+                            <div class="search-dropdown" id="editTaskExecutorDropdown"></div>
+                        </div>
+                        <input type="hidden" id="editTaskExecutor">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">确认人（最多5人）</label>
+                        <div class="confirm-person-tags" id="editTaskConfirmPersons"></div>
+                        <div class="search-select">
+                            <div class="search-input-wrap">
+                                <input type="text" class="search-input" id="editTaskConfirmerSearch" placeholder="添加确认人" oninput="WCP.filterConfirmerList('edit')" onfocus="WCP.toggleConfirmerSearch('edit')">
+                                <span class="arrow" onclick="WCP.toggleConfirmerSearch('edit')">▼</span>
+                            </div>
+                            <div class="search-dropdown" id="editTaskConfirmerDropdown"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">执行标准 <span class="required">*</span></label>
+                        <textarea class="form-textarea" id="editTaskExecStandard" placeholder="请输入执行标准"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">确认标准 <span class="required">*</span></label>
+                        <textarea class="form-textarea" id="editTaskConfirmStandard" placeholder="请输入确认标准"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">担责标准 <span class="required">*</span></label>
+                        <textarea class="form-textarea" id="editTaskLiableStandard" placeholder="请输入担责标准"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="submit-btn" onclick="WCP.confirmEditTask()">保存修改</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 确认弹窗（对齐合规版） -->
+        <div class="custom-confirm-modal" id="customConfirmModal">
+            <div class="modal-box">
+                <div class="modal-header">
+                    <div class="modal-title" id="customConfirmTitle">确认提示</div>
+                </div>
+                <div class="modal-body" id="customConfirmMessage">确定要执行此操作吗？</div>
+                <div class="modal-footer">
+                    <div class="modal-btn cancel" onclick="WCP.closeCustomConfirm()">取消</div>
+                    <div class="modal-btn confirm" id="customConfirmOk" onclick="WCP.confirmCustomConfirm()">确定</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 提示弹窗（对齐合规版） -->
+        <div class="custom-toast-modal" id="customToastModal">
+            <div class="modal-box">
+                <div class="modal-body" id="customToastMessage">操作成功</div>
+                <div class="modal-footer">
+                    <div class="modal-btn" onclick="WCP.closeCustomToast()">知道了</div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="contract-store.js"></script>
@@ -285,6 +435,81 @@
         var workerId = '';
         var stages = [];       // 本地编辑副本
         var attachments = [];  // 本地编辑副本
+
+        // ===== 阶段任务演示模板（与 worker-contract-detail.js 的 STAGE_TEMPLATES 保持一致）=====
+        var STAGE_TEMPLATES = {
+            shuidian: {
+                stages: [
+                    { name: '材料进场阶段', order: '并行执行', tasks: [ { name: '材料采购', exec: '张水电', conf: '陈庄' }, { name: '材料报验', exec: '张水电', conf: '陈庄' } ] },
+                    { name: '布管布线阶段', order: '顺序执行', tasks: [ { name: '开槽布管', exec: '张水电', conf: '陈庄' }, { name: '穿线接线', exec: '张水电', conf: '陈庄' }, { name: '阶段确认', exec: '张水电', conf: '陈庄' } ] },
+                    { name: '安装阶段', order: '顺序执行', tasks: [ { name: '开关插座安装', exec: '张水电', conf: '陈庄' } ] },
+                    { name: '收尾阶段', order: '顺序执行', tasks: [ { name: '通水通电测试', exec: '张水电', conf: '陈庄' }, { name: '阶段确认', exec: '张水电', conf: '陈庄' } ] }
+                ]
+            },
+            demolition: {
+                stages: [
+                    { name: '原墙拆除阶段', order: '顺序执行', tasks: [ { name: '防护交底', exec: '钱拆除', conf: '陈庄' }, { name: '墙体拆除', exec: '钱拆除', conf: '陈庄' } ] },
+                    { name: '垃圾清运阶段', order: '顺序执行', tasks: [ { name: '建筑垃圾清运', exec: '钱拆除', conf: '陈庄' }, { name: '现场平整', exec: '钱拆除', conf: '陈庄' } ] },
+                    { name: '收尾阶段', order: '顺序执行', tasks: [ { name: '阶段确认', exec: '钱拆除', conf: '陈庄' } ] }
+                ]
+            },
+            muzuo: {
+                stages: [
+                    { name: '测量放样阶段', order: '并行执行', tasks: [ { name: '现场测量', exec: '李木作', conf: '陈庄' }, { name: '深化图纸', exec: '李木作', conf: '陈庄' } ] },
+                    { name: '木工制作阶段', order: '顺序执行', tasks: [ { name: '基层制作', exec: '李木作', conf: '陈庄' }, { name: '柜体安装', exec: '李木作', conf: '陈庄' } ] },
+                    { name: '安装阶段', order: '顺序执行', tasks: [ { name: '五金安装', exec: '李木作', conf: '陈庄' } ] },
+                    { name: '收尾阶段', order: '顺序执行', tasks: [ { name: '阶段确认', exec: '李木作', conf: '陈庄' } ] }
+                ]
+            },
+            niwa: {
+                stages: [
+                    { name: '基层处理阶段', order: '顺序执行', tasks: [ { name: '地面找平', exec: '周泥瓦', conf: '陈庄' }, { name: '防水施工', exec: '周泥瓦', conf: '陈庄' } ] },
+                    { name: '贴砖阶段', order: '顺序执行', tasks: [ { name: '墙砖铺贴', exec: '周泥瓦', conf: '陈庄' }, { name: '地砖铺贴', exec: '周泥瓦', conf: '陈庄' }, { name: '阶段确认', exec: '周泥瓦', conf: '陈庄' } ] },
+                    { name: '收尾阶段', order: '顺序执行', tasks: [ { name: '美缝清理', exec: '周泥瓦', conf: '陈庄' } ] }
+                ]
+            },
+            youqi: {
+                stages: [
+                    { name: '基层处理阶段', order: '顺序执行', tasks: [ { name: '墙面铲除', exec: '吴油漆', conf: '陈庄' }, { name: '批刮腻子', exec: '吴油漆', conf: '陈庄' } ] },
+                    { name: '腻子阶段', order: '顺序执行', tasks: [ { name: '打磨', exec: '吴油漆', conf: '陈庄' }, { name: '底漆', exec: '吴油漆', conf: '陈庄' } ] },
+                    { name: '油漆阶段', order: '顺序执行', tasks: [ { name: '面漆涂刷', exec: '吴油漆', conf: '陈庄' }, { name: '阶段确认', exec: '吴油漆', conf: '陈庄' } ] },
+                    { name: '收尾阶段', order: '顺序执行', tasks: [ { name: '清理保护', exec: '吴油漆', conf: '陈庄' } ] }
+                ]
+            },
+            xiaolingong: {
+                stages: [
+                    { name: '安装准备阶段', order: '并行执行', tasks: [ { name: '工具进场', exec: '郑零工', conf: '陈庄' }, { name: '安全防护', exec: '郑零工', conf: '陈庄' } ] },
+                    { name: '零星作业阶段', order: '顺序执行', tasks: [ { name: '零星安装', exec: '郑零工', conf: '陈庄' }, { name: '修补作业', exec: '郑零工', conf: '陈庄' } ] },
+                    { name: '收尾阶段', order: '顺序执行', tasks: [ { name: '阶段确认', exec: '郑零工', conf: '陈庄' } ] }
+                ]
+            }
+        };
+
+        // 人员选项（工人合同场景：甲方工长 + 各工种工人，对齐合规版人员选择器交互）
+        var PERSONS = [
+            { name: '陈庄', role: '工长' },
+            { name: '张水电', role: '水电工' },
+            { name: '钱拆除', role: '拆除工' },
+            { name: '李木作', role: '木工' },
+            { name: '周泥瓦', role: '泥瓦工' },
+            { name: '吴油漆', role: '油漆工' },
+            { name: '郑零工', role: '小零工' }
+        ];
+
+        // 三项标准通用兜底（任务未设置标准时预填/展示，与合规版一致）
+        var GENERIC_STD = {
+            exec: '按合同约定及国家/行业相关施工规范执行，过程中做好自检与记录。',
+            confirm: '由相关确认人按合同约定的标准进行核验并签字确认。',
+            liable: '因执行或确认不到位造成质量、安全、工期问题的，由责任方承担相应责任。'
+        };
+
+        // 任务编辑弹窗状态
+        var currentStageIndex = -1;      // 添加任务：目标阶段索引
+        var newTaskConfirmList = [];     // 添加任务：确认人列表
+        var currentEditTask = null;      // 编辑任务：{ si, ti }
+        var editTaskConfirmList = [];    // 编辑任务：确认人列表
+        var confirmCallback = null;      // 确认弹窗回调
+        var confirmDanger = false;       // 确认弹窗：危险操作
 
         function getParam(n) { return new URLSearchParams(global.location.search).get(n); }
         function $(id) { return document.getElementById(id); }
@@ -362,12 +587,27 @@
             // 合同正文预览
             $('changeContractContentPreview').innerHTML = buildBodyPreview();
 
-            // 阶段任务 / 附件本地副本
-            stages = clone(contract.stages || []);
+            // 阶段任务 / 附件本地副本（合同未持久化阶段时按工种模板兜底，对齐详情页数据来源）
+            var tpl = STAGE_TEMPLATES[contract.type] || STAGE_TEMPLATES.shuidian;
+            stages = clone(contract.stages && contract.stages.length ? contract.stages : tpl.stages);
+            stages = stages.map(function (s) {
+                return {
+                    name: s.name || '',
+                    order: s.order || '并行执行',
+                    tasks: (s.tasks || []).map(normalizeTask)
+                };
+            });
             if (!stages.length) stages = [{ name: '施工阶段', order: '并行执行', tasks: [] }];
+            // 演示锁定效果：若无任何已执行任务，为第二阶段注入「已完成 / 进行中」任务各一项，
+            // 演示 已完成任务不可编辑/删除、所属阶段不可删除/不可修改按序执行（对齐合规版发起变更页演示）
+            if (!stages.some(stageHasLocked) && stages.length >= 2 && (stages[1].tasks || []).length >= 2) {
+                stages[1].tasks[0].completed = true;
+                stages[1].tasks[1].status = 'confirming';
+            }
             attachments = clone(contract.attachments || []);
             renderStages();
             renderAttachments();
+            fillPersonDropdowns();
 
             // 其他预填
             $('changeExtraInput').value = (contract.extraClauses || '');
@@ -467,65 +707,405 @@
             }
         }
 
-        // ===== 阶段任务编辑 =====
+        // ===== 阶段任务编辑（结构、交互与「合同详情（合规版）」发起变更页一致）=====
+
+        // 任务数据规范化：统一任务字段结构（conf 统一为字符串，便于详情页展示）
+        function normalizeTask(t) {
+            return {
+                name: t.name || '',
+                exec: t.exec || '',
+                conf: Array.isArray(t.conf) ? t.conf.join('、') : (t.conf || ''),
+                execStd: t.execStd || '',
+                confStd: t.confStd || '',
+                liableStd: t.liableStd || '',
+                completed: t.completed === true,
+                status: t.status || ''
+            };
+        }
+
+        // 任务是否锁定（已完成 / 进行中：不可编辑、不可删除）
+        function isTaskLocked(t) {
+            return t.completed === true || t.status === 'in_progress' || t.status === 'confirming';
+        }
+
+        // 阶段内是否存在已执行任务（锁定按序执行开关与删除阶段）
+        function stageHasLocked(s) {
+            return (s.tasks || []).some(function (t) { return isTaskLocked(t); });
+        }
+
         function renderStages() {
             var html = stages.map(function (s, si) {
-                var seqActive = (s.order === '按序执行') ? ' active' : '';
-                var tasks = (s.tasks || []).map(function (t, ti) {
-                    return '<div class="task-edit-item" data-si="' + si + '" data-ti="' + ti + '">' +
-                        '<div class="task-edit-main">' +
-                            '<input class="task-edit-name" value="' + escapeHtml(t.name || '') + '" placeholder="任务名称" oninput="WCP.updateTaskField(' + si + ',' + ti + ',\'name\',this.value)">' +
-                            '<div class="task-edit-roles">' +
-                                '<input class="task-edit-role" value="' + escapeHtml(t.exec || '') + '" placeholder="执行人" oninput="WCP.updateTaskField(' + si + ',' + ti + ',\'exec\',this.value)">' +
-                                '<input class="task-edit-role" value="' + escapeHtml(t.conf || '') + '" placeholder="确认人" oninput="WCP.updateTaskField(' + si + ',' + ti + ',\'conf\',this.value)">' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="task-edit-del" onclick="WCP.deleteTask(' + si + ',' + ti + ')">×</div>' +
+                var seqOn = (s.order === '按序执行' || s.order === '顺序执行');
+                var locked = stageHasLocked(s);
+                var tasksHtml = (s.tasks || []).map(function (t, ti) {
+                    var tLocked = isTaskLocked(t);
+                    var prefix = '';
+                    var colorStyle = '';
+                    if (t.completed) {
+                        prefix = '✓ ';
+                        colorStyle = ' style="color: var(--success-color);"';
+                    } else if (t.status === 'confirming') {
+                        prefix = '⏳ ';
+                        colorStyle = ' style="color: var(--warning-color);"';
+                    }
+                    var lockStyle = tLocked ? ' style="opacity: 0.3; cursor: not-allowed;"' : '';
+                    var delTitle = tLocked ? ' title="' + (t.completed ? '已完成的任务不支持删除' : '进行中的任务不支持删除') + '"' : '';
+                    return '<div class="task-edit-item">' +
+                        '<input type="text" class="task-input" value="' + escapeHtml(prefix + (t.name || '')) + '" placeholder="任务名称" onclick="WCP.viewTaskDetail(' + si + ',' + ti + ')" readonly' + colorStyle + '>' +
+                        '<div class="task-action-btn edit" onclick="WCP.editTaskDetail(' + si + ',' + ti + ')" title="编辑详情"' + lockStyle + '>✎</div>' +
+                        '<div class="task-action-btn" onclick="WCP.deleteTask(' + si + ',' + ti + ')"' + delTitle + lockStyle + '>×</div>' +
                     '</div>';
                 }).join('');
-                return '<div class="stage-edit-item" data-stage="' + (si + 1) + '" data-sequential="' + (s.order === '按序执行' ? 'true' : 'false') + '">' +
+                var seqStyle = locked ? ' style="opacity: 0.5; cursor: not-allowed;" title="当前阶段存在已执行的任务，不支持修改按序执行状态"' : '';
+                var delStageStyle = locked ? ' style="opacity: 0.3; cursor: not-allowed;" title="当前阶段存在已完成/进行中的任务，不支持删除"' : '';
+                return '<div class="stage-edit-item" data-stage="' + (si + 1) + '" data-sequential="' + (seqOn ? 'true' : 'false') + '">' +
                     '<div class="stage-header-row">' +
-                        '<input type="text" class="stage-name-input" value="' + escapeHtml(s.name || '') + '" placeholder="请输入阶段名称" oninput="WCP.updateStageName(' + si + ',this.value)">' +
-                        '<div class="stage-sequential" onclick="WCP.toggleStageSequential(this,' + si + ')">' +
-                            '<span>按序执行</span><div class="switch' + seqActive + '"></div>' +
+                        '<input type="text" class="stage-name-input" value="' + escapeHtml(s.name || '') + '" placeholder="请输入阶段名称" oninput="WCP.updateStageName(' + si + ', this.value)">' +
+                        '<div class="stage-sequential" onclick="WCP.toggleStageSequential(this,' + si + ')"' + seqStyle + '>' +
+                            '<span>按序执行</span><div class="switch' + (seqOn ? ' active' : '') + '"></div>' +
                         '</div>' +
                         '<div class="stage-actions">' +
                             '<div class="stage-action-btn add" onclick="WCP.addTaskToStage(' + si + ')"><span class="btn-icon">+</span> 添加任务</div>' +
-                            '<div class="stage-action-btn delete" onclick="WCP.deleteStage(' + si + ')"><span class="btn-icon">×</span> 删除阶段</div>' +
+                            '<div class="stage-action-btn delete" onclick="WCP.deleteStage(' + si + ')"' + delStageStyle + '><span class="btn-icon">×</span> 删除阶段</div>' +
                         '</div>' +
                     '</div>' +
-                    '<div class="task-edit-list">' + tasks + '</div>' +
+                    '<div class="task-edit-list">' + tasksHtml + '</div>' +
                 '</div>';
             }).join('');
             $('stageEditContainer').innerHTML = html;
         }
+
         function updateStageName(si, val) { if (stages[si]) stages[si].name = val; }
+
         function toggleStageSequential(el, si) {
             if (!stages[si]) return;
+            if (stageHasLocked(stages[si])) {
+                showCustomToast('当前阶段存在已执行的任务，不支持修改按序执行状态');
+                return;
+            }
             var sw = el.querySelector('.switch');
             var on = !sw.classList.contains('active');
             sw.classList.toggle('active', on);
             stages[si].order = on ? '按序执行' : '并行执行';
         }
+
+        // ===== 添加任务弹窗 =====
         function addTaskToStage(si) {
             if (!stages[si]) return;
-            stages[si].tasks = stages[si].tasks || [];
-            stages[si].tasks.push({ name: '新任务', exec: '', conf: '' });
-            renderStages();
+            currentStageIndex = si;
+            newTaskConfirmList = [];
+            $('newTaskName').value = '';
+            $('newTaskExecutor').value = '';
+            $('newTaskExecutorSearch').value = '';
+            $('newTaskExecutorTags').innerHTML = '';
+            $('newTaskConfirmerSearch').value = '';
+            renderConfirmTags('new');
+            $('newTaskExecStandard').value = '';
+            $('newTaskConfirmStandard').value = '';
+            $('newTaskLiableStandard').value = '';
+            $('addTaskModal').classList.add('show');
         }
+
+        function closeAddTaskModal() {
+            $('addTaskModal').classList.remove('show');
+            currentStageIndex = -1;
+            newTaskConfirmList = [];
+        }
+
+        function confirmAddTask() {
+            var taskName = ($('newTaskName').value || '').trim();
+            var executor = $('newTaskExecutor').value || '';
+            var execStd = ($('newTaskExecStandard').value || '').trim();
+            var confStd = ($('newTaskConfirmStandard').value || '').trim();
+            var liableStd = ($('newTaskLiableStandard').value || '').trim();
+            if (!taskName) { showCustomToast('请输入任务名称'); return; }
+            if (!execStd) { showCustomToast('请输入执行标准'); return; }
+            if (!confStd) { showCustomToast('请输入确认标准'); return; }
+            if (!liableStd) { showCustomToast('请输入担责标准'); return; }
+            if (currentStageIndex > -1 && stages[currentStageIndex]) {
+                stages[currentStageIndex].tasks = stages[currentStageIndex].tasks || [];
+                stages[currentStageIndex].tasks.push(normalizeTask({
+                    name: taskName,
+                    exec: executor,
+                    conf: newTaskConfirmList,
+                    execStd: execStd,
+                    confStd: confStd,
+                    liableStd: liableStd
+                }));
+                renderStages();
+                showCustomToast('任务已添加，点击任务名称可查看详情，点击✎可编辑');
+            }
+            closeAddTaskModal();
+        }
+
+        // ===== 任务详情（只读）=====
+        function viewTaskDetail(si, ti) {
+            var t = stages[si] && stages[si].tasks && stages[si].tasks[ti];
+            if (!t) return;
+            $('detailTaskName').textContent = t.name || '未设置';
+            $('detailExecutor').textContent = t.exec || '未设置';
+            $('detailConfirmers').textContent = t.conf || '未设置';
+            $('detailExecStandard').textContent = t.execStd || GENERIC_STD.exec;
+            $('detailConfirmStandard').textContent = t.confStd || GENERIC_STD.confirm;
+            $('detailLiableStandard').textContent = t.liableStd || GENERIC_STD.liable;
+            $('taskDetailModal').classList.add('show');
+        }
+
+        function closeTaskDetailModal() {
+            $('taskDetailModal').classList.remove('show');
+        }
+
+        // ===== 编辑任务弹窗 =====
+        function editTaskDetail(si, ti) {
+            var t = stages[si] && stages[si].tasks && stages[si].tasks[ti];
+            if (!t) return;
+            if (t.completed) {
+                showCustomToast('已完成的任务不支持编辑');
+                return;
+            }
+            currentEditTask = { si: si, ti: ti };
+            editTaskConfirmList = (t.conf || '').split(/[、,，]/).map(function (x) { return x.trim(); }).filter(Boolean);
+            $('editTaskName').value = t.name || '';
+            $('editTaskExecutor').value = t.exec || '';
+            $('editTaskExecutorSearch').value = '';
+            var roleMap = {};
+            PERSONS.forEach(function (p) { roleMap[p.name] = p.role; });
+            $('editTaskExecutorTags').innerHTML = t.exec
+                ? '<div class="confirm-person-tag">' + escapeHtml(t.exec) + '（' + (roleMap[t.exec] || '施工方') + '）<span class="remove" onclick="WCP.removeExecutor(\'edit\')">×</span></div>'
+                : '';
+            renderConfirmTags('edit');
+            $('editTaskExecStandard').value = t.execStd || GENERIC_STD.exec;
+            $('editTaskConfirmStandard').value = t.confStd || GENERIC_STD.confirm;
+            $('editTaskLiableStandard').value = t.liableStd || GENERIC_STD.liable;
+            $('editTaskModal').classList.add('show');
+        }
+
+        function closeEditTaskModal() {
+            $('editTaskModal').classList.remove('show');
+            currentEditTask = null;
+            editTaskConfirmList = [];
+            $('editTaskExecutorTags').innerHTML = '';
+        }
+
+        function confirmEditTask() {
+            if (!currentEditTask) return;
+            var taskName = ($('editTaskName').value || '').trim();
+            var executor = $('editTaskExecutor').value || '';
+            var execStd = ($('editTaskExecStandard').value || '').trim();
+            var confStd = ($('editTaskConfirmStandard').value || '').trim();
+            var liableStd = ($('editTaskLiableStandard').value || '').trim();
+            if (!taskName) { showCustomToast('请输入任务名称'); return; }
+            if (!execStd) { showCustomToast('请输入执行标准'); return; }
+            if (!confStd) { showCustomToast('请输入确认标准'); return; }
+            if (!liableStd) { showCustomToast('请输入担责标准'); return; }
+            var t = stages[currentEditTask.si].tasks[currentEditTask.ti];
+            t.name = taskName;
+            t.exec = executor;
+            t.conf = editTaskConfirmList.join('、');
+            t.execStd = execStd;
+            t.confStd = confStd;
+            t.liableStd = liableStd;
+            renderStages();
+            showCustomToast('任务已更新');
+            closeEditTaskModal();
+        }
+
+        // ===== 删除任务 / 删除阶段（含禁用校验与二次确认，对齐合规版）=====
         function deleteTask(si, ti) {
-            if (stages[si] && stages[si].tasks) { stages[si].tasks.splice(ti, 1); renderStages(); }
+            var s = stages[si];
+            var t = s && s.tasks && s.tasks[ti];
+            if (!t) return;
+            if (t.completed) { showCustomToast('已完成的任务不支持删除'); return; }
+            if (t.status === 'in_progress' || t.status === 'confirming') { showCustomToast('进行中的任务不支持删除'); return; }
+            var remainCount = s.tasks.length;
+            var msg = remainCount > 1
+                ? '确定要删除此任务吗？'
+                : '确定要删除此任务吗？删除后该阶段暂时没有任务，需要时可在该阶段重新添加。';
+            showCustomConfirm('删除任务', msg, function () {
+                s.tasks.splice(ti, 1);
+                renderStages();
+            }, true);
         }
-        function updateTaskField(si, ti, field, val) {
-            if (stages[si] && stages[si].tasks && stages[si].tasks[ti]) stages[si].tasks[ti][field] = val;
-        }
-        function addNewStage() {
-            stages.push({ name: '新阶段', order: '并行执行', tasks: [] });
-            renderStages();
-        }
+
         function deleteStage(si) {
-            stages.splice(si, 1);
+            var s = stages[si];
+            if (!s) return;
+            var hasCompleted = (s.tasks || []).some(function (t) { return t.completed; });
+            var hasInProgress = (s.tasks || []).some(function (t) { return t.status === 'in_progress' || t.status === 'confirming'; });
+            if (hasCompleted) { showCustomToast('当前阶段存在已完成的任务，不支持删除'); return; }
+            if (hasInProgress) { showCustomToast('当前阶段存在进行中的任务，不支持删除'); return; }
+            if (stages.length <= 1) { showCustomToast('至少保留一个阶段'); return; }
+            showCustomConfirm('删除阶段', '确定要删除此阶段吗？删除后该阶段下的所有任务也将被删除。', function () {
+                stages.splice(si, 1);
+                renderStages();
+            }, true);
+        }
+
+        function addNewStage() {
+            stages.push({ name: '新阶段', order: '并行执行', tasks: [normalizeTask({})] });
             renderStages();
+            var container = $('stageEditContainer');
+            var last = container.querySelectorAll('.stage-edit-item');
+            if (last.length) {
+                var nameInput = last[last.length - 1].querySelector('.stage-name-input');
+                if (nameInput) nameInput.focus();
+                last[last.length - 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // ===== 人员选择器（执行人 / 确认人，对齐合规版交互）=====
+        function fillPersonDropdowns() {
+            ['new', 'edit'].forEach(function (p) {
+                var execDd = $(p + 'TaskExecutorDropdown');
+                var confDd = $(p + 'TaskConfirmerDropdown');
+                if (execDd) {
+                    execDd.innerHTML = PERSONS.map(function (x) {
+                        return '<div class="person-option" onclick="WCP.selectExecutor(\'' + p + '\',\'' + x.name + '\',\'' + x.role + '\')">' +
+                            '<div class="avatar">' + x.name.charAt(0) + '</div><div class="name">' + x.name + '</div><div class="role-tag">' + x.role + '</div></div>';
+                    }).join('');
+                }
+                if (confDd) {
+                    confDd.innerHTML = PERSONS.map(function (x) {
+                        return '<div class="person-option" onclick="WCP.selectConfirmer(\'' + p + '\',\'' + x.name + '\',\'' + x.role + '\')">' +
+                            '<div class="avatar">' + x.name.charAt(0) + '</div><div class="name">' + x.name + '</div><div class="role-tag">' + x.role + '</div></div>';
+                    }).join('');
+                }
+            });
+        }
+
+        function toggleExecutorSearch(type) {
+            var dd = $(type + 'TaskExecutorDropdown');
+            if (!dd) return;
+            closeAllDropdowns(dd);
+            dd.classList.add('show');
+            resetDropdownOptions(dd);
+        }
+
+        function toggleConfirmerSearch(type) {
+            var dd = $(type + 'TaskConfirmerDropdown');
+            if (!dd) return;
+            closeAllDropdowns(dd);
+            dd.classList.add('show');
+            resetDropdownOptions(dd);
+        }
+
+        function closeAllDropdowns(except) {
+            document.querySelectorAll('.search-dropdown').forEach(function (d) {
+                if (d !== except) d.classList.remove('show');
+            });
+        }
+
+        function resetDropdownOptions(dd) {
+            dd.querySelectorAll('.person-option').forEach(function (o) { o.style.display = 'flex'; });
+        }
+
+        function selectExecutor(type, name, role) {
+            $(type + 'TaskExecutor').value = name;
+            $(type + 'TaskExecutorSearch').value = '';
+            var dd = $(type + 'TaskExecutorDropdown');
+            if (dd) dd.classList.remove('show');
+            $(type + 'TaskExecutorTags').innerHTML =
+                '<div class="confirm-person-tag">' + escapeHtml(name) + '（' + escapeHtml(role) + '）' +
+                '<span class="remove" onclick="WCP.removeExecutor(\'' + type + '\')">×</span></div>';
+        }
+
+        function removeExecutor(type) {
+            $(type + 'TaskExecutor').value = '';
+            $(type + 'TaskExecutorTags').innerHTML = '';
+        }
+
+        function selectConfirmer(type, name) {
+            var list = type === 'new' ? newTaskConfirmList : editTaskConfirmList;
+            if (list.indexOf(name) === -1 && list.length < 5) {
+                list.push(name);
+                renderConfirmTags(type);
+            }
+            var si = $(type + 'TaskConfirmerSearch');
+            if (si) si.value = '';
+            var dd = $(type + 'TaskConfirmerDropdown');
+            if (dd) dd.classList.remove('show');
+        }
+
+        function removeConfirmPerson(type, name) {
+            var list = type === 'new' ? newTaskConfirmList : editTaskConfirmList;
+            var idx = list.indexOf(name);
+            if (idx > -1) list.splice(idx, 1);
+            renderConfirmTags(type);
+        }
+
+        function renderConfirmTags(type) {
+            var container = $(type + 'TaskConfirmPersons');
+            if (!container) return;
+            var list = type === 'new' ? newTaskConfirmList : editTaskConfirmList;
+            container.innerHTML = list.map(function (name) {
+                return '<div class="confirm-person-tag">' + escapeHtml(name) +
+                    '<span class="remove" onclick="WCP.removeConfirmPerson(\'' + type + '\',\'' + name + '\')">×</span></div>';
+            }).join('');
+        }
+
+        function filterExecutorList(type) {
+            filterDropdown(type + 'TaskExecutorSearch', type + 'TaskExecutorDropdown');
+        }
+
+        function filterConfirmerList(type) {
+            filterDropdown(type + 'TaskConfirmerSearch', type + 'TaskConfirmerDropdown');
+        }
+
+        function filterDropdown(searchId, dropdownId) {
+            var searchInput = $(searchId);
+            var dropdown = $(dropdownId);
+            if (!searchInput || !dropdown) return;
+            var keyword = searchInput.value.toLowerCase();
+            dropdown.querySelectorAll('.person-option').forEach(function (option) {
+                var nameEl = option.querySelector('.name');
+                var roleEl = option.querySelector('.role-tag');
+                var name = nameEl ? nameEl.textContent.toLowerCase() : '';
+                var role = roleEl ? roleEl.textContent.toLowerCase() : '';
+                option.style.display = (name.indexOf(keyword) > -1 || role.indexOf(keyword) > -1) ? 'flex' : 'none';
+            });
+        }
+
+        // ===== 确认弹窗 / 提示弹窗（对齐合规版）=====
+        function showCustomToast(message) {
+            var el = $('customToastMessage');
+            var modal = $('customToastModal');
+            if (el && modal) {
+                el.innerHTML = String(message).replace(/\n/g, '<br>');
+                modal.classList.add('show');
+            }
+        }
+
+        function closeCustomToast() {
+            var modal = $('customToastModal');
+            if (modal) modal.classList.remove('show');
+        }
+
+        function showCustomConfirm(title, message, callback, isDanger) {
+            var titleEl = $('customConfirmTitle');
+            var messageEl = $('customConfirmMessage');
+            var confirmBtn = $('customConfirmOk');
+            var modal = $('customConfirmModal');
+            if (titleEl) titleEl.textContent = title;
+            if (messageEl) messageEl.textContent = message;
+            confirmCallback = callback || null;
+            confirmDanger = !!isDanger;
+            if (confirmBtn) {
+                confirmBtn.className = 'modal-btn ' + (confirmDanger ? 'danger' : 'confirm');
+                confirmBtn.textContent = confirmDanger ? '删除' : '确定';
+            }
+            if (modal) modal.classList.add('show');
+        }
+
+        function closeCustomConfirm() {
+            var modal = $('customConfirmModal');
+            if (modal) modal.classList.remove('show');
+            confirmCallback = null;
+        }
+
+        function confirmCustomConfirm() {
+            var fn = confirmCallback;
+            closeCustomConfirm();
+            if (fn) fn();
         }
 
         // ===== 合同附件编辑 =====
@@ -615,10 +1195,27 @@
             updateStageName: updateStageName,
             toggleStageSequential: toggleStageSequential,
             addTaskToStage: addTaskToStage,
+            closeAddTaskModal: closeAddTaskModal,
+            confirmAddTask: confirmAddTask,
+            viewTaskDetail: viewTaskDetail,
+            closeTaskDetailModal: closeTaskDetailModal,
+            editTaskDetail: editTaskDetail,
+            closeEditTaskModal: closeEditTaskModal,
+            confirmEditTask: confirmEditTask,
             deleteTask: deleteTask,
-            updateTaskField: updateTaskField,
             addNewStage: addNewStage,
             deleteStage: deleteStage,
+            filterExecutorList: filterExecutorList,
+            toggleExecutorSearch: toggleExecutorSearch,
+            filterConfirmerList: filterConfirmerList,
+            toggleConfirmerSearch: toggleConfirmerSearch,
+            selectExecutor: selectExecutor,
+            removeExecutor: removeExecutor,
+            selectConfirmer: selectConfirmer,
+            removeConfirmPerson: removeConfirmPerson,
+            closeCustomToast: closeCustomToast,
+            closeCustomConfirm: closeCustomConfirm,
+            confirmCustomConfirm: confirmCustomConfirm,
             addNewAttachment: addNewAttachment,
             deleteAttachment: deleteAttachment,
             submitChange: submitChange,

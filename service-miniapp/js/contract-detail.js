@@ -2583,7 +2583,69 @@ const ContractDetailPage = (function() {
             modal.style.display = 'block';
             modal.classList.add('show');
         }
+        // 预填当前补充条款（与工人合同变更页一致：可修改，留空则保持不变）
+        const extraInput = document.getElementById('changeExtraInput');
+        if (extraInput) {
+            const currentExtra = document.getElementById('supplementaryTerms');
+            extraInput.value = currentExtra ? currentExtra.textContent.replace(/\s*\n\s*/g, '\n').trim() : '';
+        }
+        // 预填当前合同金额
+        const amountOldEl = document.getElementById('contractAmountRow');
+        const amountNewInput = document.getElementById('changeAmountNew');
+        const amountOldText = document.getElementById('changeAmountOld');
+        if (amountOldEl && amountNewInput && amountOldText) {
+            const amountText = amountOldEl.textContent.replace(/[¥,]/g, '').trim();
+            const amount = parseFloat(amountText) || 0;
+            amountOldText.textContent = '¥' + formatMoney(amount);
+            amountNewInput.value = amount;
+        }
+        updateChangeAmountDiff();
         checkChangeContent();
+    }
+
+    /**
+     * 变更金额输入回调
+     */
+    function onChangeAmountInput() {
+        updateChangeAmountDiff();
+    }
+
+    /**
+     * 更新变更金额差异显示
+     */
+    function updateChangeAmountDiff() {
+        const amountOldEl = document.getElementById('contractAmountRow');
+        const amountNewInput = document.getElementById('changeAmountNew');
+        const diffRow = document.getElementById('changeAmountDiffRow');
+        const diffText = document.getElementById('changeAmountDiff');
+        if (!amountOldEl || !amountNewInput || !diffRow || !diffText) return;
+
+        const amountText = amountOldEl.textContent.replace(/[¥,]/g, '').trim();
+        const amountOld = parseFloat(amountText) || 0;
+        const amountNew = parseFloat(amountNewInput.value) || 0;
+
+        if (amountNew === amountOld) {
+            diffRow.style.display = 'none';
+            return;
+        }
+        diffRow.style.display = 'flex';
+        const diff = amountNew - amountOld;
+        diffText.className = '';
+        if (diff > 0) {
+            diffText.classList.add('up');
+            diffText.textContent = '+¥' + formatMoney(diff);
+        } else {
+            diffText.classList.add('down');
+            diffText.textContent = '-¥' + formatMoney(Math.abs(diff));
+        }
+    }
+
+    /**
+     * 格式化金额
+     */
+    function formatMoney(num) {
+        if (isNaN(num)) return '0.00';
+        return num.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
     
     /**
@@ -3129,13 +3191,145 @@ const ContractDetailPage = (function() {
      */
     function closeEditTaskModal() {
         const modal = document.getElementById('editTaskModal');
-        if (modal) modal.classList.remove('show');
+        if (modal) {
+            modal.classList.remove('show');
+            // 清理只读模式（避免影响后续「编辑任务」打开时的可编辑状态）
+            modal.classList.remove('readonly');
+            const title = modal.querySelector('.modal-title');
+            if (title) title.textContent = '编辑任务';
+        }
         
         const editTaskExecutorTags = document.getElementById('editTaskExecutorTags');
         if (editTaskExecutorTags) editTaskExecutorTags.innerHTML = '';
         
         state.currentEditTaskItem = null;
         state.editTaskConfirmPersonList = [];
+    }
+
+    /**
+     * 任务名称 → 三标准补充映射（原型数据补充，保证只读弹窗三项标准均有值）。
+     * 审核阶段 / 确认阶段等合同详情页点击任务项展示只读任务详情时使用，
+     * 取值优先级：任务项 data 属性 → 本映射 → 通用兜底。
+     */
+    const TASK_STANDARD_MAP = {
+        '材料采购': { exec: '按设计图纸与合同清单采购符合国家标准的电线、线管等材料，并随货提供合格证与检测报告。', confirm: '材料品牌、规格、数量与合同约定一致，质量证明文件齐全方可签收。', liable: '因材料质量或规格不符导致返工、工期延误的，由采购执行方承担相应费用与责任。' },
+        '材料运输': { exec: '采用合规运输方式将材料安全运抵施工现场，途中做好防护，避免磕碰与受潮。', confirm: '到场材料外包装完好、数量准确，随车单据与订单一致。', liable: '运输过程中发生材料损坏、短缺的，由运输执行方承担责任。' },
+        '材料确认': { exec: '核对到场材料的品牌、规格、数量、合格证，与合同逐项比对并记录。', confirm: '材料与合同约定一致，相关确认人签字确认后方可入库。', liable: '因漏检、误检导致不合格材料使用的，由执行与确认方共同担责。' },
+        '材料入库': { exec: '将验收合格材料分类码放、登记台账，做好防潮防火管理。', confirm: '入库数量、品类与验收单一致，台账记录完整。', liable: '因保管不当造成材料丢失、损坏的，由保管执行方承担责任。' },
+        '材料报验': { exec: '整理材料质量证明文件，向监理/业主报验并提交样品。', confirm: '报验资料齐全，样品经确认人认可后准予使用。', liable: '未经报验擅自使用的，由执行方承担整改与返工责任。' },
+        '开槽': { exec: '按深化图纸弹线定位，使用机械规范开槽，不得破坏承重结构。', confirm: '开槽位置、深度、走向符合图纸与规范要求。', liable: '因违规开槽造成结构损伤或后期隐患的，由施工执行方担责。' },
+        '布管': { exec: '按规范敷设线管，管卡固定牢固、弯曲半径合规，强弱电分管分盒。', confirm: '线管规格、走向、间距符合设计与验收标准。', liable: '管线敷设不到位导致后期无法穿线或维修困难的，由执行方整改担责。' },
+        '穿线': { exec: '按回路穿线，线色区分正确，预留足够接线长度，管内无接头。', confirm: '导线规格、根数、绝缘电阻测试合格。', liable: '因穿线错误导致短路、跳闸的，由施工执行方承担责任。' },
+        '线路测试': { exec: '使用兆欧表、万用表进行绝缘与通断测试，记录测试数据。', confirm: '绝缘电阻、通路、接地均符合规范，测试报告完整。', liable: '未测试或测试造假导致用电事故的，由执行与确认方担责。' },
+        '隐蔽工程验收': { exec: '在覆盖前完成自检，整理影像与隐蔽记录资料。', confirm: '监理/业主现场复核，隐蔽资料签字确认后方可封闭。', liable: '未经验收擅自隐蔽的，由执行方承担剥露复检与返工费用。' },
+        '阶段确认': { exec: '完成本阶段全部任务并自检合格，提交阶段成果与记录。', confirm: '相关确认人按节点对阶段成果进行核验并签字确认。', liable: '阶段内任务未达标即申请确认的，由执行方承担整改责任。' },
+        '开关插座安装': { exec: '按图纸标高与间距安装，接线牢固、面板端正、接地可靠。', confirm: '安装位置、数量、接线符合设计与安全规范。', liable: '安装松动、接错线导致故障的，由施工执行方担责。' },
+        '灯具安装': { exec: '按设计点位安装灯具，固定牢固、接线正确、漏保测试合格。', confirm: '灯具数量、位置、亮灯与接地测试合格。', liable: '安装不牢或接线错误造成脱落、触电的，由执行方承担责任。' },
+        '配电箱安装': { exec: '按系统图安装配电箱，回路标识清晰，接线规范、接地可靠。', confirm: '箱体接地、回路分配、标识与图纸一致，功能测试合格。', liable: '接线错误或标识缺失导致用电事故的，由执行方担责。' },
+        '设备调试': { exec: '按说明书对设备进行单机与联动调试，记录运行参数。', confirm: '设备运行平稳、参数达标，调试报告完整。', liable: '调试不到位导致设备异常的，由执行方承担复调责任。' },
+        '新增点位布线': { exec: '按变更确认的点位深化布线，工艺与既有标准一致。', confirm: '新增点位位置、工艺经确认人验收合格。', liable: '新增布线不达标影响使用的，由执行方整改担责。' },
+        '新增点位验收': { exec: '完成新增点位施工并自检，提交验收资料。', confirm: '新增点位经业主/监理验收签字确认。', liable: '未验收合格即投入使用的，由执行方承担责任。' },
+        '清理现场': { exec: '做到工完场清，分类清运建筑垃圾，保持现场整洁。', confirm: '现场无遗留废料、通道畅通，达到交付标准。', liable: '因清理不到位影响后续工序或安全的，由执行方担责。' },
+        '竣工验收': { exec: '完成全部施工内容并自检，整理竣工图与验收资料。', confirm: '业主、监理按合同与规范进行竣工验收并签字。', liable: '验收发现问题的，由执行方限期整改至合格。' },
+        '资料整理': { exec: '汇总施工、验收、变更等过程资料，分类归档成册。', confirm: '资料完整、签章齐全，与实体工程一致。', liable: '资料缺失、不实影响结算或维保的，由执行方补正担责。' },
+        '培训使用': { exec: '向业主讲解设备与系统使用方法，演示操作要点。', confirm: '业主确认已掌握使用与维护要点。', liable: '因培训不到位导致误操作损失的，由执行方补充培训担责。' },
+        '最终确认': { exec: '完成全部收尾与整改，提交最终结算与交付文件。', confirm: '各方对工程量、质量、资料进行最终确认签字。', liable: '最终确认前遗留问题未闭环的，由执行方承担后续责任。' }
+    };
+
+    /**
+     * 非已签约状态页面：点击任务项弹出「编辑任务」弹窗的只读效果（展示任务详情，不跳转任务详情页）。
+     * 已签约状态保持原有跳转行为（不改动既有功能）。
+     * 执行人 / 确认人可能无人员（空时展示「未指定」占位）；执行 / 确认 / 担责三项标准保证均有值。
+     * @param {HTMLElement} taskItem - 任务项元素
+     */
+    function openTaskReadonly(taskItem) {
+        // 已签约状态：保持原有跳转行为
+        if (state.currentStatus === 'signed') {
+            location.href = 'task-detail.html';
+            return;
+        }
+        if (!taskItem) return;
+
+        // 任务名称（排除变更标签文字，如「已修改 / 新增」）
+        const taskNameEl = taskItem.querySelector('.task-name');
+        let taskName = '未设置';
+        if (taskNameEl) {
+            taskName = Array.prototype.slice.call(taskNameEl.childNodes)
+                .filter(function (n) {
+                    return !(n.nodeType === 1 && n.classList && n.classList.contains('task-change-tag'));
+                })
+                .map(function (n) { return n.textContent; })
+                .join('')
+                .trim();
+            if (!taskName) taskName = '未设置';
+        }
+
+        // 从任务项元信息解析执行人 / 确认人
+        let executor = '';
+        let confirmers = [];
+        const metaRow = taskItem.querySelector('.task-meta-row');
+        if (metaRow) {
+            metaRow.querySelectorAll('.task-meta-item').forEach(function (item) {
+                const roleTag = item.querySelector('.role-tag');
+                const role = roleTag ? roleTag.textContent.trim() : '';
+                const val = item.textContent.replace(role, '').replace(/\s+/g, ' ').trim();
+                if (role === '执行') executor = val;
+                else if (role === '确认') confirmers = val ? val.split(/[、,，]/).map(function (s) { return s.trim(); }).filter(Boolean) : [];
+            });
+        }
+
+        const roleMap = {
+            '张三': '项目经理', '李四': '电工', '王五': '泥瓦工',
+            '赵六': '木工', '钱七': '油漆工', '孙八': '监理', '业主': '业主'
+        };
+
+        // 填充任务名称
+        const editTaskName = document.getElementById('editTaskName');
+        if (editTaskName) editTaskName.value = taskName;
+
+        // 执行人：可能无人员 → 空时展示「未指定」占位
+        const execTags = document.getElementById('editTaskExecutorTags');
+        if (execTags) {
+            if (executor) {
+                execTags.innerHTML = '<div class="confirm-person-tag">' + executor + '（' + (roleMap[executor] || '施工方') + '）<span class="remove" onclick="ContractDetailPage.removeExecutor(\'edit\')">×</span></div>';
+            } else {
+                execTags.innerHTML = '<div class="confirm-person-tag empty">未指定</div>';
+            }
+        }
+        const execHidden = document.getElementById('editTaskExecutor');
+        if (execHidden) execHidden.value = executor;
+
+        // 确认人：可能无人员 → 空时展示「未指定」占位
+        state.editTaskConfirmPersonList = confirmers;
+        updateEditConfirmPersonTags();
+        const confTags = document.getElementById('editTaskConfirmPersons');
+        if (confTags && confirmers.length === 0) {
+            confTags.innerHTML = '<div class="confirm-person-tag empty">未指定</div>';
+        }
+
+        // 三项标准：保证均有值（优先级：data 属性 → 任务名映射 → 通用兜底）
+        const ds = taskItem.dataset || {};
+        const stdMap = TASK_STANDARD_MAP[taskName] || {};
+        const GENERIC_STD = {
+            exec: '按合同约定及国家/行业相关施工规范执行，过程中做好自检与记录。',
+            confirm: '由相关确认人按合同约定的标准进行核验并签字确认。',
+            liable: '因执行或确认不到位造成质量、安全、工期问题的，由责任方承担相应责任。'
+        };
+        const execStd = document.getElementById('editTaskExecStandard');
+        const confStd = document.getElementById('editTaskConfirmStandard');
+        const liableStd = document.getElementById('editTaskLiableStandard');
+        if (execStd) execStd.value = ds.execStandard || stdMap.exec || GENERIC_STD.exec;
+        if (confStd) confStd.value = ds.confirmStandard || stdMap.confirm || GENERIC_STD.confirm;
+        if (liableStd) liableStd.value = ds.liableStandard || stdMap.liable || GENERIC_STD.liable;
+
+        // 进入只读模式
+        const modal = document.getElementById('editTaskModal');
+        if (modal) {
+            modal.classList.add('readonly');
+            const title = modal.querySelector('.modal-title');
+            if (title) title.textContent = '任务详情（只读）';
+            modal.classList.add('show');
+        }
     }
     
     /**
@@ -3864,6 +4058,9 @@ const ContractDetailPage = (function() {
         checkChangeReason,
         showChangeModal,
         closeChangeModal,
+        onChangeAmountInput,
+        updateChangeAmountDiff,
+        formatMoney,
         showMoreOptions,
         toggleChangeActionMenu,
         closeChangeActionMenu,
@@ -3890,6 +4087,7 @@ const ContractDetailPage = (function() {
         closeTaskDetailModal,
         editTaskDetail,
         closeEditTaskModal,
+        openTaskReadonly,
         addEditTaskConfirmer,
         removeEditTaskConfirmer,
         confirmEditTask,
@@ -3980,6 +4178,9 @@ window.viewChangeVersion = ContractDetailPage.viewChangeVersion;
 window.checkChangeReason = ContractDetailPage.checkChangeReason;
 window.showChangeModal = ContractDetailPage.showChangeModal;
 window.closeChangeModal = ContractDetailPage.closeChangeModal;
+window.onChangeAmountInput = ContractDetailPage.onChangeAmountInput;
+window.updateChangeAmountDiff = ContractDetailPage.updateChangeAmountDiff;
+window.formatMoney = ContractDetailPage.formatMoney;
 window.showMoreOptions = ContractDetailPage.showMoreOptions;
 window.toggleChangeActionMenu = ContractDetailPage.toggleChangeActionMenu;
 window.closeChangeActionMenu = ContractDetailPage.closeChangeActionMenu;
@@ -4004,6 +4205,7 @@ window.viewTaskDetail = ContractDetailPage.viewTaskDetail;
 window.closeTaskDetailModal = ContractDetailPage.closeTaskDetailModal;
 window.editTaskDetail = ContractDetailPage.editTaskDetail;
 window.closeEditTaskModal = ContractDetailPage.closeEditTaskModal;
+window.openTaskReadonly = ContractDetailPage.openTaskReadonly;
 window.addEditTaskConfirmer = ContractDetailPage.addEditTaskConfirmer;
 window.removeEditTaskConfirmer = ContractDetailPage.removeEditTaskConfirmer;
 window.confirmEditTask = ContractDetailPage.confirmEditTask;

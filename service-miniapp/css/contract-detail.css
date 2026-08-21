@@ -2199,6 +2199,48 @@
     color: var(--color-warning);
 }
 
+/* 变更页面 - 金额编辑 */
+.amount-edit-wrap {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.amount-edit-wrap .amount-prefix {
+    font-size: 13px;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.amount-edit-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-align: right;
+    padding: 4px 0;
+    width: 100%;
+}
+
+.amount-edit-input::placeholder {
+    color: var(--text-tertiary);
+    font-weight: 400;
+    font-size: 13px;
+}
+
+#changeAmountDiff.up {
+    color: var(--error-color);
+    font-weight: 600;
+}
+
+#changeAmountDiff.down {
+    color: var(--success-color);
+    font-weight: 600;
+}
+
 /* 变更页面 - Tab切换 */
 .change-tabs {
     display: flex;
@@ -3189,6 +3231,32 @@
     margin-left: 6px;
     cursor: pointer;
     color: var(--text-tertiary);
+}
+
+/* 只读弹窗中执行人/确认人无人员时的占位标签 */
+.edit-task-modal .confirm-person-tag.empty {
+    color: var(--text-tertiary);
+    background-color: transparent;
+    border: 1px dashed var(--border-color);
+}
+
+/* 编辑任务弹窗只读模式（非已签约状态点击任务项展示，呈现只读表单效果） */
+.edit-task-modal.readonly .modal-body {
+    pointer-events: none;
+}
+.edit-task-modal.readonly .form-input,
+.edit-task-modal.readonly .form-textarea {
+    background-color: var(--bg-secondary);
+    color: var(--text-secondary);
+}
+.edit-task-modal.readonly .search-select {
+    display: none;
+}
+.edit-task-modal.readonly .confirm-person-tag .remove {
+    display: none;
+}
+.edit-task-modal.readonly .modal-footer .submit-btn {
+    display: none;
 }
 
 /* 变更确认模态框 */

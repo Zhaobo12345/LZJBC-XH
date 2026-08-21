@@ -114,6 +114,7 @@
         worker_signed: {
             text: '已签约', bannerClass: 'signed',
             desc: '合同已正式生效。如需调整工程内容或金额，可发起合同变更（需对方确认后生效，无需平台审核）。',
+            descReceiver: '合同已正式生效。',
             actions: [{ text: '发起变更', type: 'primary', action: 'start_change' }]
         },
 
@@ -175,7 +176,9 @@
         editInvited: [],
         draftContentTab: 'contract-text',
         tplKind: '',
-        fulfilled: false
+        fulfilled: false,
+        currentEditTask: null,
+        editTaskConfirmPersonList: []
     };
 
     var pendingConfirm = null; // { title, message, onConfirm, onCancel }
@@ -313,6 +316,8 @@
         state.viewer = getParam('viewer') || 'sender';
         state.asUserId = getParam('asUserId') || '';
         if (!global.ContractStore) { renderNotFound(); return; }
+        // 预播种全部工种演示合同（id 形如 demo-<type>-example），保证外部按 id 跳转各工种都能命中
+        DEMO_TYPES.forEach(function (d) { ensureDemoSeed(d.type); });
         if (!state.workerId) {
             // 无 id：直接展示示例合同（水电班组服务合同），不再展示独立的合同说明/创建页
             state.workerId = ensureDemoSeed(DEFAULT_DEMO_TYPE);
@@ -414,27 +419,34 @@
         return id;
     }
 
-    // 演示用：确保名单中存在「已拒绝 + 原因」的受邀人，便于发起方视图展示拒绝原因。
-    // 幂等：仅为缺原因的已拒绝者补填、或在没有已拒绝者时预置最后一名；不覆盖用户真实填写的原因。
-    // 修复点：旧逻辑遇「已存在 rejected」即 return false，导致旧测试残留的「已拒绝但缺 rejectReason」
-    // 受邀人无法补回原因，使「已拒绝」行丢失原因。现改为先补填缺原因者，再按需预置。
+    // 演示用：规范化「已签约 / 已确认（发起方）」视图的受邀人状态，稳定呈现
+    // 「一人已确认（乙方）、一人抢单失败、一人已拒绝」的演示效果。
+    // - 乙方（首位受邀人）不参与此规范化；
+    // - 仅最后一名非乙方受邀人设为「已拒绝 + 原因」；
+    // - 其余非乙方受邀人若曾为「已拒绝」（旧数据残留），重置为待确认，
+    //   使已签约 / 已确认（发起方）视图回退显示为「抢单失败」而非「已拒绝」。
+    // 幂等：仅修改上述目标项；仅作用于 demo-<type>-example 演示合同，不覆盖用户真实数据。
     function presetRejectedDemo(invitations) {
         if (!invitations || invitations.length < 2) return false;
         var changed = false;
+        var firstId = (invitations[0] || {}).userId;
         var reasonText = '近期已有其他项目安排，无法承接本合同，敬请谅解。';
-        invitations.forEach(function (i) {
-            if (i.status === 'rejected' && !i.rejectReason) {
-                i.rejectReason = reasonText;
+        var others = invitations.filter(function (i) { return i.userId !== firstId; });
+        if (others.length === 0) return false;
+        var lastOther = others[others.length - 1];
+        others.forEach(function (i) {
+            if (i === lastOther) {
+                if (i.status !== 'rejected' || !i.rejectReason) {
+                    i.status = 'rejected';
+                    i.rejectReason = reasonText;
+                    changed = true;
+                }
+            } else if (i.status === 'rejected') {
+                delete i.status;
+                delete i.rejectReason;
                 changed = true;
             }
         });
-        var hasRejected = invitations.some(function (i) { return i.status === 'rejected'; });
-        if (!hasRejected) {
-            var last = invitations[invitations.length - 1];
-            last.status = 'rejected';
-            last.rejectReason = reasonText;
-            changed = true;
-        }
         return changed;
     }
 
@@ -561,11 +573,27 @@
     // 右侧导航「状态切换」直接预览任意状态（按状态推导视角）
     function updateStatusNavActive(status) {
         // 同步右侧原型导航「合同状态切换（工人合同）」当前选中项高亮
-        // 仅匹配带 data-status 的状态项，不影响「演示数据」「接单体验 E」等跳转/按钮项
-        var items = document.querySelectorAll('.status-switch-item[data-status]');
+        // 遍历全部 .status-switch-item（含无 data-status 的演示项，如「已签约（已履约完成）」），
+        // 先统一清除 active，再仅给匹配项点亮，避免切换状态后残留旧高亮（详见 demoFulfilled）
+        // 高亮需结合视角（data-viewer）：同一 worker_signed 状态，发起方「已签约」与受邀方「已签约(受邀方)」各自高亮
+        var items = document.querySelectorAll('.status-switch-item');
         for (var i = 0; i < items.length; i++) {
-            items[i].classList.toggle('active', items[i].getAttribute('data-status') === status);
+            var ds = items[i].getAttribute('data-status');
+            var dv = items[i].getAttribute('data-viewer');
+            var match = ds && (ds === status) && (!dv || dv === (state.viewer || 'sender'));
+            items[i].classList.toggle('active', !!match);
+            if (match) expandGroupOf(items[i]);
         }
+    }
+
+    // 展开包含指定导航项的「状态分组」，确保选中项可见（不影响其他分组收起状态）
+    function expandGroupOf(el) {
+        var group = el && el.closest ? el.closest('.status-group') : null;
+        if (!group) return;
+        var content = group.querySelector('.status-group-content');
+        var icon = group.querySelector('.status-group-icon');
+        if (content) content.style.display = '';
+        if (icon) icon.textContent = '▼';
     }
 
     /**
@@ -590,13 +618,21 @@
         }
     }
 
-    function updateStatus(status) {
+    function updateStatus(status, viewer) {
         state.status = status;
-        updateStatusNavActive(status); // 同步导航状态项选中高亮
-        var cfg = STATUS_CONFIG[status] || STATUS_CONFIG.worker_draft;
 
-        // 视角跟随状态：受邀方状态需有有效 asUserId
-        if (status.indexOf('_receiver') > -1) {
+        // 视角处理：优先使用导航项显式传入的 viewer（如发起方「已签约」项传入 'sender'），
+        // 否则按状态后缀自动推导。视角必须在更新高亮前确定，保证高亮与渲染一致。
+        if (viewer) {
+            state.viewer = viewer;
+            if (viewer === 'receiver') {
+                var fId = (state.contract.invitations[0] || {}).userId || '';
+                var vValid = state.contract.invitations.some(function (i) { return i.userId === state.asUserId; });
+                if (!vValid) state.asUserId = fId;
+            } else {
+                state.asUserId = '';
+            }
+        } else if (status.indexOf('_receiver') > -1) {
             state.viewer = 'receiver';
             var firstId = (state.contract.invitations[0] || {}).userId || '';
             var valid = state.contract.invitations.some(function (i) { return i.userId === state.asUserId; });
@@ -620,8 +656,12 @@
             state.asUserId = '';
         }
 
+        updateStatusNavActive(status); // 同步导航状态项选中高亮（需在视角确定后调用）
+        var cfg = STATUS_CONFIG[status] || STATUS_CONFIG.worker_draft;
+
         $('bannerText').textContent = cfg.text;
-        $('bannerDesc').textContent = cfg.desc;
+        // 受邀方（乙方）视角不展示「可发起合同变更」提示（受邀方不支持发起变更，由发起方操作）
+        $('bannerDesc').textContent = (state.viewer === 'receiver' && cfg.descReceiver) ? cfg.descReceiver : cfg.desc;
         $('statusBanner').className = 'wc-banner ' + (cfg.bannerClass || 'draft');
 
         // 切换状态时默认隐藏履约完成徽标（仅 demoFulfilled 时显示）
@@ -940,12 +980,22 @@
         var c = state.contract;
         var stages = getStages();
         var isFulfilled = state.fulfilled;
+        // 已签约状态：点击任务跳转任务详情页（履约完成→已完成，否则→待开始）；其余状态仍弹窗查看
+        var isSigned = (state.status === 'worker_signed');
         var stageHtml = stages.map(function (s, i) {
             var tasks = (s.tasks || []).map(function (t) {
-                return '<div class="task-item"><div class="task-info">' +
+                var clickAttr = isSigned
+                    ? 'onclick="WCP.goTaskDetail()"'
+                    : 'onclick="WCP.viewTaskDetail(this)"';
+                return '<div class="task-item" ' + clickAttr +
+                    ' data-task-name="' + escapeHtml(t.name) + '"' +
+                    ' data-executor="' + escapeHtml(t.exec || '') + '"' +
+                    ' data-confirmers="' + escapeHtml(t.conf || '') + '"' +
+                    ' data-exec-standard="' + escapeHtml(t.execStd || '') + '"' +
+                    ' data-confirm-standard="' + escapeHtml(t.confStd || '') + '"' +
+                    ' data-liable-standard="' + escapeHtml(t.liableStd || '') + '"' +
+                    '><div class="task-info">' +
                     '<div class="task-name">' + escapeHtml(t.name) + (isFulfilled ? ' <span class="task-done-tag">✓ 已完成</span>' : '') + '</div>' +
-                    '<div class="task-meta-row"><span class="task-meta-item"><span class="role-tag executor">执行</span> ' + escapeHtml(t.exec) + '</span>' +
-                    '<span class="task-meta-item"><span class="role-tag confirmer">确认</span> ' + escapeHtml(t.conf) + '</span></div>' +
                     '</div></div>';
             }).join('');
             return '<div class="stage-item"><div class="stage-header" onclick="WCP.toggleStage(this)">' +
@@ -1067,6 +1117,10 @@
                 { text: '恢复原乙方', type: 'secondary', action: 'worker_reselect_cancel' },
                 { text: '提交并邀请乙方', type: 'success', action: 'worker_resubmit' }
             ];
+        }
+        // 受邀方（乙方）视角不支持发起变更：过滤掉 start_change（发起方专属操作），避免误展示
+        if (state.viewer === 'receiver') {
+            actions = actions.filter(function (a) { return a.action !== 'start_change'; });
         }
         (actions).forEach(function (a) {
             var btn = document.createElement('button');
@@ -1645,8 +1699,8 @@
             var seqOn = (s.order === '顺序执行');
             var tasks = (s.tasks || []).map(function (t, j) {
                 return '<div class="task-edit-item">' +
-                    '<input class="task-input" value="' + escapeHtml(t.name) + '" placeholder="任务名称" oninput="WCP.updateDraftTaskName(' + i + ',' + j + ',this.value)">' +
-                    '<div style="font-size:11px;color:var(--text-tertiary);margin:2px 0 6px;">执行：' + escapeHtml(t.exec || '') + ' · 确认：' + escapeHtml(t.conf || '') + '</div>' +
+                    '<input class="task-input" value="' + escapeHtml(t.name) + '" placeholder="任务名称" oninput="WCP.updateDraftTaskName(' + i + ',' + j + ',this.value)" onclick="WCP.editTaskDetail(this,' + i + ',' + j + ')" readonly>' +
+                    '<div class="task-action-btn edit" onclick="WCP.editTaskDetail(this,' + i + ',' + j + ')" title="编辑详情">✎</div>' +
                     '<div class="task-action-btn" onclick="WCP.deleteDraftTask(' + i + ',' + j + ')">×</div>' +
                     '</div>';
             }).join('');
@@ -2172,6 +2226,246 @@
         }, 1500);
     }
 
+    // ============== 任务详情/编辑弹窗 ==============
+    // 任务名称 → 三标准映射（参考合同详情·合规版 TASK_STANDARD_MAP）
+    var TASK_STANDARD_MAP = {
+        '材料采购': { exec: '按设计图纸与合同清单采购符合国家标准的电线、线管等材料，并随货提供合格证与检测报告。', confirm: '材料品牌、规格、数量与合同约定一致，质量证明文件齐全方可签收。', liable: '因材料质量或规格不符导致返工、工期延误的，由采购执行方承担相应费用与责任。' },
+        '材料报验': { exec: '整理材料质量证明文件，向监理/业主报验并提交样品。', confirm: '报验资料齐全，样品经确认人认可后准予使用。', liable: '未经报验擅自使用的，由执行方承担整改与返工责任。' },
+        '开槽布管': { exec: '按深化图纸弹线定位，使用机械规范开槽并敷设线管，管卡固定牢固、弯曲半径合规，强弱电分管分盒。', confirm: '开槽位置、深度及线管规格、走向、间距符合图纸与规范要求。', liable: '因违规开槽或管线敷设不到位导致结构损伤、后期无法穿线或维修困难的，由施工执行方整改担责。' },
+        '穿线接线': { exec: '按回路穿线，线色区分正确，预留足够接线长度，管内无接头；开关插座处接线牢固。', confirm: '导线规格、根数、绝缘电阻测试合格，接线符合安全规范。', liable: '因穿线或接线错误导致短路、跳闸的，由施工执行方承担责任。' },
+        '通水通电测试': { exec: '完成水管打压测试与电气绝缘、通断测试，记录测试数据，确保无渗漏、无漏电。', confirm: '水管保压合格、电气绝缘电阻与接地测试达标，测试报告完整。', liable: '未测试或测试造假导致用水用电事故的，由执行与确认方共同担责。' },
+        '阶段确认': { exec: '完成本阶段全部任务并自检合格，提交阶段成果与记录。', confirm: '相关确认人按节点对阶段成果进行核验并签字确认。', liable: '阶段内任务未达标即申请确认的，由执行方承担整改责任。' },
+        '开关插座安装': { exec: '按图纸标高与间距安装，接线牢固、面板端正、接地可靠。', confirm: '安装位置、数量、接线符合设计与安全规范。', liable: '安装松动、接错线导致故障的，由施工执行方担责。' },
+        '防护交底': { exec: '对施工区域进行成品防护，向班组进行安全与技术交底并签字记录。', confirm: '防护措施到位，交底记录齐全且签字确认。', liable: '因防护不到位或交底缺失造成成品损坏、安全事故的，由执行方承担责任。' },
+        '墙体拆除': { exec: '按确认的拆除范围弹线定位，由上至下规范拆除，不得破坏承重结构与防水层。', confirm: '拆除范围、标高符合确认要求，承重结构完好。', liable: '超范围拆除或破坏承重结构的，由执行方承担修复与赔偿费用。' },
+        '建筑垃圾清运': { exec: '将拆除垃圾分类装袋，合规清运至指定消纳场所，保持通道畅通。', confirm: '现场无遗留垃圾，清运记录完整。', liable: '因清运不及时或乱倒垃圾造成处罚的，由执行方承担责任。' },
+        '现场平整': { exec: '对拆除后的墙面、地面进行清理平整，达到后续施工条件。', confirm: '基层平整度符合后续工序施工要求。', liable: '平整不到位影响后续工序质量的，由执行方整改担责。' },
+        '现场测量': { exec: '按设计图纸到现场进行尺寸复核，记录实际尺寸并标注关键节点。', confirm: '测量数据准确，与图纸偏差在允许范围内。', liable: '测量误差导致材料浪费或安装不当的，由执行方承担责任。' },
+        '深化图纸': { exec: '根据现场实测数据深化施工图纸，明确节点做法与材料用量。', confirm: '深化图纸经确认人审核签字后方可施工。', liable: '图纸深化错误导致返工的，由执行方承担相应费用。' },
+        '基层制作': { exec: '按图纸制作木作基层骨架，龙骨间距合规，连接牢固、防潮处理到位。', confirm: '基层平整度、牢固度与防潮处理符合规范。', liable: '基层制作不达标导致面层变形或开裂的，由执行方返工担责。' },
+        '柜体安装': { exec: '按深化图纸组装柜体，水平垂直调整到位，连接牢固、缝隙均匀。', confirm: '柜体安装位置、垂直度、缝隙符合验收标准。', liable: '安装不牢或偏差超标导致使用异常的，由执行方调整担责。' },
+        '五金安装': { exec: '按设计要求安装五金配件，位置准确、开合灵活、固定牢固。', confirm: '五金品牌、数量、功能符合设计要求，开合测试合格。', liable: '五金安装不到位导致损坏或使用不便的，由执行方更换担责。' },
+        '地面找平': { exec: '按标高线进行地面水泥砂浆找平，坡度符合排水要求，无空鼓开裂。', confirm: '找平层平整度、坡度符合规范，无空鼓开裂。', liable: '找平层空鼓、开裂影响后续铺设的，由执行方返工担责。' },
+        '防水施工': { exec: '对厨卫等区域涂刷防水涂料，厚度均匀、边角圆弧处理，完成后做闭水试验。', confirm: '防水层厚度达标，闭水试验24小时无渗漏。', liable: '防水施工不到位导致渗漏的，由执行方承担返工与赔偿费用。' },
+        '墙砖铺贴': { exec: '按排砖图铺贴墙砖，缝隙均匀、平整度合规，阴阳角方正。', confirm: '铺贴平整、缝隙均匀、无空鼓，阴阳角符合规范。', liable: '铺贴空鼓、脱落或不平整超标的，由执行方返工担责。' },
+        '地砖铺贴': { exec: '按排砖图铺贴地砖，坡度朝向地漏，平整度与缝差符合规范。', confirm: '地砖铺贴平整、缝差合规、无空鼓，排水通畅。', liable: '铺贴空鼓、坡度倒泛水导致积水的，由执行方返工担责。' },
+        '美缝清理': { exec: '清理砖缝后均匀填入美缝剂，表面平整、无气泡与余料。', confirm: '美缝饱满、色泽均匀、无脱落。', liable: '美缝施工不到位导致发黑脱落的，由执行方返工担责。' },
+        '墙面铲除': { exec: '铲除原墙面腻子与涂料至基层，清理灰尘保证附着力。', confirm: '基层清理干净，无残留腻子与涂料。', liable: '铲除不彻底导致后续腻子起皮的，由执行方返工担责。' },
+        '批刮腻子': { exec: '按规范批刮腻子两至三遍，每遍干透后打磨，阴阳角顺直。', confirm: '腻层平整、无裂纹、阴阳角顺直，打磨后无明显划痕。', liable: '腻子层开裂、脱落影响面漆效果的，由执行方返工担责。' },
+        '打磨': { exec: '使用砂纸或打磨机对腻子层进行均匀打磨，确保平整无划痕。', confirm: '打磨后平整度符合面漆施工要求，无明显划痕。', liable: '打磨不平或划痕过深影响面漆效果的，由执行方整改担责。' },
+        '底漆': { exec: '按规范滚涂底漆一遍，涂刷均匀无漏底，待干透后进行面漆施工。', confirm: '底漆涂刷均匀、无漏底、无流坠。', liable: '底漆漏涂导致面漆色差或泛碱的，由执行方返工担责。' },
+        '面漆涂刷': { exec: '按设计颜色滚涂面漆两遍，涂刷均匀、无流坠、无色差。', confirm: '面漆色泽均匀、无流坠、无色差，符合验收标准。', liable: '面漆色差、流坠或起皮影响观感的，由执行方返工担责。' },
+        '清理保护': { exec: '施工完成后清理现场，对成品进行保护，避免后续工序污染。', confirm: '现场清理干净，成品保护到位。', liable: '保护不到位造成成品损坏的，由执行方承担责任。' },
+        '工具进场': { exec: '按施工计划将工具与辅材运抵现场，清点登记并妥善放置。', confirm: '工具辅材清单齐全，放置规范。', liable: '工具遗漏或放置不当影响施工进度的，由执行方承担责任。' },
+        '安全防护': { exec: '对施工区域进行安全围护，配备消防器材，做好高空与用电防护。', confirm: '安全防护措施到位，符合现场管理要求。', liable: '安全防护不到位造成事故的，由执行方承担责任。' },
+        '零星安装': { exec: '按业主需求完成零星安装件，尺寸合适、固定牢固。', confirm: '安装位置、牢固度符合使用要求。', liable: '安装不牢或尺寸错误导致返工的，由执行方担责。' },
+        '修补作业': { exec: '对前期施工遗留的瑕疵进行修补，恢复至交付标准。', confirm: '修补部位与原面层无明显色差、平整一致。', liable: '修补不到位影响整体观感的，由执行方重新修补担责。' }
+    };
+    var GENERIC_STD = {
+        exec: '按合同约定及国家/行业相关施工规范执行，过程中做好自检与记录。',
+        confirm: '由相关确认人按合同约定的标准进行核验并签字确认。',
+        liable: '因执行或确认不到位造成质量、安全、工期问题的，由责任方承担相应责任。'
+    };
+    // 已签约状态：点击任务跳转任务详情页（对应任务状态：已履约完成→已完成，否则→待开始）
+    function goTaskDetail() {
+        var taskStatus = state.fulfilled ? 'completed' : 'pending';
+        window.location.href = 'task-detail.html?status=' + taskStatus;
+    }
+    // 只读任务详情弹窗（参考合同详情·合规版 viewTaskDetail）
+    function viewTaskDetail(el) {
+        var item = el.closest('.task-item') || el;
+        var name = item.getAttribute('data-task-name') || '—';
+        var executor = item.getAttribute('data-executor') || '暂未设置';
+        var confirmers = item.getAttribute('data-confirmers') || '暂未设置';
+
+        // 三标准：优先取 data 属性 → 任务名映射 → 通用兜底（保证均有值）
+        var stdMap = TASK_STANDARD_MAP[name] || {};
+        var execStd = item.getAttribute('data-exec-standard') || stdMap.exec || GENERIC_STD.exec;
+        var confStd = item.getAttribute('data-confirm-standard') || stdMap.confirm || GENERIC_STD.confirm;
+        var liableStd = item.getAttribute('data-liable-standard') || stdMap.liable || GENERIC_STD.liable;
+
+        var m = $('taskDetailModal');
+        if (!m) return;
+        $('detailTaskName').textContent = name;
+        $('detailExecutor').textContent = executor;
+        $('detailConfirmers').textContent = confirmers;
+        $('detailExecStandard').textContent = execStd;
+        $('detailConfirmStandard').textContent = confStd;
+        $('detailLiableStandard').textContent = liableStd;
+        m.classList.add('show');
+    }
+    function closeTaskDetailModal() {
+        var m = $('taskDetailModal');
+        if (m) m.classList.remove('show');
+    }
+
+    // 编辑任务弹窗（参考合同详情·合规版 editTaskDetail）
+    var ROLE_MAP = {
+        '陈庄': '工长', '张水电': '水电工', '钱拆除': '拆除工',
+        '李木作': '木作工', '周泥瓦': '泥瓦工', '吴油漆': '油漆工', '郑零工': '小零工'
+    };
+    function editTaskDetail(el, stageIdx, taskIdx) {
+        var stages = getStages();
+        var s = stages[stageIdx];
+        var t = s && s.tasks ? s.tasks[taskIdx] : null;
+        if (!t) return;
+
+        state.currentEditTask = { stageIdx: stageIdx, taskIdx: taskIdx };
+
+        var name = t.name || '';
+        var executor = t.exec || '';
+        var confirmerStr = t.conf || '';
+        var confirmerArr = confirmerStr ? confirmerStr.split(/[、,，]/).map(function(s){return s.trim();}).filter(Boolean) : [];
+        var execStd = t.execStd || '';
+        var confStd = t.confStd || '';
+        var liableStd = t.liableStd || '';
+
+        $('editTaskName').value = name;
+
+        // 执行人：填充标签 + 隐藏值
+        var execTags = $('editTaskExecutorTags');
+        if (executor && ROLE_MAP[executor]) {
+            execTags.innerHTML = '<div class="confirm-person-tag">' + executor + '（' + ROLE_MAP[executor] + '）' +
+                '<span class="remove" onclick="WCP.removeExecutor(\'edit\')">×</span></div>';
+        } else if (executor) {
+            execTags.innerHTML = '<div class="confirm-person-tag">' + executor +
+                '<span class="remove" onclick="WCP.removeExecutor(\'edit\')">×</span></div>';
+        } else {
+            execTags.innerHTML = '';
+        }
+        $('editTaskExecutor').value = executor;
+        $('editTaskExecutorSearch').value = '';
+        $('editTaskExecutorDropdown').classList.remove('show');
+
+        // 确认人：填充标签列表
+        state.editTaskConfirmPersonList = confirmerArr;
+        updateEditConfirmPersonTags();
+        $('editTaskConfirmerSearch').value = '';
+        $('editTaskConfirmerDropdown').classList.remove('show');
+
+        // 三项标准
+        $('editTaskExecStandard').value = execStd;
+        $('editTaskConfirmStandard').value = confStd;
+        $('editTaskLiableStandard').value = liableStd;
+
+        $('editTaskModal').classList.add('show');
+    }
+    function closeEditTaskModal() {
+        var m = $('editTaskModal');
+        if (m) m.classList.remove('show');
+        $('editTaskExecutorTags').innerHTML = '';
+        $('editTaskExecutorDropdown').classList.remove('show');
+        $('editTaskConfirmerDropdown').classList.remove('show');
+        state.editTaskConfirmPersonList = [];
+        state.currentEditTask = null;
+    }
+    function confirmEditTask() {
+        if (!state.currentEditTask) { closeEditTaskModal(); return; }
+        var si = state.currentEditTask.stageIdx;
+        var ti = state.currentEditTask.taskIdx;
+        var stages = getStages();
+        var t = stages[si] && stages[si].tasks ? stages[si].tasks[ti] : null;
+        if (!t) { closeEditTaskModal(); return; }
+
+        var name = $('editTaskName').value.trim();
+        if (!name) { showToast('请输入任务名称'); return; }
+
+        var execStd = $('editTaskExecStandard').value.trim();
+        var confStd = $('editTaskConfirmStandard').value.trim();
+        var liableStd = $('editTaskLiableStandard').value.trim();
+        if (!execStd) { showToast('请输入执行标准'); return; }
+        if (!confStd) { showToast('请输入确认标准'); return; }
+        if (!liableStd) { showToast('请输入担责标准'); return; }
+
+        var executor = $('editTaskExecutor').value.trim();
+        var confirmers = state.editTaskConfirmPersonList || [];
+
+        t.name = name;
+        t.exec = executor;
+        t.conf = confirmers.join('、');
+        t.execStd = execStd;
+        t.confStd = confStd;
+        t.liableStd = liableStd;
+
+        closeEditTaskModal();
+        renderDraftStageTask();
+        showToast('任务详情已保存');
+    }
+
+    // 执行人搜索下拉（参考合规版交互）
+    function toggleExecutorSearch(prefix) {
+        var dd = $(prefix + 'TaskExecutorDropdown');
+        if (!dd) return;
+        dd.classList.toggle('show');
+    }
+    function filterExecutorList(prefix) {
+        var kw = ($(prefix + 'TaskExecutorSearch').value || '').trim().toLowerCase();
+        var dd = $(prefix + 'TaskExecutorDropdown');
+        if (!dd) return;
+        dd.querySelectorAll('.person-option').forEach(function(opt) {
+            var name = opt.querySelector('.name').textContent.toLowerCase();
+            opt.style.display = name.indexOf(kw) >= 0 ? '' : 'none';
+        });
+        dd.classList.add('show');
+    }
+    function selectExecutor(prefix, name, role) {
+        var tags = $(prefix + 'TaskExecutorTags');
+        tags.innerHTML = '<div class="confirm-person-tag">' + name + '（' + role + '）' +
+            '<span class="remove" onclick="WCP.removeExecutor(\'' + prefix + '\')">×</span></div>';
+        $(prefix + 'TaskExecutor').value = name;
+        $(prefix + 'TaskExecutorSearch').value = '';
+        $(prefix + 'TaskExecutorDropdown').classList.remove('show');
+    }
+    function removeExecutor(prefix) {
+        $(prefix + 'TaskExecutorTags').innerHTML = '';
+        $(prefix + 'TaskExecutor').value = '';
+    }
+
+    // 确认人搜索下拉（多选）
+    function toggleConfirmerSearch(prefix) {
+        var dd = $(prefix + 'TaskConfirmerDropdown');
+        if (!dd) return;
+        dd.classList.toggle('show');
+    }
+    function filterConfirmerList(prefix) {
+        var kw = ($(prefix + 'TaskConfirmerSearch').value || '').trim().toLowerCase();
+        var dd = $(prefix + 'TaskConfirmerDropdown');
+        if (!dd) return;
+        dd.querySelectorAll('.person-option').forEach(function(opt) {
+            var name = opt.querySelector('.name').textContent.toLowerCase();
+            opt.style.display = name.indexOf(kw) >= 0 ? '' : 'none';
+        });
+        dd.classList.add('show');
+    }
+    function selectConfirmer(prefix, name, role) {
+        if (!state.editTaskConfirmPersonList) state.editTaskConfirmPersonList = [];
+        if (state.editTaskConfirmPersonList.length >= 5) { showToast('确认人最多5人'); return; }
+        if (state.editTaskConfirmPersonList.indexOf(name) >= 0) { showToast('已添加'); return; }
+        state.editTaskConfirmPersonList.push(name);
+        updateEditConfirmPersonTags();
+        $(prefix + 'TaskConfirmerSearch').value = '';
+        $(prefix + 'TaskConfirmerDropdown').classList.remove('show');
+    }
+    function removeConfirmer(index) {
+        if (!state.editTaskConfirmPersonList) return;
+        state.editTaskConfirmPersonList.splice(index, 1);
+        updateEditConfirmPersonTags();
+    }
+    function updateEditConfirmPersonTags() {
+        var tags = $('editTaskConfirmPersons');
+        if (!tags) return;
+        var list = state.editTaskConfirmPersonList || [];
+        if (list.length === 0) {
+            tags.innerHTML = '';
+            return;
+        }
+        tags.innerHTML = list.map(function(name, i) {
+            var role = ROLE_MAP[name] || '施工方';
+            return '<div class="confirm-person-tag">' + name + '（' + role + '）' +
+                '<span class="remove" onclick="WCP.removeConfirmer(' + i + ')">×</span></div>';
+        }).join('');
+    }
+
     // 全局暴露（供 HTML onclick 调用）
     global.WCP = {
         init: init,
@@ -2235,7 +2529,22 @@
         closeTemplatePreview: closeTemplatePreview,
         showFullText: showFullText,
         closeFullText: closeFullText,
-        previewContract: previewContract
+        previewContract: previewContract,
+        goTaskDetail: goTaskDetail,
+        viewTaskDetail: viewTaskDetail,
+        closeTaskDetailModal: closeTaskDetailModal,
+        editTaskDetail: editTaskDetail,
+        closeEditTaskModal: closeEditTaskModal,
+        confirmEditTask: confirmEditTask,
+        toggleExecutorSearch: toggleExecutorSearch,
+        filterExecutorList: filterExecutorList,
+        selectExecutor: selectExecutor,
+        removeExecutor: removeExecutor,
+        toggleConfirmerSearch: toggleConfirmerSearch,
+        filterConfirmerList: filterConfirmerList,
+        selectConfirmer: selectConfirmer,
+        removeConfirmer: removeConfirmer,
+        updateEditConfirmPersonTags: updateEditConfirmPersonTags
     };
 
     if (document.readyState === 'loading') {

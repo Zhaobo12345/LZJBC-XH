@@ -20,6 +20,7 @@
 - 意向乙方按合同类型过滤工种：`TRADE_ROLE_BY_TYPE` 映射类型→工种角色，草稿面板仅展示匹配工种。
 - 受邀方终态（`worker_lost_receiver`/`worker_rejected_receiver`）渲染轻量「邀约已结束」视图 `#receiverEndedView`，仅作用于受邀方终态，发起方视角保持完整。
 - 受邀方视角（`state.viewer==='receiver'`）差异化：`renderMeta` 去掉「合同类型」「所属架构层级」、新增「项目地址」（`projectAddress`）；正文预览仅展示关键条款（`receiverKeyClausesHTML()`），「查看全文」→「查看全部正文」（`buildReceiverContractHTML()`）；发起方/草稿态保持原样。
+- 基础/设计合同详情页（`contract-detail.html`）主视图（非变更/非编辑态展示区）阶段任务项：点击经 `openTaskReadonly(this)` 弹「编辑任务」弹窗只读态（`#editTaskModal.readonly`，`modal-body` 禁交互、隐藏搜索框/删除叉/保存按钮，仅头部 ✕ 关闭，标题「任务详情（只读）」），**不跳转** `task-detail.html`；已签约（`state.currentStatus==='signed'`）仍保持原跳转。变更流程内任务项仍用 `viewTaskDetail`（只读「任务详情」弹窗），二者勿混。`openTaskReadonly` 与 `viewTaskDetail`/`editTaskDetail` 一样需 `window.*` + `ContractDetailPage.*` 双重暴露。
 
 ## 数据口径约定（全部待办页）
 - service/owner 端「全部待办」不含「临时任务」示例项、不含「待审核」待办（仅 PC 运营端有）；所有任务类待办标签=「任务」（2026-08-04 统一更正，原误标「合约」），真实 合同/变更/架构/对账单 类标签保持原样。
@@ -37,9 +38,10 @@
 ## 页面布局约定（项目详情进行中-新版）
 - `project-detail-ongoing-v2.html`（service/owner 两份）「待办事项」卡片不与架构切换联动，置于吸顶导航（快捷入口+架构切换）之前；改按 HTML 注释锚点整体移动，不改 CSS/JS，两份同步。
 - 现状顺序：项目基本信息 → 待办事项 → [快捷入口+架构切换 吸顶] → 合同/任务概览 → 今日动态（owner 版今日动态在吸顶后、合同概览前）。
+- **`project-detail-worker.html`（服务方·工人视角，2026-08-20 新增并优化）**：仿 ongoing-v2 布局，按工人心智重构——① 首屏头部改工人视角「我的工种·施工组 + 待我处理 N（橙色 KPI 胶囊）」；② 待办按「任务执行·确认 / 合同确认·签约」分组，4 条全展示，左侧色条按紧急度着色，待办卡标题条橙色（模块色区分）；③ 快捷入口 4 主 + 更多：全部任务(带红角标4)/项目动态/我的合同(滚动至合同卡)/更多，「更多」展开面板收纳 架构/成员/资料；吸顶折叠后保留全部任务+项目动态常驻；④ 架构层级默认选中工人所属工作组（显示「默认我的工作组」提示），`selectLevel` 同步给快捷入口带 `?level=`；⑤ 合同直接展示（无统计项、`contract-list` 默认展开）且每行加「待我上传/待我确认」动作徽标；⑥ 取消「今日动态」卡片与下方「任务统计」卡片；⑦ 待办/合同均带空态（`.is-empty` 由 `refreshEmptyStates()` 切换）。不影响其他页面/功能。
 
 ## 架构层级联动约定（2026-08-19 方案A）
-- 详情页 `selectLevel()` 末尾统一把「任务概览/今日动态」`.more` 链接改带 `?level=架构层级名`（encodeURIComponent；项目部=不带参）。已改 3 页：service ongoing-v2、service/owner completed-v2；**owner ongoing-v2 无层级切换 JS（静态展示），不携带、勿加交互**。
+- 详情页 `selectLevel()` 末尾统一把「任务概览/今日动态」`.more` 链接改带 `?level=架构层级名`（encodeURIComponent；项目部=不带参）。已改 3 页：service ongoing-v2、service/owner completed-v2；**owner ongoing-v2 无层级切换 JS（静态展示），不携带、勿加交互**。`project-detail-worker.html` 的 `selectLevel()` 额外把快捷入口 `.quick-nav-item`（task-list.html / activity-list.html）一并携带层级，使「全部任务」「项目动态」入口随选中层级过滤。
 - `task-list.html`：`.contract-section` 挂 `data-level`（合同↔工作组一一对应：水电/泥瓦/木工/油漆工作组）；`currentFilters.level`；`filterTasks()` 分组层早退；标签复用 `updateFilterTags`/`removeFilter`（文案「架构层级：XX」）。
 - `activity-list.html`：activities 加 `level` 字段（设计服务/基础施工→项目部）；`currentLevelFilter` 置 renderActivities 过滤链头部；`#levelFilterRow/#levelFilterTag` 可移除标签；`initLevelFilter()`/`clearLevelFilter()`。
 - 口径：层级与既有筛选 AND 叠加、计数联动；**全部待办 todo-list 不携带层级**（按人聚合，无对应关系）。

@@ -1101,7 +1101,7 @@
                         <tr>
                             <td>合同列表（可折叠）</td>
                             <td><code>contracts.list</code></td>
-                            <td>每条含 合同名称 + 工作组 + 金额 + 进度条；点击「查看合同」展开 / 折叠；列表项点击跳 <a href="service-miniapp/contract-detail.html" target="_blank">合同详情页</a>。当该合同下全部有效任务均为「已完成」时，列表项叠加绿色「已完工」角标（履约完成派生标识，规则见 <a href="PRD-合同模块详细规格.html#sec-3-12-14" target="_blank">PRD-合同模块 §3.12.14</a>）</td>
+                            <td>每条含 合同名称 + 工作组 + 金额 + 进度条；点击「查看合同」展开 / 折叠；列表项点击跳 <a href="service-miniapp/contract-detail.html" target="_blank">合同详情页</a>。当该合同下全部有效任务均为「已完成」时，列表项叠加绿色「已完工」角标（履约完成派生标识，规则见 <a href="PRD-合同模块详细规格.html#sec-3-10-14" target="_blank">PRD-合同模块 §3.10.14</a>）</td>
                         </tr>
                         <tr>
                             <td>查看全部合同</td>
@@ -2545,8 +2545,8 @@
                     <p style="margin: 0 0 8px;">创建成功的合同仅处于初始「拟定中（draft）」状态，携带创建时填写的基础字段（合同类型 / 名称 / 甲乙 / 金额 / 工作组）。此时合同尚不完整——还需在合同详情页继续完善<strong>合同正文、阶段任务、附件</strong>等具体信息，经必填校验（名称非空、金额&gt;0、甲方乙方已选、至少一个阶段及任务等）通过后方可<strong>提交</strong>，再进入后续的<strong>确认 / 平台审核（合规版）</strong>或<strong>确认 / 签约（工人合同）</strong>流程。以下按合同类型指向《PRD-合同模块详细规格》中对应的「拟定中」状态与编辑交互文档位置：</p>
                     <ul style="margin: 0; padding-left: 20px;">
                         <li style="margin-bottom: 6px;"><strong>基础施工服务合同 / 设计服务合同（合规版 · 非工人合同）</strong>：创建后进入合规版「拟定中」状态，完善内容并提交后走平台审核流程。对应文档：
-                            <a href="PRD-合同模块详细规格.html#sec-3-7" target="_blank" style="color: var(--primary-color);">§3.7 拟定中状态-编辑交互规格</a>、
-                            <a href="PRD-合同模块详细规格.html#sec-3-8" target="_blank" style="color: var(--primary-color);">§3.8 状态横幅与驳回处理（draft）</a>（详见
+                            <a href="PRD-合同模块详细规格.html#sec-3-5" target="_blank" style="color: var(--primary-color);">§3.5 拟定中状态-编辑交互规格</a>、
+                            <a href="PRD-合同模块详细规格.html#sec-3-6" target="_blank" style="color: var(--primary-color);">§3.6 状态横幅与驳回处理（draft）</a>（详见
                             <a href="PRD-合同模块详细规格.html#page-mini-service" target="_blank" style="color: var(--primary-color);">第三章 合同详情页（服务方小程序）</a>）。<br>原型页面：<a href="service-miniapp/contract-detail.html" style="color: var(--primary-color);">service-miniapp/contract-detail.html</a>（拟定中状态可直接查看编辑表单）。
                         </li>
                         <li style="margin-bottom: 0;"><strong>六类班组服务合同（工人合同 · 拆除 / 水电 / 木作 / 泥瓦 / 油漆 / 小零工）</strong>：创建后进入工人合同「拟定中」状态（worker_draft_initial / worker_draft），完善内容并经「仅保存 / 提交并邀请乙方」后走确认签约流程（无平台审核）。对应文档：
