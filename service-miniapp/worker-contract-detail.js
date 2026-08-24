@@ -134,21 +134,22 @@
         },
         change_confirming_sender: {
             text: '变更确认中', bannerClass: 'confirming',
-            desc: '对方已确认变更，请上传变更签约文件（阶段任务已暂停流转）。',
+            desc: '变更申请已提交，等待对方（乙方）确认变更内容（阶段任务已暂停流转）。',
             actions: [{ text: '撤回变更', type: 'warning', action: 'withdraw_change' }]
         },
         change_signing_wait: {
             text: '变更签约中', bannerClass: 'confirmed',
             desc: '变更已确认，请上传线下已签约的合同变更文件，上传后变更正式生效（生成 V2 版本）。',
+            descReceiver: '变更已确认，等待发起方上传线下已签约的合同变更文件，上传后变更正式生效（生成 V2 版本）。',
             actions: [{ text: '上传变更签约文件', type: 'primary', action: 'upload_change_sign' }]
         },
         // 变更阶段分支：待确认方（乙方）驳回变更后的独立页面
         change_rejected: {
             text: '变更已驳回', bannerClass: 'rejected',
             desc: '对方（乙方）已驳回本次变更申请，合同保持原已签约状态。可重新发起变更。',
+            descReceiver: '您已驳回本次变更申请，合同保持原已签约状态。',
             actions: [
-                { text: '重新发起变更', type: 'primary', action: 'start_change' },
-                { text: '返回已签约', type: 'secondary', action: 'change_rejected_back' }
+                { text: '重新发起变更', type: 'primary', action: 'start_change' }
             ],
             showRejectReason: true,
             rejectReason: '现场实际情况与变更内容不符，暂不接受该变更方案，请与工长（甲方）沟通后重新发起。'
@@ -1120,7 +1121,7 @@
         }
         // 受邀方（乙方）视角不支持发起变更：过滤掉 start_change（发起方专属操作），避免误展示
         if (state.viewer === 'receiver') {
-            actions = actions.filter(function (a) { return a.action !== 'start_change'; });
+            actions = actions.filter(function (a) { return a.action !== 'start_change' && a.action !== 'upload_change_sign'; });
         }
         (actions).forEach(function (a) {
             var btn = document.createElement('button');
@@ -1301,15 +1302,21 @@
         }
         var stageHtml = cp.stageNote ? ('<div class="ch-sub ch-new-text">' + escapeHtml(cp.stageNote) + '</div>') : '';
         var stateLabel = '';
-        if (state.status === 'change_rejected') stateLabel = '<span class="ch-state rejected">变更已驳回（乙方）</span>';
-        else stateLabel = '<span class="ch-state done">变更进行中（待上传签约文件生效）</span>';
+        if (state.status === 'change_rejected') {
+            stateLabel = '<span class="ch-state rejected">变更已驳回（乙方）</span>';
+        } else if (state.status === 'change_signing_wait') {
+            // 仅变更签约中：对方已确认，待上传签约文件生效
+            stateLabel = '<span class="ch-state done">变更进行中（待上传签约文件生效）</span>';
+        } else {
+            // changing / change_confirming（受邀方待确认）/ change_confirming_sender（发起方待确认）：尚未确认，不能上传签约文件
+            stateLabel = '<span class="ch-state confirming">变更进行中（等待对方确认）</span>';
+        }
         var html =
             '<div class="ch-head"><span class="ch-title">🔄 变更内容</span>' + stateLabel + '</div>' +
             (cp.reason ? '<div class="ch-reason"><span class="ch-reason-label">变更原因</span>' + escapeHtml(cp.reason) + '</div>' : '') +
             '<div class="ch-row"><span class="ch-label">合同金额</span><span class="ch-value">' + amtHtml + '</span></div>' +
             (extraHtml ? '<div class="ch-row"><span class="ch-label">补充条款</span><span class="ch-value">' + extraHtml + '</span></div>' : '') +
-            (stageHtml ? '<div class="ch-row"><span class="ch-label">阶段任务</span><span class="ch-value">' + stageHtml + '</span></div>' : '') +
-            (cp.demo ? '<div class="ch-demo-tip">（演示数据：在「已签约」页点击「发起变更」可发起真实变更并查看实际高亮）</div>' : '');
+            (stageHtml ? '<div class="ch-row"><span class="ch-label">阶段任务</span><span class="ch-value">' + stageHtml + '</span></div>' : '');
         card.innerHTML = html;
     }
 

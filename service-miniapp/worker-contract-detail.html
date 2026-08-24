@@ -1251,14 +1251,15 @@
                 <div class="status-group-header" onclick="WCP.toggleStatusGroup(this)">
                     <span class="status-group-icon">▶</span>
                     <span class="status-group-title">变更阶段</span>
-                    <span class="status-group-count">6</span>
+                    <span class="status-group-count">7</span>
                 </div>
                 <div class="status-group-content" style="display:none;">
-                    <div class="status-switch-item" data-status="changing" onclick="WCP.updateStatus('changing')">变更中(发起方)</div>
-                    <div class="status-switch-item" data-status="change_confirming" onclick="WCP.updateStatus('change_confirming')">待确认变更(受邀方)</div>
-                    <div class="status-switch-item" data-status="change_rejected" onclick="WCP.updateStatus('change_rejected')">变更已驳回(受邀方驳回)</div>
                     <div class="status-switch-item" data-status="change_confirming_sender" onclick="WCP.updateStatus('change_confirming_sender')">变更确认中(发起方)</div>
-                    <div class="status-switch-item" data-status="change_signing_wait" onclick="WCP.updateStatus('change_signing_wait')">变更签约中</div>
+                    <div class="status-switch-item" data-status="change_confirming" onclick="WCP.updateStatus('change_confirming')">待确认变更(受邀方)</div>
+                    <div class="status-switch-item" data-status="change_rejected" data-viewer="sender" onclick="WCP.updateStatus('change_rejected')">变更已驳回(发起方)</div>
+                    <div class="status-switch-item" data-status="change_rejected" data-viewer="receiver" onclick="WCP.updateStatus('change_rejected', 'receiver')">变更已驳回（受邀方）</div>
+                    <div class="status-switch-item" data-status="change_signing_wait" data-viewer="sender" onclick="WCP.updateStatus('change_signing_wait')">变更签约中(发起方)</div>
+                    <div class="status-switch-item" data-status="change_signing_wait" data-viewer="receiver" onclick="WCP.updateStatus('change_signing_wait', 'receiver')">变更签约中（受邀方）</div>
                     <a class="status-switch-item" href="worker-change-sign-upload.html" style="text-decoration:none;">上传变更签约文件（新页面）</a>
                 </div>
             </div>

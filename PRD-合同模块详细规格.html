@@ -389,9 +389,9 @@
             <li><a href="#sec-9-5">9.5 各变更状态页详述</a></li>
             <li class="toc-leaf"><a href="#sec-9-5-1">9.5.1 变更中（发起方）</a></li>
             <li class="toc-leaf"><a href="#sec-9-5-2">9.5.2 待确认变更（受邀方）</a></li>
-            <li class="toc-leaf"><a href="#sec-9-5-3">9.5.3 变更已驳回（发起方视角）</a></li>
+            <li class="toc-leaf"><a href="#sec-9-5-3">9.5.3 变更已驳回（发起方 / 受邀方）</a></li>
             <li class="toc-leaf"><a href="#sec-9-5-4">9.5.4 变更确认中（发起方）</a></li>
-            <li class="toc-leaf"><a href="#sec-9-5-5">9.5.5 变更签约中（双方）</a></li>
+            <li class="toc-leaf"><a href="#sec-9-5-5">9.5.5 变更签约中（发起方 / 受邀方）</a></li>
             <li class="toc-leaf"><a href="#sec-9-5-6">9.5.6 上传变更签约文件（独立整页）</a></li>
             <li><a href="#sec-9-6">9.6 变更字段数据结构</a></li>
             <li><a href="#sec-9-7">9.7 原型导航入口</a></li>
@@ -3807,7 +3807,7 @@
                     <li>变更态（以 <code>change</code> 开头）：<code>change_confirming</code> 或含 <code>_receiver</code> → 受邀方，其余（changing / change_confirming_sender / change_signing_wait / change_rejected）→ 发起方；</li>
                     <li>草稿态（<code>worker_draft</code> / <code>worker_draft_initial</code>）→ 发起方。</li>
                 </ul>
-                <p style="margin:6px 0 0;">注意：<code>change_rejected</code>（变更已驳回）虽由乙方驳回，但详情页<strong>以发起方视角</strong>预览（发起方收到驳回结果），见 <a href="#sec-9-3">9.3</a>。</p>
+                <p style="margin:6px 0 0;">注意：变更态中 <code>change_rejected</code>（变更已驳回）与 <code>change_signing_wait</code>（变更签约中）默认以发起方视角推导；右侧原型导航同时提供 <code>?viewer=receiver</code> 入口供预览受邀方视角（见 <a href="#sec-9-5-3">9.5.3</a> / <a href="#sec-9-5-5">9.5.5</a>）。</p>
             </div>
         </div>
 
@@ -3839,7 +3839,7 @@
                 <div class="subsection-title" style="font-size:15px;">7.5.2 变更阶段状态（无需平台审核）</div>
                 <p>变更功能为独立大流程，含完整状态机、跨角色确认、独立上传页与版本 V1→V2 流转，详见 <a href="#worker-contract-change"><strong>第九章</strong></a> 工人合同变更功能详细规格。下表仅列发起方视角相关状态摘要：</p>
                 <table>
-                    <thead><tr><th>显示文案</th><th>状态 key</th><th>视角</th><th>说明（发起方）</th><th>主要操作（发起方）</th></tr></thead><tbody><tr><td>变更中</td><td><code>changing</code></td><td>发起方</td><td>变更申请已发起，等待对方确认，阶段任务暂停流转。</td><td>撤回变更</td></tr><tr><td>变更确认中</td><td><code>change_confirming_sender</code></td><td>发起方</td><td>对方已确认变更，待上传变更签约文件。</td><td>撤回变更</td></tr><tr><td>变更签约中</td><td><code>change_signing_wait</code></td><td>双方</td><td>变更已确认，待上传线下签约的变更文件（生成 V2）。</td><td>上传变更签约文件</td></tr>
+                    <thead><tr><th>显示文案</th><th>状态 key</th><th>视角</th><th>说明（发起方）</th><th>主要操作（发起方）</th></tr></thead><tbody><tr><td>变更中</td><td><code>changing</code></td><td>发起方</td><td>变更申请已发起，等待对方确认，阶段任务暂停流转。</td><td>撤回变更</td></tr><tr><td>变更确认中</td><td><code>change_confirming_sender</code></td><td>发起方</td><td>发起方已提交变更提案，等待对方（乙方）确认变更内容。</td><td>撤回变更</td></tr><tr><td>变更签约中</td><td><code>change_signing_wait</code></td><td>双方</td><td>变更已确认，待上传线下签约的变更文件（生成 V2）。</td><td>上传变更签约文件</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -4556,7 +4556,7 @@
         <div class="section" id="worker-contract-change">
             <div class="section-title">
                 九、工人合同变更功能详细规格
-                <span class="badge"><a href="service-miniapp/worker-contract-change.html">worker-contract-change.html</a> · <a href="service-miniapp/worker-contract-detail.html?status=changing">变更中(发起方)</a> · <a href="service-miniapp/worker-contract-detail.html?viewer=receiver&status=change_confirming">待确认变更(受邀方)</a> · <a href="service-miniapp/worker-contract-detail.html?status=change_rejected">变更已驳回</a> · <a href="service-miniapp/worker-change-sign-upload.html">worker-change-sign-upload.html</a></span>
+                <span class="badge"><a href="service-miniapp/worker-contract-change.html">worker-contract-change.html</a> · <a href="service-miniapp/worker-contract-detail.html?viewer=receiver&status=change_confirming">待确认变更(受邀方)</a> · <a href="service-miniapp/worker-contract-detail.html?viewer=receiver&status=change_rejected">变更已驳回（受邀方）</a> · <a href="service-miniapp/worker-contract-detail.html?viewer=receiver&status=change_signing_wait">变更签约中（受邀方）</a> · <a href="service-miniapp/worker-contract-detail.html?status=change_rejected">变更已驳回</a> · <a href="service-miniapp/worker-change-sign-upload.html">worker-change-sign-upload.html</a></span>
             </div>
 
             <div class="subsection" id="sec-9-1">
@@ -4594,7 +4594,7 @@
                 <div class="subsection-title">9.3 变更流程状态机总览</div>
                 <p>变更以「已签约」为基底，变更进度由顶部 banner 体现。状态步骤条整体停留在已签约，变更态叠加显示。</p>
                 <table>
-                    <thead><tr><th>显示文案</th><th>状态 key</th><th>视角</th><th>说明</th><th>主要操作</th></tr></thead><tbody><tr><td>变更中</td><td><code>changing</code></td><td>发起方</td><td>变更申请已发起，等待对方确认，阶段任务暂停流转。</td><td>撤回变更</td></tr><tr><td>待确认变更</td><td><code>change_confirming</code></td><td>受邀方</td><td>对方发起变更，请确认或驳回。</td><td>驳回变更 / 确认变更</td></tr><tr><td>变更确认中</td><td><code>change_confirming_sender</code></td><td>发起方</td><td>对方已确认变更，待上传变更签约文件。</td><td>撤回变更</td></tr><tr><td>变更签约中</td><td><code>change_signing_wait</code></td><td>双方</td><td>变更已确认，待上传线下签约的变更文件（生成 V2）。</td><td>上传变更签约文件</td></tr><tr><td>变更已驳回</td><td><code>change_rejected</code></td><td>发起方</td><td>乙方（受邀方）已驳回变更，合同保持原已签约；发起方视角展示驳回结果与<strong>乙方驳回原因</strong>，可重新发起。<strong>注意：状态 key 不含 _receiver，updateStatus 以发起方视角预览</strong>（见 <a href="#sec-7-3">7.3</a>）；顶部 banner 内渲染「乙方驳回原因」块（showRejectReason，演示默认文案：「现场实际情况与变更内容不符，暂不接受该变更方案，请与工长（甲方）沟通后重新发起。」）。</td><td>重新发起变更 / 返回已签约</td></tr>
+                    <thead><tr><th>显示文案</th><th>状态 key</th><th>视角</th><th>说明</th><th>主要操作</th></tr></thead><tbody><tr><td>变更中</td><td><code>changing</code></td><td>发起方</td><td>变更申请已发起，等待对方确认，阶段任务暂停流转。</td><td>撤回变更</td></tr><tr><td>待确认变更</td><td><code>change_confirming</code></td><td>受邀方</td><td>对方发起变更，请确认或驳回。</td><td>驳回变更 / 确认变更</td></tr><tr><td>变更确认中</td><td><code>change_confirming_sender</code></td><td>发起方</td><td>发起方已提交变更提案，等待对方（乙方）确认变更内容。</td><td>撤回变更</td></tr><tr><td>变更签约中</td><td><code>change_signing_wait</code></td><td>发起方 / 受邀方</td><td>变更已确认，待上传线下签约的变更文件（生成 V2）。受邀方视角仅只读等待，不展示上传按钮。</td><td>发起方：上传变更签约文件；受邀方：无</td></tr><tr><td>变更已驳回</td><td><code>change_rejected</code></td><td>发起方 / 受邀方</td><td>乙方（受邀方）已驳回变更，合同保持原已签约；发起方视角展示驳回结果与<strong>乙方驳回原因</strong>，可重新发起；受邀方视角展示「您已驳回本次变更申请」。顶部 banner 内渲染「乙方驳回原因」块（showRejectReason，演示默认文案：「现场实际情况与变更内容不符，暂不接受该变更方案，请与工长（甲方）沟通后重新发起。」）。</td><td>发起方：重新发起变更；受邀方：无</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -4664,13 +4664,17 @@
                         <tr><td><strong>横幅说明文字</strong></td><td>变更申请已发起，等待对方确认（阶段任务已暂停流转）。</td></tr>
                         <tr><td><strong>触发条件（如何进入此状态）</strong></td><td>已签约状态下发起方点击「发起变更」经二次确认后进入独立变更编辑整页（<a href="#sec-9-4">9.4</a>），填写变更原因及变更内容（金额 / 补充条款 / 阶段任务 / 附件）后提交；此时 <code>changeView=true</code>，阶段任务暂停流转。</td></tr>
                         <tr><td><strong>页面结构与可见模块</strong></td><td>
-                            进入<strong>变更视图</strong>：原只读内容区上方出现<strong>「🔄 变更内容」高亮卡片</strong>（<code>changeHighlightCard</code>），展示变更原因、合同金额「旧值 → 新值 + 差额」对比、补充条款新旧对比（有变更时）及阶段任务变更说明（有变更时），并附变更状态标签（变更进行中 / 变更已驳回）。<br>
+                            进入<strong>变更视图</strong>：原只读内容区上方出现<strong>「🔄 变更内容」高亮卡片</strong>（<code>changeHighlightCard</code>），展示变更原因、合同金额「旧值 → 新值 + 差额」对比、补充条款新旧对比（有变更时）及阶段任务变更说明（有变更时），并附变更状态标签。<br>
+                            变更状态标签按当前态区分（见 <a href="#sec-7-3">7.3</a> 渲染规则）：<br>
+                            &bull; <code>changing</code>（变更中·发起方）/ <code>change_confirming</code>（待确认变更·受邀方）/ <code>change_confirming_sender</code>（变更确认中·发起方）：标签为<strong>「变更进行中（等待对方确认）」</strong>（橙色，尚未确认，不能上传签约文件）；<br>
+                            &bull; <code>change_signing_wait</code>（变更签约中）：标签为<strong>「变更进行中（待上传签约文件生效）」</strong>（绿色，对方已确认，待发起方上传签约文件）；<br>
+                            &bull; <code>change_rejected</code>（变更已驳回）：标签为<strong>「变更已驳回（乙方）」</strong>（红色）。<br>
                             阶段任务区如有变更也以高亮标注。<br>
                             步骤条保持已签约点亮（不变更步骤条状态，以顶部横幅体现变更进度）；元信息、正文、阶段任务、附件均为只读。
                         </td></tr>
                         <tr><td><strong>底部操作按钮</strong></td><td>&bull; <strong>撤回变更</strong>（警告样式）&mdash; 撤回变更申请，合同恢复至 <code>worker_signed</code>（已签约），阶段任务恢复流转。</td></tr>
                         <tr><td><strong>状态流转</strong></td><td>
-                            &bull; 乙方确认变更 &rarr; <code>change_confirming_sender</code>（变更确认中，见 <a href="#sec-9-5-4">9.5.4</a>）<br>
+                            &bull; 乙方确认变更 &rarr; <code>change_signing_wait</code>（变更签约中，见 <a href="#sec-9-5-5">9.5.5</a>）<br>
                             &bull; 发起方撤回 &rarr; <code>worker_signed</code>（已签约）
                         </td></tr>
                         <tr><td><strong>关键逻辑与交互细节</strong></td><td>
@@ -4694,6 +4698,7 @@
                         <tr><td><strong>触发条件（如何进入此状态）</strong></td><td>发起方在「变更中」（<code>changing</code>）提交变更提案后，该变更推送给受邀方（工人·乙方），乙方视角进入待确认变更；<strong>视角推导</strong>：状态 key 以 change 开头且非 _sender，<code>updateStatus</code> 以受邀方（receiver）视角预览，并展示「乙方（我）待确认（变更）」行。</td></tr>
                         <tr><td><strong>页面结构与可见模块</strong></td><td>
                             同变更视图：<strong>变更摘要卡片</strong>展示「旧值 → 新值」对比高亮；阶段任务区变更高亮标注。<br>
+                            变更摘要卡片顶部状态标签为<strong>「变更进行中（等待对方确认）」</strong>（橙色，尚未确认，乙方不能上传签约文件）。<br>
                             与发起方视角差异：显示<strong>乙方（我）待确认（变更）行</strong>（仅展示乙方本人待确认，不暴露其他受邀人，<code>showInviteList</code> 在 change_confirming 下放开名单仅显示本人行）。
                         </td></tr>
                         <tr><td><strong>底部操作按钮</strong></td><td>
@@ -4701,7 +4706,7 @@
                             &bull; <strong>确认变更</strong>（主按钮）&mdash; 乙方同意变更，进入 <code>change_confirming_sender</code>（变更确认中，见 <a href="#sec-9-5-4">9.5.4</a>）。
                         </td></tr>
                         <tr><td><strong>状态流转</strong></td><td>
-                            &bull; 乙方确认变更 &rarr; <code>change_confirming_sender</code>（变更确认中）<br>
+                            &bull; 乙方确认变更 &rarr; <code>change_signing_wait</code>（变更签约中）<br>
                             &bull; 乙方驳回变更 &rarr; <code>change_rejected</code>（变更已驳回）
                         </td></tr>
                         <tr><td><strong>关键逻辑与交互细节</strong></td><td>
@@ -4714,29 +4719,28 @@
                     </tbody>
                 </table>
 
-                <!-- ===== 9.5.3 变更已驳回（发起方视角）===== -->
-                <div class="subsection-title" id="sec-9-5-3" style="font-size:14px;margin-top:18px;">9.5.3 变更已驳回（发起方视角）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_rejected</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?status=change_rejected" target="_blank" style="font-size:12px;">&#x1F517; 原型页</a></div>
+                <!-- ===== 9.5.3 变更已驳回（发起方 / 受邀方）===== -->
+                <div class="subsection-title" id="sec-9-5-3" style="font-size:14px;margin-top:18px;">9.5.3 变更已驳回（发起方 / 受邀方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_rejected</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?status=change_rejected" target="_blank" style="font-size:12px;">&#x1F517; 发起方原型页</a> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?status=change_rejected&amp;viewer=receiver" target="_blank" style="font-size:12px;">&#x1F517; 受邀方原型页</a></div>
                 <table style="margin-top:8px;">
                     <thead><tr><th style="width:110px;">属性</th><th>说明</th></tr></thead>
                     <tbody>
                         <tr><td><strong>横幅状态文案</strong></td><td>变更已驳回</td></tr>
-                        <tr><td><strong>横幅说明文字</strong></td><td>对方（乙方）已驳回本次变更申请，合同保持原已签约状态。可重新发起变更。</td></tr>
-                        <tr><td><strong>触发条件（如何进入此状态）</strong></td><td>乙方在「待确认变更」（<code>change_confirming</code>）点击「驳回变更」并填写驳回原因 &rarr; 变更申请被拒绝。<br><br><strong>注意</strong>：虽由乙方驳回，但此状态<strong>详情页以发起方视角预览</strong>（发起方需查看驳回结果），属于视角推导特例（见 <a href="#sec-7-3">7.3</a>）。</td></tr>
+                        <tr><td><strong>横幅说明文字</strong></td><td><strong>发起方</strong>：对方（乙方）已驳回本次变更申请，合同保持原已签约状态。可重新发起变更。<br><strong>受邀方</strong>：您已驳回本次变更申请，合同保持原已签约状态。</td></tr>
+                        <tr><td><strong>触发条件（如何进入此状态）</strong></td><td>乙方在「待确认变更」（<code>change_confirming</code>）点击「驳回变更」并填写驳回原因 &rarr; 变更申请被拒绝。</td></tr>
                         <tr><td><strong>页面结构与可见模块</strong></td><td>
                             顶部横幅下方额外渲染<strong>「乙方驳回原因」块</strong>（<code>showRejectReason</code>，取自 <code>STATUS_CONFIG.change_rejected.rejectReason</code>），展示乙方填写的驳回理由。<br>
                             合同内容恢复为 V1 原始状态（变更内容不生效）。<br>
                             变更摘要卡片仍展示（标记已驳回），步骤条保持已签约点亮。
                         </td></tr>
                         <tr><td><strong>底部操作按钮</strong></td><td>
-                            &bull; <strong>重新发起变更</strong>（主按钮）&mdash; 基于乙方反馈修改后重新发起（二次确认后跳转独立变更编辑整页，跳转前清除旧提案以当前合同内容全新填写，见 <a href="#sec-9-4">9.4</a>）。<br>
-                            &bull; <strong>返回已签约</strong>（次要按钮）&mdash; 关闭变更视图，回到纯已签约状态。
+                            &bull; <strong>发起方</strong>：仅展示「重新发起变更」（主按钮）&mdash; 基于乙方反馈修改后重新发起（二次确认后跳转独立变更编辑整页，跳转前清除旧提案以当前合同内容全新填写，见 <a href="#sec-9-4">9.4</a>）。<br>
+                            &bull; <strong>受邀方</strong>：无操作按钮（乙方已驳回，流程结束）。
                         </td></tr>
-                        <tr><td><strong>状态流转</strong></td><td>重新发起 &rarr; <code>changing</code>（变更中，见 <a href="#sec-9-5-1">9.5.1</a>）；返回 &rarr; <code>worker_signed</code>（已签约）</td></tr>
+                        <tr><td><strong>状态流转</strong></td><td>发起方点击「重新发起变更」 &rarr; <code>changing</code>（变更中，见 <a href="#sec-9-5-1">9.5.1</a>）。</td></tr>
                         <tr><td><strong>关键逻辑与交互细节</strong></td><td>
                             <ul style="margin:4px 0;padding-left:18px;font-size:12px;line-height:1.8;">
                                 <li><strong>驳回原因必填</strong>：乙方在驳回时必填（<code>rejectReason</code> 字段），演示默认文案：「现场实际情况与变更内容不符，暂不接受该变更方案，请与工长（甲方）沟通后重新发起。」发起方可据此调整方案后重新发起。</li>
                                 <li><strong>合同不受影响</strong>：合同完全保持 V1，如同从未发起过此次变更。</li>
-                                <li><strong>返回确认弹窗</strong>：点击「返回已签约」弹出 <code>ACTION_TEXT.change_rejected_back</code>：「确定返回合同已签约状态吗？变更申请将被清除，合同恢复为原始已签约内容。」</li>
                             </ul>
                         </td></tr>
                     </tbody>
@@ -4748,34 +4752,35 @@
                     <thead><tr><th style="width:110px;">属性</th><th>说明</th></tr></thead>
                     <tbody>
                         <tr><td><strong>横幅状态文案</strong></td><td>变更确认中</td></tr>
-                        <tr><td><strong>横幅说明文字</strong></td><td>对方已确认变更，请上传变更签约文件（阶段任务已暂停流转）。</td></tr>
-                        <tr><td><strong>触发条件（如何进入此状态）</strong></td><td>乙方在「待确认变更」（<code>change_confirming</code>）点击「确认变更」&rarr; 双方达成变更，进入待上传签约阶段（发起方视角）。</td></tr>
-                        <tr><td><strong>页面结构与可见模块</strong></td><td>变更摘要卡片仍展示（已确认态）。横幅提示上传变更签约文件。签约文件区显示「暂无签约文件。」（变更签约文件尚未上传）。阶段任务仍暂停流转。</td></tr>
-                        <tr><td><strong>底部操作按钮</strong></td><td>&bull; <strong>撤回变更</strong>（警告样式）&mdash; 在对方确认后、上传前仍可撤回至已签约（<code>worker_signed</code>）。</td></tr>
-                        <tr><td><strong>状态流转</strong></td><td>上传变更签约文件 &rarr; <code>change_signing_wait</code>（变更签约中，见 <a href="#sec-9-5-5">9.5.5</a>）；撤回 &rarr; <code>worker_signed</code>（已签约）</td></tr>
+                        <tr><td><strong>横幅说明文字</strong></td><td>变更申请已提交，等待对方（乙方）确认变更内容（阶段任务已暂停流转）。</td></tr>
+                        <tr><td><strong>触发条件（如何进入此状态）</strong></td><td>发起方在已签约态点击「发起变更」&rarr; 跳转独立编辑整页填写变更提案 &rarr; 提交后进入本态（发起方视角，等待乙方确认）。此态位于乙方确认之前，并非「对方已确认」。</td></tr>
+                        <tr><td><strong>页面结构与可见模块</strong></td><td>变更摘要卡片仍展示（提交态），卡片顶部状态标签为<strong>「变更进行中（等待对方确认）」</strong>（橙色，尚未确认，发起方不能上传签约文件）。横幅提示等待乙方确认。签约文件区显示「暂无签约文件。」（变更尚未生效）。阶段任务仍暂停流转。</td></tr>
+                        <tr><td><strong>底部操作按钮</strong></td><td>&bull; <strong>撤回变更</strong>（警告样式）&mdash; 在乙方确认前可撤回至已签约（<code>worker_signed</code>）。</td></tr>
+                        <tr><td><strong>状态流转</strong></td><td>乙方确认变更 &rarr; <code>change_signing_wait</code>（变更签约中，见 <a href="#sec-9-5-5">9.5.5</a>）；撤回 &rarr; <code>worker_signed</code>（已签约）</td></tr>
                         <tr><td><strong>关键逻辑与交互细节</strong></td><td>
                             <ul style="margin:4px 0;padding-left:18px;font-size:12px;line-height:1.8;">
-                                <li><strong>中间态定位</strong>：对方已同意变更内容，仅差发起方上传线下签署的变更文件即可生效（V2 生成）。</li>
-                                <li><strong>受邀方对应态</strong>：乙方在确认后的对应态仍为 <code>change_confirming</code> 待确认视图的「已确认」表现，等待发起方上传（见 <a href="#sec-9-5-2">9.5.2</a> 说明）。</li>
+                                <li><strong>中间态定位</strong>：发起方已提交变更提案，等待乙方确认；与「待确认变更」（<code>change_confirming</code>，受邀方视角）为同一进度两端——乙方看到的「确认 / 驳回」操作即在处理本态。</li>
+                                <li><strong>乙方确认后流转</strong>：乙方确认变更后，双方达成变更，进入上传签约阶段；变更签约文件上传仅发起方可操作，受邀方不支持上传（见产品决策记录）。</li>
                                 <li><strong>签约由发起方完成</strong>：与 V1 一致，变更签约文件上传仅发起方可操作，受邀方不支持上传（见产品决策记录）。</li>
                             </ul>
                         </td></tr>
                     </tbody>
                 </table>
 
-                <!-- ===== 9.5.5 变更签约中（双方）===== -->
-                <div class="subsection-title" id="sec-9-5-5" style="font-size:14px;margin-top:18px;">9.5.5 变更签约中（双方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_signing_wait</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?status=change_signing_wait" target="_blank" style="font-size:12px;">&#x1F517; 原型页</a></div>
+                <!-- ===== 9.5.5 变更签约中（发起方 / 受邀方）===== -->
+                <div class="subsection-title" id="sec-9-5-5" style="font-size:14px;margin-top:18px;">9.5.5 变更签约中（发起方 / 受邀方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_signing_wait</code></span> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?status=change_signing_wait" target="_blank" style="font-size:12px;">&#x1F517; 发起方原型页</a> &nbsp; <a class="proto-link" href="service-miniapp/worker-contract-detail.html?status=change_signing_wait&amp;viewer=receiver" target="_blank" style="font-size:12px;">&#x1F517; 受邀方原型页</a></div>
                 <table style="margin-top:8px;">
                     <thead><tr><th style="width:110px;">属性</th><th>说明</th></tr></thead>
                     <tbody>
                         <tr><td><strong>横幅状态文案</strong></td><td>变更签约中</td></tr>
-                        <tr><td><strong>横幅说明文字</strong></td><td>变更已确认，请上传线下已签约的合同变更文件，上传后变更正式生效（生成 V2 版本）。</td></tr>
-                        <tr><td><strong>触发条件（如何进入此状态）</strong></td><td>发起方在「变更确认中」（<code>change_confirming_sender</code>）准备上传变更签约文件；底部按钮跳转整页 <code>worker-change-sign-upload.html</code>（见 <a href="#sec-9-5-6">9.5.6</a>）。</td></tr>
+                        <tr><td><strong>横幅说明文字</strong></td><td><strong>发起方</strong>：变更已确认，请上传线下已签约的合同变更文件，上传后变更正式生效（生成 V2 版本）。<br><strong>受邀方</strong>：变更已确认，等待发起方上传线下已签约的合同变更文件，上传后变更正式生效（生成 V2 版本）。</td></tr>
+                        <tr><td><strong>触发条件（如何进入此状态）</strong></td><td>乙方在「待确认变更」（<code>change_confirming</code>）点击「确认变更」&rarr; 双方达成变更，进入待上传变更签约文件阶段。</td></tr>
                         <tr><td><strong>页面结构与可见模块</strong></td><td>变更摘要卡片保持展示。签约文件区显示「暂无签约文件。」（等待上传变更签约文件）。更多菜单包含版本记录 / 变更记录 / 导出合同文件三项。阶段任务仍暂停流转（变更期间锁定，待 V2 生效后解除锁定恢复，见 <a href="#sec-5-15-lock">第五章 变更期间任务锁定规则</a>）。</td></tr>
-                        <tr><td><strong>底部操作按钮</strong></td><td>&bull; <strong>上传变更签约文件</strong>（主按钮）&mdash; 跳转整页上传（<a href="#sec-9-5-6">9.5.6</a>）。</td></tr>
-                        <tr><td><strong>状态流转</strong></td><td>上传成功 &rarr; <code>worker_signed</code>（已签约，V2 版本生效，阶段任务恢复流转）</td></tr>
+                        <tr><td><strong>底部操作按钮</strong></td><td>&bull; <strong>发起方</strong>：「上传变更签约文件」（主按钮）&mdash; 跳转整页上传（<a href="#sec-9-5-6">9.5.6</a>）。<br>&bull; <strong>受邀方</strong>：无操作按钮（仅发起方可上传变更签约文件，见产品决策记录）。</td></tr>
+                        <tr><td><strong>状态流转</strong></td><td>发起方上传成功 &rarr; <code>worker_signed</code>（已签约，V2 版本生效，阶段任务恢复流转）</td></tr>
                         <tr><td><strong>关键逻辑与交互细节</strong></td><td>
                             <ul style="margin:4px 0;padding-left:18px;font-size:12px;line-height:1.8;">
+                                <li><strong>仅发起方上传</strong>：与 V1 一致，变更签约文件上传仅发起方（工长·陈庄）可操作，受邀方（乙方）仅只读等待。</li>
                                 <li><strong>V2 版本生成</strong>：上传成功后生成 V2 版本，覆盖原合同内容（变更后的金额 / 条款 / 阶段任务生效），原 V1 保留于「版本与流转」记录中可回溯。</li>
                                 <li><strong>独立上传页</strong>：与 V1 上传页 <code>worker-sign-upload.html</code> 对称，但内容适配变更提案（金额新旧对比、变更正文、阶段任务）。</li>
                                 <li><strong>更多菜单规则</strong>：见 <a href="#sec-7-10">7.10 签约文件区与更多菜单按状态渲染规则</a>。</li>
@@ -4825,15 +4830,16 @@
 
             <div class="subsection" id="sec-9-7">
                 <div class="subsection-title">9.7 原型导航入口</div>
-                <p>右侧原型导航「合同状态切换（工人合同）→ 变更阶段」分组（计数 6），用于快速预览变更各状态 / 页面：</p>
+                <p>右侧原型导航「合同状态切换（工人合同）→ 变更阶段」分组（计数 7），用于快速预览变更各状态 / 页面：</p>
                 <table>
                     <thead><tr><th>预览项（右侧导航）</th><th>对应状态 / 页面</th><th>对应 PRD 章节</th></tr></thead>
                     <tbody>
-                        <tr><td>变更中(发起方)</td><td><code>changing</code></td><td><a href="#sec-9-5-1">9.5.1</a></td></tr>
                         <tr><td>待确认变更(受邀方)</td><td><code>change_confirming</code></td><td><a href="#sec-9-5-2">9.5.2</a></td></tr>
-                        <tr><td>变更已驳回(受邀方驳回)</td><td><code>change_rejected</code></td><td><a href="#sec-9-5-3">9.5.3</a></td></tr>
+                        <tr><td>变更已驳回(发起方)</td><td><code>change_rejected</code></td><td><a href="#sec-9-5-3">9.5.3</a></td></tr>
+                        <tr><td>变更已驳回（受邀方）</td><td><code>change_rejected</code>（viewer=receiver）</td><td><a href="#sec-9-5-3">9.5.3</a></td></tr>
                         <tr><td>变更确认中(发起方)</td><td><code>change_confirming_sender</code></td><td><a href="#sec-9-5-4">9.5.4</a></td></tr>
-                        <tr><td>变更签约中</td><td><code>change_signing_wait</code></td><td><a href="#sec-9-5-5">9.5.5</a></td></tr>
+                        <tr><td>变更签约中(发起方)</td><td><code>change_signing_wait</code></td><td><a href="#sec-9-5-5">9.5.5</a></td></tr>
+                        <tr><td>变更签约中（受邀方）</td><td><code>change_signing_wait</code>（viewer=receiver）</td><td><a href="#sec-9-5-5">9.5.5</a></td></tr>
                         <tr><td>上传变更签约文件（新页面）</td><td>跳 <code><a class="proto-link" href="service-miniapp/worker-change-sign-upload.html">worker-change-sign-upload.html</a></code></td><td><a href="#sec-9-5-6">9.5.6</a></td></tr>
                     </tbody>
                 </table>
