@@ -168,14 +168,17 @@ const ContractDetailPage = (function() {
             actions: []
         },
         change_platform_rejected: {
-            text: '已签约',
-            desc: '合同已正式生效，可发起变更申请',
-            bannerClass: 'signed',
+            text: '变更审核驳回',
+            desc: '平台已驳回本次变更申请，变更流程终止，合同维持原已签约状态（V1版本）',
+            bannerClass: 'rejected',
             readonly: true,
             showPcGuide: false,
-            isChangeFlow: false,
-            showRejectReason: false,
-            actions: []
+            isChangeFlow: true,
+            showRejectReason: true,
+            rejectReason: '变更内容不符合平台规范，请补充完善变更范围说明及验收标准后重新发起变更申请',
+            actions: [
+                { text: '重新发起变更', type: 'primary', action: 'resubmit_change' }
+            ]
         },
         change_confirming_sender: {
             text: '变更确认中',
@@ -781,7 +784,7 @@ const ContractDetailPage = (function() {
             'changing': '变更中(发起方)',
             'change_confirming': '变更中(待确认方)',
             'change_platform_reviewing': '变更审核中',
-            'change_platform_rejected': '变更审核驳回',
+            'change_platform_rejected': '变更审核驳回（平台）',
             'change_confirming_sender': '变更确认中(发起方)',
             'change_confirming_receiver': '变更确认中(待确认方)',
             'change_signing_wait': '变更签约中',
@@ -1973,6 +1976,85 @@ const ContractDetailPage = (function() {
     }
     
     /**
+     * 阶段任务只读弹窗：执行标准 / 确认标准 / 担责标准（按任务名映射，保证必有值）
+     */
+    var TASK_EXEC_STD = {
+        '材料采购': '按合同清单采购合格材料，进场前提供合格证/检测报告，规格、数量与预算一致。',
+        '材料运输': '材料运输过程做好防护，按约定时间运抵现场，避免损坏与延误。',
+        '材料确认': '材料进场后报甲方（张三）及确认人验收，验收合格方可使用，留存验收记录。',
+        '开槽': '按设计图纸弹线开槽，横平竖直，避开原有管线，符合水电施工规范及安全要求。',
+        '布管': '管线敷设牢固、走向合理，符合设计规范与安全要求，做好固定与标识。',
+        '穿线': '导线规格符合设计，接线牢固、绝缘良好，严禁私拉乱接，预留检修口。',
+        '阶段确认': '本阶段全部任务完成，经甲方（张三）及确认人现场确认合格后进入下一阶段。',
+        '开关插座安装': '按图纸定位安装，平整牢固、接线正确，通电前完成绝缘测试。',
+        '灯具安装': '按图纸定位安装，固定牢固、接线正确，通电测试正常无异常。',
+        '新增点位布线': '按新增点位图纸布线，规格符合设计要求，接线牢固、绝缘良好。',
+        '新增点位验收': '新增点位工程完工后报甲方（张三）及业主验收，测试合格并签署验收记录。',
+        '清理现场': '施工面清洁、垃圾清运干净，成品保护完好，现场具备交付条件。',
+        '最终确认': '全部阶段任务完成，经甲方（张三）及全体确认人验收合格，项目整体交付。'
+    };
+    var GENERIC_EXEC_STD = '按合同约定及施工规范完成本项任务，质量合格、安全合规，验收达标。';
+    var GENERIC_CONFIRM_STD = '由确认人按照上述执行标准及合同约定组织验收，合格后方可进入下一工序；不合格须限期整改至合格。';
+    var GENERIC_LIABLE_STD = '施工质量未达标准造成返工、延误或损失的，由执行人承担相应责任与费用。';
+
+    function setText(id, text) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = text;
+    }
+
+    function parseTaskMeta(taskItem) {
+        var executor = '';
+        var confirmers = [];
+        var metaRow = taskItem.querySelector('.task-meta-row');
+        if (metaRow) {
+            metaRow.querySelectorAll('.task-meta-item').forEach(function (item) {
+                var roleTag = item.querySelector('.role-tag');
+                var role = roleTag ? roleTag.textContent.trim() : '';
+                var val = item.textContent.replace(role, '').replace(/\s+/g, ' ').trim();
+                if (role === '执行') executor = val;
+                else if (role === '确认') confirmers = val ? val.split(/[、,，]/).map(function (s) { return s.trim(); }).filter(Boolean) : [];
+            });
+        }
+        return { executor: executor, confirmers: confirmers };
+    }
+
+    /**
+     * 非已签约状态：阶段任务项点击 → 弹出「任务详情」只读弹窗（不跳转）。
+     * 已签约状态：保持跳转 task-detail.html 的原有行为。
+     * @param {HTMLElement} taskItem - 任务项元素
+     */
+    function openTaskReadonly(taskItem) {
+        if (!taskItem) return;
+        var nameEl = taskItem.querySelector('.task-name');
+        var rawName = nameEl ? nameEl.textContent.trim() : '未设置';
+        var name = rawName.replace(/\s*(已修改|新增)\s*$/, '').trim();
+        var meta = parseTaskMeta(taskItem);
+        var executor = meta.executor || '未指定';
+        var confirmers = meta.confirmers.length ? meta.confirmers.join('、') : '未指定';
+        var execStd = TASK_EXEC_STD[name] || GENERIC_EXEC_STD;
+        setText('detailTaskName', name);
+        setText('detailExecutor', executor);
+        setText('detailConfirmers', confirmers);
+        setText('detailExecStandard', execStd);
+        setText('detailConfirmStandard', GENERIC_CONFIRM_STD);
+        setText('detailLiableStandard', GENERIC_LIABLE_STD);
+        var modal = document.getElementById('taskDetailModal');
+        if (modal) modal.classList.add('show');
+    }
+
+    /**
+     * 阶段任务项点击分派：已签约跳转，其余状态弹只读详情。
+     * @param {HTMLElement} taskItem - 任务项元素
+     */
+    function onTaskItemClick(taskItem) {
+        if (state.currentStatus === 'signed') {
+            location.href = 'task-detail.html';
+        } else {
+            openTaskReadonly(taskItem);
+        }
+    }
+    
+    /**
      * 编辑任务详情
      * @param {HTMLElement} btn - 按钮元素
      */
@@ -2711,6 +2793,8 @@ const ContractDetailPage = (function() {
         confirmAddTask,
         viewTaskDetail,
         closeTaskDetailModal,
+        onTaskItemClick,
+        openTaskReadonly,
         editTaskDetail,
         closeEditTaskModal,
         addEditTaskConfirmer,
@@ -2801,6 +2885,8 @@ window.removeNewTaskConfirmer = ContractDetailPage.removeNewTaskConfirmer;
 window.confirmAddTask = ContractDetailPage.confirmAddTask;
 window.viewTaskDetail = ContractDetailPage.viewTaskDetail;
 window.closeTaskDetailModal = ContractDetailPage.closeTaskDetailModal;
+window.onTaskItemClick = ContractDetailPage.onTaskItemClick;
+window.openTaskReadonly = ContractDetailPage.openTaskReadonly;
 window.editTaskDetail = ContractDetailPage.editTaskDetail;
 window.closeEditTaskModal = ContractDetailPage.closeEditTaskModal;
 window.addEditTaskConfirmer = ContractDetailPage.addEditTaskConfirmer;

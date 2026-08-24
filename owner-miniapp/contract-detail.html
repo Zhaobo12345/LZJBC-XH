@@ -332,11 +332,11 @@
                 </div>
                 <div class="info-row">
                     <div class="label">合同名称</div>
-                    <div class="value">水电分包合同</div>
+                    <div class="value">基础施工服务合同</div>
                 </div>
                 <div class="info-row">
                     <div class="label">合同类型</div>
-                    <div class="value"><span class="contract-category-tag">水电服务合同</span></div>
+                    <div class="value"><span class="contract-category-tag">基础施工服务合同</span></div>
                 </div>
                 <div class="info-row">
                     <div class="label">合同编号</div>
@@ -387,13 +387,25 @@
                         <span class="more" onclick="showFullText()">查看全文 ></span>
                     </div>
                     <div class="text-content">
-                        根据《中华人民共和国民法典》及相关法律法规的规定，甲乙双方本着平等、自愿、公平、诚实信用的原则，就水电工程分包事宜协商一致，订立本合同。<br><br>
+                        根据《中华人民共和国民法典》及相关法律法规的规定，甲乙双方本着平等、自愿、公平、诚实信用的原则，就基础施工服务事宜协商一致，订立本合同。<br><br>
                         一、工程概况<br>
                         工程名称：XX小区整体装修水电工程<br>
                         工程地点：XX市XX区XX路XX号<br>
                         工程内容：强电、弱电、给排水等水电工程...<br><br>
                         <span class="change-highlight-text" id="changeHighlightText" style="display: none;"><strong>第四条 变更条款（新增）</strong><br>
                         因业主需求变更，新增水电点位安装工程，具体内容详见变更附件。本条款经双方确认后生效。</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">
+                        <span>📝 补充条款</span>
+                    </div>
+                    <div class="text-content">
+                        1. 本工程乙方须严格遵守国家及地方现行施工规范与安全标准，接受甲方及监理的监督检查，确保工程质量与施工安全。<br><br>
+                        2. 施工期间因乙方原因造成的人身伤害或财产损害，由乙方承担全部赔偿责任。<br><br>
+                        3. 材料进场须报验，未经验收不得擅自使用；隐蔽工程须验收合格后方可覆盖。<br><br>
+                        4. 因乙方原因导致工期延误，每日按合同金额的千分之三计取违约金，累计不超过合同总额的百分之五。<br><br>
+                        5. 本合同未尽事宜，双方可另行签订补充协议，补充协议与本合同具有同等法律效力。
                     </div>
                 </div>
             </div>
@@ -418,7 +430,7 @@
                             <div class="arrow expanded">▼</div>
                         </div>
                         <div class="stage-tasks show">
-                            <div class="task-item" onclick="location.href='task-detail.html'">
+                            <div class="task-item" onclick="onTaskItemClick(this)">
                                 <div class="task-status completed" style="display: none;">✓</div>
                                 <div class="task-info">
                                     <div class="task-name">材料采购</div>
@@ -429,7 +441,7 @@
                                     <div class="task-desc" style="display: none;">已完成 · 2024-01-12</div>
                                 </div>
                             </div>
-                            <div class="task-item" onclick="location.href='task-detail.html'">
+                            <div class="task-item" onclick="onTaskItemClick(this)">
                                 <div class="task-status completed" style="display: none;">✓</div>
                                 <div class="task-info">
                                     <div class="task-name">材料运输</div>
@@ -440,7 +452,7 @@
                                     <div class="task-desc" style="display: none;">已完成 · 2024-01-13</div>
                                 </div>
                             </div>
-                            <div class="task-item" onclick="location.href='task-detail.html'">
+                            <div class="task-item" onclick="onTaskItemClick(this)">
                                 <div class="task-status completed" style="display: none;">✓</div>
                                 <div class="task-info">
                                     <div class="task-name">材料确认</div>
@@ -468,7 +480,7 @@
                             <div class="arrow">▼</div>
                         </div>
                         <div class="stage-tasks">
-                            <div class="task-item" onclick="location.href='task-detail.html'">
+                            <div class="task-item" onclick="onTaskItemClick(this)">
                                 <div class="task-status completed" style="display: none;">✓</div>
                                 <div class="task-info">
                                     <div class="task-name">开槽</div>
@@ -479,7 +491,7 @@
                                     <div class="task-desc" style="display: none;">已完成 · 2024-01-18</div>
                                 </div>
                             </div>
-                            <div class="task-item" onclick="location.href='task-detail.html'">
+                            <div class="task-item" onclick="onTaskItemClick(this)">
                                 <div class="task-status completed" style="display: none;">✓</div>
                                 <div class="task-info">
                                     <div class="task-name">布管</div>
@@ -490,7 +502,7 @@
                                     <div class="task-desc" style="display: none;">已完成 · 2024-01-22</div>
                                 </div>
                             </div>
-                            <div class="task-item task-modified" id="modifiedTaskItem" onclick="location.href='task-detail.html'">
+                            <div class="task-item task-modified" id="modifiedTaskItem" onclick="onTaskItemClick(this)">
                                 <div class="task-status in-progress" style="display: none;">⋯</div>
                                 <div class="task-info">
                                     <div class="task-name">穿线 <span class="task-change-tag modified" id="modifiedTaskTag" style="display: none;">已修改</span></div>
@@ -501,7 +513,7 @@
                                     <div class="task-desc" style="display: none;">确认中 · 已提交执行记录</div>
                                 </div>
                             </div>
-                            <div class="task-item" onclick="location.href='task-detail.html'">
+                            <div class="task-item" onclick="onTaskItemClick(this)">
                                 <div class="task-status pending" style="display: none;">○</div>
                                 <div class="task-info">
                                     <div class="task-name">阶段确认</div>
@@ -529,7 +541,7 @@
                             <div class="arrow">▼</div>
                         </div>
                         <div class="stage-tasks">
-                            <div class="task-item" onclick="location.href='task-detail.html'">
+                            <div class="task-item" onclick="onTaskItemClick(this)">
                                 <div class="task-status pending" style="display: none;">○</div>
                                 <div class="task-info">
                                     <div class="task-name">开关插座安装</div>
@@ -540,7 +552,7 @@
                                     <div class="task-desc" style="display: none;">待开始</div>
                                 </div>
                             </div>
-                            <div class="task-item" onclick="location.href='task-detail.html'">
+                            <div class="task-item" onclick="onTaskItemClick(this)">
                                 <div class="task-status pending" style="display: none;">○</div>
                                 <div class="task-info">
                                     <div class="task-name">灯具安装</div>
@@ -551,7 +563,7 @@
                                     <div class="task-desc" style="display: none;">待开始</div>
                                 </div>
                             </div>
-                            <div class="task-item" onclick="location.href='task-detail.html'">
+                            <div class="task-item" onclick="onTaskItemClick(this)">
                                 <div class="task-status pending" style="display: none;">○</div>
                                 <div class="task-info">
                                     <div class="task-name">阶段确认</div>
@@ -580,7 +592,7 @@
                             <div class="arrow expanded">▼</div>
                         </div>
                         <div class="stage-tasks show">
-                            <div class="task-item task-added" onclick="location.href='task-detail.html'">
+                            <div class="task-item task-added" onclick="onTaskItemClick(this)">
                                 <div class="task-status pending" style="display: none;">○</div>
                                 <div class="task-info">
                                     <div class="task-name">新增点位布线 <span class="task-change-tag added">新增</span></div>
@@ -591,7 +603,7 @@
                                     <div class="task-desc" style="display: none;">待开始</div>
                                 </div>
                             </div>
-                            <div class="task-item task-added" onclick="location.href='task-detail.html'">
+                            <div class="task-item task-added" onclick="onTaskItemClick(this)">
                                 <div class="task-status pending" style="display: none;">○</div>
                                 <div class="task-info">
                                     <div class="task-name">新增点位验收 <span class="task-change-tag added">新增</span></div>
@@ -619,7 +631,7 @@
                             <div class="arrow">▼</div>
                         </div>
                         <div class="stage-tasks">
-                            <div class="task-item" onclick="location.href='task-detail.html'">
+                            <div class="task-item" onclick="onTaskItemClick(this)">
                                 <div class="task-status pending" style="display: none;">○</div>
                                 <div class="task-info">
                                     <div class="task-name">清理现场</div>
@@ -630,7 +642,7 @@
                                     <div class="task-desc" style="display: none;">待开始</div>
                                 </div>
                             </div>
-                            <div class="task-item" onclick="location.href='task-detail.html'">
+                            <div class="task-item" onclick="onTaskItemClick(this)">
                                 <div class="task-status pending" style="display: none;">○</div>
                                 <div class="task-info">
                                     <div class="task-name">最终确认</div>
@@ -656,7 +668,7 @@
                         <div class="attachment-item">
                             <div class="file-icon">📄</div>
                             <div class="file-info">
-                                <div class="file-name">水电分包合同_签约文件.pdf</div>
+                                <div class="file-name">基础施工服务合同_签约文件.pdf</div>
                                 <div class="file-meta">张三上传 · 2024-01-15 10:30</div>
                             </div>
                             <div class="download-btn" onclick="showCustomToast('预览文件')">👁️</div>
@@ -671,7 +683,7 @@
                     <div class="attachment-item">
                         <div class="file-icon">📄</div>
                         <div class="file-info">
-                            <div class="file-name">水电分包合同.pdf</div>
+                            <div class="file-name">基础施工服务合同.pdf</div>
                             <div class="file-meta">2.3MB · 2024-01-10上传</div>
                         </div>
                         <div class="download-btn" onclick="showCustomToast('下载文件')">⬇</div>
@@ -1242,7 +1254,7 @@
                 <div class="contract-article">
                     <div class="article-title">合同编号：BJSDSWHT000001</div>
                     <div class="article-content">
-                        <p><strong>合同名称：</strong>水电分包合同</p>
+                        <p><strong>合同名称：</strong>基础施工服务合同</p>
                         <p><strong>签订日期：</strong>2024年01月10日</p>
                         <p><strong>合同金额：</strong>人民币捌万元整（¥80,000.00）</p>
                     </div>
@@ -1523,7 +1535,7 @@
                     <div class="sign-file-preview">
                         <div class="file-icon">📄</div>
                         <div class="file-info">
-                            <div class="file-name">水电分包合同_签约文件.pdf</div>
+                            <div class="file-name">基础施工服务合同_签约文件.pdf</div>
                             <div class="file-meta">上传人：张三 · 2024-01-10 15:30</div>
                         </div>
                         <div class="file-action" onclick="previewSignFile()">预览</div>
@@ -1761,8 +1773,8 @@
                     <span class="status-group-count">4</span>
                 </div>
                 <div class="status-group-content" style="display: none;">
-                    <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('change_confirming')">变更中(待确认方)</div>
                     <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('change_platform_reviewing')">变更审核中</div>
+                    <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('change_platform_rejected')">变更审核驳回（平台）</div>
                     <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('change_confirming_receiver')">变更确认中(待确认方)</div>
                     <div class="status-switch-item" onclick="ContractDetailPage.updateContractStatus('change_signing_wait')">变更签约中</div>
                 </div>

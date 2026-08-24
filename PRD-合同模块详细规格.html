@@ -333,7 +333,7 @@
             <li class="toc-leaf"><a href="#sec-5-15-1">5.15.1 变更中（发起方）</a></li>
             <li class="toc-leaf"><a href="#sec-5-15-2">5.15.2 待确认变更（确认方）</a></li>
             <li class="toc-leaf"><a href="#sec-5-15-3">5.15.3 变更审核中（双方）</a></li>
-            <li class="toc-leaf"><a href="#sec-5-15-4">5.15.4 变更审核驳回（发起方）</a></li>
+            <li class="toc-leaf"><a href="#sec-5-15-4">5.15.4 变更审核驳回（平台）</a></li>
             <li class="toc-leaf"><a href="#sec-5-15-5">5.15.5 变更确认中（发起方）</a></li>
             <li class="toc-leaf"><a href="#sec-5-15-6">5.15.6 变更确认中（确认方）</a></li>
             <li class="toc-leaf"><a href="#sec-5-15-7">5.15.7 变更签约中（上传方）</a></li>
@@ -1076,7 +1076,7 @@
                         </tr>
                         <tr>
                             <td>点击任务</td>
-                            <td>跳转到任务详情页</td>
+                            <td><strong>已签约态</strong>：跳转到任务详情页；<strong>非已签约态（且非变更流程相关页面）</strong>：弹出「任务详情（只读）」弹窗（不跳转），只读展示任务名称 / 执行人 / 确认人 / 执行标准 / 确认标准 / 担责标准；执行人、确认人无人员时显示「未指定」占位</td>
                         </tr>
                         <tr>
                             <td>任务状态标签</td>
@@ -1084,6 +1084,7 @@
                         </tr>
                     </tbody>
                 </table>
+                <p style="margin:10px 0 0;color:var(--text-secondary);font-size:12px;">注：上述「非已签约态弹只读弹窗、仅已签约跳转」规则同时适用于服务方小程序（基础 / 设计合同详情页）与业主小程序（业主端合同详情页）；变更流程内的任务项仍按对应变更态规则处理（不弹此只读弹窗）。</p>
             </div>
 
             <div class="subsection" id="sec-3-5">
@@ -2932,6 +2933,26 @@
                 <div class="subsection-title">5.15 各变更状态页详述</div>
                 <p style="margin:8px 0 12px;color:var(--text-secondary);font-size:13px;">以下按<strong>基础合同变更流程中的每个状态逐一说明</strong>，每节包含：原型页面链接（可跳转核对）、适用方/视角、横幅文案与说明、进入条件、页面结构与可见模块、底部操作按钮、状态流转路径、关键交互逻辑与字段规格。本节为第五章「发起变更功能」的状态页维度补充，与 §3.10 的非变更态分节共同构成合同详情页完整状态规格；<strong>变更态各节（原编号 3.12.15–3.12.22）的详细内容已统一收录于此</strong>，第三章仅保留导航索引。</p>
 
+                <div class="note" style="margin:12px 0;border-color:#185FA5;">
+                    <div class="note-title" style="color:#185FA5;">本章范围与视角约定（仅非工人合同 · 含平台审核）</div>
+                    <p>本章仅描述<strong>非工人合同（基础施工服务合同 / 设计服务合同，含平台审核）</strong>的变更流程状态页。工人合同（班组服务合同）变更流程为<strong>去平台审核</strong>的独立流程，详见 <a href="#worker-contract-change">第九章</a>；两合同类型的关键差异已集中在 <a href="#sec-7-1">7.1 对比框</a>，本章不再逐节赘述工人合同区别。</p>
+                    <p style="margin-top:8px;"><strong>视角 ↔ 角色 ↔ 原型页映射：</strong></p>
+                    <table class="spec-table" style="margin:6px 0;font-size:12px;">
+                        <thead><tr><th>子节（状态 · 角色）</th><th>主要操作方（端）</th><th>原型页</th></tr></thead>
+                        <tbody>
+                            <tr><td>5.15.1 变更中（发起方）</td><td>服务方端</td><td>service-miniapp</td></tr>
+                            <tr><td>5.15.2 待确认变更（确认方）</td><td>业主端</td><td>owner-miniapp（service-miniapp 同态可演示）</td></tr>
+                            <tr><td>5.15.3 变更审核中（双方）</td><td>服务方端 + 业主端</td><td>service-miniapp + owner-miniapp</td></tr>
+                            <tr><td>5.15.4 变更审核驳回（平台）</td><td>服务方端</td><td>service-miniapp</td></tr>
+                            <tr><td>5.15.5 变更确认中（发起方）</td><td>服务方端</td><td>service-miniapp</td></tr>
+                            <tr><td>5.15.6 变更确认中（确认方）</td><td>业主端</td><td>owner-miniapp（service-miniapp 同态可演示）</td></tr>
+                            <tr><td>5.15.7 变更签约中（上传方）</td><td>服务方端</td><td>service-miniapp</td></tr>
+                            <tr><td>5.15.8 变更已生效（双方）</td><td>服务方端 + 业主端</td><td>service-miniapp + owner-miniapp</td></tr>
+                        </tbody>
+                    </table>
+                    <p style="margin-top:8px;"><strong>端展示统一说明：</strong>标题中的「发起方 / 确认方」对应非工人合同角色——<strong>发起方 = 服务方（施工方），确认方 = 业主</strong>。业主端（owner-miniapp）合同详情页对各变更态的展示差异：仅阶段任务变更路径的「待确认变更（<code>change_confirming</code>）」在业主端右侧导航<strong>不单列独立项</strong>，业主最终确认统一在 <a href="#sec-5-15-6">5.15.6</a>（<code>change_confirming_receiver</code>）完成；其余变更态业主端均可通过加载对应演示数据查看。</p>
+                </div>
+
                 <!-- 5.15.0 变更期间任务锁定（通用规则） -->
                 <div class="subsection-title" id="sec-5-15-lock" style="font-size:14px;margin-top:18px;color:#cf1322;">⚠️ 变更期间任务锁定规则（通用 · 非工人合同与工人合同均适用）</div>
                 <div class="note" style="margin:12px 0;border-color:#cf1322;">
@@ -2980,23 +3001,21 @@
                 </table>
 
                 <!-- 5.15.2 待确认变更（change_confirming） -->
-                <div class="subsection-title" id="sec-5-15-2" style="font-size:14px;margin-top:18px;">5.15.2 待确认变更（确认方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_confirming</code></span> &nbsp; <a class="proto-link" href="service-miniapp/contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（演示开关未单列，需加载 <code>change_confirming</code> 演示数据查看）</a></div>
+                <div class="subsection-title" id="sec-5-15-2" style="font-size:14px;margin-top:18px;">5.15.2 待确认变更（确认方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_confirming</code></span> &nbsp; <a class="proto-link" href="service-miniapp/contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（演示开关未单列，需加载 <code>change_confirming</code> 演示数据查看）</a> &nbsp; <a class="proto-link" href="owner-miniapp/contract-detail.html?status=change_confirming" target="_blank" style="font-size:12px;">&#x1F517; 业主端原型页（owner-miniapp）</a></div>
                 <table style="margin-top:8px;">
                     <thead><tr><th style="width:120px;">属性</th><th>说明</th></tr></thead>
                     <tbody>
                         <tr><td><strong>适用方 / 视角</strong></td><td>变更确认方（被通知确认变更的对方，通常为业主或合作方）</td></tr>
                         <tr><td><strong>横幅状态文案</strong></td><td>待确认变更</td></tr>
                         <tr><td><strong>横幅说明文字</strong></td><td>对方发起变更申请，请确认或驳回（阶段任务已暂停流转）</td></tr>
-                        <tr><td><strong>进入条件</strong></td><td>以下两种路径均会到达此状态：<br>
-                            &bull; 路径 A：发起方提交<strong>仅阶段任务变更</strong>（<code>changing</code>）&rarr; 系统通知确认方<br>
-                            &bull; 路径 B：发起方提交的变更经<strong>平台审核通过</strong>（<code>change_platform_reviewing</code> &rarr; <code>change_confirming</code>）&rarr; 通知确认方
+                        <tr><td><strong>进入条件</strong></td><td>仅<strong>仅阶段任务变更</strong>路径到达此状态：发起方提交<strong>仅阶段任务变更</strong>（<code>changing</code>，<strong>不经过平台审核</strong>）&rarr; 系统通知确认方。<br>
+                            <span style="color:#cf1322;">注：涉及金额 / 正文 / 附件、需平台审核的变更，平台审核通过后确认方在 <a href="#sec-5-15-6">5.15.6</a>（<code>change_confirming_receiver</code>）完成最终确认，<strong>不经由本态</strong>。</span>
                         </td></tr>
                         <tr><td><strong>页面结构与可见模块</strong></td><td>
                             &bull; 只读内容区域正常展示<br>
                             &bull; 顶部橙色横幅显示「待确认变更」<br>
                             &bull; 变更原因横幅：展示发起方填写的变更原因<br>
-                            &bull; 阶段任务区：新增/修改的任务以标签标注<br>
-                            &bull; 路径 B（经平台审核）时额外展示：<strong>变更摘要卡片</strong> + 变更提示横幅 + 金额/正文变更高亮
+                            &bull; 阶段任务区：新增/修改的任务以标签标注
                         </td></tr>
                         <tr><td><strong>底部操作按钮</strong></td><td>
                             &bull; 「驳回变更」（<code>secondary</code> 样式）&mdash; 点击弹出驳回原因填写框（必填），驳回后合同退回 <code>signed</code><br>
@@ -3017,7 +3036,7 @@
                 </table>
 
                 <!-- 5.15.3 变更审核中（change_platform_reviewing） -->
-                <div class="subsection-title" id="sec-5-15-3" style="font-size:14px;margin-top:18px;">5.15.3 变更审核中（双方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_platform_reviewing</code></span> &nbsp; <a class="proto-link" href="service-miniapp/contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（右侧导航「合同状态切换」&rarr;「变更审核中」）</a></div>
+                <div class="subsection-title" id="sec-5-15-3" style="font-size:14px;margin-top:18px;">5.15.3 变更审核中（双方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_platform_reviewing</code></span> &nbsp; <a class="proto-link" href="service-miniapp/contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（右侧导航「合同状态切换」&rarr;「变更审核中」）</a> &nbsp; <a class="proto-link" href="owner-miniapp/contract-detail.html?status=change_platform_reviewing" target="_blank" style="font-size:12px;">&#x1F517; 业主端原型页（owner-miniapp）</a></div>
                 <table style="margin-top:8px;">
                     <thead><tr><th style="width:120px;">属性</th><th>说明</th></tr></thead>
                     <tbody>
@@ -3038,7 +3057,7 @@
                         </td></tr>
                         <tr><td><strong>底部操作按钮</strong></td><td>&bull; 「撤回变更申请」（<code>secondary</code> 样式）&mdash; 发起方可撤回，撤回后合同恢复至 <code>signed</code></td></tr>
                         <tr><td><strong>状态流转</strong></td><td>
-                            &bull; 平台审核通过 &rarr; <code>change_confirming</code>（待确认变更），见 <a href="#sec-5-15-2">5.15.2</a><br>
+                            &bull; 平台审核通过 &rarr; <code>change_confirming_receiver</code>（变更确认中·待确认方），见 <a href="#sec-5-15-6">5.15.6</a><br>
                             &bull; 平台审核驳回 &rarr; <code>change_platform_rejected</code>（变更审核驳回），见 <a href="#sec-5-15-4">5.15.4</a><br>
                             &bull; 发起方撤回 &rarr; <code>signed</code>（已签约）
                         </td></tr>
@@ -3054,7 +3073,7 @@
                 </table>
 
                 <!-- 5.15.4 变更审核驳回（change_platform_rejected） -->
-                <div class="subsection-title" id="sec-5-15-4" style="font-size:14px;margin-top:18px;">5.15.4 变更审核驳回（发起方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_platform_rejected</code></span> &nbsp; <a class="proto-link" href="service-miniapp/contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（右侧导航「合同状态切换」&rarr;「变更审核驳回」）</a></div>
+                <div class="subsection-title" id="sec-5-15-4" style="font-size:14px;margin-top:18px;">5.15.4 变更审核驳回（平台）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_platform_rejected</code></span> &nbsp; <a class="proto-link" href="service-miniapp/contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（右侧导航「合同状态切换」&rarr;「变更审核驳回（平台）」）</a></div>
                 <table style="margin-top:8px;">
                     <thead><tr><th style="width:120px;">属性</th><th>说明</th></tr></thead>
                     <tbody>
@@ -3093,7 +3112,7 @@
                         <tr><td><strong>适用方 / 视角</strong></td><td>变更发起方（对方已确认变更内容后的视角）</td></tr>
                         <tr><td><strong>横幅状态文案</strong></td><td>变更确认中</td></tr>
                         <tr><td><strong>横幅说明文字</strong></td><td>平台审核已通过（如需），对方已确认变更内容，请上传线下已签约的合同变更文件（阶段任务已暂停流转）</td></tr>
-                        <tr><td><strong>进入条件</strong></td><td>确认方（对方）在「待确认变更」（<code>change_confirming</code>）状态点击「确认变更」&rarr; 流转至发起方的「变更确认中」视角</td></tr>
+                        <tr><td><strong>进入条件</strong></td><td>确认方（对方）在「待确认变更」（<code>change_confirming</code>，仅阶段任务变更路径）或「变更确认中（待确认方）」（<code>change_confirming_receiver</code>，平台审核通过路径）状态点击「确认变更」&rarr; 流转至发起方的「变更确认中（<code>change_confirming_sender</code>）」视角</td></tr>
                         <tr><td><strong>页面结构与可见模块</strong></td><td>
                             &bull; 只读内容区域正常展示<br>
                             &bull; 顶部青色横幅显示「变更确认中」<br>
@@ -3122,7 +3141,7 @@
                 </table>
 
                 <!-- 5.15.6 变更确认中-确认方（change_confirming_receiver） -->
-                <div class="subsection-title" id="sec-5-15-6" style="font-size:14px;margin-top:18px;">5.15.6 变更确认中（确认方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_confirming_receiver</code></span> &nbsp; <a class="proto-link" href="service-miniapp/contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（演示开关未单列，需加载 <code>change_confirming_receiver</code> 演示数据查看）</a></div>
+                <div class="subsection-title" id="sec-5-15-6" style="font-size:14px;margin-top:18px;">5.15.6 变更确认中（确认方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_confirming_receiver</code></span> &nbsp; <a class="proto-link" href="service-miniapp/contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（演示开关未单列，需加载 <code>change_confirming_receiver</code> 演示数据查看）</a> &nbsp; <a class="proto-link" href="owner-miniapp/contract-detail.html?status=change_confirming_receiver" target="_blank" style="font-size:12px;">&#x1F517; 业主端原型页（owner-miniapp）</a></div>
                 <table style="margin-top:8px;">
                     <thead><tr><th style="width:120px;">属性</th><th>说明</th></tr></thead>
                     <tbody>
@@ -3146,7 +3165,7 @@
                         </td></tr>
                         <tr><td><strong>关键交互与逻辑</strong></td><td>
                             <ul style="margin:4px 0;padding-left:18px;font-size:12px;line-height:1.8;">
-                                <li>此状态与 5.15.2 的区别在于：<strong>已经过平台审核</strong>，变更摘要卡片和高亮展示更完整。</li>
+                                <li>此状态是<strong>平台审核通过后</strong>确认方的最终确认态；与 <a href="#sec-5-15-2">5.15.2</a>（仅阶段任务变更、<strong>不经平台审核</strong>的确认方待确认态）分工明确：本态必经平台审核，5.15.2 不经平台审核，二者不再重叠。</li>
                                 <li>确认方在此状态做的是<strong>最终确认</strong>（平台已认可变更合理性）。</li>
                             </ul>
                         </td></tr>
@@ -3192,7 +3211,7 @@
                 </table>
 
                 <!-- 5.15.8 变更已生效（change_confirmed） -->
-                <div class="subsection-title" id="sec-5-15-8" style="font-size:14px;margin-top:18px;">5.15.8 变更已生效（双方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_confirmed</code></span> &nbsp; <a class="proto-link" href="service-miniapp/contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（演示开关未单列，需加载 <code>change_confirmed</code> 演示数据查看）</a></div>
+                <div class="subsection-title" id="sec-5-15-8" style="font-size:14px;margin-top:18px;">5.15.8 变更已生效（双方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_confirmed</code></span> &nbsp; <a class="proto-link" href="service-miniapp/contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（演示开关未单列，需加载 <code>change_confirmed</code> 演示数据查看）</a> &nbsp; <a class="proto-link" href="owner-miniapp/contract-detail.html?status=change_confirmed" target="_blank" style="font-size:12px;">&#x1F517; 业主端原型页（owner-miniapp）</a></div>
                 <table style="margin-top:8px;">
                     <thead><tr><th style="width:120px;">属性</th><th>说明</th></tr></thead>
                     <tbody>
@@ -3462,16 +3481,16 @@
                     <tbody>
                         <tr>
                             <td>变更平台审核通过</td>
-                            <td>变更状态由 变更审核中(change_platform_reviewing) → 变更确认中(change_confirming)，<strong>且合同甲方(partyA)为业主</strong></td>
+                            <td>变更状态由 变更审核中(change_platform_reviewing) → 变更确认中（待确认方）(change_confirming_receiver)，<strong>且合同甲方(partyA)为业主</strong></td>
                             <td>业主</td>
-                            <td>合同变更确认（待确认变更）</td>
+                            <td>合同变更确认（变更确认中·待确认方）</td>
                             <td>变更</td>
                             <td><a class="proto-link" href="service-miniapp/contract-detail.html?status=change_confirming_receiver" target="_blank">contract-detail.html?status=change_confirming_receiver</a></td>
                             <td>pending</td>
                         </tr>
                         <tr>
                             <td>变更确认后（进入变更签约）</td>
-                            <td>变更双方完成确认，状态由 变更确认中(change_confirming) → 变更签约中(change_signing_wait)</td>
+                            <td>变更双方完成确认，状态由 变更确认中（待确认方）(change_confirming_receiver) → 变更确认中(发起方)(change_confirming_sender) → 变更签约中(change_signing_wait)</td>
                             <td>发起方（合同创建人）</td>
                             <td>合同变更签约（待上传变更签约附件）</td>
                             <td>变更</td>
@@ -4239,7 +4258,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <p style="font-size:12px;color:#888;margin-top:8px;">注：已签约态「点击任务跳转任务详情页」与基础施工服务合同（合规版）<a href="#sec-3-4">§3.4 任务卡片交互规格</a>「点击任务 &rarr; 跳转到任务详情页」规则对齐；工人合同特有「已履约完成」派生标识（7.5.3.5）对应任务详情「已完成」态。</p>
+                <p style="font-size:12px;color:#888;margin-top:8px;">注：已签约态点击任务跳转任务详情页、非已签约态弹「任务详情（只读）」弹窗，与基础施工服务合同（合规版）<a href="#sec-3-4">§3.4 任务卡片交互规格</a>规则对齐；工人合同特有「已履约完成」派生标识（7.5.3.5）对应任务详情「已完成」态。</p>
 
                 <h4 style="margin-top:16px;">7.11.2 「编辑任务」弹窗与保存校验（仅拟定中）</h4>
                 <p>仅拟定中（初始 / 撤回后）可编辑任务详情。入口：点击任务名称行或「✎」打开 <code>editTaskModal</code>（预填现有值）。字段与保存校验（<code>confirmEditTask</code>）：</p>
