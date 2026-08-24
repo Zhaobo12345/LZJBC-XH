@@ -257,6 +257,19 @@ const ContractDetailPage = (function() {
                 { text: '上传变更签约文件', type: 'primary', action: 'upload_change_sign' }
             ]
         },
+        change_confirming_rejected: {
+            text: '变更确认人驳回',
+            desc: '变更确认方（甲方/业主）已驳回本次变更申请，合同保持原已签约状态。可重新发起变更。',
+            bannerClass: 'rejected',
+            readonly: true,
+            showPcGuide: false,
+            isChangeFlow: true,
+            showRejectReason: true,
+            rejectReason: '变更内容与现场实际情况不符，暂不接受该变更方案，请与发起方沟通后重新发起。',
+            actions: [
+                { text: '重新发起变更', type: 'primary', action: 'resubmit_change' }
+            ]
+        },
 
         // ============== 工人合同新流程（方案 B） ==============
         // 仅作用于 拆除/水电/木作/泥瓦/油漆/小零工 六类，基础施工/设计 仍走上方原流程
@@ -770,7 +783,7 @@ const ContractDetailPage = (function() {
         const changeReasonDisplay = document.getElementById('changeReasonDisplay');
         const changeSummaryDisplay = document.getElementById('changeSummaryDisplay');
         const changeHighlightBanner = document.getElementById('changeHighlightBanner');
-        const changeStates = ['changing', 'change_confirming', 'change_platform_reviewing', 'change_confirming_sender', 'change_confirming_receiver', 'change_signing_wait', 'change_signing'];
+        const changeStates = ['changing', 'change_confirming', 'change_platform_reviewing', 'change_platform_rejected', 'change_confirming_sender', 'change_confirming_receiver', 'change_confirming_rejected', 'change_signing_wait', 'change_signing'];
         
         const stageOnlyChangeStates = ['changing', 'change_confirming'];
         
@@ -1236,6 +1249,7 @@ const ContractDetailPage = (function() {
             'change_platform_rejected': '变更审核驳回',
             'change_confirming_sender': '变更确认中(发起方)',
             'change_confirming_receiver': '变更确认中(待确认方)',
+            'change_confirming_rejected': '变更确认人驳回',
             'change_signing_wait': '变更签约中',
             'worker_inviting_sender': '确认中(发起方)',
             'worker_inviting_receiver': '确认中(被邀请人)',
@@ -1351,6 +1365,7 @@ const ContractDetailPage = (function() {
             'change_confirming_sender': 4,
             'change_confirming_receiver': 4,
             'change_signing_wait': 4,
+            'change_confirming_rejected': 4,
             'change_confirmed': 4
         };
         
@@ -1395,7 +1410,9 @@ const ContractDetailPage = (function() {
             'confirmed': { desc: '双方已确认，请上传签约文件', show: true },
             'signed': { desc: '合同已签约生效，可发起变更申请', show: true },
             'changing': { desc: '变更申请已发起，等待对方确认', show: true },
-            'change_confirming': { desc: '对方发起变更，请确认或驳回', show: true }
+            'change_confirming': { desc: '对方发起变更，请确认或驳回', show: true },
+            'change_platform_rejected': { desc: '变更申请审核未通过，请根据驳回原因修改后重新提交', show: true },
+            'change_confirming_rejected': { desc: '变更确认方已驳回本次变更，合同保持原已签约，可重新发起变更', show: true }
         };
         
         const config = guideConfig[status];
@@ -2365,6 +2382,22 @@ const ContractDetailPage = (function() {
                     { title: '提交平台审核', desc: '等待平台审核', time: '2024-02-12 10:05', type: 'success' },
                     { title: '平台审核通过', desc: '审核人：运营专员王芳', time: '2024-02-13 14:00', type: 'success' },
                     { title: '变更确认', desc: '确认人：XX装修公司', time: '2024-02-15 10:00', type: 'success' }
+                ]
+            },
+            'change_confirming_rejected': {
+                versions: [
+                    { tag: 'V1', name: '初始版本', desc: '首次签约版本', date: '2024-01-10 签约生效', current: true }
+                ],
+                timeline: [
+                    { title: '创建合同', desc: '拟定中', time: '2024-01-05 10:00', type: 'success' },
+                    { title: '提交确认', desc: '进入平台审核', time: '2024-01-06 14:30', type: 'success' },
+                    { title: '平台审核通过', desc: '审核人：运营专员李华', time: '2024-01-07 09:15', type: 'success' },
+                    { title: '乙方确认合同', desc: '确认人：XX装修公司', time: '2024-01-08 16:20', type: 'success' },
+                    { title: '上传签约文件', desc: '上传人：张三，合同正式生效（V1版本）', time: '2024-01-10 15:30', type: 'success' },
+                    { title: '发起变更', desc: '变更类型：含其他内容变更', time: '2024-02-12 10:00', type: 'warning' },
+                    { title: '提交平台审核', desc: '等待平台审核', time: '2024-02-12 10:05', type: 'success' },
+                    { title: '平台审核通过', desc: '审核人：运营专员王芳', time: '2024-02-13 14:00', type: 'success' },
+                    { title: '变更确认方驳回', desc: '驳回原因：变更内容与现场实际情况不符', time: '2024-02-15 10:00', type: 'error' }
                 ]
             },
             'change_confirmed': {

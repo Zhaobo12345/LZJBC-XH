@@ -338,6 +338,7 @@
             <li class="toc-leaf"><a href="#sec-5-15-6">5.15.6 变更确认中（确认方）</a></li>
             <li class="toc-leaf"><a href="#sec-5-15-7">5.15.7 变更签约中（上传方）</a></li>
             <li class="toc-leaf"><a href="#sec-5-15-8">5.15.8 变更已生效（双方）</a></li>
+            <li class="toc-leaf"><a href="#sec-5-15-9">5.15.9 变更确认人驳回（确认方）</a></li>
         </ul>
     </li>
     <li class="toc-chapter collapsed">
@@ -2948,6 +2949,7 @@
                             <tr><td>5.15.6 变更确认中（确认方）</td><td>业主端</td><td>owner-miniapp（service-miniapp 同态可演示）</td></tr>
                             <tr><td>5.15.7 变更签约中（上传方）</td><td>服务方端</td><td>service-miniapp</td></tr>
                             <tr><td>5.15.8 变更已生效（双方）</td><td>服务方端 + 业主端</td><td>service-miniapp + owner-miniapp</td></tr>
+                            <tr><td>5.15.9 变更确认人驳回（确认方）</td><td>服务方端（发起方视角）/ 业主端（确认方视角）</td><td>service-miniapp</td></tr>
                         </tbody>
                     </table>
                     <p style="margin-top:8px;"><strong>端展示统一说明：</strong>标题中的「发起方 / 确认方」对应非工人合同角色——<strong>发起方 = 服务方（施工方），确认方 = 业主</strong>。业主端（owner-miniapp）合同详情页对各变更态的展示差异：仅阶段任务变更路径的「待确认变更（<code>change_confirming</code>）」在业主端右侧导航<strong>不单列独立项</strong>，业主最终确认统一在 <a href="#sec-5-15-6">5.15.6</a>（<code>change_confirming_receiver</code>）完成；其余变更态业主端均可通过加载对应演示数据查看。</p>
@@ -3161,7 +3163,7 @@
                         </td></tr>
                         <tr><td><strong>状态流转</strong></td><td>
                             &bull; 确认 &rarr; <code>change_confirming_sender</code>（发起方进入变更确认中），见 <a href="#sec-5-15-5">5.15.5</a><br>
-                            &bull; 驳回 &rarr; <code>signed</code>（退回已签约）
+                            &bull; 驳回 &rarr; <code>change_confirming_rejected</code>（变更确认人驳回，见 <a href="#sec-5-15-9">5.15.9</a>）
                         </td></tr>
                         <tr><td><strong>关键交互与逻辑</strong></td><td>
                             <ul style="margin:4px 0;padding-left:18px;font-size:12px;line-height:1.8;">
@@ -3244,6 +3246,38 @@
                                     </ul>
                                 </li>
                                 <li><strong>可再次变更</strong>：底部「发起变更」按钮可用，新一轮变更将基于 V2 生成 V3，以此类推。</li>
+                            </ul>
+                        </td></tr>
+                    </tbody>
+                </table>
+
+                <!-- 5.15.9 变更确认人驳回（change_confirming_rejected） -->
+                <div class="subsection-title" id="sec-5-15-9" style="font-size:14px;margin-top:18px;">5.15.9 变更确认人驳回（确认方）<span style="font-weight:400;color:#888;font-size:12px;">&mdash; 状态标识：<code>change_confirming_rejected</code></span> &nbsp; <a class="proto-link" href="service-miniapp/contract-detail.html" target="_blank" style="font-size:12px;">&#x1F517; 原型页（右侧导航「合同状态切换」&rarr;「变更确认人驳回」）</a></div>
+                <table style="margin-top:8px;">
+                    <thead><tr><th style="width:120px;">属性</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>适用方 / 视角</strong></td><td>变更发起方（服务方端视角，查看确认方驳回结果）；确认方（业主端）视角为本人操作结果展示。</td></tr>
+                        <tr><td><strong>横幅状态文案</strong></td><td>变更确认人驳回</td></tr>
+                        <tr><td><strong>横幅说明文字</strong></td><td>变更确认方（甲方/业主）已驳回本次变更申请，合同保持原已签约状态。可重新发起变更。</td></tr>
+                        <tr><td><strong>进入条件</strong></td><td>确认方在「变更确认中（确认方）」（<code>change_confirming_receiver</code>，见 <a href="#sec-5-15-6">5.15.6</a>）点击「驳回变更」并填写驳回原因 &rarr; 变更申请被确认方拒绝。</td></tr>
+                        <tr><td><strong>页面结构与可见模块</strong></td><td>
+                            &bull; 顶部红色横幅显示「变更确认人驳回」<br>
+                            &bull; 横幅下方：<strong>驳回原因区域</strong>（红底白字样式），展示确认方（甲方/业主）填写的驳回原因（<code>showRejectReason</code>，取自 <code>STATUS_CONFIG.change_confirming_rejected.rejectReason</code>）<br>
+                            &bull; 变更原因横幅仍展示<br>
+                            &bull; 变更摘要卡片仍展示（标记已驳回），供发起方参考修改后重新发起<br>
+                            &bull; 合同内容恢复为 V1 原始状态（变更内容不生效）；阶段任务保持锁定，重新发起前不恢复流转
+                        </td></tr>
+                        <tr><td><strong>底部操作按钮</strong></td><td>&bull; 「重新发起变更」（<code>primary</code> 样式）&mdash; 基于确认方反馈修改后重新发起（二次确认后重新进入变更流程，见 <a href="#sec-5-15-1">5.15.1</a> / <a href="#sec-5-15-3">5.15.3</a>）</td></tr>
+                        <tr><td><strong>状态流转</strong></td><td>
+                            &bull; 重新发起变更 &rarr; <code>changing</code>（若改为仅阶段任务变更）或 <code>change_platform_reviewing</code>（若含金额/正文/附件变更）<br>
+                            &bull; 不重新发起则停留在当前状态（合同保持原已签约）
+                        </td></tr>
+                        <tr><td><strong>关键交互与逻辑</strong></td><td>
+                            <ul style="margin:4px 0;padding-left:18px;font-size:12px;line-height:1.8;">
+                                <li><strong>与变更审核驳回（平台）区分</strong>：本态为<strong>确认方（甲方/业主）主动驳回</strong>（<code>change_confirming_rejected</code>），<a href="#sec-5-15-4">5.15.4</a> 为<strong>平台运营驳回</strong>（<code>change_platform_rejected</code>），二者驳回主体不同，页面结构相似但横幅文案与说明文字区分。</li>
+                                <li><strong>驳回原因必填</strong>：确认方驳回时必填（<code>rejectReason</code> 字段），演示默认文案：「变更内容与现场实际情况不符，暂不接受该变更方案，请与发起方沟通后重新发起。」</li>
+                                <li><strong>合同不受影响</strong>：合同完全保持 V1，如同从未发起过此次变更。</li>
+                                <li><strong>变更记录</strong>：自动追加「变更确认方驳回」节点（error 标签 + 驳回原因）。</li>
                             </ul>
                         </td></tr>
                     </tbody>
