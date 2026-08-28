@@ -49,14 +49,34 @@
             flex: 1; overflow-y: auto; padding: 0; background: #f2f3f5;
         }
         .content-toolbar {
-            display: flex; align-items: center; justify-content: flex-end; gap: 12px;
-            padding: 10px 16px; font-size: 13px; color: #888;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 12px 0; font-size: 13px; color: #888;
         }
-        .content-toolbar .text-more-btn { cursor: default; }
+        .content-toolbar .tb-hint { font-size: 12px; color: #C0C4CC; }
+        .text-more-btn {
+            display: inline-flex; align-items: center; gap: 4px;
+            font-size: 13px; color: #1677FF;
+            padding: 4px 8px; border-radius: 6px; cursor: pointer;
+        }
+        .text-more-btn:active { background-color: #F7F8FA; }
+        .text-more-btn .caret { font-size: 10px; transition: transform 0.2s; }
+        .text-more-btn.open .caret { transform: rotate(180deg); }
+        .more-ops-panel {
+            display: none; margin: 4px 12px 0;
+            background: #fff; border: 1px solid #E5E6EB; border-radius: 10px; overflow: hidden;
+        }
+        .more-ops-panel.show { display: block; }
+        .more-ops-panel .op-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 11px 14px; font-size: 14px; color: #1D2129;
+            border-bottom: 1px solid #F2F3F5; cursor: pointer;
+        }
+        .more-ops-panel .op-item:last-child { border-bottom: none; }
+        .more-ops-panel .op-icon { font-size: 15px; }
 
         /* 状态横幅（拟定中） */
         .wc-banner {
-            margin: 12px; padding: 12px 14px; border-radius: 12px; color: #fff;
+            margin: 6px 12px 12px; padding: 12px 14px; border-radius: 12px; color: #fff;
         }
         .wc-banner.draft { background: linear-gradient(135deg, #faad14 0%, #ffc53d 100%); }
         .wc-banner-text { font-size: 15px; font-weight: 700; }
@@ -242,6 +262,26 @@
         }
         .app-toast.show { opacity: 1; }
 
+        /* 通用信息弹窗（更多菜单项：版本记录 / 变更记录） */
+        .info-modal-mask {
+            position: absolute; inset: 0; background: rgba(0,0,0,.45);
+            display: none; align-items: center; justify-content: center; z-index: 320;
+        }
+        .info-modal-mask.show { display: flex; }
+        .info-modal {
+            width: 80%; max-width: 300px; background: #fff; border-radius: 12px;
+            padding: 18px; box-sizing: border-box; max-height: 70%; overflow-y: auto;
+        }
+        .info-modal-title { font-size: 15px; font-weight: 600; margin-bottom: 10px; }
+        .info-modal-body { font-size: 13px; color: #444; line-height: 1.6; }
+        .info-modal-body .rec-row { padding: 8px 0; border-bottom: 1px solid #f2f3f5; }
+        .info-modal-body .rec-row:last-child { border-bottom: none; }
+        .info-modal-body .rec-tag { display: inline-block; font-size: 11px; color: #1677ff; background: #e6f4ff; border-radius: 4px; padding: 1px 6px; margin-right: 6px; }
+        .info-modal-close {
+            margin-top: 14px; text-align: center; color: #1677ff; font-size: 14px;
+            padding: 8px; border-radius: 8px; background: #f0f7ff; cursor: pointer;
+        }
+
         /* ===== 模板选择 / 预览 底部抽屉 ===== */
         .wcd-modal-mask {
             position: absolute; left: 0; top: 0; right: 0; bottom: 0;
@@ -309,8 +349,9 @@
     <div class="page-content">
         <div class="content-toolbar">
             <span class="tb-hint">合同操作</span>
-            <span class="text-more-btn">更多▾</span>
+            <span class="text-more-btn" id="moreOpsBtn" onclick="toggleMoreOps()">更多<span class="caret">▾</span></span>
         </div>
+        <div class="more-ops-panel" id="moreOpsPanel"></div>
 
         <!-- 状态横幅：拟定中 -->
         <div class="wc-banner draft">
@@ -426,6 +467,15 @@
 
     <div class="app-toast" id="appToast"></div>
 
+    <!-- 通用信息弹窗（版本记录 / 变更记录） -->
+    <div class="info-modal-mask" id="infoModalMask" onclick="if(event.target===this)closeInfoModal()">
+        <div class="info-modal">
+            <div class="info-modal-title" id="infoModalTitle"></div>
+            <div class="info-modal-body" id="infoModalBody"></div>
+            <div class="info-modal-close" onclick="closeInfoModal()">关闭</div>
+        </div>
+    </div>
+
     <!-- 更换模板：选择弹窗 -->
     <div class="wcd-modal-mask" id="wcdTplModal" onclick="if(event.target===this)closeTemplatePicker()">
         <div class="wcd-sheet">
@@ -482,7 +532,7 @@
 
         <!-- 发起方视角 -->
         <div class="status-group">
-            <div class="status-group-header">
+            <div class="status-group-header" onclick="toggleStatusGroup(this)">
                 <span class="status-group-icon">▼</span>
                 <span class="status-group-title">发起方视角</span>
                 <span class="status-group-count">8</span>
@@ -501,7 +551,7 @@
 
         <!-- 受邀方视角 -->
         <div class="status-group">
-            <div class="status-group-header">
+            <div class="status-group-header" onclick="toggleStatusGroup(this)">
                 <span class="status-group-icon">▶</span>
                 <span class="status-group-title">受邀方视角</span>
                 <span class="status-group-count">6</span>
@@ -519,7 +569,7 @@
 
         <!-- 演示数据 -->
         <div class="status-group">
-            <div class="status-group-header">
+            <div class="status-group-header" onclick="toggleStatusGroup(this)">
                 <span class="status-group-icon">▼</span>
                 <span class="status-group-title">演示数据</span>
                 <span class="status-group-count">2</span>
@@ -686,13 +736,19 @@
     }
     function filterInvite() { renderInviteList(); }
 
-    /* 点击面板外部时收起意向乙方选择面板（点击面板内部 / 控制条不收起） */
+    /* 点击面板外部时收起意向乙方选择面板 / 「更多」菜单（点击面板内部 / 控制条不收起） */
     document.addEventListener('click', function (e) {
         var box = $('editInvitePanelBox');
-        if (!box || !box.classList.contains('open')) return;
-        var picker = box.closest('.member-picker');
-        if (picker && picker.contains(e.target)) return;
-        box.classList.remove('open');
+        if (box && box.classList.contains('open')) {
+            var picker = box.closest('.member-picker');
+            if (!picker || !picker.contains(e.target)) box.classList.remove('open');
+        }
+        var mPanel = $('moreOpsPanel');
+        if (mPanel && mPanel.classList.contains('show')) {
+            if (!e.target.closest('.content-toolbar') && !e.target.closest('.more-ops-panel')) {
+                closeMoreOps();
+            }
+        }
     });
 
     function renderInviteList() {
@@ -1012,6 +1068,55 @@
         showToast('已保存草稿');
     }
 
+    /* ===================== 顶部「更多」菜单（对齐 worker_draft_initial 状态） ===================== */
+    function renderMoreOps() {
+        var panel = $('moreOpsPanel');
+        if (!panel) return;
+        var items = [
+            { icon: '📋', label: '版本记录', fn: 'showVersionModal()' },
+            { icon: '📜', label: '变更记录', fn: 'showChangeRecordModal()' },
+            { icon: '📄', label: '导出合同文件', fn: 'exportContract()' }
+        ];
+        panel.innerHTML = items.map(function (it) {
+            return '<div class="op-item" onclick="' + it.fn + '; closeMoreOps();">' +
+                '<span class="op-icon">' + it.icon + '</span><span>' + it.label + '</span></div>';
+        }).join('');
+    }
+    function toggleMoreOps() {
+        var p = $('moreOpsPanel'), b = $('moreOpsBtn');
+        if (!p) return;
+        p.classList.toggle('show');
+        if (b) b.classList.toggle('open');
+    }
+    function closeMoreOps() {
+        var p = $('moreOpsPanel'), b = $('moreOpsBtn');
+        if (p) p.classList.remove('show');
+        if (b) b.classList.remove('open');
+    }
+
+    /* 通用信息弹窗 */
+    function openInfoModal(title, html) {
+        var t = $('infoModalTitle'), b = $('infoModalBody'), m = $('infoModalMask');
+        if (t) t.textContent = title;
+        if (b) b.innerHTML = html;
+        if (m) m.classList.add('show');
+    }
+    function closeInfoModal() {
+        var m = $('infoModalMask');
+        if (m) m.classList.remove('show');
+    }
+    function showVersionModal() {
+        openInfoModal('版本记录',
+            '<div class="rec-row"><span class="rec-tag">V1</span>初始版本（拟定中）</div>' +
+            '<div class="rec-row" style="color:#999;">首次创建合同，当前版本</div>');
+    }
+    function showChangeRecordModal() {
+        openInfoModal('变更记录', '<div class="rec-row" style="color:#999;">当前为拟定中状态，暂无变更记录</div>');
+    }
+    function exportContract() {
+        showToast('已导出合同文件（演示）');
+    }
+
     /* ===================== 原型导航：收起 / 展开 ===================== */
     function togglePageNav() {
         var nav = document.querySelector('.page-nav');
@@ -1021,10 +1126,21 @@
         if (btn) btn.classList.toggle('collapsed');
     }
 
+    /* 状态分组展开 / 收起（对齐 worker-contract-detail.html 的 WCP.toggleStatusGroup 行为） */
+    function toggleStatusGroup(header) {
+        var content = header.parentElement.querySelector('.status-group-content');
+        var icon = header.querySelector('.status-group-icon');
+        if (!content || !icon) return;
+        var hidden = content.style.display === 'none';
+        content.style.display = hidden ? 'block' : 'none';
+        icon.textContent = hidden ? '▼' : '▶';
+    }
+
     /* ===================== 初始化 ===================== */
     renderInviteChips();
     renderInviteList();
     renderDraftContent();
+    renderMoreOps();
 </script>
 </body>
 </html>
