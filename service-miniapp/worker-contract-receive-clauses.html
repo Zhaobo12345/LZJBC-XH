@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>家装平台小程序原型 - 合同详细条款</title>
+    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="css/contract-detail.css">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; background: #e9ebee; min-height: 100vh;
+            font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+            display: flex; align-items: flex-start; justify-content: center; padding: 24px;
+        }
+        .phone-frame {
+            width: 375px; height: 812px; background: #f2f3f5;
+            border-radius: 40px; overflow: hidden; position: relative; flex-shrink: 0;
+            box-shadow: 0 12px 40px rgba(0,0,0,.25); display: flex; flex-direction: column;
+        }
+        .status-bar {
+            height: 44px; background: #fff; display: flex; align-items: center;
+            justify-content: space-between; padding: 0 22px; font-size: 14px;
+            font-weight: 600; color: #000; flex-shrink: 0;
+        }
+        .nav-bar {
+            height: 48px; background: #fff; display: flex; align-items: center;
+            position: relative; border-bottom: 1px solid #ececec; flex-shrink: 0;
+        }
+        .nav-bar .nb-back {
+            position: absolute; left: 14px; font-size: 26px; line-height: 1;
+            color: #1a1a1a; text-decoration: none; width: 28px;
+        }
+        .nav-bar .title { flex: 1; text-align: center; font-size: 17px; font-weight: 600; color: #1a1a1a; }
+        .receive-scroll { flex: 1; overflow-y: auto; padding: 12px; }
+
+        .flow-card {
+            background: #fff; border-radius: 14px; padding: 16px; margin-top: 12px;
+            box-shadow: 0 1px 6px rgba(0,0,0,.04);
+        }
+        .doc-h { font-size: 18px; font-weight: 700; color: #1a1a1a; text-align: center; }
+        .doc-h-sub { font-size: 12px; color: #999; text-align: center; margin: 4px 0 12px; padding-bottom: 12px; border-bottom: 1px dashed #eee; }
+        .doc-sec { margin: 14px 0; }
+        .doc-sec-title { font-size: 14px; font-weight: 600; color: #222; margin-bottom: 6px; }
+        .doc-p { font-size: 13px; color: #555; line-height: 1.85; margin: 4px 0; }
+        .doc-ol { margin: 4px 0; padding-left: 20px; }
+        .doc-ol li { font-size: 13px; color: #555; line-height: 1.85; }
+        .doc-key { color: #fa541c; font-weight: 600; }
+        .doc-back {
+            display: block; text-align: center; margin: 14px auto 4px; width: max-content;
+            font-size: 13px; color: var(--primary-color, #1677ff); text-decoration: none;
+            padding: 8px 18px; border: 1px solid #91caff; border-radius: 18px; background: #f0f7ff;
+        }
+        .doc-back:active { background: #e6f4ff; }
+    </style>
+</head>
+<body>
+<div class="phone-frame">
+    <div class="status-bar">
+        <div class="time">9:41</div>
+        <div class="icons">📶 🔋</div>
+    </div>
+    <div class="nav-bar">
+        <a class="nb-back" href="worker-contract-receive-inviting.html">&lsaquo;</a>
+        <div class="title">合同详细条款</div>
+    </div>
+
+    <div class="receive-scroll">
+        <div class="flow-card">
+            <div class="doc-h">水电班组服务合同</div>
+            <div class="doc-h-sub">详细条款（全文）</div>
+
+            <div class="doc-sec">
+                <div class="doc-sec-title">一、工程概况</div>
+                <p class="doc-p">工程名称「水电班组服务合同」，地点 XX市XX区XX路XX号。</p>
+            </div>
+
+            <div class="doc-sec">
+                <div class="doc-sec-title">二、双方权利义务</div>
+                <p class="doc-p"><b>（一）甲方责权</b></p>
+                <ol class="doc-ol">
+                    <li>甲方有权按照相关工艺及质量标准监督、指导乙方工作，并根据工作过程及完成情况给予奖励、处罚。</li>
+                    <li>甲方应按照工程施工要求在乙方施工前进行相关培训及交底，包含但不限于《现场施工管理规定》、《施工工艺及验收标准》、图纸交底等。</li>
+                    <li>甲方有责任按时为乙方提供满足工作需要的场地、材料、工具、安全措施等。</li>
+                </ol>
+                <p class="doc-p"><b>（二）乙方责权</b></p>
+                <ol class="doc-ol">
+                    <li>乙方有权在约定的支付节点获得报酬。</li>
+                    <li>当遇到现场、图纸冲突时，乙方应第一时间告知甲方进行协调。</li>
+                    <li>乙方在工作中应自觉保护其他工种的劳动成果，不得擅自破坏。</li>
+                    <li>乙方不得擅自把甲方提供的工具、材料拿出场外或使用到其他工地。</li>
+                </ol>
+            </div>
+
+            <div class="doc-sec">
+                <div class="doc-sec-title">三、价款与支付</div>
+                <p class="doc-p">合同金额 <span class="doc-key">¥8,800 元</span>（施工完成且验收通过后由线下进行支付），具体支付节点由双方书面约定。</p>
+            </div>
+
+            <div class="doc-sec">
+                <div class="doc-sec-title">四、验收与违约</div>
+                <p class="doc-p">隐蔽工程验收合格后方可进入下一道工序。</p>
+            </div>
+
+            <div class="doc-sec">
+                <div class="doc-sec-title">五、违约责任</div>
+                <ol class="doc-ol">
+                    <li>由于乙方原因不能按照合同约定的工期完成施工的，每延期一天支付合同额 <span class="doc-key">3‰</span> 作为违约金赔偿甲方；由于甲方原因造成工期延误的，应按照实际情况对乙方窝工、人员往返等费用进行合理补偿，补偿标准按照每天支付合同额 <span class="doc-key">3‰</span> 作为补偿。</li>
+                    <li>由于乙方原因造成施工质量不达标的，乙方应彻底返修直到质量达标，由此造成的工期延误参照第 1 条；由于甲方原因造成施工质量不达标的，如需返修由甲方支付相应返修费用给乙方，并进行工期顺延。</li>
+                </ol>
+            </div>
+
+            <div class="doc-sec">
+                <div class="doc-sec-title">六、争议解决</div>
+                <p class="doc-p">协商不成的，提交项目所在地人民法院诉讼解决。</p>
+            </div>
+
+            <a class="doc-back" href="worker-contract-receive-inviting.html">← 返回合同邀约</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

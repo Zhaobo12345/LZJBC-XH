@@ -1207,6 +1207,7 @@
                 </div>
                 <div class="status-group-content">
                     <div class="status-switch-item" data-status="worker_draft_initial" onclick="WCP.updateStatus('worker_draft_initial')">拟定中(发起方)</div>
+                    <a class="status-switch-item" href="worker-contract-draft-initial-new.html" style="text-decoration:none;">拟定中(发起方)-新</a>
                     <div class="status-switch-item" data-status="worker_inviting_sender" onclick="WCP.updateStatus('worker_inviting_sender')">确认中(发起方)</div>
                     <div class="status-switch-item" data-status="worker_confirmed_sender" onclick="WCP.updateStatus('worker_confirmed_sender')">已确认(发起方)</div>
                     <a class="status-switch-item" href="worker-sign-upload.html" style="text-decoration:none;">上传签约文件（新页面）</a>
@@ -1221,10 +1222,11 @@
                 <div class="status-group-header" onclick="WCP.toggleStatusGroup(this)">
                     <span class="status-group-icon">▶</span>
                     <span class="status-group-title">受邀方视角</span>
-                    <span class="status-group-count">4</span>
+                    <span class="status-group-count">6</span>
                 </div>
                 <div class="status-group-content" style="display:none;">
                     <div class="status-switch-item" data-status="worker_confirmed_receiver" onclick="WCP.updateStatus('worker_confirmed_receiver')">已确认(受邀方)</div>
+                    <a class="status-switch-item" href="worker-contract-receive-confirmed-new.html" style="text-decoration:none;">已确认（受邀方）-新</a>
                     <div class="status-switch-item" data-status="worker_lost_receiver" onclick="WCP.updateStatus('worker_lost_receiver')">抢单失败(受邀方)</div>
                     <div class="status-switch-item" data-status="worker_rejected_receiver" onclick="WCP.updateStatus('worker_rejected_receiver')">已拒绝(受邀方)</div>
                     <div class="status-switch-divider"></div>

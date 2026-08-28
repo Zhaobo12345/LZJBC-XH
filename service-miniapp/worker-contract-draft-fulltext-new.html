@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>家装平台小程序原型 - 合同正文（全文）</title>
+    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="css/contract-detail.css">
+    <style>
+        * { box-sizing: border-box; }
+        ::-webkit-scrollbar { display: none; }
+        * { scrollbar-width: none; -ms-overflow-style: none; }
+        body {
+            margin: 0; background: #e9ebee; min-height: 100vh;
+            font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+            display: flex; align-items: flex-start; justify-content: center; padding: 24px;
+        }
+        .phone-frame {
+            width: 375px; height: 812px; background: #f2f3f5;
+            border-radius: 40px; overflow: hidden; position: relative; flex-shrink: 0;
+            box-shadow: 0 12px 40px rgba(0,0,0,.25); display: flex; flex-direction: column;
+        }
+        .status-bar {
+            height: 44px; background: #fff; display: flex; align-items: center;
+            justify-content: space-between; padding: 0 22px; font-size: 14px; font-weight: 600; color: #000; flex-shrink: 0;
+        }
+        .nav-bar {
+            height: 48px; background: #fff; display: flex; align-items: center; position: relative;
+            border-bottom: 1px solid #ececec; flex-shrink: 0;
+        }
+        .nav-bar .nb-back {
+            position: absolute; left: 14px; font-size: 26px; line-height: 1; color: #1a1a1a; text-decoration: none; width: 28px;
+        }
+        .nav-bar .title { flex: 1; text-align: center; font-size: 17px; font-weight: 600; color: #1a1a1a; }
+        .scroll { flex: 1; overflow-y: auto; padding: 14px; }
+        .contract-article { background: #fff; border-radius: 12px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.04); }
+        .article-title { font-size: 15px; font-weight: 700; color: #222; margin-bottom: 8px; }
+        .article-content p { font-size: 13px; color: #444; line-height: 1.8; margin: 0 0 6px; }
+        .article-content p:last-child { margin-bottom: 0; }
+    </style>
+</head>
+<body>
+<div class="phone-frame">
+    <div class="status-bar">
+        <div class="time">9:41</div>
+        <div class="icons">📶 🔋</div>
+    </div>
+    <div class="nav-bar">
+        <a class="nb-back" href="worker-contract-draft-initial-new.html">&lsaquo;</a>
+        <div class="title">合同正文（全文）</div>
+    </div>
+
+    <div class="scroll">
+        <div class="contract-article">
+            <div class="article-title">第一条 工程概况</div>
+            <div class="article-content">
+                <p>1.1 工程名称：全屋水电改造合同</p>
+                <p>1.2 工程地点：XX市XX区XX路XX号</p>
+                <p>1.3 工程内容：水电班组提供的给水、排水、强电、弱电等水电改造施工及验收服务。</p>
+                <p>1.4 承包方式：包工包料</p>
+                <p>1.5 工期：30 天（自开工通知载明的开工日起算）。</p>
+            </div>
+        </div>
+        <div class="contract-article">
+            <div class="article-title">第二条 合同价款及支付方式</div>
+            <div class="article-content">
+                <p>2.1 合同总价：人民币 12600 元（含税）。</p>
+                <p>2.2 支付方式：合同签订后支付预付款，材料进场验收合格后支付进度款，完工验收后支付尾款（施工完成且验收通过后由线下进行支付）。</p>
+            </div>
+        </div>
+        <div class="contract-article">
+            <div class="article-title">第三条 双方权利义务</div>
+            <div class="article-content">
+                <p>3.1 甲方（陈庄）应按约定支付工程款，并提供施工所需条件。</p>
+                <p>3.2 乙方应按标准施工，自确认加入后自动归入项目架构层级「水电工程」。</p>
+            </div>
+        </div>
+        <div class="contract-article">
+            <div class="article-title">第四条 工程质量及验收</div>
+            <div class="article-content">
+                <p>4.1 乙方应严格按国家现行施工验收规范施工。</p>
+                <p>4.2 分阶段验收，隐蔽工程验收合格后方可进行下一道工序。</p>
+            </div>
+        </div>
+        <div class="contract-article">
+            <div class="article-title">第五条 违约责任</div>
+            <div class="article-content">
+                <p>5.1 甲方逾期付款的，按逾期金额千分之三/日支付违约金。</p>
+                <p>5.2 乙方工期延误或质量不符的，应无偿返工并承担违约责任。</p>
+            </div>
+        </div>
+        <div class="contract-article">
+            <div class="article-title">第六条 争议解决</div>
+            <div class="article-content">
+                <p>6.1 协商不成的，向工程所在地人民法院提起诉讼。</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
