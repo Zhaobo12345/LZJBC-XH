@@ -76,11 +76,28 @@
 
         /* 状态横幅（拟定中） */
         .wc-banner {
-            margin: 6px 12px 12px; padding: 12px 14px; border-radius: 12px; color: #fff;
+            margin: 4px 12px 6px; padding: 8px 12px; border-radius: 10px; color: #fff;
         }
         .wc-banner.draft { background: linear-gradient(135deg, #faad14 0%, #ffc53d 100%); }
-        .wc-banner-text { font-size: 15px; font-weight: 700; }
-        .wc-banner-desc { font-size: 12px; opacity: .92; margin-top: 4px; line-height: 1.5; }
+        .wc-banner-text { font-size: 14px; font-weight: 700; }
+        .wc-banner-desc { font-size: 11px; opacity: .92; margin-top: 2px; line-height: 1.4; }
+
+        /* 状态进度步骤条：拟定中（当前）→ 确认中 → 已签约（独立自包含，不依赖外部变量） */
+        .worker-flow { display: flex; align-items: center; margin: 2px 12px 4px; }
+        .wf-step { display: flex; flex-direction: column; align-items: center; width: 60px; flex-shrink: 0; }
+        .wf-circle {
+            width: 28px; height: 28px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; background: #F2F3F5;
+            border: 2px solid #E5E6EB; color: #86909C;
+        }
+        .wf-step.current .wf-circle { background: #E8F3FF; border-color: #1677FF; color: #1677FF; }
+        .wf-step.done .wf-circle { background: #E8FFEA; border-color: #00B42A; color: #00B42A; }
+        .wf-label { font-size: 10px; margin-top: 3px; color: #86909C; }
+        .wf-step.current .wf-label { color: #1677FF; font-weight: 600; }
+        .wf-step.done .wf-label { color: #00B42A; }
+        .wf-line { flex: 1; height: 2px; background: #E5E6EB; margin: 0 -4px 14px; }
+        .wf-line.done { background: #00B42A; }
 
         /* 合同邀约与乙方卡片 */
         .worker-invite-card {
@@ -353,6 +370,15 @@
         </div>
         <div class="more-ops-panel" id="moreOpsPanel"></div>
 
+        <!-- 状态进度步骤条：拟定中（当前）→ 确认中 → 已签约 -->
+        <div class="worker-flow">
+            <div class="wf-step current"><div class="wf-circle">✏️</div><div class="wf-label">拟定中</div></div>
+            <div class="wf-line"></div>
+            <div class="wf-step"><div class="wf-circle">🤝</div><div class="wf-label">确认中</div></div>
+            <div class="wf-line"></div>
+            <div class="wf-step"><div class="wf-circle">📄</div><div class="wf-label">已签约</div></div>
+        </div>
+
         <!-- 状态横幅：拟定中 -->
         <div class="wc-banner draft">
             <div class="wc-banner-text">拟定中</div>
@@ -363,20 +389,20 @@
         <div class="worker-invite-card">
             <div class="card-title">🤝 合同邀约与乙方（意向乙方 · 首位确认者成乙方）</div>
 
-            <div class="form-section-title">合同信息（拟定中可修改）</div>
+            <div class="form-section-title">合同信息 <span>（类型：水电班组服务合同）</span></div>
 
             <div class="edit-field">
-                <label>合同名称</label>
+                <label>合同名称<span class="field-required-tag">* 必填</span></label>
                 <input type="text" id="editNameInput" class="edit-input" value="全屋水电改造合同">
             </div>
             <div class="edit-field">
-                <label>合同金额（元）</label>
+                <label>合同金额（元）<span class="field-required-tag">* 必填</span></label>
                 <input type="number" id="editAmountInput" class="edit-input" value="12600">
             </div>
 
             <!-- 新增：工期（含工期值） -->
             <div class="edit-field">
-                <label>工期</label>
+                <label>工期（自合同签订之日起计算）</label>
                 <div class="field-row">
                     <input type="number" id="editDurationInput" class="edit-input" value="30">
                     <span class="field-unit">天</span>
