@@ -2748,7 +2748,7 @@ const ContractDetailPage = (function() {
                 templateBtn.style.display = 'none';
             } else {
                 templateBtn.style.display = '';
-                templateBtn.textContent = tabId === 'stage-task' ? '📄 更换任务模板' : '📄 更换合同模板';
+                templateBtn.textContent = tabId === 'stage-task' ? '📄 更换任务模板' : '📄 更换正文模板';
             }
         }
         
@@ -2843,7 +2843,7 @@ const ContractDetailPage = (function() {
                 templateBtn.style.display = 'none';
             } else {
                 templateBtn.style.display = '';
-                templateBtn.textContent = tabId === 'stage-task' ? '📄 更换任务模板' : '📄 更换合同模板';
+                templateBtn.textContent = tabId === 'stage-task' ? '📄 更换任务模板' : '📄 更换正文模板';
             }
         }
         

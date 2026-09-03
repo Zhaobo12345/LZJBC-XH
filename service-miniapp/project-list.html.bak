@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>家装平台小程序原型 - 项目列表及详情主页-新</title>
+    <title>家装平台小程序原型 - 项目列表</title>
     <style>
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         /* 手机端小程序规范：隐藏所有滚动条（手机框内详情滚动、下拉面板、原型导航等） */
@@ -102,14 +102,48 @@
         .switch input:checked + .slider { background-color: var(--warning); }
         .switch input:checked + .slider:before { transform: translateX(16px); }
 
+        /* ===== 认证状态演示开关（手机框右侧中间，对应「新建项目」） ===== */
+        .auth-demo-switch {
+            position: absolute; left: calc(100% + 16px); top: 50%; transform: translateY(-50%);
+            background: #fff; border: 1px solid #bae0ff; border-radius: 12px;
+            padding: 12px 14px; box-shadow: 0 4px 16px rgba(0,0,0,.1); z-index: 100; width: 132px;
+        }
+        .auth-demo-switch .switch-title { font-size: 12px; font-weight: 600; color: #333; margin-bottom: 8px; text-align: center; }
+        .auth-demo-switch .switch-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+        .auth-demo-switch .switch-status { color: var(--text-3); font-weight: 600; font-size: 12px; white-space: nowrap; }
+        .auth-demo-switch .switch-status.certified { color: var(--success); }
+        .auth-demo-switch .switch-hint { font-size: 10px; color: #999; text-align: center; line-height: 1.3; }
+        .auth-demo-switch .switch input:checked + .slider { background-color: var(--success); }
+
+        /* 认证提示弹窗（新建项目未认证时） */
+        .app-modal {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0,0,0,.5); display: none;
+            justify-content: center; align-items: center; z-index: 300;
+        }
+        .app-modal.show { display: flex; }
+        .modal-box { width: 280px; background: #fff; border-radius: 12px; padding: 24px 20px 16px; text-align: center; }
+        .modal-title { font-size: 16px; font-weight: 600; color: #333; margin-bottom: 16px; }
+        .modal-content { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 24px; }
+        .modal-content p { margin: 0; }
+        .modal-actions { display: flex; gap: 12px; }
+        .modal-btn {
+            flex: 1; height: 40px; border: none; border-radius: 8px; font-size: 14px;
+            cursor: pointer; transition: all .2s; display: flex; justify-content: center;
+            align-items: center; text-align: center; line-height: 1; padding: 0;
+            -webkit-appearance: none; font-family: inherit; font-weight: 500;
+        }
+        .modal-btn.cancel { background: #f5f5f5; color: #666; }
+        .modal-btn.confirm { background: var(--primary); color: #fff; }
+
         /* ===== 项目下拉面板 ===== */
         .proj-panel {
             position: absolute; left: 0; right: 0; top: 100%; background: #fff;
             max-height: 0; overflow: hidden; transition: max-height .3s ease; z-index: 25;
             box-shadow: 0 8px 20px rgba(0,0,0,.12); border-radius: 0 0 16px 16px;
         }
-        .proj-panel.open { max-height: 460px; overflow-y: auto; }
-        .proj-panel-inner { padding: 8px 12px 12px; }
+        .proj-panel.open { max-height: 460px; display: flex; flex-direction: column; overflow: hidden; }
+        .proj-panel-inner { flex: 1; min-height: 0; overflow-y: auto; padding: 8px 12px 12px; }
         .proj-option {
             border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; cursor: pointer;
             transition: all .15s; background: #fff;
@@ -124,6 +158,25 @@
         .po-stats { display: flex; gap: 14px; font-size: 12px; color: var(--text-2); margin-bottom: 6px; }
         .po-bar { height: 4px; background: #eef0f3; border-radius: 2px; overflow: hidden; }
         .po-bar-fill { height: 100%; background: var(--primary); border-radius: 2px; }
+        /* ===== 切换面板：状态筛选胶囊 + 新建项目 ===== */
+        .proj-panel-filter { flex-shrink: 0; display: flex; gap: 6px; padding: 8px 12px 6px; border-bottom: 1px solid var(--border); background: #fff; }
+        .pf-item {
+            flex: 1; text-align: center; font-size: 12px; padding: 5px 0; border-radius: 8px;
+            background: #f2f4f7; color: var(--text-2); cursor: pointer; transition: all .15s;
+        }
+        .pf-item.active { background: #333; color: #fff; font-weight: 600; }
+        .proj-panel-foot {
+            flex-shrink: 0; padding: 8px 12px 10px;
+            border-top: 1px solid var(--border); background: #fff;
+            box-shadow: 0 -2px 8px rgba(0,0,0,.04);
+        }
+        .proj-new-btn {
+            width: 100%; padding: 9px; border: none; border-radius: 10px;
+            background: var(--primary); color: #fff; font-size: 14px; font-weight: 600; cursor: pointer;
+            transition: opacity .15s;
+        }
+        .proj-new-btn:active { opacity: .85; }
+        .proj-empty { text-align: center; font-size: 12px; color: #999; padding: 18px 0; }
 
         /* ===== 详情滚动区 ===== */
         .detail-scroll { flex: 1; overflow-y: auto; padding: 12px 12px 56px; position: relative; }
@@ -318,7 +371,8 @@
         .card.contract-half .contract-stat .label { font-size: 10px; color: var(--text-3); margin-top: 2px; }
         .card.contract-half .contract-list { max-height: 0; overflow: hidden; transition: max-height .25s ease; }
         .card.contract-half .contract-list.show { max-height: 110px; overflow-y: auto; }
-        .contract-item { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid #f0f0f0; }
+        .contract-item { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid #f0f0f0; cursor: pointer; transition: background .15s; }
+        .contract-item:active { background: #f7faff; }
         .contract-item:first-child { border-top: none; }
         .contract-item .info { flex: 1; min-width: 0; }
         .contract-item .name { font-size: 13px; color: var(--text); font-weight: 500; }
@@ -377,6 +431,17 @@
         .todo-card.worker { margin-bottom: 12px; }
         .todo-card.worker .todo-item { padding: 10px 0; }
 
+        /* ===== 我的任务（位于待办事项下方） ===== */
+        .my-task-card { cursor: pointer; padding: 10px 14px; margin-bottom: 10px; }
+        .my-task-card .card-title { margin-bottom: 6px; }
+        .my-task-card .my-task-stats { display: flex; flex-direction: row; align-items: stretch; }
+        .my-task-card .my-task-stat { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 2px 0; }
+        .my-task-card .my-task-stat .value { font-size: 18px; font-weight: 700; color: var(--text); line-height: 1; }
+        .my-task-card .my-task-stat .label { font-size: 11px; color: var(--text-3); margin-top: 1px; text-align: center; }
+        .my-task-card .my-task-divider { width: 1px; background: #f0f0f0; margin: 4px 0; }
+        .my-task-card .my-task-stat:first-child .value { color: var(--success, #52c41a); }
+        .my-task-card.worker .card-title { color: #d46b08; }
+
         /* ===== 今日动态（与「项目详情（进行中-新版）」保持一致） ===== */
         .activity-role-tag {
             display: inline-block; font-size: 10px; padding: 0 6px; border-radius: 8px;
@@ -403,7 +468,8 @@
         .activity-stage-tag.design { background-color: #F9F0FF; color: #722ED1; }
         .activity-list { max-height: 150px; overflow-y: auto; }
         .activity-list.expanded { max-height: 320px; }
-        .activity-item { padding: 6px 0 6px 16px; position: relative; }
+        .activity-item { padding: 6px 0 6px 16px; position: relative; cursor: pointer; transition: background .15s; }
+        .activity-item:active { background: #f7faff; }
         .activity-item::before { content: ''; position: absolute; left: 4px; top: 14px; width: 7px; height: 7px; border-radius: 50%; background: var(--primary); }
         .activity-header { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
         .activity-avatar {
@@ -459,13 +525,11 @@
 <body>
     <div class="page-nav">
         <h3>原型导航</h3>
-        <a href="project-list.html">项目列表</a>
-        <a href="project-detail.html">项目详情（进行中）</a>
-        <a href="project-detail-ongoing-v2.html">项目详情（进行中-新版）</a>
-        <a href="project-detail-worker.html">项目详情（工人）</a>
-        <a href="project-detail-initial-v2.html">项目详情（初始-新版）</a>
-        <a href="project-detail-completed-v2.html">项目详情（已完成-新版）</a>
-        <a href="project-list-detail-new.html" class="active">项目列表及详情主页-新</a>
+        <a href="home.html">首页</a>
+        <a href="project-list.html" class="active">项目列表</a>
+        <a href="project-list-empty-demo.html">项目列表（空状态演示）</a>
+        <a href="project-detail.html">项目详情</a>
+        <a href="project-detail-new.html">初始项目详情页</a>
         <a href="project-info.html">项目信息</a>
         <a href="architecture.html">项目架构</a>
         <a href="create-project.html">创建项目</a>
@@ -506,7 +570,15 @@
 
             <!-- 项目下拉面板：置于 topbar 内，相对切换条定位展开 -->
             <div class="proj-panel" id="projPanel">
+                <div class="proj-panel-filter" id="projPanelFilter">
+                    <div class="pf-item active" data-filter="all" onclick="setPanelFilter('all', this)">全部</div>
+                    <div class="pf-item" data-filter="ongoing" onclick="setPanelFilter('ongoing', this)">进行中</div>
+                    <div class="pf-item" data-filter="done" onclick="setPanelFilter('done', this)">已完成</div>
+                </div>
                 <div class="proj-panel-inner" id="projPanelInner"></div>
+                <div class="proj-panel-foot">
+                    <button class="proj-new-btn" onclick="createProject()">＋ 新建项目</button>
+                </div>
             </div>
         </div>
 
@@ -532,6 +604,21 @@
                 <div class="label">我的</div>
             </div>
         </div>
+
+        <!-- 角色认证提示弹窗（新建项目需先完成认证） -->
+        <div class="app-modal" id="authRequiredModal">
+            <div class="modal-box">
+                <div class="modal-title">创建项目需先完成认证</div>
+                <div class="modal-content">
+                    <p>当前操作需先完成角色认证；</p>
+                    <p>认证通过后方可继续创建；</p>
+                </div>
+                <div class="modal-actions">
+                    <div class="modal-btn cancel" onclick="closeAuthModal()">取消</div>
+                    <div class="modal-btn confirm" onclick="goToAuthPage()">立即认证</div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- 角色演示开关：置于手机框外侧，参考项目列表页「演示开关」效果 -->
@@ -546,6 +633,19 @@
         </div>
         <div class="switch-hint">切换角色视角</div>
     </div>
+
+    <!-- 认证状态演示开关：手机框右侧中间，对应「新建项目」，切换后点击新建项目验证不同效果 -->
+    <div class="auth-demo-switch">
+        <div class="switch-title">认证演示</div>
+        <div class="switch-item">
+            <span class="switch-status" id="authStatus">未认证</span>
+            <label class="switch">
+                <input type="checkbox" id="authSwitch" onchange="toggleAuthStatus(this.checked)">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="switch-hint">切换后点击新建项目</div>
+    </div>
     </div>
 
     <script>
@@ -553,11 +653,11 @@
         var SHARED = {
             nonworkerTodos: [
                 { tag: 'contract', title: '泥瓦工班组服务合同确认', desc: '泥瓦工作组 | 待确认', status: '待确认', cls: 'urgent', icon: '🔵', bg: '#E6F7FF' },
-                { tag: 'contract', title: '木作班组服务合同签约', desc: '木工工作组 | 待签约', status: '待确认', cls: 'pending', icon: '🔵', bg: '#E6F7FF' },
-                { tag: 'task', title: '吊顶安装', desc: '木工工作组 | 张三执行中', status: '执行中', cls: 'in-progress', icon: '🟡', bg: '#FFF7E6' }
+                { tag: 'contract', title: '木作班组服务合同签约', desc: '木工工作组 | 待签约', status: '待签约', cls: 'pending', icon: '🔵', bg: '#E6F7FF' },
+                { tag: 'task', title: '吊顶安装', desc: '木工工作组 | 张三待确认', status: '待确认', cls: 'pending', icon: '🟢', bg: '#F6FFED', link: 'task-detail.html' }
             ],
             workerTaskTodos: [
-                { tag: 'task', title: '吊顶安装', desc: '木工工作组 | 张三执行中', status: '执行中', cls: 'in-progress', icon: '🟡', bg: '#FFF7E6' },
+                { tag: 'contract', title: '泥瓦工班组服务合同确认', desc: '泥瓦工作组 | 待我确认', status: '待确认', cls: 'urgent', icon: '🔵', bg: '#E6F7FF' },
                 { tag: 'task', title: '墙面基层处理', desc: '油漆工作组 | 李四待确认', status: '待确认', cls: 'pending', icon: '🟢', bg: '#F6FFED' },
                 { tag: 'task', title: '地砖铺贴', desc: '泥瓦工作组 | 王五待确认', status: '待确认', cls: 'pending', icon: '🔵', bg: '#E6F7FF' }
             ],
@@ -566,8 +666,8 @@
                 { tag: 'contract', title: '木作班组服务合同签约', desc: '木工工作组 | 待我签约', status: '待我签约', cls: 'pending', icon: '🔵', bg: '#E6F7FF' }
             ],
             contracts: [
-                { name: '水电班组服务合同', meta: '水电工作组 | 金额：8万', percent: 65, badge: '已确认', badgeCls: 'green' },
-                { name: '泥瓦工班组服务合同', meta: '泥瓦工作组 | 金额：12万', percent: 30, badge: '已确认', badgeCls: 'green' }
+                { name: '水电班组服务合同', meta: '水电工作组 | 金额：8万', percent: 65, badge: '已确认', badgeCls: 'green', detail: 'contract-detail.html?status=draft' },
+                { name: '泥瓦工班组服务合同', meta: '泥瓦工作组 | 金额：12万', percent: 30, badge: '已确认', badgeCls: 'green', detail: 'contract-detail.html?status=confirming_sender' }
             ],
             levels: [
                 { name: '项目部', count: '4个工作组 · 8份合同', selected: false },
@@ -580,7 +680,12 @@
                 { text: '陈庄 上传了水电验收照片', time: '09:20' },
                 { text: '泥瓦工作组 提交阶段确认', time: '11:05' },
                 { text: '系统：合同「木作班组服务合同」进入待签约', time: '14:30' }
-            ]
+            ],
+            // 「我的任务」区块：我（当前视角角色）作为执行人的任务统计（原型示例数据）
+            myTasks: {
+                nonworker: { done: 3, total: 7 }, // 我（项目总）作为执行人的任务：已完成/全部
+                worker: { done: 4, total: 6 }      // 我（工人）作为执行人的任务：已完成/全部
+            }
         };
 
         var PROJECTS = [
@@ -594,6 +699,7 @@
 
         var currentIndex = 0;
         var currentRole = 'nonworker';
+        var panelFilter = 'all'; // 切换面板筛选项：all / ongoing / done
 
         /* ===================== 渲染：项目切换条 ===================== */
         function renderSwitchBar() {
@@ -605,11 +711,23 @@
         }
 
         function renderPanel() {
-            var html = PROJECTS.map(function (p, i) {
+            // 按切换面板筛选项过滤项目：全部 / 进行中 / 已完成（数据中"已完工"等同"已完成"）
+            var list = PROJECTS.filter(function (p) {
+                if (panelFilter === 'ongoing') return p.status === '进行中';
+                if (panelFilter === 'done') return p.status === '已完工' || p.status === '已完成';
+                return true;
+            });
+            if (list.length === 0) {
+                document.getElementById('projPanelInner').innerHTML = '<div class="proj-empty">暂无匹配的项目</div>';
+                return;
+            }
+            var html = list.map(function (p, i) {
+                // 过滤后索引需回映射真实 PROJECTS 下标，以便 selectProject 正确选中
+                var realIdx = PROJECTS.indexOf(p);
                 var pct = Math.round(p.contractSigned / p.contractTotal * 100);
-                var active = i === currentIndex ? ' active' : '';
+                var active = realIdx === currentIndex ? ' active' : '';
                 var done = p.status === '已完工' ? ' done' : '';
-                return '<div class="proj-option' + active + '" onclick="selectProject(' + i + ')">' +
+                return '<div class="proj-option' + active + '" onclick="selectProject(' + realIdx + ')">' +
                     '<div class="po-top"><span class="po-name">' + p.name + '</span>' +
                     '<span class="po-status' + done + '">' + p.status + '</span></div>' +
                     '<div class="po-addr">📍 ' + p.address + '</div>' +
@@ -626,7 +744,7 @@
             var todos = p.todoCount === 0
                 ? '<div class="empty-state" style="font-size:12px;color:#999;padding:10px 0;text-align:center;">项目已完工，暂无待办 ☕</div>'
                 : SHARED.nonworkerTodos.map(function (t) {
-                    return '<div class="todo-item">' +
+                    return '<div class="todo-item"' + (t.link ? ' onclick="go(\'' + t.link + '\')" style="cursor:pointer"' : '') + '>' +
                         '<div class="icon" style="background-color:' + t.bg + ';">' + t.icon + '</div>' +
                         '<div class="content"><div class="title">' + t.title + ' <span class="task-tag ' + t.tag + '">' + (t.tag === 'contract' ? '合同' : '任务') + '</span></div>' +
                         '<div class="desc">' + t.desc + '</div></div>' +
@@ -641,7 +759,7 @@
             }).join('');
 
             var contracts = SHARED.contracts.map(function (c) {
-                return '<div class="contract-item">' +
+                return '<div class="contract-item" onclick="navigate(\'' + c.detail + '\')">' +
                     '<div class="info"><div class="name">' + c.name + '</div><div class="meta">' + c.meta + '</div></div>' +
                     '<div class="progress-wrap"><div class="percent">' + c.percent + '%</div>' +
                     '<div class="bar"><div class="fill" style="width:' + c.percent + '%"></div></div></div></div>';
@@ -650,8 +768,14 @@
             return '<div class="detail-fade">' +
                 '<div class="card"><div class="card-title"><span>📋 待办事项</span>' +
                     '<span class="badge-wrap"><span class="badge">' + p.todoCount + '</span></span>' +
-                    '<span class="more">查看全部 ></span></div>' +
+                    '<span class="more" onclick="openPage(\'todo-list.html\')">查看全部 ></span></div>' +
                     '<div class="todo-content">' + todos + '</div></div>' +
+                '<div class="card my-task-card" onclick="openPage(\'task-list.html?role=exec\')"><div class="card-title"><span>📌 我的任务</span><span class="more">查看全部 ></span></div>' +
+                    '<div class="my-task-stats">' +
+                        '<div class="my-task-stat"><div class="value">' + SHARED.myTasks.nonworker.done + '</div><div class="label">已完成</div></div>' +
+                        '<div class="my-task-divider"></div>' +
+                        '<div class="my-task-stat"><div class="value">' + SHARED.myTasks.nonworker.total + '</div><div class="label">我作为执行人的全部任务</div></div>' +
+                    '</div></div>' +
                 '<div class="sticky-header" id="stickyHeader">' +
                     '<div class="quick-nav" id="quickNavNon">' +
                         '<div class="quick-nav-item" onclick="go(\'architecture.html\')"><div class="icon structure">🏗️</div><div class="label">架构</div></div>' +
@@ -721,7 +845,7 @@
         /* ===================== 渲染：工人详情 ===================== */
         function renderWorker(p) {
             var taskTodos = SHARED.workerTaskTodos.map(function (t) {
-                return '<div class="todo-item">' +
+                return '<div class="todo-item"' + (t.link ? ' onclick="go(\'' + t.link + '\')" style="cursor:pointer"' : '') + '>' +
                     '<div class="icon" style="background-color:' + t.bg + ';">' + t.icon + '</div>' +
                     '<div class="content"><div class="title">' + t.title + ' <span class="task-tag ' + t.tag + '">' + (t.tag === 'contract' ? '合同' : '任务') + '</span></div>' +
                     '<div class="desc">' + t.desc + '</div></div>' +
@@ -738,7 +862,7 @@
             }).join('');
 
             var contracts = SHARED.contracts.filter(function (c) { return c.name !== '水电班组服务合同'; }).map(function (c) {
-                return '<div class="contract-item">' +
+                return '<div class="contract-item" onclick="navigate(\'' + c.detail + '\')">' +
                     '<div class="info"><div class="name">' + c.name + '</div><div class="meta-row">' +
                         '<span class="meta">' + c.meta + '</span><span class="action-badge ' + c.badgeCls + '">' + c.badge + '</span></div></div>' +
                     '<div class="progress-wrap"><div class="percent">' + c.percent + '%</div>' +
@@ -748,10 +872,16 @@
             return '<div class="detail-fade">' +
                 '<div class="card todo-card worker"><div class="card-title"><span>📋 待办事项</span>' +
                     '<span class="badge-wrap"><span class="badge">' + p.todoCount + '</span></span>' +
-                    '<span class="more">查看全部 ></span></div>' +
+                    '<span class="more" onclick="openPage(\'todo-list.html\')">查看全部 ></span></div>' +
                     '<div class="todo-content">' +
                         (p.todoCount === 0 ? '<div class="empty-state" style="font-size:12px;color:#999;padding:8px 0;">暂无待办，休息一下 ☕</div>'
                             : taskTodos) +
+                    '</div></div>' +
+                '<div class="card my-task-card worker" onclick="openPage(\'task-list.html?role=exec\')"><div class="card-title"><span>📌 我的任务</span><span class="more">查看全部 ></span></div>' +
+                    '<div class="my-task-stats">' +
+                        '<div class="my-task-stat"><div class="value">' + SHARED.myTasks.worker.done + '</div><div class="label">已完成</div></div>' +
+                        '<div class="my-task-divider"></div>' +
+                        '<div class="my-task-stat"><div class="value">' + SHARED.myTasks.worker.total + '</div><div class="label">我作为执行人的全部任务</div></div>' +
                     '</div></div>' +
                 '<div class="sticky-header" id="stickyHeader">' +
                     '<div class="quick-nav work-quick-nav" id="quickNavWork">' +
@@ -782,13 +912,8 @@
         /* ===================== 顶部一行：项目名/切换 + 角色摘要 ===================== */
         function renderTopHero(p) {
             var el = document.getElementById('topHero');
-            if (currentRole === 'worker') {
-                // 工人视角：下方详情区已展示隶属工作组/待我处理，顶部避免重复，用「项目信息」引导文案（点击左侧查看项目信息）
-                el.textContent = '项目信息';
-            } else {
-                // 非工人视角：展示项目基本信息（已开工天数 · 面积户型），不与项目名重复
-                el.innerHTML = '已开工 <b>' + p.days + '</b> 天 · ' + p.area;
-            }
+            // 非工人视角与工人视角的 proj-info-zone 展示内容保持统一：均用「项目信息」引导文案（点击左侧查看项目信息），避免角色间不一致
+            el.textContent = '项目信息';
         }
 
         /* ===================== 主渲染 ===================== */
@@ -813,6 +938,43 @@
             renderPanel();
             togglePanel(); // 收起
             renderDetail();
+        }
+
+        /* 切换面板：状态筛选（全部 / 进行中 / 已完成） */
+        function setPanelFilter(f, el) {
+            panelFilter = f;
+            var items = document.querySelectorAll('#projPanelFilter .pf-item');
+            items.forEach(function (it) { it.classList.remove('active'); });
+            if (el) el.classList.add('active');
+            renderPanel();
+        }
+
+        /* 新建项目：参考「项目列表」创建图标逻辑（认证后跳转 / 未认证弹窗） */
+        var isUserCertified = false;
+        function createProject() {
+            if (isUserCertified) {
+                location.href = 'create-project.html';
+            } else {
+                document.getElementById('authRequiredModal').classList.add('show');
+            }
+        }
+        function closeAuthModal() {
+            document.getElementById('authRequiredModal').classList.remove('show');
+        }
+        function goToAuthPage() {
+            closeAuthModal();
+            location.href = 'promoter-auth.html';
+        }
+        function toggleAuthStatus(certified) {
+            isUserCertified = certified;
+            var statusEl = document.getElementById('authStatus');
+            if (certified) {
+                statusEl.textContent = '已认证';
+                statusEl.classList.add('certified');
+            } else {
+                statusEl.textContent = '未认证';
+                statusEl.classList.remove('certified');
+            }
         }
 
         function toggleRoleSwitch(checked) {
@@ -880,7 +1042,10 @@
             if (arrow) arrow.classList.remove('open');
         }
 
-        function go(href) { /* 演示跳转占位 */ showToast('演示：跳转 ' + href); }
+        /* 真实跳转至目标原型页（与「项目详情」页 data-href 机制一致：点击即跳转，不再仅弹提示） */
+        function navigate(href) { if (href) window.location.href = href; }
+        function go(href) { /* 统一走真实跳转（原占位提示已替换为实际页面导航） */ navigate(href); }
+        function openPage(href) { /* 真实跳转至目标原型页（待办事项/我的任务 查看全部 专用） */ window.location.href = href; }
 
         /* 今日动态：展开 / 收起（与源页「展开更多」一致：默认显示 2 条，展开显示全部 4 条） */
         function toggleActivityList() {

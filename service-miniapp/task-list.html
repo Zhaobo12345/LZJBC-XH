@@ -755,137 +755,8 @@
             color: var(--warning-color);
         }
 
-        .filter-panel-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 999;
-            display: none;
-        }
+        /* 高级筛选抽屉样式已随筛选面板移除（2026-09-03） */
 
-        .filter-panel-overlay.show {
-            display: block;
-        }
-
-        .filter-panel {
-            position: absolute;
-            top: 0;
-            right: -280px;
-            width: 280px;
-            height: 100%;
-            background-color: var(--bg-primary);
-            z-index: 1000;
-            transition: right 0.3s;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .filter-panel.show {
-            right: 0;
-        }
-
-        .filter-panel-header {
-            padding: 16px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .filter-panel-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .filter-panel-close {
-            font-size: 20px;
-            color: var(--text-tertiary);
-            cursor: pointer;
-        }
-
-        .filter-panel-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px;
-        }
-
-        .filter-group {
-            margin-bottom: 20px;
-        }
-
-        .filter-group-title {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .filter-group-title .tip {
-            font-size: 11px;
-            color: var(--text-tertiary);
-            font-weight: normal;
-        }
-
-        .filter-multi-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .filter-multi-option {
-            padding: 8px 14px;
-            background-color: var(--bg-secondary);
-            border-radius: 8px;
-            font-size: 13px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid transparent;
-        }
-
-        .filter-multi-option:hover {
-            background-color: #E6F7FF;
-        }
-
-        .filter-multi-option.selected {
-            background-color: #E6F7FF;
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        .filter-panel-footer {
-            padding: 16px;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            gap: 12px;
-        }
-
-        .filter-panel-btn {
-            flex: 1;
-            height: 40px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-        }
-
-        .filter-panel-btn.reset {
-            background-color: var(--bg-secondary);
-            color: var(--text-secondary);
-        }
-
-        .filter-panel-btn.apply {
-            background-color: var(--primary-color);
-            color: #FFFFFF;
-        }
 
         .save-filter-btn {
             font-size: 12px;
@@ -1190,26 +1061,20 @@
                 <input type="text" class="search-input" placeholder="搜索任务名称..." id="searchInput" oninput="filterTasks()">
             </div>
 
-            <div class="filter-bar" id="taskFilterBar">
-                <div class="filter-group">
-                    <span class="filter-label">参与</span>
-                    <div class="filter-toggle" id="participantToggle">
-                        <div class="filter-option active" data-filter="all">全部</div>
-                        <div class="filter-option" data-filter="mine">我参与</div>
-                    </div>
-                </div>
-                <div class="filter-group" style="position: relative;">
-                    <span class="filter-label">状态</span>
-                    <div class="filter-select" id="statusSelectBtn">
-                        全部状态
-                    </div>
+            <div class="quick-filter-bar" id="roleFilterBar" style="overflow-x:auto;scrollbar-width:none;">
+                <button type="button" class="quick-filter-btn active" style="flex:0 0 auto;" data-role="all" onclick="applyPill('all', this)">全部</button>
+                <button type="button" class="quick-filter-btn" style="flex:0 0 auto;" data-role="mine" onclick="applyPill('mine', this)">我参与</button>
+                <button type="button" class="quick-filter-btn" style="flex:0 0 auto;" data-role="exec" onclick="applyPill('exec', this)">待我执行</button>
+                <button type="button" class="quick-filter-btn" style="flex:0 0 auto;" data-role="confirm" onclick="applyPill('confirm', this)">待我确认</button>
+                <div class="status-filter-wrap" style="position:relative;flex:0 0 auto;">
+                    <button type="button" class="quick-filter-btn" id="statusSelectBtn" onclick="toggleStatusDropdown(event)">状态 ▾</button>
                     <div class="status-dropdown" id="statusDropdownMenu">
-                        <div class="status-dropdown-item active" data-status="all">全部状态</div>
-                        <div class="status-dropdown-item" data-status="pending">待开始</div>
-                        <div class="status-dropdown-item" data-status="config">待配置</div>
-                        <div class="status-dropdown-item" data-status="executing">执行中</div>
-                        <div class="status-dropdown-item" data-status="confirming">确认中</div>
-                        <div class="status-dropdown-item" data-status="completed">已完成</div>
+                        <div class="status-dropdown-item active" data-status="all" onclick="selectStatus('all','全部状态',this)">全部状态</div>
+                        <div class="status-dropdown-item" data-status="pending" onclick="selectStatus('pending','待开始',this)">待开始</div>
+                        <div class="status-dropdown-item" data-status="config" onclick="selectStatus('config','待配置',this)">待配置</div>
+                        <div class="status-dropdown-item" data-status="executing" onclick="selectStatus('executing','执行中',this)">执行中</div>
+                        <div class="status-dropdown-item" data-status="confirming" onclick="selectStatus('confirming','确认中',this)">确认中</div>
+                        <div class="status-dropdown-item" data-status="completed" onclick="selectStatus('completed','已完成',this)">已完成</div>
                     </div>
                 </div>
             </div>
@@ -1217,7 +1082,7 @@
             <div class="filter-tags" id="filterTags" style="display: none;"></div>
 
             <div class="result-bar">
-                <span id="resultCount">共 24 个任务</span>
+                <span id="resultCount">共 26 个任务</span>
                 <span class="expand-all-btn" onclick="expandAllContracts()">展开全部</span>
             </div>
             
@@ -1228,7 +1093,7 @@
                         <div class="contract-main">
                             <div class="contract-name">水电班组服务合同</div>
                             <div class="contract-footer-row">
-                                <div class="contract-meta">水电工作组 · 4个阶段 · 13个任务</div>
+                                <div class="contract-meta">水电工作组 · 5个阶段 · 17个任务</div>
                                 <div class="contract-progress">
                                     <div class="progress-track"><div class="progress-fill"></div></div>
                                     <div class="progress-text">已完成 0/0</div>
@@ -1240,10 +1105,10 @@
                     <div class="stage-group show">
                         <div class="stage-item" data-sequential="true">
                             <div class="stage-header" onclick="toggleStage(this)">
-                                <div class="stage-dot completed"></div>
+                                <div class="stage-dot confirming"></div>
                                 <div class="stage-name">材料进场阶段</div>
                                 <div class="sequential-icon" title="按序执行"></div>
-                                <div class="stage-count">3/3 已完成</div>
+                                <div class="stage-count">3/5 进行中</div>
                                 <div class="arrow expanded">▼</div>
                             </div>
                             <div class="task-list show">
@@ -1271,6 +1136,22 @@
                                     </div>
                                     <div class="task-status-text completed"><span class="status-icon">✓</span>已完成</div>
                                 </div>
+                                <div class="task-item" data-type="contract" data-status="pending" data-priority="normal" data-task-index="3" data-participant="true" onclick="goToTaskDetail(this)">
+                                    <div class="task-status pending">○</div>
+                                    <div class="task-info">
+                                        <div class="task-name">材料验收</div>
+                                        <div class="task-meta">执行人：张三 · 确认人：李四、王五</div>
+                                    </div>
+                                    <div class="task-status-text pending"><span class="status-icon">⏸</span>待开始</div>
+                                </div>
+                                <div class="task-item" data-type="contract" data-status="executing" data-priority="normal" data-task-index="4" data-participant="true" onclick="goToTaskDetail(this)">
+                                    <div class="task-status executing">▶</div>
+                                    <div class="task-info">
+                                        <div class="task-name">材料入库</div>
+                                        <div class="task-meta">执行人：张三 · 确认人：李四</div>
+                                    </div>
+                                    <div class="task-status-text executing"><span class="status-icon">▶</span>执行中</div>
+                                </div>
                             </div>
                         </div>
                         
@@ -1279,7 +1160,7 @@
                                 <div class="stage-dot confirming"></div>
                                 <div class="stage-name">布管布线阶段</div>
                                 <div class="sequential-icon" title="按序执行"></div>
-                                <div class="stage-count">3/5 进行中</div>
+                                <div class="stage-count">5/7 进行中</div>
                                 <div class="arrow">▼</div>
                             </div>
                             <div class="task-list">
@@ -1326,6 +1207,30 @@
                                         <div class="task-meta">执行人：李四 · 确认人：张三、王五</div>
                                     </div>
                                     <div class="task-status-text pending"><span class="status-icon">⏸</span>待开始</div>
+                                </div>
+                                <div class="task-item" data-type="contract" data-status="confirming" data-priority="important" data-participant="true" onclick="goToTaskDetail(this)">
+                                    <div class="task-status confirming">⏳</div>
+                                    <div class="task-info">
+                                        <div class="task-name">水电隐蔽验收</div>
+                                        <div class="task-meta">执行人：李四 · 确认人：张三、王五</div>
+                                        <div class="confirm-progress">
+                                            <div class="confirm-progress-bar"><div class="confirm-progress-fill" style="width: 50%;"></div></div>
+                                            <div class="confirm-progress-text">1/2 已确认</div>
+                                        </div>
+                                    </div>
+                                    <div class="task-status-text confirming"><span class="status-icon">⏳</span>确认中</div>
+                                </div>
+                                <div class="task-item" data-type="contract" data-status="confirming" data-priority="normal" data-participant="true" onclick="goToTaskDetail(this)">
+                                    <div class="task-status confirming">⏳</div>
+                                    <div class="task-info">
+                                        <div class="task-name">管路打压验收</div>
+                                        <div class="task-meta">执行人：李四 · 确认人：张三、王五、赵六</div>
+                                        <div class="confirm-progress">
+                                            <div class="confirm-progress-bar"><div class="confirm-progress-fill" style="width: 33%;"></div></div>
+                                            <div class="confirm-progress-text">1/3 已确认</div>
+                                        </div>
+                                    </div>
+                                    <div class="task-status-text confirming"><span class="status-icon">⏳</span>确认中</div>
                                 </div>
                             </div>
                         </div>
@@ -1650,6 +1555,8 @@
         <a href="contract-detail.html" class="page-nav-item">合同详情</a>
         <a href="task-detail.html" class="page-nav-item">任务详情</a>
     </div>
+
+    <!-- 高级筛选面板已移除（2026-09-03），筛选仅保留角色胶囊 + 状态下拉 -->
     
     <script>
         let currentFilters = {
@@ -1659,10 +1566,133 @@
             typeText: '全部类型',
             status: 'all',
             statusText: '全部状态',
+            role: 'all',          // all | mine | exec | confirm
+            priority: 'all',      // all | normal | important | urgent
             mine: false,
             level: null
         };
-        
+
+        // 演示「我」的身份（与现有 data-participant="true" 任务一致）：张三
+        const CURRENT_USER = '张三';
+
+        // 从「执行人：X · 确认人：Y、Z」文本解析角色归属
+        function getTaskRole(task) {
+            const meta = task.querySelector('.task-meta');
+            const txt = meta ? meta.textContent : '';
+            const exec = (txt.match(/执行人：\s*([^·]+)/) || [,''])[1] || '';
+            const conf = (txt.match(/确认人：\s*([^\n]+)/) || [,''])[1] || '';
+            return {
+                executor: exec.trim(),
+                confirmers: conf.split(/[、,，]/).map(function (s) { return s.trim(); }).filter(Boolean)
+            };
+        }
+
+        // 角色维度过滤（与 status / priority 做 AND 叠加）
+        function passesRole(task, status, participant) {
+            const role = currentFilters.role;
+            if (role === 'all') return true;
+            if (role === 'mine') return participant;
+            const r = getTaskRole(task);
+            if (role === 'exec') return r.executor === CURRENT_USER && status !== 'completed';
+            if (role === 'confirm') return r.confirmers.indexOf(CURRENT_USER) !== -1 && status === 'confirming';
+            return true;
+        }
+
+        // 顶部胶囊与 currentFilters 同步高亮（仅角色轴 4 项；状态由下拉单独呈现）
+        function syncPills() {
+            document.querySelectorAll('#roleFilterBar .quick-filter-btn[data-role]').forEach(function (b) { b.classList.remove('active'); });
+            const r = currentFilters.role;
+            if (r !== 'all' && r) {
+                const btn = document.querySelector('#roleFilterBar .quick-filter-btn[data-role="' + r + '"]');
+                if (btn) btn.classList.add('active');
+            } else {
+                const allBtn = document.querySelector('#roleFilterBar .quick-filter-btn[data-role="all"]');
+                if (allBtn) allBtn.classList.add('active');
+            }
+            // 状态下拉：按钮文案 + 高亮当前项
+            const sb = document.getElementById('statusSelectBtn');
+            if (sb) sb.textContent = (currentFilters.status === 'all') ? '状态 ▾' : (currentFilters.statusText + ' ▾');
+            const menu = document.getElementById('statusDropdownMenu');
+            if (menu) {
+                menu.querySelectorAll('.status-dropdown-item').forEach(function (i) {
+                    i.classList.toggle('active', i.dataset.status === currentFilters.status);
+                });
+            }
+        }
+
+        // 顶部角色胶囊点击（单一选中）：全部 / 我参与 / 待我执行 / 待我确认
+        function applyPill(key, btn) {
+            switch (key) {
+                case 'mine': currentFilters.role = 'mine'; break;
+                case 'exec': currentFilters.role = 'exec'; break;
+                case 'confirm': currentFilters.role = 'confirm'; break;
+                default: currentFilters.role = 'all';
+            }
+            // 切角色轴时复位状态轴，避免两轴叠加造成理解混乱
+            currentFilters.status = 'all';
+            currentFilters.statusText = '全部状态';
+            currentFilters.mine = (currentFilters.role === 'mine');
+            syncPills();
+            updateFilterTags();
+            filterTasks();
+        }
+
+        // 状态筛选下拉：展开/收起（单一状态轴，不与角色胶囊同级平铺）
+        // 关键：#roleFilterBar 设了 overflow-x:auto，会裁切绝对定位的下拉；故改用 fixed 定位，按按钮位置计算坐标，逃离裁剪。
+        function toggleStatusDropdown(e) {
+            e.stopPropagation();
+            const menu = document.getElementById('statusDropdownMenu');
+            const btn = document.getElementById('statusSelectBtn');
+            if (!menu || !btn) return;
+            const show = menu.classList.toggle('show');
+            btn.classList.toggle('active', show);
+            if (show) {
+                const rect = btn.getBoundingClientRect();
+                menu.style.position = 'fixed';
+                menu.style.top = (rect.bottom + 6) + 'px';
+                menu.style.left = Math.max(8, rect.left) + 'px';
+                menu.style.right = 'auto';
+                menu.style.zIndex = '3000';
+                setTimeout(function () {
+                    document.addEventListener('click', function handleDoc(ev) {
+                        if (!menu.contains(ev.target) && !btn.contains(ev.target)) {
+                            menu.classList.remove('show');
+                            btn.classList.remove('active');
+                            menu.style.position = '';
+                            menu.style.top = '';
+                            menu.style.left = '';
+                            menu.style.right = '';
+                            document.removeEventListener('click', handleDoc);
+                        }
+                    });
+                }, 0);
+            } else {
+                menu.style.position = '';
+                menu.style.top = '';
+                menu.style.left = '';
+                menu.style.right = '';
+            }
+        }
+
+        // 状态筛选下拉项选择
+        function selectStatus(status, text, item) {
+            currentFilters.status = status;
+            currentFilters.statusText = text;
+            const menu = document.getElementById('statusDropdownMenu');
+            if (menu) {
+                menu.querySelectorAll('.status-dropdown-item').forEach(function (i) { i.classList.remove('active'); });
+                if (item) item.classList.add('active');
+                menu.classList.remove('show');
+            }
+            const btn = document.getElementById('statusSelectBtn');
+            if (btn) btn.classList.remove('active');
+            syncPills();
+            updateFilterTags();
+            filterTasks();
+        }
+
+        // 高级筛选面板相关函数已随面板移除（2026-09-03）
+
         let allExpanded = true;
         
         function showToast(message, duration = 2500) {
@@ -1712,41 +1742,9 @@
             document.getElementById('filterBtn').classList.remove('active');
         }
         
-        function selectContract(element, value, text) {
-            currentFilters.contract = value;
-            currentFilters.contractText = text;
-            updateFilterOptions('contractOptions', value);
-            updateFilterTags();
-            filterTasks();
-        }
-        
-        function selectType(element, value, text) {
-            currentFilters.type = value;
-            currentFilters.typeText = text;
-            updateFilterOptions('typeOptions', value);
-            updateFilterTags();
-            filterTasks();
-        }
-        
-        function selectStatus(element, value, text) {
-            currentFilters.status = value;
-            currentFilters.statusText = text;
-            updateFilterOptions('statusOptions', value);
-            updateFilterTags();
-            filterTasks();
-        }
-        
-        function updateFilterOptions(containerId, activeValue) {
-            const container = document.getElementById(containerId);
-            const options = container.querySelectorAll('.filter-option');
-            options.forEach(option => {
-                if (option.dataset.value === activeValue) {
-                    option.classList.add('active');
-                } else {
-                    option.classList.remove('active');
-                }
-            });
-        }
+        // 注意：状态下拉项选择由上方 selectStatus(status, text, item) 处理（行内 onclick 直连）；
+        // 旧的 selectContract / selectType / selectStatus(element,value,text) / updateFilterOptions 三函数
+        // 属已移除的高级筛选面板，其签名与行内调用不一致且引用已删除的 #statusOptions，会导致点击无反应，故整体删除（2026-09-03）。
         
         function updateFilterTags() {
             const filterTags = document.getElementById('filterTags');
@@ -1760,6 +1758,14 @@
             }
             if (currentFilters.status !== 'all') {
                 tags.push({ type: 'status', text: currentFilters.statusText });
+            }
+            if (currentFilters.role !== 'all') {
+                const roleText = { mine: '我参与', exec: '待我执行', confirm: '待我确认' }[currentFilters.role];
+                tags.push({ type: 'role', text: roleText });
+            }
+            if (currentFilters.priority !== 'all') {
+                const priText = { normal: '普通', important: '重要', urgent: '紧急' }[currentFilters.priority];
+                tags.push({ type: 'priority', text: '优先级：' + priText });
             }
             if (currentFilters.level) {
                 tags.push({ type: 'level', text: '架构层级：' + currentFilters.level });
@@ -1791,15 +1797,18 @@
             if (type === 'contract') {
                 currentFilters.contract = 'all';
                 currentFilters.contractText = '全部合同';
-                updateFilterOptions('contractOptions', 'all');
             } else if (type === 'type') {
                 currentFilters.type = 'all';
                 currentFilters.typeText = '全部类型';
-                updateFilterOptions('typeOptions', 'all');
             } else if (type === 'status') {
                 currentFilters.status = 'all';
                 currentFilters.statusText = '全部状态';
-                updateFilterOptions('statusOptions', 'all');
+                syncPills();
+            } else if (type === 'role') {
+                currentFilters.role = 'all';
+                syncPills();
+            } else if (type === 'priority') {
+                currentFilters.priority = 'all';
             } else if (type === 'level') {
                 currentFilters.level = null;
             }
@@ -1929,7 +1938,7 @@
         function filterTasks() {
             const searchText = document.getElementById('searchInput').value.toLowerCase();
             snapshotExpandState();
-            const isFiltering = !(currentFilters.contract === 'all' && currentFilters.type === 'all' && currentFilters.status === 'all' && !currentFilters.mine && !searchText);
+            const isFiltering = !(currentFilters.contract === 'all' && currentFilters.type === 'all' && currentFilters.status === 'all' && currentFilters.role === 'all' && currentFilters.priority === 'all' && !currentFilters.mine && !searchText);
             const contractSections = document.querySelectorAll('.contract-section');
             let totalVisible = 0;
             let pendingCount = 0;
@@ -1970,7 +1979,14 @@
                         if (currentFilters.status !== 'all' && taskStatus !== currentFilters.status) {
                             visible = false;
                         }
-                        
+
+                        if (!passesRole(task, taskStatus, taskParticipant)) {
+                            visible = false;
+                        }
+                        if (currentFilters.priority !== 'all' && task.dataset.priority !== currentFilters.priority) {
+                            visible = false;
+                        }
+
                         if (currentFilters.mine && !taskParticipant) {
                             visible = false;
                         }
@@ -2021,7 +2037,15 @@
                         if (currentFilters.status !== 'all' && taskStatus !== currentFilters.status) {
                             visible = false;
                         }
-                        
+
+                        const taskParticipant = task.dataset.participant === 'true';
+                        if (!passesRole(task, taskStatus, taskParticipant)) {
+                            visible = false;
+                        }
+                        if (currentFilters.priority !== 'all' && task.dataset.priority !== currentFilters.priority) {
+                            visible = false;
+                        }
+
                         if (searchText && !taskName.includes(searchText)) {
                             visible = false;
                         }
@@ -2073,33 +2097,7 @@
                 const dropdown = document.getElementById('filterDropdown');
                 if (dropdown) dropdown.classList.remove('show');
             }
-            
-            const filterPanel = document.getElementById('filterPanel');
-            const filterOverlay = document.getElementById('filterPanelOverlay');
-            if (filterPanel && filterPanel.classList.contains('show')) {
-                if (e.target === filterOverlay) {
-                    closeFilterPanel();
-                }
-            }
         });
-
-        function openFilterPanel() {
-            const panel = document.getElementById('filterPanel');
-            const overlay = document.getElementById('filterPanelOverlay');
-            if (panel && overlay) {
-                panel.classList.add('show');
-                overlay.classList.add('show');
-            }
-        }
-
-        function closeFilterPanel() {
-            const panel = document.getElementById('filterPanel');
-            const overlay = document.getElementById('filterPanelOverlay');
-            if (panel && overlay) {
-                panel.classList.remove('show');
-                overlay.classList.remove('show');
-            }
-        }
 
         function toggleMultiOption(element) {
             element.classList.toggle('selected');
@@ -2353,6 +2351,28 @@
                 }
             } catch (e) {}
 
+            // 「我参与」筛选初始化（来自项目详情「我的任务」区块跳转）
+            try {
+                var mineParam = new URLSearchParams(location.search).get('mine');
+                if (mineParam === '1') {
+                    currentFilters.role = 'mine';
+                    currentFilters.mine = true;
+                    syncPills();
+                    filterTasks();
+                }
+            } catch (e) {}
+
+            // 「待我执行 / 待我确认 / 我参与」筛选初始化（来自项目详情「我的任务」区块跳转携带 ?role=exec|confirm|mine）
+            try {
+                var roleParam = new URLSearchParams(location.search).get('role');
+                if (roleParam === 'exec' || roleParam === 'confirm' || roleParam === 'mine') {
+                    currentFilters.role = roleParam;
+                    currentFilters.mine = (roleParam === 'mine');
+                    syncPills();
+                    filterTasks();
+                }
+            } catch (e) {}
+
             const participantOptions = document.querySelectorAll('.filter-option');
             participantOptions.forEach(function(option) {
                 option.addEventListener('click', function(e) {
@@ -2366,47 +2386,7 @@
                 });
             });
             
-            const dropdown = document.getElementById('statusDropdownMenu');
-            const selectBtn = document.getElementById('statusSelectBtn');
-            
-            if (dropdown && selectBtn) {
-                selectBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    dropdown.classList.toggle('show');
-                    selectBtn.classList.toggle('active');
-                    
-                    if (dropdown.classList.contains('show')) {
-                        setTimeout(function() {
-                            document.addEventListener('click', function handleDocClick(e) {
-                                if (!dropdown.contains(e.target) && !selectBtn.contains(e.target)) {
-                                    dropdown.classList.remove('show');
-                                    selectBtn.classList.remove('active');
-                                    document.removeEventListener('click', handleDocClick);
-                                }
-                            });
-                        }, 0);
-                    }
-                });
-                
-                const items = dropdown.querySelectorAll('.status-dropdown-item');
-                items.forEach(function(item) {
-                    item.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const status = item.dataset.status;
-                        const text = item.textContent;
-                        
-                        items.forEach(function(i) { i.classList.remove('active'); });
-                        item.classList.add('active');
-                        
-                        selectBtn.textContent = text;
-                        dropdown.classList.remove('show');
-                        selectBtn.classList.remove('active');
-                        
-                        currentFilters.status = status;
-                        filterTasks();
-                    });
-                });
-            }
+            // 状态下拉已改由行内 onclick 直连 toggleStatusDropdown/selectStatus，旧监听移除避免重复绑定。
         });
         
         

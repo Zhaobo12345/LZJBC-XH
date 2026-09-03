@@ -114,6 +114,14 @@
         }
         .hero-inviter-text { font-size: 13px; color: rgba(255, 255, 255, .72); position: relative; z-index: 1; }
         .hero-inviter-text b { color: #fff; font-weight: 600; }
+        /* hero 发起方拨打电话图标 */
+        .hero-call {
+            display: inline-flex; align-items: center; justify-content: center;
+            margin-left: 8px; width: 22px; height: 22px; border-radius: 50%;
+            background: rgba(255, 255, 255, .22); color: #fff; font-size: 12px;
+            cursor: pointer; vertical-align: middle; line-height: 1; text-decoration: none;
+        }
+        .hero-call:active { background: rgba(255, 255, 255, .38); }
         .hero-trade {
             font-size: 22px; font-weight: 700; color: #fff;
             margin: 16px 0 4px; letter-spacing: -.3px;
@@ -380,7 +388,7 @@
         <!-- 卡片流：保留全部信息，按工人决策维度组织 -->
         <div class="flow-card">
             <div class="flow-title">🤝 合作方 <span class="badge">甲方（工长）· 乙方（您）</span></div>
-            <div class="flow-line">甲方（雇主）：<a href="tel:13888888888" class="call-link">📞 陈庄（工长）拨打电话</a></div>
+            <div class="flow-line">甲方（雇主）：<b>陈庄（工长）</b></div>
             <div class="flow-line">乙方（您）：<b>张水电</b></div>
         </div>
 
@@ -498,7 +506,8 @@
         var inviting = appState === 'inviting';
         var html = '<div class="hero-card' + (inviting ? '' : ' confirmed') + '">';
         html += '<div class="hero-inviter"><div class="hero-avatar">陈</div>' +
-                '<div class="hero-inviter-text"><b>陈庄（工长）</b> 邀请您承接</div></div>';
+                '<div class="hero-inviter-text"><b>陈庄（工长）</b> 邀请您承接' +
+                '<a class="hero-call" href="tel:13888888888" title="拨打发起方电话">📞</a></div></div>';
         html += '<div class="hero-trade">水电班组服务合同</div>';
         html += '<div class="hero-amount"><small>¥</small>8,800<small> 元</small></div>';
         html += '<div class="hero-amount-label">合同报酬（施工完成且验收通过后由线下进行支付）</div>';

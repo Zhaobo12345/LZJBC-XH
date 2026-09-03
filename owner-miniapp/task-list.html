@@ -1173,26 +1173,20 @@
                 <input type="text" class="search-input" placeholder="搜索任务名称..." id="searchInput" oninput="filterTasks()">
             </div>
 
-            <div class="filter-bar" id="taskFilterBar">
-                <div class="filter-group">
-                    <span class="filter-label">参与</span>
-                    <div class="filter-toggle" id="participantToggle">
-                        <div class="filter-option active" data-filter="all">全部</div>
-                        <div class="filter-option" data-filter="mine">我参与</div>
-                    </div>
-                </div>
-                <div class="filter-group" style="position: relative;">
-                    <span class="filter-label">状态</span>
-                    <div class="filter-select" id="statusSelectBtn">
-                        全部状态
-                    </div>
+            <div class="quick-filter-bar" id="roleFilterBar" style="overflow-x:auto;scrollbar-width:none;">
+                <button type="button" class="quick-filter-btn active" style="flex:0 0 auto;" data-role="all" onclick="applyPill('all', this)">全部</button>
+                <button type="button" class="quick-filter-btn" style="flex:0 0 auto;" data-role="mine" onclick="applyPill('mine', this)">我参与</button>
+                <button type="button" class="quick-filter-btn" style="flex:0 0 auto;" data-role="exec" onclick="applyPill('exec', this)">待我执行</button>
+                <button type="button" class="quick-filter-btn" style="flex:0 0 auto;" data-role="confirm" onclick="applyPill('confirm', this)">待我确认</button>
+                <div class="status-filter-wrap" style="position:relative;flex:0 0 auto;">
+                    <button type="button" class="quick-filter-btn" id="statusSelectBtn" onclick="toggleStatusDropdown(event)">状态 ▾</button>
                     <div class="status-dropdown" id="statusDropdownMenu">
-                        <div class="status-dropdown-item active" data-status="all">全部状态</div>
-                        <div class="status-dropdown-item" data-status="pending">待开始</div>
-                        <div class="status-dropdown-item" data-status="config">待配置</div>
-                        <div class="status-dropdown-item" data-status="executing">执行中</div>
-                        <div class="status-dropdown-item" data-status="confirming">确认中</div>
-                        <div class="status-dropdown-item" data-status="completed">已完成</div>
+                        <div class="status-dropdown-item active" data-status="all" onclick="selectStatus('all','全部状态',this)">全部状态</div>
+                        <div class="status-dropdown-item" data-status="pending" onclick="selectStatus('pending','待开始',this)">待开始</div>
+                        <div class="status-dropdown-item" data-status="config" onclick="selectStatus('config','待配置',this)">待配置</div>
+                        <div class="status-dropdown-item" data-status="executing" onclick="selectStatus('executing','执行中',this)">执行中</div>
+                        <div class="status-dropdown-item" data-status="confirming" onclick="selectStatus('confirming','确认中',this)">确认中</div>
+                        <div class="status-dropdown-item" data-status="completed" onclick="selectStatus('completed','已完成',this)">已完成</div>
                     </div>
                 </div>
             </div>
@@ -1641,6 +1635,8 @@
             typeText: '全部类型',
             status: 'all',
             statusText: '全部状态',
+            role: 'all',          // all | mine | exec | confirm
+            priority: 'all',      // all | normal | important | urgent
             mine: false,
             level: null
         };
@@ -1694,42 +1690,125 @@
             document.getElementById('filterBtn').classList.remove('active');
         }
         
-        function selectContract(element, value, text) {
-            currentFilters.contract = value;
-            currentFilters.contractText = text;
-            updateFilterOptions('contractOptions', value);
+        // 演示「我」的身份（与现有 data-participant="true" 任务一致）：张三
+        const CURRENT_USER = '张三';
+
+        // 从「执行人：X · 确认人：Y、Z」文本解析角色归属
+        function getTaskRole(task) {
+            const meta = task.querySelector('.task-meta');
+            const txt = meta ? meta.textContent : '';
+            const exec = (txt.match(/执行人：\s*([^·]+)/) || [,''])[1] || '';
+            const conf = (txt.match(/确认人：\s*([^\n]+)/) || [,''])[1] || '';
+            return {
+                executor: exec.trim(),
+                confirmers: conf.split(/[、,，]/).map(function (s) { return s.trim(); }).filter(Boolean)
+            };
+        }
+
+        // 角色维度过滤（与 status / priority 做 AND 叠加）
+        function passesRole(task, status, participant) {
+            const role = currentFilters.role;
+            if (role === 'all') return true;
+            if (role === 'mine') return participant;
+            const r = getTaskRole(task);
+            if (role === 'exec') return r.executor === CURRENT_USER && status !== 'completed';
+            if (role === 'confirm') return r.confirmers.indexOf(CURRENT_USER) !== -1 && status === 'confirming';
+            return true;
+        }
+
+        // 顶部胶囊与 currentFilters 同步高亮（仅角色轴 4 项；状态由下拉单独呈现）
+        function syncPills() {
+            document.querySelectorAll('#roleFilterBar .quick-filter-btn[data-role]').forEach(function (b) { b.classList.remove('active'); });
+            const r = currentFilters.role;
+            if (r !== 'all' && r) {
+                const btn = document.querySelector('#roleFilterBar .quick-filter-btn[data-role="' + r + '"]');
+                if (btn) btn.classList.add('active');
+            } else {
+                const allBtn = document.querySelector('#roleFilterBar .quick-filter-btn[data-role="all"]');
+                if (allBtn) allBtn.classList.add('active');
+            }
+            // 状态下拉：按钮文案 + 高亮当前项
+            const sb = document.getElementById('statusSelectBtn');
+            if (sb) sb.textContent = (currentFilters.status === 'all') ? '状态 ▾' : currentFilters.statusText;
+            const menu = document.getElementById('statusDropdownMenu');
+            if (menu) {
+                menu.querySelectorAll('.status-dropdown-item').forEach(function (i) {
+                    i.classList.toggle('active', i.dataset.status === currentFilters.status);
+                });
+            }
+        }
+
+        // 顶部角色胶囊点击（单一选中）：全部 / 我参与 / 待我执行 / 待我确认
+        function applyPill(key, btn) {
+            switch (key) {
+                case 'mine': currentFilters.role = 'mine'; break;
+                case 'exec': currentFilters.role = 'exec'; break;
+                case 'confirm': currentFilters.role = 'confirm'; break;
+                default: currentFilters.role = 'all';
+            }
+            // 切角色轴时复位状态轴，避免两轴叠加造成理解混乱
+            currentFilters.status = 'all';
+            currentFilters.statusText = '全部状态';
+            currentFilters.mine = (currentFilters.role === 'mine');
+            syncPills();
             updateFilterTags();
             filterTasks();
         }
-        
-        function selectType(element, value, text) {
-            currentFilters.type = value;
-            currentFilters.typeText = text;
-            updateFilterOptions('typeOptions', value);
-            updateFilterTags();
-            filterTasks();
+
+        // 状态筛选下拉：展开/收起（单一状态轴，不与角色胶囊同级平铺）
+        // 关键：#roleFilterBar 设了 overflow-x:auto，会裁切绝对定位的下拉；故改用 fixed 定位，按按钮位置计算坐标，逃离裁剪。
+        function toggleStatusDropdown(e) {
+            e.stopPropagation();
+            const menu = document.getElementById('statusDropdownMenu');
+            const btn = document.getElementById('statusSelectBtn');
+            if (!menu || !btn) return;
+            const show = menu.classList.toggle('show');
+            btn.classList.toggle('active', show);
+            if (show) {
+                const rect = btn.getBoundingClientRect();
+                menu.style.position = 'fixed';
+                menu.style.top = (rect.bottom + 6) + 'px';
+                menu.style.left = Math.max(8, rect.left) + 'px';
+                menu.style.right = 'auto';
+                menu.style.zIndex = '3000';
+                setTimeout(function () {
+                    document.addEventListener('click', function handleDoc(ev) {
+                        if (!menu.contains(ev.target) && !btn.contains(ev.target)) {
+                            menu.classList.remove('show');
+                            btn.classList.remove('active');
+                            menu.style.position = '';
+                            menu.style.top = '';
+                            menu.style.left = '';
+                            menu.style.right = '';
+                            document.removeEventListener('click', handleDoc);
+                        }
+                    });
+                }, 0);
+            } else {
+                menu.style.position = '';
+                menu.style.top = '';
+                menu.style.left = '';
+                menu.style.right = '';
+            }
         }
-        
-        function selectStatus(element, value, text) {
-            currentFilters.status = value;
+
+        // 状态筛选下拉项选择
+        function selectStatus(status, text, item) {
+            currentFilters.status = status;
             currentFilters.statusText = text;
-            updateFilterOptions('statusOptions', value);
+            const menu = document.getElementById('statusDropdownMenu');
+            if (menu) {
+                menu.querySelectorAll('.status-dropdown-item').forEach(function (i) { i.classList.remove('active'); });
+                if (item) item.classList.add('active');
+                menu.classList.remove('show');
+            }
+            const btn = document.getElementById('statusSelectBtn');
+            if (btn) btn.classList.remove('active');
+            syncPills();
             updateFilterTags();
             filterTasks();
         }
-        
-        function updateFilterOptions(containerId, activeValue) {
-            const container = document.getElementById(containerId);
-            const options = container.querySelectorAll('.filter-option');
-            options.forEach(option => {
-                if (option.dataset.value === activeValue) {
-                    option.classList.add('active');
-                } else {
-                    option.classList.remove('active');
-                }
-            });
-        }
-        
+
         function updateFilterTags() {
             const filterTags = document.getElementById('filterTags');
             const tags = [];
@@ -1742,6 +1821,10 @@
             }
             if (currentFilters.status !== 'all') {
                 tags.push({ type: 'status', text: currentFilters.statusText });
+            }
+            if (currentFilters.role !== 'all') {
+                const roleText = { mine: '我参与', exec: '待我执行', confirm: '待我确认' }[currentFilters.role];
+                tags.push({ type: 'role', text: roleText });
             }
             if (currentFilters.level) {
                 tags.push({ type: 'level', text: '架构层级：' + currentFilters.level });
@@ -1773,15 +1856,16 @@
             if (type === 'contract') {
                 currentFilters.contract = 'all';
                 currentFilters.contractText = '全部合同';
-                updateFilterOptions('contractOptions', 'all');
             } else if (type === 'type') {
                 currentFilters.type = 'all';
                 currentFilters.typeText = '全部类型';
-                updateFilterOptions('typeOptions', 'all');
             } else if (type === 'status') {
                 currentFilters.status = 'all';
                 currentFilters.statusText = '全部状态';
-                updateFilterOptions('statusOptions', 'all');
+                syncPills();
+            } else if (type === 'role') {
+                currentFilters.role = 'all';
+                syncPills();
             } else if (type === 'level') {
                 currentFilters.level = null;
             }
@@ -1911,7 +1995,7 @@
         function filterTasks() {
             const searchText = document.getElementById('searchInput').value.toLowerCase();
             snapshotExpandState();
-            const isFiltering = !(currentFilters.contract === 'all' && currentFilters.type === 'all' && currentFilters.status === 'all' && !currentFilters.mine && !searchText);
+            const isFiltering = !(currentFilters.contract === 'all' && currentFilters.type === 'all' && currentFilters.status === 'all' && currentFilters.role === 'all' && !currentFilters.mine && !searchText);
             const contractSections = document.querySelectorAll('.contract-section');
             let totalVisible = 0;
             let pendingCount = 0;
@@ -1953,6 +2037,10 @@
                             visible = false;
                         }
                         
+                        if (!passesRole(task, taskStatus, taskParticipant)) {
+                            visible = false;
+                        }
+                        
                         if (currentFilters.mine && !taskParticipant) {
                             visible = false;
                         }
@@ -1988,6 +2076,7 @@
                     tempTasks.forEach(task => {
                         const taskType = task.dataset.type;
                         const taskStatus = task.dataset.status;
+                        const taskParticipant = task.dataset.participant === 'true';
                         const taskName = task.querySelector('.task-name').textContent.toLowerCase();
                         
                         let visible = true;
@@ -2001,6 +2090,10 @@
                         }
                         
                         if (currentFilters.status !== 'all' && taskStatus !== currentFilters.status) {
+                            visible = false;
+                        }
+                        
+                        if (!passesRole(task, taskStatus, taskParticipant)) {
                             visible = false;
                         }
                         
@@ -2087,34 +2180,8 @@
             element.classList.toggle('selected');
         }
 
-        function quickFilter(type, btn) {
-            document.querySelectorAll('.quick-filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            if (type === 'all') {
-                currentFilters.status = 'all';
-                currentFilters.type = 'all';
-                currentFilters.mine = false;
-            } else if (type === 'mine') {
-                currentFilters.status = 'all';
-                currentFilters.type = 'all';
-                currentFilters.mine = true;
-            } else {
-                currentFilters.status = type;
-                currentFilters.type = 'all';
-                currentFilters.mine = false;
-            }
-            
-            filterTasks();
-        }
-
-        function handleParticipantClick(type, btn) {
-            document.querySelectorAll('.filter-option').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            currentFilters.mine = type === 'mine';
-            filterTasks();
-        }
+        // 旧的参与 toggle / 角色快捷筛选（quickFilter / handleParticipantClick）已随 filter-bar 重构移除（2026-09-03）；
+        // 角色轴改由顶部胶囊 applyPill 处理，状态轴由 selectStatus 处理。
 
         function saveFilterScheme() {
             showToast('筛选方案已保存');
@@ -2335,60 +2402,18 @@
                 }
             } catch (e) {}
 
-            const participantOptions = document.querySelectorAll('.filter-option');
-            participantOptions.forEach(function(option) {
-                option.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    participantOptions.forEach(function(o) { o.classList.remove('active'); });
-                    option.classList.add('active');
-                    
-                    const type = option.dataset.filter;
-                    currentFilters.mine = type === 'mine';
+            // 角色/状态筛选已改为行内 onclick（applyPill / toggleStatusDropdown / selectStatus）；
+            // 此处仅保留「我参与」深链初始化的 parity（与 service-miniapp 一致）。
+            try {
+                var mv = new URLSearchParams(location.search).get('mine');
+                if (mv === '1') {
+                    currentFilters.role = 'mine';
+                    currentFilters.mine = true;
+                    syncPills();
+                    updateFilterTags();
                     filterTasks();
-                });
-            });
-            
-            const dropdown = document.getElementById('statusDropdownMenu');
-            const selectBtn = document.getElementById('statusSelectBtn');
-            
-            if (dropdown && selectBtn) {
-                selectBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    dropdown.classList.toggle('show');
-                    selectBtn.classList.toggle('active');
-                    
-                    if (dropdown.classList.contains('show')) {
-                        setTimeout(function() {
-                            document.addEventListener('click', function handleDocClick(e) {
-                                if (!dropdown.contains(e.target) && !selectBtn.contains(e.target)) {
-                                    dropdown.classList.remove('show');
-                                    selectBtn.classList.remove('active');
-                                    document.removeEventListener('click', handleDocClick);
-                                }
-                            });
-                        }, 0);
-                    }
-                });
-                
-                const items = dropdown.querySelectorAll('.status-dropdown-item');
-                items.forEach(function(item) {
-                    item.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const status = item.dataset.status;
-                        const text = item.textContent;
-                        
-                        items.forEach(function(i) { i.classList.remove('active'); });
-                        item.classList.add('active');
-                        
-                        selectBtn.textContent = text;
-                        dropdown.classList.remove('show');
-                        selectBtn.classList.remove('active');
-                        
-                        currentFilters.status = status;
-                        filterTasks();
-                    });
-                });
-            }
+                }
+            } catch (e) {}
         });
         
         function toggleActionMenu() {
