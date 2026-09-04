@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<html lang="zh-CN" data-page-node-id="GlFC6wwMqa7ZfcUWjxUPWd">
+<head data-page-node-id="AUV63pAZ5nQ9VICsEQICmJ">
+    <meta charset="UTF-8" data-page-node-id="y0BzZ3Yf3ptaT68AszEKs1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" data-page-node-id="EVKn9xM6AzldLyMWlHqLlh">
     <title>家装平台小程序原型 - 工人合同详情（拟定中（发起方）-新）</title>
-    <link rel="stylesheet" href="common.css">
-    <link rel="stylesheet" href="css/contract-detail.css">
+    <link rel="stylesheet" href="common.css" data-page-node-id="KBCM39xLNZcDsepLusbwV2">
+    <link rel="stylesheet" href="css/contract-detail.css" data-page-node-id="KTOExwNsC6Zs8RxXzrx5w6">
     <style>
         /* ===== 拟定中（发起方）-新：与「拟定中（发起方）」布局一致，叠加 工期 / 违约责任(必填) / 合同正文默认收起 三处差异 ===== */
         * { box-sizing: border-box; }
@@ -106,6 +106,12 @@
         }
         .card-title { font-size: 14px; font-weight: 600; color: #222; margin-bottom: 10px; }
         .card-note { font-size: 12px; font-weight: 400; color: #999; margin-left: 4px; }
+
+        /* 拟定中内联编辑面板（蓝色背景框，与 worker-contract-detail.html 的 .invite-edit-panel 保持一致） */
+        .invite-edit-panel {
+            margin-top: 6px; border: 1px solid var(--primary-light);
+            border-radius: 10px; padding: 12px; background: var(--status-primary-bg);
+        }
 
         .form-section-title { font-size: 13px; font-weight: 600; color: #333; margin: 14px 0 8px; }
         .form-section-title:first-child { margin-top: 0; }
@@ -233,7 +239,7 @@
 
         /* 预览合同按钮（对齐「拟定中（发起方）」状态页） */
         .wc-preview-btn {
-            margin-top: 14px; display: flex; align-items: center; justify-content: center; gap: 6px;
+            margin: 0 12px 12px; display: flex; align-items: center; justify-content: center; gap: 6px;
             height: 44px; border-radius: 8px; background: #1677ff; color: #fff;
             font-size: 15px; font-weight: 600; cursor: pointer;
         }
@@ -392,340 +398,340 @@
         .status-switch-divider { height: 1px; background-color: #E5E6EB; margin: 8px 0; border-radius: 1px; }
     </style>
 </head>
-<body>
-<div class="phone-frame">
-    <div class="status-bar">
-        <div class="time">9:41</div>
-        <div class="icons">📶 🔋</div>
+<body data-page-node-id="wh5MndfC1OPTerHCjmLM6P">
+<div class="phone-frame" data-page-node-id="Qmnlpz0GuyqgcCaItckkAp">
+    <div class="status-bar" data-page-node-id="mpMYD5Ij4W0jVAO1OAL4Yl">
+        <div class="time" data-page-node-id="wOAHtDcgi4PYct6lPRYtnU">9:41</div>
+        <div class="icons" data-page-node-id="f8xTax4LKgqE8ZJyFtn9Vz">📶 🔋</div>
     </div>
-    <div class="nav-bar">
-        <a class="nb-back" href="worker-contract-detail.html">&lsaquo;</a>
-        <div class="title">工人合同详情</div>
-        <div class="actions"><div class="native-capsule" title="微信原生胶囊：由微信客户端渲染，开发者不可自定义其内容"><span>⋯</span><span class="nc-divider"></span><span>○</span></div></div>
+    <div class="nav-bar" data-page-node-id="JLbAfAA1cdBsvLibBesGCc">
+        <a class="nb-back" href="worker-contract-detail.html" data-page-node-id="mfXKlvAVSxbqQ817a2P14D">&lsaquo;</a>
+        <div class="title" data-page-node-id="2Jo62JIWcNQJpLfIdaJGAg">工人合同详情</div>
+        <div class="actions" data-page-node-id="VdzaoOhOuKTbgJXjtzcTwb"><div class="native-capsule" title="微信原生胶囊：由微信客户端渲染，开发者不可自定义其内容" data-page-node-id="7jaWGC46NtJOfGIQHG3uxH"><span data-page-node-id="aJwuAAb9CJG9MZDdJtQaEL">⋯</span><span class="nc-divider" data-page-node-id="0NV7Pagu38s7mgCIGv9NEt"></span><span data-page-node-id="Qvgklif3YEA06rB330iyF3">○</span></div></div>
     </div>
 
-    <div class="page-content">
-        <div class="content-toolbar">
-            <span class="tb-hint">合同操作</span>
-            <span class="text-more-btn" id="moreOpsBtn" onclick="toggleMoreOps()">更多<span class="caret">▾</span></span>
+    <div class="page-content" data-page-node-id="jb78vEgkfuwAX88vPYZ8NX">
+        <div class="content-toolbar" data-page-node-id="gaCeroWts7t26gEz04x92u">
+            <span class="tb-hint" data-page-node-id="mtNHyO1DPq7PahD4yp5c9A">合同操作</span>
+            <span class="text-more-btn" id="moreOpsBtn" onclick="toggleMoreOps()" data-page-node-id="LJfQ584p3AleuhhRsfZEzo">更多<span class="caret" data-page-node-id="TTHI876xXGI7ZrETHO5Pje">▾</span></span>
         </div>
-        <div class="more-ops-panel" id="moreOpsPanel"></div>
+        <div class="more-ops-panel" id="moreOpsPanel" data-page-node-id="IPNA2seooTN1nxktrzyIdY"></div>
 
         <!-- 状态进度步骤条：拟定中（当前）→ 确认中 → 已签约 -->
-        <div class="worker-flow">
-            <div class="wf-step current"><div class="wf-circle">✏️</div><div class="wf-label">拟定中</div></div>
-            <div class="wf-line"></div>
-            <div class="wf-step"><div class="wf-circle">🤝</div><div class="wf-label">确认中</div></div>
-            <div class="wf-line"></div>
-            <div class="wf-step"><div class="wf-circle">📄</div><div class="wf-label">已签约</div></div>
+        <div class="worker-flow" data-page-node-id="ayXLpXCvOd02LoOJS8bL5N">
+            <div class="wf-step current" data-page-node-id="ST00FeZnFlHcoRQqqIEhGx"><div class="wf-circle" data-page-node-id="DgEWdB9MzxzEXSidSVmSV0">✏️</div><div class="wf-label" data-page-node-id="sVIHzsFieBw3UVlQXtBMj8">拟定中</div></div>
+            <div class="wf-line" data-page-node-id="lRHgOCBtqu37fH1wPfHA5m"></div>
+            <div class="wf-step" data-page-node-id="csd3Yuo5ZsvWKiXW2NKTP7"><div class="wf-circle" data-page-node-id="9XwNDHJJpGkHxuvfNEHMQi">🤝</div><div class="wf-label" data-page-node-id="Qc6UXBbmfSW3haI3nQYjSs">确认中</div></div>
+            <div class="wf-line" data-page-node-id="xGUB8pj3pemS0r6F8uVB7R"></div>
+            <div class="wf-step" data-page-node-id="sw2PcINg2tdmKRulqb7022"><div class="wf-circle" data-page-node-id="I03KCpvi7dEbujKacisGD6">📄</div><div class="wf-label" data-page-node-id="zlfCnH8GzjDMcDSgwACM1z">已签约</div></div>
         </div>
 
         <!-- 状态横幅：拟定中 -->
-        <div class="wc-banner draft">
-            <div class="wc-banner-text">拟定中</div>
-            <div class="wc-banner-desc">合同处于拟定中。可直接修改合同名称、合同金额、工期与违约责任，并选择意向乙方（仅各工种，1-3 人）后提交邀请。</div>
+        <div class="wc-banner draft" data-page-node-id="iPFvMKzzjMqeqneCmo2xUn">
+            <div class="wc-banner-text" data-page-node-id="dLWSRYJzIafGIsCTmSB7WW">拟定中</div>
+            <div class="wc-banner-desc" data-page-node-id="vczBNmDmobgoLcBQ2nSneg">合同处于拟定中。可直接修改合同名称、合同金额、工期与违约责任，并选择意向乙方（仅各工种，1-3 人）后提交邀请。</div>
         </div>
 
         <!-- 合同甲方与意向乙方 -->
-        <div class="worker-invite-card">
-            <div class="card-title">🤝 合同方 <span class="card-note">意向乙方首位确认者即签约乙方</span></div>
+        <div class="worker-invite-card" data-page-node-id="Ebse9GLlibdGYx2a0oyL6h">
+            <div class="card-title" data-page-node-id="2ReH9IzqMJJmELV6aHIqWu">🤝 合同方 <span class="card-note" data-page-node-id="0dpX600XcDRKCPsb3EFxuc">意向乙方首位确认者即签约乙方</span></div>
 
             <!-- 合同甲方：可从项目成员中选择（模糊匹配姓名/角色），单选 -->
-            <div class="form-section-title">合同甲方</div>
-            <div class="party-a-row">
-                <div class="invite-chips" id="partyAChips"></div>
-                <div class="member-picker party-a-picker">
-                    <div class="member-picker-control" id="partyAControl" onclick="togglePartyAPanel()">
-                        <span id="partyAValue">更换甲方 ›</span>
+            <div class="form-section-title" data-page-node-id="rj5wHwtNiE33zbAT3Yo9FR">合同甲方</div>
+            <div class="party-a-row" data-page-node-id="GBGcDt276qzOhSpnJnmJg6">
+                <div class="invite-chips" id="partyAChips" data-page-node-id="zpugc2c6frUOfKMUASAx9R"></div>
+                <div class="member-picker party-a-picker" data-page-node-id="Gcw51qV7eVXG4U97Rvw7qu">
+                    <div class="member-picker-control" id="partyAControl" onclick="togglePartyAPanel()" data-page-node-id="KSJnZshBdN7rosEU2yJji1">
+                        <span id="partyAValue" data-page-node-id="5txXigAJxknKBcASYo4gHT">更换甲方 ›</span>
                     </div>
-                    <div class="member-picker-panel" id="partyAPanelBox">
-                        <input type="text" class="member-picker-search" id="partyASearch" placeholder="搜索姓名或角色，如 陈庄 / 工长" oninput="filterPartyA()">
-                        <div class="member-picker-list" id="partyAList"></div>
-                        <div class="member-picker-empty" id="partyAEmpty" style="display:none;">未找到匹配的成员</div>
+                    <div class="member-picker-panel" id="partyAPanelBox" data-page-node-id="7V2YwMKPV1ioCBlYVwYmjE">
+                        <input type="text" class="member-picker-search" id="partyASearch" placeholder="搜索姓名或角色，如 陈庄 / 工长" oninput="filterPartyA()" data-page-node-id="qEoCEOPDz1fYD3p2cQCQ7f">
+                        <div class="member-picker-list" id="partyAList" data-page-node-id="lTChKF70dcWZf0Z4pktZYc"></div>
+                        <div class="member-picker-empty" id="partyAEmpty" style="display:none;" data-page-node-id="a0BSVkXptu44Asksaj83Dt">未找到匹配的成员</div>
                     </div>
                 </div>
             </div>
 
             <!-- 意向乙方：可选择 / 可删除 / 最多 3 人 -->
-            <div class="form-section-title" id="inviteRoleTitle">意向乙方（仅各工种，邀请 1-3 人）<span class="muted" id="inviteCount"></span></div>
-            <div class="invite-chips" id="inviteEditChips"></div>
-            <div class="member-picker">
-                <div class="member-picker-control" onclick="toggleInvitePanel()">
-                    <span id="editInviteValue">点击添加意向乙方</span>
+            <div class="form-section-title" id="inviteRoleTitle" data-page-node-id="CWOYrrlLicAKGaMMKwgVKd">意向乙方（仅各工种，邀请 1-3 人）<span class="muted" id="inviteCount" data-page-node-id="mLsJtknTWVtD6dKCmQTXEW"></span></div>
+            <div class="invite-chips" id="inviteEditChips" data-page-node-id="nGnShKyUajXtHVuw0gc004"></div>
+            <div class="member-picker" data-page-node-id="3BjL0DEDzqG1jnLJUO2iYm">
+                <div class="member-picker-control" onclick="toggleInvitePanel()" data-page-node-id="B0SPRFyqkbvwtzdF09zsH1">
+                    <span id="editInviteValue" data-page-node-id="GHQ6J3EeitQrtJBZrDTJRP">点击添加意向乙方</span>
                 </div>
-                <div class="member-picker-panel" id="editInvitePanelBox">
-                    <input type="text" class="member-picker-search" id="editInviteSearch" placeholder="搜索工种，如 水电 / 拆除" oninput="filterInvite()">
-                    <div class="member-picker-list" id="editInviteList"></div>
-                    <div class="member-picker-empty" id="editInviteEmpty" style="display:none;">未找到匹配的工种</div>
+                <div class="member-picker-panel" id="editInvitePanelBox" data-page-node-id="gYK01HPHDL377cYhajDzG3">
+                    <input type="text" class="member-picker-search" id="editInviteSearch" placeholder="搜索工种，如 水电 / 拆除" oninput="filterInvite()" data-page-node-id="RIivauOSygKsz9YdEXj4Gd">
+                    <div class="member-picker-list" id="editInviteList" data-page-node-id="Pn3cmB5O8lV2UorsFdxze5"></div>
+                    <div class="member-picker-empty" id="editInviteEmpty" style="display:none;" data-page-node-id="O5djw3Y7eKWRV1myDBd2E9">未找到匹配的工种</div>
                 </div>
             </div>
 
-            <div class="form-section-title">合同信息 <span>（类型：水电班组服务合同）</span></div>
+            <div class="form-section-title" data-page-node-id="AEsfDSC23hZGVESI9EKfa7">合同信息 <span data-page-node-id="Zl6ltnlnBK04mEDpJJgcvA">（类型：水电班组服务合同）</span></div>
 
-            <div class="edit-field">
-                <label>合同名称<span class="field-required-tag">* 必填</span></label>
-                <input type="text" id="editNameInput" class="edit-input" value="全屋水电改造合同">
+            <div class="edit-field" data-page-node-id="8sMTmTBDOe4nd1sTGFZpCJ">
+                <label data-page-node-id="2jebj30YRItUUBFRDiRzDg">合同名称<span class="field-required-tag" data-page-node-id="9lEvnKCGveSLvI8V5O4mjK">* 必填</span></label>
+                <input type="text" id="editNameInput" class="edit-input" value="全屋水电改造合同" data-page-node-id="R0AzszdozelwAgAwMwYH4w">
             </div>
-            <div class="edit-field">
-                <label>合同金额（元，最多两位小数）<span class="field-required-tag">* 必填</span></label>
-                <input type="number" id="editAmountInput" class="edit-input" value="12600" step="0.01" min="0">
+            <div class="edit-field" data-page-node-id="uQAWzsvwTDG0HBgtD7HltC">
+                <label data-page-node-id="oeTi8GyynBqB646pJDRLiQ">合同金额（元，最多两位小数）<span class="field-required-tag" data-page-node-id="Ehl8YU5BQJylHnU64KFr37">* 必填</span></label>
+                <input type="number" id="editAmountInput" class="edit-input" value="12600" step="0.01" min="0" data-page-node-id="Wxaw7M0foSHTlfrDfnST7b">
             </div>
 
             <!-- 新增：工期（含工期值） -->
-            <div class="edit-field">
-                <label>工期（自合同签订之日起计算）</label>
-                <div class="field-row">
-                    <input type="number" id="editDurationInput" class="edit-input" value="30">
-                    <span class="field-unit">天</span>
+            <div class="edit-field" data-page-node-id="8zWzbJdy42A7dHVYqEnkfa">
+                <label data-page-node-id="MW8NDZOQBpfJDtxeEBFPx0">工期（自合同签订之日起计算）</label>
+                <div class="field-row" data-page-node-id="J8sXtDGO9ZVhM0UzFzfSo3">
+                    <input type="number" id="editDurationInput" class="edit-input" value="30" data-page-node-id="63F6P1iOJS3DP67aAmSpe9">
+                    <span class="field-unit" data-page-node-id="1Oh6KAQbg1KZqAvERg55Tz">天</span>
                 </div>
             </div>
         </div>
 
         <!-- 合同内容（拟定中可编辑） -->
-        <div class="contract-content-card">
-            <div class="card-title">
-                <span>📄 合同内容</span>
-                <span id="draftTemplateBtn" style="float:right;color:#1677ff;font-size:13px;cursor:pointer;font-weight:600;" onclick="showDraftTemplatePicker()">📄 更换正文模板</span>
+        <div class="contract-content-card" data-page-node-id="p6w4a3OxzdLWSkd5l5cV00">
+            <div class="card-title" data-page-node-id="dAjnlB1MYgYuz0c7fKR0sh">
+                <span data-page-node-id="O7py6AHHeO8fE3YYF9h1aH">📄 合同内容</span>
+                <span id="draftTemplateBtn" style="float:right;color:#1677ff;font-size:13px;cursor:pointer;font-weight:600;" onclick="showDraftTemplatePicker()" data-page-node-id="ldEp9AcGtnSUCJxYZkf0CI">📄 更换正文模板</span>
             </div>
-            <div class="content-tabs">
-                <div class="content-tab active" onclick="switchDraftTab(this, 'contract-text')">合同正文</div>
-                <div class="content-tab" onclick="switchDraftTab(this, 'stage-task')">阶段任务</div>
-                <div class="content-tab" onclick="switchDraftTab(this, 'attachment')">附件</div>
+            <div class="content-tabs" data-page-node-id="6n1JCRaujMtRiHDtkOMeeR">
+                <div class="content-tab active" onclick="switchDraftTab(this, 'contract-text')" data-page-node-id="AFyR4zyLsEp9tsM4kZgsJb">合同正文</div>
+                <div class="content-tab" onclick="switchDraftTab(this, 'stage-task')" data-page-node-id="6ZZZsJGmuceWqua336oDG0">阶段任务</div>
+                <div class="content-tab" onclick="switchDraftTab(this, 'attachment')" data-page-node-id="a24yxsoby7dIXk0aOPIxTL">附件</div>
             </div>
 
             <!-- 合同正文：默认收起，仅展示链接；点击调整到查看合同全文页面 -->
-            <div class="content-tab-pane active" id="pane-contract-text">
-                <div class="template-info" id="draftTemplateInfo" style="display:none;">
-                    <div class="template-tag" id="draftTemplateTag"></div>
-                    <div class="template-hint">模板内容不可编辑，如需修改请重新选择模板</div>
+            <div class="content-tab-pane active" id="pane-contract-text" data-page-node-id="ff1ODbQOFung5pnxpXqAJo">
+                <div class="template-info" id="draftTemplateInfo" style="display:none;" data-page-node-id="GbAAoQ9x9vlsQRxBZ1jAVX">
+                    <div class="template-tag" id="draftTemplateTag" data-page-node-id="xlGZQ7WFtDllPGRL5sBspE"></div>
+                    <div class="template-hint" data-page-node-id="tYX6WoLSR1g7Pvhi07Xyk6">模板内容不可编辑，如需修改请重新选择模板</div>
                 </div>
                 <!-- 违约责任：移入合同正文（查看全文上方，必填） -->
-                <div class="edit-field">
-                    <label>违约责任<span class="field-required-tag">* 必填</span></label>
+                <div class="edit-field" data-page-node-id="DTpjWlnboZ3Xtzpw9auj89">
+                    <label data-page-node-id="GTvpHFvrs1P5fqxJedCNxJ">违约责任<span class="field-required-tag" data-page-node-id="dSR8PQJFbP7Z5GVofE0Qor">* 必填</span></label>
                     <textarea id="breachInput" class="edit-textarea" placeholder="请输入违约责任条款，例如：1、甲方逾期付款的，按逾期金额千分之三/日支付违约金；2、乙方工期延误或质量不符的，应无偿返工并承担违约责任。">1、甲方逾期付款的，按逾期金额千分之三/日支付违约金。
 2、乙方工期延误或质量不符的，应无偿返工并承担违约责任。</textarea>
 
                 </div>
-                <div class="form-label-row">
-                    <label class="form-label">固定详细条款</label>
-                    <a class="view-full-link" href="worker-contract-draft-fulltext-new.html">查看条款</a>
+                <div class="form-label-row" data-page-node-id="bXn1JiWDBCy787U8u0XbBW">
+                    <label class="form-label" data-page-node-id="AIC6Zu2MisfFuExkCr43xy">固定详细条款</label>
+                    <a class="view-full-link" href="worker-contract-draft-fulltext-new.html" data-page-node-id="imHGiB5NSkW6i4qDL1M5pb">查看条款</a>
                 </div>
 
                 <!-- 补充条款（不受影响） -->
-                <div class="form-label-row" style="margin-top:14px;">
-                    <label class="form-label">补充条款</label>
+                <div class="form-label-row" style="margin-top:14px;" data-page-node-id="GB0XsKZpgNX59W9WFzBJAK">
+                    <label class="form-label" data-page-node-id="Q1tTOGo21W0idJcFKyO5W9">补充条款</label>
                 </div>
                 <textarea class="edit-textarea plain" id="editContractExtra" placeholder="可输入补充条款内容">无</textarea>
             </div>
 
             <!-- 阶段任务（数据驱动，支持更换模板真正替换阶段） -->
-            <div class="content-tab-pane" id="pane-stage-task">
-                <div class="template-info" id="draftStageInfo" style="display:none;">
-                    <div class="template-tag" id="draftStageTag"></div>
-                    <div class="template-hint">模板内容可编辑调整</div>
+            <div class="content-tab-pane" id="pane-stage-task" data-page-node-id="gbNilLwT14glk8tLxbHFxL">
+                <div class="template-info" id="draftStageInfo" style="display:none;" data-page-node-id="EpRNJVQ0mHfYAtJBPvik64">
+                    <div class="template-tag" id="draftStageTag" data-page-node-id="CeBxHISph2o4tXNXDbHV40"></div>
+                    <div class="template-hint" data-page-node-id="HeRoVhcm7NQjDaMjB3lkdP">模板内容可编辑调整</div>
                 </div>
-                <div id="draftStageList"></div>
-                <div class="add-stage-btn" onclick="addDraftStage()"><span>+ 添加新阶段</span></div>
+                <div id="draftStageList" data-page-node-id="PW1M1DNiNVeXFva8SKPfNP"></div>
+                <div class="add-stage-btn" onclick="addDraftStage()" data-page-node-id="lIN7xKcubpzzPWug8aps9h"><span data-page-node-id="gufpghvkSzlhhSpbVrfOX2">+ 添加新阶段</span></div>
             </div>
 
             <!-- 附件 -->
-            <div class="content-tab-pane" id="pane-attachment">
-                <div class="attachment-upload-area" onclick="addDraftAttachment()">
-                    <div class="upload-icon">📁</div>
-                    <div class="upload-text">点击上传附件</div>
-                    <div class="upload-hint">支持 PDF、图片、Word、Excel 等格式</div>
+            <div class="content-tab-pane" id="pane-attachment" data-page-node-id="NyZpEHDQr8kddUxC5lsl56">
+                <div class="attachment-upload-area" onclick="addDraftAttachment()" data-page-node-id="WrGKXDxS6rVWTdskTR9pg9">
+                    <div class="upload-icon" data-page-node-id="SAXsdjtL84JgaNc1flAkxB">📁</div>
+                    <div class="upload-text" data-page-node-id="dqBl2wVWCV85xtCFzOZr5t">点击上传附件</div>
+                    <div class="upload-hint" data-page-node-id="oDLlxsLDMnNWCA833rAcot">支持 PDF、图片、Word、Excel 等格式</div>
                 </div>
-                <div class="attachment-list" id="draftAttList"></div>
+                <div class="attachment-list" id="draftAttList" data-page-node-id="a8T6sIwCSgGN0E1fFntQNT"></div>
             </div>
-            <div class="wc-preview-btn" onclick="previewContract()">👁️ 预览合同</div>
         </div>
+            <div class="wc-preview-btn" onclick="previewContract()" data-page-node-id="JijIFBsvxC4eds3YgtXvNt">👁️ 预览合同</div>
     </div>
 
     <!-- 底部操作栏 -->
-    <div class="sticky-cta">
-        <button class="cta-btn cta-secondary" onclick="doSave()">仅保存</button>
-        <button class="cta-btn cta-primary" onclick="doSubmit()">提交并邀请乙方</button>
+    <div class="sticky-cta" data-page-node-id="TGpiAZSCKoxbrwVHWhTHiE">
+        <button class="cta-btn cta-secondary" onclick="doSave()" data-page-node-id="jHAfVSVSnSDcABMtJJu8fB">仅保存</button>
+        <button class="cta-btn cta-primary" onclick="doSubmit()" data-page-node-id="U3iBwOBE8LqSCJjUtuPcuP">提交并邀请乙方</button>
     </div>
 
-    <div class="app-toast" id="appToast"></div>
+    <div class="app-toast" id="appToast" data-page-node-id="OyMf8yjV8OmkUfHPfbI8YX"></div>
 
     <!-- 通用信息弹窗（版本记录 / 变更记录） -->
-    <div class="info-modal-mask" id="infoModalMask" onclick="if(event.target===this)closeInfoModal()">
-        <div class="info-modal">
-            <div class="info-modal-title" id="infoModalTitle"></div>
-            <div class="info-modal-body" id="infoModalBody"></div>
-            <div class="info-modal-close" onclick="closeInfoModal()">关闭</div>
+    <div class="info-modal-mask" id="infoModalMask" onclick="if(event.target===this)closeInfoModal()" data-page-node-id="urpdfgQhGlnFtUJWDfglWZ">
+        <div class="info-modal" data-page-node-id="5JXqCUCQa3pkI0VGK9gTuv">
+            <div class="info-modal-title" id="infoModalTitle" data-page-node-id="yx4lUqp7zgpej5tYmCQALD"></div>
+            <div class="info-modal-body" id="infoModalBody" data-page-node-id="cgI9wSZ3LF1W8OzkIK5Ur5"></div>
+            <div class="info-modal-close" onclick="closeInfoModal()" data-page-node-id="NZZSmcG1cPynwAdZTYoemT">关闭</div>
         </div>
     </div>
 
     <!-- 更换模板：选择弹窗 -->
-    <div class="wcd-modal-mask" id="wcdTplModal" onclick="if(event.target===this)closeTemplatePicker()">
-        <div class="wcd-sheet">
-            <div class="wcd-sheet-head"><div class="title" id="wcdTplTitle">选择模板</div><div class="close" onclick="closeTemplatePicker()">✕</div></div>
-            <div class="wcd-sheet-filter">当前合同类型：<span id="wcdTplFilterType">-</span></div>
-            <div class="wcd-sheet-body"><div id="wcdTplList"></div><div class="member-picker-empty" id="wcdTplEmpty" style="display:none;">暂无匹配的模板</div></div>
-            <div class="wcd-sheet-foot"><div class="btn cancel" onclick="closeTemplatePicker()">取消</div></div>
+    <div class="wcd-modal-mask" id="wcdTplModal" onclick="if(event.target===this)closeTemplatePicker()" data-page-node-id="b6dFCDzGlPVEAf1EONa58x">
+        <div class="wcd-sheet" data-page-node-id="Y4Ht5r0vahHNSHR47ItEh7">
+            <div class="wcd-sheet-head" data-page-node-id="FrBXYV19LY6qUUzcbn3sbK"><div class="title" id="wcdTplTitle" data-page-node-id="YoKt7CujvErPbrgF1PigfI">选择模板</div><div class="close" onclick="closeTemplatePicker()" data-page-node-id="UpKO5T9RwoB2ii8NWT4HZH">✕</div></div>
+            <div class="wcd-sheet-filter" data-page-node-id="Bpw8Dj84WWz6eeyJFz4LzD">当前合同类型：<span id="wcdTplFilterType" data-page-node-id="cUcOBv2iAY8Ps5YGaVIUIX">-</span></div>
+            <div class="wcd-sheet-body" data-page-node-id="Z7xZG1L0c5SBiIF9vF2p9b"><div id="wcdTplList" data-page-node-id="eCzLtexpBSLGEKfOBkITkj"></div><div class="member-picker-empty" id="wcdTplEmpty" style="display:none;" data-page-node-id="IMPXIlDCfrETksAfNJEkYh">暂无匹配的模板</div></div>
+            <div class="wcd-sheet-foot" data-page-node-id="Mc23DKtuHIT9Ygdg5JrsDv"><div class="btn cancel" onclick="closeTemplatePicker()" data-page-node-id="DHIGteXqkH9n3qBOIcXooC">取消</div></div>
         </div>
     </div>
 
     <!-- 更换模板：预览弹窗 -->
-    <div class="wcd-modal-mask" id="wcdPreviewModal" onclick="if(event.target===this)closeTemplatePreview()">
-        <div class="wcd-sheet">
-            <div class="wcd-sheet-head"><div class="title" id="wcdPreviewTitle">模板预览</div><div class="close" onclick="closeTemplatePreview()">✕</div></div>
-            <div class="preview-meta" id="wcdPreviewMeta"></div>
-            <div class="wcd-sheet-body" style="padding:0;"><div class="preview-content" id="wcdPreviewContent"></div></div>
-            <div class="wcd-sheet-foot">
-                <div class="btn cancel" onclick="closeTemplatePreview()" style="margin-bottom:8px;">取消</div>
-                <div class="btn primary" onclick="applyTemplateFromPreview()">使用此模板</div>
+    <div class="wcd-modal-mask" id="wcdPreviewModal" onclick="if(event.target===this)closeTemplatePreview()" data-page-node-id="Urn1hPFqlEBxlsWhBiO9VF">
+        <div class="wcd-sheet" data-page-node-id="jsvzJOoWvF5m5HM8hJ7onH">
+            <div class="wcd-sheet-head" data-page-node-id="S3jPRSdIF9gsBWfji5sDl0"><div class="title" id="wcdPreviewTitle" data-page-node-id="BzW562MFALVPPC2AWb0QDF">模板预览</div><div class="close" onclick="closeTemplatePreview()" data-page-node-id="8eZiwbAsbTQPAnXfXAhfOQ">✕</div></div>
+            <div class="preview-meta" id="wcdPreviewMeta" data-page-node-id="EmmOkl80yEZa9Do5zj3X60"></div>
+            <div class="wcd-sheet-body" style="padding:0;" data-page-node-id="iIwgTDbPGUrUTxV6fSpxRi"><div class="preview-content" id="wcdPreviewContent" data-page-node-id="5qOdQiH07XZepBYKcdFyVN"></div></div>
+            <div class="wcd-sheet-foot" data-page-node-id="3OpVDDtue1rc0VPdWAPvzH">
+                <div class="btn cancel" onclick="closeTemplatePreview()" style="margin-bottom:8px;" data-page-node-id="Fi3hbk6ebKgGsbXGjtNsFK">取消</div>
+                <div class="btn primary" onclick="applyTemplateFromPreview()" data-page-node-id="7IVqEotaQmQEsIPfQr0CU8">使用此模板</div>
             </div>
         </div>
     </div>
 
     <!-- 预览合同弹窗（全屏，对齐「拟定中（发起方）」状态页） -->
-    <div class="fulltext-modal" id="wcFullTextModal" onclick="if(event.target===this)closeFullText()">
-        <div class="status-bar">
-            <span class="time">9:41</span>
-            <div class="icons">📶 🔋</div>
+    <div class="fulltext-modal" id="wcFullTextModal" onclick="if(event.target===this)closeFullText()" data-page-node-id="9MrPEELmLDOUjsETLfEaRz">
+        <div class="status-bar" data-page-node-id="up2HgLGZHnz057yOCGM4Xo">
+            <span class="time" data-page-node-id="TAVnhNCc9moAdfudENUcOp">9:41</span>
+            <div class="icons" data-page-node-id="NPoEShNi55MKxyk1WpXnjB">📶 🔋</div>
         </div>
-        <div class="nav-bar">
-            <div class="back" onclick="closeFullText()"><span class="back-arrow">←</span><span class="back-text">返回</span></div>
-            <div class="title" id="wcFullTextTitle">👁️ 预览合同</div>
-            <div class="nb-actions">
-                <div class="native-capsule" title="微信原生胶囊：由微信客户端渲染，开发者不可自定义其内容"><span class="nc-left">⋯</span><span class="nc-divider"></span><span class="nc-right">○</span></div>
+        <div class="nav-bar" data-page-node-id="vl65o2STLqrP4DsHrvE1lX">
+            <div class="back" onclick="closeFullText()" data-page-node-id="B2yFCCDz6bqlm19IQUIyAB"><span class="back-arrow" data-page-node-id="FKfsdBEb4xeyy1NsGJOEsE">←</span><span class="back-text" data-page-node-id="AM3rqln8x3rHz89UxFG2vE">返回</span></div>
+            <div class="title" id="wcFullTextTitle" data-page-node-id="ewzH2It2x8a2mrU7xQUhc3">👁️ 预览合同</div>
+            <div class="nb-actions" data-page-node-id="TbvL61EYxjYSSGZLnnBiQu">
+                <div class="native-capsule" title="微信原生胶囊：由微信客户端渲染，开发者不可自定义其内容" data-page-node-id="DdK6GgMhfxABLIFcQz4ev5"><span class="nc-left" data-page-node-id="mBKIyu8wDcgLtuBUOPiaA6">⋯</span><span class="nc-divider" data-page-node-id="ubiEPSUGg4vgEOnzIMqbe2"></span><span class="nc-right" data-page-node-id="Jnbqfc9b9JRnJ9m9BQ8se5">○</span></div>
             </div>
         </div>
-        <div class="fulltext-content" id="wcFullTextContent"></div>
+        <div class="fulltext-content" id="wcFullTextContent" data-page-node-id="hi5q3tQnJuV8H5pLrJOxbd"></div>
     </div>
 
     <!-- 编辑任务弹窗（对齐「拟定中（发起方）」状态页 editTaskDetail） -->
-    <div class="edit-task-modal" id="editTaskModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">编辑任务</div>
-                <div class="modal-close" onclick="closeEditTaskModal()">✕</div>
+    <div class="edit-task-modal" id="editTaskModal" data-page-node-id="DOQHLy4tDExSaNKb2EDZkC">
+        <div class="modal-content" data-page-node-id="iH1vY8ywxkL7VjJTf3v2Jy">
+            <div class="modal-header" data-page-node-id="Fm3XZt6X53vge9Bne0taTC">
+                <div class="modal-title" data-page-node-id="VTWqH52vAVo93VrUyNeJal">编辑任务</div>
+                <div class="modal-close" onclick="closeEditTaskModal()" data-page-node-id="gTXpBpU0Dnei3VFwAAeuPw">✕</div>
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">任务名称 <span class="required">*</span></label>
-                    <input type="text" class="form-input" id="editTaskName" placeholder="请输入任务名称">
+            <div class="modal-body" data-page-node-id="lFydEB9ZZq3jD5zAsCaAHT">
+                <div class="form-group" data-page-node-id="uzEapsmD5jAHzm0QureHUz">
+                    <label class="form-label" data-page-node-id="1kaFhWjx9SJwYmN98KErzR">任务名称 <span class="required" data-page-node-id="LKighv8wWUnonmawHBRhht">*</span></label>
+                    <input type="text" class="form-input" id="editTaskName" placeholder="请输入任务名称" data-page-node-id="X7h2tCXZdPwCEVB3r3Ilfj">
                 </div>
-                <div class="form-group">
-                    <label class="form-label">执行人</label>
-                    <div class="confirm-person-tags" id="editTaskExecutorTags" style="margin-bottom:8px;"></div>
-                    <div class="search-select">
-                        <div class="search-input-wrap">
-                            <input type="text" class="search-input" id="editTaskExecutorSearch" placeholder="请选择执行人" oninput="filterExecutorList('edit')" onfocus="toggleExecutorSearch('edit')">
-                            <span class="arrow" onclick="toggleExecutorSearch('edit')">▼</span>
+                <div class="form-group" data-page-node-id="JBDUrFpR6hImVtMDxCfN8s">
+                    <label class="form-label" data-page-node-id="EQ2rRT3wX0oFdR20KQ1Pk8">执行人</label>
+                    <div class="confirm-person-tags" id="editTaskExecutorTags" style="margin-bottom:8px;" data-page-node-id="8wy3C1JLtKPXPDi97POF2E"></div>
+                    <div class="search-select" data-page-node-id="MH8OEnpEn3EiNmeSdjlTIM">
+                        <div class="search-input-wrap" data-page-node-id="fRpMXvEKn0HK7whzfnAQOg">
+                            <input type="text" class="search-input" id="editTaskExecutorSearch" placeholder="请选择执行人" oninput="filterExecutorList('edit')" onfocus="toggleExecutorSearch('edit')" data-page-node-id="aG4GouB75HATvMA4m1LvwQ">
+                            <span class="arrow" onclick="toggleExecutorSearch('edit')" data-page-node-id="D9Lug7adRsplFAxZrihCJP">▼</span>
                         </div>
-                        <div class="search-dropdown" id="editTaskExecutorDropdown"></div>
+                        <div class="search-dropdown" id="editTaskExecutorDropdown" data-page-node-id="j5TJARtua6HdYb33KBe9ZK"></div>
                     </div>
-                    <input type="hidden" id="editTaskExecutor">
+                    <input type="hidden" id="editTaskExecutor" data-page-node-id="rSiew36YPiBkhantRdqOx6">
                 </div>
-                <div class="form-group">
-                    <label class="form-label">确认人（最多5人）</label>
-                    <div class="confirm-person-tags" id="editTaskConfirmPersons"></div>
-                    <div class="search-select">
-                        <div class="search-input-wrap">
-                            <input type="text" class="search-input" id="editTaskConfirmerSearch" placeholder="添加确认人" oninput="filterConfirmerList('edit')" onfocus="toggleConfirmerSearch('edit')">
-                            <span class="arrow" onclick="toggleConfirmerSearch('edit')">▼</span>
+                <div class="form-group" data-page-node-id="5Y7zhBUNmu8ZJ6UFgzAAtD">
+                    <label class="form-label" data-page-node-id="RQoTXidZU0egZhiJ4PdyES">确认人（最多5人）</label>
+                    <div class="confirm-person-tags" id="editTaskConfirmPersons" data-page-node-id="whln9TRP9gcmr05IrTs30x"></div>
+                    <div class="search-select" data-page-node-id="xUle0HjJpleZip2p57DGCl">
+                        <div class="search-input-wrap" data-page-node-id="BziRz5sPGHQ9QuABBHvdgX">
+                            <input type="text" class="search-input" id="editTaskConfirmerSearch" placeholder="添加确认人" oninput="filterConfirmerList('edit')" onfocus="toggleConfirmerSearch('edit')" data-page-node-id="HRMJewrsoH457qGFfUDsFJ">
+                            <span class="arrow" onclick="toggleConfirmerSearch('edit')" data-page-node-id="GZedI7R2CUO1m76cfEut1w">▼</span>
                         </div>
-                        <div class="search-dropdown" id="editTaskConfirmerDropdown"></div>
+                        <div class="search-dropdown" id="editTaskConfirmerDropdown" data-page-node-id="dCbrQVLrrqYAwWmADEkAhz"></div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">执行标准 <span class="required">*</span></label>
+                <div class="form-group" data-page-node-id="KuM6bxnYcbrE6P2DJfmr4Y">
+                    <label class="form-label" data-page-node-id="t4UAYyjtx5qmHSBjJfAcUb">执行标准 <span class="required" data-page-node-id="3s835ZBIOWsVL05UtMCI9p">*</span></label>
                     <textarea class="form-textarea" id="editTaskExecStandard" placeholder="请输入执行标准"></textarea>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">确认标准 <span class="required">*</span></label>
+                <div class="form-group" data-page-node-id="CTQonjCgYUF8t9FobmHbY3">
+                    <label class="form-label" data-page-node-id="fFMoxCA68Ih1o0FJOtNZAK">确认标准 <span class="required" data-page-node-id="W0RrYSZ0Lr35webPA1K5KD">*</span></label>
                     <textarea class="form-textarea" id="editTaskConfirmStandard" placeholder="请输入确认标准"></textarea>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">担责标准 <span class="required">*</span></label>
+                <div class="form-group" data-page-node-id="DyFq06pw18h6qeBZ9PFF17">
+                    <label class="form-label" data-page-node-id="xnOd2RU0Jj5E2cQxAx2Goo">担责标准 <span class="required" data-page-node-id="wpCuZ4H5MbZVJkC1sIbi4A">*</span></label>
                     <textarea class="form-textarea" id="editTaskLiableStandard" placeholder="请输入担责标准"></textarea>
                 </div>
             </div>
-            <div class="modal-footer"><button class="submit-btn" onclick="confirmEditTask()">保存修改</button></div>
+            <div class="modal-footer" data-page-node-id="us8r8qiX6xgMHmeeaHCG4u"><button class="submit-btn" onclick="confirmEditTask()" data-page-node-id="QWFiIBTqMh2diHGEjevOhM">保存修改</button></div>
         </div>
     </div>
 
     <!-- 个人电子名片（开发中） -->
-    <div class="wcd-modal-mask" id="businessCardModal" onclick="if(event.target===this)closeBusinessCard()">
-        <div class="wcd-sheet" style="max-height:auto;">
-            <div class="wcd-sheet-head"><div class="title">个人电子名片</div><div class="close" onclick="closeBusinessCard()">✕</div></div>
-            <div style="padding:8px 16px 20px;text-align:center;">
-                <div class="wcd-bc-badge">开发中</div>
-                <div class="wcd-bc-avatar" id="bcAvatar"></div>
-                <div class="wcd-bc-name" id="bcName"></div>
-                <div class="wcd-bc-role" id="bcRole"></div>
-                <div class="wcd-bc-id" id="bcId"></div>
-                <div class="wcd-bc-tip">个人电子名片功能开发中，敬请期待</div>
+    <div class="wcd-modal-mask" id="businessCardModal" onclick="if(event.target===this)closeBusinessCard()" data-page-node-id="dwkG8GfEvJNdFK3p5iHNQ9">
+        <div class="wcd-sheet" style="max-height:auto;" data-page-node-id="BGF83Dyy5nBvl0tvGcz3Pr">
+            <div class="wcd-sheet-head" data-page-node-id="WnrXVhIYTukMxEN4HAQ0ga"><div class="title" data-page-node-id="MEylWT3yQuqAoaaipfdhwk">个人电子名片</div><div class="close" onclick="closeBusinessCard()" data-page-node-id="HLwbsLQmyTgYvkjdOWfylC">✕</div></div>
+            <div style="padding:8px 16px 20px;text-align:center;" data-page-node-id="cCKJ8DzopllEGaSKZLOYW6">
+                <div class="wcd-bc-badge" data-page-node-id="FgNURq0KGO2vOGQsT2Rkgp">开发中</div>
+                <div class="wcd-bc-avatar" id="bcAvatar" data-page-node-id="YV5XlYQp610H6wb2N2NaoD"></div>
+                <div class="wcd-bc-name" id="bcName" data-page-node-id="wKAH6hLO4p07qi2fLZ8fqA"></div>
+                <div class="wcd-bc-role" id="bcRole" data-page-node-id="S7LkJoEYsTH4gDWa3k7YI5"></div>
+                <div class="wcd-bc-id" id="bcId" data-page-node-id="BVvqbkPax98qPJSw4hYtKf"></div>
+                <div class="wcd-bc-tip" data-page-node-id="ciULbGLs1gwxiKuvLGn6yC">个人电子名片功能开发中，敬请期待</div>
             </div>
         </div>
     </div>
 
-    <input type="file" id="draftAttInput" style="display:none;" onchange="onDraftAttPicked(event)">
+    <input type="file" id="draftAttInput" style="display:none;" onchange="onDraftAttPicked(event)" data-page-node-id="sqJOZG7uYvyQoTDREKxIxI">
 </div>
 
 <!-- 原型导航：与 worker-contract-detail.html 一致（新增「拟定中（发起方）-新」并置为当前） -->
-    <div class="page-nav">
-        <div class="page-nav-title" onclick="togglePageNav()" title="收起 / 展开 原型导航">原型导航 <span class="toggle-btn" id="pageNavToggle">▼</span></div>
-    <a href="home.html" class="page-nav-item">首页</a>
-    <a href="project-list.html" class="page-nav-item">项目主页（进行中）</a>
-    <a href="contract-detail.html" class="page-nav-item">合同详情（合规版）</a>
-    <a href="message.html" class="page-nav-item">消息</a>
-    <a href="worker-contract-detail.html" class="page-nav-item">工人合同详情（新流程）</a>
+    <div class="page-nav" data-page-node-id="eX6cwHb3zdOBO5vO9iW6NV">
+        <div class="page-nav-title" onclick="togglePageNav()" title="收起 / 展开 原型导航" data-page-node-id="dPZLl2nnFjHGLiC6dLv2Ko">原型导航 <span class="toggle-btn" id="pageNavToggle" data-page-node-id="2kiHbOwSCv4HTh4ODG2UCV">▼</span></div>
+    <a href="home.html" class="page-nav-item" data-page-node-id="2PG4eciulXxvh0m2akVmuB">首页</a>
+    <a href="project-list.html" class="page-nav-item" data-page-node-id="hC5qG5necuSwGAztyvE94v">项目主页（进行中）</a>
+    <a href="contract-detail.html" class="page-nav-item" data-page-node-id="7TTDd8nlLYngBVPjsGMJKb">合同详情（合规版）</a>
+    <a href="message.html" class="page-nav-item" data-page-node-id="FFtACSlSnCcHGBQOnr4APE">消息</a>
+    <a href="worker-contract-detail.html" class="page-nav-item" data-page-node-id="8BjFkqbjqKiCMitmz5lFbz">工人合同详情（新流程）</a>
 
-    <div style="margin-top:16px; padding-top:12px; border-top:1px solid #E8E8E8;">
-        <div class="page-nav-title">合同状态切换（工人合同）</div>
+    <div style="margin-top:16px; padding-top:12px; border-top:1px solid #E8E8E8;" data-page-node-id="SnHpWkdUBMdO8E6ZlGFtOk">
+        <div class="page-nav-title" data-page-node-id="4ooMbg9GqSZBSZwdQBRphV">合同状态切换（工人合同）</div>
 
         <!-- 发起方视角 -->
-        <div class="status-group">
-            <div class="status-group-header" onclick="toggleStatusGroup(this)">
-                <span class="status-group-icon">▼</span>
-                <span class="status-group-title">发起方视角</span>
-                <span class="status-group-count">8</span>
+        <div class="status-group" data-page-node-id="SsLHMjZOCsclfqzx4e6gFa">
+            <div class="status-group-header" onclick="toggleStatusGroup(this)" data-page-node-id="RgPekDXyJ6vRA1MZKob4vR">
+                <span class="status-group-icon" data-page-node-id="L2aQfvsgDCcTc3I7naRF7q">▼</span>
+                <span class="status-group-title" data-page-node-id="bBNeVSpoHuAnGUmVYicFF0">发起方视角</span>
+                <span class="status-group-count" data-page-node-id="3S8rDnZExAi4edMEDpOJMv">8</span>
             </div>
-            <div class="status-group-content">
-                <a class="status-switch-item" href="worker-contract-detail.html?status=worker_draft_initial" style="text-decoration:none;">拟定中(发起方)</a>
-                <a class="status-switch-item active" href="worker-contract-draft-initial-new.html" style="text-decoration:none;">拟定中(发起方)-新</a>
-                <a class="status-switch-item" href="worker-contract-confirming-initiator-new.html" style="text-decoration:none;">确认中(发起方)</a>
-                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;">已确认(发起方)</a>
-                <a class="status-switch-item" href="worker-sign-upload.html" style="text-decoration:none;">上传签约文件（新页面）</a>
-                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;">拟定中(撤回后)</a>
-                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;">已签约</a>
-                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;">已签约（已履约完成）</a>
+            <div class="status-group-content" data-page-node-id="ehZCoZIG7FAzooiEidhXOp">
+                <a class="status-switch-item" href="worker-contract-detail.html?status=worker_draft_initial" style="text-decoration:none;" data-page-node-id="rWA8DsklDEVXWSmkEF7tZY">拟定中(发起方)</a>
+                <a class="status-switch-item active" href="worker-contract-draft-initial-new.html" style="text-decoration:none;" data-page-node-id="tCozbh4kLlGslhDVTCOdX9">拟定中(发起方)-新</a>
+                <a class="status-switch-item" href="worker-contract-confirming-initiator-new.html" style="text-decoration:none;" data-page-node-id="IflEzupueyCG6o6pTdjhbI">确认中(发起方)</a>
+                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;" data-page-node-id="cSs950kdZbImjYLV2hnOOc">已确认(发起方)</a>
+                <a class="status-switch-item" href="worker-sign-upload.html" style="text-decoration:none;" data-page-node-id="i1H2GO2YrOhEmb6suw3BT1">上传签约文件（新页面）</a>
+                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;" data-page-node-id="m7eoDfwqIDz6ZkGREAdPaz">拟定中(撤回后)</a>
+                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;" data-page-node-id="ccazCdCVJt1fH7dAK4dtvY">已签约</a>
+                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;" data-page-node-id="vQLZZjCMIwUBHRMbueVj21">已签约（已履约完成）</a>
             </div>
         </div>
 
         <!-- 受邀方视角 -->
-        <div class="status-group">
-            <div class="status-group-header" onclick="toggleStatusGroup(this)">
-                <span class="status-group-icon">▶</span>
-                <span class="status-group-title">受邀方视角</span>
-                <span class="status-group-count">6</span>
+        <div class="status-group" data-page-node-id="FtBfIIkGmSLiXxLo7baMsV">
+            <div class="status-group-header" onclick="toggleStatusGroup(this)" data-page-node-id="JfZ7Tm5LZFTFC7mVAhj6px">
+                <span class="status-group-icon" data-page-node-id="xDAVXZJY3WCfxJtBmTyqEW">▶</span>
+                <span class="status-group-title" data-page-node-id="Kvbmayfbtz6EreCofnHeWz">受邀方视角</span>
+                <span class="status-group-count" data-page-node-id="JrOVfiaoBnBpnjXUgWzFvS">6</span>
             </div>
-            <div class="status-group-content" style="display:none;">
-                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;">已确认(受邀方)</a>
-                <a class="status-switch-item" href="worker-contract-receive-confirmed-new.html" style="text-decoration:none;">已确认（受邀方）-新</a>
-                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;">抢单失败(受邀方)</a>
-                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;">已拒绝(受邀方)</a>
-                <div class="status-switch-divider"></div>
-                <a class="status-switch-item" href="worker-contract-receive-inviting.html" style="text-decoration:none;">确认中（接单体验 E）</a>
-                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;">已签约(受邀方)</a>
+            <div class="status-group-content" style="display:none;" data-page-node-id="delQsc5tsafdiGZX5tvfUw">
+                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;" data-page-node-id="1AFemnn3mrzrtLImiPL93U">已确认(受邀方)</a>
+                <a class="status-switch-item" href="worker-contract-receive-confirmed-new.html" style="text-decoration:none;" data-page-node-id="bWTKsUNdSIxEtQGva0XduU">已确认（受邀方）-新</a>
+                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;" data-page-node-id="B9KPL4iewpF1pYIHUeeZ77">抢单失败(受邀方)</a>
+                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;" data-page-node-id="fORjJSRMzmu2ZmxeKEkoop">已拒绝(受邀方)</a>
+                <div class="status-switch-divider" data-page-node-id="Tti55ObFbZhPNVvtFCm3Zy"></div>
+                <a class="status-switch-item" href="worker-contract-receive-inviting.html" style="text-decoration:none;" data-page-node-id="w2xwSFLG3gaUwwcEOWHyuw">确认中（接单体验 E）</a>
+                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;" data-page-node-id="YYVPKi5C8MN8IAj35t0hRd">已签约(受邀方)</a>
             </div>
         </div>
 
         <!-- 演示数据 -->
-        <div class="status-group">
-            <div class="status-group-header" onclick="toggleStatusGroup(this)">
-                <span class="status-group-icon">▼</span>
-                <span class="status-group-title">演示数据</span>
-                <span class="status-group-count">2</span>
+        <div class="status-group" data-page-node-id="pAtv0aPkUvD7cvk7VHxX5b">
+            <div class="status-group-header" onclick="toggleStatusGroup(this)" data-page-node-id="S1MNeriua076avG9d7FBIA">
+                <span class="status-group-icon" data-page-node-id="2JTxuBhVWsZAQZhCuM7JBY">▼</span>
+                <span class="status-group-title" data-page-node-id="3nJZuEqUVl3RBfczV2AHEb">演示数据</span>
+                <span class="status-group-count" data-page-node-id="K4IuQahwFKyR0qe585vZGW">2</span>
             </div>
-            <div class="status-group-content">
-                <a class="status-switch-item" href="wechat-service-notice.html" style="text-decoration:none;">微信服务通知</a>
-                <a class="status-switch-item" href="invite-banner-demo.html" style="text-decoration:none;">应用内顶部通知条（示例）</a>
+            <div class="status-group-content" data-page-node-id="ExFeBGv8j5aDBZbiHMiERk">
+                <a class="status-switch-item" href="wechat-service-notice.html" style="text-decoration:none;" data-page-node-id="9krVpPshe40ol2z9xS0Tw0">微信服务通知</a>
+                <a class="status-switch-item" href="invite-banner-demo.html" style="text-decoration:none;" data-page-node-id="erF13xsdfdQ1cNBbCgm3Cb">应用内顶部通知条（示例）</a>
             </div>
         </div>
     </div>
