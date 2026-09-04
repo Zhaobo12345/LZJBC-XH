@@ -39,10 +39,10 @@
 ## 页面布局约定（项目详情进行中-新版）
 - `project-detail-ongoing-v2.html`（service/owner 两份）「待办事项」卡片不与架构切换联动，置于吸顶导航（快捷入口+架构切换）之前；改按 HTML 注释锚点整体移动，不改 CSS/JS，两份同步。
 - 现状顺序：项目基本信息 → 待办事项 → [快捷入口+架构切换 吸顶] → 合同/任务概览 → 今日动态（owner 版今日动态在吸顶后、合同概览前）。
-- **`project-detail-worker.html`（服务方·工人视角，2026-08-20 新增并优化）**：仿 ongoing-v2 布局，按工人心智重构——① 首屏头部改工人视角「我的工种·施工组 + 待我处理 N（橙色 KPI 胶囊）」；② 待办按「任务执行·确认 / 合同确认·签约」分组，4 条全展示，左侧色条按紧急度着色，待办卡标题条橙色（模块色区分）；③ 快捷入口 4 主 + 更多：全部任务(带红角标4)/项目动态/我的合同(滚动至合同卡)/更多，「更多」展开面板收纳 架构/成员/资料；吸顶折叠后保留全部任务+项目动态常驻；④ 架构层级默认选中工人所属工作组（显示「默认我的工作组」提示），`selectLevel` 同步给快捷入口带 `?level=`；⑤ 合同直接展示（无统计项、`contract-list` 默认展开）且每行加「待我上传/待我确认」动作徽标；⑥ 取消「今日动态」卡片与下方「任务统计」卡片；⑦ 待办/合同均带空态（`.is-empty` 由 `refreshEmptyStates()` 切换）。不影响其他页面/功能。
+- **`project-detail-worker.html`（服务方·工人视角）— 已于 2026-09-04 删除**：原（2026-08-20 新增优化）仿 ongoing-v2 布局，按工人心智重构——① 首屏头部改工人视角「我的工种·施工组 + 待我处理 N（橙色 KPI 胶囊）」；② 待办按「任务执行·确认 / 合同确认·签约」分组，4 条全展示，左侧色条按紧急度着色，待办卡标题条橙色（模块色区分）；③ 快捷入口 4 主 + 更多：全部任务(带红角标4)/项目动态/我的合同(滚动至合同卡)/更多，「更多」展开面板收纳 架构/成员/资料；吸顶折叠后保留全部任务+项目动态常驻；④ 架构层级默认选中工人所属工作组（显示「默认我的工作组」提示），`selectLevel` 同步给快捷入口带 `?level=`；⑤ 合同直接展示（无统计项、`contract-list` 默认展开）且每行加「待我上传/待我确认」动作徽标；⑥ 取消「今日动态」卡片与下方「任务统计」卡片；⑦ 待办/合同均带空态（`.is-empty` 由 `refreshEmptyStates()` 切换）。不影响其他页面/功能。
 
 ## 架构层级联动约定（2026-08-19 方案A）
-- 详情页 `selectLevel()` 末尾统一把「任务概览/今日动态」`.more` 链接改带 `?level=架构层级名`（encodeURIComponent；项目部=不带参）。已改 3 页：service ongoing-v2、service/owner completed-v2；**owner ongoing-v2 无层级切换 JS（静态展示），不携带、勿加交互**。`project-detail-worker.html` 的 `selectLevel()` 额外把快捷入口 `.quick-nav-item`（task-list.html / activity-list.html）一并携带层级，使「全部任务」「项目动态」入口随选中层级过滤。
+- 详情页 `selectLevel()` 末尾统一把「任务概览/今日动态」`.more` 链接改带 `?level=架构层级名`（encodeURIComponent；项目部=不带参）。已改 3 页：service ongoing-v2、service/owner completed-v2；**owner ongoing-v2 无层级切换 JS（静态展示），不携带、勿加交互**。（注：`project-detail-worker.html` 已于 2026-09-04 删除，其 `selectLevel()` 额外把快捷入口 `.quick-nav-item` 携带层级的写法仅供参考追溯，页面已不存在。）
 - `task-list.html`：`.contract-section` 挂 `data-level`（合同↔工作组一一对应：水电/泥瓦/木工/油漆工作组）；`currentFilters.level`；`filterTasks()` 分组层早退；标签复用 `updateFilterTags`/`removeFilter`（文案「架构层级：XX」）。
 - `activity-list.html`：activities 加 `level` 字段（设计服务/基础施工→项目部）；`currentLevelFilter` 置 renderActivities 过滤链头部；`#levelFilterRow/#levelFilterTag` 可移除标签；`initLevelFilter()`/`clearLevelFilter()`。
 - 口径：层级与既有筛选 AND 叠加、计数联动；**全部待办 todo-list 不携带层级**（按人聚合，无对应关系）。

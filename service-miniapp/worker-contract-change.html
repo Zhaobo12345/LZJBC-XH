@@ -82,6 +82,18 @@
             font-size: 13px; z-index: 60; display: none; max-width: 80%; text-align: center;
         }
 
+        /* ===== 对齐「拟定中（发起方）-新」：工期可编辑 / 违约责任(必填) / 固定条款查看 ===== */
+        .edit-field { margin-bottom: 14px; }
+        .edit-field > label { display: block; font-size: 13px; color: #333; margin-bottom: 6px; font-weight: 500; }
+        .field-row { display: flex; align-items: center; gap: 8px; }
+        .field-row .edit-input { flex: 1; }
+        .field-unit { font-size: 13px; color: #666; flex: 0 0 auto; }
+        .field-required-tag { color: #ff4d4f; margin-left: 4px; font-size: 12px; font-weight: 400; }
+        .form-label-row { display: flex; align-items: center; justify-content: space-between; margin: 16px 0 8px; }
+        .form-label { font-size: 13px; color: #333; font-weight: 500; }
+        .view-full-link { color: #1677ff; font-size: 13px; text-decoration: none; cursor: pointer; }
+        .view-full-link:active { opacity: .7; }
+
         /* 通用信息弹窗（版本记录 / 变更记录） */
         .info-modal-mask {
             position: absolute; inset: 0; background: rgba(0,0,0,0.45); z-index: 70; display: none;
@@ -201,6 +213,28 @@
                     </div>
                 </div>
 
+                <!-- 工期变更（对齐「拟定中（发起方）-新」：工期可编辑） -->
+                <div class="change-section">
+                    <div class="section-title"><span>📅</span><span>工期变更</span></div>
+                    <div class="change-item">
+                        <div class="item-label">当前工期</div>
+                        <div class="item-value" id="durationOldText">—</div>
+                    </div>
+                    <div class="change-item highlight">
+                        <div class="item-label">变更后工期</div>
+                        <div class="item-value">
+                            <div class="field-row">
+                                <input type="number" id="changeDurationNew" class="edit-input" placeholder="请输入变更后工期" oninput="WCP.onDurationInput()">
+                                <span class="field-unit">天</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="change-item diff" id="durationDiffRow" style="display:none;">
+                        <div class="item-label">工期变动</div>
+                        <div class="item-value" id="durationDiffText">—</div>
+                    </div>
+                </div>
+
                 <!-- 合同内容（三标签页，对齐合规版布局） -->
                 <div class="change-section">
                     <div class="section-title"><span>📑</span><span>合同内容</span></div>
@@ -210,8 +244,18 @@
                         <div class="change-tab" onclick="WCP.switchChangeTab(this, 'attachment')">合同附件</div>
                     </div>
 
-                    <!-- 合同正文 -->
+                    <!-- 合同正文（对齐「拟定中（发起方）-新」：违约责任必填可编辑 + 固定详细条款查看 + 补充条款变更） -->
                     <div class="change-tab-content active" id="contract-content">
+                        <!-- 违约责任：移入合同正文（必填，可编辑） -->
+                        <div class="edit-field">
+                            <label>违约责任<span class="field-required-tag">* 必填</span></label>
+                            <textarea id="changeBreachInput" class="edit-textarea" rows="4" placeholder="请输入违约责任条款，例如：1、甲方逾期付款的，按逾期金额千分之三/日支付违约金；2、乙方工期延误或质量不符的，应无偿返工并承担违约责任。"></textarea>
+                        </div>
+                        <!-- 固定详细条款（展示 + 查看全文 不可修改） -->
+                        <div class="form-label-row">
+                            <label class="form-label">固定详细条款</label>
+                            <a class="view-full-link" href="worker-contract-draft-fulltext-new.html">查看条款</a>
+                        </div>
                         <div class="change-contract-content">
                             <div class="content-preview" id="changeContractContentPreview"></div>
                             <div class="content-toggle" onclick="WCP.toggleContractContent(this)">
@@ -437,6 +481,49 @@
         var attachments = [];  // 本地编辑副本
 
         // ===== 阶段任务演示模板（与 worker-contract-detail.js 的 STAGE_TEMPLATES 保持一致）=====
+        var DEMO_CONTRACT_ID = 'demo-shuidian-signed';
+        function makeDemoContract(id) {
+            // 演示兜底：从新页「已签约（发起方）-新」点击发起变更进入时，若本地无持久化数据则使用此 demo 合同
+            var tplStages = (STAGE_TEMPLATES.shuidian && STAGE_TEMPLATES.shuidian.stages) ? STAGE_TEMPLATES.shuidian.stages : [];
+            return {
+                id: id || DEMO_CONTRACT_ID,
+                name: '水电班组服务合同',
+                type: 'shuidian',
+                typeName: '水电班组服务合同',
+                group: '水电工作组',
+                partyA: 'chenzhuang',
+                partyAName: '陈庄（工长）',
+                partyAPhone: '13800000001',
+                projectAddress: '西安市雁塔区科技路 88 号',
+                amount: 12000,
+                amountText: '壹万贰仟元整',
+                duration: 30,
+                breach: '1、甲方逾期付款的，按逾期金额千分之三/日支付违约金。\n2、乙方工期延误或质量不符的，应无偿返工并承担违约责任。',
+                isWorker: true,
+                status: 'worker_signed',
+                invitations: [
+                    { userId: 'zhang-shuidian', name: '张水电', role: '水电工', status: 'confirmed' },
+                    { userId: 'han-shuidian', name: '韩水通', role: '水电工', status: 'lost' },
+                    { userId: 'yang-shuidian', name: '杨水明', role: '水电工', status: 'rejected', rejectReason: '近期已有其他项目安排，无法承接本合同，敬请谅解。' }
+                ],
+                partyB: 'zhang-shuidian',
+                partyBName: '张水电',
+                joinedArchitecture: '水电工作组',
+                signed: true,
+                createdAt: Date.now(),
+                changeLog: [],
+                versionLog: [
+                    { name: 'V1 初始版本', desc: '拟定中（发起方）创建', date: '2024-01-05' },
+                    { name: 'V2 已签约版本', desc: '双方确认并上传签约文件', date: '2024-01-06' }
+                ],
+                stages: clone(tplStages),
+                attachments: [
+                    { name: '签约文件-水电合同.pdf', size: '1.2MB', date: '2024-01-06 14:30' }
+                ],
+                extraClauses: '',
+                contentIntro: '水电工程施工，包含材料进场、布管布线、开关插座安装及通水通电测试等。'
+            };
+        }
         var STAGE_TEMPLATES = {
             shuidian: {
                 stages: [
@@ -557,9 +644,10 @@
 
         function init() {
             workerId = getParam('id') || '';
-            if (!global.ContractStore || !workerId) { renderNotFound(); return; }
-            contract = global.ContractStore.getContract(workerId);
-            if (!contract) { renderNotFound(); return; }
+            if (!workerId) { renderNotFound(); return; }
+            contract = global.ContractStore ? global.ContractStore.getContract(workerId) : null;
+            // 演示兜底：本地未持久化或 ContractStore 不可用时，使用 demo 合同数据渲染，避免直接打开时弹“数据不可用”并返回
+            if (!contract) contract = makeDemoContract(workerId);
 
             // 合同基本信息
             $('ctxName').textContent = contract.name || '工人合同';
@@ -613,6 +701,15 @@
             $('changeExtraInput').value = (contract.extraClauses || '');
             $('changeReasonInput').value = '';
             $('changeReasonCount').textContent = '0/200';
+
+            // 工期预填（对齐「拟定中（发起方）-新」：工期可编辑）
+            var baseDuration = Number(contract.duration) || 0;
+            $('durationOldText').textContent = baseDuration ? (baseDuration + ' 天') : '—';
+            $('changeDurationNew').value = baseDuration;
+            updateDurationDiff();
+
+            // 违约责任预填（对齐「拟定中（发起方）-新」：合同正文内违约责任可编辑）
+            $('changeBreachInput').value = (contract.breach || '');
         }
 
         function clone(o) { try { return JSON.parse(JSON.stringify(o)); } catch (e) { return []; } }
@@ -679,6 +776,19 @@
         }
 
         function onAmountInput() { updateAmountDiff(); }
+        function onDurationInput() { updateDurationDiff(); }
+        function updateDurationDiff() {
+            var durationOld = Number(contract.duration) || 0;
+            var durationNew = Number($('changeDurationNew').value) || 0;
+            var diffRow = $('durationDiffRow');
+            var diffText = $('durationDiffText');
+            if (!diffRow || !diffText) return;
+            if (!durationNew || durationNew === durationOld) { diffRow.style.display = 'none'; return; }
+            diffRow.style.display = 'flex';
+            var diff = durationNew - durationOld;
+            diffText.className = 'item-value ' + (diff < 0 ? 'down' : '');
+            diffText.textContent = (diff > 0 ? '+' : '') + diff + ' 天';
+        }
         function updateAmountDiff() {
             var amountOld = Number(contract.amount) || 0;
             var amountNew = Number($('changeAmountNew').value) || 0;
@@ -1141,12 +1251,20 @@
             var extraOld = contract.extraClauses || '';
             var extraNew = ($('changeExtraInput').value || '').trim();
             if (!extraNew) extraNew = extraOld;
+            var durationOld = Number(contract.duration) || 0;
+            var durationNew = Number($('changeDurationNew').value) || 0;
+            if (!durationNew) durationNew = durationOld;
+            var breachNew = ($('changeBreachInput').value || '').trim();
+            if (!breachNew) breachNew = (contract.breach || '');
             return {
                 reason: reason,
                 amountOld: amountOld,
                 amountNew: amountNew,
                 extraOld: extraOld,
                 extraNew: extraNew,
+                durationOld: durationOld,
+                durationNew: durationNew,
+                breachNew: breachNew,
                 stagesNew: clone(stages),
                 attachmentsNew: clone(attachments),
                 time: nowLabel(),
@@ -1191,6 +1309,7 @@
             onChangeReasonInput: onChangeReasonInput,
             switchChangeTab: switchChangeTab,
             onAmountInput: onAmountInput,
+            onDurationInput: onDurationInput,
             toggleContractContent: toggleContractContent,
             updateStageName: updateStageName,
             toggleStageSequential: toggleStageSequential,

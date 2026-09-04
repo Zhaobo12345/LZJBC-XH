@@ -620,7 +620,13 @@
     }
 
     function updateStatus(status, viewer) {
+        var prevStatus = state.status;
         state.status = status;
+
+        // 乙方确认接单→已签约：将「无执行人」的任务执行人统一更新为乙方人员（仅签约瞬间触发一次）
+        if (status === 'worker_signed' && prevStatus !== 'worker_signed') {
+            assignDefaultExecutorsOnSigned();
+        }
 
         // 视角处理：优先使用导航项显式传入的 viewer（如发起方「已签约」项传入 'sender'），
         // 否则按状态后缀自动推导。视角必须在更新高亮前确定，保证高亮与渲染一致。
@@ -707,6 +713,7 @@
 
         renderMeta();
         renderFlow(status);
+        repositionFlowBar(status);
         renderLists(status);
 
         var isDraft = (status === 'worker_draft' || status === 'worker_draft_initial');
@@ -744,7 +751,7 @@
         var isReceiver = (state.viewer === 'receiver');
         if (!isDraft) html += metaRow('合同名称', c.name);
         // 受邀方视角：取消「合同类型」「所属架构层级」，改为补充「项目地址」（见下方）
-        if (!isReceiver) {
+        if (!isReceiver && !isDraft) {
             html += metaRow('合同类型', c.typeName);
             html += metaRow('所属架构层级', c.group || '—');
         }
@@ -784,26 +791,27 @@
     }
 
     function renderFlow(status) {
+        // 步骤条对齐「拟定中（发起方）-新」：拟定中 → 确认中 → 已签约（3 步，无独立「已确认」步）
         var steps = [
             { key: 'draft', label: '拟定中', icon: '✏️' },
             { key: 'inviting', label: '确认中', icon: '🤝' },
-            { key: 'confirmed', label: '已确认', icon: '✅' },
             { key: 'signed', label: '已签约', icon: '📄' }
         ];
-        var order = ['draft', 'inviting', 'confirmed', 'signed'];
+        var order = ['draft', 'inviting', 'signed'];
         var current = 'inviting';
+        var done = false;
         if (status === 'worker_draft' || status === 'worker_draft_initial') current = 'draft';
         // 变更阶段：合同已签约，阶段任务按变更流程流转，步骤条整体置为已签约（变更以 banner 体现）
         // 含「变更中」(changing) 与 change_* 全部变更态（变更进行中/确认中/签约中/已驳回），均与变更状态不冲突
         // 该分支须置于 confirmed 判断之前，避免 change_* 中某些 key 因含 confirmed 子串被误判
-        else if (status.indexOf('change') === 0 || status === 'changing') current = 'signed';
-        else if (status.indexOf('confirmed') > -1) current = 'confirmed';
-        else if (status === 'worker_signed') current = 'signed';
+        else if (status.indexOf('change') === 0 || status === 'changing') { current = 'signed'; done = true; }
+        else if (status.indexOf('confirmed') > -1) { current = 'signed'; }   // 已确认：归入「已签约」步（进行中）
+        else if (status === 'worker_signed') { current = 'signed'; done = true; }
         var curIdx = order.indexOf(current);
 
         var html = '<div class="worker-flow">';
         steps.forEach(function (s, i) {
-            var cls = i < curIdx ? 'done' : (i === curIdx ? 'current' : '');
+            var cls = i < curIdx ? 'done' : (i === curIdx ? (done ? 'done' : 'current') : '');
             html += '<div class="wf-step ' + cls + '"><div class="wf-circle">' + s.icon + '</div><div class="wf-label">' + s.label + '</div></div>';
             if (i < steps.length - 1) {
                 html += '<div class="wf-line ' + (i < curIdx ? 'done' : '') + '"></div>';
@@ -813,6 +821,28 @@
 
         var box = $('workerFlowBox');
         box.innerHTML = html;
+    }
+
+    // 撤回后 / 发起方 草稿态：步骤条移至「合同操作」下方、状态横幅之上，并改用「合同方 意向乙方首位确认者即签约乙方」标题，
+    // 对齐「拟定中（发起方）-新」；非草稿态恢复原位，不影响其他状态布局。
+    function repositionFlowBar(status) {
+        var flowBox = $('workerFlowBox');
+        var invitationCard = $('invitationCard');
+        var mainView = $('mainView');
+        var banner = $('statusBanner');
+        var meta = $('workerContractMeta');
+        if (!flowBox || !invitationCard || !mainView || !banner) return;
+        var isDraft = (status === 'worker_draft' || status === 'worker_draft_initial');
+        var title = invitationCard.querySelector('.card-title');
+        if (isDraft) {
+            if (flowBox.parentNode !== mainView) mainView.insertBefore(flowBox, banner);
+            if (title) title.innerHTML = '🤝 合同方 <span class="card-note">意向乙方首位确认者即签约乙方</span>';
+            if (meta) meta.style.display = 'none';
+        } else {
+            if (flowBox.parentNode === mainView && meta) invitationCard.insertBefore(flowBox, meta);
+            if (title) title.innerHTML = '🤝 合同邀约与乙方（意向乙方 · 首位确认者成乙方）';
+            if (meta) meta.style.display = '';
+        }
     }
 
     function renderLists(status) {
@@ -1466,8 +1496,87 @@
         });
         if ($('editNameInput')) $('editNameInput').value = state.contract.name || '';
         if ($('editAmountInput')) $('editAmountInput').value = (state.contract.amount != null && state.contract.amount !== '') ? state.contract.amount : '';
+        if ($('editDurationInput')) $('editDurationInput').value = (state.contract.duration != null && state.contract.duration !== '') ? state.contract.duration : '';
+        if ($('breachInput')) $('breachInput').value = state.contract.breach || '';
+        // 甲方默认陈庄（与数据归一化一致）
+        if (!state.contract.partyAName) state.contract.partyAName = '陈庄';
+        renderPartyAChips();
         renderEditChips();
         renderEditList();
+    }
+
+    // ============== 拟定中：合同甲方选择（单选，模糊匹配姓名/角色；复用 WORKER_CANDIDATES） ==============
+    function togglePartyAPanel() {
+        var p = $('partyAPanelBox'); if (!p) return;
+        var open = p.classList.contains('open');
+        if (open) { p.classList.remove('open'); return; }
+        p.classList.add('open');
+        var s = $('partyASearch');
+        if (s) { s.value = ''; renderPartyAList(); if (s.focus) s.focus(); }
+    }
+    function filterPartyA() { renderPartyAList(); }
+    function renderPartyAList() {
+        var listEl = $('partyAList');
+        var emptyEl = $('partyAEmpty');
+        if (!listEl) return;
+        var keyword = (($('partyASearch') && $('partyASearch').value) || '').trim().toLowerCase();
+        listEl.innerHTML = '';
+        var matched = WORKER_CANDIDATES.filter(function (m) {
+            if (!keyword) return true;
+            return m.name.toLowerCase().indexOf(keyword) > -1 || m.role.toLowerCase().indexOf(keyword) > -1;
+        });
+        if (matched.length === 0) { if (emptyEl) emptyEl.style.display = 'block'; return; }
+        if (emptyEl) emptyEl.style.display = 'none';
+        var curId = (state.contract && state.contract.partyAId) ||
+            ((state.contract && state.contract.partyAName) ? (WORKER_CANDIDATES.filter(function (x) { return x.name === state.contract.partyAName; })[0] || {}).id : '') || '';
+        matched.forEach(function (m) {
+            var selected = curId && curId === m.id;
+            var item = document.createElement('div');
+            item.className = 'member-picker-item' + (selected ? ' selected' : '');
+            item.innerHTML = memberAvatarHtml(m, 'clickable') +
+                '<span class="member-main"><span class="member-name">' + escapeHtml(m.name) + '</span>' +
+                '<span class="member-role">' + escapeHtml(m.role) + '</span></span>' +
+                (selected ? '<span class="check">✓</span>' : '');
+            item.onclick = function () { selectPartyA(m); };
+            var av = item.querySelector('.member-avatar');
+            if (av) av.onclick = function (e) { e.stopPropagation(); openBusinessCard(m); };
+            listEl.appendChild(item);
+        });
+    }
+    function selectPartyA(m) {
+        state.contract.partyAName = m.name;
+        state.contract.partyAId = m.id;
+        renderPartyAChips();
+        renderPartyAList();
+        var p = $('partyAPanelBox'); if (p) p.classList.remove('open');
+    }
+    function renderPartyAChips() {
+        var chipsEl = $('partyAChips');
+        var valEl = $('partyAValue');
+        if (!chipsEl) return;
+        chipsEl.innerHTML = '';
+        var name = state.contract && state.contract.partyAName;
+        if (!name) {
+            if (valEl) valEl.textContent = '选择甲方 ›';
+            return;
+        }
+        if (valEl) valEl.textContent = '更换甲方 ›';
+        var cur = (WORKER_CANDIDATES.filter(function (x) { return x.name === name; })[0]) || { name: name, role: '' };
+        var chip = document.createElement('span');
+        chip.className = 'invite-chip';
+        chip.innerHTML = memberAvatarHtml(cur, 'clickable') +
+            '<span class="chip-text">' + escapeHtml(cur.name) + (cur.role ? '（' + escapeHtml(cur.role) + '）' : '') + '</span>' +
+            '<span class="x">✕</span>';
+        var av = chip.querySelector('.member-avatar');
+        if (av) av.onclick = function (e) { e.stopPropagation(); openBusinessCard(cur); };
+        chip.querySelector('.x').onclick = function (ev) {
+            ev.stopPropagation();
+            state.contract.partyAName = '';
+            state.contract.partyAId = '';
+            renderPartyAChips();
+            renderPartyAList();
+        };
+        chipsEl.appendChild(chip);
     }
 
     function toggleEditPanel() {
@@ -1565,6 +1674,8 @@
     function saveAndResubmit() {
         var name = ($('editNameInput').value || '').trim();
         var amountRaw = ($('editAmountInput').value || '').trim();
+        var duration = ($('editDurationInput').value || '').trim();
+        var breach = ($('breachInput').value || '').trim();
         if (!name) { showToast('请填写合同名称'); return; }
         var amount = Number(amountRaw);
         if (!amountRaw || isNaN(amount) || amount <= 0) { showToast('请填写有效的合同金额'); return; }
@@ -1573,11 +1684,15 @@
             return;
         }
         ensureDraftFields();
+        state.contract.duration = duration;
+        state.contract.breach = breach;
         var info = ACTION_TEXT.worker_resubmit;
         showConfirm(info.title, info.message, function () {
             if (global.ContractStore.patchContract) {
                 global.ContractStore.patchContract(state.workerId, {
                     name: name, amount: amount,
+                    duration: duration, breach: breach,
+                    partyAName: state.contract.partyAName, partyAId: state.contract.partyAId,
                     stages: state.contract.stages,
                     extraClauses: state.contract.extraClauses,
                     attachments: state.contract.attachments,
@@ -1600,11 +1715,19 @@
     function saveDraftOnly() {
         var name = ($('editNameInput').value || '').trim();
         var amount = ($('editAmountInput').value || '').trim();
+        var duration = ($('editDurationInput').value || '').trim();
+        var breach = ($('breachInput').value || '').trim();
         ensureDraftFields();
+        state.contract.duration = duration;
+        state.contract.breach = breach;
         if (global.ContractStore.patchContract) {
             global.ContractStore.patchContract(state.workerId, {
                 name: name,
                 amount: amount,
+                duration: duration,
+                breach: breach,
+                partyAName: state.contract.partyAName,
+                partyAId: state.contract.partyAId,
                 stages: state.contract.stages,
                 extraClauses: state.contract.extraClauses,
                 attachments: state.contract.attachments,
@@ -1643,6 +1766,9 @@
         if (c.templateText == null) c.templateText = '';
         if (c.templateStage == null) c.templateStage = '';
         if (!c.contentIntro) c.contentIntro = (STAGE_TEMPLATES[c.type] || STAGE_TEMPLATES.shuidian).contentIntro;
+        if (c.duration == null || c.duration === '') c.duration = '30';
+        if (c.breach == null || c.breach === '') c.breach = '1、甲方逾期付款的，按逾期金额千分之三/日支付违约金。\n2、乙方工期延误或质量不符的，应无偿返工并承担违约责任。';
+        if (!c.partyAName) c.partyAName = '陈庄';
     }
     function getStages() { ensureDraftFields(); return state.contract.stages; }
     function getContentIntro() { ensureDraftFields(); return state.contract.contentIntro; }
@@ -1679,15 +1805,8 @@
 
     function renderDraftContractText() {
         var c = state.contract;
-        var intro = getContentIntro();
-        var preview = $('draftContractTextPreview');
-        if (preview) {
-            preview.innerHTML = '<p>根据《中华人民共和国民法典》及相关法律法规的规定，甲乙双方本着平等、自愿、公平、诚实信用的原则，就' + escapeHtml(c.typeName) + '事宜协商一致，订立本合同。</p>' +
-                '<p class="text-title">一、工程概况</p>' +
-                '<p>工程名称：' + escapeHtml(c.name) + '</p>' +
-                '<p>工程地点：XX市XX区XX路XX号</p>' +
-                '<p>工程内容：' + escapeHtml(intro) + '</p>';
-        }
+        var breach = $('breachInput');
+        if (breach) breach.value = c.breach || '';
         var extra = $('editContractExtra');
         if (extra) extra.value = getExtra();
         var info = $('draftTemplateInfo');
@@ -1746,12 +1865,14 @@
     function addDraftTask(si) {
         var s = state.contract.stages[si]; if (!s) return;
         s.tasks = s.tasks || [];
-        s.tasks.push({ name: '新任务', exec: tradeWorkerOf(state.contract.type), conf: '陈庄' });
+        var exec = state.editInvited.length === 1 ? state.editInvited[0].name : '';
+        s.tasks.push({ name: '新任务', exec: exec, conf: '' });
         renderDraftStageTask();
     }
     function deleteDraftTask(si, ti) { var s = state.contract.stages[si]; if (!s) return; s.tasks.splice(ti, 1); renderDraftStageTask(); }
     function addDraftStage() {
-        state.contract.stages.push({ name: '新阶段', order: '顺序执行', tasks: [{ name: '新任务', exec: tradeWorkerOf(state.contract.type), conf: '陈庄' }] });
+        var exec = state.editInvited.length === 1 ? state.editInvited[0].name : '';
+        state.contract.stages.push({ name: '新阶段', order: '顺序执行', tasks: [{ name: '新任务', exec: exec, conf: '' }] });
         renderDraftStageTask();
     }
     function deleteDraftStage(si) { state.contract.stages.splice(si, 1); renderDraftStageTask(); }
@@ -1847,20 +1968,22 @@
     }
     function closeTemplatePicker() { var m = $('wcTemplatePicker'); if (m) m.classList.remove('show'); }
 
-    // 生成合同正文模板预览的富文本内容（与「合同详情（合规版）」tpl.content 体量对齐，达到演示效果）
-    function buildTemplateTextPreview(id) {
-        var c = state.contract;
-        var tpl = STAGE_TEMPLATES[c.type] || STAGE_TEMPLATES.shuidian;
-        var intro = (tpl.contentIntro || '').replace('工程内容：', '');
-        var name = c.name || (draftBaseName() + '作业');
-        var addr = c.projectAddress || '陕西省西安市XX区XX路XX号';
+    // 正文模板预览：拆为「违约责任」与「固定详细条款」两个只读区域；固定详细条款仅含标准条款项，不含甲乙方/金额/工期
+    function buildTemplatePreviewSections(id) {
         if (id === 'lite') {
-            return '甲方（发包方）：______________\n乙方（承包方）：______________\n\n一、工程名称：' + name + '\n二、工程地点：' + addr + '\n三、工程内容：' + intro + '\n四、合同金额：人民币________元整（¥________）\n五、工期：____年__月__日至____年__月__日\n六、付款方式：按阶段付款（材料进场30% / 施工完成40% / 验收合格30%）\n七、质量要求：符合国家现行施工标准\n八、争议解决：协商不成的，向工程所在地人民法院起诉' + '\n\n甲方（签章）：______________    乙方（签章）：______________\n日期：____年__月__日';
+            return {
+                breach: '任一方违约应承担相应责任并赔偿对方因此受到的损失。',
+                fixed: '一、质量要求：符合国家现行施工标准。\n二、争议解决：协商不成的，向工程所在地人民法院起诉。'
+            };
         }
-        return '甲方（发包方）：______________\n乙方（承包方）：______________\n\n根据《中华人民共和国民法典》及相关法律法规，甲乙双方本着平等、自愿、公平、诚实信用的原则，就 ' + name + ' 事宜协商一致，订立本合同。\n\n第一条 工程概况\n1.1 工程名称：' + name + '\n1.2 工程地点：' + addr + '\n1.3 工程内容：' + intro + '\n\n第二条 合同金额\n合同总金额为人民币（大写）____________元整（¥__________）。\n\n第三条 工期\n3.1 计划开工日期：____年__月__日\n3.2 计划竣工日期：____年__月__日\n3.3 总工期：____日历天\n\n第四条 付款方式\n4.1 材料进场支付合同总金额的30%\n4.2 施工完成支付合同总金额的40%\n4.3 验收合格后支付剩余30%\n\n第五条 双方权利义务\n甲方有权监督、指导乙方工作并给予奖励、处罚；乙方应按标准施工，服从现场管理规定与交底。\n\n第六条 质量标准\n应符合国家及行业现行施工验收标准，材料合格、工艺规范。\n\n第七条 验收标准\n阶段完工后由甲方组织验收，合格后方可进入下一阶段。\n\n第八条 违约责任\n任一方违约应承担相应责任并赔偿对方因此受到的损失。\n\n第九条 争议解决\n本合同履行中发生争议，双方应友好协商解决；协商不成的，向工程所在地人民法院提起诉讼。\n\n甲方（签章）：______________    乙方（签章）：______________\n签订日期：____年__月__日';
+        return {
+            breach: '任一方违约应承担相应责任并赔偿对方因此受到的损失。',
+            fixed: '一、双方权利义务\n甲方有权监督、指导乙方工作并给予奖励、处罚；乙方应按标准施工，服从现场管理规定与交底。\n\n二、质量标准\n应符合国家及行业现行施工验收标准，材料合格、工艺规范。\n\n三、验收标准\n阶段完工后由甲方组织验收，合格后方可进入下一阶段。\n\n四、争议解决\n本合同履行中发生争议，双方应友好协商解决；协商不成的，向工程所在地人民法院提起诉讼。'
+        };
     }
 
     // 模板预览（对齐「合同详情（合规版）」更换模板的预览交互）
+    var tplPreviewStages = null; // 阶段任务模板预览：缓存当前预览的阶段数据，供点击任务就地展开三项标准
     function previewDraftTemplate(kind, id) {
         var item = (getDraftTemplates(kind) || []).filter(function (x) { return x.id === id; })[0];
         if (!item) return;
@@ -1886,16 +2009,30 @@
             if (kind === 'stage') {
                 var src = STAGE_TEMPLATES[state.contract.type] || STAGE_TEMPLATES.shuidian;
                 var stages = (id === 'lite') ? src.stages.slice(0, 2) : src.stages;
+                tplPreviewStages = stages;
                 html += '<div class="preview-section"><div class="preview-section-title">阶段任务明细（' + stages.length + ' 个阶段）</div><div class="preview-stage-list">';
                 stages.forEach(function (s, i) {
-                    var tasks = (s.tasks || []).map(function (t) {
-                        return '<div class="preview-task-item"><span class="preview-task-name">' + escapeHtml(t.name) + '</span><span class="preview-task-sub">执行：' + escapeHtml(t.exec || '') + ' · 确认：' + escapeHtml(t.conf || '') + '</span></div>';
+                    var tasks = (s.tasks || []).map(function (t, ti) {
+                        var did = 'tplTask_' + i + '_' + ti, tid = 'tplTaskToggle_' + i + '_' + ti;
+                        var std = function (lbl, val) {
+                            return '<div style="margin-bottom:8px;"><span style="color:#1677ff;font-weight:600;">' + lbl + '：</span><span style="color:#333;">' + escapeHtml(val || '（未填写）') + '</span></div>';
+                        };
+                        return '<div style="margin:6px 0;">' +
+                            '<div style="padding:10px 12px;background:#f7f9fc;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;" onclick="WCP.toggleTemplateTaskDetail(' + i + ',' + ti + ')">' +
+                            '<span style="font-weight:600;color:#333;">' + escapeHtml(t.name) + '</span>' +
+                            '<span id="' + tid + '" style="color:#1677ff;font-size:12px;flex-shrink:0;margin-left:10px;">查看标准 ›</span></div>' +
+                            '<div id="' + did + '" style="display:none;padding:10px 14px 6px;background:#fff;border:1px solid #eef2f7;border-top:none;border-radius:0 0 8px 8px;">' +
+                            std('执行标准', t.execStd) + std('确认标准', t.confStd) + std('担责标准', t.liableStd) +
+                            '</div></div>';
                     }).join('');
                     html += '<div class="preview-stage-item"><div class="preview-stage-header"><span class="preview-stage-num">' + (i + 1) + '</span><span class="preview-stage-name">' + escapeHtml(s.name) + '</span><span class="preview-stage-order">' + escapeHtml(s.order || '') + '</span></div><div class="preview-task-list">' + tasks + '</div></div>';
                 });
                 html += '</div></div>';
             } else {
-                html += '<div class="preview-section"><div class="preview-section-title">合同正文</div><div class="preview-section-content">' + escapeHtml(buildTemplateTextPreview(id)).replace(/\n/g, '<br>') + '</div></div>';
+                var sec = buildTemplatePreviewSections(id);
+                html += '<div class="preview-section"><div class="preview-section-title">违约责任</div><div class="preview-section-content">' + escapeHtml(sec.breach).replace(/\n/g, '<br>') + '</div></div>';
+                html += '<div class="preview-section"><div class="preview-section-title">固定详细条款<span style="font-size:11px;color:#999;font-weight:400;margin-left:8px;">（不可修改）</span></div><div class="preview-section-content">' + escapeHtml(sec.fixed).replace(/\n/g, '<br>') + '</div></div>';
+                html += '<div style="font-size:12px;color:#999;margin-top:8px;">甲乙方 / 合同金额 / 工期 等基础信息由合同主信息填写，不在固定条款内。</div>';
             }
             contentEl.innerHTML = html;
         }
@@ -1908,6 +2045,16 @@
         closeTemplatePreview();
     }
     function closeTemplatePreview() { var m = $('wcTemplatePreview'); if (m) m.classList.remove('show'); }
+
+    // 阶段任务模板预览：点击任务项在预览浮窗内就地展开/收起 执行 / 确认 / 担责标准（手风琴，不新增浮窗层）
+    function toggleTemplateTaskDetail(si, ti) {
+        var detail = document.getElementById('tplTask_' + si + '_' + ti);
+        var toggle = document.getElementById('tplTaskToggle_' + si + '_' + ti);
+        if (!detail) return;
+        var open = detail.style.display !== 'none';
+        detail.style.display = open ? 'none' : 'block';
+        if (toggle) toggle.textContent = open ? '查看标准 ›' : '收起 ‹';
+    }
 
     // ---- 查看全文 / 预览合同 ----
     function showFullText() {
@@ -1987,13 +2134,16 @@
         var stages = getStages();
         var stageHtml = stages.map(function (s) {
             var ts = (s.tasks || []).map(function (t) {
-                return '<p>· ' + escapeHtml(t.name) + '（执行：' + escapeHtml(t.exec || '') + '，确认：' + escapeHtml(t.conf || '') + '）</p>';
+                return '<div style="margin-bottom:8px;"><p style="margin:0 0 4px;"><strong>' + escapeHtml(t.name) + '</strong>　<span style="font-weight:400;color:#86909C;">执行：' + escapeHtml(t.exec || '—') + '　确认：' + escapeHtml(t.conf || '—') + '</span></p>' +
+                    '<p style="margin:0 0 2px;">执行标准：' + escapeHtml(t.execStd || '（未填写）') + '</p>' +
+                    '<p style="margin:0 0 2px;">确认标准：' + escapeHtml(t.confStd || '（未填写）') + '</p>' +
+                    '<p style="margin:0;">担责标准：' + escapeHtml(t.liableStd || '（未填写）') + '</p></div>';
             }).join('');
             return '<div class="contract-article"><div class="article-title">' + escapeHtml(s.name) + '（' + escapeHtml(s.order || '并行执行') + '）</div><div class="article-content">' + ts + '</div></div>';
         }).join('');
         var atts = getAttachments();
         var attHtml = atts.map(function (a) { return '<p>· ' + escapeHtml(a.name) + '（' + escapeHtml(a.meta || '') + '）</p>'; }).join('');
-        var partyB = c.partyBName ? escapeHtml(c.partyBName) : '（待签署）';
+        var partyB = c.partyBName ? escapeHtml(c.partyBName) : '';
         var sign = '<div class="contract-article"><div class="article-title">签署信息</div><div class="article-content">' +
             '<p><strong>甲方（发包方）：</strong>' + escapeHtml(c.partyAName || '陈庄') + '</p>' +
             '<p><strong>乙方（承包方）：</strong>' + partyB + '</p></div></div>';
@@ -2311,6 +2461,29 @@
         '陈庄': '工长', '张水电': '水电工', '钱拆除': '拆除工',
         '李木作': '木作工', '周泥瓦': '泥瓦工', '吴油漆': '油漆工', '郑零工': '小零工'
     };
+    // 合同乙方名单（用于编辑任务时执行人默认值推导）：已确认/已签约取 partyBName（唯一），
+    // 拟定/邀请中取意向乙方名单（1~3 人）。
+    function getPartyBList() {
+        var c = state.contract;
+        if (!c) return [];
+        if (c.partyBName) return [c.partyBName];
+        var invs = c.invitations || state.editInvited || [];
+        return invs.map(function (i) { return i.name; });
+    }
+    // 乙方确认接单→已签约时，将「无执行人」的任务执行人统一更新为乙方人员（PRD 规则）。
+    function assignDefaultExecutorsOnSigned() {
+        var c = state.contract;
+        if (!c || !c.partyBName) return;
+        var stages = getStages();
+        if (!stages || !stages.length) return;
+        var changed = false;
+        stages.forEach(function (s) {
+            (s.tasks || []).forEach(function (t) {
+                if (!t.exec) { t.exec = c.partyBName; changed = true; }
+            });
+        });
+        if (changed && typeof renderDraftStageTask === 'function') renderDraftStageTask();
+    }
     function editTaskDetail(el, stageIdx, taskIdx) {
         var stages = getStages();
         var s = stages[stageIdx];
@@ -2321,6 +2494,11 @@
 
         var name = t.name || '';
         var executor = t.exec || '';
+        // 执行人默认值：合同乙方仅一人时，无执行人的任务默认填乙方人员；多乙方则为空（非必选）
+        if (!executor) {
+            var pbList = getPartyBList();
+            if (pbList.length === 1) executor = pbList[0];
+        }
         var confirmerStr = t.conf || '';
         var confirmerArr = confirmerStr ? confirmerStr.split(/[、,，]/).map(function(s){return s.trim();}).filter(Boolean) : [];
         var execStd = t.execStd || '';
@@ -2534,6 +2712,11 @@
         previewDraftTemplate: previewDraftTemplate,
         applyTemplateFromPreview: applyTemplateFromPreview,
         closeTemplatePreview: closeTemplatePreview,
+        toggleTemplateTaskDetail: toggleTemplateTaskDetail,
+        togglePartyAPanel: togglePartyAPanel,
+        filterPartyA: filterPartyA,
+        selectPartyA: selectPartyA,
+        renderPartyAChips: renderPartyAChips,
         showFullText: showFullText,
         closeFullText: closeFullText,
         previewContract: previewContract,

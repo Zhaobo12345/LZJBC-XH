@@ -1173,6 +1173,9 @@
 
                 <div class="subsection-title" id="sec-3-5-2-1" style="font-size: 13px; margin-top: 18px;">3.5.2.1 阶段任务编辑交互详述</div>
                 <p style="font-size:12px;color:#888;margin-top:8px;">以下为「阶段任务」选项卡 内各交互项的完整流程、逻辑与交互效果（拟定中 / 审核驳回态容器为 <code>#editStageList</code> 的 <code>.stage-card</code>；变更态容器为 <code>#stageEditContainer</code> 的 <code>.stage-edit-item</code>；删除阶段 / 添加任务 / 顺序开关 / 编辑任务 / 删除任务等处理函数兼容两种选择器，"添加阶段"分拟定中 <code>addNewStageDraft</code> 与变更 <code>addNewStage</code> 两个入口）。下表「涉及字段」列给出各交互操作的字段项规格（类型 / 是否必填），「原型位置」列给出可点击跳转至对应原型页面的链接（新标签页打开，并定位到该交互所在的准确位置）。</p>
+                <div class="note-block" style="margin:10px 0;padding:10px 12px;background:#f6ffed;border-left:3px solid #52c41a;border-radius:6px;font-size:12px;color:#333;line-height:1.8;">
+                    <strong>📌 编辑任务 · 执行人默认值规则（非工人合同与工人合同通用）</strong>：打开「编辑任务」弹窗时，若合同<strong>乙方仅一人</strong>，则「执行人」字段<strong>默认填为乙方人员</strong>（仅对原本无执行人的任务生效，已有执行人不覆盖）；若合同乙方<strong>多人</strong>，则执行人<strong>默认空、且为非必选</strong>（可选择、可不填）。该规则仅影响编辑弹窗的默认预填值，不改变「执行人可空」的既有字段属性，也不强制要求执行人必填。工人合同「乙方仅一人」对应状态进入已确认 / 已签约后 partyBName 唯一；拟定 / 邀请中则按意向乙方名单（1~3 人）计数，多人时即走「默认空、非必选」分支。
+                </div>
                 <table>
                     <thead>
                         <tr>
@@ -4005,6 +4008,7 @@
                             <li>变更流程<strong>无需平台审核</strong>：双方确认即生效（区别于基础施工服务合同的平台审核制）。</li>
                             <li>更多菜单规则见 <a href="#sec-7-10">7.10 签约文件区与更多菜单按状态渲染规则</a>。</li>
                             <li><strong>执行人待办生成</strong>：工人合同「已签约」同样触发执行人「任务执行」待办生成，规则（含「签约前配置执行人不生成待办」前置约束、签约扫描、补配置）与 <a href="#sec-3-10-14">§3.10.14 非工人合同已签约</a> 一致，本节不重复。</li>
+                            <li><strong>乙方确认接单→已签约：无执行人任务自动归属乙方（规则）</strong>：当乙方确认接单、状态由 <code>worker_confirmed</code> 经上传签约文件流转至 <code>worker_signed</code>（已签约）时，系统对合同下<strong>所有「执行人为空」的阶段任务</strong>，自动将其执行人更新为<strong>该乙方人员</strong>（即 §3.5.2.1 编辑任务「执行人默认值规则」中「乙方仅一人」情形的落地）；已配置执行人的任务不受影响。该规则确保签约后每个阶段任务均有明确执行人归属，与「执行人待办生成」前置约束（签约前配置执行人不生成待办）协同生效。仅在状态「首次进入」已签约时触发一次（变更撤回 / 驳回返回已签约等回到本态不重复覆盖用户已填执行人）。</li>
                             <li><strong>履约完成派生标识</strong>：工人合同「已签约」后，当合同下全部有效任务均为「已完成」时，状态横幅同样叠加绿色「已履约完成」标识（实时派生、无独立状态、不阻断变更），规则与 <a href="#sec-3-10-14">§3.10.14 履约完成派生标识</a> 一致。<strong>原型演示</strong>：工人合同详情页右侧导航「发起方视角」提供「已签约（已履约完成）」演示项，一键切换至已签约态并显示履约完成徽标。</li>
                         </ul>
                     </td></tr>

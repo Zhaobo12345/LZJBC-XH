@@ -229,34 +229,66 @@
         .template-hint { font-size: 11px; color: #99c0ff; margin-top: 2px; }
         .edit-textarea.plain { min-height: 70px; }
 
-        /* 阶段任务 */
-        .stage-card {
-            border: 1px solid #f0f0f0; border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; background: #fafafa;
+        /* 阶段任务样式由 css/contract-detail.css 统一控制，保持与「拟定中（发起方）」一致 */
+
+        /* 预览合同按钮（对齐「拟定中（发起方）」状态页） */
+        .wc-preview-btn {
+            margin-top: 14px; display: flex; align-items: center; justify-content: center; gap: 6px;
+            height: 44px; border-radius: 8px; background: #1677ff; color: #fff;
+            font-size: 15px; font-weight: 600; cursor: pointer;
         }
-        .stage-card:last-child { margin-bottom: 0; }
-        .stage-card-header-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-        .stage-name-input {
-            flex: 1; border: none; background: transparent; font-size: 14px; font-weight: 600; color: #222; padding: 2px 0; font-family: inherit;
+        .wc-preview-btn:active { opacity: 0.85; }
+
+        /* 预览合同弹窗（全屏，对齐「拟定中（发起方）」状态页） */
+        .fulltext-modal {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: #fff; z-index: 360; display: none; flex-direction: column;
         }
-        .stage-order { font-size: 11px; color: #fa8c16; background: #fff7e6; padding: 2px 8px; border-radius: 10px; flex: 0 0 auto; }
-        .task-edit-list { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
-        .task-edit-item { display: flex; align-items: center; gap: 8px; }
-        .task-input {
-            flex: 1; height: 32px; border: 1px solid #e3e3e3; border-radius: 6px; padding: 0 10px;
-            font-size: 13px; color: #333; background: #fff; font-family: inherit;
+        .fulltext-modal.show { display: flex; }
+        .fulltext-modal .status-bar {
+            height: 44px; background: #fff; display: flex; align-items: center;
+            justify-content: space-between; padding: 0 22px; font-size: 14px;
+            font-weight: 600; color: #000; flex-shrink: 0;
         }
-        .task-action-btn { width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; background: #f0f0f0; color: #666; font-size: 14px; cursor: pointer; flex: 0 0 auto; }
-        .task-action-btn.edit { color: #1677ff; }
-        .task-action-btn:hover { background: #e6e6e6; }
-        .stage-sequential { margin-left: auto; display: flex; align-items: center; gap: 6px; font-size: 12px; color: #fa8c16; }
-        .stage-sequential .sw { width: 34px; height: 18px; border-radius: 10px; background: #d9d9d9; position: relative; cursor: pointer; transition: background .2s; flex: 0 0 auto; }
-        .stage-sequential .sw.active { background: #1677ff; }
-        .stage-sequential .sw::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: left .2s; }
-        .stage-sequential .sw.active::after { left: 18px; }
-        .stage-actions { display: flex; gap: 12px; margin-left: auto; align-items: center; }
-        .stage-action-btn { color: #1677ff; font-weight: 600; font-size: 13px; cursor: pointer; }
-        .stage-action-btn.delete { color: #ff4d4f; }
-        .add-stage-btn { margin-top: 10px; border: 1px dashed #bae0ff; color: #1677ff; text-align: center; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 13px; background: #f0f7ff; }
+        .fulltext-modal .nav-bar {
+            position: relative; height: 48px; background: #fff; display: flex;
+            align-items: center; border-bottom: 1px solid #e5e6eb; flex-shrink: 0; padding: 0 16px;
+        }
+        .fulltext-modal .nav-bar .back {
+            position: absolute; left: 16px; display: flex; align-items: center;
+            color: #1677ff; font-size: 14px; cursor: pointer; z-index: 2;
+        }
+        .fulltext-modal .nav-bar .back .back-arrow { margin-right: 4px; font-size: 16px; }
+        .fulltext-modal .nav-bar .title {
+            flex: 1; text-align: center; font-size: 16px; font-weight: 600; color: #222;
+        }
+        .fulltext-modal .nav-bar .nb-actions {
+            position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+            display: flex; align-items: center; z-index: 2;
+        }
+        .fulltext-modal .nav-bar .native-capsule {
+            display: inline-flex; align-items: center; justify-content: space-between;
+            min-width: 56px; height: 28px; padding: 0 10px;
+            border: 1px solid rgba(0,0,0,.08); border-radius: 14px;
+            background: rgba(255,255,255,.7); color: rgba(0,0,0,.6);
+            font-size: 12px; line-height: 1; user-select: none; box-sizing: border-box;
+        }
+        .fulltext-modal .nav-bar .native-capsule .nc-left,
+        .fulltext-modal .nav-bar .native-capsule .nc-right { display: inline-flex; align-items: center; justify-content: center; flex: 1; min-width: 16px; }
+        .fulltext-modal .nav-bar .native-capsule .nc-right { font-size: 10px; }
+        .fulltext-modal .nav-bar .native-capsule .nc-divider { width: 1px; height: 14px; background: rgba(0,0,0,.1); margin: 0 4px; }
+        .fulltext-modal .fulltext-content { flex: 1; overflow-y: auto; padding: 16px; background: #f5f5f5; }
+        .fulltext-modal .contract-article { background: #fff; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+        .fulltext-modal .article-title { font-size: 15px; font-weight: 600; color: #222; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
+        .fulltext-modal .article-content { font-size: 13px; line-height: 1.8; color: #4E5969; }
+        .fulltext-modal .article-content p { margin-bottom: 8px; }
+        .fulltext-modal .article-content p:last-child { margin-bottom: 0; }
+        .fulltext-modal .wc-task-block { padding: 8px 10px; margin-bottom: 10px; background: #fafafa; border-radius: 6px; border-left: 3px solid #1677ff; }
+        .fulltext-modal .wc-task-block:last-child { margin-bottom: 0; }
+        .fulltext-modal .wc-task-block .wc-task-head { font-weight: 600; color: #222; margin-bottom: 4px; }
+        .fulltext-modal .wc-task-block .wc-std-label { color: #1677ff; font-weight: 600; }
+        .task-edit-item { cursor: pointer; }
+        .task-edit-item:hover { background: #f5f8ff; }
 
         /* 附件 */
         .attachment-upload-area { border: 1px dashed #d9d9d9; border-radius: 10px; padding: 18px; text-align: center; cursor: pointer; background: #fafafa; margin-bottom: 10px; }
@@ -505,6 +537,7 @@
                 </div>
                 <div class="attachment-list" id="draftAttList"></div>
             </div>
+            <div class="wc-preview-btn" onclick="previewContract()">👁️ 预览合同</div>
         </div>
     </div>
 
@@ -548,6 +581,74 @@
         </div>
     </div>
 
+    <!-- 预览合同弹窗（全屏，对齐「拟定中（发起方）」状态页） -->
+    <div class="fulltext-modal" id="wcFullTextModal" onclick="if(event.target===this)closeFullText()">
+        <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="icons">📶 🔋</div>
+        </div>
+        <div class="nav-bar">
+            <div class="back" onclick="closeFullText()"><span class="back-arrow">←</span><span class="back-text">返回</span></div>
+            <div class="title" id="wcFullTextTitle">👁️ 预览合同</div>
+            <div class="nb-actions">
+                <div class="native-capsule" title="微信原生胶囊：由微信客户端渲染，开发者不可自定义其内容"><span class="nc-left">⋯</span><span class="nc-divider"></span><span class="nc-right">○</span></div>
+            </div>
+        </div>
+        <div class="fulltext-content" id="wcFullTextContent"></div>
+    </div>
+
+    <!-- 编辑任务弹窗（对齐「拟定中（发起方）」状态页 editTaskDetail） -->
+    <div class="edit-task-modal" id="editTaskModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">编辑任务</div>
+                <div class="modal-close" onclick="closeEditTaskModal()">✕</div>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">任务名称 <span class="required">*</span></label>
+                    <input type="text" class="form-input" id="editTaskName" placeholder="请输入任务名称">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">执行人</label>
+                    <div class="confirm-person-tags" id="editTaskExecutorTags" style="margin-bottom:8px;"></div>
+                    <div class="search-select">
+                        <div class="search-input-wrap">
+                            <input type="text" class="search-input" id="editTaskExecutorSearch" placeholder="请选择执行人" oninput="filterExecutorList('edit')" onfocus="toggleExecutorSearch('edit')">
+                            <span class="arrow" onclick="toggleExecutorSearch('edit')">▼</span>
+                        </div>
+                        <div class="search-dropdown" id="editTaskExecutorDropdown"></div>
+                    </div>
+                    <input type="hidden" id="editTaskExecutor">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">确认人（最多5人）</label>
+                    <div class="confirm-person-tags" id="editTaskConfirmPersons"></div>
+                    <div class="search-select">
+                        <div class="search-input-wrap">
+                            <input type="text" class="search-input" id="editTaskConfirmerSearch" placeholder="添加确认人" oninput="filterConfirmerList('edit')" onfocus="toggleConfirmerSearch('edit')">
+                            <span class="arrow" onclick="toggleConfirmerSearch('edit')">▼</span>
+                        </div>
+                        <div class="search-dropdown" id="editTaskConfirmerDropdown"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">执行标准 <span class="required">*</span></label>
+                    <textarea class="form-textarea" id="editTaskExecStandard" placeholder="请输入执行标准"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">确认标准 <span class="required">*</span></label>
+                    <textarea class="form-textarea" id="editTaskConfirmStandard" placeholder="请输入确认标准"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">担责标准 <span class="required">*</span></label>
+                    <textarea class="form-textarea" id="editTaskLiableStandard" placeholder="请输入担责标准"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer"><button class="submit-btn" onclick="confirmEditTask()">保存修改</button></div>
+        </div>
+    </div>
+
     <!-- 个人电子名片（开发中） -->
     <div class="wcd-modal-mask" id="businessCardModal" onclick="if(event.target===this)closeBusinessCard()">
         <div class="wcd-sheet" style="max-height:auto;">
@@ -570,8 +671,7 @@
     <div class="page-nav">
         <div class="page-nav-title" onclick="togglePageNav()" title="收起 / 展开 原型导航">原型导航 <span class="toggle-btn" id="pageNavToggle">▼</span></div>
     <a href="home.html" class="page-nav-item">首页</a>
-    <a href="project-list.html" class="page-nav-item">项目列表</a>
-    <a href="project-detail.html" class="page-nav-item">项目详情</a>
+    <a href="project-list.html" class="page-nav-item">项目主页（进行中）</a>
     <a href="contract-detail.html" class="page-nav-item">合同详情（合规版）</a>
     <a href="message.html" class="page-nav-item">消息</a>
     <a href="worker-contract-detail.html" class="page-nav-item">工人合同详情（新流程）</a>
@@ -589,7 +689,7 @@
             <div class="status-group-content">
                 <a class="status-switch-item" href="worker-contract-detail.html?status=worker_draft_initial" style="text-decoration:none;">拟定中(发起方)</a>
                 <a class="status-switch-item active" href="worker-contract-draft-initial-new.html" style="text-decoration:none;">拟定中(发起方)-新</a>
-                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;">确认中(发起方)</a>
+                <a class="status-switch-item" href="worker-contract-confirming-initiator-new.html" style="text-decoration:none;">确认中(发起方)</a>
                 <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;">已确认(发起方)</a>
                 <a class="status-switch-item" href="worker-sign-upload.html" style="text-decoration:none;">上传签约文件（新页面）</a>
                 <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;">拟定中(撤回后)</a>
@@ -686,62 +786,120 @@
         shuidian: {
             contentIntro: '工程内容：强电、弱电、给排水等水电工程，含材料进场、布管布线、设备安装及收尾验收。',
             stages: [
-                { name: '材料进场阶段', order: '并行执行', tasks: [ { name: '材料采购', exec: '张水电', conf: '陈庄' }, { name: '材料报验', exec: '张水电', conf: '陈庄' } ] },
-                { name: '布管布线阶段', order: '顺序执行', tasks: [ { name: '开槽布管', exec: '张水电', conf: '陈庄' }, { name: '穿线接线', exec: '张水电', conf: '陈庄' }, { name: '阶段确认', exec: '张水电', conf: '陈庄' } ] },
-                { name: '安装阶段', order: '顺序执行', tasks: [ { name: '开关插座安装', exec: '张水电', conf: '陈庄' } ] },
-                { name: '收尾阶段', order: '顺序执行', tasks: [ { name: '通水通电测试', exec: '张水电', conf: '陈庄' }, { name: '阶段确认', exec: '张水电', conf: '陈庄' } ] }
+                { name: '材料进场阶段', order: '并行执行', tasks: [
+                    { name: '材料采购', exec: '张水电', conf: '陈庄', execStd: '按合同清单采购符合国家标准的电线、管材及配件，留存合格证与检测报告。', confStd: '甲方核对品牌、规格、数量与清单一致并签字。', liableStd: '以次充好或数量不足的，乙方无偿退换并承担延期责任。' },
+                    { name: '材料报验', exec: '张水电', conf: '陈庄', execStd: '材料进场后24小时内提交报验单及质量证明文件。', confStd: '甲方现场抽检并签字确认合格后方可使用。', liableStd: '未报验或不合格材料使用的，乙方承担全部返工费用。' }
+                ] },
+                { name: '布管布线阶段', order: '顺序执行', tasks: [
+                    { name: '开槽布管', exec: '张水电', conf: '陈庄', execStd: '按图纸弹线开槽，槽深走向符合规范，管线固定牢固。', confStd: '甲方检查走向、固定及保护层厚度达标。', liableStd: '违规开槽损坏结构的，乙方负责修复并赔偿。' },
+                    { name: '穿线接线', exec: '张水电', conf: '陈庄', execStd: '线色线径符合设计，接头压接牢固，绝缘电阻测试合格。', confStd: '甲方抽测绝缘电阻及接线正确性。', liableStd: '接线错误或绝缘不达标的，乙方无偿整改并担责。' },
+                    { name: '阶段确认', exec: '张水电', conf: '陈庄', execStd: '提交本阶段全部任务完成证据，发起阶段验收申请。', confStd: '甲方逐条核验交付物，合格签字。', liableStd: '未达标返工责任及费用由乙方承担。' }
+                ] },
+                { name: '安装阶段', order: '顺序执行', tasks: [
+                    { name: '开关插座安装', exec: '张水电', conf: '陈庄', execStd: '底盒端正、高度一致，面板贴合无缝，接地可靠。', confStd: '甲方通电测试及外观检查合格。', liableStd: '安装松动或接线隐患的，乙方无偿修复。' }
+                ] },
+                { name: '收尾阶段', order: '顺序执行', tasks: [
+                    { name: '通水通电测试', exec: '张水电', conf: '陈庄', execStd: '全屋通水通电，管路无渗漏，回路负载测试正常。', confStd: '甲方参与试压试电并签字。', liableStd: '渗漏或电路故障的，乙方无偿返修并担责。' },
+                    { name: '阶段确认', exec: '张水电', conf: '陈庄', execStd: '提交收尾完成证据，发起最终阶段验收。', confStd: '甲方核验合格并签字确认。', liableStd: '未达标返工责任及费用由乙方承担。' }
+                ] }
             ]
         },
         demolition: {
             contentIntro: '工程内容：室内原墙体、饰面拆除及建筑垃圾清运，含防护交底与现场平整。',
             stages: [
-                { name: '原墙拆除阶段', order: '顺序执行', tasks: [ { name: '防护交底', exec: '钱拆除', conf: '陈庄' }, { name: '墙体拆除', exec: '钱拆除', conf: '陈庄' } ] },
-                { name: '垃圾清运阶段', order: '顺序执行', tasks: [ { name: '建筑垃圾清运', exec: '钱拆除', conf: '陈庄' }, { name: '现场平整', exec: '钱拆除', conf: '陈庄' } ] },
-                { name: '收尾阶段', order: '顺序执行', tasks: [ { name: '阶段确认', exec: '钱拆除', conf: '陈庄' } ] }
+                { name: '原墙拆除阶段', order: '顺序执行', tasks: [
+                    { name: '防护交底', exec: '钱拆除', conf: '陈庄', execStd: '施工前对成品管线做防护，向甲方交底并确认范围。', confStd: '甲方确认防护到位、交底清楚。', liableStd: '未防护造成损害的，乙方负责修复赔偿。' },
+                    { name: '墙体拆除', exec: '钱拆除', conf: '陈庄', execStd: '按方案拆除，保留结构构件，粉尘湿法作业。', confStd: '甲方检查无违规拆改、无结构损伤。', liableStd: '误拆结构构件的，乙方承担修复及赔偿责任。' }
+                ] },
+                { name: '垃圾清运阶段', order: '顺序执行', tasks: [
+                    { name: '建筑垃圾清运', exec: '钱拆除', conf: '陈庄', execStd: '分类装袋、日产日清，合规外运至指定点。', confStd: '甲方确认现场无残留、外运合规。', liableStd: '乱倒或违规清运的责任与费用由乙方承担。' },
+                    { name: '现场平整', exec: '钱拆除', conf: '陈庄', execStd: '拆除面清理平整，无尖锐物、无积水。', confStd: '甲方验收地面平整、可进入下道工序。', liableStd: '未达交接标准的，乙方无偿整改。' }
+                ] },
+                { name: '收尾阶段', order: '顺序执行', tasks: [
+                    { name: '阶段确认', exec: '钱拆除', conf: '陈庄', execStd: '提交拆除与清运完成证据，发起阶段验收。', confStd: '甲方核验合格并签字。', liableStd: '未达标返工责任及费用由乙方承担。' }
+                ] }
             ]
         },
         muzuo: {
             contentIntro: '工程内容：木作基层、定制柜体制作与安装，含测量放样、五金安装及收尾。',
             stages: [
-                { name: '测量放样阶段', order: '并行执行', tasks: [ { name: '现场测量', exec: '李木作', conf: '陈庄' }, { name: '深化图纸', exec: '李木作', conf: '陈庄' } ] },
-                { name: '木工制作阶段', order: '顺序执行', tasks: [ { name: '基层制作', exec: '李木作', conf: '陈庄' }, { name: '柜体安装', exec: '李木作', conf: '陈庄' } ] },
-                { name: '安装阶段', order: '顺序执行', tasks: [ { name: '五金安装', exec: '李木作', conf: '陈庄' } ] },
-                { name: '收尾阶段', order: '顺序执行', tasks: [ { name: '阶段确认', exec: '李木作', conf: '陈庄' } ] }
+                { name: '测量放样阶段', order: '并行执行', tasks: [
+                    { name: '现场测量', exec: '李木作', conf: '陈庄', execStd: '按图到现场复尺，误差记录并交底。', confStd: '甲方确认尺寸与图纸一致。', liableStd: '测量误差致返工的，乙方担责。' },
+                    { name: '深化图纸', exec: '李木作', conf: '陈庄', execStd: '依据复尺深化节点图，经甲方签字。', confStd: '甲方审核节点、收口方案。', liableStd: '图纸错误致浪费的，乙方承担。' }
+                ] },
+                { name: '木工制作阶段', order: '顺序执行', tasks: [
+                    { name: '基层制作', exec: '李木作', conf: '陈庄', execStd: '龙骨基层按图施工，平整牢固、防腐防潮。', confStd: '甲方检查平整度、牢固度。', liableStd: '基层不合格的，乙方无偿整改。' },
+                    { name: '柜体安装', exec: '李木作', conf: '陈庄', execStd: '柜体水平垂直、拼缝严密、五金顺畅。', confStd: '甲方验收外观与功能。', liableStd: '安装偏差或损伤的，乙方无偿修复。' }
+                ] },
+                { name: '安装阶段', order: '顺序执行', tasks: [
+                    { name: '五金安装', exec: '李木作', conf: '陈庄', execStd: '铰链拉手等牢固无异响，开合顺畅。', confStd: '甲方功能测试合格。', liableStd: '松脱或异响的，乙方无偿处理。' }
+                ] },
+                { name: '收尾阶段', order: '顺序执行', tasks: [
+                    { name: '阶段确认', exec: '李木作', conf: '陈庄', execStd: '提交木作完成证据，发起阶段验收。', confStd: '甲方核验合格并签字。', liableStd: '未达标返工责任及费用由乙方承担。' }
+                ] }
             ]
         },
         niwa: {
             contentIntro: '工程内容：地面找平、防水施工与墙地砖铺贴，含美缝清理。',
             stages: [
-                { name: '基层处理阶段', order: '顺序执行', tasks: [ { name: '地面找平', exec: '周泥瓦', conf: '陈庄' }, { name: '防水施工', exec: '周泥瓦', conf: '陈庄' } ] },
-                { name: '贴砖阶段', order: '顺序执行', tasks: [ { name: '墙砖铺贴', exec: '周泥瓦', conf: '陈庄' }, { name: '地砖铺贴', exec: '周泥瓦', conf: '陈庄' }, { name: '阶段确认', exec: '周泥瓦', conf: '陈庄' } ] },
-                { name: '收尾阶段', order: '顺序执行', tasks: [ { name: '美缝清理', exec: '周泥瓦', conf: '陈庄' } ] }
+                { name: '基层处理阶段', order: '顺序执行', tasks: [
+                    { name: '地面找平', exec: '周泥瓦', conf: '陈庄', execStd: '按标高找平，平整度达标，无空鼓。', confStd: '甲方检测平整度、空鼓。', liableStd: '空鼓或超差的，乙方无偿返平。' },
+                    { name: '防水施工', exec: '周泥瓦', conf: '陈庄', execStd: '涂刷均匀、厚度达标，阴阳角加强，闭水试验合格。', confStd: '甲方参与闭水试验48h无渗漏。', liableStd: '渗漏的，乙方无偿重做并担责。' }
+                ] },
+                { name: '贴砖阶段', order: '顺序执行', tasks: [
+                    { name: '墙砖铺贴', exec: '周泥瓦', conf: '陈庄', execStd: '排版合理、空鼓率达标、留缝一致、阴阳角方正。', confStd: '甲方抽查空鼓与平整。', liableStd: '空鼓超标的，乙方无偿重铺。' },
+                    { name: '地砖铺贴', exec: '周泥瓦', conf: '陈庄', execStd: '坡度正确、无积水，平整牢固。', confStd: '甲方泼水测试排水、检查空鼓。', liableStd: '积水或空鼓的，乙方无偿整改。' },
+                    { name: '阶段确认', exec: '周泥瓦', conf: '陈庄', execStd: '提交铺贴完成证据，发起阶段验收。', confStd: '甲方核验合格并签字。', liableStd: '未达标返工责任及费用由乙方承担。' }
+                ] },
+                { name: '收尾阶段', order: '顺序执行', tasks: [
+                    { name: '美缝清理', exec: '周泥瓦', conf: '陈庄', execStd: '缝隙清理饱满、色泽一致，现场清洁。', confStd: '甲方验收观感与清洁。', liableStd: '美缝缺陷的，乙方无偿补做。' }
+                ] }
             ]
         },
         youqi: {
             contentIntro: '工程内容：墙面基层处理、腻子批刮与乳胶漆涂刷，含清理保护。',
             stages: [
-                { name: '基层处理阶段', order: '顺序执行', tasks: [ { name: '墙面铲除', exec: '吴油漆', conf: '陈庄' }, { name: '批刮腻子', exec: '吴油漆', conf: '陈庄' } ] },
-                { name: '腻子阶段', order: '顺序执行', tasks: [ { name: '打磨', exec: '吴油漆', conf: '陈庄' }, { name: '底漆', exec: '吴油漆', conf: '陈庄' } ] },
-                { name: '油漆阶段', order: '顺序执行', tasks: [ { name: '面漆涂刷', exec: '吴油漆', conf: '陈庄' }, { name: '阶段确认', exec: '吴油漆', conf: '陈庄' } ] },
-                { name: '收尾阶段', order: '顺序执行', tasks: [ { name: '清理保护', exec: '吴油漆', conf: '陈庄' } ] }
+                { name: '基层处理阶段', order: '顺序执行', tasks: [
+                    { name: '墙面铲除', exec: '吴油漆', conf: '陈庄', execStd: '原饰面铲至基层，无残留、无粉化。', confStd: '甲方检查基层坚实。', liableStd: '铲除不净致脱落的，乙方担责。' },
+                    { name: '批刮腻子', exec: '吴油漆', conf: '陈庄', execStd: '两至三遍批刮，平整无砂眼、无开裂。', confStd: '甲方验收平整度、无裂纹。', liableStd: '开裂或脱层的，乙方无偿返工。' }
+                ] },
+                { name: '腻子阶段', order: '顺序执行', tasks: [
+                    { name: '打磨', exec: '吴油漆', conf: '陈庄', execStd: '打磨平整、无划痕，阴阳角顺直。', confStd: '甲方灯光检查无瑕。', liableStd: '打磨瑕疵的，乙方无偿处理。' },
+                    { name: '底漆', exec: '吴油漆', conf: '陈庄', execStd: '涂刷均匀、无漏刷、附着力良好。', confStd: '甲方检查无透底。', liableStd: '漏刷或附着力差的，乙方补涂。' }
+                ] },
+                { name: '油漆阶段', order: '顺序执行', tasks: [
+                    { name: '面漆涂刷', exec: '吴油漆', conf: '陈庄', execStd: '两遍涂刷均匀、无色差、无流坠。', confStd: '甲方验收色泽与平整。', liableStd: '色差流坠的，乙方无偿重涂。' },
+                    { name: '阶段确认', exec: '吴油漆', conf: '陈庄', execStd: '提交涂刷完成证据，发起阶段验收。', confStd: '甲方核验合格并签字。', liableStd: '未达标返工责任及费用由乙方承担。' }
+                ] },
+                { name: '收尾阶段', order: '顺序执行', tasks: [
+                    { name: '清理保护', exec: '吴油漆', conf: '陈庄', execStd: '成品保护到位，现场清理干净。', confStd: '甲方确认无污染、无损坏。', liableStd: '保护不当致损的，乙方赔偿。' }
+                ] }
             ]
         },
         xiaolingong: {
             contentIntro: '工程内容：零星安装、修补等小零工作业，含工具进场与安全防护。',
             stages: [
-                { name: '安装准备阶段', order: '并行执行', tasks: [ { name: '工具进场', exec: '郑零工', conf: '陈庄' }, { name: '安全防护', exec: '郑零工', conf: '陈庄' } ] },
-                { name: '零星作业阶段', order: '顺序执行', tasks: [ { name: '零星安装', exec: '郑零工', conf: '陈庄' }, { name: '修补作业', exec: '郑零工', conf: '陈庄' } ] },
-                { name: '收尾阶段', order: '顺序执行', tasks: [ { name: '阶段确认', exec: '郑零工', conf: '陈庄' } ] }
+                { name: '安装准备阶段', order: '并行执行', tasks: [
+                    { name: '工具进场', exec: '郑零工', conf: '陈庄', execStd: '工具检验合格、摆放有序，持证上岗。', confStd: '甲方确认工具合规、人员持证。', liableStd: '工具或资质不符的，乙方整改担责。' },
+                    { name: '安全防护', exec: '郑零工', conf: '陈庄', execStd: '佩戴劳保、设置警示，临边防护到位。', confStd: '甲方检查安全措施合格。', liableStd: '防护缺失致事故的，乙方担责。' }
+                ] },
+                { name: '零星作业阶段', order: '顺序执行', tasks: [
+                    { name: '零星安装', exec: '郑零工', conf: '陈庄', execStd: '按图安装，牢固美观、功能正常。', confStd: '甲方验收安装质量。', liableStd: '安装隐患的，乙方无偿修复。' },
+                    { name: '修补作业', exec: '郑零工', conf: '陈庄', execStd: '缺陷部位修补平整、观感一致。', confStd: '甲方确认修补到位。', liableStd: '修补不达标的，乙方无偿返修。' }
+                ] },
+                { name: '收尾阶段', order: '顺序执行', tasks: [
+                    { name: '阶段确认', exec: '郑零工', conf: '陈庄', execStd: '提交零星作业完成证据，发起阶段验收。', confStd: '甲方核验合格并签字。', liableStd: '未达标返工责任及费用由乙方承担。' }
+                ] }
             ]
         }
     };
 
     var C = {
-        type: 'shuidian', typeName: '水电班组服务合同', name: '全屋水电改造合同', amount: 12600,
+        type: 'shuidian', typeName: '水电班组服务合同', name: '全屋水电改造合同', amount: 12600, duration: '30',
         projectAddress: 'XX市XX区XX路XX号', group: '水电施工组',
         contentIntro: STAGE_TEMPLATES.shuidian.contentIntro,
         stages: clone(STAGE_TEMPLATES.shuidian.stages),
-        extraClauses: '无',
+        extraClauses: '1、本合同约定工期为固定工期，因乙方原因延误的，按合同总价每日千分之二支付违约金。\n2、隐蔽工程须经验收合格后方可覆盖，甲方不参与施工的，乙方对施工质量负全责。\n3、本合同未尽事宜，双方可另行签订补充协议，补充协议与本合同具有同等效力。',
         attachments: [
             { name: '水电班组服务合同.pdf', meta: '2.3MB' },
             { name: '量房照片.jpg', meta: '1.5MB' },
@@ -752,6 +910,7 @@
     };
     var editInvited = [{ userId: 'm-shuidian', name: '张水电', role: '水电工' }];
     var partyA = (WORKER_CANDIDATES.filter(function (m) { return m.id === 'm-chenzhuang'; })[0]) || null;
+    var currentStatus = 'worker_draft_initial'; // 当前页态：非签约态；已签约态可置 'signed' / 'signed_done'
     var draftTab = 'contract-text';
     var tplKind = 'text', previewKind = null, previewId = null;
 
@@ -991,21 +1150,23 @@
         var html = stages.map(function (s, i) {
             var seqOn = (s.order === '顺序执行');
             var tasks = (s.tasks || []).map(function (t, j) {
-                return '<div class="task-edit-item">' +
-                    '<input class="task-input" value="' + escapeHtml(t.name) + '" placeholder="任务名称" oninput="updateDraftTaskName(' + i + ',' + j + ',this.value)">' +
-                    '<div class="task-action-btn edit" onclick="showToast(\'任务详情编辑（原型演示）\')" title="编辑详情">✎</div>' +
+                return '<div class="task-edit-item" onclick="editTaskDetail(' + i + ',' + j + ')">' +
+                    '<input class="task-input" value="' + escapeHtml(t.name) + '" placeholder="任务名称" readonly onclick="editTaskDetail(' + i + ',' + j + ')">' +
+                    '<div class="task-action-btn edit" onclick="editTaskDetail(' + i + ',' + j + ')" title="编辑任务详情">✎</div>' +
                     '<div class="task-action-btn" onclick="deleteDraftTask(' + i + ',' + j + ')">×</div>' +
                     '</div>';
             }).join('');
             return '<div class="stage-card">' +
+                '<div class="stage-card-header">' +
                 '<div class="stage-card-header-row">' +
                 '<input type="text" class="stage-name-input" value="' + escapeHtml(s.name) + '" placeholder="请输入阶段名称" oninput="updateDraftStageName(' + i + ',this.value)">' +
-                '<div class="stage-sequential"><span>' + (seqOn ? '按序执行' : '并行执行') + '</span><div class="sw ' + (seqOn ? 'active' : '') + '" onclick="toggleDraftStageSeq(' + i + ',this)"></div></div>' +
+                '<div class="stage-sequential"><span>' + (seqOn ? '按序执行' : '并行执行') + '</span><div class="switch ' + (seqOn ? 'active' : '') + '" onclick="toggleDraftStageSeq(' + i + ',this)"></div></div>' +
                 '</div>' +
                 '<div class="stage-card-header-row"><div class="stage-actions">' +
-                '<div class="stage-action-btn" onclick="addDraftTask(' + i + ')">+ 添加任务</div>' +
+                '<div class="stage-action-btn add" onclick="addDraftTask(' + i + ')">+ 添加任务</div>' +
                 '<div class="stage-action-btn delete" onclick="deleteDraftStage(' + i + ')">× 删除阶段</div>' +
                 '</div></div>' +
+                '</div>' +
                 '<div class="task-edit-list">' + tasks + '</div>' +
                 '</div>';
         }).join('');
@@ -1025,15 +1186,23 @@
         var span = el.parentElement.querySelector('span');
         if (span) span.textContent = s.order;
     }
+    /* 拟定中（发起方）-新：乙方 = 当前意向乙方 editInvited（尚未签约）；用于新增任务执行人默认值推导 */
+    function getDraftPartyBList() {
+        return (editInvited || []).map(function (m) { return m.name; });
+    }
     function addDraftTask(si) {
         if (!C.stages[si]) return;
         C.stages[si].tasks = C.stages[si].tasks || [];
-        C.stages[si].tasks.push({ name: '新任务', exec: '张水电', conf: '陈庄' });
+        var pb = getDraftPartyBList();
+        var exec = pb.length === 1 ? pb[0] : ''; // 仅 1 名乙方→默认执行人=该乙方；多人→空（非必选）
+        C.stages[si].tasks.push({ name: '新任务', exec: exec, conf: '' }); // 确认人默认空
         renderDraftStageTask();
     }
     function deleteDraftTask(si, ti) { if (C.stages[si]) C.stages[si].tasks.splice(ti, 1); renderDraftStageTask(); }
     function addDraftStage() {
-        C.stages.push({ name: '新阶段', order: '顺序执行', tasks: [{ name: '新任务', exec: '张水电', conf: '陈庄' }] });
+        var pb = getDraftPartyBList();
+        var exec = pb.length === 1 ? pb[0] : '';
+        C.stages.push({ name: '新阶段', order: '顺序执行', tasks: [{ name: '新任务', exec: exec, conf: '' }] });
         renderDraftStageTask();
     }
     function deleteDraftStage(si) { C.stages.splice(si, 1); renderDraftStageTask(); }
@@ -1063,6 +1232,258 @@
         renderDraftContractText();
         renderDraftStageTask();
         renderDraftAttachment();
+    }
+
+    /* ===================== 预览合同（对齐「拟定中（发起方）」状态页 previewContract） ===================== */
+    function syncContractFromInputs() {
+        var nameEl = $('editNameInput'), amountEl = $('editAmountInput'), durationEl = $('editDurationInput');
+        var breachEl = $('breachInput'), extraEl = $('editContractExtra');
+        if (nameEl) C.name = (nameEl.value || '').trim();
+        if (amountEl) C.amount = amountEl.value;
+        if (durationEl) C.duration = (durationEl.value || '').trim();
+        if (breachEl) C.breach = (breachEl.value || '').trim();
+        if (extraEl) C.extraClauses = (extraEl.value || '').trim();
+    }
+    function getBreachText() {
+        var el = $('breachInput');
+        var t = el ? (el.value || '').trim() : '';
+        return t || '甲方逾期付款的，按逾期金额千分之三/日支付违约金；乙方工期延误或质量不符的，应无偿返工并承担违约责任。';
+    }
+    function buildContractBodyHTML() {
+        var c = C;
+        var intro = c.contentIntro || '水电班组相关施工作业';
+        var amount = c.amount ? (c.amount + ' 元') : '—';
+        var addr = c.projectAddress || 'XX市XX区XX路XX号';
+        var partyAName = (partyA && partyA.name) || '陈庄';
+        return '<div class="contract-article"><div class="article-title">第一条 工程概况</div><div class="article-content">' +
+            '<p>1.1 工程名称：' + escapeHtml(c.name) + '</p>' +
+            '<p>1.2 工程地点：' + escapeHtml(addr) + '</p>' +
+            '<p>1.3 工程内容：' + escapeHtml(intro) + '</p>' +
+            '<p>1.4 承包方式：包工包料</p></div></div>' +
+            '<div class="contract-article"><div class="article-title">第二条 合同价款及支付方式</div><div class="article-content">' +
+            '<p>2.1 合同总价：人民币 ' + escapeHtml(amount) + '（含税）。</p>' +
+            '<p>2.2 支付方式：合同签订后支付预付款，材料进场验收合格后支付进度款，完工验收后支付尾款。</p></div></div>' +
+            '<div class="contract-article"><div class="article-title">第三条 双方权利义务</div><div class="article-content">' +
+            '<p>3.1 甲方（' + escapeHtml(partyAName) + '）应按约定支付工程款，并提供施工所需条件。</p>' +
+            '<p>3.2 乙方应按标准施工，自确认加入后自动归入项目架构层级「' + escapeHtml(c.group || '—') + '」。</p></div></div>' +
+            '<div class="contract-article"><div class="article-title">第四条 工程质量及验收</div><div class="article-content">' +
+            '<p>4.1 乙方应严格按国家现行施工验收规范施工。</p>' +
+            '<p>4.2 分阶段验收，隐蔽工程验收合格后方可进行下一道工序。</p></div></div>' +
+            '<div class="contract-article"><div class="article-title">第五条 违约责任</div><div class="article-content">' +
+            escapeHtml(getBreachText()).replace(/\n/g, '<br>') + '</div></div>' +
+            '<div class="contract-article"><div class="article-title">第六条 争议解决</div><div class="article-content">' +
+            '<p>6.1 协商不成的，向工程所在地人民法院提起诉讼。</p></div></div>';
+    }
+    /* 乙方信息：非已签约 → 标签「乙方（承包方）」、值为空；已签约 → 标签「乙方（承包方）」、值为实际乙方人员姓名 */
+    function getPartyB() {
+        var label = '乙方（承包方）';
+        var isSigned = (currentStatus === 'signed' || currentStatus === 'signed_done');
+        var value;
+        if (isSigned) {
+            // 已签约：乙方 = 首位确认意向乙方（实际签约乙方），优先取 C.signedPartyB
+            var list = (C.signedPartyB && C.signedPartyB.length) ? C.signedPartyB
+                     : (editInvited && editInvited.length ? editInvited : []);
+            value = list.map(function (m) { return escapeHtml(m.name); }).join('、');
+        } else {
+            value = ''; // 非已签约状态：乙方值置空
+        }
+        return { label: label, value: value };
+    }
+    function buildContractBasicInfoHTML() {
+        var c = C;
+        var partyAName = (partyA && partyA.name) || '陈庄';
+        var b = getPartyB();
+        var duration = c.duration ? (c.duration + ' 天') : '—';
+        return '<div class="contract-article"><div class="article-title">合同基本信息</div><div class="article-content">' +
+            '<p><strong>合同名称：</strong>' + escapeHtml(c.name) + '</p>' +
+            '<p><strong>合同类型：</strong>' + escapeHtml(c.typeName || '—') + '</p>' +
+            '<p><strong>工程地点：</strong>' + escapeHtml(c.projectAddress || '—') + '</p>' +
+            '<p><strong>合同金额：</strong>人民币 ' + escapeHtml(c.amount || '—') + ' 元（含税）</p>' +
+            '<p><strong>合同工期：</strong>' + duration + '</p>' +
+            '<p><strong>架构层级：</strong>' + escapeHtml(c.group || '—') + '</p>' +
+            '<p><strong>甲方（发包方）：</strong>' + escapeHtml(partyAName) + '</p>' +
+            '<p><strong>' + b.label + '：</strong>' + b.value + '</p></div></div>';
+    }
+    function buildFullContractHTML() {
+        var c = C;
+        var basic = buildContractBasicInfoHTML();
+        var body = buildContractBodyHTML();
+        var extra = c.extraClauses || '';
+        var extraHtml = '<div class="contract-article"><div class="article-title">补充条款</div><div class="article-content">' + (extra ? escapeHtml(extra).replace(/\n/g, '<br>') : '（无）') + '</div></div>';
+        var stages = c.stages || [];
+        var stageHtml = stages.map(function (s) {
+            var ts = (s.tasks || []).map(function (t) {
+                return '<div class="wc-task-block">' +
+                    '<p class="wc-task-head">' + escapeHtml(t.name) + '　<span style="font-weight:400;color:#86909C;">执行：' + escapeHtml(t.exec || '—') + '　确认：' + escapeHtml(t.conf || '—') + '</span></p>' +
+                    '<p><span class="wc-std-label">执行标准：</span>' + escapeHtml(t.execStd || '（未填写）') + '</p>' +
+                    '<p><span class="wc-std-label">确认标准：</span>' + escapeHtml(t.confStd || '（未填写）') + '</p>' +
+                    '<p><span class="wc-std-label">担责标准：</span>' + escapeHtml(t.liableStd || '（未填写）') + '</p>' +
+                    '</div>';
+            }).join('');
+            return '<div class="contract-article"><div class="article-title">' + escapeHtml(s.name) + '（' + escapeHtml(s.order || '并行执行') + '）</div><div class="article-content">' + (ts || '<p>暂无任务</p>') + '</div></div>';
+        }).join('');
+        var atts = c.attachments || [];
+        var attHtml = atts.map(function (a) { return '<p>· ' + escapeHtml(a.name) + '（' + escapeHtml(a.meta || '') + '）</p>'; }).join('');
+        var b = getPartyB();
+        var partyAName = (partyA && partyA.name) || '陈庄';
+        var sign = '<div class="contract-article"><div class="article-title">签署信息</div><div class="article-content">' +
+            '<p><strong>甲方（发包方）：</strong>' + escapeHtml(partyAName) + '</p>' +
+            '<p><strong>' + b.label + '：</strong>' + b.value + '</p></div></div>';
+        return '<div style="text-align:center; font-size:18px; font-weight:700; color:#222; margin-bottom:16px;">' + escapeHtml(c.typeName || '工人班组服务合同') + '</div>' +
+            basic + body + extraHtml + stageHtml + '<div class="contract-article"><div class="article-title">合同附件</div><div class="article-content">' + (attHtml || '<p>无</p>') + '</div></div>' + sign;
+    }
+    function previewContract() {
+        var m = $('wcFullTextModal'); if (!m) return;
+        syncContractFromInputs();
+        $('wcFullTextTitle').textContent = '👁️ 预览合同';
+        $('wcFullTextContent').innerHTML = buildFullContractHTML();
+        m.classList.add('show');
+    }
+    function closeFullText() { var m = $('wcFullTextModal'); if (m) m.classList.remove('show'); }
+
+    /* ===================== 编辑任务弹窗（对齐「拟定中（发起方）」状态页） ===================== */
+    var ROLE_MAP = {
+        '陈庄': '工长', '陈业主': '业主', '王设计': '设计师', '刘项目总': '项目总', '孙工长': '工长',
+        '钱拆除': '拆除工', '冯拆建': '拆除工', '蒋拆平': '拆除工',
+        '张水电': '水电工', '韩水通': '水电工', '杨水明': '水电工',
+        '李木作': '木作工', '赵木森': '木作工', '秦木林': '木作工',
+        '周泥瓦': '泥瓦工', '许泥固': '泥瓦工', '何泥稳': '泥瓦工',
+        '吴油漆': '油漆工', '吕油彩': '油漆工', '施油光': '油漆工',
+        '郑零工': '小零工', '张零杂': '小零工', '孔零活': '小零工'
+    };
+    var editTaskState = { current: null, confirmers: [] };
+    function fillPersonDropdown(prefix) {
+        var dd = $(prefix + 'TaskExecutorDropdown');
+        if (dd) {
+            dd.innerHTML = WORKER_CANDIDATES.map(function (m) {
+                return '<div class="person-option" onclick="selectExecutor(\'' + prefix + '\', \'' + m.name + '\', \'' + m.role + '\')"><div class="avatar">' + m.name.charAt(0) + '</div><div class="name">' + m.name + '</div><div class="role-tag">' + m.role + '</div></div>';
+            }).join('');
+        }
+        var cd = $(prefix + 'TaskConfirmerDropdown');
+        if (cd) {
+            cd.innerHTML = WORKER_CANDIDATES.map(function (m) {
+                return '<div class="person-option" onclick="selectConfirmer(\'' + prefix + '\', \'' + m.name + '\', \'' + m.role + '\')"><div class="avatar">' + m.name.charAt(0) + '</div><div class="name">' + m.name + '</div><div class="role-tag">' + m.role + '</div></div>';
+            }).join('');
+        }
+    }
+    function editTaskDetail(si, ti) {
+        var s = C.stages[si];
+        var t = s && s.tasks ? s.tasks[ti] : null;
+        if (!t) return;
+        editTaskState.current = { si: si, ti: ti };
+        $('editTaskName').value = t.name || '';
+        var executor = t.exec || '';
+        // 执行人默认值：合同乙方仅一人时，无执行人的任务默认填乙方人员；多乙方则为空（非必选）；确认人一律默认空
+        if (!executor) {
+            var pbList = getDraftPartyBList();
+            if (pbList.length === 1) executor = pbList[0];
+        }
+        var execTags = $('editTaskExecutorTags');
+        if (executor) {
+            execTags.innerHTML = '<div class="confirm-person-tag">' + executor + '（' + (ROLE_MAP[executor] || '施工方') + '）' +
+                '<span class="remove" onclick="removeExecutor(\'edit\')">×</span></div>';
+        } else { execTags.innerHTML = ''; }
+        $('editTaskExecutor').value = executor;
+        $('editTaskExecutorSearch').value = '';
+        $('editTaskExecutorDropdown').classList.remove('show');
+        var confirmerArr = (t.conf || '').split(/[、,，]/).map(function (s) { return s.trim(); }).filter(Boolean);
+        editTaskState.confirmers = confirmerArr;
+        updateEditConfirmPersonTags();
+        $('editTaskConfirmerSearch').value = '';
+        $('editTaskConfirmerDropdown').classList.remove('show');
+        $('editTaskExecStandard').value = t.execStd || '';
+        $('editTaskConfirmStandard').value = t.confStd || '';
+        $('editTaskLiableStandard').value = t.liableStd || '';
+        $('editTaskModal').classList.add('show');
+    }
+    function closeEditTaskModal() {
+        var m = $('editTaskModal');
+        if (m) m.classList.remove('show');
+        $('editTaskExecutorTags').innerHTML = '';
+        $('editTaskExecutorDropdown').classList.remove('show');
+        $('editTaskConfirmerDropdown').classList.remove('show');
+        editTaskState.confirmers = [];
+        editTaskState.current = null;
+    }
+    function confirmEditTask() {
+        if (!editTaskState.current) { closeEditTaskModal(); return; }
+        var si = editTaskState.current.si, ti = editTaskState.current.ti;
+        var t = C.stages[si] && C.stages[si].tasks ? C.stages[si].tasks[ti] : null;
+        if (!t) { closeEditTaskModal(); return; }
+        var name = $('editTaskName').value.trim();
+        if (!name) { showToast('请输入任务名称'); return; }
+        var execStd = $('editTaskExecStandard').value.trim();
+        var confStd = $('editTaskConfirmStandard').value.trim();
+        var liableStd = $('editTaskLiableStandard').value.trim();
+        if (!execStd) { showToast('请输入执行标准'); return; }
+        if (!confStd) { showToast('请输入确认标准'); return; }
+        if (!liableStd) { showToast('请输入担责标准'); return; }
+        var executor = $('editTaskExecutor').value.trim();
+        var confirmers = editTaskState.confirmers || [];
+        t.name = name;
+        t.exec = executor;
+        t.conf = confirmers.join('、');
+        t.execStd = execStd;
+        t.confStd = confStd;
+        t.liableStd = liableStd;
+        closeEditTaskModal();
+        renderDraftStageTask();
+        showToast('任务详情已保存');
+    }
+    function toggleExecutorSearch(prefix) { var dd = $(prefix + 'TaskExecutorDropdown'); if (dd) dd.classList.toggle('show'); }
+    function filterExecutorList(prefix) {
+        var kw = ($(prefix + 'TaskExecutorSearch').value || '').trim().toLowerCase();
+        var dd = $(prefix + 'TaskExecutorDropdown'); if (!dd) return;
+        dd.querySelectorAll('.person-option').forEach(function (opt) {
+            var name = opt.querySelector('.name').textContent.toLowerCase();
+            opt.style.display = (name.indexOf(kw) >= 0) ? '' : 'none';
+        });
+        dd.classList.add('show');
+    }
+    function selectExecutor(prefix, name, role) {
+        var tags = $(prefix + 'TaskExecutorTags');
+        tags.innerHTML = '<div class="confirm-person-tag">' + name + '（' + role + '）' +
+            '<span class="remove" onclick="removeExecutor(\'' + prefix + '\')">×</span></div>';
+        $(prefix + 'TaskExecutor').value = name;
+        $(prefix + 'TaskExecutorSearch').value = '';
+        $(prefix + 'TaskExecutorDropdown').classList.remove('show');
+    }
+    function removeExecutor(prefix) {
+        $(prefix + 'TaskExecutorTags').innerHTML = '';
+        $(prefix + 'TaskExecutor').value = '';
+    }
+    function toggleConfirmerSearch(prefix) { var dd = $(prefix + 'TaskConfirmerDropdown'); if (dd) dd.classList.toggle('show'); }
+    function filterConfirmerList(prefix) {
+        var kw = ($(prefix + 'TaskConfirmerSearch').value || '').trim().toLowerCase();
+        var dd = $(prefix + 'TaskConfirmerDropdown'); if (!dd) return;
+        dd.querySelectorAll('.person-option').forEach(function (opt) {
+            var name = opt.querySelector('.name').textContent.toLowerCase();
+            opt.style.display = (name.indexOf(kw) >= 0) ? '' : 'none';
+        });
+        dd.classList.add('show');
+    }
+    function selectConfirmer(prefix, name, role) {
+        if (editTaskState.confirmers.length >= 5) { showToast('确认人最多5人'); return; }
+        if (editTaskState.confirmers.indexOf(name) >= 0) { showToast('已添加'); return; }
+        editTaskState.confirmers.push(name);
+        updateEditConfirmPersonTags();
+        $(prefix + 'TaskConfirmerSearch').value = '';
+        $(prefix + 'TaskConfirmerDropdown').classList.remove('show');
+    }
+    function removeConfirmer(index) {
+        editTaskState.confirmers.splice(index, 1);
+        updateEditConfirmPersonTags();
+    }
+    function updateEditConfirmPersonTags() {
+        var tags = $('editTaskConfirmPersons');
+        if (!tags) return;
+        var list = editTaskState.confirmers || [];
+        if (list.length === 0) { tags.innerHTML = ''; return; }
+        tags.innerHTML = list.map(function (name, i) {
+            var role = ROLE_MAP[name] || '施工方';
+            return '<div class="confirm-person-tag">' + name + '（' + role + '）' +
+                '<span class="remove" onclick="removeConfirmer(' + i + ')">×</span></div>';
+        }).join('');
     }
 
     /* ===================== 更换模板 ===================== */
@@ -1124,13 +1545,18 @@
     }
     function closeTemplatePicker() { var m = $('wcdTplModal'); if (m) m.classList.remove('show'); }
 
-    function buildTemplateTextPreview(id) {
-        var name = C.name || (draftBaseName() + '作业');
-        var addr = C.projectAddress || '陕西省西安市XX区XX路XX号';
+    // 正文模板预览：拆为「违约责任」与「固定详细条款」两个只读区域；固定详细条款仅含标准条款项，不含甲乙方/金额/工期
+    function buildTemplatePreviewSections(id) {
         if (id === 'lite') {
-            return '甲方（发包方）：______________\n乙方（承包方）：______________\n\n一、工程名称：' + name + '\n二、工程地点：' + addr + '\n三、工程内容：' + (C.contentIntro || '').replace('工程内容：', '') + '\n四、合同金额：人民币________元整（¥________）\n五、工期：____年__月__日至____年__月__日\n六、付款方式：按阶段付款（材料进场30% / 施工完成40% / 验收合格30%）\n七、质量要求：符合国家现行施工标准\n八、争议解决：协商不成的，向工程所在地人民法院起诉' + '\n\n甲方（签章）：______________    乙方（签章）：______________\n日期：____年__月__日';
+            return {
+                breach: '任一方违约应承担相应责任并赔偿对方因此受到的损失。',
+                fixed: '一、质量要求：符合国家现行施工标准。\n二、争议解决：协商不成的，向工程所在地人民法院起诉。'
+            };
         }
-        return '甲方（发包方）：______________\n乙方（承包方）：______________\n\n根据《中华人民共和国民法典》及相关法律法规，甲乙双方本着平等、自愿、公平、诚实信用的原则，就 ' + name + ' 事宜协商一致，订立本合同。\n\n第一条 工程概况\n1.1 工程名称：' + name + '\n1.2 工程地点：' + addr + '\n1.3 工程内容：' + (C.contentIntro || '').replace('工程内容：', '') + '\n\n第二条 合同金额\n合同总金额为人民币（大写）____________元整（¥__________）。\n\n第三条 工期\n3.1 计划开工日期：____年__月__日\n3.2 计划竣工日期：____年__月__日\n3.3 总工期：____日历天\n\n第四条 付款方式\n4.1 材料进场支付合同总金额的30%\n4.2 施工完成支付合同总金额的40%\n4.3 验收合格后支付剩余30%\n\n第五条 双方权利义务\n甲方有权监督、指导乙方工作并给予奖励、处罚；乙方应按标准施工，服从现场管理规定与交底。\n\n第六条 质量标准\n应符合国家及行业现行施工验收标准，材料合格、工艺规范。\n\n第七条 验收标准\n阶段完工后由甲方组织验收，合格后方可进入下一阶段。\n\n第八条 违约责任\n任一方违约应承担相应责任并赔偿对方因此受到的损失。\n\n第九条 争议解决\n本合同履行中发生争议，双方应友好协商解决；协商不成的，向工程所在地人民法院提起诉讼。\n\n甲方（签章）：______________    乙方（签章）：______________\n签订日期：____年__月__日';
+        return {
+            breach: '任一方违约应承担相应责任并赔偿对方因此受到的损失。',
+            fixed: '一、双方权利义务\n甲方有权监督、指导乙方工作并给予奖励、处罚；乙方应按标准施工，服从现场管理规定与交底。\n\n二、质量标准\n应符合国家及行业现行施工验收标准，材料合格、工艺规范。\n\n三、验收标准\n阶段完工后由甲方组织验收，合格后方可进入下一阶段。\n\n四、争议解决\n本合同履行中发生争议，双方应友好协商解决；协商不成的，向工程所在地人民法院提起诉讼。'
+        };
     }
     function previewDraftTemplate(kind, id) {
         var item = (getDraftTemplates(kind) || []).filter(function (x) { return x.id === id; })[0];
@@ -1156,14 +1582,27 @@
                 var stages = (id === 'lite') ? src.stages.slice(0, 2) : src.stages;
                 html += '<div class="preview-section"><div class="preview-section-title">阶段任务明细（' + stages.length + ' 个阶段）</div><div class="preview-stage-list">';
                 stages.forEach(function (s, i) {
-                    var tasks = (s.tasks || []).map(function (t) {
-                        return '<div style="padding:4px 0;"><span style="font-weight:600;color:#333;">' + escapeHtml(t.name) + '</span><span style="color:#999;font-size:12px;margin-left:8px;">执行：' + escapeHtml(t.exec || '') + ' · 确认：' + escapeHtml(t.conf || '') + '</span></div>';
+                    var tasks = (s.tasks || []).map(function (t, ti) {
+                        var did = 'tplTask_' + i + '_' + ti, tid = 'tplTaskToggle_' + i + '_' + ti;
+                        var std = function (lbl, val) {
+                            return '<div style="margin-bottom:8px;"><span style="color:#1677ff;font-weight:600;">' + lbl + '：</span><span style="color:#333;">' + escapeHtml(val || '（未填写）') + '</span></div>';
+                        };
+                        return '<div style="margin:6px 0;">' +
+                            '<div style="padding:10px 12px;background:#f7f9fc;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;" onclick="toggleTemplateTaskDetail(' + i + ',' + ti + ')">' +
+                            '<span style="font-weight:600;color:#333;">' + escapeHtml(t.name) + '</span>' +
+                            '<span id="' + tid + '" style="color:#1677ff;font-size:12px;flex-shrink:0;margin-left:10px;">查看标准 ›</span></div>' +
+                            '<div id="' + did + '" style="display:none;padding:10px 14px 6px;background:#fff;border:1px solid #eef2f7;border-top:none;border-radius:0 0 8px 8px;">' +
+                            std('执行标准', t.execStd) + std('确认标准', t.confStd) + std('担责标准', t.liableStd) +
+                            '</div></div>';
                     }).join('');
                     html += '<div style="padding:12px 0;border-bottom:1px solid #f0f0f0;"><div style="display:flex;align-items:center;gap:8px;font-weight:600;color:#222;"><span style="background:#1677ff;color:#fff;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;">' + (i + 1) + '</span>' + escapeHtml(s.name) + ' <span style="color:#fa8c16;font-size:12px;">' + escapeHtml(s.order || '') + '</span></div><div style="margin-top:6px;padding-left:28px;">' + tasks + '</div></div>';
                 });
                 html += '</div></div>';
             } else {
-                html += '<div class="preview-section"><div class="preview-section-title">合同正文</div><div class="preview-section-content">' + escapeHtml(buildTemplateTextPreview(id)).replace(/\n/g, '<br>') + '</div></div>';
+                var sec = buildTemplatePreviewSections(id);
+                html += '<div class="preview-section"><div class="preview-section-title">违约责任</div><div class="preview-section-content">' + escapeHtml(sec.breach).replace(/\n/g, '<br>') + '</div></div>';
+                html += '<div class="preview-section"><div class="preview-section-title">固定详细条款<span style="font-size:11px;color:#999;font-weight:400;margin-left:8px;">（不可修改）</span></div><div class="preview-section-content">' + escapeHtml(sec.fixed).replace(/\n/g, '<br>') + '</div></div>';
+                html += '<div style="font-size:12px;color:#999;margin-top:8px;">甲乙方 / 合同金额 / 工期 等基础信息由合同主信息填写，不在固定条款内。</div>';
             }
             contentEl.innerHTML = html;
         }
@@ -1175,6 +1614,16 @@
         closeTemplatePreview();
     }
     function closeTemplatePreview() { var m = $('wcdPreviewModal'); if (m) m.classList.remove('show'); }
+
+    // 阶段任务模板预览：点击任务项在预览浮窗内就地展开/收起 执行 / 确认 / 担责标准（手风琴，不新增浮窗层）
+    function toggleTemplateTaskDetail(si, ti) {
+        var detail = document.getElementById('tplTask_' + si + '_' + ti);
+        var toggle = document.getElementById('tplTaskToggle_' + si + '_' + ti);
+        if (!detail) return;
+        var open = detail.style.display !== 'none';
+        detail.style.display = open ? 'none' : 'block';
+        if (toggle) toggle.textContent = open ? '查看标准 ›' : '收起 ‹';
+    }
 
     /* ===================== 提交 / 保存 ===================== */
     function doSubmit() {

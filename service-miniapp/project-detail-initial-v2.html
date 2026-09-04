@@ -142,7 +142,7 @@
         .detail-fade { animation: fadeUp .28s ease both; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
-        /* ===== 项目基本信息头（初始项目：橙色「新家准备中」变体） ===== */
+        /* ===== 项目基本信息头（沿用项目列表页规范，状态徽标取自项目主体状态） ===== */
         .project-basic-header {
             background: linear-gradient(135deg, #1677ff 0%, #4096ff 100%); color: #fff; border-radius: 14px;
             padding: 10px 14px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; cursor: pointer;
@@ -354,6 +354,11 @@
         .my-task-card .my-task-divider { width: 1px; background: #f0f0f0; margin: 4px 0; }
         .my-task-card .my-task-stat:first-child .value { color: var(--success, #52c41a); }
 
+        /* ===== 工人视角（与 project-list 工人视角统一） ===== */
+        .todo-card.worker { border-left: 3px solid var(--warning); }
+        .todo-card.worker .card-title { color: #d46b08; }
+        .level-default-hint { font-size: 11px; color: var(--warning); margin-top: 2px; }
+
         /* ===== 今日动态 ===== */
         .activity-role-tag {
             display: inline-block; font-size: 10px; padding: 0 6px; border-radius: 8px;
@@ -450,17 +455,38 @@
         .tab-item .label { font-size: 10px; }
         .tab-item.active { color: var(--primary); }
         .tab-item:not(.active) { color: var(--text-3); }
+
+        /* ===== 角色演示开关（与项目列表页「演示开关」同源，置于手机框外侧右侧） ===== */
+        .role-demo-switch {
+            position: absolute; left: calc(100% + 16px); top: 80px;
+            background: #fff; border: 1px solid #ffe7ba; border-radius: 12px;
+            padding: 12px 14px; box-shadow: 0 4px 16px rgba(0,0,0,.1); z-index: 100; width: 132px;
+        }
+        .role-demo-switch .switch-title { font-size: 12px; font-weight: 600; color: #333; margin-bottom: 8px; text-align: center; }
+        .role-demo-switch .switch-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+        .role-demo-switch .switch-status { color: var(--primary); font-weight: 600; font-size: 12px; white-space: nowrap; }
+        .role-demo-switch .switch-status.worker { color: var(--warning); }
+        .role-demo-switch .switch-hint { font-size: 10px; color: #999; text-align: center; line-height: 1.3; }
+        .switch { position: relative; display: inline-block; width: 36px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc; transition: .3s; border-radius: 20px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px;
+            background-color: #fff; transition: .3s; border-radius: 50%;
+        }
+        .switch input:checked + .slider { background-color: var(--warning); }
+        .switch input:checked + .slider:before { transform: translateX(16px); }
     </style>
 </head>
 <body>
     <div class="page-nav">
         <div class="page-nav-title" onclick="togglePageNav()" title="收起 / 展开 原型导航">原型导航 <span class="toggle-btn" id="pageNavToggle">▼</span></div>
         <a href="home.html">首页</a>
-        <a href="project-list.html">项目列表</a>
-        <a href="project-detail.html">项目详情</a>
-        <a href="project-detail-ongoing-v2.html">项目详情（进行中-新版）</a>
+        <a href="project-list.html">项目主页（进行中）</a>
         <a href="project-detail-initial-v2.html" class="active">项目详情（初始-新版）</a>
-        <a href="project-detail-initial-worker.html">项目详情（初始-工人视角）</a>
         <a href="project-detail-completed-v2.html">项目详情（已完成-新版）</a>
         <a href="project-info.html">项目信息</a>
         <a href="architecture.html">项目架构</a>
@@ -484,11 +510,13 @@
         <div class="topbar">
             <div class="proj-switch">
                 <!-- 左侧：点击查看当前项目信息（跳转 project-info 页） -->
-                <div class="proj-info-zone">
+                <div class="proj-info-zone" onclick="viewProjectInfo()">
                     <div class="proj-switch-left">
                         <span class="proj-name" id="curProjName">—</span>
                         <span class="proj-status" id="curProjStatus">—</span>
                     </div>
+                    <div class="proj-switch-hero" id="topHero"></div>
+                    <span class="info-arrow">›</span>
                 </div>
                 <!-- 右侧：点击展开项目切换面板 -->
                 <div class="proj-switch-right" onclick="togglePanel()">
@@ -534,6 +562,20 @@
             </div>
         </div>
     </div>
+
+    <!-- 角色演示开关：置于手机框外侧右侧，与项目列表页「演示开关」同源 -->
+    <div class="role-demo-switch">
+        <div class="switch-title">演示开关</div>
+        <div class="switch-item">
+            <span class="switch-status" id="roleStatus">非工人</span>
+            <label class="switch">
+                <input type="checkbox" id="roleSwitch" onchange="toggleRoleSwitch(this.checked)">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="switch-hint">切换角色视角</div>
+    </div>
+
     </div>
 
     <script>
@@ -568,7 +610,8 @@
             var groups = (d.groups && Array.isArray(d.groups)) ? d.groups.length : 0;
             return {
                 name: d.projectName || 'XX小区整体装修',
-                status: '进行中',
+                status: d.status || '进行中',
+                address: d.address || 'XX小区***号***室',
                 area: area + ' ' + houseType,
                 contractSigned: 0, contractTotal: 0, taskDone: 0, taskTotal: 0,
                 trade: '', todoCount: 0, groupCount: groups
@@ -587,7 +630,8 @@
             document.getElementById('curProjName').textContent = p.name;
             var st = document.getElementById('curProjStatus');
             st.textContent = p.status;
-            st.className = 'proj-status' + (p.status === '已完工' ? ' done' : '');
+            st.className = 'proj-status' + (p.status === '已完工' || p.status === '已完成' ? ' done' : '');
+            document.getElementById('topHero').textContent = '项目信息';
         }
 
         function renderPanel() {
@@ -608,7 +652,7 @@
                 return '<div class="proj-option' + active + '" onclick="selectProject(' + realIdx + ')">' +
                     '<div class="po-top"><span class="po-name">' + p.name + '</span>' +
                     '<span class="po-status' + done + '">' + p.status + '</span></div>' +
-                    '<div class="po-addr">📍 ' + p.area + '</div>' +
+                    '<div class="po-addr">📍 ' + p.address + '</div>' +
                     '<div class="po-stats"><span>合同 ' + p.contractSigned + '/' + p.contractTotal + '</span>' +
                     '<span>任务 ' + p.taskDone + '/' + p.taskTotal + '</span></div>' +
                     '<div class="po-bar"><div class="po-bar-fill" style="width:' + pct + '%"></div></div>' +
@@ -617,19 +661,30 @@
             document.getElementById('projPanelInner').innerHTML = html;
         }
 
+        /* 架构层级选项（非工人默认项目部 / 工人默认泥瓦工作组；两视角共用同一组件） */
+        function buildLevelOptions(selected) {
+            var defs = [
+                { name: '项目部', icon: '🏢', type: 'project', count: '0个工作组 · 0份合同' },
+                { name: '水电工作组', icon: '⚡', type: 'workgroup', count: '3个施工组 · 2份合同' },
+                { name: '泥瓦工作组', icon: '⚡', type: 'workgroup', count: '2个施工组 · 1份合同' },
+                { name: '木工工作组', icon: '⚡', type: 'workgroup', count: '2个施工组 · 1份合同' },
+                { name: '油漆工作组', icon: '⚡', type: 'workgroup', count: '1个施工组 · 1份合同' }
+            ];
+            return defs.map(function (d) {
+                var sel = d.name === selected;
+                var badge = d.type === 'project' ? '项目部' : '工作组';
+                return '<div class="level-option' + (sel ? ' selected' : '') + '" onclick="pickLevel(this, event)">' +
+                    '<div class="icon">' + d.icon + '</div>' +
+                    '<div class="info"><div class="name">' + d.name + '</div><div class="count">' + d.count + '</div></div>' +
+                    '<div class="check" style="visibility:' + (sel ? 'visible' : 'hidden') + ';">✓</div></div>';
+            }).join('');
+        }
+
         /* ===================== 渲染：初始项目详情（整体布局对齐项目列表页） ===================== */
         function renderInitial(p) {
-            var levels = '<div class="level-option selected" onclick="pickLevel(this, event)">' +
-                '<div class="icon">🏢</div>' +
-                '<div class="info"><div class="name">项目部</div><div class="count">' + p.groupCount + '个工作组 · 0份合同</div></div>' +
-                '<div class="check" style="visibility:visible;">✓</div></div>';
+            var levels = buildLevelOptions('项目部');
 
-            return '<div class="detail-fade">' +
-                // 新家准备中（橙色变体，作为唯一的项目信息入口：仅展示状态 + 面积户型，项目名已在顶部切换条展示，避免重复）
-                '<div class="project-basic-header new-project" onclick="viewProjectInfo()">' +
-                    '<div class="left-info">新家准备中</div>' +
-                    '<div class="right-wrap"><div class="right-info">' + p.area + '</div><span class="enter-arrow">›</span></div>' +
-                '</div>' +
+            return                 '<div class="detail-fade">' +
                 // 待办事项（初始态：暂无待办 + 创建工作组引导）
                 '<div class="card"><div class="card-title"><span>📋 待办事项</span>' +
                     '<span class="badge-wrap"><span class="badge">0</span></span>' +
@@ -677,13 +732,59 @@
                 '</div>';
         }
 
+        /* 工人视角初始项目详情（单页演示开关切换；顶部单一项目信息头与全局切换条共用） */
+        function renderInitialWorker(p) {
+            var trade = p.trade || '泥瓦';
+            var levels = buildLevelOptions(trade + '工作组');
+            return '<div class="detail-fade">' +
+                // 待办事项（工人视角：初始态 0 待办，与项目列表工人视角一致）
+                '<div class="card todo-card worker"><div class="card-title"><span>📋 待办事项</span>' +
+                    '<span class="badge-wrap"><span class="badge">0</span></span>' +
+                    '<span class="more" onclick="openPage(\'todo-list.html\')">查看全部 ></span></div>' +
+                    '<div class="todo-content"><div class="empty-state" style="font-size:12px;color:#999;padding:8px 0;">暂无待办，待工长分配任务、发起合同后在此显示</div></div></div>' +
+                // 我的任务（工人视角：0/0）
+                '<div class="card my-task-card worker" onclick="openPage(\'task-list.html?role=exec\')"><div class="card-title"><span>📌 我的任务</span><span class="more">查看全部 ></span></div>' +
+                    '<div class="my-task-stats">' +
+                        '<div class="my-task-stat"><div class="value">0</div><div class="label">已完成</div></div>' +
+                        '<div class="my-task-divider"></div>' +
+                        '<div class="my-task-stat"><div class="value">0</div><div class="label">我作为执行人的全部任务</div></div>' +
+                    '</div></div>' +
+                // 吸顶快捷入口 + 架构（工人视角，与项目列表工人视角一致）
+                '<div class="sticky-header" id="stickyHeader">' +
+                    '<div class="quick-nav" id="quickNavWork">' +
+                        '<div class="quick-nav-item keep" onclick="go(\'activity-list.html\')"><div class="icon activity">📝</div><div class="label">项目动态</div></div>' +
+                        '<div class="quick-nav-item" onclick="go(\'architecture.html\')"><div class="icon structure">🏗️</div><div class="label">架构</div></div>' +
+                        '<div class="quick-nav-item" onclick="go(\'member.html\')"><div class="icon member">👥</div><div class="label">成员</div></div>' +
+                        '<div class="quick-nav-item" onclick="go(\'project-files.html\')"><div class="icon file">📁</div><div class="label">资料</div></div></div>' +
+                    '<div class="level-selector arch-half" id="levelSelectorWork"><div class="level-dropdown" onclick="toggleLevelOpts(this)">' +
+                        '<div class="current"><div class="icon">⚡</div><div>' +
+                        '<div class="text-row"><div class="text">' + trade + '工作组</div><div class="type-badge workgroup">工作组</div></div>' +
+                        '<div class="breadcrumb-inline"><span class="breadcrumb-item">项目部</span><span class="separator">›</span><span class="breadcrumb-item active">' + trade + '工作组</span></div>' +
+                        '<div class="level-default-hint">默认我的工作组</div></div></div>' +
+                        '<div class="arrow">▼</div></div>' +
+                        '<div class="level-options">' + levels + '</div></div>' +
+                '</div>' +
+                // 合同 / 任务统计（工人视角：初始态均为 0）
+                '<div class="stats-row">' +
+                    '<div class="card contract-half worker"><div class="card-title"><span>📄 合同</span></div>' +
+                        '<div class="contract-list show" id="contractListWorker"><div class="empty-state" style="font-size:12px;color:#999;padding:8px 0;">暂无合同，待工长发起班组合同后在此查看</div></div></div>' +
+                    '<div class="card task-half worker"><div class="card-title"><span>📊 任务统计</span><span class="more" onclick="go(\'task-list.html\')">查看全部 ></span></div>' +
+                        '<div class="task-stats">' +
+                            '<div class="task-stat-item"><div class="icon-wrap all">📋</div><div class="info"><div class="value"><span class="current">0</span><span class="separator">/</span><span class="total">0</span></div><div class="label">全部任务</div></div></div>' +
+                            '<div class="task-stat-item"><div class="icon-wrap accept">⏳</div><div class="info"><div class="value">0</div><div class="label">确认中任务</div></div></div>' +
+                            '<div class="task-stat-item"><div class="icon-wrap contract">▶</div><div class="info"><div class="value">0</div><div class="label">执行中任务</div></div></div>' +
+                        '</div></div>' +
+                '</div>' +
+                '</div>';
+        }
+
         /* ===================== 顶部一行：项目名/切换（切换条已承载，无需额外摘要） ===================== */
 
         /* ===================== 主渲染 ===================== */
         function renderDetail() {
             var p = PROJECTS[currentIndex];
             var area = document.getElementById('detailArea');
-            area.innerHTML = renderInitial(p);
+            area.innerHTML = (currentRole === 'worker') ? renderInitialWorker(p) : renderInitial(p);
         }
 
         /* ===================== 交互 ===================== */
@@ -793,12 +894,32 @@
             setTimeout(function () { t.remove(); }, 1600);
         }
 
+        /* 角色演示开关：非工人 / 工人 视角切换（单页内切换，替代独立工人页） */
+        function toggleRoleSwitch(checked) {
+            currentRole = checked ? 'worker' : 'nonworker';
+            var rs = document.getElementById('roleStatus');
+            if (rs) {
+                rs.textContent = currentRole === 'worker' ? '工人' : '非工人';
+                rs.classList.toggle('worker', checked);
+            }
+            renderDetail();
+        }
+        /* 工人视角交互：层级切换 / 吸顶阴影由通用逻辑处理（见上） */
+
         /* ===================== 点击面板外部自动收起 ===================== */
         document.addEventListener('click', function (e) {
             var panel = document.getElementById('projPanel');
             var topbar = document.querySelector('.topbar');
             if (panel.classList.contains('open') && !topbar.contains(e.target)) {
                 togglePanel();
+            }
+            // 层级下拉外部点击收起
+            var ls = document.querySelector('.level-selector');
+            if (ls && !ls.contains(e.target)) {
+                var lo = ls.querySelector('.level-options');
+                if (lo) lo.classList.remove('open');
+                var la = ls.querySelector('.arrow');
+                if (la) la.classList.remove('open');
             }
         });
 

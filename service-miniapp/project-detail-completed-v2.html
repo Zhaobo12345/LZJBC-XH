@@ -200,18 +200,6 @@
         .detail-fade { animation: fadeUp .28s ease both; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
-        /* ===== 已完工项目头（绿色调，复用项目列表卡片体系） ===== */
-        .project-basic-header {
-            background: linear-gradient(135deg, #F6FFED 0%, #D9F7BE 100%);
-            border-radius: 14px; padding: 10px 14px; margin-bottom: 8px;
-            display: flex; align-items: center; justify-content: space-between; cursor: pointer;
-            box-shadow: 0 4px 14px rgba(82,196,26,.18);
-        }
-        .project-basic-header .left-info { font-size: 15px; font-weight: 700; color: #389E0D; }
-        .project-basic-header .right-wrap { display: flex; align-items: center; gap: 6px; }
-        .project-basic-header .right-info { font-size: 12px; color: #389E0D; background: rgba(255,255,255,.6); border: 1px solid rgba(82,196,26,.25); border-radius: 16px; padding: 4px 10px; }
-        .project-basic-header .enter-arrow { font-size: 18px; color: #8C8C8C; }
-
         /* ===== 通用卡片 ===== */
         .card {
             background: var(--card); border-radius: 14px; padding: 10px 12px; margin-bottom: 8px; box-shadow: var(--shadow);
@@ -544,18 +532,15 @@
     <div class="page-nav">
         <div class="page-nav-title" onclick="togglePageNav()" title="收起 / 展开 原型导航">原型导航 <span class="toggle-btn" id="pageNavToggle">▼</span></div>
         <a href="home.html">首页</a>
-        <a href="project-list.html" class="active">项目列表</a>
-        <a href="project-detail.html">项目详情</a>
-        <a href="project-detail-new.html">初始项目详情页</a>
-        <a href="project-info.html">项目信息</a>
-        <a href="project-detail-ongoing-v2.html">项目详情（进行中-新版）</a>
+        <a href="project-list.html">项目主页（进行中）</a>
         <a href="project-detail-initial-v2.html">项目详情（初始-新版）</a>
-        <a href="project-detail-completed.html">项目详情（已完成）</a>
         <a href="project-detail-completed-v2.html" class="active">项目详情（已完成-新版）</a>
+        <a href="project-info.html">项目信息</a>
         <a href="architecture.html">项目架构</a>
         <a href="create-project.html">创建项目</a>
         <a href="task-list.html">任务列表</a>
         <a href="contract-detail.html">合同详情</a>
+        <a href="task-detail.html">任务详情</a>
     </div>
 
     <div class="stage">
@@ -829,7 +814,6 @@
                 : '<div class="hidden"></div>';
 
             return '<div class="detail-fade">' +
-                (isDone ? '<div class="project-basic-header" onclick="viewProjectInfo()"><div class="left-info">🎉 项目已完工</div><div class="right-wrap"><div class="right-info">' + p.area + '</div><span class="enter-arrow">›</span></div></div>' : '') +
                 '<div class="card"><div class="card-title"><span>📋 待办事项</span>' +
                     '<span class="badge-wrap"><span class="badge">' + p.todoCount + '</span></span>' +
                     '<span class="more" onclick="openPage(\'todo-list.html\')">查看全部 ></span></div>' +
@@ -904,7 +888,6 @@
             }).join('');
 
             return '<div class="detail-fade">' +
-                (isDone ? '<div class="project-basic-header" onclick="viewProjectInfo()"><div class="left-info">🎉 项目已完工</div><div class="right-wrap"><div class="right-info">' + p.area + '</div><span class="enter-arrow">›</span></div></div>' : '') +
                 '<div class="card todo-card worker"><div class="card-title"><span>📋 待办事项</span>' +
                     '<span class="badge-wrap"><span class="badge">' + p.todoCount + '</span></span>' +
                     '<span class="more" onclick="openPage(\'todo-list.html\')">查看全部 ></span></div>' +

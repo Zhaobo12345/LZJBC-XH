@@ -730,8 +730,8 @@
     <div class="page-nav">
         <div class="page-nav-title">原型导航</div>
         <a href="home.html" class="page-nav-item">首页</a>
-        <a href="project-list.html" class="page-nav-item">项目列表</a>
-        <a href="project-detail-ongoing-v2.html" class="page-nav-item">项目详情</a>
+        <a href="project-list.html" class="page-nav-item">项目主页（进行中）</a>
+        <a href="project-list.html" class="page-nav-item">项目主页（进行中）</a>
         <a href="member.html" class="page-nav-item">项目成员</a>
         <a href="message.html" class="page-nav-item active">消息</a>
         <a href="architecture.html" class="page-nav-item">项目架构</a>
@@ -1355,7 +1355,7 @@
         function goToProject(projectName) {
             showToast(`正在跳转到"${projectName}"项目详情...`);
             setTimeout(() => {
-                location.href = 'project-detail-ongoing-v2.html';
+                location.href = 'project-list.html';
             }, 500);
         }
 

@@ -3154,6 +3154,15 @@ const ContractDetailPage = (function() {
      * 编辑任务详情
      * @param {HTMLElement} btn - 按钮元素
      */
+    // 合同乙方名单（用于编辑任务时执行人默认值推导）：非工人合同乙方为单选，取「乙方（承包方）」下拉选中项。
+    function getPartyBList() {
+        const sel = document.getElementById('editPartyB');
+        if (!sel || !sel.value) return [];
+        const txt = (sel.options[sel.selectedIndex] && sel.options[sel.selectedIndex].text) || sel.value;
+        const name = txt.split('（')[0].trim();
+        return [name];
+    }
+
     function editTaskDetail(btn) {
         const taskItem = btn.closest('.task-edit-item');
         if (!taskItem) return;
@@ -3166,7 +3175,12 @@ const ContractDetailPage = (function() {
         state.currentEditTaskItem = taskItem;
         
         const taskName = taskItem.querySelector('.task-input').value;
-        const executor = taskItem.dataset.executor || '';
+        let executor = taskItem.dataset.executor || '';
+        // 执行人默认值：合同乙方仅一人时，无执行人的任务默认填乙方人员；多乙方则为空（非必选）
+        if (!executor) {
+            const pbList = getPartyBList();
+            if (pbList.length === 1) executor = pbList[0];
+        }
         const confirmers = taskItem.dataset.confirmers ? taskItem.dataset.confirmers.split(',') : [];
         const execStandard = taskItem.dataset.execStandard || '';
         const confirmStandard = taskItem.dataset.confirmStandard || '';
