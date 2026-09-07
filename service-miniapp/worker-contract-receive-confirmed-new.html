@@ -247,6 +247,99 @@
     <div class="app-toast" id="appToast"></div>
 </div>
 
+    <div class="page-nav" data-page-node-id="rcNvRoot">
+        <div class="page-nav-title" onclick="WCP.togglePageNav()" title="收起 / 展开 原型导航" data-page-node-id="rcNvTitle">
+            原型导航 <span class="toggle-btn" id="pageNavToggle" data-page-node-id="rcNvToggle">▼</span>
+        </div>
+        <a href="home.html" class="page-nav-item" data-page-node-id="rcNvHome">首页</a>
+        <a href="project-list.html" class="page-nav-item" data-page-node-id="rcNvProj1">项目主页（进行中）</a>
+        <a href="project-list.html" class="page-nav-item" data-page-node-id="rcNvProj2">项目主页（进行中）</a>
+        <a href="contract-detail.html" class="page-nav-item" data-page-node-id="rcNvComp">合同详情（合规版）</a>
+        <a href="message.html" class="page-nav-item" data-page-node-id="rcNvMsg">消息</a>
+        <a href="worker-contract-detail.html" class="page-nav-item active" data-page-node-id="rcNvWorker">工人合同详情（新流程）</a>
+        <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #E8E8E8;" data-page-node-id="rcNvDiv">
+            <div class="page-nav-title" data-page-node-id="rcNvStateTitle">合同状态切换（工人合同）</div>
+
+            <!-- 发起方视角 -->
+            <div class="status-group" data-page-node-id="rcNvInitGrp">
+                <div class="status-group-header" onclick="WCP.toggleStatusGroup(this)" data-page-node-id="rcNvInitHdr">
+                    <span class="status-group-icon" data-page-node-id="rcNvInitIco">▼</span>
+                    <span class="status-group-title" data-page-node-id="rcNvInitTtl">发起方视角</span>
+                    <span class="status-group-count" data-page-node-id="rcNvInitCnt">5</span>
+                </div>
+                <div class="status-group-content" data-page-node-id="rcNvInitCtn">
+                    <a class="status-switch-item" href="worker-contract-draft-initial-new.html" style="text-decoration:none;" data-page-node-id="rcNvI1">拟定中(发起方)-新</a>
+                    <a class="status-switch-item" href="worker-contract-confirming-initiator-new.html" style="text-decoration:none;" data-page-node-id="rcNvI2">确认中(发起方)</a>
+                    <a class="status-switch-item" href="worker-contract-detail.html?status=worker_draft" style="text-decoration:none;" data-page-node-id="rcNvI3">拟定中(撤回后)</a>
+                    <a class="status-switch-item" href="worker-contract-signed-initiator-new.html" style="text-decoration:none;" data-page-node-id="rcNvI4">已签约（发起方）-新</a>
+                    <a class="status-switch-item" href="worker-contract-detail.html?demo=fulfilled" style="text-decoration:none;" data-page-node-id="rcNvI5">已签约（已履约完成）</a>
+                </div>
+            </div>
+
+            <!-- 受邀方视角 -->
+            <div class="status-group" data-page-node-id="rcNvRecvGrp">
+                <div class="status-group-header" onclick="WCP.toggleStatusGroup(this)" data-page-node-id="rcNvRecvHdr">
+                    <span class="status-group-icon" data-page-node-id="rcNvRecvIco">▼</span>
+                    <span class="status-group-title" data-page-node-id="rcNvRecvTtl">受邀方视角</span>
+                    <span class="status-group-count" data-page-node-id="rcNvRecvCnt">4</span>
+                </div>
+                <div class="status-group-content" data-page-node-id="rcNvRecvCtn">
+                    <a class="status-switch-item" href="worker-contract-receive-inviting.html" style="text-decoration:none;" data-page-node-id="rcNvR4">确认中（受邀方）</a>
+                    <a class="status-switch-item active" href="worker-contract-receive-confirmed-new.html" style="text-decoration:none;" data-page-node-id="rcNvR1">已确认（受邀方）-新</a>
+                    <a class="status-switch-item" href="worker-contract-detail.html?status=worker_rejected_receiver" style="text-decoration:none;" data-page-node-id="rcNvR3">已拒绝(受邀方)</a>
+                    <a class="status-switch-item" href="worker-contract-detail.html?status=worker_lost_receiver" style="text-decoration:none;" data-page-node-id="rcNvR2">抢单失败(受邀方)</a>
+                </div>
+            </div>
+
+            <!-- 演示数据 -->
+            <div class="status-group" data-page-node-id="rcNvDemoGrp">
+                <div class="status-group-header" onclick="WCP.toggleStatusGroup(this)" data-page-node-id="rcNvDemoHdr">
+                    <span class="status-group-icon" data-page-node-id="rcNvDemoIco">▼</span>
+                    <span class="status-group-title" data-page-node-id="rcNvDemoTtl">演示数据</span>
+                    <span class="status-group-count" data-page-node-id="rcNvDemoCnt">2</span>
+                </div>
+                <div class="status-group-content" data-page-node-id="rcNvDemoCtn">
+                    <a class="status-switch-item" href="wechat-service-notice.html" style="text-decoration:none;" data-page-node-id="rcNvD1">微信服务通知</a>
+                    <a class="status-switch-item" href="invite-banner-demo.html" style="text-decoration:none;" data-page-node-id="rcNvD2">应用内顶部通知条（示例）</a>
+                </div>
+            </div>
+
+            <!-- 变更阶段：工人合同无需平台审核，对齐「合同详情（合规版）」变更流程去平台化版本（预览用，不影响其它功能） -->
+            <div class="status-group" data-page-node-id="rcNvChgGrp">
+                <div class="status-group-header" onclick="WCP.toggleStatusGroup(this)" data-page-node-id="rcNvChgHdr">
+                    <span class="status-group-icon" data-page-node-id="rcNvChgIco">▶</span>
+                    <span class="status-group-title" data-page-node-id="rcNvChgTtl">变更阶段</span>
+                    <span class="status-group-count" data-page-node-id="rcNvChgCnt">4</span>
+                </div>
+                <div class="status-group-content" style="display:none;" data-page-node-id="rcNvChgCtn">
+                    <a class="status-switch-item" href="worker-contract-detail.html?status=change_confirming_sender" style="text-decoration:none;" data-page-node-id="rcNvC1">变更确认中(发起方)</a>
+                    <a class="status-switch-item" href="worker-contract-detail.html?status=change_confirming" style="text-decoration:none;" data-page-node-id="rcNvC2">待确认变更(受邀方)</a>
+                    <a class="status-switch-item" href="worker-contract-detail.html?status=change_rejected&viewer=sender" style="text-decoration:none;" data-page-node-id="rcNvC3">变更已驳回(发起方)</a>
+                    <a class="status-switch-item" href="worker-contract-detail.html?status=change_rejected&viewer=receiver" style="text-decoration:none;" data-page-node-id="rcNvC4">变更已驳回（受邀方）</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    window.WCP = window.WCP || {};
+    WCP.togglePageNav = function () {
+        var nav = document.querySelector('.page-nav');
+        var btn = document.getElementById('pageNavToggle');
+        if (!nav) return;
+        var collapsed = nav.classList.toggle('collapsed');
+        if (btn) btn.classList.toggle('collapsed', collapsed);
+    };
+    WCP.toggleStatusGroup = function (header) {
+        var content = header.parentElement.querySelector('.status-group-content');
+        var icon = header.querySelector('.status-group-icon');
+        if (!content || !icon) return;
+        var hidden = content.style.display === 'none';
+        content.style.display = hidden ? 'block' : 'none';
+        icon.textContent = hidden ? '▼' : '▶';
+    };
+</script>
+
 <script>
     var appState = 'confirmed';
 

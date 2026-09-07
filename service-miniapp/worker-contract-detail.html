@@ -271,6 +271,7 @@
             background: var(--bg-primary); outline: none; font-family: inherit;
         }
         .edit-input:focus { border-color: var(--primary-color); }
+        .edit-input.ro, .edit-textarea.ro { background: var(--bg-secondary); color: var(--text-secondary); border-color: var(--border-color); cursor: default; }
         .edit-textarea {
             width: 100%; box-sizing: border-box; border: 1px solid var(--border-color);
             border-radius: 8px; padding: 10px 12px; font-size: 13px; color: var(--text-primary);
@@ -818,6 +819,106 @@
         #draftContentWrap .wc-preview-btn { margin: 14px 12px 12px; display: flex; align-items: center; justify-content: center; gap: 6px; height: 44px; border-radius: 8px; background: #1677ff; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; }
         #draftContentWrap .wc-preview-btn:active { opacity: 0.85; }
 
+        /* 变更阶段（发起方视角）只读合同内容卡片：对齐「已签约（发起方）-新」 */
+        #changeReadOnlyWrap .contract-content-card { margin: 0 12px 12px; background: var(--bg-primary, #fff); border-radius: 12px; padding: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        #changeReadOnlyWrap .card-title { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 12px; }
+        #changeReadOnlyWrap .content-tabs { display: flex; border-bottom: 1px solid var(--border-color); margin-bottom: 12px; }
+        #changeReadOnlyWrap .content-tab { flex: 1; text-align: center; padding: 10px 0; font-size: 13px; color: var(--text-secondary); cursor: pointer; position: relative; }
+        #changeReadOnlyWrap .content-tab.active { color: var(--primary-color); font-weight: 600; }
+        #changeReadOnlyWrap .content-tab.active::after { content: ""; position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%); width: 40px; height: 2px; background: var(--primary-color); border-radius: 2px; }
+        #changeReadOnlyWrap .content-tab-pane { display: none; }
+        #changeReadOnlyWrap .content-tab-pane.active { display: block; }
+        #changeReadOnlyWrap .form-label-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+        #changeReadOnlyWrap .form-label { font-size: 13px; color: var(--text-primary); font-weight: 600; }
+        #changeReadOnlyWrap .view-full-link { font-size: 12px; color: var(--primary-color); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 2px; padding: 2px 0; }
+        #changeReadOnlyWrap .edit-field { margin-bottom: 10px; }
+        #changeReadOnlyWrap .edit-field > label { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
+        #changeReadOnlyWrap .edit-input,
+        #changeReadOnlyWrap .edit-textarea { width: 100%; box-sizing: border-box; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 12px; font-size: 13px; color: var(--text-primary); background: var(--bg-secondary); outline: none; font-family: inherit; }
+        #changeReadOnlyWrap .edit-textarea { min-height: 70px; resize: none; line-height: 1.7; }
+        #changeReadOnlyWrap .edit-input.ro,
+        #changeReadOnlyWrap .edit-textarea.ro { background: var(--bg-secondary); color: var(--text-secondary); border-color: var(--border-color); cursor: default; }
+        #changeReadOnlyWrap .field-row { display: flex; align-items: center; gap: 8px; }
+        #changeReadOnlyWrap .field-row .edit-input { flex: 1; }
+        #changeReadOnlyWrap .field-unit { font-size: 13px; color: var(--text-secondary); flex: 0 0 auto; }
+        #changeReadOnlyWrap .form-section-title { font-size: 13px; font-weight: 600; color: var(--text-primary); margin: 14px 0 8px; }
+        #changeReadOnlyWrap .form-section-title:first-child { margin-top: 0; }
+        #changeReadOnlyWrap .party-a-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+        #changeReadOnlyWrap .invite-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+        #changeReadOnlyWrap .invite-chip { display: inline-flex; align-items: center; gap: 4px; background: var(--status-primary-bg); border: 1px solid var(--primary-light); border-radius: 14px; padding: 4px 10px; font-size: 12px; color: var(--primary-color); }
+        #changeReadOnlyWrap .invite-chip .member-avatar { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 11px; font-weight: 600; }
+        #changeReadOnlyWrap .invite-chip .chip-text { margin-left: 2px; }
+        #changeReadOnlyWrap .contract-text-preview { font-size: 13px; color: var(--text-secondary); line-height: 1.7; background: var(--bg-secondary); border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; }
+        #changeReadOnlyWrap .contract-text-preview p { margin: 0 0 6px; }
+        #changeReadOnlyWrap .contract-text-preview p:last-child { margin-bottom: 0; }
+        #changeReadOnlyWrap .contract-text-preview .text-title { font-weight: 600; color: var(--text-primary); margin-top: 8px; }
+        #changeReadOnlyWrap .attachment-list .attachment-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border-color); }
+        #changeReadOnlyWrap .attachment-list .attachment-item:last-child { border-bottom: none; }
+        #changeReadOnlyWrap .attachment-list .file-icon { font-size: 20px; }
+        #changeReadOnlyWrap .attachment-list .file-info { flex: 1; }
+        #changeReadOnlyWrap .attachment-list .file-name { font-size: 13px; color: var(--text-primary); }
+        #changeReadOnlyWrap .attachment-list .file-meta { font-size: 11px; color: var(--text-tertiary); }
+        #changeReadOnlyWrap .stage-section-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+        #changeReadOnlyWrap .stage-card { background: var(--bg-primary); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.04); }
+        #changeReadOnlyWrap .stage-card .stage-item { border: none; border-radius: 0; margin-bottom: 0; border-bottom: 1px solid var(--border-color); }
+        #changeReadOnlyWrap .stage-card .stage-item:last-child { border-bottom: none; }
+        #changeReadOnlyWrap .stage-card .stage-tasks { border-top: 1px solid var(--border-color); }
+        #changePaneStageTask { background: var(--bg-secondary); margin: 0 -14px -14px; padding: 12px 14px 16px; min-height: 260px; }
+        #changePaneAttachment { min-height: 260px; }
+
+        /* ---------- 受邀方变更态（待确认变更 / 变更已驳回·受邀方）：对齐「已确认（受邀方）-新」卡片流布局 ---------- */
+        #receiverChangeWrap .rc-card {
+            margin: 0 12px 12px; background: var(--bg-primary, #fff); border-radius: 12px;
+            padding: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        #receiverChangeWrap .rc-title {
+            font-size: 15px; font-weight: 600; color: var(--text-primary, #333);
+            margin-bottom: 10px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+        }
+        #receiverChangeWrap .rc-title.clickable { cursor: pointer; justify-content: flex-start; }
+        #receiverChangeWrap .rc-badge {
+            font-size: 11px; font-weight: 500; color: var(--text-secondary, #666);
+            background: var(--bg-secondary, #f5f5f5); padding: 2px 8px; border-radius: 10px;
+        }
+        #receiverChangeWrap .rc-fold-arrow { margin-left: auto; font-size: 12px; color: var(--text-tertiary, #999); transition: transform .15s; }
+        #receiverChangeWrap .rc-fold-arrow.open { transform: rotate(90deg); }
+        #receiverChangeWrap .rc-line { font-size: 13px; color: var(--text-primary, #333); line-height: 1.9; }
+        #receiverChangeWrap .rc-line b { font-weight: 600; }
+        #receiverChangeWrap .rc-call-link {
+            display: inline-flex; align-items: center; gap: 4px; text-decoration: none;
+            font-size: 12px; color: var(--primary-color, #1677ff);
+            padding: 3px 10px; border: 1px solid #91caff; border-radius: 14px;
+            background: var(--status-primary-bg, #f0f7ff); font-weight: 600;
+        }
+        #receiverChangeWrap .rc-full-link-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        #receiverChangeWrap .rc-full-link {
+            display: inline-flex; align-items: center; gap: 4px; text-decoration: none; cursor: pointer;
+            font-size: 12px; font-weight: 600; color: var(--primary-color, #1677ff);
+            padding: 4px 9px; border: 1px solid #91caff; border-radius: 8px; background: var(--status-primary-bg, #f0f7ff);
+        }
+        #receiverChangeWrap .rc-agreed-badge {
+            display: inline-flex; align-items: center; gap: 3px; flex: 0 0 auto;
+            font-size: 11px; font-weight: 600; color: #52c41a;
+            padding: 3px 7px; border: 1px solid #b7eb8f; border-radius: 8px; background: #f6ffed;
+        }
+        #receiverChangeWrap .rc-att {
+            display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--border-color, #f5f5f5);
+        }
+        #receiverChangeWrap .rc-att:last-child { border-bottom: none; }
+        #receiverChangeWrap .rc-att-icon { font-size: 20px; }
+        #receiverChangeWrap .rc-att-name { font-size: 13px; color: var(--text-primary, #333); flex: 1; }
+        #receiverChangeWrap .rc-att-meta { font-size: 11px; color: var(--text-tertiary, #999); }
+        #receiverChangeWrap .rc-empty { text-align: center; padding: 14px 0; color: var(--text-tertiary, #999); font-size: 13px; }
+        #receiverChangeWrap .rc-stage-box { margin-top: 10px; }
+        /* hero 主卡（对齐「已确认（受邀方）-新」顶部主接单卡：合同名称 / 报酬 / 项目地址） */
+        #receiverChangeWrap .rc-hero-name { font-size: 20px; font-weight: 700; color: var(--text-primary, #1a1a1a); line-height: 1.35; }
+        #receiverChangeWrap .rc-hero-amount { font-size: 24px; font-weight: 700; color: var(--primary-color, #1677ff); margin-top: 6px; }
+        #receiverChangeWrap .rc-hero-amount small { font-size: 15px; font-weight: 600; }
+        #receiverChangeWrap .rc-hero-amount .rc-hero-old { font-size: 13px; font-weight: 500; color: var(--text-tertiary, #999); margin-left: 6px; text-decoration: line-through; }
+        #receiverChangeWrap .rc-hero-label { font-size: 12px; color: var(--text-tertiary, #999); margin-top: 4px; line-height: 1.5; }
+        #receiverChangeWrap .rc-hero-meta { font-size: 13px; color: var(--text-primary, #333); margin-top: 8px; }
+        #receiverChangeWrap .rc-hero-meta b { display: block; font-size: 12px; color: var(--text-tertiary, #999); font-weight: 400; margin-bottom: 2px; }
+
     </style>
 
     <!-- 弹窗在手机框内的尺寸约束（覆盖 contract-detail.css 的 80vh，改为相对手机框高度） -->
@@ -949,6 +1050,36 @@
                 <div class="section-content show" id="contentSection" data-page-node-id="npySSDhduVDS7oRWtROvPr"></div>
                 <div class="section-content" id="stagesSection" data-page-node-id="Bc5SUFCw43cSSHbDUfaxOG"></div>
                 <div class="section-content" id="attachmentsSection" data-page-node-id="3p42sV96OzXfHSWuFNOyxD"></div>
+                </div>
+
+                <!-- 变更阶段（发起方视角：变更确认中 / 变更已驳回）：只读合同内容，布局对齐「已签约（发起方）-新」 -->
+                <div id="changeReadOnlyWrap" style="display:none;" data-page-node-id="cR0ChgReadOnlyWrap">
+                    <div class="contract-content-card" data-page-node-id="cR0ChgContentCard">
+                        <div class="card-title" data-page-node-id="cR0ChgCardTitle">📄 合同内容</div>
+                        <div class="content-tabs" data-page-node-id="cR0ChgTabs">
+                            <div class="content-tab active" onclick="WCP.switchChangeContentTab(this,'contract-text')" data-page-node-id="cR0ChgTabText">合同正文</div>
+                            <div class="content-tab" onclick="WCP.switchChangeContentTab(this,'stage-task')" data-page-node-id="cR0ChgTabStage">阶段任务</div>
+                            <div class="content-tab" onclick="WCP.switchChangeContentTab(this,'attachment')" data-page-node-id="cR0ChgTabAttach">附件</div>
+                        </div>
+                        <div class="content-tab-pane active" id="changePaneContractText" data-page-node-id="cR0ChgPaneText"></div>
+                        <div class="content-tab-pane" id="changePaneStageTask" data-page-node-id="cR0ChgPaneStage">
+                            <div id="changeStagesBox" data-page-node-id="cR0ChgStagesBox"></div>
+                        </div>
+                        <div class="content-tab-pane" id="changePaneAttachment" data-page-node-id="cR0ChgPaneAttach">
+                            <div id="changeAttachmentsBox" data-page-node-id="cR0ChgAttachBox"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 受邀方变更态（待确认变更 / 变更已驳回·受邀方）：卡片流布局，对齐「已确认（受邀方）-新」（无状态步骤图） -->
+                <div id="receiverChangeWrap" style="display:none;" data-page-node-id="rcvChgRoot">
+                    <div class="rc-card" id="rcHero" data-page-node-id="rcvChgHero"></div>
+                    <div class="rc-card" id="rcCoop" data-page-node-id="rcvChgCoop"></div>
+                    <div class="rc-card" id="rcDuration" data-page-node-id="rcvChgDuration"></div>
+                    <div class="rc-card" id="rcBreach" data-page-node-id="rcvChgBreach"></div>
+                    <div class="rc-card" id="rcFullText" data-page-node-id="rcvChgFullText"></div>
+                    <div class="rc-card" id="rcStages" data-page-node-id="rcvChgStages"></div>
+                    <div class="rc-card" id="rcAttachments" data-page-node-id="rcvChgAttach"></div>
                 </div>
 
                 <!-- 拟定中：可编辑合同内容（参考「合同详情（合规版）」） -->
@@ -1394,16 +1525,13 @@
                 <div class="status-group-header" onclick="WCP.toggleStatusGroup(this)" data-page-node-id="1ihgHkxicLHT9HXMxu5nbD">
                     <span class="status-group-icon" data-page-node-id="e1QEc5Qgk2dkSPyHUlrmPd">▶</span>
                     <span class="status-group-title" data-page-node-id="mSQth1Q6g3A3vQ87pamvs3">受邀方视角</span>
-                    <span class="status-group-count" data-page-node-id="CE5CmIuZ0Z3V8t78E6hSBw">6</span>
+                    <span class="status-group-count" data-page-node-id="CE5CmIuZ0Z3V8t78E6hSBw">4</span>
                 </div>
                 <div class="status-group-content" style="display:none;" data-page-node-id="mcEQsEgj6awEvvAEJrtnhp">
-                    <div class="status-switch-item" data-status="worker_confirmed_receiver" onclick="WCP.updateStatus('worker_confirmed_receiver')" data-page-node-id="wDc2tzW1L8P0MJcVpAQ3Py">已确认(受邀方)</div>
-                    <a class="status-switch-item" href="worker-contract-receive-confirmed-new.html" style="text-decoration:none;" data-page-node-id="7flScL21fmQ1CTgCp1Nmne">已确认（受邀方）-新</a>
-                    <div class="status-switch-item" data-status="worker_lost_receiver" onclick="WCP.updateStatus('worker_lost_receiver')" data-page-node-id="c2cQ9Ry1BsMdiyZxAVBfO3">抢单失败(受邀方)</div>
+                <a class="status-switch-item" href="worker-contract-receive-inviting.html" style="text-decoration:none;" data-page-node-id="D0kNiLvWlvWYSQBrA7ePFx">确认中（受邀方）</a>
+                <a class="status-switch-item" href="worker-contract-receive-confirmed-new.html" style="text-decoration:none;" data-page-node-id="7flScL21fmQ1CTgCp1Nmne">已确认（受邀方）-新</a>
                     <div class="status-switch-item" data-status="worker_rejected_receiver" onclick="WCP.updateStatus('worker_rejected_receiver')" data-page-node-id="kE06J3PDn3Ce6lZsoYqzer">已拒绝(受邀方)</div>
-                    <div class="status-switch-divider" data-page-node-id="UfGrSkx0qLV6GqA0HNo1sb"></div>
-                    <a class="status-switch-item" href="worker-contract-receive-inviting.html" style="text-decoration:none;" data-page-node-id="D0kNiLvWlvWYSQBrA7ePFx">确认中（接单体验 E）</a>
-                    <a class="status-switch-item" data-status="worker_signed" data-viewer="receiver" href="worker-contract-detail.html?viewer=receiver&status=worker_signed" style="text-decoration:none;" data-page-node-id="GoDZGdlKy2uklwsEC49ZBl">已签约(受邀方)</a>
+                    <div class="status-switch-item" data-status="worker_lost_receiver" onclick="WCP.updateStatus('worker_lost_receiver')" data-page-node-id="c2cQ9Ry1BsMdiyZxAVBfO3">抢单失败(受邀方)</div>
                 </div>
             </div>
 
@@ -1425,16 +1553,13 @@
                 <div class="status-group-header" onclick="WCP.toggleStatusGroup(this)" data-page-node-id="YLlSoVooerjPcJPY6FgF4Z">
                     <span class="status-group-icon" data-page-node-id="fksC60W2q0VJlmK4UGYx4F">▶</span>
                     <span class="status-group-title" data-page-node-id="kbZjG5gNqd8qQCXx6zSjuF">变更阶段</span>
-                    <span class="status-group-count" data-page-node-id="1masPZy1sVsruBL0wtznW8">7</span>
+                    <span class="status-group-count" data-page-node-id="1masPZy1sVsruBL0wtznW8">4</span>
                 </div>
                 <div class="status-group-content" style="display:none;" data-page-node-id="LYowNDruIRtCeobpG2AlMI">
                     <div class="status-switch-item" data-status="change_confirming_sender" onclick="WCP.updateStatus('change_confirming_sender')" data-page-node-id="rs5k7oGBFv1gFkNXFydN0r">变更确认中(发起方)</div>
                     <div class="status-switch-item" data-status="change_confirming" onclick="WCP.updateStatus('change_confirming')" data-page-node-id="rrRB7kWjsEhBcJ0wOPejRt">待确认变更(受邀方)</div>
                     <div class="status-switch-item" data-status="change_rejected" data-viewer="sender" onclick="WCP.updateStatus('change_rejected')" data-page-node-id="L0ODoJPK9AKZRRdI0IiYDl">变更已驳回(发起方)</div>
                     <div class="status-switch-item" data-status="change_rejected" data-viewer="receiver" onclick="WCP.updateStatus('change_rejected', 'receiver')" data-page-node-id="TlL5HsJrX83LeKBsFtIpGc">变更已驳回（受邀方）</div>
-                    <div class="status-switch-item" data-status="change_signing_wait" data-viewer="sender" onclick="WCP.updateStatus('change_signing_wait')" data-page-node-id="00vJVMGdlA75DURna6N8dA">变更签约中(发起方)</div>
-                    <div class="status-switch-item" data-status="change_signing_wait" data-viewer="receiver" onclick="WCP.updateStatus('change_signing_wait', 'receiver')" data-page-node-id="V3OGf1CC3ahfU4obV9QYZk">变更签约中（受邀方）</div>
-                    <a class="status-switch-item" href="worker-change-sign-upload.html" style="text-decoration:none;" data-page-node-id="BjtvVdsszjDzpFQHcwbB4h">上传变更签约文件（新页面）</a>
                 </div>
             </div>
         </div>

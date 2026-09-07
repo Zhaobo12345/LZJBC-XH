@@ -121,12 +121,6 @@
             desc: '变更申请已提交，等待对方（乙方）确认变更内容（阶段任务已暂停流转）。',
             actions: [{ text: '撤回变更', type: 'warning', action: 'withdraw_change' }]
         },
-        change_signing_wait: {
-            text: '变更签约中', bannerClass: 'confirmed',
-            desc: '变更已确认，请上传线下已签约的合同变更文件，上传后变更正式生效（生成 V2 版本）。',
-            descReceiver: '变更已确认，等待发起方上传线下已签约的合同变更文件，上传后变更正式生效（生成 V2 版本）。',
-            actions: [{ text: '上传变更签约文件', type: 'primary', action: 'upload_change_sign' }]
-        },
         // 变更阶段分支：待确认方（乙方）驳回变更后的独立页面
         change_rejected: {
             text: '变更已驳回', bannerClass: 'rejected',
@@ -148,7 +142,7 @@
         // 变更阶段动作（工人合同：无平台审核，对方确认后即进入签约）
         withdraw_change: { title: '撤回变更', message: '确定要撤回变更申请吗？撤回后合同恢复已签约状态，阶段任务恢复流转。' },
         reject_change: { title: '驳回变更', message: '确定要驳回该变更申请吗？驳回后合同保持原已签约状态。' },
-        confirm_change: { title: '确认变更', message: '确认后双方即达成变更，需上传变更签约文件方可生效，确定继续吗？' },
+        confirm_change: { title: '确认变更', message: '确认后即生成新版本的已签约状态，变更正式生效，确定继续吗？' },
         change_rejected_back: { title: '返回已签约', message: '确定返回合同已签约状态吗？变更申请将被清除，合同恢复为原始已签约内容。' }
     };
 
@@ -317,7 +311,9 @@
         var preview = getParam('preview');
         var urlStatus = getParam('status');
         state.viewer = getParam('viewer') || state.viewer;
-        updateStatus(urlStatus ? urlStatus : (preview ? preview : computeStatus()));
+        updateStatus(urlStatus ? urlStatus : (preview ? preview : computeStatus()), getParam('viewer'));
+        // 原型导航深链：?demo=fulfilled 时直接呈现「已签约（已履约完成）」演示态（仅当参数存在时触发，不影响既有流程）
+        if (getParam('demo') === 'fulfilled') demoFulfilled();
         bindModalDismiss();
     }
 
@@ -535,12 +531,12 @@
         // 变更阶段各状态：变更仅乙方需确认，其他人仅为历史邀约记录（不再「待确认」）。
         // 乙方状态按变更逻辑随状态演进：
         //   待确认变更 change_confirming（受邀方）·变更中 changing = 待确认（变更）；
-        //   确认中/签约中 change_confirming_sender·change_signing_wait = 已确认（变更）；已驳回 change_rejected = 已驳回（变更）
+        //   确认中 change_confirming_sender = 已确认（变更）；已驳回 change_rejected = 已驳回（变更）
         if (st === 'change_confirming' || st === 'changing') {
             if (inv.userId === firstId) return 'change_pending';
             return inv.status === 'rejected' ? 'rejected' : 'lost';
         }
-        if (st === 'change_confirming_sender' || st === 'change_signing_wait') {
+        if (st === 'change_confirming_sender') {
             if (inv.userId === firstId) return 'change_confirmed';
             return inv.status === 'rejected' ? 'rejected' : 'lost';
         }
@@ -698,17 +694,41 @@
 
         var isDraft = (status === 'worker_draft');
         // 受邀方视角不展示「其他被邀请人及确认状态」，仅发起方可见完整名单；
-        // 但待确认变更（change_confirming·受邀方）需展示「乙方（我）待确认（变更）」行，故放开名单显示
-        var showInviteList = !isDraft && (state.viewer !== 'receiver' || status === 'change_confirming');
+        // 但待确认变更（change_confirming·受邀方）需展示「乙方（我）待确认（变更）」行，故放开名单显示；
+        // 发起方变更态的「其他邀约人」已并入合同方卡片 meta 渲染，此处隐藏避免重复
+        var showInviteList = !isDraft && !isSenderChangeView() && (state.viewer !== 'receiver' || status === 'change_confirming');
         $('inviteListBox').style.display = showInviteList ? 'block' : 'none';
         $('inviteEditPanel').style.display = isDraft ? 'block' : 'none';
         if (isDraft) initEditPanel();
 
         var ro = $('readOnlySections');
         var dw = $('draftContentWrap');
-        if (ro) ro.style.display = isDraft ? 'none' : 'block';
+        var cw = $('changeReadOnlyWrap');
+        var rcw = $('receiverChangeWrap');
+        var isSenderChange = isSenderChangeView();
+        var isRCChg = receiverChangeMode();
+        if (cw) cw.style.display = isSenderChange ? 'block' : 'none';
+        if (rcw) rcw.style.display = isRCChg ? 'block' : 'none';
+        if (ro) ro.style.display = (isDraft || isSenderChange || isRCChg) ? 'none' : 'block';
         if (dw) dw.style.display = isDraft ? 'block' : 'none';
         if (isDraft) renderDraftContent();
+        if (isSenderChange) switchChangeContentTab(null, 'contract-text');
+
+        // 受邀方变更态：对齐「已确认（受邀方）-新」——不展示状态步骤图，整个「合同邀约与乙方」卡片隐藏，
+        // 其中的合同名称/金额/乙方等信息改由 receiverChangeWrap 的 hero 主卡 + 合作方卡承载
+        var ic = $('invitationCard');
+        if (ic) ic.style.display = isRCChg ? 'none' : 'block';
+        if (isRCChg) {
+            if ($('workerContractMeta')) $('workerContractMeta').style.display = 'none';
+            if ($('inviteListBox')) $('inviteListBox').style.display = 'none';
+        }
+
+        // 变更态卡片标题：发起方变更态改「合同方」，对齐「已签约（发起方）-新」；其余一律还原原标题
+        //（受邀方变更态整张邀约卡已隐藏，标题不参与渲染）
+        var inviteTitle = $('invitationCard') ? $('invitationCard').querySelector('.card-title') : null;
+        if (inviteTitle) {
+            inviteTitle.innerHTML = isSenderChange ? '🤝 合同方' : '🤝 合同邀约与乙方（意向乙方 · 首位确认者成乙方）';
+        }
 
         // 重新选择乙方（拟定中·撤回后）：存在被替换的原乙方时，横幅提示 + 历史卡片均以数据驱动展示（直接导航进入也生效）
         if (isDraft && state.contract.replacedPartyB && state.contract.replacedPartyB.name) {
@@ -719,9 +739,14 @@
         renderActions(cfg);
         renderChangeHighlight();   // 变更阶段：在已签约内容基础上高亮标记变更点
 
-        renderContentSection();
-        renderStagesSection();
-        renderAttachmentsSection();
+        // 受邀方变更态改走「已确认（受邀方）-新」卡片流渲染，其余状态沿用原只读分区
+        if (isRCChg) {
+            renderReceiverChangeSections();
+        } else {
+            renderContentSection();
+            renderStagesSection();
+            renderAttachmentsSection();
+        }
     }
 
     function renderMeta() {
@@ -729,6 +754,67 @@
         var html = '';
         var isDraft = (state.status === 'worker_draft');
         var isReceiver = (state.viewer === 'receiver');
+        // 字段级对齐：指定的 4 个变更态（变更确认中/待确认变更/变更已驳回，含发起方与受邀方视角）补充展示「工期」字段，
+        // 与最新发起方视角 / 已确认（受邀方）-新 参考页一致；变更专属字段描述效果及操作项保持不动
+        var targetedChangeStates = ['change_confirming_sender', 'change_confirming', 'change_rejected'];
+        var showDuration = targetedChangeStates.indexOf(state.status) > -1;
+
+        // 发起方变更态：合同方 + 合同信息卡片，对齐「已签约（发起方）-新」参考页布局
+        if (isSenderChangeView()) {
+            html += '<div class="form-section-title">合同甲方</div>';
+            html += '<div class="party-a-row"><div class="invite-chips">' +
+                '<span class="invite-chip"><span class="member-avatar" style="background:#fa8c16;">' + escapeHtml(c.partyAName ? c.partyAName.charAt(0) : '陈') + '</span>' +
+                '<span class="chip-text">' + escapeHtml(c.partyAName || '陈庄') + '（工长）</span></span></div></div>';
+
+            // 乙方解析兜底链见 resolvePartyB()：预览已确认 → 已确认邀约 → 存储乙方 → 首位邀约 → 工种默认候选人
+            var b = resolvePartyB();
+            html += '<div class="form-section-title">乙方（承包方）</div>';
+            html += '<div class="invite-chips">' +
+                '<span class="invite-chip"><span class="member-avatar" style="background:#1677ff;">' + escapeHtml(b.name ? b.name.charAt(0) : '乙') + '</span>' +
+                '<span class="chip-text">' + escapeHtml(b.name || '—') + '（' + escapeHtml(b.role || '乙方') + '）</span></span></div>';
+
+            // 其他邀约人：渲染除乙方外的真实邀约记录行（弱化展示，样式对齐 renderLists 记录行）；无则不展示该分组
+            var others = (c.invitations || []).filter(function (i) { return i.userId !== b.userId; });
+            if (others.length) {
+                html += '<div class="form-section-title">其他邀约人</div>';
+                html += '<div class="invite-list">' + others.map(function (inv) {
+                    var ds = inviteDisplayStatus(inv);
+                    var stText = '待确认', stCls = 'pending';
+                    if (ds === 'confirmed') { stText = '已确认（乙方）'; stCls = 'confirmed'; }
+                    else if (ds === 'rejected') { stText = '已拒绝'; stCls = 'rejected'; }
+                    else if (ds === 'lost') { stText = '抢单失败'; stCls = 'lost'; }
+                    else if (ds === 'change_pending') { stText = '待确认（变更）'; stCls = 'change-pending'; }
+                    else if (ds === 'change_confirmed') { stText = '已确认（变更）'; stCls = 'change-confirmed'; }
+                    else if (ds === 'change_rejected') { stText = '已驳回（变更）'; stCls = 'change-rejected'; }
+                    var reasonSub = (ds === 'rejected' && inv.rejectReason)
+                        ? '<div class="invite-reason">原因：' + escapeHtml(inv.rejectReason) + '</div>' : '';
+                    return '<div class="invite-row is-record">' +
+                        '<div class="invite-avatar muted">' + escapeHtml(inv.name ? inv.name.charAt(0) : '?') + '</div>' +
+                        '<div class="invite-info"><div class="invite-name">' + escapeHtml(inv.name) +
+                        '<span class="invite-record-tag">邀约记录</span></div>' +
+                        '<div class="invite-role">' + escapeHtml(inv.role) + '</div>' + reasonSub + '</div>' +
+                        '<div class="invite-status ' + stCls + ' record">' + stText + '</div></div>';
+                }).join('') + '</div>';
+            }
+
+            html += '<div class="form-section-title">合同信息 <span class="muted">（类型：' + escapeHtml(c.typeName) + '）</span></div>';
+            html += '<div class="edit-field"><label>合同名称</label><input type="text" class="edit-input ro" value="' + escapeHtml(c.name) + '" readonly></div>';
+            var cpAmt = isChangeStage() ? getActiveChangeProposal() : null;
+            var amountValue = c.amount;
+            if (cpAmt && typeof cpAmt.amountNew === 'number') amountValue = cpAmt.amountNew;
+            html += '<div class="edit-field"><label>合同金额（元，最多两位小数）</label><input type="number" class="edit-input ro" value="' + escapeHtml(Number(amountValue || 0).toFixed(2)) + '" readonly></div>';
+            // 工期：变更阶段优先展示提案的「变更后工期」（activeDuration 内部已处理兜底）
+            if (showDuration) {
+                var durVal = activeDuration();
+                if (durVal) {
+                    html += '<div class="edit-field"><label>工期（自合同签订之日起计算）</label>' +
+                        '<div class="field-row"><input type="number" class="edit-input ro" value="' + escapeHtml(String(durVal)) + '" readonly><span class="field-unit">天</span></div></div>';
+                }
+            }
+            $('workerContractMeta').innerHTML = html;
+            return;
+        }
+
         if (!isDraft) html += metaRow('合同名称', c.name);
         // 受邀方视角：取消「合同类型」「所属架构层级」，改为补充「项目地址」（见下方）
         if (!isReceiver && !isDraft) {
@@ -743,6 +829,11 @@
             } else {
                 html += metaRow('合同金额', c.amount + ' 元');
             }
+        }
+        // 字段级对齐：指定变更态展示「工期」字段（参考页均含工期；变更阶段优先展示提案变更后工期）
+        if (showDuration) {
+            var durVal = activeDuration();
+            if (durVal) html += metaRow('工期', durVal + ' 天');
         }
         // 项目地址：受邀方视角补充展示（发起方/草稿保持原样，不增删）
         if (isReceiver && c.projectAddress) html += metaRow('项目地址', c.projectAddress);
@@ -782,7 +873,7 @@
         var done = false;
         if (status === 'worker_draft') current = 'draft';
         // 变更阶段：合同已签约，阶段任务按变更流程流转，步骤条整体置为已签约（变更以 banner 体现）
-        // 含「变更中」(changing) 与 change_* 全部变更态（变更进行中/确认中/签约中/已驳回），均与变更状态不冲突
+        // 含「变更中」(changing) 与 change_* 全部变更态（变更进行中/确认中/已驳回），均与变更状态不冲突
         // 该分支须置于 confirmed 判断之前，避免 change_* 中某些 key 因含 confirmed 子串被误判
         else if (status.indexOf('change') === 0 || status === 'changing') { current = 'signed'; done = true; }
         else if (status.indexOf('confirmed') > -1) { current = 'signed'; }   // 已确认：归入「已签约」步（进行中）
@@ -830,7 +921,7 @@
         box.innerHTML = '';
         var c = state.contract;
         var firstId = (c.invitations[0] || {}).userId || '';
-        var isChangeView = (status === 'changing' || status === 'change_confirming' || status === 'change_confirming_sender' || status === 'change_signing_wait' || status === 'change_rejected');
+        var isChangeView = (status === 'changing' || status === 'change_confirming' || status === 'change_confirming_sender' || status === 'change_rejected');
         var isReceiverChangeView = isChangeView && state.viewer === 'receiver';
         c.invitations.forEach(function (inv) {
             // 受邀方变更确认态（change_confirming）：仅展示乙方（即受邀方本人）待确认行，不暴露其他受邀人
@@ -849,6 +940,8 @@
                 reasonSub = '<div class="invite-reason">原因：' + escapeHtml(inv.rejectReason) + '</div>';
             }
             var isPartyB = (inv.userId === firstId);
+            // 发起方变更态：乙方已在「合同方」卡片中单独展示，邀约名单中仅保留其他邀约人
+            if (isSenderChangeView() && isPartyB) return;
             // 变更/已确认(发起方)/已签约：乙方已确定，其他被邀请人作为历史邀约记录弱化展示（浅色），
             // 与变更阶段未选中邀请人效果一致（opacity 0.55 + muted 头像 + 灰色状态徽标）。
             var isRecord = (isChangeView || status === 'worker_signed') && !isPartyB;
@@ -922,6 +1015,40 @@
     function renderContentSection() {
         var c = state.contract;
         var isReceiver = (state.viewer === 'receiver');
+
+        // 发起方变更态：合同正文采用「已签约（发起方）-新」布局（违约责任/固定详细条款/补充条款，只读）
+        if (isSenderChangeView()) {
+            var extra = getExtra();
+            var cpExtra = isChangeStage() ? getActiveChangeProposal() : null;
+            var extraChanged = cpExtra && cpExtra.extraNew && cpExtra.extraNew !== cpExtra.extraOld;
+            var extraHtml;
+            if (extraChanged) {
+                extraHtml = '<textarea class="edit-textarea ro" readonly>' + escapeHtml(cpExtra.extraNew) + '</textarea>';
+            } else if (extra) {
+                extraHtml = '<textarea class="edit-textarea ro" readonly>' + escapeHtml(extra) + '</textarea>';
+            } else {
+                extraHtml = '<textarea class="edit-textarea ro" readonly>无</textarea>';
+            }
+            var breachText = '1、甲方逾期付款的，按逾期金额千分之三/日支付违约金。\n2、乙方工期延误或质量不符的，应无偿返工并承担违约责任。';
+            var html = '<div class="edit-field">' +
+                '<label>违约责任</label>' +
+                '<textarea class="edit-textarea ro" readonly>' + escapeHtml(breachText) + '</textarea>' +
+                '</div>' +
+                '<div class="form-label-row">' +
+                '<label class="form-label">固定详细条款</label>' +
+                '<a class="view-full-link" href="worker-contract-draft-fulltext-new.html">查看条款</a>' +
+                '</div>' +
+                '<div class="form-label-row" style="margin-top:14px;">' +
+                '<label class="form-label">补充条款</label>' +
+                (extraChanged ? '<span class="text-content-change-tag">变更后</span>' : '') +
+                '</div>' +
+                extraHtml;
+            var box = $('changePaneContractText');
+            if (box) box.innerHTML = html;
+            $('contentSection').innerHTML = '';
+            return;
+        }
+
         // 合同正文：对齐「拟定中」样式——form-label-row（合同正文 + 查看全文）+ 截断预览框（点击查看全文弹全文）
         var preview;
         if (isReceiver) {
@@ -1017,8 +1144,15 @@
                 '<div class="arrow expanded">▼</div></div>' +
                 '<div class="stage-tasks show">' + tasks + '</div></div>';
         }).join('');
-        var html = '<div class="card"><div class="card-title"><span>📊 阶段任务 (' + stages.length + '个阶段)</span></div>' + stageHtml + '</div>';
-        $('stagesSection').innerHTML = html;
+        var html;
+        if (isSenderChangeView()) {
+            html = '<div class="stage-section-title"><span>📊</span><span>阶段任务 (' + stages.length + '个阶段)</span></div>' +
+                '<div class="stage-card">' + stageHtml + '</div>';
+        } else {
+            html = '<div class="card"><div class="card-title"><span>📊 阶段任务 (' + stages.length + '个阶段)</span></div>' + stageHtml + '</div>';
+        }
+        var target = isSenderChangeView() ? 'changeStagesBox' : 'stagesSection';
+        $(target).innerHTML = html;
     }
 
     function toggleStage(header) {
@@ -1038,9 +1172,16 @@
                 '<div class="file-info"><div class="file-name">' + escapeHtml(a.name) + '</div><div class="file-meta">' + escapeHtml(a.meta || '') + '</div></div>' +
                 '<div class="download-btn" onclick="WCP.showToast(\'预览附件\')">⬇</div></div>';
         }).join('');
-        var html = '<div class="card"><div class="card-title"><span>📝 签约文件</span></div>' + signHtml + '</div>' +
-            '<div class="card"><div class="card-title"><span>📎 合同附件</span></div>' + attachHtml + '</div>';
-        $('attachmentsSection').innerHTML = html;
+        var html;
+        if (isSenderChangeView()) {
+            html = '<div class="attachment-list">' + attachHtml + '</div>';
+            if (!attachHtml) html = '<div style="text-align:center;padding:20px 0;color:var(--text-tertiary);font-size:13px;">暂无附件</div>';
+        } else {
+            html = '<div class="card"><div class="card-title"><span>📝 签约文件</span></div>' + signHtml + '</div>' +
+                '<div class="card"><div class="card-title"><span>📎 合同附件</span></div>' + attachHtml + '</div>';
+        }
+        var target = isSenderChangeView() ? 'changeAttachmentsBox' : 'attachmentsSection';
+        $(target).innerHTML = html;
     }
 
     // 签约文件区（附件区内），依据状态展示
@@ -1062,15 +1203,8 @@
     function onSignFilePicked(e) {
         var f = e.target && e.target.files && e.target.files[0];
         if (!f) return;
-        // 注：「变更签约文件上传」已改为跳转独立上传页（worker-change-sign-upload.html），上传成功后由该页跳回「已签约」；
-        // 此处仅处理「已确认 → 上传签约文件」的常规签约（无 changeProposal），上传后跳回「已签约」
-        if (state.contract && state.contract.changeProposal) {
-            applyChangeProposal();
-            showToast('变更签约文件已上传，合同变更已生效（V2）');
-            updateStatus('worker_signed');
-            e.target.value = '';
-            return;
-        }
+        // 常规签约：已确认 → 上传签约文件 → 已签约。
+        // 注：变更流程已取消「上传签约文件」环节（对方确认后即生成 V2 已签约），故此处不再处理 changeProposal
         if (global.ContractStore && state.workerId) {
             global.ContractStore.markSigned(state.workerId);
             state.contract = global.ContractStore.getContract(state.workerId);
@@ -1086,6 +1220,7 @@
         if (!cp) return;
         var patch = {};
         if (typeof cp.amountNew === 'number') { state.contract.amount = cp.amountNew; patch.amount = cp.amountNew; }
+        if (typeof cp.durationNew === 'number' && cp.durationNew) { state.contract.duration = cp.durationNew; patch.duration = cp.durationNew; }
         if (typeof cp.extraNew === 'string') { state.contract.extraClauses = cp.extraNew; patch.extraClauses = cp.extraNew; }
         if (cp.stagesNew) { state.contract.stages = cp.stagesNew; patch.stages = cp.stagesNew; }
         if (cp.attachmentsNew) { state.contract.attachments = cp.attachmentsNew; patch.attachments = cp.attachmentsNew; }
@@ -1093,6 +1228,9 @@
         state.contract.versionLog = state.contract.versionLog || [];
         var vDesc = '变更生效';
         if (cp.amountNew !== cp.amountOld) vDesc += '：金额 ¥' + fmtMoney(cp.amountOld) + ' → ¥' + fmtMoney(cp.amountNew);
+        if (typeof cp.durationNew === 'number' && cp.durationNew && cp.durationOld != null && cp.durationOld !== cp.durationNew) {
+            vDesc += '：工期 ' + cp.durationOld + ' 天 → ' + cp.durationNew + ' 天';
+        }
         if (cp.reason) vDesc += (vDesc === '变更生效' ? '：' : '；') + cp.reason;
         state.contract.versionLog.push({
             name: '合同变更 V2',
@@ -1127,7 +1265,7 @@
         }
         // 受邀方（乙方）视角不支持发起变更：过滤掉 start_change（发起方专属操作），避免误展示
         if (state.viewer === 'receiver') {
-            actions = actions.filter(function (a) { return a.action !== 'start_change' && a.action !== 'upload_change_sign'; });
+            actions = actions.filter(function (a) { return a.action !== 'start_change'; });
         }
         (actions).forEach(function (a) {
             var btn = document.createElement('button');
@@ -1142,9 +1280,6 @@
 
     function handleAction(action) {
         if (action === 'view') return;
-        // 已确认(发起方)：上传签约文件——参考「上传变更签约文件（新页面）」整页上传流程，跳转到独立上传页
-        // 变更签约中：参考「合同详情（合规版）」的上传变更签约文件流程——跳转到独立上传页面，上传成功后由该页跳回「已签约」
-        if (action === 'upload_change_sign') { global.location.href = 'worker-change-sign-upload.html'; return; }
         if (action === 'worker_resubmit') { saveAndResubmit(); return; }
         // 拟定中「仅保存」：持久化当前草稿编辑内容（参考「合同详情（合规版）」），不改变状态、不发送邀约
         if (action === 'worker_save_draft') { saveDraftOnly(); return; }
@@ -1183,8 +1318,13 @@
                 var res = applyChangeAction(action);
                 if (res) {
                     pushChangeLog(res.logTitle, res.logDesc, res.logType);
-                    // 撤回/驳回变更 → 回到已签约，清除变更提案（恢复为原始已签约内容）
-                    if (res.next === 'worker_signed') clearChangeProposal();
+                    if (res.applyProposal) {
+                        // 确认变更 → 应用变更提案生成 V2（保留提案内容，不清除）
+                        applyChangeProposal();
+                    } else if (res.next === 'worker_signed') {
+                        // 撤回/驳回变更 → 回到已签约，清除变更提案（恢复为原始已签约内容）
+                        clearChangeProposal();
+                    }
                     showToast(res.toast);
                     if (res.next) updateStatus(res.next);
                 }
@@ -1203,8 +1343,8 @@
             case 'change_rejected_back':
                 return { next: 'worker_signed', toast: '已返回合同已签约状态', logTitle: '返回已签约', logDesc: '发起方关闭变更驳回页，合同恢复已签约状态', logType: 'primary' };
             case 'confirm_change':
-                // 工人合同无平台审核：对方确认后直接进入「变更确认中」（待上传签约文件）
-                return { next: 'change_confirming_sender', toast: '已确认变更，请上传变更签约文件', logTitle: '确认变更', logDesc: '待确认方确认变更，双方达成变更，进入签约环节', logType: 'primary' };
+                // 最新流程：对方确认后即已签约（生成 V2 版本），无需上传签约文件
+                return { next: 'worker_signed', applyProposal: true, toast: '已确认变更，变更已生效（生成 V2 版本）', logTitle: '确认变更', logDesc: '待确认方确认变更，合同生成新版本（V2）并生效', logType: 'primary' };
             default:
                 return null;
         }
@@ -1239,10 +1379,13 @@
         if (state.status && state.status.indexOf('change') === 0) {
             var baseAmt = Number(state.contract && state.contract.amount) || 0;
             var baseExtra = getExtra() || '';
+            var baseDur = Number(state.contract && state.contract.duration) || 30;
             return {
                 reason: '因现场实际情况调整，需对合同金额与部分阶段任务进行变更',
                 amountOld: baseAmt,
                 amountNew: baseAmt + 2000,
+                durationOld: baseDur,
+                durationNew: baseDur + 15,
                 extraOld: baseExtra,
                 extraNew: baseExtra ? (baseExtra + '；新增：水电隐蔽工程需增加打压测试环节。') : '新增：水电隐蔽工程需增加打压测试环节。',
                 stageNote: '新增「收尾阶段」：包含 2 个任务（保洁、验收）',
@@ -1254,6 +1397,148 @@
 
     function isChangeStage() {
         return !!(state.status && state.status.indexOf('change') === 0);
+    }
+
+    // 解析当前乙方（承包方）：预览已确认 → 真实已确认邀约 → 存储乙方 → 首位邀约 → 按工种默认候选人。
+    // 变更预览态 previewConfirmedId() 返回空、且本地旧演示数据可能缺邀约/乙方字段，必须有最终兜底，避免出现「?」
+    function resolvePartyB() {
+        var c = state.contract;
+        var pId = previewConfirmedId();
+        var inv = null;
+        if (pId) inv = (c.invitations || []).filter(function (i) { return i.userId === pId; })[0];
+        if (!inv) inv = (c.invitations || []).filter(function (i) { return i.status === 'confirmed'; })[0];
+        if (inv && inv.name) return { name: inv.name, role: inv.role || '', userId: inv.userId };
+        if (c.partyBName) return { name: c.partyBName, role: c.partyBRole || '', userId: '' };
+        var firstInv = (c.invitations || [])[0];
+        if (firstInv && firstInv.name) return { name: firstInv.name, role: firstInv.role || '', userId: firstInv.userId };
+        var cand = getContractTypeCandidates(c.type)[0];
+        return {
+            name: cand ? cand.name : '施工方',
+            role: cand ? cand.role : (TRADE_ROLE_BY_TYPE[c.type] || '乙方'),
+            userId: ''
+        };
+    }
+
+    // 当前工期（变更阶段优先取提案的变更后工期，未填/未变更则用当前合同工期）
+    function activeDuration() {
+        ensureDraftFields();
+        var c = state.contract;
+        var cp = isChangeStage() ? getActiveChangeProposal() : null;
+        if (cp && typeof cp.durationNew === 'number' && cp.durationNew) return cp.durationNew;
+        return Number(c.duration) || 0;
+    }
+
+    function isSenderChangeView() {
+        return state.viewer === 'sender' && (state.status === 'change_confirming_sender' || state.status === 'change_rejected');
+    }
+
+    // 受邀方变更态（待确认变更 change_confirming / 变更已驳回 change_rejected·受邀方视角）
+    function receiverChangeMode() {
+        return state.viewer === 'receiver' && (state.status === 'change_confirming' || state.status === 'change_rejected');
+    }
+
+    // 受邀方变更态：渲染「主卡 / 合作方 / 工期 / 违约责任 / 合同全部正文 / 我要干的活 / 附件」卡片流，
+    // 对齐「已确认（受邀方）-新」页面布局（无状态步骤图）；变更相关字段描述效果及操作项保持不动
+    function renderReceiverChangeSections() {
+        ensureDraftFields();
+        var c = state.contract;
+        var b = resolvePartyB();
+        var partyA = c.partyAName || '陈庄';
+
+        // ⓪ 主卡（对齐参考页顶部 hero 主接单卡）：合同名称 + 合同报酬 + 项目地址
+        var cpAmt = isChangeStage() ? getActiveChangeProposal() : null;
+        var amtVal = c.amount;
+        if (cpAmt && typeof cpAmt.amountNew === 'number') amtVal = cpAmt.amountNew;
+        var amtOldTag = (cpAmt && cpAmt.amountNew !== cpAmt.amountOld)
+            ? '<span class="rc-hero-old">原 ¥' + escapeHtml(fmtMoney(cpAmt.amountOld)) + '</span>' : '';
+        var heroMeta = '';
+        if (c.projectAddress) heroMeta = '<div class="rc-hero-meta"><b>项目地址</b>' + escapeHtml(c.projectAddress) + '</div>';
+        $('rcHero').innerHTML =
+            '<div class="rc-hero-name">' + escapeHtml(c.name) + '</div>' +
+            '<div class="rc-hero-amount"><small>¥</small>' + escapeHtml(fmtMoney(amtVal)) + '<small> 元</small>' + amtOldTag + '</div>' +
+            '<div class="rc-hero-label">合同报酬（施工完成且验收通过后由线下进行支付）</div>' +
+            heroMeta;
+
+        // ① 合作方
+        $('rcCoop').innerHTML =
+            '<div class="rc-title">🤝 合作方 <span class="rc-badge">甲方（工长）· 乙方（您）</span></div>' +
+            '<div class="rc-line">甲方（雇主）：<a class="rc-call-link" onclick="WCP.showToast(\'演示原型，暂不支持拨号\')">📞 ' + escapeHtml(partyA) + '（工长）拨打电话</a></div>' +
+            '<div class="rc-line">乙方（您）：<b>' + escapeHtml(b.name) + '</b></div>';
+
+        // ② 工期（只读；变更阶段优先展示提案的「变更后工期」，有变化时附原工期说明）
+        var cpDur = isChangeStage() ? getActiveChangeProposal() : null;
+        var durNew = activeDuration();
+        var durChanged = !!(cpDur && typeof cpDur.durationNew === 'number' && cpDur.durationNew && Number(c.duration) && cpDur.durationNew !== Number(c.duration));
+        $('rcDuration').innerHTML = '<div class="rc-line">📅 工期：<b>' + escapeHtml(String(durNew || 30)) + ' 天</b>' +
+            (durChanged ? ' <span style="font-size:11px;color:var(--text-tertiary,#999);">原 ' + escapeHtml(String(c.duration)) + ' 天 · 变更后 ' + escapeHtml(String(cpDur.durationNew)) + ' 天</span>' : '') +
+            '</div>';
+
+        // ③ 违约责任（只读）
+        $('rcBreach').innerHTML =
+            '<div class="rc-title">⚠️ 违约责任</div>' +
+            '<div class="rc-line">1. 甲方逾期付款的，按逾期金额千分之三/日支付违约金。</div>' +
+            '<div class="rc-line">2. 乙方工期延误或质量不符的，应无偿返工并承担违约责任。</div>';
+
+        // ④ 合同全部正文：链接式 + 只读「已阅读并同意」标记
+        $('rcFullText').innerHTML =
+            '<div class="rc-full-link-row">' +
+                '<a class="rc-full-link" onclick="WCP.showFullText()">📄 查看《合同全部正文》 ›</a>' +
+                '<span class="rc-agreed-badge">✓ 已阅读并同意</span>' +
+            '</div>';
+
+        // ⑤ 我要干的活（阶段任务，整体收纳展开）
+        var stages = getStages();
+        $('rcStages').innerHTML =
+            '<div class="rc-title clickable" onclick="WCP.toggleReceiverStageWrap()">🔧 我要干的活 <span class="rc-badge">' + stages.length + ' 个阶段</span>' +
+            '<span class="rc-fold-arrow" id="rcStageArrow">▶</span></div>' +
+            '<div class="rc-stage-box" id="rcStageWrap" style="display:none;" data-rendered="0"></div>';
+
+        // ⑥ 合同附件
+        var atts = getAttachments();
+        var attHtml = atts.map(function (a) {
+            return '<div class="rc-att"><div class="rc-att-icon">📄</div>' +
+                '<div class="rc-att-name">' + escapeHtml(a.name) + '</div>' +
+                '<div class="rc-att-meta">' + escapeHtml(a.meta || '') + '</div></div>';
+        }).join('');
+        if (!attHtml) attHtml = '<div class="rc-empty">暂无附件</div>';
+        $('rcAttachments').innerHTML = '<div class="rc-title">📎 合同附件 <span class="rc-badge">' + atts.length + ' 项</span></div>' + attHtml;
+    }
+
+    // 「我要干的活」整体展开 / 收起（首次展开时渲染阶段列表）
+    function toggleReceiverStageWrap() {
+        var wrap = $('rcStageWrap');
+        var arrow = $('rcStageArrow');
+        if (!wrap) return;
+        var toOpen = (wrap.style.display === 'none');
+        if (toOpen && wrap.getAttribute('data-rendered') === '0') {
+            wrap.innerHTML = receiverStageHTML();
+            wrap.setAttribute('data-rendered', '1');
+        }
+        wrap.style.display = toOpen ? 'block' : 'none';
+        if (arrow) arrow.classList.toggle('open', toOpen);
+    }
+
+    function receiverStageHTML() {
+        var stages = getStages();
+        return stages.map(function (s, i) {
+            var tasks = (s.tasks || []).map(function (t) {
+                return '<div class="task-item" onclick="WCP.viewTaskDetail(this)"' +
+                    ' data-task-name="' + escapeHtml(t.name) + '"' +
+                    ' data-executor="' + escapeHtml(t.exec || '') + '"' +
+                    ' data-confirmers="' + escapeHtml(t.conf || '') + '"' +
+                    ' data-exec-standard="' + escapeHtml(t.execStd || '') + '"' +
+                    ' data-confirm-standard="' + escapeHtml(t.confStd || '') + '"' +
+                    ' data-liable-standard="' + escapeHtml(t.liableStd || '') + '"' +
+                    '><div class="task-info"><div class="task-name">' + escapeHtml(t.name) + '</div></div></div>';
+            }).join('');
+            return '<div class="stage-item"><div class="stage-header" onclick="WCP.toggleStage(this)">' +
+                '<div class="stage-icon">' + (i + 1) + '</div>' +
+                '<div class="stage-info"><div class="stage-name">' + escapeHtml(s.name) + '</div>' +
+                '<div class="stage-meta">' + (s.tasks ? s.tasks.length : 0) + '个任务 · 待开始</div>' +
+                '<div class="stage-order-tag" style="background-color:#FFF7E6;color:#FA8C16;">' + escapeHtml(s.order || '并行执行') + '</div></div>' +
+                '<div class="arrow expanded">▼</div></div>' +
+                '<div class="stage-tasks show">' + tasks + '</div></div>';
+        }).join('');
     }
 
     // ============== 发起方「发起变更」（已签约 → 变更中） ==============
@@ -1303,20 +1588,25 @@
             extraHtml = '<div class="ch-sub">' + escapeHtml(cp.extraNew) + '</div>';
         }
         var stageHtml = cp.stageNote ? ('<div class="ch-sub ch-new-text">' + escapeHtml(cp.stageNote) + '</div>') : '';
+        // 工期变更：提案含 durationNew 且与原工期不同时，在变更内容中展示「原 X 天 → 变更后 Y 天」
+        var durHtml = '';
+        if (typeof cp.durationNew === 'number' && cp.durationNew && cp.durationNew !== Number(state.contract.duration)) {
+            durHtml = '<div class="ch-sub"><span class="ch-old">' + escapeHtml(String(state.contract.duration)) + ' 天</span>' +
+                '<span class="ch-arrow">→</span>' +
+                '<span class="ch-new">' + escapeHtml(String(cp.durationNew)) + ' 天</span></div>';
+        }
         var stateLabel = '';
         if (state.status === 'change_rejected') {
             stateLabel = '<span class="ch-state rejected">变更已驳回（乙方）</span>';
-        } else if (state.status === 'change_signing_wait') {
-            // 仅变更签约中：对方已确认，待上传签约文件生效
-            stateLabel = '<span class="ch-state done">变更进行中（待上传签约文件生效）</span>';
         } else {
-            // changing / change_confirming（受邀方待确认）/ change_confirming_sender（发起方待确认）：尚未确认，不能上传签约文件
+            // changing / change_confirming（受邀方待确认）/ change_confirming_sender（发起方待确认）：等待对方确认，确认后即生成 V2 已签约
             stateLabel = '<span class="ch-state confirming">变更进行中（等待对方确认）</span>';
         }
         var html =
             '<div class="ch-head"><span class="ch-title">🔄 变更内容</span>' + stateLabel + '</div>' +
             (cp.reason ? '<div class="ch-reason"><span class="ch-reason-label">变更原因</span>' + escapeHtml(cp.reason) + '</div>' : '') +
             '<div class="ch-row"><span class="ch-label">合同金额</span><span class="ch-value">' + amtHtml + '</span></div>' +
+            (durHtml ? '<div class="ch-row"><span class="ch-label">工期</span><span class="ch-value">' + durHtml + '</span></div>' : '') +
             (extraHtml ? '<div class="ch-row"><span class="ch-label">补充条款</span><span class="ch-value">' + extraHtml + '</span></div>' : '') +
             (stageHtml ? '<div class="ch-row"><span class="ch-label">阶段任务</span><span class="ch-value">' + stageHtml + '</span></div>' : '');
         card.innerHTML = html;
@@ -1773,6 +2063,23 @@
         // 附件 Tab：隐藏「更换模板」按钮（附件不支持模板功能）
         var btn = $('draftTemplateBtn');
         if (btn) btn.style.display = (key === 'attachment') ? 'none' : '';
+    }
+
+    // 变更阶段（发起方视角）只读合同内容 Tab 切换
+    function switchChangeContentTab(tabEl, key) {
+        var wrap = $('changeReadOnlyWrap');
+        if (!wrap) return;
+        var tabs = wrap.querySelectorAll('.content-tab');
+        for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
+        if (tabEl) tabEl.classList.add('active');
+        var panes = ['changePaneContractText', 'changePaneStageTask', 'changePaneAttachment'];
+        panes.forEach(function (pid) {
+            var el = $(pid);
+            if (el) el.classList.remove('active');
+        });
+        var map = { 'contract-text': 'changePaneContractText', 'stage-task': 'changePaneStageTask', 'attachment': 'changePaneAttachment' };
+        var pane = $(map[key]);
+        if (pane) pane.classList.add('active');
     }
 
     function renderDraftContractText() {
@@ -2663,6 +2970,8 @@
         openBusinessCard: openBusinessCard,
         closeBusinessCard: closeBusinessCard,
         switchDraftContentTab: switchDraftContentTab,
+        switchChangeContentTab: switchChangeContentTab,
+        toggleReceiverStageWrap: toggleReceiverStageWrap,
         updateDraftExtra: updateDraftExtra,
         updateDraftTaskName: updateDraftTaskName,
         updateDraftStageName: updateDraftStageName,

@@ -697,9 +697,9 @@
             <div class="status-group-content" data-page-node-id="ehZCoZIG7FAzooiEidhXOp">
                 <a class="status-switch-item active" href="worker-contract-draft-initial-new.html" style="text-decoration:none;" data-page-node-id="tCozbh4kLlGslhDVTCOdX9">拟定中(发起方)-新</a>
                 <a class="status-switch-item" href="worker-contract-confirming-initiator-new.html" style="text-decoration:none;" data-page-node-id="IflEzupueyCG6o6pTdjhbI">确认中(发起方)</a>
-                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;" data-page-node-id="m7eoDfwqIDz6ZkGREAdPaz">拟定中(撤回后)</a>
-                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;" data-page-node-id="ccazCdCVJt1fH7dAK4dtvY">已签约</a>
-                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;" data-page-node-id="vQLZZjCMIwUBHRMbueVj21">已签约（已履约完成）</a>
+                <a class="status-switch-item" href="worker-contract-detail.html?status=worker_draft" style="text-decoration:none;" data-page-node-id="m7eoDfwqIDz6ZkGREAdPaz">拟定中(撤回后)</a>
+                <a class="status-switch-item" href="worker-contract-signed-initiator-new.html" style="text-decoration:none;" data-page-node-id="ccazCdCVJt1fH7dAK4dtvY">已签约（发起方）-新</a>
+                <a class="status-switch-item" href="worker-contract-detail.html?demo=fulfilled" style="text-decoration:none;" data-page-node-id="vQLZZjCMIwUBHRMbueVj21">已签约（已履约完成）</a>
             </div>
         </div>
 
@@ -708,16 +708,13 @@
             <div class="status-group-header" onclick="toggleStatusGroup(this)" data-page-node-id="JfZ7Tm5LZFTFC7mVAhj6px">
                 <span class="status-group-icon" data-page-node-id="xDAVXZJY3WCfxJtBmTyqEW">▶</span>
                 <span class="status-group-title" data-page-node-id="Kvbmayfbtz6EreCofnHeWz">受邀方视角</span>
-                <span class="status-group-count" data-page-node-id="JrOVfiaoBnBpnjXUgWzFvS">6</span>
+                <span class="status-group-count" data-page-node-id="JrOVfiaoBnBpnjXUgWzFvS">4</span>
             </div>
             <div class="status-group-content" style="display:none;" data-page-node-id="delQsc5tsafdiGZX5tvfUw">
-                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;" data-page-node-id="1AFemnn3mrzrtLImiPL93U">已确认(受邀方)</a>
+                <a class="status-switch-item" href="worker-contract-receive-inviting.html" style="text-decoration:none;" data-page-node-id="w2xwSFLG3gaUwwcEOWHyuw">确认中（受邀方）</a>
                 <a class="status-switch-item" href="worker-contract-receive-confirmed-new.html" style="text-decoration:none;" data-page-node-id="bWTKsUNdSIxEtQGva0XduU">已确认（受邀方）-新</a>
-                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;" data-page-node-id="B9KPL4iewpF1pYIHUeeZ77">抢单失败(受邀方)</a>
-                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;" data-page-node-id="fORjJSRMzmu2ZmxeKEkoop">已拒绝(受邀方)</a>
-                <div class="status-switch-divider" data-page-node-id="Tti55ObFbZhPNVvtFCm3Zy"></div>
-                <a class="status-switch-item" href="worker-contract-receive-inviting.html" style="text-decoration:none;" data-page-node-id="w2xwSFLG3gaUwwcEOWHyuw">确认中（接单体验 E）</a>
-                <a class="status-switch-item" href="worker-contract-detail.html" style="text-decoration:none;" data-page-node-id="YYVPKi5C8MN8IAj35t0hRd">已签约(受邀方)</a>
+                <a class="status-switch-item" href="worker-contract-detail.html?status=worker_rejected_receiver" style="text-decoration:none;" data-page-node-id="fORjJSRMzmu2ZmxeKEkoop">已拒绝(受邀方)</a>
+                <a class="status-switch-item" href="worker-contract-detail.html?status=worker_lost_receiver" style="text-decoration:none;" data-page-node-id="B9KPL4iewpF1pYIHUeeZ77">抢单失败(受邀方)</a>
             </div>
         </div>
 
@@ -731,6 +728,21 @@
             <div class="status-group-content" data-page-node-id="ExFeBGv8j5aDBZbiHMiERk">
                 <a class="status-switch-item" href="wechat-service-notice.html" style="text-decoration:none;" data-page-node-id="9krVpPshe40ol2z9xS0Tw0">微信服务通知</a>
                 <a class="status-switch-item" href="invite-banner-demo.html" style="text-decoration:none;" data-page-node-id="erF13xsdfdQ1cNBbCgm3Cb">应用内顶部通知条（示例）</a>
+            </div>
+        </div>
+
+        <!-- 变更阶段：工人合同无需平台审核，对齐「合同详情（合规版）」变更流程去平台化版本（预览用，不影响其它功能） -->
+        <div class="status-group" data-page-node-id="c1dstatGrpA">
+            <div class="status-group-header" onclick="toggleStatusGroup(this)" data-page-node-id="c1dstatGrpB">
+                <span class="status-group-icon" data-page-node-id="c1dstatGrpC">▶</span>
+                <span class="status-group-title" data-page-node-id="c1dstatGrpD">变更阶段</span>
+                <span class="status-group-count" data-page-node-id="c1dstatGrpE">4</span>
+            </div>
+            <div class="status-group-content" style="display:none;" data-page-node-id="c1dstatGrpF">
+                <a class="status-switch-item" href="worker-contract-detail.html?status=change_confirming_sender" style="text-decoration:none;" data-page-node-id="c1dstatItm1">变更确认中(发起方)</a>
+                <a class="status-switch-item" href="worker-contract-detail.html?status=change_confirming" style="text-decoration:none;" data-page-node-id="c1dstatItm2">待确认变更(受邀方)</a>
+                <a class="status-switch-item" href="worker-contract-detail.html?status=change_rejected&viewer=sender" style="text-decoration:none;" data-page-node-id="c1dstatItm3">变更已驳回(发起方)</a>
+                <a class="status-switch-item" href="worker-contract-detail.html?status=change_rejected&viewer=receiver" style="text-decoration:none;" data-page-node-id="c1dstatItm4">变更已驳回（受邀方）</a>
             </div>
         </div>
     </div>

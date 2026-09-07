@@ -1,67 +1,38 @@
 # 项目长期记忆（LZJBC-XH 家装平台小程序原型）
 
-## 协作约定（重要）
+## 协作约定（最高优先级）
 - **中断即取消**：用户中途取消某任务后立即给新指令 → 被中断任务视为已取消，仅执行新指令。
-- 单点改动、逐项确认工作流（create-contract / worker-contract 原型迭代）延续：代码定稿后再同步 PRD（除非说"仅改代码"）。
-- **改动前置约束**：任何修改不得影响基础施工/设计服务合同原流程；工人合同逻辑一律经 `isWorkerType` / 独立页面门控。
-- **手机端小程序无滚动条（全局约定，2026-08-28）**：所有小程序端页面不得出现滚动条（手机端小程序规范）。滚动容器一律隐藏滚动条：`::-webkit-scrollbar{display:none}` + `scrollbar-width:none` + `-ms-overflow-style:none`（必要时在 common.css 全局隐藏）。新建/修改页面时务必自查无滚动条。
+- **先确认后改**：提方案（结构化表格：方案/理由/风险）→ 用户确认 → 再实现；禁止自作主张；改完代码再同步 PRD（除非说"仅改代码"）。
+- **改动前置约束**：不得影响基础施工/设计服务合同原流程；工人合同逻辑一律经 `isWorkerType` / 独立页面门控；不得破坏既有交互、页面其他模块。
+- **无滚动条（全局）**：小程序端滚动容器一律 `::-webkit-scrollbar{display:none}` + `scrollbar-width:none` + `-ms-overflow-style:none`。
+- **页面必带微信小程序默认导航栏**（状态栏 + nav + 原生胶囊占位）；mobile-first 全宽堆叠，复合卡片不并排半宽；兼顾中老年可访问性（触控区够大）。
+- 校验留痕：`node --check` JS + `.workbuddy/_validate_html.py <file>` 验 HTML 标签平衡 + CSS 大括号平衡 + id 引用自检；验收后截图复核。
 
 ## PRD 书写规范
-- **中英文顺序**：以中文为主、英文 key 辅，有中文对照者一律「中文（英文标识符）」前置（如 `初始拟定（worker_draft_initial）`），禁止英文前置；状态机表列序固定 `显示文案 | 状态 key | …`。**例外保持英文在前**：技术标识符/组件名/代码表达式/URL 片段（如 `localStorage（无后端）`、`POST /api/v1/...`）。
-- **裸英文自查**：字段名/状态名/枚举值/子字段有中文对照者一律「中文（英文标识符）」前置（`媒体文件（files）`），禁止 `<code>files</code>` 类裸英文；仅 MIME/URL/代码表达式可保留英文置 `<code>`。每轮改动后 Grep 扫 `<code>` 与裸露英文字母串确认无违规。
-- **第一版不写历史对比**：当前 PRD 为 V1，不写"本版已取消 X / 已移除 X"，不为砍掉功能留"已取消"专节；功能取舍仅存代码层记忆。
-- **合同状态机以原型为权威基准**：PRD 内所有合同状态的中文名与状态 key 必须与 `service-miniapp/contract-detail.html` 步骤条（拟定中/平台审核/确认中/已确认/已签约）及 `contract-detail.js` STATUS_MAP（`draft`/`platform_reviewing`/`confirming_sender`/`confirming_receiver`/`confirmed`/`signed`/`platform_rejected`/`changing` + 变更态 `change_platform_reviewing`/`change_platform_rejected`/`change_confirming*`/`change_signing_wait`）严格对齐；工人合同状态以 `contract-store.js` 为准（全程无平台审核）。写状态机前先 Grep 原型确认，杜绝自造「待审核/待确认/待签约」「drafting/pending_review/pending_confirm/pending_sign」等偏离名。**注意 PC 运营端模块使用自有状态 key（`pending_review`/`changing`/`reviewed_*` 等），与小程序 `platform_reviewing` 为不同层映射，属正常，勿改。**
+- 「中文（英文标识符）」前置，禁止英文前置或 `<code>` 裸英文；例外：MIME/URL/代码表达式/组件名可留英文。每轮改后 Grep 扫违规。
+- 状态机表列序固定 `显示文案 | 状态 key | …`；V1 不写历史对比，不为已砍功能留"已取消"专节。
+- **状态基准以原型为权威**：工人合同看 `contract-store.js` + `worker-contract-detail.js` STATUS_CONFIG；基础/设计合同看 `contract-detail.*`（含平台审核）。写前先 Grep 原型，杜绝自造状态名。PC 运营端用自有 key（`pending_review`/`reviewed_*`）属另一层映射，勿改。
 
-## 关键架构约定
-- 六类工人合同（拆除/水电/木作/泥瓦/油漆/小零工）走独立页 `worker-contract-detail.html`+`.js`；基础/设计合同走 `contract-detail.html`。
-- 工人合同数据层前端 `localStorage`（无后端），`contract-store.js` 提供 `window.ContractStore`；并发首胜防重用 `confirmInvitation` 首胜校验。
-- 右侧原型导航「合同状态切换（工人合同）」以 `state.status`（预览态）为准，非真实 `c.status`。
-- 工人合同两种草案态 `worker_draft_initial`/`worker_draft` 共用内联编辑面板 `draftContentWrap`（替代只读 `readOnlySections`），由底部"提交邀请"统一提交；状态步骤条 拟定中→确认中→已确认→已签约。
-- 工人合同 **甲方=陈庄（工长，非业主）**；阶段确认人 `conf`=陈庄；"业主"候选 `m-owner` 仅系统角色、不参与意向乙方；意向乙方仅限六工种。
-- 意向乙方按合同类型过滤工种：`TRADE_ROLE_BY_TYPE` 映射类型→工种角色，草稿面板仅展示匹配工种。
-- 受邀方终态（`worker_lost_receiver`/`worker_rejected_receiver`）渲染轻量「邀约已结束」视图 `#receiverEndedView`，仅作用于受邀方终态，发起方视角保持完整。
-- 受邀方视角（`state.viewer==='receiver'`）差异化：`renderMeta` 去掉「合同类型」「所属架构层级」、新增「项目地址」（`projectAddress`）；正文预览仅展示关键条款（`receiverKeyClausesHTML()`），「查看全文」→「查看全部正文」（`buildReceiverContractHTML()`）；发起方/草稿态保持原样。
-- 基础/设计合同详情页（`contract-detail.html`）主视图（非变更/非编辑态展示区）阶段任务项：点击经 `openTaskReadonly(this)` 弹「编辑任务」弹窗只读态（`#editTaskModal.readonly`，`modal-body` 禁交互、隐藏搜索框/删除叉/保存按钮，仅头部 ✕ 关闭，标题「任务详情（只读）」），**不跳转** `task-detail.html`；已签约（`state.currentStatus==='signed'`）仍保持原跳转。变更流程内任务项仍用 `viewTaskDetail`（只读「任务详情」弹窗），二者勿混。`openTaskReadonly` 与 `viewTaskDetail`/`editTaskDetail` 一样需 `window.*` + `ContractDetailPage.*` 双重暴露。
+## 工人合同（service-miniapp）
+- 六类工种合同（拆除/水电/木作/泥瓦/油漆/小零工）走 `worker-contract-detail.html`+`.js`（合并页，暴露 `WCP`）；基础/设计合同走 `contract-detail.html`。数据层 `localStorage`（无后端），`js/contract-store.js` 提供 `window.ContractStore`。
+- **甲方=陈庄（工长，非业主）**；意向乙方仅限六工种（`TRADE_ROLE_BY_TYPE` 过滤）；"业主"候选 `m-owner` 不参与意向乙方。
+- 右侧原型导航「合同状态切换」以 `state.status`（预览态）为准；四组：发起方视角(5)/受邀方视角(4)/演示数据/变更阶段(4)。**同一组需同步修改 5 个页面**（合并页 + signed/confirming/draft-initial/receive-confirmed 四个 -new 页）。
+- 受邀方视角（`state.viewer==='receiver'`）差异化：`renderMeta` 去掉「合同类型」「所属架构层级」、加「项目地址」；正文预览仅关键条款（`receiverKeyClausesHTML()`）。终态（`worker_lost_receiver`/`worker_rejected_receiver`）渲染轻量 `#receiverEndedView`。
+- **变更阶段布局（2026-09-07 对齐）**：发起方两态（`change_confirming_sender`/`change_rejected+sender`）走 `#changeReadOnlyWrap`（合同正文/阶段任务/附件 三 Tab，卡片标题「🤝 合同方」，参考「已签约（发起方）-新」）；受邀方两态（`change_confirming`/`change_rejected+receiver`）走 `#receiverChangeWrap`（合作方→工期→违约责任→合同全部正文链接+已阅读徽标→我要干的活(折叠)→附件，卡片标题「🤝 合作方」，参考 `worker-contract-receive-confirmed-new.html`）。标题三分支（变更发起方=合同方／变更受邀方=合作方／其余=原标题），**必须还原**。
 
-## 数据口径约定（全部待办页）
-- service/owner 端「全部待办」不含「临时任务」示例项、不含「待审核」待办（仅 PC 运营端有）；所有任务类待办标签=「任务」（2026-08-04 统一更正，原误标「合约」），真实 合同/变更/架构/对账单 类标签保持原样。
-- 「邀请加入强电施工组」（架构标签）点击跳 `invite-join.html?group=强电施工组`，接受/拒绝写 `localStorage['lzj_group_invite_强电施工组']`，返回待办页移除并角标重算。
-- service 端角标硬编码（全部13/待处理10/已处理3）；owner 端角标由 `updateTodoBadges()` 动态算（含 localStorage 注入「对账单」待办）。
-- 消息页 Tab 结构：service-miniapp 含 邀请/合同邀约 两 Tab（2026-08-19 已移除「任务通知」「系统消息」Tab）；owner-miniapp 仅"邀请"一类、**不展示分类 Tab 栏**（2026-08-19 移除「任务通知」「系统消息」，本日取消单 Tab 栏），消息直接列表渲染，未处理数量以底部导航"消息"项右上角红色角标（#navMsgBadge，由 updateBadge 维护）呈现。「合同邀约」Tab 仅 service-miniapp 有，勿误加至 owner；owner 端亦勿恢复「系统消息」Tab 或加回分类 Tab 栏。
+## 工人合同变更流程最新规则（2026-09-07）
+- 流程：已签约 → 发起变更（`worker-contract-change.html`）→ 对方确认 → 即生成 V2 已签约（**无上传签约文件环节**）；驳回 → 变更已驳回 → 可重发/返回已签约。
+- 已删除：`change_signing_wait`、`worker-change-sign-upload.html`、`worker-sign-upload.html`、`upload_change_sign`。勿恢复。
+- `applyChangeAction('confirm_change')` 返回 `{next:'worker_signed', applyProposal:true}` → 调 `applyChangeProposal()` 生成 V2；回到 `worker_signed` 时 `clearChangeProposal()`。
+- **范围边界**：合规版 `contract-detail.html`/`js/contract-detail.js` 是另一套流程（含平台审核、`change_signing_wait` 仍有效，`todo-list.html:432` 指向它），清理工人合同变更态勿误伤。
 
-## 合同邀约体验方案页面位置约定（被邀请人视角）
-- C方案（微信服务通知）独立页 `service-miniapp/wechat-service-notice.html`（绿色微信外壳，点开直达 `worker-contract-detail.html?viewer=receiver`），不可放小程序内消息页。
-- A方案（顶部邀约通知条）独立页 `service-miniapp/invite-banner-demo.html`。
-- A/C 二级入口挂 `worker-contract-detail.html` 右侧原型导航「演示数据」分组底部（`<a>` 链接 + `status-switch-divider`，分组计数 7→9）。
-- 方案 E（整页接单卡片流）独立页 `service-miniapp/worker-contract-receive.html`（2026-08-05 新增，零耦合）；勿再在 message.html 内置 C 演示。
-- 原 `service-miniapp/share-navigation.html` 已于 2026-08-04 删除，勿恢复。
-
-## 页面布局约定（项目详情进行中-新版）
-- `project-detail-ongoing-v2.html`（service/owner 两份）「待办事项」卡片不与架构切换联动，置于吸顶导航（快捷入口+架构切换）之前；改按 HTML 注释锚点整体移动，不改 CSS/JS，两份同步。
-- 现状顺序：项目基本信息 → 待办事项 → [快捷入口+架构切换 吸顶] → 合同/任务概览 → 今日动态（owner 版今日动态在吸顶后、合同概览前）。
-- **`project-detail-worker.html`（服务方·工人视角）— 已于 2026-09-04 删除**：原（2026-08-20 新增优化）仿 ongoing-v2 布局，按工人心智重构——① 首屏头部改工人视角「我的工种·施工组 + 待我处理 N（橙色 KPI 胶囊）」；② 待办按「任务执行·确认 / 合同确认·签约」分组，4 条全展示，左侧色条按紧急度着色，待办卡标题条橙色（模块色区分）；③ 快捷入口 4 主 + 更多：全部任务(带红角标4)/项目动态/我的合同(滚动至合同卡)/更多，「更多」展开面板收纳 架构/成员/资料；吸顶折叠后保留全部任务+项目动态常驻；④ 架构层级默认选中工人所属工作组（显示「默认我的工作组」提示），`selectLevel` 同步给快捷入口带 `?level=`；⑤ 合同直接展示（无统计项、`contract-list` 默认展开）且每行加「待我上传/待我确认」动作徽标；⑥ 取消「今日动态」卡片与下方「任务统计」卡片；⑦ 待办/合同均带空态（`.is-empty` 由 `refreshEmptyStates()` 切换）。不影响其他页面/功能。
-
-## 架构层级联动约定（2026-08-19 方案A）
-- 详情页 `selectLevel()` 末尾统一把「任务概览/今日动态」`.more` 链接改带 `?level=架构层级名`（encodeURIComponent；项目部=不带参）。已改 3 页：service ongoing-v2、service/owner completed-v2；**owner ongoing-v2 无层级切换 JS（静态展示），不携带、勿加交互**。（注：`project-detail-worker.html` 已于 2026-09-04 删除，其 `selectLevel()` 额外把快捷入口 `.quick-nav-item` 携带层级的写法仅供参考追溯，页面已不存在。）
-- `task-list.html`：`.contract-section` 挂 `data-level`（合同↔工作组一一对应：水电/泥瓦/木工/油漆工作组）；`currentFilters.level`；`filterTasks()` 分组层早退；标签复用 `updateFilterTags`/`removeFilter`（文案「架构层级：XX」）。
-- `activity-list.html`：activities 加 `level` 字段（设计服务/基础施工→项目部）；`currentLevelFilter` 置 renderActivities 过滤链头部；`#levelFilterRow/#levelFilterTag` 可移除标签；`initLevelFilter()`/`clearLevelFilter()`。
-- 口径：层级与既有筛选 AND 叠加、计数联动；**全部待办 todo-list 不携带层级**（按人聚合，无对应关系）。
-
-## 产品决策与功能取消记录
-- 已取消「引导到电脑端编辑合同内容」：基础施工合同 `contract-detail.*` 不再提供 PC 端编辑引导；已删 `editGuideBox`/`pcEditGuide` 及 `copyEditLink`/`fallbackCopy`/`showPCEditGuide`。勿恢复。
-- 工人合同「已确认（受邀方）」不支持上传签约文件（2026-08-14）：纸质合同扫描件仅发起方（工长·甲方，`worker_confirmed_sender` 内联 `pickSignFile` + 整页 `worker-sign-upload.html`）上传；受邀方（`worker_confirmed_receiver`）与方案 E 仅只读等待。代码已改 `worker-contract-detail.js`/`worker-contract-receive.html`；PRD §7.5.1/§8.2/§8.4 已去"受邀方上传签约文件"。
-- 基础合同阶段编辑器两套并行体系（易踩坑）：拟定中表单 `#editStageList`（`.stage-card`，`renderStagesFromSnapshot` 等）+ 变更流程 `#stageEditContainer`（`.stage-edit-item`，`addNewStage` 仅服务变更）。阶段处理函数（`deleteStage`/`addTaskToStage`/`toggleStageSequential`/`editStageSettings`/`checkChangeContent`）已兼容双选择器（`.stage-card, .stage-edit-item`）。改这些函数须保双体系兼容；`addNewStage` 勿改 `.stage-card`/`#editStageList`。
-
-## 任务模块后置状态小节顺序（2026-08-17）
-- 服务方与业主端任务详情页四个后置状态小节顺序一致：**已完成 → 驳回后待开始 → 确认中（被驳回后） → 已完成（含驳回）**（服务方 §3.16~§3.19 / 业主端 §6.9~§6.12；映射：3.16=6.9=已完成、3.17=6.10=驳回后待开始、3.18=6.11=确认中被驳回后、3.19=6.12=已完成含驳回）。增删/引用须同步重映射 `§3.1[6789]`/`§6.[9,10,11,12]` 引用与 TOC。
-
-## 原型城市范围（2026-08-10）
-- 仅支持 北京、南阳、西安（`create-project.html` 注释"仅支持北京、河南、陕西"→北京市/南阳市/西安市）。
-- 所有页面与文档示例城市必须落此范围，不得出现 杭州/上海/深圳/广州/成都/宁波/温州/浙江/江苏 等越界城市；合同/项目主示例统一用 西安（陕西省/西安市），消息页地址可在三城轮替。
-
-## 业主端项目详情页面收敛（2026-09-07）
-- **已删除旧版页**：`owner-miniapp/project-detail.html`（项目详情）、`owner-miniapp/project-detail-completed.html`（项目详情（已完成））。**勿恢复、勿再引用**。
-- **现行页**：`project-detail-ongoing-v2.html`（项目详情（进行中-新版））、`project-detail-completed-v2.html`（项目详情（已完成-新版））。
-- **入口统一**：原跳 `project-detail.html` 的功能跳转（home 查看详情/项目卡片/快捷入口/tab、member 返回、create-project 创建成功、architecture 返回、invite-join 加入成功）已全部改指 `project-detail-ongoing-v2.html`。新增入口也一律指向 -v2 页。
-- **共享资源勿删**：`owner-miniapp/css/project-detail.css`、`owner-miniapp/js/project-detail.js` 虽以 project-detail 命名，但被两个 -v2 最新版页面共同引用，属共享资源，删除会破坏最新需求页面。清理时勿按"同名"误删。
-- 清理同类项时先 grep 确认资产被谁引用，再决定是否删除（避免影响最新需求页面）。
+## 数据口径 / 页面约定
+- 「全部待办」不含「临时任务」「待审核」；任务类待办标签=「任务」；层级不进 todo-list（按人聚合）。
+- 消息页 Tab：service 端仅 邀请/合同邀约（无任务通知/系统消息）；owner 端**不显示 Tab 栏**，未读数走底部导航 `#navMsgBadge`。
+- 被邀请人体验演示页：`wechat-service-notice.html`（C）、`invite-banner-demo.html`（A）、`worker-contract-receive-inviting.html`（E 入口）。已删 `share-navigation.html`、`worker-contract-receive.html`、`project-detail-worker.html`，勿恢复。
+- 业主端项目详情已收敛为 `project-detail-ongoing-v2.html` / `project-detail-completed-v2.html`（旧 `project-detail*.html` 已删）；但 `css/project-detail.css`+`js/project-detail.js` 是两 -v2 页共享资源，**勿按同名误删**。
+- 架构层级联动：`selectLevel()` 给两级链接带 `?level=`（service ongoing-v2、service/owner completed-v2；owner ongoing-v2 无 JS 静态展示勿加）；`task-list.html`/`activity-list.html` 各自过滤。
+- 「待办事项」卡片在 `project-detail-ongoing-v2.html` 中置于吸顶导航之前。
+- 原型城市仅限 北京/南阳/西安；主示例统一 西安。
+- 任务模块后置四小节顺序（服务方 §3.16~3.19 / 业主端 §6.9~6.12）：已完成 → 驳回后待开始 → 确认中（被驳回后） → 已完成（含驳回）；增删须同步重映射引用与 TOC。
+- 合规版阶段编辑器两套并行：拟定中 `#editStageList`(`.stage-card`) + 变更 `#stageEditContainer`(`.stage-edit-item`)；相关函数须兼容双选择器 `.stage-card, .stage-edit-item`。
