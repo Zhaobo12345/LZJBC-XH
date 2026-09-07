@@ -322,16 +322,14 @@
             <li class="toc-sub"><a href="#sub-4-7">4.7 交互效果</a></li>
             <li class="toc-sub"><a href="#sub-4-8">4.8 待办类型详细规则</a></li>
             <li class="toc-sub"><a href="#sub-4-8-1">4.8.1 任务确认（confirming）</a></li>
-            <li class="toc-sub"><a href="#sub-4-8-2">4.8.2 任务执行（含重新执行）（pending）</a></li>
-            <li class="toc-sub"><a href="#sub-4-8-3">4.8.3 合同内容确认（pending）</a></li>
-            <li class="toc-sub"><a href="#sub-4-8-4">4.8.4 合同签约（pending）</a></li>
-            <li class="toc-sub"><a href="#sub-4-8-5">4.8.5 合同修改重提（pending）</a></li>
-            <li class="toc-sub"><a href="#sub-4-8-6">4.8.6 合同变更确认（pending）</a></li>
-            <li class="toc-sub"><a href="#sub-4-8-7">4.8.7 合同变更签约（pending）</a></li>
-            <li class="toc-sub"><a href="#sub-4-8-8">4.8.8 变更合同修改（pending）</a></li>
-            <li class="toc-sub"><a href="#sub-4-8-9">4.8.9 合同签约（工人合同）（worker_confirmed_sender）</a></li>
-            <li class="toc-sub"><a href="#sub-4-8-10">4.8.10 对账单确认（confirming）</a></li>
-            <li class="toc-sub"><a href="#sub-4-8-11">4.8.11 待办失效（invalidated）</a></li>
+            <li class="toc-sub"><a href="#sub-4-8-2">4.8.2 合同内容确认（pending）</a></li>
+            <li class="toc-sub"><a href="#sub-4-8-3">4.8.3 合同签约（pending）</a></li>
+            <li class="toc-sub"><a href="#sub-4-8-4">4.8.4 合同修改重提（pending）</a></li>
+            <li class="toc-sub"><a href="#sub-4-8-5">4.8.5 合同变更确认（pending）</a></li>
+            <li class="toc-sub"><a href="#sub-4-8-6">4.8.6 合同变更签约（pending）</a></li>
+            <li class="toc-sub"><a href="#sub-4-8-7">4.8.7 变更合同修改（pending）</a></li>
+            <li class="toc-sub"><a href="#sub-4-8-8">4.8.8 对账单确认（confirming）</a></li>
+            <li class="toc-sub"><a href="#sub-4-8-9">4.8.9 待办失效（invalidated）</a></li>
             <li class="toc-group-title">业主小程序</li>
             <li><a href="#page-task-list-owner">五、全部任务（业主）</a></li>
             <li class="toc-sub"><a href="#sub-5-1">5.1 页面概述</a></li>
@@ -1401,10 +1399,8 @@
                 <div class="note"><p>只读视角（配置人 / 确认人 / 其他用户 / 非执行人）仅展示记录内容，<strong>不显示</strong>上传 / 继续上传 / 编辑 / 删除任何操作项。逐条操作在「执行中」态持续可用，详见 §3.14。</p></div>
                 <h4>效果</h4>
                 <p>头部默认配色；流程条第 1 步「⏸ 待开始」当前（current）；底部主按钮为品牌主色（primary）；<strong>尚未上传执行记录时</strong>「提交确认 / 完成任务」主按钮置灰（disabled），待上传并进入「执行中」后恢复可点击。</p>
-                <h4>待办生成规则（执行人「任务执行」待办 · 触发来源）</h4>
-                <p>执行人「任务执行」待办的<strong>首次生成由合同进入可施工态触发</strong>：合同已签约（<code>signed</code> / <code>worker_signed</code>）或变更已生效（<code>change_confirmed</code>）后，系统为对应合同下「已配置执行人 + 待开始」的任务自动生成（生成时间 = 签约 / 变更生效时间）。</p>
-                <p><strong>完整规则与前置约束（签约前配置执行人不生成待办）、变更作用域（仅变更项任务）以合同模块为权威出处</strong>：见 <a href="PRD-合同模块详细规格.html#sec-3-10-14" target="_blank">PRD-合同模块 §3.10.14 已签约</a> / <a href="PRD-合同模块详细规格.html#sec-5-15-8" target="_blank">§5.15.8 变更已生效</a>，本节不再重复细节。</p>
-                <p>待办类型、标签、归属、跳转目标与状态联动见 <a href="#sub-4-8-2">§4.8.2</a>；确认人驳回触发的「重新执行」待办见 <a href="#sub-3-15">§3.15(5)</a>。</p>
+                <h4>提醒规则（执行人服务号通知 · 不生成应用内待办）</h4>
+                <p>任务进入「待开始」后系统<strong>不生成应用内待办</strong>（「合同任务执行」待办类型已取消），执行人通过任务列表与任务详情页自行查看待开始任务。确认为执行人后由系统推送一条<strong>微信服务号通知</strong>（订阅消息，见 <a href="service-miniapp/wechat-service-notice.html" target="_blank">wechat-service-notice.html 原型</a>），提示其查看待开始任务并开始执行；完整触发条件与变更作用域（仅变更项任务）以合同模块为权威出处：见 <a href="PRD-合同模块详细规格.html#sec-3-10-14" target="_blank">PRD-合同模块 §3.10.14 已签约</a> / <a href="PRD-合同模块详细规格.html#sec-5-15-8" target="_blank">§5.15.8 变更已生效</a>。</p>
             </div>
 
             <div class="subsection">
@@ -1592,13 +1588,14 @@
                 </ul>
                 </div>
                 <div class="subflow">
-                <p class="subflow-title">（5）待办生成规则（执行人「任务执行 / 重新执行」待办）</p>
+                <p class="subflow-title">（5）服务号通知规则（执行人「任务被驳回·需重新执行」通知）</p>
                 <ul>
-                    <li><strong>生成时机</strong>：确认人点击「确认驳回」提交、使任务主状态回退为「驳回后待开始（rejected_pending）」后，系统为<strong>该任务的执行人</strong>自动生成一条「任务执行」待办（即「重新执行」待办）；生成时间 = 驳回时间。单条确认（非全部完成 / 非驳回）不生成执行人待办。</li>
-                    <li><strong>待办类型与归属</strong>：对应 §4.3「合同任务执行」待办类型（标签「任务」，状态值 pending，数据来源「任务状态为待开始且当前用户为执行人」）；待办仅对该任务执行人可见。注：驳回回退态（rejected_pending）属「待开始」主状态家族，满足「待开始 + 执行人」的待办来源条件，故复用同一「合同任务执行」类型，不新增类型。</li>
-                    <li><strong>跳转目标</strong>：点击待办卡片跳转 <a href="service-miniapp/task-detail.html?status=rejected_pending&amp;role=executor" target="_blank">task-detail.html?status=rejected_pending&amp;role=executor</a>，进入执行人视角重新上传记录并提交。</li>
-                    <li><strong>状态联动</strong>：执行人重新提交确认 / 完成任务后，原「任务执行」待办自动标记 completed（移出待处理）；该待办随任务离开「待开始 / 驳回后待开始」态即不再匹配来源而移出，重新进入时由本规则（或 §3.14 提交确认规则）重新生成。</li>
-                    <li><strong>说明</strong>：待办由系统自动生成，本规则仅新增「确认人驳回 → 执行人重新执行待办」这一待办来源，不改变 §4.3 其他既有待办类型及功能描述。</li>
+                    <li><strong>通知时机</strong>：确认人点击「确认驳回」提交、使任务主状态回退为「驳回后待开始（rejected_pending）」后，系统向<strong>该任务的执行人</strong>推送一条<strong>微信服务号通知</strong>（订阅消息）；推送时间 = 驳回时间。单条确认（非全部完成 / 非驳回）不推送。驳回后<strong>不生成应用内待办</strong>（「合同任务执行」待办类型已取消，见 §4.3），执行人经通知或任务列表进入重新执行。</li>
+                    <li><strong>通知渠道与原型</strong>：走微信「服务通知」（订阅消息）通道，用户离开小程序亦可触达；通知效果见原型 <a href="service-miniapp/wechat-service-notice.html" target="_blank">wechat-service-notice.html</a>（「任务被驳回，需重新执行」卡片）。</li>
+                    <li><strong>通知内容</strong>：标题「⚠️ 任务被驳回，需重新执行」；正文含任务归属（合同 · 任务名）、驳回人（确认人）与驳回原因摘要；行动引导「点击查看并重新执行 ›」。</li>
+                    <li><strong>跳转目标</strong>：点击通知直达 <a href="service-miniapp/task-detail.html?status=rejected_pending&amp;role=executor" target="_blank">task-detail.html?status=rejected_pending&amp;role=executor</a>，进入执行人视角重新上传记录并提交。</li>
+                    <li><strong>状态联动</strong>：执行人重新提交确认 / 完成任务后任务再次进入「确认中」；确认人为每一位已配置确认人生成应用内「任务确认」待办（见 §4.8.1），由 §3.14 提交确认规则驱动。</li>
+                    <li><strong>说明</strong>：本规则由原「确认人驳回 → 执行人重新执行待办」调整而来——待办类型「合同任务执行」已取消，驳回提醒改为服务号通知，不改变 §4.3 其他既有待办类型及功能描述。</li>
                 </ul>
                 </div>
                 <h4>效果</h4>
@@ -1834,13 +1831,6 @@
                             <td>task-detail.html?status=confirming</td>
                         </tr>
                         <tr>
-                            <td>合同任务执行</td>
-                            <td>任务</td>
-                            <td>任务状态为"待开始"且当前用户为执行人</td>
-                            <td>pending</td>
-                            <td>task-detail.html?status=pending</td>
-                        </tr>
-                        <tr>
                             <td>合同内容确认</td>
                             <td>合同</td>
                             <td>合同状态为"待确认合同内容"</td>
@@ -1891,7 +1881,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <p style="font-size: 12px; color: var(--text-tertiary); margin-top: 8px;">状态值补充说明：当待办所依赖的用户指派（执行人 / 确认人 / 甲方 / 发起方 / 受邀人等角色或指派）发生改派或撤销，且当前用户不再是该指派方时，该待办状态转为 <code>invalidated</code>（已失效）——不再可操作，在「已失效」选项卡呈现，不计入「待处理」也不计入「已处理」。通用规则见 <a href="#sub-4-8-11">§4.8.11</a>。</p>
+                <p style="font-size: 12px; color: var(--text-tertiary); margin-top: 8px;">状态值补充说明：当待办所依赖的用户指派（执行人 / 确认人 / 甲方 / 发起方 / 受邀人等角色或指派）发生改派或撤销，且当前用户不再是该指派方时，该待办状态转为 <code>invalidated</code>（已失效）——不再可操作，在「已失效」选项卡呈现，不计入「待处理」也不计入「已处理」。通用规则见 <a href="#sub-4-8-9">§4.8.9</a>。</p>
             </div>
 
             <div class="subsection">
@@ -1923,7 +1913,7 @@
                     </tbody>
                 </table>
                 <p style="font-size: 13px; color: var(--text-secondary); margin: 10px 0;">全部待办页<strong>默认进入「待处理」</strong>（第一视角、零干扰），不提供「全部」并集视图——待处理 / 已处理 / 已失效 三类状态<strong>互斥且穷尽</strong>（pending+confirming / completed / invalidated），已覆盖全部待办。</p>
-                <p style="font-size: 12px; color: var(--text-tertiary); margin-top: 8px;">失效态（<code>invalidated</code>）独立为「已失效」选项卡呈现：它既非用户可操作（不计入待处理），也非用户完成（不计入已处理），故在「待处理」「已处理」筛选中均被排除。详见 <a href="#sub-4-8-11">§4.8.11</a>。</p>
+                <p style="font-size: 12px; color: var(--text-tertiary); margin-top: 8px;">失效态（<code>invalidated</code>）独立为「已失效」选项卡呈现：它既非用户可操作（不计入待处理），也非用户完成（不计入已处理），故在「待处理」「已处理」筛选中均被排除。详见 <a href="#sub-4-8-9">§4.8.9</a>。</p>
             </div>
 
             <div class="subsection">
@@ -1946,7 +1936,7 @@
                         </tr>
                         <tr>
                             <td>类型标签</td>
-                            <td>标题右侧小标签：合同（青色）、变更（橙色）、审核（青色）、架构（橙色）</td>
+                            <td>标题右侧小标签：任务（青色）、合同（青色）、变更（橙色）、审核（青色）</td>
                         </tr>
                         <tr>
                             <td>元信息</td>
@@ -1954,7 +1944,7 @@
                         </tr>
                         <tr>
                             <td>状态标签</td>
-                            <td>右侧状态标签：待确认（蓝色）、待执行（绿色）、待签约（紫色）、待处理（橙色）、待审核（青色）、待接受（绿色）、已完成（绿色）；「已处理」中已完成态的待办按实际完成动作呈现具体文案（如 已执行 / 已确认 / 已上传），以表达"完成了什么操作"</td>
+                            <td>右侧状态标签：待确认（蓝色）、待签约（紫色）、待处理（橙色）、待审核（青色）、已完成（绿色）、已失效（灰色）；「已处理」中已完成态的待办按实际完成动作呈现具体文案（如 已执行 / 已确认 / 已上传），以表达"完成了什么操作"</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1970,7 +1960,7 @@
    - 点击"待处理"：仅显示 pending / confirming 项
    - 点击"已处理"：仅显示 completed 项
    - 点击"已失效"：仅显示 invalidated 项（点击卡片弹失效原因，不跳转）
-   - 无匹配项时显示对应空状态（如待处理空："暂无待处理事项"）
+   - 无匹配项时显示空状态："暂无符合条件的待办事项"（各选项卡文案一致）
 3. 点击待办卡片
    - 根据待办类型跳转到对应详情页
    - 跳转URL携带status参数，目标页面据此高亮对应操作区
@@ -2017,7 +2007,7 @@
             <!-- ===== 4.8 待办类型详细规则（生成规则 · 页面逻辑 · 交互 · 字段规格） ===== -->
             <div class="subsection">
                 <div class="subsection-title" id="sub-4-8">4.8 待办类型详细规则</div>
-                <p>本节为「全部待办」页的<strong>呈现规格</strong>：各待办类型的「生成规则」（何时、向谁生成）以对应功能章节为<strong>唯一权威来源（SSOT）</strong>——任务类见「三、任务详情页」§3.14(5)/§3.15(5)/§3.17(3)，合同类见 PRD-合同模块 §6.3.2 / §6.3.3 / §10.3.2，对账单见 §7.6–§7.9 与 <a href="PRD-项目模块详细规格.html#sub-9-7-6">PRD-项目模块 9.7.6</a>。本章<strong>不再复述触发条件</strong>，仅以索引链接指向权威点，并重点补充待办页独有的「页面逻辑 · 交互 · 字段规格（卡片渲染）」。所有待办均由系统自动生成，用户无填写入口；原型以 <code>localStorage</code> 演示，正式产品以后端待办接口为准。以下规则不改变 §4.3 已列类型及口径。</p>
+                <p>本节为「全部待办」页的<strong>呈现规格</strong>：各待办类型的「生成规则」（何时、向谁生成）以对应功能章节为<strong>唯一权威来源（SSOT）</strong>——任务类见「三、任务详情页」<a href="#sub-3-14">§3.14(5)</a>/<a href="#sub-3-17">§3.17(3)</a>，合同类见 PRD-合同模块 §6.3.2 / §6.3.3 / §10.3.2，对账单见 §7.6–§7.9 与 <a href="PRD-项目模块详细规格.html#sub-9-7-6">PRD-项目模块 9.7.6</a>。本章<strong>不再复述触发条件</strong>，仅以索引链接指向权威点，并重点补充待办页独有的「页面逻辑 · 交互 · 字段规格（卡片渲染）」。所有待办均由系统自动生成，用户无填写入口；原型以 <code>localStorage</code> 演示，正式产品以后端待办接口为准。以下规则不改变 §4.3 已列类型及口径。注：原「任务执行（含重新执行）」待办类型已取消——任务进入待开始 / 驳回后待开始不再生成应用内待办，执行人提醒改为微信服务号通知（见 <a href="#sub-3-12">§3.12 提醒规则</a> 与 <a href="#sub-3-15">§3.15(5)</a>）。</p>
 
                 <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-1">4.8.1 任务确认（confirming）</div>
                 <div class="info-grid">
@@ -2051,37 +2041,7 @@
                     </tbody>
                 </table>
 
-                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-2">4.8.2 任务执行（含重新执行）（pending）</div>
-                <div class="info-grid">
-                    <div class="info-item"><div class="info-label">待办类型</div><div class="info-value">任务执行 / 重新执行（合同任务执行）</div></div>
-                    <div class="info-item"><div class="info-label">类型标签</div><div class="info-value">任务（青色）</div></div>
-                    <div class="info-item"><div class="info-label">生成方</div><div class="info-value">任务状态变更（系统自动）</div></div>
-                    <div class="info-item"><div class="info-label">接收方</div><div class="info-value">该任务的执行人</div></div>
-                    <div class="info-item"><div class="info-label">状态值</div><div class="info-value">pending（待执行）</div></div>
-                    <div class="info-item"><div class="info-label">跳转目标</div><div class="info-value">task-detail.html?status=pending</div></div>
-                </div>
-                <p><strong>生成规则：</strong>「任务执行」待办存在两类生成来源——① <strong>合同可施工触发（首次 · 权威规则见合同模块）</strong>：合同已签约（<code>signed</code> / <code>worker_signed</code>）或变更已生效（<code>change_confirmed</code>）后，系统为合同下「已配置执行人 + 待开始」的任务自动生成，完整触发条件、前置约束（签约前配置执行人不生成待办）与变更作用域（仅变更项）见 <a href="PRD-合同模块详细规格.html#sec-3-10-14" target="_blank">PRD-合同模块 §3.10.14</a> / <a href="PRD-合同模块详细规格.html#sec-5-15-8" target="_blank">§5.15.8</a>；② <strong>确认人驳回触发（重新执行）</strong>：见 <a href="#sub-3-15">§3.15(5)</a>（驳回回退至「驳回后待开始」后生成）。本节仅描述其在「全部待办」页的呈现与完成联动，触发规则以合同模块 §3.10.14 / §5.15.8 与 §3 为准。</p>
-                <p><strong>页面逻辑：</strong>待办归属 = 执行人；任务进入待开始 / 驳回后待开始且当前用户为执行人时展示（首次生成于合同已签约 / 变更生效，重新执行生成于确认人驳回）；计入「待处理」。</p>
-                <p><strong>交互与完成规则：</strong></p>
-                <div class="code-block">1. 点击待办卡片 → task-detail.html?status=pending
-   - 服务方执行人：进入执行、上传执行记录
-   - 业主若被配置为执行人（见 §6.3.1）：同理进入执行
-2. 执行人提交确认 / 完成任务后：
-   - 原「任务执行」待办标记 completed，移出待处理
-3. 任务离开「待开始 / 驳回后待开始」态即不再匹配而移出，重新进入时由本规则（或 §3.14 提交确认规则）重新生成</div>
-                <p><strong>字段规格：</strong></p>
-                <table>
-                    <thead><tr><th>字段</th><th>取值规则</th><th>示例</th></tr></thead>
-                    <tbody>
-                        <tr><td>标题</td><td>{阶段}{任务}</td><td>吊顶安装 / 地面找平</td></tr>
-                        <tr><td>类型标签</td><td>任务（青色）</td><td>任务</td></tr>
-                        <tr><td>元信息</td><td>{工作组} · 待执行</td><td>木工工作组 · 待执行</td></tr>
-                        <tr><td>状态标签</td><td>待执行（pending，计入待处理）</td><td>待执行</td></tr>
-                        <tr><td>图标</td><td>🟢</td><td>🟢</td></tr>
-                    </tbody>
-                </table>
-
-                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-3">4.8.3 合同内容确认（pending）</div>
+                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-2">4.8.2 合同内容确认（pending）</div>
                 <div class="info-grid">
                     <div class="info-item"><div class="info-label">待办类型</div><div class="info-value">合同内容确认（合同待确认）</div></div>
                     <div class="info-item"><div class="info-label">类型标签</div><div class="info-value">合同（青色）</div></div>
@@ -2109,14 +2069,14 @@
                     </tbody>
                 </table>
 
-                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-4">4.8.4 合同签约（pending）</div>
+                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-3">4.8.3 合同签约（pending）</div>
                 <div class="info-grid">
                     <div class="info-item"><div class="info-label">待办类型</div><div class="info-value">合同签约（待上传签约附件）</div></div>
                     <div class="info-item"><div class="info-label">类型标签</div><div class="info-value">合同（青色）</div></div>
                     <div class="info-item"><div class="info-label">生成方</div><div class="info-value">合同状态流转（系统自动）</div></div>
                     <div class="info-item"><div class="info-label">接收方</div><div class="info-value">发起方（合同创建人）</div></div>
                     <div class="info-item"><div class="info-label">状态值</div><div class="info-value">pending（待签约）</div></div>
-                    <div class="info-item"><div class="info-label">跳转目标</div><div class="info-value">contract-detail.html?status=signing（基础/设计合同）<br>worker-sign-upload.html（工人合同，详见 §4.8.9）</div></div>
+                    <div class="info-item"><div class="info-label">跳转目标</div><div class="info-value">contract-detail.html?status=signing（基础/设计合同）</div></div>
                 </div>
                 <p><strong>生成规则：</strong>完整触发条件见 PRD-合同模块 <a href="PRD-合同模块详细规格.html#sub-6-3-2" target="_blank">§6.3.2</a>（合同双方完成内容确认、状态由确认中 → 已确认后，为发起方生成该待办）。本节仅描述其在「全部待办」页的呈现与完成联动，触发规则以合同模块 §6.3.2 为准。</p>
                 <p><strong>页面逻辑：</strong>待办归属 = 发起方；合同进入已确认后生成；计入「待处理」。</p>
@@ -2124,7 +2084,7 @@
                 <div class="code-block">1. 点击待办卡片 → contract-detail.html?status=signing（基础/设计合同）
 2. 发起方上传签约文件生效（状态 → 已签约 signed）后：
    - 该待办标记 completed，移至「已处理」
-3. 工人合同同口径，跳转见 §4.8.9</div>
+3. 工人合同同口径，跳转见 §4.8.8</div>
                 <p><strong>字段规格：</strong></p>
                 <table>
                     <thead><tr><th>字段</th><th>取值规则</th><th>示例</th></tr></thead>
@@ -2137,7 +2097,7 @@
                     </tbody>
                 </table>
 
-                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-5">4.8.5 合同修改重提（pending）</div>
+                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-4">4.8.4 合同修改重提（pending）</div>
                 <div class="info-grid">
                     <div class="info-item"><div class="info-label">待办类型</div><div class="info-value">合同修改重提（待修改重新提交）</div></div>
                     <div class="info-item"><div class="info-label">类型标签</div><div class="info-value">审核（青色）</div></div>
@@ -2164,7 +2124,7 @@
                     </tbody>
                 </table>
 
-                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-6">4.8.6 合同变更确认（pending）</div>
+                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-5">4.8.5 合同变更确认（pending）</div>
                 <div class="info-grid">
                     <div class="info-item"><div class="info-label">待办类型</div><div class="info-value">合同变更确认（待确认变更）</div></div>
                     <div class="info-item"><div class="info-label">类型标签</div><div class="info-value">变更（橙色 #FA8C16 / 背景 #FFF7E6）</div></div>
@@ -2191,7 +2151,7 @@
                     </tbody>
                 </table>
 
-                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-7">4.8.7 合同变更签约（pending）</div>
+                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-6">4.8.6 合同变更签约（pending）</div>
                 <div class="info-grid">
                     <div class="info-item"><div class="info-label">待办类型</div><div class="info-value">合同变更签约（待上传变更签约附件）</div></div>
                     <div class="info-item"><div class="info-label">类型标签</div><div class="info-value">变更（橙色）</div></div>
@@ -2218,7 +2178,7 @@
                     </tbody>
                 </table>
 
-                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-8">4.8.8 变更合同修改（pending）</div>
+                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-7">4.8.7 变更合同修改（pending）</div>
                 <div class="info-grid">
                     <div class="info-item"><div class="info-label">待办类型</div><div class="info-value">变更合同修改（待重新发起变更）</div></div>
                     <div class="info-item"><div class="info-label">类型标签</div><div class="info-value">变更（橙色）</div></div>
@@ -2245,39 +2205,11 @@
                     </tbody>
                 </table>
 
-                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-9">4.8.9 合同签约（工人合同）（worker_confirmed_sender）</div>
-                <div class="info-grid">
-                    <div class="info-item"><div class="info-label">待办类型</div><div class="info-value">合同签约（待上传签约文件 · 工人合同）</div></div>
-                    <div class="info-item"><div class="info-label">类型标签</div><div class="info-value">合同（青色）</div></div>
-                    <div class="info-item"><div class="info-label">生成方</div><div class="info-value">工人合同确认后状态流转（系统自动）</div></div>
-                    <div class="info-item"><div class="info-label">接收方</div><div class="info-value">发起方（工长·甲方，陈庄）</div></div>
-                    <div class="info-item"><div class="info-label">状态值</div><div class="info-value">worker_confirmed_sender（待签约）</div></div>
-                    <div class="info-item"><div class="info-label">跳转目标</div><div class="info-value">worker-sign-upload.html（或 worker-contract-detail.html 内联上传）</div></div>
-                </div>
-                <p><strong>生成规则：</strong>完整触发条件见 PRD-合同模块 <a href="PRD-合同模块详细规格.html#sub-10-3-2" target="_blank">§10.3.2</a>（工人合同双方确认、发起方状态进入已确认后，为发起方生成该待办；受邀方不生成任何应用内待办）。本节仅描述其在「全部待办」页的呈现与完成联动，触发规则以合同模块 §10.3.2 为准。</p>
-                <p><strong>页面逻辑：</strong>待办归属 = 发起方（工长·甲方）；仅发起方生成；计入「待处理」。工人合同全程无平台审核，故不存在「业主合同待确认」待办（甲方固定为工长·陈庄）。</p>
-                <p><strong>交互与完成规则：</strong></p>
-                <div class="code-block">1. 点击待办卡片 → worker-sign-upload.html
-2. 发起方上传签约文件成功（状态 → 已签约 worker_signed）后：
-   - 该待办标记 completed，移至「已处理」
-3. 受邀方不生成任何应用内待办（经微信服务通知接单，详见 wechat-service-notice.html）</div>
-                <p><strong>字段规格：</strong></p>
-                <table>
-                    <thead><tr><th>字段</th><th>取值规则</th><th>示例</th></tr></thead>
-                    <tbody>
-                        <tr><td>标题</td><td>{工人合同名称}签约</td><td>泥瓦工班组服务合同签约</td></tr>
-                        <tr><td>类型标签</td><td>合同（青色）</td><td>合同</td></tr>
-                        <tr><td>元信息</td><td>{所属架构层级} · 待上传签约文件</td><td>泥瓦工程 · 待上传签约文件</td></tr>
-                        <tr><td>状态标签</td><td>待签约（worker_confirmed_sender，计入待处理）</td><td>待签约</td></tr>
-                        <tr><td>图标</td><td>📝</td><td>📝</td></tr>
-                    </tbody>
-                </table>
-
-                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-10">4.8.10 对账单确认（confirming）</div>
+                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-8">4.8.8 对账单确认（confirming）</div>
                 <p>生成规则与字段规格详见 <a href="#sub-7-6">§7.6–§7.9（业主端对账单确认待办详规）</a>；对账单创建后生成该待办的触发说明亦见 <a href="PRD-项目模块详细规格.html#sub-9-7-6">PRD-项目模块详细规格.html 9.7.6</a>「创建成功后系统生成的信息」。此处仅列摘要：待办归属 = 确认人（业主）；状态 = confirming（待确认）；跳转 = <code>statement-detail.html?status=pending&amp;role=confirmer</code>；类型标签 = 对账单（金色 #FAAD14 / 背景 #FFFBE6）；图标 = 💰。服务方在「对账单」列表页新增并提交成功后，系统为对应业主确认人自动生成一条，重复提交不重复生成。</p>
-                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-11">4.8.11 待办失效（invalidated）</div>
-                <p><strong>适用类型：</strong>所有「以当前用户为指派方」的待办均可能失效——任务确认（§4.8.1）、任务执行（§4.8.2）、合同内容确认（§4.8.3）、合同签约（§4.8.4）、合同变更确认（§4.8.6）、合同变更签约（§4.8.7）、合同修改重提（§4.8.5）、变更合同修改（§4.8.8）、对账单确认（§4.8.10）、工人合同签约（§4.8.9）。</p>
-                <p><strong>触发条件：</strong>待办生成后，其产生依据（执行人 / 确认人 / 甲方 / 发起方 / 受邀人等角色或指派）被改派或撤销，且当前用户不再是该指派方时，系统将该待办标记 <code>invalidated</code>。典型场景：任务执行人由 A 改派为 B 后，A 原先的「待执行」待办失效（示例元信息「执行人已变更为 B」）。</p>
+                <div class="subsection-title" style="margin-top:16px;" id="sub-4-8-9">4.8.9 待办失效（invalidated）</div>
+                <p><strong>适用类型：</strong>所有「以当前用户为指派方」的待办均可能失效——任务确认（§4.8.1）、合同内容确认（§4.8.2）、合同签约（§4.8.3）、合同变更确认（§4.8.5）、合同变更签约（§4.8.6）、合同修改重提（§4.8.4）、变更合同修改（§4.8.7）、对账单确认（§4.8.8）。</p>
+                <p><strong>触发条件：</strong>待办生成后，其产生依据（确认人 / 甲方 / 发起方 / 受邀人等角色或指派）被改派或撤销，且当前用户不再是该指派方时，系统将该待办标记 <code>invalidated</code>。典型场景：任务确认人由 A 改派为 B 后，A 原先的「任务确认」待办失效（示例元信息「确认人已变更为周监理」）；合同乙方改派后原被邀请人的「合同内容确认」待办失效（示例元信息「乙方已变更为孙工」）。</p>
                 <p><strong>状态值：</strong>invalidated（已失效）。</p>
                 <p><strong>页面逻辑：</strong>在「已失效」选项卡独立呈现；<strong>不计入「待处理」</strong>（非可操作）、<strong>不计入「已处理」</strong>（非本人完成）。与 completed（用户完成）严格区分。</p>
                 <p><strong>交互与完成规则：</strong></p>
@@ -2841,8 +2773,8 @@
                     <tbody>
                         <tr>
                             <td>待办来源范围</td>
-                            <td>包含任务执行、合同签约、合同变更等全部类型</td>
-                            <td>默认仅包含需业主确认的类型（任务确认、合同内容确认、合同变更确认、对账单确认）；<strong>任务执行仅当业主被配置为任务执行人时出现</strong>（见 <a href="#sub-7-10">§7.10</a>）</td>
+                            <td>包含任务确认、合同签约、合同变更等全部类型</td>
+                            <td>默认仅包含需业主确认的类型（任务确认、合同内容确认、合同变更确认、对账单确认）</td>
                         </tr>
                         <tr>
                             <td>任务确认跳转</td>
@@ -2976,14 +2908,13 @@
                     <thead><tr><th>业主端可见待办类型</th><th>归属角色</th><th>详细规则</th><th>是否计入待处理</th></tr></thead>
                     <tbody>
                         <tr><td>任务确认</td><td>业主作为确认人</td><td><a href="#sub-4-8-1">§4.8.1</a></td><td>是（confirming）</td></tr>
-                        <tr><td>任务执行（业主作为执行人时）</td><td>业主作为执行人</td><td><a href="#sub-4-8-2">§4.8.2</a></td><td>是（pending），仅当业主被配置为该任务执行人时出现</td></tr>
-                        <tr><td>合同内容确认</td><td>业主（甲方 = 业主时）</td><td><a href="#sub-4-8-3">§4.8.3</a></td><td>是（pending）</td></tr>
-                        <tr><td>合同变更确认</td><td>业主（甲方 = 业主时）</td><td><a href="#sub-4-8-6">§4.8.6</a></td><td>是（pending）</td></tr>
+                        <tr><td>合同内容确认</td><td>业主（甲方 = 业主时）</td><td><a href="#sub-4-8-2">§4.8.2</a></td><td>是（pending）</td></tr>
+                        <tr><td>合同变更确认</td><td>业主（甲方 = 业主时）</td><td><a href="#sub-4-8-5">§4.8.5</a></td><td>是（pending）</td></tr>
                         <tr><td>对账单确认</td><td>业主确认人</td><td><a href="#sub-7-6">§7.6–§7.9</a></td><td>是（confirming）</td></tr>
                     </tbody>
                 </table>
-                <div class="note"><div class="note-title">业主端不包含的待办类型（默认）</div><p>以下类型仅面向发起方 / 服务方或执行人，<strong>默认不计入业主端「全部待办」</strong>：<br>① 合同签约（§4.8.4 / §4.8.9，发起方视角）、合同修改重提（§4.8.5，发起方被驳回方）、合同变更签约（§4.8.7，发起方）、变更合同修改（§4.8.8，发起方被驳回方）；<br>② 任务执行 / 重新执行（§4.8.2）：业主端默认不含（执行人通常为服务方）；但当<strong>业主被配置为任务执行人时（见 §6.3.1）</strong>会生成「任务执行」待办并出现在业主端全部待办（原型示例中的「吊顶安装 / 墙面腻子批刮 · 待执行」即此场景）。<br>即业主端默认范围 = 任务确认 + 合同内容确认 + 合同变更确认 + 对账单确认；此外当业主被配置为任务执行人时，「任务执行」待办也会出现（见上表），与 <a href="#sub-7-2">§7.2</a> 差异说明一致。</p></div>
-                <p><strong>已处理规则：</strong>业主完成确认 / 处理后，对应待办标记 completed 自动从「待处理」移至「已处理」；业主端「已处理」亦含其他任务类待办（任务确认 / 任务执行）完成后归档项，并非独立生成的「已完成任务」类型（该类型已从 §4.3 移除，因其非由独立事件生成，而是既有待办完成后的状态呈现）。</p>
+                <div class="note"><div class="note-title">业主端不包含的待办类型（默认）</div><p>以下类型仅面向发起方 / 服务方，<strong>默认不计入业主端「全部待办」</strong>：合同签约（§4.8.3，发起方视角）、合同修改重提（§4.8.4，发起方被驳回方）、合同变更签约（§4.8.6，发起方）、变更合同修改（§4.8.7，发起方被驳回方）。<br>即业主端待办范围 = 任务确认 + 合同内容确认 + 合同变更确认 + 对账单确认，与 <a href="#sub-7-2">§7.2</a> 差异说明一致。注：原「任务执行」待办类型已取消（执行人提醒改为微信服务号通知，见 <a href="#sub-3-15">§3.15(5)</a>），业主端不再出现任何任务执行待办。</p></div>
+                <p><strong>已处理规则：</strong>业主完成确认 / 处理后，对应待办标记 completed 自动从「待处理」移至「已处理」；业主端「已处理」亦含其他任务类待办（任务确认）完成后归档项，并非独立生成的「已完成任务」类型（该类型已从 §4.3 移除，因其非由独立事件生成，而是既有待办完成后的状态呈现）。</p>
             </div>
         </div>
 

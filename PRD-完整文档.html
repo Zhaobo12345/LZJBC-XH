@@ -929,6 +929,7 @@
                     <li><strong>覆盖范围</strong>：加入项目类邀请（两端）、工人合同邀约（仅服务方）。</li>
                     <li><strong>不覆盖范围</strong>：任务类提醒（归口「待办」）；合同正文编辑 / 变更流程本身（归口《PRD-合同模块详细规格》）；邀请的发起方式与权限（归口《PRD-项目模块详细规格》7.5 / 7.6，本节仅描述接收侧）。</li>
                     <li><strong>布局专有</strong>：消息页布局、列表项结构、卡片字段规格属消息页专有，仅在本节展开，其他文档不重复。</li>
+                    <li><strong>站外触达</strong>：用户离开小程序时，平台通过微信「服务通知（订阅消息）」推送提醒并直达小程序内对应页面，归口 <a href="#sub-7-10">7.10</a>，不属于消息页本身。</li>
                 </ul>
             </div>
 
@@ -1115,6 +1116,63 @@
                     <li><strong>合同邀约消息</strong>：持久化于 localStorage（<code>ContractStore</code>），跨会话保留；首次进入由示例脚本注入 6 条覆盖 查看邀约 / 已撤回 / 已拒绝 / 抢单失败 / 已确认 五类效果的示例。</li>
                     <li><strong>未读同步</strong>：邀请消息未读在会话内维护；合同邀约未读持久化于 <code>ContractStore</code>，<code>markAllRead</code> 一并清除两类未读并刷新角标。</li>
                 </ul>
+            </div>
+
+            <div class="subsection" style="margin-bottom: 24px;" id="sub-7-10">
+                <div class="subsection-title">7.10 服务通知（微信订阅消息）</div>
+                <p><strong>定位</strong>：服务通知是平台在<strong>微信客户端层</strong>的触达通道——用户离开小程序时，平台通过微信合规通道（订阅消息）向用户微信的「服务通知」会话推送提醒；用户点开通知即<strong>直达小程序内对应页面（含状态视角参数）</strong>。它与消息页（站内聚合，见 7.1~7.9）、「待办」（站内任务归口，见《PRD-任务模块详细规格》）三者互补：消息页承载站内消息列表，待办承载站内任务处理，服务通知负责站外及时触达。</p>
+                <p><strong>与站内能力的边界</strong>：</p>
+                <ul>
+                    <li>服务通知<strong>不占用站内消息页 Tab</strong>（消息页仅 邀请 / 合同邀约，见 7.3）；推送记录留存于微信「服务通知」会话，平台侧不提供站内通知列表回看。</li>
+                    <li>任务类提醒（如确认人驳回 → 执行人重新执行）<strong>站内不生成待办</strong>，执行人提醒统一走服务通知（触发规则详见 <a href="PRD-任务模块详细规格.html" target="_blank">PRD-任务模块详细规格</a> §3.12 / §3.15(5)）。</li>
+                    <li>推送须符合微信订阅消息合规要求（用户订阅一次、推送一条；模板字段受平台审核约束）。</li>
+                </ul>
+                <p><strong>触发场景清单</strong>（按现有小程序功能盘点，点击跳转目标均已支持状态视角直达）：</p>
+                <table class="param-table">
+                    <thead><tr><th>通知项</th><th>接收方</th><th>触发时机</th><th>跳转目标</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td>工人合同邀约待确认</td>
+                            <td>被邀请人（意向乙方）</td>
+                            <td>发起方发送工人合同邀约后</td>
+                            <td><code>worker-contract-receive-inviting.html</code>（邀约响应页）</td>
+                            <td>含响应截止提醒（逾期视为放弃）</td>
+                        </tr>
+                        <tr>
+                            <td>任务被驳回·需重新执行</td>
+                            <td>任务执行人</td>
+                            <td>确认人驳回执行记录、任务回退「驳回后待开始」后</td>
+                            <td><code>task-detail.html?status=rejected_pending&amp;role=executor</code></td>
+                            <td>含驳回原因；触发规则以任务模块 §3.15(5) 为权威</td>
+                        </tr>
+                        <tr>
+                            <td>工人合同被拒绝</td>
+                            <td>发起方（工长·甲方）</td>
+                            <td>受邀方拒绝合同邀约后</td>
+                            <td><code>worker-contract-detail.html?status=worker_rejected</code>（发起方视角）</td>
+                            <td>含拒绝原因，便于发起方改邀他人</td>
+                        </tr>
+                        <tr>
+                            <td>合同变更待您确认</td>
+                            <td>受邀方（乙方）</td>
+                            <td>发起方提交合同变更、进入「待确认变更」后</td>
+                            <td><code>worker-contract-detail.html?status=change_confirming&amp;viewer=receiver</code>（受邀方视角）</td>
+                            <td>含变更摘要（金额 / 工期变动）</td>
+                        </tr>
+                        <tr>
+                            <td>合同变更已确认·新版本生效</td>
+                            <td>发起方（工长·甲方）</td>
+                            <td>受邀方确认变更、生成新版本（V2）已签约后</td>
+                            <td><code>worker-contract-detail.html?status=worker_signed</code></td>
+                            <td>提示双方按变更后约定履行</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="note" style="margin-top: 16px;">
+                    <div class="note-title">说明</div>
+                    <p>上表为服务通知总览（SSOT 归口本节）；各通知项的<strong>业务触发细节</strong>以对应模块文档为权威——任务驳回见《PRD-任务模块详细规格》§3.12 / §3.15(5)，合同邀约 / 变更流程见《PRD-合同模块详细规格》。后续新增通知项时先在本表登记，再在对应模块补触发规则。</p>
+                </div>
+                <p><strong>原型</strong>：<a href="service-miniapp/wechat-service-notice.html" target="_blank">service-miniapp/wechat-service-notice.html</a>（微信聊天列表 → 服务通知会话，演示上表五条推送及点击直达效果）。</p>
             </div>
         </div>
 

@@ -27,8 +27,11 @@
 - **范围边界**：合规版 `contract-detail.html`/`js/contract-detail.js` 是另一套流程（含平台审核、`change_signing_wait` 仍有效，`todo-list.html:432` 指向它），清理工人合同变更态勿误伤。
 
 ## 数据口径 / 页面约定
+- **PC 端合同文本模板工人合同双字段（2026-09-07）**：`pc/pc-contract-template.html` 新建/编辑/预览按模板类型二选一——六类班组服务合同（工人合同）走「合同文本（工人合同）」双字段（违约责任=引用后可编辑绿色徽标 / 固定详细条款=引用后不可编辑红色徽标，templateData 存 `breach`/`fixed`，`syncTextFieldsByCategory()` 切换）；基础/设计合同保留单一「合同正文」富文本。口径与小程序 `buildTemplatePreviewSections()` 同步；PRD-PC端其他模块详细规格 §1.4/§1.5 已同步。
 - 「全部待办」不含「临时任务」「待审核」；任务类待办标签=「任务」；层级不进 todo-list（按人聚合）。
+- **「合同任务执行」待办类型已取消（2026-09-07）**：任务进入待开始/驳回后待开始**不生成应用内待办**；执行人提醒走**微信服务号通知**（原型 `service-miniapp/wechat-service-notice.html`，驳回通知点击 → `task-detail.html?status=rejected_pending&role=executor`）。勿恢复该类型或「任务执行待办」表述；PRD §4.8 小节已重编号（原 4.8.3~4.8.11 → 4.8.2~4.8.10）。全部待办筛选 = 待处理(pending+confirming)/已处理(completed)/已失效(invalidated)，无「全部」并集视图。
 - 消息页 Tab：service 端仅 邀请/合同邀约（无任务通知/系统消息）；owner 端**不显示 Tab 栏**，未读数走底部导航 `#navMsgBadge`。
+- **服务通知 SSOT 归口《PRD-完整文档》§7.10**（2026-09-07）：微信订阅消息推送总览表 5 项（合同邀约/任务驳回/合同被拒绝/变更待确认/变更已确认V2）；站内不占消息页 Tab、任务提醒站内不生成待办；新增通知项先登记 7.10 表再补模块规则。原型 `service-miniapp/wechat-service-notice.html` 演示五条，跳转经 `worker-contract-detail.html?status=&viewer=` 直达状态视角。
 - 被邀请人体验演示页：`wechat-service-notice.html`（C）、`invite-banner-demo.html`（A）、`worker-contract-receive-inviting.html`（E 入口）。已删 `share-navigation.html`、`worker-contract-receive.html`、`project-detail-worker.html`，勿恢复。
 - 业主端项目详情已收敛为 `project-detail-ongoing-v2.html` / `project-detail-completed-v2.html`（旧 `project-detail*.html` 已删）；但 `css/project-detail.css`+`js/project-detail.js` 是两 -v2 页共享资源，**勿按同名误删**。
 - 架构层级联动：`selectLevel()` 给两级链接带 `?level=`（service ongoing-v2、service/owner completed-v2；owner ongoing-v2 无 JS 静态展示勿加）；`task-list.html`/`activity-list.html` 各自过滤。
