@@ -360,7 +360,6 @@
     <div class="page-nav">
         <div class="page-nav-title">原型导航</div>
         <a href="home.html" class="page-nav-item">首页</a>
-        <a href="project-detail.html" class="page-nav-item">项目详情</a>
         <a href="member.html" class="page-nav-item">项目成员</a>
         <a href="message.html" class="page-nav-item">消息</a>
         <a href="architecture.html" class="page-nav-item">项目架构</a>
@@ -492,7 +491,7 @@
             document.getElementById('pageContent').classList.remove('dimmed');
             document.getElementById('resultBlocked').style.display = 'none';
             showToast(role ? `已以「${role}」身份加入项目，正在进入...` : '已加入项目，正在进入...');
-            setTimeout(() => { location.href = 'project-detail.html'; }, 600);
+            setTimeout(() => { location.href = 'project-detail-ongoing-v2.html'; }, 600);
         }
 
         function openRoleSelectModal() {

@@ -72,14 +72,6 @@
                 { text: '确认加入', type: 'primary', action: 'worker_confirm' }
             ]
         },
-        worker_confirmed_sender: {
-            text: '已确认', bannerClass: 'confirmed',
-            desc: '乙方已确认，已自动加入项目架构层级。请上传已签署的纸质合同扫描件 / 照片，上传后合同正式生效。',
-            actions: [
-                { text: '重新选择乙方', type: 'secondary', action: 'worker_reselect' },
-                { text: '上传签约文件', type: 'primary', action: 'upload_sign' }
-            ]
-        },
         worker_confirmed_receiver: {
             text: '已确认', bannerClass: 'confirmed',
             desc: '您已成为本合同乙方，已自动加入项目架构层级。等待发起方上传已签署的纸质合同扫描件，上传后合同正式生效。',
@@ -94,14 +86,6 @@
             text: '已拒绝', bannerClass: 'rejected',
             desc: '您已拒绝该合同邀约，未成为本合同乙方。该邀约流程已结束。',
             actions: []
-        },
-        worker_draft_initial: {
-            text: '拟定中', bannerClass: 'draft',
-            desc: '合同处于拟定中。可直接修改合同名称、合同金额，并选择意向乙方（仅各工种，1-3 人）后提交邀请。',
-            actions: [
-                { text: '仅保存', type: 'secondary', action: 'worker_save_draft' },
-                { text: '提交并邀请乙方', type: 'success', action: 'worker_resubmit' }
-            ]
         },
         worker_draft: {
             text: '拟定中', bannerClass: 'draft',
@@ -508,14 +492,11 @@
                 return 'worker_inviting_receiver';
             }
             if (c.status === 'worker_draft') return 'worker_draft';
-            if (c.status === 'worker_draft_initial') return 'worker_draft_initial';
             if (c.status === 'worker_signed') return 'worker_signed';
             return 'worker_draft';
         }
         if (c.status === 'worker_inviting') return 'worker_inviting_sender';
-        if (c.status === 'worker_confirmed') return 'worker_confirmed_sender';
         if (c.status === 'worker_draft') return 'worker_draft';
-        if (c.status === 'worker_draft_initial') return 'worker_draft_initial';
         if (c.status === 'worker_signed') return 'worker_signed';
         return 'worker_draft';
     }
@@ -525,7 +506,7 @@
         var st = state.status;
         var c = state.contract;
         var firstId = (c.invitations[0] || {}).userId || '';
-        if (st === 'worker_confirmed_sender' || st === 'worker_signed') return firstId;
+        if (st === 'worker_signed') return firstId;
         if (st === 'worker_confirmed_receiver') return state.asUserId;
         if (st === 'worker_lost_receiver') {
             var other = c.invitations.filter(function (i) { return i.userId !== state.asUserId; })[0];
@@ -543,7 +524,6 @@
         if (st === 'worker_inviting_sender' || st === 'worker_inviting_receiver' || st === 'worker_draft') {
             return inv.status; // 真实数据
         }
-        if (st === 'worker_confirmed_sender') return inv.userId === firstId ? 'confirmed' : (inv.status === 'rejected' ? 'rejected' : 'lost');
         if (st === 'worker_confirmed_receiver') return inv.userId === asId ? 'confirmed' : (inv.status === 'rejected' ? 'rejected' : 'lost');
         if (st === 'worker_lost_receiver') {
             if (inv.userId === asId) return 'lost';
@@ -658,7 +638,7 @@
                 state.viewer = 'sender';
                 state.asUserId = '';
             }
-        } else if (status === 'worker_draft' || status === 'worker_draft_initial') {
+        } else if (status === 'worker_draft') {
             state.viewer = 'sender';
             state.asUserId = '';
         }
@@ -716,7 +696,7 @@
         repositionFlowBar(status);
         renderLists(status);
 
-        var isDraft = (status === 'worker_draft' || status === 'worker_draft_initial');
+        var isDraft = (status === 'worker_draft');
         // 受邀方视角不展示「其他被邀请人及确认状态」，仅发起方可见完整名单；
         // 但待确认变更（change_confirming·受邀方）需展示「乙方（我）待确认（变更）」行，故放开名单显示
         var showInviteList = !isDraft && (state.viewer !== 'receiver' || status === 'change_confirming');
@@ -747,7 +727,7 @@
     function renderMeta() {
         var c = state.contract;
         var html = '';
-        var isDraft = (state.status === 'worker_draft' || state.status === 'worker_draft_initial');
+        var isDraft = (state.status === 'worker_draft');
         var isReceiver = (state.viewer === 'receiver');
         if (!isDraft) html += metaRow('合同名称', c.name);
         // 受邀方视角：取消「合同类型」「所属架构层级」，改为补充「项目地址」（见下方）
@@ -800,7 +780,7 @@
         var order = ['draft', 'inviting', 'signed'];
         var current = 'inviting';
         var done = false;
-        if (status === 'worker_draft' || status === 'worker_draft_initial') current = 'draft';
+        if (status === 'worker_draft') current = 'draft';
         // 变更阶段：合同已签约，阶段任务按变更流程流转，步骤条整体置为已签约（变更以 banner 体现）
         // 含「变更中」(changing) 与 change_* 全部变更态（变更进行中/确认中/签约中/已驳回），均与变更状态不冲突
         // 该分支须置于 confirmed 判断之前，避免 change_* 中某些 key 因含 confirmed 子串被误判
@@ -832,7 +812,7 @@
         var banner = $('statusBanner');
         var meta = $('workerContractMeta');
         if (!flowBox || !invitationCard || !mainView || !banner) return;
-        var isDraft = (status === 'worker_draft' || status === 'worker_draft_initial');
+        var isDraft = (status === 'worker_draft');
         var title = invitationCard.querySelector('.card-title');
         if (isDraft) {
             if (flowBox.parentNode !== mainView) mainView.insertBefore(flowBox, banner);
@@ -871,7 +851,7 @@
             var isPartyB = (inv.userId === firstId);
             // 变更/已确认(发起方)/已签约：乙方已确定，其他被邀请人作为历史邀约记录弱化展示（浅色），
             // 与变更阶段未选中邀请人效果一致（opacity 0.55 + muted 头像 + 灰色状态徽标）。
-            var isRecord = (isChangeView || status === 'worker_confirmed_sender' || status === 'worker_signed') && !isPartyB;
+            var isRecord = (isChangeView || status === 'worker_signed') && !isPartyB;
             var partyBTag = isPartyB ? '<span class="invite-partyb-tag">乙方</span>' : '';
             var recordTag = isRecord ? '<span class="invite-record-tag">邀约记录</span>' : '';
             var row = document.createElement('div');
@@ -1075,10 +1055,6 @@
         if (status === 'worker_confirmed_receiver') {
             return '<div class="sign-file-wait">等待发起方上传已签署的纸质合同扫描件，上传后合同正式生效。</div>';
         }
-        if (status === 'worker_confirmed_sender') {
-            return '<div class="sign-file-drop">请上传已签署的纸质合同扫描件 / 照片' +
-                '<div class="sf-btn" onclick="WCP.pickSignFile()">选择文件并上传</div></div>';
-        }
         return '<div class="sign-file-wait">暂无签约文件。</div>';
     }
 
@@ -1142,7 +1118,7 @@
         var actions = cfg.actions || [];
         // 重新选择乙方（拟定中·撤回后）：存在被替换的原乙方时，底部操作显示为「恢复原乙方 / 提交并邀请乙方」
         // 数据驱动（replacedPartyB 存在即代表处于重选草稿态），跨导航进入也稳定显示
-        if (state.contract.replacedPartyB && (status === 'worker_draft' || status === 'worker_draft_initial')) {
+        if (state.contract.replacedPartyB && (status === 'worker_draft')) {
             actions = [
                 { text: '仅保存', type: 'secondary', action: 'worker_save_draft' },
                 { text: '恢复原乙方', type: 'secondary', action: 'worker_reselect_cancel' },
@@ -1167,8 +1143,6 @@
     function handleAction(action) {
         if (action === 'view') return;
         // 已确认(发起方)：上传签约文件——参考「上传变更签约文件（新页面）」整页上传流程，跳转到独立上传页
-        // （worker-sign-upload.html），上传成功后由该页跳回「已签约」（V1）。受邀方视角不支持上传签约文件（见 worker_confirmed_receiver）。
-        if (action === 'upload_sign') { global.location.href = 'worker-sign-upload.html'; return; }
         // 变更签约中：参考「合同详情（合规版）」的上传变更签约文件流程——跳转到独立上传页面，上传成功后由该页跳回「已签约」
         if (action === 'upload_change_sign') { global.location.href = 'worker-change-sign-upload.html'; return; }
         if (action === 'worker_resubmit') { saveAndResubmit(); return; }
@@ -1180,8 +1154,6 @@
         // 点击「拒绝」直接展示填写原因弹窗（二次确认在提交原因后触发），不弹前置确认框
         if (action === 'worker_reject') { openRejectReason(); return; }
 
-        // 发起方已确认态：点「重新选择乙方」→ 弹二次确认
-        if (action === 'worker_reselect') { openReselectConfirm(); return; }
         // 重选进行中（拟定中）：恢复原乙方（取消重选）
         if (action === 'worker_reselect_cancel') { cancelReselect(); return; }
 
@@ -1457,7 +1429,7 @@
             global.ContractStore.reselectCancel(state.workerId, prev);
             state.contract = global.ContractStore.getContract(state.workerId);
         }
-        updateStatus('worker_confirmed_sender');
+        updateStatus('worker_draft');
         showToast('已取消重新选择，恢复原乙方');
     }
     // ============== 乙方头像 / 个人电子名片（拟定中选择乙方时展示） ==============
@@ -2221,7 +2193,6 @@
             };
         };
         return {
-            'worker_draft_initial': base([]),
             'worker_draft': (function () {
                 // 重新选择乙方属于「历史版本」记录（非变更），合并合同 versionLog 展示
                 var log = (c.versionLog || []).slice().reverse();
@@ -2248,9 +2219,6 @@
                     { title: '收到邀约', desc: '待我方确认', time: '2024-01-06 14:30', type: 'primary' }
                 ]
             },
-            'worker_confirmed_sender': base([
-                { title: '乙方确认合同', desc: '确认人：' + partyB, time: '2024-01-08 16:20', type: 'success' }
-            ]),
             'worker_confirmed_receiver': base([
                 { title: '我方确认合同', desc: '确认人：' + partyB, time: '2024-01-08 16:20', type: 'success' }
             ]),

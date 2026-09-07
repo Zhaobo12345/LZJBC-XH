@@ -601,7 +601,6 @@
     <div class="page-nav">
         <div class="page-nav-title">原型导航</div>
         <a href="home.html" class="page-nav-item">首页</a>
-        <a href="project-detail.html" class="page-nav-item">项目详情</a>
         <a href="project-info.html" class="page-nav-item">项目信息</a>
         <a href="architecture.html" class="page-nav-item">项目架构</a>
         <a href="create-project.html" class="page-nav-item active">创建项目</a>
@@ -817,7 +816,7 @@
                 console.log('提交数据:', formData);
                 
                 showModal('创建成功', '项目创建成功！即将跳转到项目详情页面。', function() {
-                    location.href = 'project-detail.html';
+                    location.href = 'project-detail-ongoing-v2.html';
                 }, false);
             } else {
                 const firstError = document.querySelector('.error-message.show, .form-input.error, .form-select.error');

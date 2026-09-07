@@ -58,3 +58,10 @@
 ## 原型城市范围（2026-08-10）
 - 仅支持 北京、南阳、西安（`create-project.html` 注释"仅支持北京、河南、陕西"→北京市/南阳市/西安市）。
 - 所有页面与文档示例城市必须落此范围，不得出现 杭州/上海/深圳/广州/成都/宁波/温州/浙江/江苏 等越界城市；合同/项目主示例统一用 西安（陕西省/西安市），消息页地址可在三城轮替。
+
+## 业主端项目详情页面收敛（2026-09-07）
+- **已删除旧版页**：`owner-miniapp/project-detail.html`（项目详情）、`owner-miniapp/project-detail-completed.html`（项目详情（已完成））。**勿恢复、勿再引用**。
+- **现行页**：`project-detail-ongoing-v2.html`（项目详情（进行中-新版））、`project-detail-completed-v2.html`（项目详情（已完成-新版））。
+- **入口统一**：原跳 `project-detail.html` 的功能跳转（home 查看详情/项目卡片/快捷入口/tab、member 返回、create-project 创建成功、architecture 返回、invite-join 加入成功）已全部改指 `project-detail-ongoing-v2.html`。新增入口也一律指向 -v2 页。
+- **共享资源勿删**：`owner-miniapp/css/project-detail.css`、`owner-miniapp/js/project-detail.js` 虽以 project-detail 命名，但被两个 -v2 最新版页面共同引用，属共享资源，删除会破坏最新需求页面。清理时勿按"同名"误删。
+- 清理同类项时先 grep 确认资产被谁引用，再决定是否删除（避免影响最新需求页面）。
