@@ -1437,7 +1437,7 @@
         return state.viewer === 'receiver' && (state.status === 'change_confirming' || state.status === 'change_rejected');
     }
 
-    // 受邀方变更态：渲染「主卡 / 合作方 / 工期 / 违约责任 / 合同全部正文 / 我要干的活 / 附件」卡片流，
+    // 受邀方变更态：渲染「主卡 / 合作方 / 工期 / 违约责任 / 合同全部正文 / 承接任务 / 附件」卡片流，
     // 对齐「已确认（受邀方）-新」页面布局（无状态步骤图）；变更相关字段描述效果及操作项保持不动
     function renderReceiverChangeSections() {
         ensureDraftFields();
@@ -1486,10 +1486,10 @@
                 '<span class="rc-agreed-badge">✓ 已阅读并同意</span>' +
             '</div>';
 
-        // ⑤ 我要干的活（阶段任务，整体收纳展开）
+        // ⑤ 承接任务（阶段任务，整体收纳展开）
         var stages = getStages();
         $('rcStages').innerHTML =
-            '<div class="rc-title clickable" onclick="WCP.toggleReceiverStageWrap()">🔧 我要干的活 <span class="rc-badge">' + stages.length + ' 个阶段</span>' +
+            '<div class="rc-title clickable" onclick="WCP.toggleReceiverStageWrap()">🔧 承接任务 <span class="rc-badge">' + stages.length + ' 个阶段</span>' +
             '<span class="rc-fold-arrow" id="rcStageArrow">▶</span></div>' +
             '<div class="rc-stage-box" id="rcStageWrap" style="display:none;" data-rendered="0"></div>';
 
@@ -1504,7 +1504,7 @@
         $('rcAttachments').innerHTML = '<div class="rc-title">📎 合同附件 <span class="rc-badge">' + atts.length + ' 项</span></div>' + attHtml;
     }
 
-    // 「我要干的活」整体展开 / 收起（首次展开时渲染阶段列表）
+    // 「承接任务」整体展开 / 收起（首次展开时渲染阶段列表）
     function toggleReceiverStageWrap() {
         var wrap = $('rcStageWrap');
         var arrow = $('rcStageArrow');
@@ -2116,7 +2116,7 @@
                 '<div class="stage-sequential"><span>' + (seqOn ? '按序执行' : '并行执行') + '</span><div class="switch ' + (seqOn ? 'active' : '') + '" onclick="WCP.toggleDraftStageSeq(' + i + ',this)"></div></div>' +
                 '</div>' +
                 '<div class="stage-card-header-row"><div class="stage-actions">' +
-                '<div class="stage-action-btn add" onclick="WCP.addDraftTask(' + i + ')">+ 添加任务</div>' +
+                '<div class="stage-action-btn add" onclick="WCP.openAddTaskModal(' + i + ')">+ 添加任务</div>' +
                 '<div class="stage-action-btn delete" onclick="WCP.deleteDraftStage(' + i + ')">× 删除阶段</div>' +
                 '</div></div>' +
                 '</div>' +
@@ -2261,7 +2261,7 @@
         };
     }
 
-    // 模板预览（对齐「合同详情（合规版）」更换模板的预览交互）
+    // 模板预览（弹窗效果与布局对齐「拟定中（发起方）-新」更换模板的预览交互）
     var tplPreviewStages = null; // 阶段任务模板预览：缓存当前预览的阶段数据，供点击任务就地展开三项标准
     function previewDraftTemplate(kind, id) {
         var item = (getDraftTemplates(kind) || []).filter(function (x) { return x.id === id; })[0];
@@ -2275,11 +2275,9 @@
             if (kind === 'stage') {
                 var src0 = STAGE_TEMPLATES[state.contract.type] || STAGE_TEMPLATES.shuidian;
                 var sn = (id === 'lite') ? src0.stages.slice(0, 2).length : src0.stages.length;
-                metaEl.innerHTML = '<div class="preview-meta-item"><span class="meta-label">类型：</span><span class="meta-value">' + escapeHtml(tn) + '</span></div>' +
-                    '<div class="preview-meta-item"><span class="meta-label">阶段数：</span><span class="meta-value">' + sn + '</span></div>';
+                metaEl.innerHTML = '<span>类型：' + escapeHtml(tn) + '</span><span>阶段数：' + sn + '</span>';
             } else {
-                metaEl.innerHTML = '<div class="preview-meta-item"><span class="meta-label">类型：</span><span class="meta-value">' + escapeHtml(tn) + '</span></div>' +
-                    '<div class="preview-meta-item"><span class="meta-label">模板：</span><span class="meta-value">' + escapeHtml(item.name) + '</span></div>';
+                metaEl.innerHTML = '<span>类型：' + escapeHtml(tn) + '</span><span>模板：' + escapeHtml(item.name) + '</span>';
             }
         }
         var contentEl = $('wcPreviewContent');
@@ -2304,7 +2302,7 @@
                             std('执行标准', t.execStd) + std('确认标准', t.confStd) + std('担责标准', t.liableStd) +
                             '</div></div>';
                     }).join('');
-                    html += '<div class="preview-stage-item"><div class="preview-stage-header"><span class="preview-stage-num">' + (i + 1) + '</span><span class="preview-stage-name">' + escapeHtml(s.name) + '</span><span class="preview-stage-order">' + escapeHtml(s.order || '') + '</span></div><div class="preview-task-list">' + tasks + '</div></div>';
+                    html += '<div style="padding:12px 0;border-bottom:1px solid #f0f0f0;"><div style="display:flex;align-items:center;gap:8px;font-weight:600;color:#222;"><span style="background:#1677ff;color:#fff;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;">' + (i + 1) + '</span>' + escapeHtml(s.name) + ' <span style="color:#fa8c16;font-size:12px;">' + escapeHtml(s.order || '') + '</span></div><div style="margin-top:6px;padding-left:28px;">' + tasks + '</div></div>';
                 });
                 html += '</div></div>';
             } else {
@@ -2736,13 +2734,20 @@
         '陈庄': '工长', '张水电': '水电工', '钱拆除': '拆除工',
         '李木作': '木作工', '周泥瓦': '泥瓦工', '吴油漆': '油漆工', '郑零工': '小零工'
     };
-    // 合同乙方名单（用于编辑任务时执行人默认值推导）：已确认/已签约取 partyBName（唯一），
-    // 拟定/邀请中取意向乙方名单（1~3 人）。
+    // 合同乙方名单（用于编辑/添加任务时执行人默认值推导）：已确认/已签约取 partyBName（唯一），
+    // 拟定/邀请中取意向乙方名单（1~3 人）。拟定中（撤回后）invitations 已清空（空数组不作为有效来源），
+    // 此时回退到邀请编辑面板已选名单 state.editInvited，保证撤回后添加/编辑任务仍能按规则预填。
     function getPartyBList() {
         var c = state.contract;
         if (!c) return [];
         if (c.partyBName) return [c.partyBName];
-        var invs = c.invitations || state.editInvited || [];
+        // 拟定中（撤回后）：意向乙方以邀请编辑面板的实时选择为准——
+        // 用户可能已增删候选（尚未重新提交邀约），c.invitations 中的旧记录（含 replaced/pending）
+        // 不能作为默认值依据，否则面板调整为 1 人后仍按「多人」规则默认空，预填失效。
+        if (state.status === 'worker_draft' && state.editInvited && state.editInvited.length) {
+            return state.editInvited.map(function (i) { return i.name; });
+        }
+        var invs = (c.invitations && c.invitations.length) ? c.invitations : (state.editInvited || []);
         return invs.map(function (i) { return i.name; });
     }
     // 乙方确认接单→已签约时，将「无执行人」的任务执行人统一更新为乙方人员（PRD 规则）。
@@ -2852,6 +2857,70 @@
         showToast('任务详情已保存');
     }
 
+    // 新建任务弹窗（交互对齐「合同详情·合规版」addTaskModal：先填全字段 → 确认后写入阶段）
+    function openAddTaskModal(si) {
+        if (typeof si !== 'number') si = state.currentAddStageIndex || 0;
+        state.currentAddStageIndex = si;
+        state.newTaskConfirmPersonList = [];
+        var name = $('newTaskName'); if (name) name.value = '';
+        var exec = $('newTaskExecutor');
+        var execTags = $('newTaskExecutorTags');
+        // 执行人默认值：与编辑任务规则一致——乙方仅一人时默认填乙方人员；多人则默认空（均可修改）
+        var defaultExec = '';
+        var pbList = getPartyBList();
+        if (pbList.length === 1) defaultExec = pbList[0];
+        if (exec) exec.value = defaultExec;
+        if (execTags) {
+            if (defaultExec && ROLE_MAP[defaultExec]) {
+                execTags.innerHTML = '<div class="confirm-person-tag">' + defaultExec + '（' + ROLE_MAP[defaultExec] + '）' +
+                    '<span class="remove" onclick="WCP.removeExecutor(\'new\')">×</span></div>';
+            } else if (defaultExec) {
+                execTags.innerHTML = '<div class="confirm-person-tag">' + defaultExec +
+                    '<span class="remove" onclick="WCP.removeExecutor(\'new\')">×</span></div>';
+            } else {
+                execTags.innerHTML = '';
+            }
+        }
+        var execSearch = $('newTaskExecutorSearch'); if (execSearch) execSearch.value = '';
+        var confTags = $('newTaskConfirmPersons'); if (confTags) confTags.innerHTML = '';
+        var confSearch = $('newTaskConfirmerSearch'); if (confSearch) confSearch.value = '';
+        var es = $('newTaskExecStandard'); if (es) es.value = '';
+        var cs = $('newTaskConfirmStandard'); if (cs) cs.value = '';
+        var ls = $('newTaskLiableStandard'); if (ls) ls.value = '';
+        var m = $('addTaskModal');
+        if (m) m.classList.add('show');
+    }
+    function closeAddTaskModal() {
+        var m = $('addTaskModal');
+        if (m) m.classList.remove('show');
+        var execTags = $('newTaskExecutorTags'); if (execTags) execTags.innerHTML = '';
+        var confTags = $('newTaskConfirmPersons'); if (confTags) confTags.innerHTML = '';
+        state.currentAddStageIndex = null;
+        state.newTaskConfirmPersonList = [];
+    }
+    function confirmAddTask() {
+        var si = state.currentAddStageIndex;
+        if (typeof si !== 'number') { closeAddTaskModal(); return; }
+        var stages = getStages();
+        var s = stages[si];
+        if (!s) { closeAddTaskModal(); return; }
+        var name = $('newTaskName').value.trim();
+        if (!name) { showToast('请输入任务名称'); return; }
+        var execStd = $('newTaskExecStandard').value.trim();
+        var confStd = $('newTaskConfirmStandard').value.trim();
+        var liableStd = $('newTaskLiableStandard').value.trim();
+        if (!execStd) { showToast('请输入执行标准'); return; }
+        if (!confStd) { showToast('请输入确认标准'); return; }
+        if (!liableStd) { showToast('请输入担责标准'); return; }
+        var executor = $('newTaskExecutor').value.trim();
+        var confirmers = state.newTaskConfirmPersonList || [];
+        s.tasks = s.tasks || [];
+        s.tasks.push({ name: name, exec: executor, conf: confirmers.join('、'), execStd: execStd, confStd: confStd, liableStd: liableStd });
+        closeAddTaskModal();
+        renderDraftStageTask();
+        showToast('任务已添加');
+    }
+
     // 执行人搜索下拉（参考合规版交互）
     function toggleExecutorSearch(prefix) {
         var dd = $(prefix + 'TaskExecutorDropdown');
@@ -2898,23 +2967,25 @@
         dd.classList.add('show');
     }
     function selectConfirmer(prefix, name, role) {
-        if (!state.editTaskConfirmPersonList) state.editTaskConfirmPersonList = [];
-        if (state.editTaskConfirmPersonList.length >= 5) { showToast('确认人最多5人'); return; }
-        if (state.editTaskConfirmPersonList.indexOf(name) >= 0) { showToast('已添加'); return; }
-        state.editTaskConfirmPersonList.push(name);
-        updateEditConfirmPersonTags();
+        var key = prefix + 'TaskConfirmPersonList';
+        if (!state[key]) state[key] = [];
+        if (state[key].length >= 5) { showToast('确认人最多5人'); return; }
+        if (state[key].indexOf(name) >= 0) { showToast('已添加'); return; }
+        state[key].push(name);
+        updateConfirmPersonTags(prefix);
         $(prefix + 'TaskConfirmerSearch').value = '';
         $(prefix + 'TaskConfirmerDropdown').classList.remove('show');
     }
-    function removeConfirmer(index) {
-        if (!state.editTaskConfirmPersonList) return;
-        state.editTaskConfirmPersonList.splice(index, 1);
-        updateEditConfirmPersonTags();
+    function removeConfirmer(prefix, index) {
+        var key = prefix + 'TaskConfirmPersonList';
+        if (!state[key]) return;
+        state[key].splice(index, 1);
+        updateConfirmPersonTags(prefix);
     }
-    function updateEditConfirmPersonTags() {
-        var tags = $('editTaskConfirmPersons');
+    function updateConfirmPersonTags(prefix) {
+        var tags = $(prefix + 'TaskConfirmPersons');
         if (!tags) return;
-        var list = state.editTaskConfirmPersonList || [];
+        var list = state[prefix + 'TaskConfirmPersonList'] || [];
         if (list.length === 0) {
             tags.innerHTML = '';
             return;
@@ -2922,8 +2993,11 @@
         tags.innerHTML = list.map(function(name, i) {
             var role = ROLE_MAP[name] || '施工方';
             return '<div class="confirm-person-tag">' + name + '（' + role + '）' +
-                '<span class="remove" onclick="WCP.removeConfirmer(' + i + ')">×</span></div>';
+                '<span class="remove" onclick="WCP.removeConfirmer(\'' + prefix + '\',' + i + ')">×</span></div>';
         }).join('');
+    }
+    function updateEditConfirmPersonTags() {
+        updateConfirmPersonTags('edit');
     }
 
     // 全局暴露（供 HTML onclick 调用）
@@ -2977,6 +3051,9 @@
         updateDraftStageName: updateDraftStageName,
         toggleDraftStageSeq: toggleDraftStageSeq,
         addDraftTask: addDraftTask,
+        openAddTaskModal: openAddTaskModal,
+        closeAddTaskModal: closeAddTaskModal,
+        confirmAddTask: confirmAddTask,
         deleteDraftTask: deleteDraftTask,
         addDraftStage: addDraftStage,
         deleteDraftStage: deleteDraftStage,

@@ -350,35 +350,34 @@
         .mpi-btn { color: var(--primary-color); font-weight: 600; font-size: 14px; cursor: pointer; padding: 4px 2px; }
         .mpi-btn.primary { color: var(--primary-color); }
         .mpi-btn:active { opacity: .7; }
-        .preview-section { margin-bottom: 20px; }
-        .preview-section-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 12px; padding-left: 12px; border-left: 3px solid var(--primary-color); }
-        .preview-section-content { font-size: 13px; color: var(--text-secondary); line-height: 1.8; white-space: pre-wrap; word-break: break-all; }
-        .preview-stage-list { border-top: 1px solid var(--border-color); margin-top: 12px; }
-        .preview-stage-item { padding: 12px 0; border-bottom: 1px solid var(--border-color); }
-        .preview-stage-item:last-child { border-bottom: none; }
-        .preview-stage-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-        .preview-stage-num { width: 20px; height: 20px; border-radius: 50%; background: var(--primary-color); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex: 0 0 auto; }
-        .preview-stage-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
-        .preview-stage-order { font-size: 11px; color: var(--text-tertiary); margin-left: auto; }
-        .preview-task-list { padding-left: 28px; }
-        .preview-task-item { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; padding: 6px 0; font-size: 12px; }
-        .preview-task-name { font-size: 12px; color: var(--text-secondary); }
-        .preview-task-sub { font-size: 11px; color: var(--text-tertiary); margin-top: 3px; }
-        /* 更换模板弹窗：与「合同详情（合规版）」完全统一（底部抽屉 + 模板选择列表 + 预览元信息条） */
-        .wc-template-modal,
-        .wc-template-preview-modal {
+        /* 更换模板预览弹窗：对齐「拟定中（发起方）-新」预览效果与布局（wcd-sheet 底部抽屉） */
+        .wc-wcd-mask { position: absolute; left: 0; top: 0; right: 0; bottom: 0; background: rgba(0,0,0,.45); z-index: 510; display: none; align-items: flex-end; }
+        .wc-wcd-mask.show { display: flex; }
+        .wc-wcd-sheet { width: 100%; max-height: 72%; background: #fff; border-radius: 14px 14px 0 0; display: flex; flex-direction: column; overflow: hidden; }
+        .wc-wcd-sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid #f0f0f0; flex-shrink: 0; }
+        .wc-wcd-sheet-head .title { font-size: 15px; font-weight: 600; color: #222; }
+        .wc-wcd-sheet-head .close { font-size: 18px; color: #999; cursor: pointer; }
+        .wc-wcd-preview-meta { padding: 10px 16px; background: #fafafa; font-size: 12px; color: #666; display: flex; gap: 16px; border-bottom: 1px solid #f5f5f5; flex-shrink: 0; }
+        .wc-wcd-sheet-body { overflow-y: auto; }
+        .wc-wcd-preview-content { padding: 14px 16px; font-size: 13px; color: #333; line-height: 1.8; }
+        .wc-wcd-preview-content .preview-section { margin-bottom: 16px; }
+        .wc-wcd-preview-content .preview-section-title { font-size: 14px; font-weight: 600; color: #222; margin-bottom: 10px; padding-left: 10px; border-left: 3px solid #1677ff; }
+        .wc-wcd-preview-content .preview-section-content { white-space: pre-wrap; word-break: break-all; }
+        .wc-wcd-sheet-foot { padding: 12px 16px; border-top: 1px solid #f5f5f5; flex-shrink: 0; }
+        .wc-wcd-sheet-foot .btn { display: block; width: 100%; box-sizing: border-box; text-align: center; padding: 11px; border-radius: 22px; font-size: 14px; cursor: pointer; }
+        .wc-wcd-sheet-foot .btn.cancel { background: #f5f5f5; color: #666; }
+        .wc-wcd-sheet-foot .btn.primary { background: #1677ff; color: #fff; }
+        /* 更换模板选择弹窗：与「合同详情（合规版）」完全统一（底部抽屉 + 模板选择列表）；预览弹窗已改为上方 wc-wcd-*（对齐「拟定中（发起方）-新」） */
+        .wc-template-modal {
             position: absolute; top: 0; left: 0; right: 0; bottom: 0;
             z-index: 500; display: none;
         }
-        .wc-template-modal.show,
-        .wc-template-preview-modal.show { display: block; }
-        .wc-template-modal .modal-overlay,
-        .wc-template-preview-modal .modal-overlay {
+        .wc-template-modal.show { display: block; }
+        .wc-template-modal .modal-overlay {
             position: absolute; top: 0; left: 0; right: 0; bottom: 0;
             background-color: rgba(0,0,0,0.5);
         }
-        .wc-template-modal .modal-content,
-        .wc-template-preview-modal .modal-content {
+        .wc-template-modal .modal-content {
             position: absolute; bottom: 0; left: 0; right: 0;
             background-color: var(--bg-primary);
             border-radius: 16px 16px 0 0;
@@ -386,42 +385,33 @@
             overflow-y: auto;
             display: flex; flex-direction: column;
         }
-        .wc-template-preview-modal .modal-content { max-height: 90%; }
-        .wc-template-modal .modal-header,
-        .wc-template-preview-modal .modal-header {
+        .wc-template-modal .modal-header {
             display: flex; align-items: center; justify-content: space-between;
             padding: 16px; border-bottom: 1px solid var(--border-color);
             position: sticky; top: 0; background-color: var(--bg-primary); flex-shrink: 0;
         }
-        .wc-template-modal .modal-header .title,
-        .wc-template-preview-modal .modal-header .title {
+        .wc-template-modal .modal-header .title {
             font-size: 16px; font-weight: 600; color: var(--text-primary);
         }
-        .wc-template-modal .modal-header .close-btn,
-        .wc-template-preview-modal .modal-header .close-btn {
+        .wc-template-modal .modal-header .close-btn {
             font-size: 20px; color: var(--text-tertiary); cursor: pointer;
         }
-        .wc-template-modal .modal-body,
-        .wc-template-preview-modal .modal-body {
+        .wc-template-modal .modal-body {
             flex: 1; overflow-y: auto; padding: 16px;
         }
-        .wc-template-modal .modal-footer,
-        .wc-template-preview-modal .modal-footer {
+        .wc-template-modal .modal-footer {
             display: flex; gap: 12px; padding: 12px 16px;
             background-color: var(--bg-primary); border-top: 1px solid var(--border-color); flex-shrink: 0;
         }
-        .wc-template-modal .modal-footer .modal-btn,
-        .wc-template-preview-modal .modal-footer .modal-btn {
+        .wc-template-modal .modal-footer .modal-btn {
             flex: 1; height: 44px; border-radius: 8px;
             display: flex; align-items: center; justify-content: center;
             font-size: 15px; font-weight: 500; cursor: pointer; border: none;
         }
-        .wc-template-modal .modal-footer .modal-btn.secondary,
-        .wc-template-preview-modal .modal-footer .modal-btn.secondary {
+        .wc-template-modal .modal-footer .modal-btn.secondary {
             background-color: var(--bg-secondary); color: var(--text-secondary);
         }
-        .wc-template-modal .modal-footer .modal-btn.primary,
-        .wc-template-preview-modal .modal-footer .modal-btn.primary {
+        .wc-template-modal .modal-footer .modal-btn.primary {
             background-color: var(--primary-color); color: #FFFFFF;
         }
 
@@ -460,12 +450,6 @@
         .template-empty .empty-text { font-size: 14px; color: var(--text-secondary); margin-bottom: 4px; }
         .template-empty .empty-desc { font-size: 12px; color: var(--text-tertiary); }
 
-        /* 预览元信息（与合规版一致） */
-        .preview-meta { display: flex; flex-wrap: wrap; gap: 12px; padding: 12px 16px; background-color: var(--bg-secondary); border-bottom: 1px solid var(--border-color); }
-        .preview-meta-item { display: flex; align-items: center; font-size: 12px; }
-        .preview-meta-item .meta-label { color: var(--text-tertiary); }
-        .preview-meta-item .meta-value { color: var(--text-primary); font-weight: 500; }
-        .preview-content { padding: 16px 0; }
         .member-picker-empty { padding: 14px; text-align: center; color: var(--text-tertiary); font-size: 12px; }
 
         /* 底部操作（对齐「拟定中（发起方）-新」sticky-cta：药丸形按钮） */
@@ -1238,21 +1222,20 @@
             </div>
         </div>
 
-        <!-- 更换模板预览弹窗（底部抽屉，与「合同详情（合规版）」统一风格） -->
-        <div class="wc-template-preview-modal" id="wcTemplatePreview" data-page-node-id="rqkVnjYkHPHEBnlXvDEDz1">
-            <div class="modal-overlay" onclick="WCP.closeTemplatePreview()" data-page-node-id="LPDBn8lWQs77SBeAHHEhzm"></div>
-            <div class="modal-content" data-page-node-id="F32aTcgUARm80bLOIYwDoE">
-                <div class="modal-header" data-page-node-id="AAn33caDwNPueF7Pu5QNFd">
+        <!-- 更换模板预览弹窗（底部抽屉，对齐「拟定中（发起方）-新」预览效果与布局） -->
+        <div class="wc-wcd-mask" id="wcTemplatePreview" onclick="if(event.target===this)WCP.closeTemplatePreview()" data-page-node-id="rqkVnjYkHPHEBnlXvDEDz1">
+            <div class="wc-wcd-sheet" data-page-node-id="F32aTcgUARm80bLOIYwDoE">
+                <div class="wc-wcd-sheet-head" data-page-node-id="AAn33caDwNPueF7Pu5QNFd">
                     <div class="title" id="wcPreviewTitle" data-page-node-id="o991ifDdkpoBTwVkuWBt37">模板预览</div>
-                    <div class="close-btn" onclick="WCP.closeTemplatePreview()" data-page-node-id="CXpUqFLsLyWFcmmJHZ4HwK">✕</div>
+                    <div class="close" onclick="WCP.closeTemplatePreview()" data-page-node-id="CXpUqFLsLyWFcmmJHZ4HwK">✕</div>
                 </div>
-                <div class="preview-meta" id="wcPreviewMeta" data-page-node-id="bqFHKQOOqWCaC2OhDqvnKG"></div>
-                <div class="modal-body" style="padding:0 16px;" data-page-node-id="ijaHtlq581HBBIamX1uOol">
-                    <div class="preview-content" id="wcPreviewContent" data-page-node-id="nrMufg3ZEnyAtuHlqJKol3"></div>
+                <div class="wc-wcd-preview-meta" id="wcPreviewMeta" data-page-node-id="bqFHKQOOqWCaC2OhDqvnKG"></div>
+                <div class="wc-wcd-sheet-body" data-page-node-id="ijaHtlq581HBBIamX1uOol">
+                    <div class="wc-wcd-preview-content" id="wcPreviewContent" data-page-node-id="nrMufg3ZEnyAtuHlqJKol3"></div>
                 </div>
-                <div class="modal-footer" data-page-node-id="V2ExKYVkucERzqLL9Owz2T">
-                    <div class="modal-btn secondary" onclick="WCP.closeTemplatePreview()" data-page-node-id="ANGJ3eWnrP42bhgSMZ8MCz">取消</div>
-                    <div class="modal-btn primary" onclick="WCP.applyTemplateFromPreview()" data-page-node-id="1Cp3zUYKBvmZcKbb8iGBRB">使用此模板</div>
+                <div class="wc-wcd-sheet-foot" data-page-node-id="V2ExKYVkucERzqLL9Owz2T">
+                    <div class="btn cancel" onclick="WCP.closeTemplatePreview()" style="margin-bottom:8px;" data-page-node-id="ANGJ3eWnrP42bhgSMZ8MCz">取消</div>
+                    <div class="btn primary" onclick="WCP.applyTemplateFromPreview()" data-page-node-id="1Cp3zUYKBvmZcKbb8iGBRB">使用此模板</div>
                 </div>
             </div>
         </div>
@@ -1445,13 +1428,29 @@
                                 <span class="arrow" onclick="WCP.toggleExecutorSearch('edit')" data-page-node-id="vEQd6s8l6ElAJyUikpQkNl">▼</span>
                             </div>
                             <div class="search-dropdown" id="editTaskExecutorDropdown" data-page-node-id="9brJBPQsLIdkp5yjVKng8I">
-                                <div class="person-option" onclick="WCP.selectExecutor('edit', '陈庄', '工长')" data-page-node-id="OS4dDRkklensszc1WB40oG"><div class="avatar" data-page-node-id="vILdkMS1aNQOY7jLhQZhdP">陈</div><div class="name" data-page-node-id="wLlEpZFRHWOGOJefWdNnxF">陈庄</div><div class="role-tag" data-page-node-id="yr9Ag2cR4LaC8DWdTClunb">工长</div></div>
-                                <div class="person-option" onclick="WCP.selectExecutor('edit', '张水电', '水电工')" data-page-node-id="dbx4WJY0CNAMBrissBGjBE"><div class="avatar" data-page-node-id="UX6PUSgCT2nKqex32AiO8h">张</div><div class="name" data-page-node-id="Gt5pZYrTazXOetguXCqiuS">张水电</div><div class="role-tag" data-page-node-id="yqH27ufRuDiYVNXlXZkpVi">水电工</div></div>
-                                <div class="person-option" onclick="WCP.selectExecutor('edit', '钱拆除', '拆除工')" data-page-node-id="njlnzDNB8WfbW8077q9Zz9"><div class="avatar" data-page-node-id="OnGUOam5LZGWs4UUkUkczS">钱</div><div class="name" data-page-node-id="BnkUlIUv57kuBSm4W3rP3t">钱拆除</div><div class="role-tag" data-page-node-id="eXgbOOr0qUzWcvceYK0rEE">拆除工</div></div>
-                                <div class="person-option" onclick="WCP.selectExecutor('edit', '李木作', '木作工')" data-page-node-id="0gbDPIXrQVlWZwv9Tf5CIY"><div class="avatar" data-page-node-id="QCPrUk9j1BKbhuL0fOzBkC">李</div><div class="name" data-page-node-id="tVe1TYcf2CBScNmKFrR86k">李木作</div><div class="role-tag" data-page-node-id="3ZKt5a91wGENFnhz0cKnEW">木作工</div></div>
-                                <div class="person-option" onclick="WCP.selectExecutor('edit', '周泥瓦', '泥瓦工')" data-page-node-id="IjEHWIJ7LfB0F58ASeOBAc"><div class="avatar" data-page-node-id="geHCQBXaQ8ya7zBjHaSwiH">周</div><div class="name" data-page-node-id="AMfX2eSjS4Mfm0ABmNc8fP">周泥瓦</div><div class="role-tag" data-page-node-id="wQ2kdZUj3RLsVaNmysSiG7">泥瓦工</div></div>
-                                <div class="person-option" onclick="WCP.selectExecutor('edit', '吴油漆', '油漆工')" data-page-node-id="APe0PRmu79a4cTdrhUHMRx"><div class="avatar" data-page-node-id="WwS4H5BvYXSjLF71Bzunbu">吴</div><div class="name" data-page-node-id="0XRttifZA0MjAGOY8vBplh">吴油漆</div><div class="role-tag" data-page-node-id="r90WoYhEfOl3j4msnWk2b5">油漆工</div></div>
-                                <div class="person-option" onclick="WCP.selectExecutor('edit', '郑零工', '小零工')" data-page-node-id="OQszaxlKOOWKLLmIeoH0IB"><div class="avatar" data-page-node-id="FGyGmCLuL4OlD0bF2xpsre">郑</div><div class="name" data-page-node-id="hXjqOvlS8TPfEb6XvGb4z1">郑零工</div><div class="role-tag" data-page-node-id="6SJcR3MlKM8BllfNje8iEs">小零工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '陈庄', '工长')" data-page-node-id="editTaskEo1"><div class="avatar" data-page-node-id="editTaskEo1a">陈</div><div class="name" data-page-node-id="editTaskEo1n">陈庄</div><div class="role-tag" data-page-node-id="editTaskEo1r">工长</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '陈业主', '业主')" data-page-node-id="editTaskEo2"><div class="avatar" data-page-node-id="editTaskEo2a">陈</div><div class="name" data-page-node-id="editTaskEo2n">陈业主</div><div class="role-tag" data-page-node-id="editTaskEo2r">业主</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '王设计', '设计师')" data-page-node-id="editTaskEo3"><div class="avatar" data-page-node-id="editTaskEo3a">王</div><div class="name" data-page-node-id="editTaskEo3n">王设计</div><div class="role-tag" data-page-node-id="editTaskEo3r">设计师</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '刘项目总', '项目总')" data-page-node-id="editTaskEo4"><div class="avatar" data-page-node-id="editTaskEo4a">刘</div><div class="name" data-page-node-id="editTaskEo4n">刘项目总</div><div class="role-tag" data-page-node-id="editTaskEo4r">项目总</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '孙工长', '工长')" data-page-node-id="editTaskEo5"><div class="avatar" data-page-node-id="editTaskEo5a">孙</div><div class="name" data-page-node-id="editTaskEo5n">孙工长</div><div class="role-tag" data-page-node-id="editTaskEo5r">工长</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '钱拆除', '拆除工')" data-page-node-id="editTaskEo6"><div class="avatar" data-page-node-id="editTaskEo6a">钱</div><div class="name" data-page-node-id="editTaskEo6n">钱拆除</div><div class="role-tag" data-page-node-id="editTaskEo6r">拆除工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '冯拆建', '拆除工')" data-page-node-id="editTaskEo7"><div class="avatar" data-page-node-id="editTaskEo7a">冯</div><div class="name" data-page-node-id="editTaskEo7n">冯拆建</div><div class="role-tag" data-page-node-id="editTaskEo7r">拆除工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '蒋拆平', '拆除工')" data-page-node-id="editTaskEo8"><div class="avatar" data-page-node-id="editTaskEo8a">蒋</div><div class="name" data-page-node-id="editTaskEo8n">蒋拆平</div><div class="role-tag" data-page-node-id="editTaskEo8r">拆除工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '张水电', '水电工')" data-page-node-id="editTaskEo9"><div class="avatar" data-page-node-id="editTaskEo9a">张</div><div class="name" data-page-node-id="editTaskEo9n">张水电</div><div class="role-tag" data-page-node-id="editTaskEo9r">水电工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '韩水通', '水电工')" data-page-node-id="editTaskEo10"><div class="avatar" data-page-node-id="editTaskEo10a">韩</div><div class="name" data-page-node-id="editTaskEo10n">韩水通</div><div class="role-tag" data-page-node-id="editTaskEo10r">水电工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '杨水明', '水电工')" data-page-node-id="editTaskEo11"><div class="avatar" data-page-node-id="editTaskEo11a">杨</div><div class="name" data-page-node-id="editTaskEo11n">杨水明</div><div class="role-tag" data-page-node-id="editTaskEo11r">水电工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '李木作', '木作工')" data-page-node-id="editTaskEo12"><div class="avatar" data-page-node-id="editTaskEo12a">李</div><div class="name" data-page-node-id="editTaskEo12n">李木作</div><div class="role-tag" data-page-node-id="editTaskEo12r">木作工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '赵木森', '木作工')" data-page-node-id="editTaskEo13"><div class="avatar" data-page-node-id="editTaskEo13a">赵</div><div class="name" data-page-node-id="editTaskEo13n">赵木森</div><div class="role-tag" data-page-node-id="editTaskEo13r">木作工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '秦木林', '木作工')" data-page-node-id="editTaskEo14"><div class="avatar" data-page-node-id="editTaskEo14a">秦</div><div class="name" data-page-node-id="editTaskEo14n">秦木林</div><div class="role-tag" data-page-node-id="editTaskEo14r">木作工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '周泥瓦', '泥瓦工')" data-page-node-id="editTaskEo15"><div class="avatar" data-page-node-id="editTaskEo15a">周</div><div class="name" data-page-node-id="editTaskEo15n">周泥瓦</div><div class="role-tag" data-page-node-id="editTaskEo15r">泥瓦工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '许泥固', '泥瓦工')" data-page-node-id="editTaskEo16"><div class="avatar" data-page-node-id="editTaskEo16a">许</div><div class="name" data-page-node-id="editTaskEo16n">许泥固</div><div class="role-tag" data-page-node-id="editTaskEo16r">泥瓦工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '何泥稳', '泥瓦工')" data-page-node-id="editTaskEo17"><div class="avatar" data-page-node-id="editTaskEo17a">何</div><div class="name" data-page-node-id="editTaskEo17n">何泥稳</div><div class="role-tag" data-page-node-id="editTaskEo17r">泥瓦工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '吴油漆', '油漆工')" data-page-node-id="editTaskEo18"><div class="avatar" data-page-node-id="editTaskEo18a">吴</div><div class="name" data-page-node-id="editTaskEo18n">吴油漆</div><div class="role-tag" data-page-node-id="editTaskEo18r">油漆工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '吕油彩', '油漆工')" data-page-node-id="editTaskEo19"><div class="avatar" data-page-node-id="editTaskEo19a">吕</div><div class="name" data-page-node-id="editTaskEo19n">吕油彩</div><div class="role-tag" data-page-node-id="editTaskEo19r">油漆工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '施油光', '油漆工')" data-page-node-id="editTaskEo20"><div class="avatar" data-page-node-id="editTaskEo20a">施</div><div class="name" data-page-node-id="editTaskEo20n">施油光</div><div class="role-tag" data-page-node-id="editTaskEo20r">油漆工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '郑零工', '小零工')" data-page-node-id="editTaskEo21"><div class="avatar" data-page-node-id="editTaskEo21a">郑</div><div class="name" data-page-node-id="editTaskEo21n">郑零工</div><div class="role-tag" data-page-node-id="editTaskEo21r">小零工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '张零杂', '小零工')" data-page-node-id="editTaskEo22"><div class="avatar" data-page-node-id="editTaskEo22a">张</div><div class="name" data-page-node-id="editTaskEo22n">张零杂</div><div class="role-tag" data-page-node-id="editTaskEo22r">小零工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('edit', '孔零活', '小零工')" data-page-node-id="editTaskEo23"><div class="avatar" data-page-node-id="editTaskEo23a">孔</div><div class="name" data-page-node-id="editTaskEo23n">孔零活</div><div class="role-tag" data-page-node-id="editTaskEo23r">小零工</div></div>
                             </div>
                         </div>
                         <input type="hidden" id="editTaskExecutor" data-page-node-id="5PqpbhXD8QyU87JHCVMHFZ">
@@ -1491,6 +1490,90 @@
                 <div class="modal-footer" data-page-node-id="rljuh9V3tuozUxAAiMaGQI"><button class="submit-btn" onclick="WCP.confirmEditTask()" data-page-node-id="0X8G2xu2YgB3pe59ICKPw8">保存修改</button></div>
             </div>
         </div>
+
+        <!-- 新建任务弹窗（交互对齐「合同详情·合规版」addTaskModal：先填全字段 → 确定添加） -->
+        <div class="edit-task-modal" id="addTaskModal" data-page-node-id="addTaskModalRoot">
+            <div class="modal-content" data-page-node-id="addTaskModalContent">
+                <div class="modal-header" data-page-node-id="addTaskModalHeader">
+                    <div class="modal-title" data-page-node-id="addTaskModalTitle">添加新任务</div>
+                    <div class="modal-close" onclick="WCP.closeAddTaskModal()" data-page-node-id="addTaskModalClose">✕</div>
+                </div>
+                <div class="modal-body" data-page-node-id="addTaskModalBody">
+                    <div class="form-group" data-page-node-id="addTaskFgName">
+                        <label class="form-label" data-page-node-id="addTaskLblName">任务名称 <span class="required" data-page-node-id="addTaskReq1">*</span></label>
+                        <input type="text" class="form-input" id="newTaskName" placeholder="请输入任务名称" data-page-node-id="addTaskNameInput">
+                    </div>
+                    <div class="form-group" data-page-node-id="addTaskFgExec">
+                        <label class="form-label" data-page-node-id="addTaskLblExec">执行人（选填）</label>
+                        <div class="confirm-person-tags" id="newTaskExecutorTags" style="margin-bottom: 8px;" data-page-node-id="addTaskExecTags"></div>
+                        <div class="search-select" data-page-node-id="addTaskExecSelect">
+                            <div class="search-input-wrap" data-page-node-id="addTaskExecWrap">
+                                <input type="text" class="search-input" id="newTaskExecutorSearch" placeholder="请选择执行人" oninput="WCP.filterExecutorList('new')" onfocus="WCP.toggleExecutorSearch('new')" data-page-node-id="addTaskExecSearch">
+                                <span class="arrow" onclick="WCP.toggleExecutorSearch('new')" data-page-node-id="addTaskExecArrow">▼</span>
+                            </div>
+                            <div class="search-dropdown" id="newTaskExecutorDropdown" data-page-node-id="addTaskExecDd">
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '陈庄', '工长')" data-page-node-id="newTaskEo1"><div class="avatar" data-page-node-id="newTaskEo1a">陈</div><div class="name" data-page-node-id="newTaskEo1n">陈庄</div><div class="role-tag" data-page-node-id="newTaskEo1r">工长</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '陈业主', '业主')" data-page-node-id="newTaskEo2"><div class="avatar" data-page-node-id="newTaskEo2a">陈</div><div class="name" data-page-node-id="newTaskEo2n">陈业主</div><div class="role-tag" data-page-node-id="newTaskEo2r">业主</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '王设计', '设计师')" data-page-node-id="newTaskEo3"><div class="avatar" data-page-node-id="newTaskEo3a">王</div><div class="name" data-page-node-id="newTaskEo3n">王设计</div><div class="role-tag" data-page-node-id="newTaskEo3r">设计师</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '刘项目总', '项目总')" data-page-node-id="newTaskEo4"><div class="avatar" data-page-node-id="newTaskEo4a">刘</div><div class="name" data-page-node-id="newTaskEo4n">刘项目总</div><div class="role-tag" data-page-node-id="newTaskEo4r">项目总</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '孙工长', '工长')" data-page-node-id="newTaskEo5"><div class="avatar" data-page-node-id="newTaskEo5a">孙</div><div class="name" data-page-node-id="newTaskEo5n">孙工长</div><div class="role-tag" data-page-node-id="newTaskEo5r">工长</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '钱拆除', '拆除工')" data-page-node-id="newTaskEo6"><div class="avatar" data-page-node-id="newTaskEo6a">钱</div><div class="name" data-page-node-id="newTaskEo6n">钱拆除</div><div class="role-tag" data-page-node-id="newTaskEo6r">拆除工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '冯拆建', '拆除工')" data-page-node-id="newTaskEo7"><div class="avatar" data-page-node-id="newTaskEo7a">冯</div><div class="name" data-page-node-id="newTaskEo7n">冯拆建</div><div class="role-tag" data-page-node-id="newTaskEo7r">拆除工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '蒋拆平', '拆除工')" data-page-node-id="newTaskEo8"><div class="avatar" data-page-node-id="newTaskEo8a">蒋</div><div class="name" data-page-node-id="newTaskEo8n">蒋拆平</div><div class="role-tag" data-page-node-id="newTaskEo8r">拆除工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '张水电', '水电工')" data-page-node-id="newTaskEo9"><div class="avatar" data-page-node-id="newTaskEo9a">张</div><div class="name" data-page-node-id="newTaskEo9n">张水电</div><div class="role-tag" data-page-node-id="newTaskEo9r">水电工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '韩水通', '水电工')" data-page-node-id="newTaskEo10"><div class="avatar" data-page-node-id="newTaskEo10a">韩</div><div class="name" data-page-node-id="newTaskEo10n">韩水通</div><div class="role-tag" data-page-node-id="newTaskEo10r">水电工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '杨水明', '水电工')" data-page-node-id="newTaskEo11"><div class="avatar" data-page-node-id="newTaskEo11a">杨</div><div class="name" data-page-node-id="newTaskEo11n">杨水明</div><div class="role-tag" data-page-node-id="newTaskEo11r">水电工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '李木作', '木作工')" data-page-node-id="newTaskEo12"><div class="avatar" data-page-node-id="newTaskEo12a">李</div><div class="name" data-page-node-id="newTaskEo12n">李木作</div><div class="role-tag" data-page-node-id="newTaskEo12r">木作工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '赵木森', '木作工')" data-page-node-id="newTaskEo13"><div class="avatar" data-page-node-id="newTaskEo13a">赵</div><div class="name" data-page-node-id="newTaskEo13n">赵木森</div><div class="role-tag" data-page-node-id="newTaskEo13r">木作工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '秦木林', '木作工')" data-page-node-id="newTaskEo14"><div class="avatar" data-page-node-id="newTaskEo14a">秦</div><div class="name" data-page-node-id="newTaskEo14n">秦木林</div><div class="role-tag" data-page-node-id="newTaskEo14r">木作工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '周泥瓦', '泥瓦工')" data-page-node-id="newTaskEo15"><div class="avatar" data-page-node-id="newTaskEo15a">周</div><div class="name" data-page-node-id="newTaskEo15n">周泥瓦</div><div class="role-tag" data-page-node-id="newTaskEo15r">泥瓦工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '许泥固', '泥瓦工')" data-page-node-id="newTaskEo16"><div class="avatar" data-page-node-id="newTaskEo16a">许</div><div class="name" data-page-node-id="newTaskEo16n">许泥固</div><div class="role-tag" data-page-node-id="newTaskEo16r">泥瓦工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '何泥稳', '泥瓦工')" data-page-node-id="newTaskEo17"><div class="avatar" data-page-node-id="newTaskEo17a">何</div><div class="name" data-page-node-id="newTaskEo17n">何泥稳</div><div class="role-tag" data-page-node-id="newTaskEo17r">泥瓦工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '吴油漆', '油漆工')" data-page-node-id="newTaskEo18"><div class="avatar" data-page-node-id="newTaskEo18a">吴</div><div class="name" data-page-node-id="newTaskEo18n">吴油漆</div><div class="role-tag" data-page-node-id="newTaskEo18r">油漆工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '吕油彩', '油漆工')" data-page-node-id="newTaskEo19"><div class="avatar" data-page-node-id="newTaskEo19a">吕</div><div class="name" data-page-node-id="newTaskEo19n">吕油彩</div><div class="role-tag" data-page-node-id="newTaskEo19r">油漆工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '施油光', '油漆工')" data-page-node-id="newTaskEo20"><div class="avatar" data-page-node-id="newTaskEo20a">施</div><div class="name" data-page-node-id="newTaskEo20n">施油光</div><div class="role-tag" data-page-node-id="newTaskEo20r">油漆工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '郑零工', '小零工')" data-page-node-id="newTaskEo21"><div class="avatar" data-page-node-id="newTaskEo21a">郑</div><div class="name" data-page-node-id="newTaskEo21n">郑零工</div><div class="role-tag" data-page-node-id="newTaskEo21r">小零工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '张零杂', '小零工')" data-page-node-id="newTaskEo22"><div class="avatar" data-page-node-id="newTaskEo22a">张</div><div class="name" data-page-node-id="newTaskEo22n">张零杂</div><div class="role-tag" data-page-node-id="newTaskEo22r">小零工</div></div>
+                                <div class="person-option" onclick="WCP.selectExecutor('new', '孔零活', '小零工')" data-page-node-id="newTaskEo23"><div class="avatar" data-page-node-id="newTaskEo23a">孔</div><div class="name" data-page-node-id="newTaskEo23n">孔零活</div><div class="role-tag" data-page-node-id="newTaskEo23r">小零工</div></div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="newTaskExecutor" data-page-node-id="addTaskExecHidden">
+                    </div>
+                    <div class="form-group" data-page-node-id="addTaskFgConf">
+                        <label class="form-label" data-page-node-id="addTaskLblConf">确认人（最多5人）</label>
+                        <div class="confirm-person-tags" id="newTaskConfirmPersons" data-page-node-id="addTaskConfTags"></div>
+                        <div class="search-select" data-page-node-id="addTaskConfSelect">
+                            <div class="search-input-wrap" data-page-node-id="addTaskConfWrap">
+                                <input type="text" class="search-input" id="newTaskConfirmerSearch" placeholder="添加确认人" oninput="WCP.filterConfirmerList('new')" onfocus="WCP.toggleConfirmerSearch('new')" data-page-node-id="addTaskConfSearch">
+                                <span class="arrow" onclick="WCP.toggleConfirmerSearch('new')" data-page-node-id="addTaskConfArrow">▼</span>
+                            </div>
+                            <div class="search-dropdown" id="newTaskConfirmerDropdown" data-page-node-id="addTaskConfDd">
+                                <div class="person-option" onclick="WCP.selectConfirmer('new', '陈庄', '工长')" data-page-node-id="addTaskCo1"><div class="avatar" data-page-node-id="addTaskCo1a">陈</div><div class="name" data-page-node-id="addTaskCo1n">陈庄</div><div class="role-tag" data-page-node-id="addTaskCo1r">工长</div></div>
+                                <div class="person-option" onclick="WCP.selectConfirmer('new', '张水电', '水电工')" data-page-node-id="addTaskCo2"><div class="avatar" data-page-node-id="addTaskCo2a">张</div><div class="name" data-page-node-id="addTaskCo2n">张水电</div><div class="role-tag" data-page-node-id="addTaskCo2r">水电工</div></div>
+                                <div class="person-option" onclick="WCP.selectConfirmer('new', '钱拆除', '拆除工')" data-page-node-id="addTaskCo3"><div class="avatar" data-page-node-id="addTaskCo3a">钱</div><div class="name" data-page-node-id="addTaskCo3n">钱拆除</div><div class="role-tag" data-page-node-id="addTaskCo3r">拆除工</div></div>
+                                <div class="person-option" onclick="WCP.selectConfirmer('new', '李木作', '木作工')" data-page-node-id="addTaskCo4"><div class="avatar" data-page-node-id="addTaskCo4a">李</div><div class="name" data-page-node-id="addTaskCo4n">李木作</div><div class="role-tag" data-page-node-id="addTaskCo4r">木作工</div></div>
+                                <div class="person-option" onclick="WCP.selectConfirmer('new', '周泥瓦', '泥瓦工')" data-page-node-id="addTaskCo5"><div class="avatar" data-page-node-id="addTaskCo5a">周</div><div class="name" data-page-node-id="addTaskCo5n">周泥瓦</div><div class="role-tag" data-page-node-id="addTaskCo5r">泥瓦工</div></div>
+                                <div class="person-option" onclick="WCP.selectConfirmer('new', '吴油漆', '油漆工')" data-page-node-id="addTaskCo6"><div class="avatar" data-page-node-id="addTaskCo6a">吴</div><div class="name" data-page-node-id="addTaskCo6n">吴油漆</div><div class="role-tag" data-page-node-id="addTaskCo6r">油漆工</div></div>
+                                <div class="person-option" onclick="WCP.selectConfirmer('new', '郑零工', '小零工')" data-page-node-id="addTaskCo7"><div class="avatar" data-page-node-id="addTaskCo7a">郑</div><div class="name" data-page-node-id="addTaskCo7n">郑零工</div><div class="role-tag" data-page-node-id="addTaskCo7r">小零工</div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" data-page-node-id="addTaskFgEs">
+                        <label class="form-label" data-page-node-id="addTaskLblEs">执行标准 <span class="required" data-page-node-id="addTaskReq2">*</span></label>
+                        <textarea class="form-textarea" id="newTaskExecStandard" placeholder="请输入执行标准" data-page-node-id="addTaskEsInput"></textarea>
+                    </div>
+                    <div class="form-group" data-page-node-id="addTaskFgCs">
+                        <label class="form-label" data-page-node-id="addTaskLblCs">确认标准 <span class="required" data-page-node-id="addTaskReq3">*</span></label>
+                        <textarea class="form-textarea" id="newTaskConfirmStandard" placeholder="请输入确认标准" data-page-node-id="addTaskCsInput"></textarea>
+                    </div>
+                    <div class="form-group" data-page-node-id="addTaskFgLs">
+                        <label class="form-label" data-page-node-id="addTaskLblLs">担责标准 <span class="required" data-page-node-id="addTaskReq4">*</span></label>
+                        <textarea class="form-textarea" id="newTaskLiableStandard" placeholder="请输入担责标准" data-page-node-id="addTaskLsInput"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer" data-page-node-id="addTaskFooter"><button class="submit-btn" onclick="WCP.confirmAddTask()" data-page-node-id="addTaskSubmit">确定添加</button></div>
+            </div>
+        </div>
     </div>
 
     <div class="page-nav" data-page-node-id="l8G4Iovgj72C1GSId0pi92">
@@ -1525,11 +1608,12 @@
                 <div class="status-group-header" onclick="WCP.toggleStatusGroup(this)" data-page-node-id="1ihgHkxicLHT9HXMxu5nbD">
                     <span class="status-group-icon" data-page-node-id="e1QEc5Qgk2dkSPyHUlrmPd">▶</span>
                     <span class="status-group-title" data-page-node-id="mSQth1Q6g3A3vQ87pamvs3">受邀方视角</span>
-                    <span class="status-group-count" data-page-node-id="CE5CmIuZ0Z3V8t78E6hSBw">4</span>
+                    <span class="status-group-count" data-page-node-id="CE5CmIuZ0Z3V8t78E6hSBw">5</span>
                 </div>
                 <div class="status-group-content" style="display:none;" data-page-node-id="mcEQsEgj6awEvvAEJrtnhp">
                 <a class="status-switch-item" href="worker-contract-receive-inviting.html" style="text-decoration:none;" data-page-node-id="D0kNiLvWlvWYSQBrA7ePFx">确认中（受邀方）</a>
-                <a class="status-switch-item" href="worker-contract-receive-confirmed-new.html" style="text-decoration:none;" data-page-node-id="7flScL21fmQ1CTgCp1Nmne">已确认（受邀方）-新</a>
+                <a class="status-switch-item" href="worker-contract-receive-confirmed-new.html" style="text-decoration:none;" data-page-node-id="7flScL21fmQ1CTgCp1Nmne">已签约（受邀方）</a>
+                <a class="status-switch-item" href="worker-contract-fulfilled-receiver.html" style="text-decoration:none;" data-page-node-id="fulRecvNav2">已签约（已履约）</a>
                     <div class="status-switch-item" data-status="worker_rejected_receiver" onclick="WCP.updateStatus('worker_rejected_receiver')" data-page-node-id="kE06J3PDn3Ce6lZsoYqzer">已拒绝(受邀方)</div>
                     <div class="status-switch-item" data-status="worker_lost_receiver" onclick="WCP.updateStatus('worker_lost_receiver')" data-page-node-id="c2cQ9Ry1BsMdiyZxAVBfO3">抢单失败(受邀方)</div>
                 </div>

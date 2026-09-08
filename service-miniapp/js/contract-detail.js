@@ -2988,9 +2988,21 @@ const ContractDetailPage = (function() {
         const newTaskLiableStandard = document.getElementById('newTaskLiableStandard');
         
         if (newTaskName) newTaskName.value = '';
-        if (newTaskExecutor) newTaskExecutor.value = '';
         if (newTaskExecutorSearch) newTaskExecutorSearch.value = '';
-        if (newTaskExecutorTags) newTaskExecutorTags.innerHTML = '';
+        // 执行人默认值：默认为乙方人员（可修改）；可选范围为项目内全部人员
+        var defaultExec = '';
+        var pbList = getPartyBList();
+        if (pbList.length >= 1) defaultExec = pbList[0];
+        if (newTaskExecutor) newTaskExecutor.value = defaultExec || '';
+        if (newTaskExecutorTags) {
+            if (defaultExec) {
+                var addRoleMap = { '张三': '项目经理', '李四': '电工', '王五': '泥瓦工', '赵六': '木工', '钱七': '油漆工', '孙八': '监理', '业主': '业主' };
+                newTaskExecutorTags.innerHTML = '<div class="confirm-person-tag">' + defaultExec + '（' + (addRoleMap[defaultExec] || '施工方') + '）' +
+                    '<span class="remove" onclick="ContractDetailPage.removeExecutor(\'new\')">×</span></div>';
+            } else {
+                newTaskExecutorTags.innerHTML = '';
+            }
+        }
         if (newTaskConfirmerSearch) newTaskConfirmerSearch.value = '';
         if (newTaskExecStandard) newTaskExecStandard.value = '';
         if (newTaskConfirmStandard) newTaskConfirmStandard.value = '';
@@ -3154,13 +3166,33 @@ const ContractDetailPage = (function() {
      * 编辑任务详情
      * @param {HTMLElement} btn - 按钮元素
      */
-    // 合同乙方名单（用于编辑任务时执行人默认值推导）：非工人合同乙方为单选，取「乙方（承包方）」下拉选中项。
+    // 合同乙方名单（用于编辑任务时执行人默认值推导）
+    // - 工人合同（state.isWorker）：取 partyBName（唯一）或意向乙方名单（1~3 人），各态通用
+    // - 非工人合同（基础 / 设计）：乙方单选，优先取草稿表单「乙方（承包方）」下拉选中项
+    //   （含隐藏态仍在 DOM，可取）；再兜底取新合同流程的乙方数据
     function getPartyBList() {
+        if (state.isWorker) {
+            const c = state.workerContract;
+            if (c && c.partyBName) return [c.partyBName];
+            // 拟定中（撤回后）：意向乙方以邀请编辑面板实时选择为准（旧 invitations 记录不作默认值依据）
+            if (state.status === 'worker_draft' && state.editInvited && state.editInvited.length) {
+                return state.editInvited.map(function (i) { return i.name; });
+            }
+            // 拟定中（撤回后）invitations 已清空（空数组不作为有效来源），回退到邀请编辑面板已选名单
+            const invs = (c && c.invitations && c.invitations.length) ? c.invitations : (state.editInvited || []);
+            return invs.map(function (i) { return i.name; });
+        }
+        // 非工人合同
         const sel = document.getElementById('editPartyB');
-        if (!sel || !sel.value) return [];
-        const txt = (sel.options[sel.selectedIndex] && sel.options[sel.selectedIndex].text) || sel.value;
-        const name = txt.split('（')[0].trim();
-        return [name];
+        if (sel && sel.value) {
+            const txt = (sel.options[sel.selectedIndex] && sel.options[sel.selectedIndex].text) || sel.value;
+            const name = txt.split('（')[0].trim();
+            if (name) return [name];
+        }
+        if (state.newContractData && state.newContractData.partyBName) {
+            return [state.newContractData.partyBName];
+        }
+        return [];
     }
 
     function editTaskDetail(btn) {

@@ -318,6 +318,13 @@
         
         <div class="nav-title">服务方小程序</div>
         <ul class="nav-list">
+            <li class="nav-item collapsed" id="nav-page-entry-route">
+                <a href="#page-entry-route"><span class="nav-toggle">▼</span>零、入口与角色路由</a>
+                <ul class="nav-sub">
+                    <li><a href="#sub-0-1">0.1 启动页进入规则</a></li>
+                    <li><a href="#sub-0-2">0.2 主导航「项目」规则</a></li>
+                </ul>
+            </li>
             <li class="nav-item collapsed" id="nav-page-home-service">
                 <a href="#page-home-service"><span class="nav-toggle">▼</span>一、首页</a>
                 <ul class="nav-sub">
@@ -331,10 +338,10 @@
                     <li><a href="#sub-2-1">2.1 页面概述</a></li>
                     <li><a href="#sub-2-2">2.2 数据展示规则</a></li>
                     <li><a href="#sub-2-3">2.3 页面结构</a></li>
-                    <li><a href="#sub-2-4">2.4 状态选项卡切换规则</a></li>
-                    <li><a href="#sub-2-5">2.5 项目卡片规格</a></li>
-                    <li><a href="#sub-2-6">2.6 悬浮创建按钮(FAB)</a></li>
-                    <li><a href="#sub-2-7">2.7 项目列表空状态规格</a></li>
+                    <li><a href="#sub-2-4">2.4 切换面板筛选规则</a></li>
+                    <li><a href="#sub-2-5">2.5 项目选项规格（切换面板内）</a></li>
+                    <li><a href="#sub-2-6">2.6 新建项目入口</a></li>
+                    <li><a href="#sub-2-9">2.9 项目列表空状态规格</a></li>
                 </ul>
             </li>
             <li class="nav-item collapsed" id="nav-page-detail-service">
@@ -353,6 +360,7 @@
                     <li><a href="#sub-3-11">3.11 已完成状态-差异</a></li>
                     <li><a href="#sub-3-12">3.12 已完成状态-交互逻辑</a></li>
                     <li><a href="#sub-3-13">3.13 已完成状态-状态流转与回退规则</a></li>
+                    <li><a href="#sub-3-14">3.14 详情区双视角差异（工人 / 非工人）</a></li>
                 </ul>
             </li>
             <li class="nav-item collapsed" id="nav-page-info-service">
@@ -592,6 +600,39 @@
         </div>
 
         <div class="container">
+        <!-- ==================== 0. 入口与角色路由规则 ==================== -->
+        <div class="section" id="page-entry-route">
+            <div class="section-title">
+                零、入口与角色路由
+            </div>
+
+            <div class="subsection" id="sub-0-1">
+                <div class="subsection-title">0.1 启动页进入规则（按角色路由）</div>
+                <p>小程序启动后，依据<strong>当前用户的角色集合</strong>决定默认进入「首页」或底部「项目」主导航页面。一个人在同一项目内仅有一个角色；"工人"指六类工种角色（拆除 / 水电 / 木作 / 泥瓦 / 油漆 / 小零工），其余（业主、项目总、设计师、工长等）为非工人角色。</p>
+                <table>
+                    <thead><tr><th>用户角色情况</th><th>默认进入页面</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td>仅一个角色且为非工人</td><td>首页</td><td>如仅有「项目总」一种角色，启动进入首页聚合页</td></tr>
+                        <tr><td>仅工人角色（含多个工人角色）</td><td>项目</td><td>如仅有「泥瓦工」或同时具备「泥瓦工 + 水电工」等纯工人角色组合，启动即进入「项目」主导航页面</td></tr>
+                        <tr><td>多角色中含<strong>工人之外的角色</strong></td><td>首页</td><td>只要角色集合中存在任一非工人角色（如「项目总 + 泥瓦工」），即进入首页；不因同时具备工人角色而改变</td></tr>
+                    </tbody>
+                </table>
+                <div class="note" style="margin-top:16px;background:#F6FFED;border-left-color:var(--success-color);">
+                    <div class="note-title" style="color:var(--success-color);">路由判定的核心原则</div>
+                    <p>是否进入「项目」主导航页面，取决于角色集合中<strong>是否「全部为工人角色」</strong>：是 → 进「项目」；否（含任一非工人角色，或仅单一非工人角色）→ 进「首页」。</p>
+                </div>
+            </div>
+
+            <div class="subsection" id="sub-0-2">
+                <div class="subsection-title">0.2 主导航「项目」页面规则</div>
+                <p>点击底部主导航「项目」进入项目主页面（<a href="service-miniapp/project-list.html" target="_blank">service-miniapp/project-list.html</a>）。由于每个用户在同一项目内仅一个角色，页面依据用户在项目内的角色展示对应视角的布局样式（布局与差异详见 <a href="#sub-3-14">§3.14 详情区双视角差异</a>）：</p>
+                <ul style="margin:0 0 16px 20px;color:var(--text-secondary);font-size:13px;line-height:1.9;">
+                    <li><strong>角色为工人：</strong>展示「工人视角」项目主页面布局（橙色工种主题色）。</li>
+                    <li><strong>角色为非工人：</strong>展示「非工人视角」项目主页面布局。</li>
+                </ul>
+            </div>
+        </div>
+
         <!-- ==================== 1. 首页（服务方小程序） ==================== -->
         <div class="section" id="page-home-service">
             <div class="section-title">
@@ -639,7 +680,7 @@
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">页面名称</div>
-                        <div class="info-value">项目列表页</div>
+                        <div class="info-value">项目主页面（项目及详情）</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面路径</div>
@@ -647,12 +688,16 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
-                        <div class="info-value">已加入的全部用户</div>
+                        <div class="info-value">已加入项目的全部用户（按其在项目内角色展示工人 / 非工人视角）</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面入口</div>
-                        <div class="info-value">首页"项目列表"、底部TabBar</div>
+                        <div class="info-value">底部 TabBar「项目」（默认选中）；首页「我的项目 - 查看全部」</div>
                     </div>
+                </div>
+                <div class="note" style="margin-top:16px;background:#E6F7FF;border-left-color:var(--primary-color);">
+                    <div class="note-title" style="color:var(--primary-color);">页面定位</div>
+                    <p>本页为「项目」主导航对应页面，<strong>顶部项目切换条 + 切换面板 + 项目详情区三段合一</strong>：详情区根据当前用户在项目内的角色（工人 / 非工人）渲染不同布局（布局与差异详见 <a href="#sub-3-14">§3.14</a>）。启动页是否进入本页由角色路由决定（见第零章）。</p>
                 </div>
             </div>
 
@@ -680,7 +725,7 @@
                         </tr>
                         <tr>
                             <td>排序规则</td>
-                            <td>按项目最后操作时间倒序排列</td>
+                            <td>进行中项目排在前面、已完成项目排在后面；同状态组内按项目<strong>签署时间倒序</strong>排列（签署时间越新越靠前）。排在列表<strong>第一个的项目为默认展示项目</strong>，进入「项目」主导航即自动选中并展示其详情。</td>
                         </tr>
                     </tbody>
                 </table>
@@ -691,28 +736,28 @@
                 <div class="code-block">
 ┌─────────────────────────────────────┐
 │  导航栏                              │
-│  - 标题：我的项目                    │
+│  - 标题：项目及详情                  │
 ├─────────────────────────────────────┤
-│  状态选项卡栏                           │
-│  - 全部 | 进行中 | 已完工            │
+│  顶部项目切换条（topbar）            │
+│  - 左：当前项目名 + 状态标签（点击→项目信息）│
+│  - 右：「切换」按钮（点击展开切换面板）│
 ├─────────────────────────────────────┤
-│  项目卡片列表                        │
-│  - 项目名称 + 状态标签               │
-│  - 项目地址                          │
-│  - 合同进度/任务进度统计              │
+│  切换面板（下拉，默认收起）          │
+│  - 筛选：全部 | 进行中 | 已完成      │
+│  - 项目选项列表（名称/状态/地址/合同进度/任务进度）│
+│  - 底部「＋ 新建项目」按钮          │
 ├─────────────────────────────────────┤
-│  悬浮创建按钮（FAB）                  │
-│  - 右下角固定位置                    │
-│  - 点击跳转创建项目页                │
+│  详情区（按角色展示 工人 / 非工人 视角，│
+│          布局与差异详见 §3.14）      │
 ├─────────────────────────────────────┤
-│  底部TabBar                           │
-│  - 首页 | 我的项目（激活）| 消息     │
+│  底部 TabBar                         │
+│  - 首页 | 项目（激活） | 消息 | 我的 │
 └─────────────────────────────────────┘
                 </div>
             </div>
 
             <div class="subsection" id="sub-2-4">
-                <div class="subsection-title">2.4 状态选项卡切换规则</div>
+                <div class="subsection-title">2.4 切换面板筛选规则</div>
                 <table>
                     <thead>
                         <tr>
@@ -722,51 +767,43 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>选项卡项</td>
-                            <td>全部、进行中、已完工，共3个选项卡</td>
+                            <td>筛选项</td>
+                            <td>全部、进行中、已完成，共3个筛选项（置于切换面板顶部筛选条）</td>
                         </tr>
                         <tr>
                             <td>默认选中</td>
-                            <td>默认选中"全部"选项卡</td>
+                            <td>默认选中"全部"筛选项</td>
                         </tr>
                         <tr>
                             <td>选中状态</td>
-                            <td>文字颜色为主色（#1890FF）、字体加粗，底部显示2px高的主色下划线（宽度与文字等宽）</td>
-                        </tr>
-                        <tr>
-                            <td>未选中状态</td>
-                            <td>文字颜色为次级文字色（#595959）、常规字重，无下划线</td>
+                            <td>文字高亮（深色背景 #333、白字、加粗）；未选中为浅灰背景（#f2f4f7）、次级文字色</td>
                         </tr>
                         <tr>
                             <td>切换方式</td>
-                            <td>点击选项卡项即时切换，无需二次确认</td>
+                            <td>点击筛选项即时过滤下方项目列表，无需二次确认</td>
                         </tr>
                         <tr>
-                            <td>切换动画</td>
-                            <td>下划线滑块平滑过渡，过渡时长200ms</td>
+                            <td>全部筛选</td>
+                            <td>展示所有项目（进行中 + 已完成），按 §2.2 排序规则排列</td>
                         </tr>
                         <tr>
-                            <td>全部选项卡</td>
-                            <td>展示所有状态的项目（进行中 + 已完工），按最后操作时间倒序</td>
+                            <td>进行中筛选</td>
+                            <td>仅展示状态为"进行中"的项目</td>
                         </tr>
                         <tr>
-                            <td>进行中选项卡</td>
-                            <td>筛选状态为"进行中"的项目，按最后操作时间倒序</td>
-                        </tr>
-                        <tr>
-                            <td>已完工选项卡</td>
-                            <td>筛选状态为"已完工"的项目，按完工时间倒序</td>
+                            <td>已完成筛选</td>
+                            <td>仅展示状态为"已完成 / 已完工"的项目</td>
                         </tr>
                         <tr>
                             <td>筛选无数据</td>
-                            <td>当前选项卡筛选后无匹配项目时，显示筛选空状态（详见 2.7 项目列表空状态规格）</td>
+                            <td>当前筛选条件下无匹配项目时，面板内显示"暂无匹配的项目"提示（详见 §2.9 项目列表空状态规格）</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="subsection" id="sub-2-5">
-                <div class="subsection-title">2.5 项目卡片规格</div>
+                <div class="subsection-title">2.5 项目选项规格（切换面板内）</div>
                 <table>
                     <thead>
                         <tr>
@@ -779,39 +816,44 @@
                         <tr>
                             <td>项目名称</td>
                             <td>projects.name</td>
-                            <td>完整显示</td>
+                            <td>完整显示，加粗</td>
                         </tr>
                         <tr>
                             <td>项目状态</td>
                             <td>projects.status</td>
-                            <td>进行中（蓝色）/ 已完成（绿色）</td>
+                            <td>进行中（蓝色）/ 已完工（绿色）状态标签</td>
                         </tr>
                         <tr>
                             <td>项目地址</td>
                             <td>projects.address</td>
-                            <td>完整地址，显示区域+详细地址</td>
+                            <td>区域 + 详细地址（脱敏展示，如「XX小区***号***室」）</td>
                         </tr>
                         <tr>
                             <td>合同进度</td>
                             <td>已签约合同数/总合同数</td>
-                            <td>进度条（绿色）</td>
+                            <td>「合同 signed/total」文案 + 进度条</td>
                         </tr>
                         <tr>
                             <td>任务进度</td>
                             <td>已完成任务数/总任务数</td>
-                            <td>进度条（蓝色）</td>
+                            <td>「任务 done/total」文案 + 进度条</td>
+                        </tr>
+                        <tr>
+                            <td>选中态</td>
+                            <td>currentIndex</td>
+                            <td>当前展示项目对应选项高亮边框（主色）+ 浅蓝背景</td>
                         </tr>
                         <tr>
                             <td>点击行为</td>
                             <td>—</td>
-                            <td>点击项目卡片，跳转到<a href="#page-detail-service">项目详情页（服务方小程序）</a>，携带项目ID参数</td>
+                            <td>点击项目选项 → 设为当前项目、收起面板、刷新详情区（按角色渲染对应视角）</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="subsection" id="sub-2-6">
-                <div class="subsection-title">2.6 悬浮创建按钮（FAB）</div>
+                <div class="subsection-title">2.6 新建项目入口</div>
                 <table>
                     <thead>
                         <tr>
@@ -822,35 +864,22 @@
                     <tbody>
                         <tr>
                             <td>位置</td>
-                            <td>默认展示，右下角固定，距离底部70px（TabBar高度+边距）</td>
+                            <td>切换面板底部固定操作区（「＋ 新建项目」整宽按钮），面板展开时可见</td>
                         </tr>
                         <tr>
-                            <td>尺寸</td>
-                            <td>56x56px，圆形</td>
-                        </tr>
-                        <tr>
-                            <td>背景色</td>
-                            <td>#1890FF</td>
-                        </tr>
-                        <tr>
-                            <td>图标</td>
-                            <td>+ 号，白色，24px</td>
-                        </tr>
-                        <tr>
-                            <td>阴影</td>
-                            <td>0 4px 12px rgba(24,144,255,0.4)</td>
+                            <td>样式</td>
+                            <td>主色（#1677FF）背景、白字、圆角按钮，宽 100%</td>
                         </tr>
                         <tr>
                             <td>点击行为</td>
-                            <td>点击创建入口后，若用户未认证角色，弹出轻提示弹窗，提示文案“当前操作需先完成角色认证；
-认证通过后方可继续创建；”，弹窗提供两个操作：“立即认证”：跳转至认证页面；“取消”：关闭提示，返回原页面；若用户已认证则跳转到<a href="#page-create-service">创建项目页</a>。</td>
+                            <td>点击后：若用户<strong>未认证</strong>角色，弹出认证提示弹窗（文案"当前操作需先完成角色认证；认证通过后方可继续创建；"），提供「立即认证」（→ promoter-auth.html）与「取消」；若用户<strong>已认证</strong>则跳转至<a href="service-miniapp/create-project.html" target="_blank">创建项目页</a>。</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <div class="subsection" id="sub-2-7">
-                <div class="subsection-title">2.7 项目列表空状态规格</div>
+            <div class="subsection" id="sub-2-9">
+                <div class="subsection-title">2.9 项目列表空状态规格</div>
                 <table>
                     <thead>
                         <tr>
@@ -884,12 +913,9 @@
                 </table>
 
                 <div class="note" style="margin-top: 16px;">
-                    <div class="note-title">悬浮创建按钮（FAB）可见性规则</div>
-                    <p><strong>有数据状态：</strong>FAB按钮正常显示，点击跳转创建项目页</p>
-                    <p><strong>全局空状态：</strong>FAB按钮保持显示，同时空状态提供"创建项目"操作按钮，两者均可触发创建</p>
-                    <p><strong>加载中状态：</strong>FAB按钮隐藏，避免用户在加载过程中误操作</p>
-                    <p><strong>无网络状态：</strong>FAB按钮隐藏，引导用户先解决网络问题</p>
-                    <p><strong>筛选空状态：</strong>筛选条件产生的空状态，FAB按钮保持显示</p>
+                    <div class="note-title">新建项目入口在不同状态下的可见性</div>
+                    <p><strong>有数据 / 全局空状态 / 筛选空状态：</strong>均保持显示——"新建项目"入口位于切换面板底部，不受空状态影响；全局空时无数据时，空状态插画区同时提供「创建项目」操作按钮，二者均可触发创建。</p>
+                    <p><strong>加载中 / 无网络状态：</strong>切换面板内的项目列表区域展示对应空状态插图与「重试」操作，引导用户先解决加载 / 网络问题后再操作。</p>
                 </div>
 
                 <div class="note" style="margin-top: 16px; background: #E6F7FF; border-left-color: var(--primary-color);">
@@ -910,25 +936,31 @@
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">页面名称</div>
-                        <div class="info-value">项目详情页（进行中）</div>
+                        <div class="info-value">项目详情页（进行中，内联于项目主页面）</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面路径</div>
-                        <div class="info-value"><a href="service-miniapp/project-detail-ongoing-v2.html" target="_blank">service-miniapp/project-detail-ongoing-v2.html</a></div>
+                        <div class="info-value"><a href="service-miniapp/project-list.html" target="_blank">service-miniapp/project-list.html</a>（详情区内联渲染；独立页：<a href="service-miniapp/project-detail-initial-v2.html" target="_blank">project-detail-initial-v2.html</a> 初始 / <a href="service-miniapp/project-detail-completed-v2.html" target="_blank">project-detail-completed-v2.html</a> 已完成）</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">适用角色</div>
-                        <div class="info-value">已加入项目的全部用户（业主、项目总、设计师、工长、各工种工等服务方成员）</div>
+                        <div class="info-value">已加入项目的全部用户（按其在项目内角色展示工人 / 非工人视角，详见 <a href="#sub-3-14">§3.14 详情区双视角差异</a>）</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面入口</div>
-                        <div class="info-value">项目列表点击项目卡片</div>
+                        <div class="info-value">进入「项目」主导航即默认展示排在第一位的项目详情；切换面板选择其他项目即刷新详情区</div>
                     </div>
+                </div>
+                <div class="note" style="margin-top:16px;background:#E6F7FF;border-left-color:var(--primary-color);">
+                    <div class="note-title" style="color:var(--primary-color);">与第零章 / 第二章的关系</div>
+                    <p>「进行中」项目详情已合并至项目主页面（§2）详情区，不再以独立 ongoing 页面承载；本章（§3）按角色视角描述详情页规格——页面结构（§3.2）、快捷导航（§3.3）、今日动态（§3.7）等已分别区分<strong>非工人 / 工人</strong>视角，两视角的全量差异汇总见 <a href="#sub-3-14">§3.14 详情区双视角差异</a>。</p>
                 </div>
             </div>
 
 <div class="subsection" id="sub-3-2">
                 <div class="subsection-title">3.2 页面结构</div>
+                <p style="color:var(--text-secondary);font-size:13px;">页面结构按角色视角分述：角色为<strong>非工人</strong>（项目总 / 设计师 / 工长等）展示「非工人视角」；角色为<strong>工人</strong>（六类工种之一）展示「工人视角」，整体配色切换为橙色工种主题。两视角整体自上而下均为：<strong>项目基本信息 → 待办事项 → 我的任务 → [快捷入口 + 架构切换 吸顶] → 合同 / 任务概览</strong>，差异在快捷入口组成、合同区形态与是否包含「今日动态」。</p>
+                <p style="margin:14px 0 6px;font-size:13px;"><strong>① 非工人视角页面结构</strong></p>
                 <div class="code-block">
 ┌─────────────────────────────────────┐
 │  导航栏                              │
@@ -942,10 +974,14 @@
 │  - 待办列表（默认 2 条）+ 角标       │
 │  - 查看全部 → todo-list.html         │
 ├─────────────────────────────────────┤
+│  我的任务卡片                        │
+│  - 已完成 X · 我作为执行人的全部任务 X│
+│  - 查看全部 → task-list.html?role=exec│
+├─────────────────────────────────────┤
 │  吸顶导航（毛玻璃 sticky）           │
 │  - 快捷入口：固定 + 架构/成员/资料/对账单（4 项）│
 │  - 展开 / 收起 切换按钮             │
-│  - 架构选择器（层级切换，高度减半）  │
+│  - 架构选择器（层级切换，默认项目部）│
 ├─────────────────────────────────────┤
 │  合同概览 + 任务统计（上下堆叠）     │
 │  - 合同概览：签约 X/Y · 总进度% · 合同列表（可折叠）│
@@ -956,12 +992,36 @@
 │  - 展开更多 / 查看全部 → activity-list.html │
 └─────────────────────────────────────┘
                 </div>
-                <p style="margin-top:12px;color:var(--text-secondary);font-size:13px;">页面自上而下顺序为：<strong>项目基本信息 → 待办事项 → [快捷入口 + 架构切换 吸顶] → 合同 / 任务概览 → 今日动态</strong>。「待办事项」卡片<strong>不与架构切换联动</strong>，固定置于吸顶导航之前；「快捷入口 + 架构选择器」组合吸顶（毛玻璃），向下滚动时快捷入口自动收起（手动固定除外）。</p>
+                <p style="margin:14px 0 6px;font-size:13px;"><strong>② 工人视角页面结构</strong>（与①的差异：快捷入口以「项目动态」替代「对账单」、架构选择器默认本人工种工作组、合同区无折叠且仅展示相关合同、无「今日动态」区块）</p>
+                <div class="code-block">
+┌─────────────────────────────────────┐
+│  导航栏 / 项目基本信息头部（同①）    │
+├─────────────────────────────────────┤
+│  待办事项卡片（橙色主题）            │
+│  - 左侧 3px 橙色描边、标题橙色       │
+│  - 「待我确认 / 待我签约」等工人文案 │
+├─────────────────────────────────────┤
+│  我的任务卡片（橙色主题，统计同①）   │
+├─────────────────────────────────────┤
+│  吸顶导航（毛玻璃 sticky）           │
+│  - 快捷入口：固定 + 项目动态/架构/   │
+│    成员/资料（4 项，不含「对账单」） │
+│  - 架构选择器（默认本人工种工作组，  │
+│    提示「默认我的工作组」）          │
+├─────────────────────────────────────┤
+│  合同 + 任务统计（上下堆叠）         │
+│  - 合同：无折叠，仅展示本工种相关合同│
+│  - 任务统计：全部 X/Y · 确认中 X · 执行中 X │
+│  （无「今日动态」区块）              │
+└─────────────────────────────────────┘
+                </div>
+                <p style="margin-top:12px;color:var(--text-secondary);font-size:13px;">页面自上而下顺序为：<strong>项目基本信息 → 待办事项 → 我的任务 → [快捷入口 + 架构切换 吸顶] → 合同 / 任务概览 → 今日动态（仅非工人）</strong>。「待办事项」卡片<strong>不与架构切换联动</strong>，固定置于吸顶导航之前；「快捷入口 + 架构选择器」组合吸顶（毛玻璃），向下滚动时快捷入口自动收起（手动固定除外）。两视角差异明细见 <a href="#sub-3-14">§3.14</a>。</p>
             </div>
 
 <div class="subsection" id="sub-3-3">
                 <div class="subsection-title">3.3 快捷导航规格</div>
-                <p style="color:var(--text-secondary);font-size:13px;">新版原型将「项目信息」入口上移至顶部「项目基本信息头部」，故快捷导航仅保留 4 个内容入口（架构 / 成员 / 资料 / 对账单）+「固定」按钮；并新增「展开 / 收起」切换按钮。</p>
+                <p style="color:var(--text-secondary);font-size:13px;">「项目信息」入口已上移至顶部「项目基本信息头部」；快捷导航按角色视角提供不同的 4 个内容入口 +「固定」按钮，并配「展开 / 收起」切换按钮。<strong>工人无对账单查看需求与权限，工人视角快捷导航不展示「对账单」入口，以「项目动态」替代。</strong></p>
+                <p style="margin:14px 0 6px;font-size:13px;"><strong>① 非工人视角快捷入口（架构 / 成员 / 资料 / 对账单）</strong></p>
                 <table>
                     <thead>
                         <tr>
@@ -972,12 +1032,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>固定</td>
-                            <td>📌</td>
-                            <td>—</td>
-                            <td>将当前项目固定到首页；固定后快捷导航在页面滚动时不自动收起，状态通过 <code>localStorage</code> 持久化；文案在「📌 固定 / 📌 取消固定」间切换</td>
-                        </tr>
                         <tr>
                             <td>架构</td>
                             <td>🏗️</td>
@@ -1000,18 +1054,66 @@
                             <td>对账单</td>
                             <td>💰</td>
                             <td>statement-list.html</td>
-                            <td>查看项目对账单（仅拥有全部数据权限可查看）</td>
+                            <td>查看项目对账单（仅拥有全部数据权限可查看）；<strong>工人视角不提供该入口</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin:14px 0 6px;font-size:13px;"><strong>② 工人视角快捷入口（项目动态 / 架构 / 成员 / 资料）</strong></p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>入口名称</th>
+                            <th>图标</th>
+                            <th>跳转页面</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>项目动态</td>
+                            <td>📝</td>
+                            <td>activity-list.html</td>
+                            <td>查看项目动态列表，位于快捷入口首位，替代非工人视角「对账单」的位置</td>
+                        </tr>
+                        <tr>
+                            <td>架构</td>
+                            <td>🏗️</td>
+                            <td>architecture.html</td>
+                            <td>查看项目架构树</td>
+                        </tr>
+                        <tr>
+                            <td>成员</td>
+                            <td>👥</td>
+                            <td>member.html</td>
+                            <td>查看项目成员</td>
+                        </tr>
+                        <tr>
+                            <td>资料</td>
+                            <td>📁</td>
+                            <td>project-files.html</td>
+                            <td>查看项目文件库</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin:14px 0 6px;font-size:13px;"><strong>③ 两视角共性行为</strong></p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>元素</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>固定（📌）</td>
+                            <td>将当前项目固定到首页；固定后快捷导航在页面滚动时不自动收起，状态通过 <code>localStorage</code> 持久化；文案在「📌 固定 / 📌 取消固定」间切换</td>
                         </tr>
                         <tr>
                             <td>展开 / 收起（切换按钮）</td>
-                            <td>••••</td>
-                            <td>—</td>
                             <td>切换快捷入口的显示 / 隐藏，文案随状态变化（「展开快捷入口」/「收起快捷入口」）；向下滚动时自动收起并显示该按钮，滚回顶部自动展开</td>
                         </tr>
                         <tr>
                             <td>项目信息（已移出快捷导航）</td>
-                            <td>—</td>
-                            <td>project-info.html</td>
                             <td>不再作为快捷导航入口；改由顶部「项目基本信息头部」整块点击进入（见 3.2 / 3.5 / 3.8）</td>
                         </tr>
                     </tbody>
@@ -1141,10 +1243,16 @@
                             <td>默认显示 <strong>2 条</strong>（第 3 条起截断，不滚动展示），点击「查看全部」跳转列表页，规格详见 <a href="PRD-任务模块详细规格.html#page-todo-list-service" target="_blank">全部待办页（服务方）</a></td>
                         </tr>
                         <tr>
-                            <td rowspan="5">快捷导航栏</td>
+                            <td>我的任务卡片</td>
+                            <td>我的任务统计</td>
+                            <td>任务统计接口按「当前用户 = 执行人」过滤</td>
+                            <td>已完成任务数 / 我作为执行人的全部任务数；工人 / 非工人视角均展示（口径为当前用户作为执行人的任务），点击「查看全部」跳转 task-list.html?role=exec</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="6">快捷导航栏</td>
                             <td>入口数量</td>
                             <td>前端固定配置</td>
-                            <td>固定 1 个（📌）+ 内容入口 4 个：架构、成员、资料、对账单；「项目信息」入口已移至顶部基本信息头部</td>
+                            <td>固定 1 个（📌）+ 内容入口 4 个——非工人视角：架构、成员、资料、对账单；工人视角：项目动态、架构、成员、资料（不含对账单）；「项目信息」入口已移至顶部基本信息头部</td>
                         </tr>
                         <tr>
                             <td>架构入口</td>
@@ -1162,9 +1270,14 @@
                             <td>跳转项目文件库页</td>
                         </tr>
                         <tr>
-                            <td>对账单入口</td>
+                            <td>对账单入口（仅非工人视角）</td>
                             <td>固定链接</td>
                             <td>跳转项目对账单页</td>
+                        </tr>
+                        <tr>
+                            <td>项目动态入口（仅工人视角）</td>
+                            <td>固定链接</td>
+                            <td>跳转项目动态列表页（activity-list.html），替代非工人视角的「对账单」入口</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1224,6 +1337,10 @@
                         <tr>
                             <td>功能说明</td>
                             <td>展示项目「今日」产生的动态，由系统在各业务动作完成时自动生成（生成规则见 <a href="#sub-11-3">11.3 动态类型规格与生成规则</a>）；今日可能出现的动态项包括：任务提交、任务完成、任务确认、任务驳回、合同签约（含非工人 / 工人合同）</td>
+                        </tr>
+                        <tr>
+                            <td>适用视角</td>
+                            <td>仅<strong>非工人视角</strong>展示「今日动态」卡片；工人视角不展示该区块（工人可通过快捷导航「项目动态」入口查看动态，见 3.3）</td>
                         </tr>
                         <tr>
                             <td>数据来源</td>
@@ -1311,7 +1428,7 @@
                         </tr>
                         <tr>
                             <td rowspan="4">快捷导航</td>
-                            <td>快捷入口（架构、成员、资料、对账单）</td>
+                            <td>快捷入口（非工人视角：架构、成员、资料、对账单；工人视角：项目动态、架构、成员、资料）</td>
                             <td>点击</td>
                             <td>跳转对应页面</td>
                         </tr>
@@ -1638,6 +1755,29 @@
                 <p><strong>状态一致性：</strong>项目状态为全局字段（<code>projects.status</code>），服务方发起的回退 / 再次完成，业主端（见 <a href="#sub-12-11">§12.11</a>）同步呈现，两端状态标签与布局随状态联动，无需各自维护。</p>
             </div>
         </div>
+
+            <div class="subsection" id="sub-3-14">
+                <div class="subsection-title">3.14 详情区双视角差异（工人 / 非工人）</div>
+                <p>项目主页面（§2）底部详情区根据当前用户在项目内的角色渲染不同布局：角色为<strong>非工人</strong>（项目总 / 设计师 / 工长等）展示「非工人视角」；角色为<strong>工人</strong>（六类工种之一）展示「工人视角」，整体配色由蓝色改为橙色（工种主题色）以强调工人身份。页面结构（§3.2）、快捷导航（§3.3）、今日动态（§3.7）已按视角分述，其余区块两视角仅在以下方面存在差异，通用字段与交互详见 §3.2–§3.13：</p>
+                <table>
+                    <thead>
+                        <tr><th>区块</th><th>非工人视角</th><th>工人视角</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>待办事项</td><td>卡片「📋 待办事项」+ 数量角标 +「查看全部 &gt;」(→ todo-list.html)；列表含合同 / 任务类待办（如「泥瓦工班组服务合同确认」「吊顶安装」），每项带类型标签（合同 / 任务）、描述、状态徽标；项目已完工且无待办时展示「项目已完工，暂无待办 ☕」。</td><td>同左结构与跳转，左侧 3px 橙色描边、标题橙色；列表以「待我确认 / 待我签约」等工人视角文案呈现（如「泥瓦工班组服务合同确认·待我确认」「墙面基层处理·待确认」）；无待办时展示「暂无待办，休息一下 ☕」。</td></tr>
+                        <tr><td>我的任务</td><td>卡片「📌 我的任务」+「查看全部 &gt;」(→ task-list.html?role=exec)；统计「已完成 / 全部任务」（原型示例 已完成 3 / 全部 7）。</td><td>同非工人视角，统计为工人作为执行人的任务（原型示例 已完成 4 / 全部 6）。</td></tr>
+                        <tr><td>吸顶快捷导航</td><td colspan="2">入口组成与跳转详见 <a href="#sub-3-3">§3.3 快捷导航规格</a>——非工人视角为架构 / 成员 / 资料 / 对账单；工人视角以「项目动态」替代「对账单」。</td></tr>
+                        <tr><td>架构层级选择器</td><td>默认选中「项目部」，面包屑「项目部」；下拉可切换项目部 / 各工作组（水电 / 泥瓦 / 木工 / 油漆…），选中项带 ✓。</td><td>默认选中<strong>当前工种所属工作组</strong>（如泥瓦工对应「泥瓦工作组」），面包屑「项目部 › 泥瓦工作组」并提示「默认我的工作组」；可下拉切换至项目部或其他工作组。</td></tr>
+                        <tr><td>合同</td><td>卡片「📄 合同概览」+「查看合同 ▼」折叠；展示签约数（已签约 / 总数）与总进度百分比；列表含合同名、工作组、金额、进度条、状态徽标（如「已确认」），点击展开 / 折叠。</td><td>卡片「📄 合同」（无折叠）；仅展示与工人相关的合同（原型示例过滤掉「水电班组服务合同」，展示「泥瓦工班组服务合同」），含金额、状态徽标、进度条。</td></tr>
+                        <tr><td>任务统计</td><td>卡片「📊 任务统计」+「查看全部 &gt;」(→ task-list.html)；展示全部任务（完成 / 总数）、确认中任务、执行中任务统计（原型示例 确认中 3、执行中 2）。</td><td>同非工人视角：全部任务（完成 / 总数）、确认中任务、执行中任务统计。</td></tr>
+                        <tr><td>今日动态</td><td colspan="2">仅非工人视角展示，规格详见 <a href="#sub-3-7">§3.7 今日动态卡片规格</a>；工人视角不展示该区块。</td></tr>
+                    </tbody>
+                </table>
+                <div class="note" style="margin-top:16px;">
+                    <div class="note-title">两视角差异要点</div>
+                    <p>非工人视角含「今日动态」区块与「对账单」入口，合同区为「合同概览（可折叠）」且展示全部合同；工人视角不含「今日动态」、快捷导航以「项目动态」替代「对账单」、层级选择器默认定位到本人工种工作组、合同区仅展示相关合同。</p>
+                </div>
+            </div>
 
         <!-- ==================== 4. 项目信息页（服务方小程序） ==================== -->
         <div class="section" id="page-info-service">
@@ -4076,7 +4216,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">页面入口</div>
-                        <div class="info-value">项目详情页快捷导航"对账单"</div>
+                        <div class="info-value">项目详情页快捷导航"对账单"（仅非工人视角提供该入口；工人视角快捷导航不含对账单，见 <a href="#sub-3-3">§3.3</a>）</div>
                     </div>
                 </div>
             </div>

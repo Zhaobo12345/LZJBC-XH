@@ -657,6 +657,58 @@
         </div>
     </div>
 
+    <!-- 新建任务弹窗（交互对齐「合同详情·合规版」addTaskModal：先填全字段 → 确定添加；下拉人员由 fillPersonDropdown('new') 动态填充） -->
+    <div class="edit-task-modal" id="addTaskModal" data-page-node-id="addTaskModalRoot">
+        <div class="modal-content" data-page-node-id="addTaskModalContent">
+            <div class="modal-header" data-page-node-id="addTaskModalHeader">
+                <div class="modal-title" data-page-node-id="addTaskModalTitle">添加新任务</div>
+                <div class="modal-close" onclick="closeAddTaskModal()" data-page-node-id="addTaskModalClose">✕</div>
+            </div>
+            <div class="modal-body" data-page-node-id="addTaskModalBody">
+                <div class="form-group" data-page-node-id="addTaskFgName">
+                    <label class="form-label" data-page-node-id="addTaskLblName">任务名称 <span class="required" data-page-node-id="addTaskReq1">*</span></label>
+                    <input type="text" class="form-input" id="newTaskName" placeholder="请输入任务名称" data-page-node-id="addTaskNameInput">
+                </div>
+                <div class="form-group" data-page-node-id="addTaskFgExec">
+                    <label class="form-label" data-page-node-id="addTaskLblExec">执行人（选填）</label>
+                    <div class="confirm-person-tags" id="newTaskExecutorTags" style="margin-bottom: 8px;" data-page-node-id="addTaskExecTags"></div>
+                    <div class="search-select" data-page-node-id="addTaskExecSelect">
+                        <div class="search-input-wrap" data-page-node-id="addTaskExecWrap">
+                            <input type="text" class="search-input" id="newTaskExecutorSearch" placeholder="请选择执行人" oninput="filterExecutorList('new')" onfocus="toggleExecutorSearch('new')" data-page-node-id="addTaskExecSearch">
+                            <span class="arrow" onclick="toggleExecutorSearch('new')" data-page-node-id="addTaskExecArrow">▼</span>
+                        </div>
+                        <div class="search-dropdown" id="newTaskExecutorDropdown" data-page-node-id="addTaskExecDd"></div>
+                    </div>
+                    <input type="hidden" id="newTaskExecutor" data-page-node-id="addTaskExecHidden">
+                </div>
+                <div class="form-group" data-page-node-id="addTaskFgConf">
+                    <label class="form-label" data-page-node-id="addTaskLblConf">确认人（最多5人）</label>
+                    <div class="confirm-person-tags" id="newTaskConfirmPersons" data-page-node-id="addTaskConfTags"></div>
+                    <div class="search-select" data-page-node-id="addTaskConfSelect">
+                        <div class="search-input-wrap" data-page-node-id="addTaskConfWrap">
+                            <input type="text" class="search-input" id="newTaskConfirmerSearch" placeholder="添加确认人" oninput="filterConfirmerList('new')" onfocus="toggleConfirmerSearch('new')" data-page-node-id="addTaskConfSearch">
+                            <span class="arrow" onclick="toggleConfirmerSearch('new')" data-page-node-id="addTaskConfArrow">▼</span>
+                        </div>
+                        <div class="search-dropdown" id="newTaskConfirmerDropdown" data-page-node-id="addTaskConfDd"></div>
+                    </div>
+                </div>
+                <div class="form-group" data-page-node-id="addTaskFgEs">
+                    <label class="form-label" data-page-node-id="addTaskLblEs">执行标准 <span class="required" data-page-node-id="addTaskReq2">*</span></label>
+                    <textarea class="form-textarea" id="newTaskExecStandard" placeholder="请输入执行标准" data-page-node-id="addTaskEsInput"></textarea>
+                </div>
+                <div class="form-group" data-page-node-id="addTaskFgCs">
+                    <label class="form-label" data-page-node-id="addTaskLblCs">确认标准 <span class="required" data-page-node-id="addTaskReq3">*</span></label>
+                    <textarea class="form-textarea" id="newTaskConfirmStandard" placeholder="请输入确认标准" data-page-node-id="addTaskCsInput"></textarea>
+                </div>
+                <div class="form-group" data-page-node-id="addTaskFgLs">
+                    <label class="form-label" data-page-node-id="addTaskLblLs">担责标准 <span class="required" data-page-node-id="addTaskReq4">*</span></label>
+                    <textarea class="form-textarea" id="newTaskLiableStandard" placeholder="请输入担责标准" data-page-node-id="addTaskLsInput"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer" data-page-node-id="addTaskFooter"><button class="submit-btn" onclick="confirmAddTask()" data-page-node-id="addTaskSubmit">确定添加</button></div>
+        </div>
+    </div>
+
     <!-- 个人电子名片（开发中） -->
     <div class="wcd-modal-mask" id="businessCardModal" onclick="if(event.target===this)closeBusinessCard()" data-page-node-id="dwkG8GfEvJNdFK3p5iHNQ9">
         <div class="wcd-sheet" style="max-height:auto;" data-page-node-id="BGF83Dyy5nBvl0tvGcz3Pr">
@@ -708,11 +760,12 @@
             <div class="status-group-header" onclick="toggleStatusGroup(this)" data-page-node-id="JfZ7Tm5LZFTFC7mVAhj6px">
                 <span class="status-group-icon" data-page-node-id="xDAVXZJY3WCfxJtBmTyqEW">▶</span>
                 <span class="status-group-title" data-page-node-id="Kvbmayfbtz6EreCofnHeWz">受邀方视角</span>
-                <span class="status-group-count" data-page-node-id="JrOVfiaoBnBpnjXUgWzFvS">4</span>
+                <span class="status-group-count" data-page-node-id="JrOVfiaoBnBpnjXUgWzFvS">5</span>
             </div>
             <div class="status-group-content" style="display:none;" data-page-node-id="delQsc5tsafdiGZX5tvfUw">
                 <a class="status-switch-item" href="worker-contract-receive-inviting.html" style="text-decoration:none;" data-page-node-id="w2xwSFLG3gaUwwcEOWHyuw">确认中（受邀方）</a>
-                <a class="status-switch-item" href="worker-contract-receive-confirmed-new.html" style="text-decoration:none;" data-page-node-id="bWTKsUNdSIxEtQGva0XduU">已确认（受邀方）-新</a>
+                <a class="status-switch-item" href="worker-contract-receive-confirmed-new.html" style="text-decoration:none;" data-page-node-id="bWTKsUNdSIxEtQGva0XduU">已签约（受邀方）</a>
+                <a class="status-switch-item" href="worker-contract-fulfilled-receiver.html" style="text-decoration:none;" data-page-node-id="fulRecvNav3">已签约（已履约）</a>
                 <a class="status-switch-item" href="worker-contract-detail.html?status=worker_rejected_receiver" style="text-decoration:none;" data-page-node-id="fORjJSRMzmu2ZmxeKEkoop">已拒绝(受邀方)</a>
                 <a class="status-switch-item" href="worker-contract-detail.html?status=worker_lost_receiver" style="text-decoration:none;" data-page-node-id="B9KPL4iewpF1pYIHUeeZ77">抢单失败(受邀方)</a>
             </div>
@@ -1180,7 +1233,7 @@
                 '<div class="stage-sequential"><span>' + (seqOn ? '按序执行' : '并行执行') + '</span><div class="switch ' + (seqOn ? 'active' : '') + '" onclick="toggleDraftStageSeq(' + i + ',this)"></div></div>' +
                 '</div>' +
                 '<div class="stage-card-header-row"><div class="stage-actions">' +
-                '<div class="stage-action-btn add" onclick="addDraftTask(' + i + ')">+ 添加任务</div>' +
+                '<div class="stage-action-btn add" onclick="openAddTaskModal(' + i + ')">+ 添加任务</div>' +
                 '<div class="stage-action-btn delete" onclick="deleteDraftStage(' + i + ')">× 删除阶段</div>' +
                 '</div></div>' +
                 '</div>' +
@@ -1369,6 +1422,7 @@
         '郑零工': '小零工', '张零杂': '小零工', '孔零活': '小零工'
     };
     var editTaskState = { current: null, confirmers: [] };
+    var addTaskState = { current: null, confirmers: [] };
     function fillPersonDropdown(prefix) {
         var dd = $(prefix + 'TaskExecutorDropdown');
         if (dd) {
@@ -1387,6 +1441,8 @@
         var s = C.stages[si];
         var t = s && s.tasks ? s.tasks[ti] : null;
         if (!t) return;
+        // 填充编辑弹窗执行人 / 确认人下拉（可选范围=项目内全部人员，与新建任务弹窗一致）
+        fillPersonDropdown('edit');
         editTaskState.current = { si: si, ti: ti };
         $('editTaskName').value = t.name || '';
         var executor = t.exec || '';
@@ -1480,27 +1536,92 @@
         dd.classList.add('show');
     }
     function selectConfirmer(prefix, name, role) {
-        if (editTaskState.confirmers.length >= 5) { showToast('确认人最多5人'); return; }
-        if (editTaskState.confirmers.indexOf(name) >= 0) { showToast('已添加'); return; }
-        editTaskState.confirmers.push(name);
-        updateEditConfirmPersonTags();
+        var list = prefix === 'new' ? addTaskState.confirmers : editTaskState.confirmers;
+        if (list.length >= 5) { showToast('确认人最多5人'); return; }
+        if (list.indexOf(name) >= 0) { showToast('已添加'); return; }
+        list.push(name);
+        updateConfirmPersonTags(prefix);
         $(prefix + 'TaskConfirmerSearch').value = '';
         $(prefix + 'TaskConfirmerDropdown').classList.remove('show');
     }
-    function removeConfirmer(index) {
-        editTaskState.confirmers.splice(index, 1);
-        updateEditConfirmPersonTags();
+    function removeConfirmer(prefix, index) {
+        var list = prefix === 'new' ? addTaskState.confirmers : editTaskState.confirmers;
+        list.splice(index, 1);
+        updateConfirmPersonTags(prefix);
     }
-    function updateEditConfirmPersonTags() {
-        var tags = $('editTaskConfirmPersons');
+    function updateConfirmPersonTags(prefix) {
+        var tags = $(prefix + 'TaskConfirmPersons');
         if (!tags) return;
-        var list = editTaskState.confirmers || [];
+        var list = prefix === 'new' ? addTaskState.confirmers : editTaskState.confirmers;
         if (list.length === 0) { tags.innerHTML = ''; return; }
         tags.innerHTML = list.map(function (name, i) {
             var role = ROLE_MAP[name] || '施工方';
             return '<div class="confirm-person-tag">' + name + '（' + role + '）' +
-                '<span class="remove" onclick="removeConfirmer(' + i + ')">×</span></div>';
+                '<span class="remove" onclick="removeConfirmer(\'' + prefix + '\',' + i + ')">×</span></div>';
         }).join('');
+    }
+    function updateEditConfirmPersonTags() { updateConfirmPersonTags('edit'); }
+
+    // 新建任务弹窗（交互对齐「合同详情·合规版」addTaskModal：先填全字段 → 确定添加）
+    function openAddTaskModal(si) {
+        if (typeof si !== 'number') si = addTaskState.current || 0;
+        addTaskState.current = si;
+        addTaskState.confirmers = [];
+        var name = $('newTaskName'); if (name) name.value = '';
+        var exec = $('newTaskExecutor');
+        var execTags = $('newTaskExecutorTags');
+        // 执行人默认值：与编辑任务规则一致——乙方仅一人时默认填乙方人员；多人则默认空（均可修改）
+        var defaultExec = '';
+        var pbList = getDraftPartyBList();
+        if (pbList.length === 1) defaultExec = pbList[0];
+        if (exec) exec.value = defaultExec;
+        if (execTags) {
+            if (defaultExec && ROLE_MAP[defaultExec]) {
+                execTags.innerHTML = '<div class="confirm-person-tag">' + defaultExec + '（' + ROLE_MAP[defaultExec] + '）' +
+                    '<span class="remove" onclick="removeExecutor(\'new\')">×</span></div>';
+            } else if (defaultExec) {
+                execTags.innerHTML = '<div class="confirm-person-tag">' + defaultExec +
+                    '<span class="remove" onclick="removeExecutor(\'new\')">×</span></div>';
+            } else {
+                execTags.innerHTML = '';
+            }
+        }
+        var execSearch = $('newTaskExecutorSearch'); if (execSearch) execSearch.value = '';
+        var confTags = $('newTaskConfirmPersons'); if (confTags) confTags.innerHTML = '';
+        var confSearch = $('newTaskConfirmerSearch'); if (confSearch) confSearch.value = '';
+        var es = $('newTaskExecStandard'); if (es) es.value = '';
+        var cs = $('newTaskConfirmStandard'); if (cs) cs.value = '';
+        var ls = $('newTaskLiableStandard'); if (ls) ls.value = '';
+        fillPersonDropdown('new');
+        var m = $('addTaskModal'); if (m) m.classList.add('show');
+    }
+    function closeAddTaskModal() {
+        var m = $('addTaskModal'); if (m) m.classList.remove('show');
+        var execTags = $('newTaskExecutorTags'); if (execTags) execTags.innerHTML = '';
+        var confTags = $('newTaskConfirmPersons'); if (confTags) confTags.innerHTML = '';
+        addTaskState.current = null;
+        addTaskState.confirmers = [];
+    }
+    function confirmAddTask() {
+        var si = addTaskState.current;
+        if (typeof si !== 'number') { closeAddTaskModal(); return; }
+        var s = C.stages[si];
+        if (!s) { closeAddTaskModal(); return; }
+        var name = $('newTaskName').value.trim();
+        if (!name) { showToast('请输入任务名称'); return; }
+        var execStd = $('newTaskExecStandard').value.trim();
+        var confStd = $('newTaskConfirmStandard').value.trim();
+        var liableStd = $('newTaskLiableStandard').value.trim();
+        if (!execStd) { showToast('请输入执行标准'); return; }
+        if (!confStd) { showToast('请输入确认标准'); return; }
+        if (!liableStd) { showToast('请输入担责标准'); return; }
+        var executor = $('newTaskExecutor').value.trim();
+        var confirmers = addTaskState.confirmers || [];
+        s.tasks = s.tasks || [];
+        s.tasks.push({ name: name, exec: executor, conf: confirmers.join('、'), execStd: execStd, confStd: confStd, liableStd: liableStd });
+        closeAddTaskModal();
+        renderDraftStageTask();
+        showToast('任务已添加');
     }
 
     /* ===================== 更换模板 ===================== */
