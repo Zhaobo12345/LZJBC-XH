@@ -244,18 +244,6 @@
             background: var(--status-success-bg); color: var(--success-color); font-size: 12px; line-height: 1.5;
         }
 
-        /* 签约文件区（附件区内） */
-        .sign-file-drop {
-            border: 1px dashed var(--border-color); border-radius: 8px; padding: 16px;
-            text-align: center; color: var(--text-tertiary); font-size: 12px;
-        }
-        .sign-file-drop .sf-btn {
-            display: inline-block; margin-top: 8px; padding: 7px 16px; border-radius: 6px;
-            background: var(--primary-color); color: #fff; font-size: 13px; cursor: pointer;
-        }
-        .sign-file-wait { font-size: 12px; color: var(--text-tertiary); }
-        .sign-file-done { font-size: 12px; color: var(--success-color); }
-
         /* 拟定中内联编辑面板 */
         .invite-edit-panel {
             margin-top: 6px; border: 1px solid var(--primary-light);
@@ -1191,7 +1179,6 @@
             </div>
         </div>
 
-        <input type="file" id="signFileInput" style="display:none;" onchange="WCP.onSignFilePicked(event)" data-page-node-id="cTM9COZIA2WpXuaOSTIOIE">
         <input type="file" id="draftAttInput" style="display:none;" onchange="WCP.onDraftAttPicked(event)" data-page-node-id="gBr7BsSrzCG9qnPJbIBKAG">
 
         <!-- 更换模板弹窗 -->

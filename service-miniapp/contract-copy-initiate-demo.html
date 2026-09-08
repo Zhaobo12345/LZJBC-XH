@@ -3,7 +3,7 @@
 <head data-page-node-id="uALUa3MaeyUGo6ZWfJXmm3">
     <meta charset="UTF-8" data-page-node-id="SazdR3cOwCXfQQzWeaDJHx">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" data-page-node-id="cknJRCwCxwcEO3chqbLg6K">
-    <title>家装平台小程序原型 - 工人合同详情（已签约（发起方）-新）</title>
+    <title>家装平台小程序原型 - 工人合同详情（已签约 · 复制发起演示）</title>
     <link rel="stylesheet" href="common.css" data-page-node-id="9suQKBZBt9NmxSeGZDHQnB">
     <link rel="stylesheet" href="css/contract-detail.css" data-page-node-id="SAc5jtZsKWoceYOiwvwoYd">
     <style>
@@ -468,6 +468,26 @@
         .preview-section-title { font-size: 14px; font-weight: 600; color: #222; margin-bottom: 10px; padding-left: 10px; border-left: 3px solid #1677ff; }
         .preview-section-content { white-space: pre-wrap; word-break: break-all; }
 
+        /* ===== 复制发起（演示）：沿用原合同内容 + 差异项调整 ===== */
+        .copy-sheet-body { padding: 0 16px 16px; overflow-y: auto; }
+        .copy-lock-row { margin: 12px 0 4px; padding: 8px 10px; background: #E6F4FF; border-radius: 8px; font-size: 11px; color: #1677FF; line-height: 1.6; }
+        .copy-field { margin: 10px 0; }
+        .copy-field .cf-label { display: flex; align-items: center; flex-wrap: wrap; font-size: 12px; color: #888; margin-bottom: 4px; }
+        .copy-badge { display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 8px; font-size: 10px; font-weight: 500; }
+        .copy-badge.keep { background: #F2F3F5; color: #86909C; }
+        .copy-badge.adjusted { background: #FFF7E6; color: #FA8C16; }
+        .copy-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+        .copy-chip {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 6px 12px; background: #F7F8FA; border: 1px solid transparent;
+            border-radius: 16px; font-size: 13px; color: #555; cursor: pointer;
+        }
+        .copy-chip.selected { background: #F0F7FF; color: #1677FF; border-color: #1677FF; font-weight: 600; }
+        .copy-chip.disabled { opacity: 0.55; cursor: not-allowed; }
+        .copy-chip.disabled .cc-reason { font-size: 10px; color: #999; }
+        .copy-tip { font-size: 11px; color: #999; margin-top: 10px; line-height: 1.5; }
+        .more-ops-panel .op-item .op-extra { margin-left: auto; font-size: 11px; color: #999; }
+
         /* ===== 原型导航：沿用 common.css 的 .page-nav 浮动定位，仅补充状态组样式，确保与原页面一致 ===== */
         .status-group { margin-bottom: 8px; }
         .status-group-header {
@@ -804,6 +824,45 @@
         </div>
     </div>
 
+    <!-- 【新需求演示】复制发起：沿用本合同内容，仅调整差异项，快捷创建同类型新合同（复用 wcd-sheet 底部抽屉样式） -->
+    <div class="wcd-modal-mask" id="copySheetMask" onclick="if(event.target===this)closeCopySheet()">
+        <div class="wcd-sheet">
+            <div class="wcd-sheet-head"><div class="title">复制发起</div><div class="close" onclick="closeCopySheet()">✕</div></div>
+            <div class="copy-sheet-body">
+                <div class="copy-lock-row">🔒 将复制本合同的 类型 / 固定详细条款 / 阶段任务清单 / 附件（本入口不可修改，保证同工种口径统一）；以下差异项默认沿用原值，可按新工人情况调整。</div>
+                <div class="copy-field">
+                    <div class="cf-label">意向乙方（必选；同一工人已有同类型在途合同时不可选）</div>
+                    <div class="copy-chips" id="copyPartyBChips"></div>
+                </div>
+                <div class="copy-field">
+                    <div class="cf-label">合同名称</div>
+                    <input type="text" id="copyNameInput" class="edit-input" value="全屋水电改造合同">
+                </div>
+                <div class="copy-field">
+                    <div class="cf-label">合同金额（元，最多两位小数）<span class="copy-badge keep" id="copyAmountBadge">沿用原值</span></div>
+                    <input type="number" id="copyAmountInput" class="edit-input" value="12600.00" step="0.01" min="0" oninput="markCopyAdjusted('copyAmount')">
+                </div>
+                <div class="copy-field">
+                    <div class="cf-label">工期（自合同签订之日起计算）<span class="copy-badge keep" id="copyDurationBadge">沿用原值</span></div>
+                    <div class="field-row">
+                        <input type="number" id="copyDurationInput" class="edit-input" value="30" oninput="markCopyAdjusted('copyDuration')">
+                        <span class="field-unit">天</span>
+                    </div>
+                </div>
+                <div class="copy-field">
+                    <div class="cf-label">违约责任<span class="copy-badge keep" id="copyBreachBadge">沿用原值</span></div>
+                    <textarea id="copyBreachInput" class="edit-textarea" oninput="markCopyAdjusted('copyBreach')">1、甲方逾期付款的，按逾期金额千分之三/日支付违约金。
+2、乙方工期延误或质量不符的，应无偿返工并承担违约责任。</textarea>
+                </div>
+                <div class="copy-tip">确认后新合同进入「确认中」，向所选意向乙方发送邀约；后续确认 / 签约 / 变更流程与普通合同一致，不影响本合同。</div>
+            </div>
+            <div class="wcd-sheet-foot">
+                <div class="btn cancel" onclick="closeCopySheet()" style="margin-bottom:8px;">取消</div>
+                <div class="btn primary" onclick="confirmCopyInitiate()">确认发起</div>
+            </div>
+        </div>
+    </div>
+
     <input type="file" id="draftAttInput" style="display:none;" onchange="onDraftAttPicked(event)" data-page-node-id="lnbOQMua3z0W4oXt3RGvS7">
 </div>
 
@@ -901,6 +960,7 @@
     function renderMoreOps() {
         var p = $('moreOpsPanel'); if (!p) return;
         p.innerHTML =
+            '<div class="op-item" onclick="openCopySheet(); closeMoreOps()"><span class="op-icon">📋</span><span>复制发起</span><span class="op-extra">快捷创建同类型新合同</span></div>' +
             '<div class="op-item" onclick="openInfoModal(\'版本记录\', \'V1 初始版本（拟定中） 2024-01-05；V2 提交确认 2024-01-06\')"><span class="op-icon">🕐</span><span>版本记录</span></div>' +
             '<div class="op-item" onclick="openInfoModal(\'变更记录\', \'暂无变更记录\')"><span class="op-icon">📝</span><span>变更记录</span></div>' +
             '<div class="op-item" onclick="exportContract(); closeMoreOps()"><span class="op-icon">📄</span><span>导出合同文件</span></div>';
@@ -1025,6 +1085,64 @@
     function shareToWechat() {
         closeExportModal(); showToast('正在生成PDF文件...');
         setTimeout(function () { showToast('PDF文件已生成，正在打开微信分享...\n\n文件包含：合同基本信息、签约双方信息、合同正文、附件'); }, 1500);
+    }
+
+    // ==================== 【新需求演示】复制发起：沿用原合同内容 + 差异项调整 ====================
+    var COPY_CANDIDATES = [
+        { name: '韩水通', role: '水电工', disabled: false },
+        { name: '杨水明', role: '水电工', disabled: false },
+        { name: '吴水安', role: '水电工', disabled: false },
+        { name: '张水电', role: '水电工', disabled: true, reason: '已是本合同乙方' }
+    ];
+    function renderCopyCandidates() {
+        var box = $('copyPartyBChips'); if (!box) return;
+        box.innerHTML = COPY_CANDIDATES.map(function (c) {
+            return '<span class="copy-chip' + (c.disabled ? ' disabled' : '') + '" data-name="' + esc(c.name) + '"' +
+                (c.disabled ? '' : ' onclick="selectCopyCandidate(this)"') + '>' +
+                (c.disabled ? '🔒 ' : '') + esc(c.name) + '（' + esc(c.role) + '）' +
+                (c.disabled ? '<span class="cc-reason">' + esc(c.reason || '不可选') + '</span>' : '') +
+                '</span>';
+        }).join('');
+    }
+    function selectCopyCandidate(el) {
+        document.querySelectorAll('#copyPartyBChips .copy-chip').forEach(function (c) { c.classList.remove('selected'); });
+        el.classList.add('selected');
+    }
+    function markCopyAdjusted(key) {
+        var badge = $(key + 'Badge'); if (!badge) return;
+        badge.textContent = '已调整';
+        badge.classList.remove('keep'); badge.classList.add('adjusted');
+    }
+    function openCopySheet() {
+        renderCopyCandidates();
+        // 差异项徽标复位为「沿用原值」
+        ['copyAmount', 'copyDuration', 'copyBreach'].forEach(function (k) {
+            var badge = $(k + 'Badge'); if (!badge) return;
+            badge.textContent = '沿用原值'; badge.classList.add('keep'); badge.classList.remove('adjusted');
+        });
+        var mask = $('copySheetMask'); if (mask) mask.classList.add('show');
+    }
+    function closeCopySheet() {
+        var mask = $('copySheetMask'); if (mask) mask.classList.remove('show');
+    }
+    function confirmCopyInitiate() {
+        var selected = document.querySelector('#copyPartyBChips .copy-chip.selected');
+        if (!selected) { showToast('请选择意向乙方'); return; }
+        var partyB = selected.getAttribute('data-name');
+        var amount = $('copyAmountInput').value.trim();
+        var duration = $('copyDurationInput').value.trim();
+        if (!amount) { showToast('请填写合同金额'); return; }
+        if (!duration) { showToast('请填写工期'); return; }
+        closeCopySheet();
+        var diff =
+            '<div class="rec-row"><span class="rec-tag">已调整</span>意向乙方：' + esc(partyB) + '（原合同乙方：张水电）</div>' +
+            '<div class="rec-row"><span class="rec-tag">' + (amount !== '12600.00' ? '已调整' : '沿用原值') + '</span>合同金额：¥' + esc(amount) + '</div>' +
+            '<div class="rec-row"><span class="rec-tag">' + (duration !== '30' ? '已调整' : '沿用原值') + '</span>工期：' + esc(duration) + ' 天</div>' +
+            '<div class="rec-row"><span class="rec-tag">沿用原值</span>合同类型：水电班组服务合同</div>' +
+            '<div class="rec-row"><span class="rec-tag">沿用原值</span>违约责任 / 固定详细条款 / 阶段任务 / 附件</div>' +
+            '<div class="rec-row">新合同已进入「确认中」，邀约已发送给 ' + esc(partyB) + '；本合同不受影响。</div>';
+        showToast('复制发起成功！新合同已进入「确认中」');
+        setTimeout(function () { openInfoModal('复制发起结果（差异对比）', diff); }, 500);
     }
 
     renderMoreOps();

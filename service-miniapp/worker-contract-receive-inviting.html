@@ -613,7 +613,7 @@
         } else {
             html += '<div class="hero-confirmed-badge">✅ 您已成为本合同乙方，已自动加入项目架构层级</div>';
             html += '<div class="next-flow"><div class="next-flow-title">下一步</div>' +
-                    '<div class="next-step"><div class="next-dot">1</div><div class="next-step-text">等待发起方上传签约文件<span>合同正式生效前由发起方上传纸质合同扫描件</span></div></div>' +
+                    '<div class="next-step"><div class="next-dot">1</div><div class="next-step-text">合同即时生效<span>确认后即正式生效，无上传签约文件环节</span></div></div>' +
                     '<div class="next-step"><div class="next-dot pending">2</div><div class="next-step-text">等待开工通知<span>工长确认后推送开工时间</span></div></div>' +
                     '<div class="next-step"><div class="next-dot pending">3</div><div class="next-step-text">查看工程任务<span>阶段任务与验收节点</span></div></div>' +
                     '</div>';
@@ -629,7 +629,7 @@
             html = '<button class="cta-btn cta-secondary" onclick="doDecline()">拒绝</button>' +
                    '<button class="cta-btn cta-primary" onclick="doReceive()">接单</button>';
         } else {
-            html = '<div class="cta-status-hint">⏳ 等待发起方上传签约文件，合同将正式生效</div>';
+            html = '<div class="cta-status-hint">✅ 已确认接单，合同即时生效</div>';
         }
         $('cta').innerHTML = html;
     }
@@ -644,7 +644,7 @@
             return;
         }
         showToast('已接单！您已成为本合同乙方');
-        setTimeout(function () { window.location.href = 'worker-contract-detail.html?viewer=receiver&status=worker_confirmed_receiver'; }, 700);
+        setTimeout(function () { window.location.href = 'worker-contract-detail.html?viewer=receiver&status=worker_signed'; }, 700);
     }
     // 确认中 → 拒绝：跳转合同邀约消息页
     function doDecline() {

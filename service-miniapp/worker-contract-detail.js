@@ -74,7 +74,7 @@
         },
         worker_confirmed_receiver: {
             text: '已确认', bannerClass: 'confirmed',
-            desc: '您已成为本合同乙方，已自动加入项目架构层级。等待发起方上传已签署的纸质合同扫描件，上传后合同正式生效。',
+            desc: '您已成为本合同乙方，已自动加入项目架构层级。',
             actions: []
         },
         worker_lost_receiver: {
@@ -307,6 +307,7 @@
         if (!state.contract) { renderNotFound(); return; }
         $('notFound').style.display = 'none';
         $('mainView').style.display = 'block';
+        fillConfirmerDropdown();
         // 支持「发起变更」页提交后回跳预览（如 preview=changing）或外部跳转指定状态（如 status=worker_confirmed_receiver）
         var preview = getParam('preview');
         var urlStatus = getParam('status');
@@ -1166,7 +1167,6 @@
 
     function renderAttachmentsSection() {
         var c = state.contract;
-        var signHtml = renderSignArea();
         var attachHtml = getAttachments().map(function (a) {
             return '<div class="attachment-item"><div class="file-icon">📄</div>' +
                 '<div class="file-info"><div class="file-name">' + escapeHtml(a.name) + '</div><div class="file-meta">' + escapeHtml(a.meta || '') + '</div></div>' +
@@ -1177,41 +1177,11 @@
             html = '<div class="attachment-list">' + attachHtml + '</div>';
             if (!attachHtml) html = '<div style="text-align:center;padding:20px 0;color:var(--text-tertiary);font-size:13px;">暂无附件</div>';
         } else {
-            html = '<div class="card"><div class="card-title"><span>📝 签约文件</span></div>' + signHtml + '</div>' +
-                '<div class="card"><div class="card-title"><span>📎 合同附件</span></div>' + attachHtml + '</div>';
+            // 最新流程无上传签约文件环节，附件卡仅渲染合同附件（无签约文件子卡）
+            html = '<div class="card"><div class="card-title"><span>📎 合同附件</span></div>' + attachHtml + '</div>';
         }
         var target = isSenderChangeView() ? 'changeAttachmentsBox' : 'attachmentsSection';
         $(target).innerHTML = html;
-    }
-
-    // 签约文件区（附件区内），依据状态展示
-    function renderSignArea() {
-        var status = state.status;
-        if (status === 'worker_signed') {
-            return '<div class="attachment-item"><div class="file-icon">📄</div>' +
-                '<div class="file-info"><div class="file-name">' + escapeHtml(state.contract.typeName) + '_签约文件.pdf</div>' +
-                '<div class="file-meta">已上传 · 合同已生效</div></div>' +
-                '<div class="download-btn" onclick="WCP.showToast(\'预览文件\')">👁️</div></div>';
-        }
-        if (status === 'worker_confirmed_receiver') {
-            return '<div class="sign-file-wait">等待发起方上传已签署的纸质合同扫描件，上传后合同正式生效。</div>';
-        }
-        return '<div class="sign-file-wait">暂无签约文件。</div>';
-    }
-
-    function pickSignFile() { $('signFileInput').click(); }
-    function onSignFilePicked(e) {
-        var f = e.target && e.target.files && e.target.files[0];
-        if (!f) return;
-        // 常规签约：已确认 → 上传签约文件 → 已签约。
-        // 注：变更流程已取消「上传签约文件」环节（对方确认后即生成 V2 已签约），故此处不再处理 changeProposal
-        if (global.ContractStore && state.workerId) {
-            global.ContractStore.markSigned(state.workerId);
-            state.contract = global.ContractStore.getContract(state.workerId);
-        }
-        showToast('签约文件已上传，合同已生效');
-        updateStatus('worker_signed');
-        e.target.value = '';
     }
 
     // 变更生效（V2）：将发起变更页提交的提案（金额/补充条款/阶段任务/附件）落到合同，并写入版本记录
@@ -2528,8 +2498,7 @@
                 { title: '我方确认合同', desc: '确认人：' + partyB, time: '2024-01-08 16:20', type: 'success' }
             ]),
             'worker_signed': base([
-                { title: '乙方确认合同', desc: '确认人：' + partyB, time: '2024-01-08 16:20', type: 'success' },
-                { title: '上传签约文件', desc: '合同正式生效（V1版本）', time: '2024-01-10 15:30', type: 'success' }
+                { title: '乙方确认合同', desc: '确认人：' + partyB + '，合同即时生效（V1版本）', time: '2024-01-08 16:20', type: 'success' }
             ]),
             'worker_lost_receiver': {
                 versions: [{ tag: 'V1', name: '初始版本', desc: '抢单失败', date: '2024-01-05 创建', current: true }],
@@ -2966,6 +2935,16 @@
         });
         dd.classList.add('show');
     }
+    // 确认人可选范围=项目内全部人员（与执行人同源 WORKER_CANDIDATES），覆盖静态 7 人选项
+    function fillConfirmerDropdown() {
+        ['edit', 'new'].forEach(function (prefix) {
+            var dd = $(prefix + 'TaskConfirmerDropdown');
+            if (!dd) return;
+            dd.innerHTML = WORKER_CANDIDATES.map(function (m) {
+                return '<div class="person-option" onclick="WCP.selectConfirmer(\'' + prefix + '\', \'' + m.name + '\', \'' + m.role + '\')"><div class="avatar">' + m.name.charAt(0) + '</div><div class="name">' + m.name + '</div><div class="role-tag">' + m.role + '</div></div>';
+            }).join('');
+        });
+    }
     function selectConfirmer(prefix, name, role) {
         var key = prefix + 'TaskConfirmPersonList';
         if (!state[key]) state[key] = [];
@@ -3013,8 +2992,6 @@
         showToast: showToast,
         closeConfirm: closeConfirm,
         runConfirm: runConfirm,
-        pickSignFile: pickSignFile,
-        onSignFilePicked: onSignFilePicked,
         switchSection: switchSection,
         toggleStage: toggleStage,
         createDemo: createDemo,
