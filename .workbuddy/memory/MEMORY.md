@@ -6,11 +6,22 @@
 - **改动前置约束**：不得影响基础施工/设计服务合同原流程；工人合同逻辑一律经 `isWorkerType` / 独立页面门控；不得破坏既有交互、页面其他模块。
 - **无滚动条（全局）**：小程序端滚动容器一律 `::-webkit-scrollbar{display:none}` + `scrollbar-width:none` + `-ms-overflow-style:none`。
 - **页面必带微信小程序默认导航栏**（状态栏 + nav + 原生胶囊占位）；mobile-first 全宽堆叠，复合卡片不并排半宽；兼顾中老年可访问性（触控区够大）。
-- 校验留痕：`node --check` JS + `.workbuddy/_validate_html.py <file>` 验 HTML 标签平衡 + CSS 大括号平衡 + id 引用自检；验收后截图复核。
+- 校验留痕：`node --check` JS + `.workbuddy/_validate_html.py <file>` 验 HTML 标签平衡 + CSS 大括号平衡 + id 引用自检；验收后截图复核。**CSS 大括号必须按 `<style>` 块逐个统计**（`architecture.html` 有 2 个 style 块，只 split 第一块会漏检新增样式）。
+- **原型页演示开关惯例**：演示用开关/说明一律放**手机框右侧框外**，用 `.arch-demo-stage`（flex nowrap 裹 phone-frame）+ `.arch-demo-note`（左侧 2px 虚线蓝条侧栏，沿用 `contract-copy-initiate.html` 的 `.copy-note` 风格），不得放框内；开关只改状态变量，不调语义不符的既有函数。
+- **弹窗层级（architecture.html，2026-09-09）**：`common.css` 中所有 `.app-modal` 同为 `z-index:1000`，同层级时 **DOM 靠后者盖住靠前者**——在「查看合同」弹窗内触发的提示会被遮盖。已在本页加 `#appModal{z-index:1010}`、`.app-toast{z-index:1020}`。凡新增「在某弹窗内触发提示」的交互，必须先核对层级。
+- **演示页回迁正式页的标准流程（2026-09-09 确立）**：① `present_files` 预览会注入大量 `data-page-node-id`（曾达 312 个），**回迁前必须先用 Python 正则剔除该属性并按行 rstrip 归一再 diff**，否则 diff 全是噪声；② 写 Python 批量替换脚本、每处替换 `count==1` 断言，杜绝 Edit 静默不落盘；③ 回迁后再做一次「清洗版」diff 对比源页，**剩余差异应只剩演示专有项**作为验收标准；④ 改造前 `cp` 备份到 `.workbuddy/_tmp/*.bak` 可回滚；⑤ 演示页专有的说明卡/标题后缀/装饰性注释一律不回迁。
+
+## 项目架构页 · 复制发起（正式页已接管）
+- `service-miniapp/architecture.html` 已同步演示页的「复制发起」能力（2026-09-09），**与 `architecture-multi-contract-demo.html` 功能等价**，后者仍保留作为演示页。
+- 数据模型：一个工作组可有多份合同，`groupContracts` = 组名 → **合同数组**；工具函数 `contractsOf(groupName)` / `hasSignedContract(groupName)`。守卫适配数组口径：`checkCanExitGroup`、`checkCanExitProject`、`showCreateModal(level2)`、`showDeleteModal`。
+- 「复制发起」为**按份**操作：蓝本=所选那一份。**常规入口唯一：已存在合同的节点渲染「查看合同」→ 弹窗内每份行「📋 复制发起」**；无合同的节点只渲染「📝 创建合同」→ 直接空白新建，**不存在复制发起入口**（无蓝本）。`copyContract()` → `contract-copy-initiate.html?group=&source=&from=architecture`。`goCreateContract` 里「已有合同→弹创建方式（复制发起（推荐）/空白新建）」是**不可达的防御分支**，PRD 中只能写为「如因数据同步等原因被触发，系统不阻断」，**不得写成常规入口**（2026-09-09 用户纠错）。
+- **「一个工作组只能有一个合同」表述已从该页移除**（`goCreateContract` 不再阻断）。注意：`showAppModal` 只重设 `appModalConfirm.onclick`、**不重设 Cancel**，故「创建方式」弹窗覆写 Cancel 后必须调 `resetCreateChoiceButtons()` 复位，否则污染其他弹窗。
+- **PRD 落位（2026-09-09 定稿）**：复制发起入口/权限 → `PRD-项目模块详细规格.html` §6.12 与 `PRD-合同模块详细规格.html` §7.12（工人合同详情页发起方入口）；**发起页（contract-copy-initiate.html）字段规格归合同模块**：§7.12.2 字段差异（对比基准=§7.5.3.1 拟定中页）+ §7.12.3 隶属架构层级选择；项目模块 6.12「发起页形态」行仅留跨文档链接（`href="PRD-合同模块详细规格.html#sec-7-12"`），不重复描述。**权限规则：复制发起 = 创建合同权限**，两处均单列。PRD 更新禁用历史版本记录与新旧对比描述，一律正向陈述。
 
 ## PRD 书写规范
 - 「中文（英文标识符）」前置，禁止英文前置或 `<code>` 裸英文；例外：MIME/URL/代码表达式/组件名可留英文。每轮改后 Grep 扫违规。
 - 状态机表列序固定 `显示文案 | 状态 key | …`；V1 不写历史对比，不为已砍功能留"已取消"专节。
+- **禁止「对原有交互的影响」式总结小节**（2026-09-09 用户明确）：新功能若其影响已写入各对应小节，不得再单列「XX.1 对原有交互的影响」——等同历史记录/新旧对比，第一版不需要。写作前先确认每条影响是否已在对应小节落地，是则只改小节、不写总结。例外：纯规格清单（如「覆盖页面与示例」列哪些页面含该入口）可保留。
 - **状态基准以原型为权威**：工人合同看 `contract-store.js` + `worker-contract-detail.js` STATUS_CONFIG；基础/设计合同看 `contract-detail.*`（含平台审核）。写前先 Grep 原型，杜绝自造状态名。PC 运营端用自有 key（`pending_review`/`reviewed_*`）属另一层映射，勿改。
 
 ## 工人合同（service-miniapp）

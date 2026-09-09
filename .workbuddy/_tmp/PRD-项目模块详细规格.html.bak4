@@ -3174,7 +3174,7 @@
                         </tr>
                         <tr data-page-node-id="Gsm3phiHpLHAIP3oq1xDHn">
                             <td data-page-node-id="aiWdW8vOhbsVoLMivlqakl">发起页形态</td>
-                            <td data-page-node-id="bgJe60A6gED6lXBEfojsMb">沿用拟定中页（<a href="service-miniapp/worker-contract-draft-initial-new.html" target="_blank">worker-contract-draft-initial-new.html</a>）布局，各字段预填蓝本合同取值并标注「沿用 / 已调整」，全部可编辑；底部为「取消 / 仅保存 / 提交并邀请乙方」。发起页字段规格与隶属架构层级选择详见<a href="PRD-合同模块详细规格.html#sec-7-12" target="_blank">《PRD-合同模块详细规格》7.12.2 / 7.12.3</a></td>
+                            <td data-page-node-id="bgJe60A6gED6lXBEfojsMb">沿用拟定中页布局，各字段预填蓝本合同取值并标注「沿用 / 已调整」，全部可编辑；底部为「取消 / 仅保存 / 提交并邀请乙方」</td>
                         </tr>
                         <tr data-page-node-id="WbIs3OG0ABoJUXI7BW2uNN">
                             <td data-page-node-id="YvxFxAnDgpXVAm54qBeki7">隶属架构层级</td>

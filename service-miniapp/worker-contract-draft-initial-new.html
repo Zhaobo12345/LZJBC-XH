@@ -73,6 +73,7 @@
         }
         .more-ops-panel .op-item:last-child { border-bottom: none; }
         .more-ops-panel .op-icon { font-size: 15px; }
+        .more-ops-panel .op-extra { margin-left: auto; font-size: 11px; color: #98A2B3; }
 
         /* 状态横幅（拟定中） */
         .wc-banner {
@@ -1782,6 +1783,8 @@
             return;
         }
         showToast('已提交并邀请乙方（' + editInvited.length + ' 人）');
+        var invitesParam = encodeURIComponent(JSON.stringify(editInvited));
+        setTimeout(function () { window.location.href = 'worker-contract-confirming-initiator-new.html?invites=' + invitesParam; }, 2300);
     }
     function doSave() {
         var breach = $('breachInput');
@@ -1794,13 +1797,15 @@
         var panel = $('moreOpsPanel');
         if (!panel) return;
         var items = [
+            { icon: '📑', label: '复制发起', extra: '快捷发起同类型新合同', fn: 'openCopyInitiate()' },
             { icon: '📋', label: '版本记录', fn: 'showVersionModal()' },
             { icon: '📜', label: '变更记录', fn: 'showChangeRecordModal()' },
             { icon: '📄', label: '导出合同文件', fn: 'exportContract()' }
         ];
         panel.innerHTML = items.map(function (it) {
             return '<div class="op-item" onclick="' + it.fn + '; closeMoreOps();">' +
-                '<span class="op-icon">' + it.icon + '</span><span>' + it.label + '</span></div>';
+                '<span class="op-icon">' + it.icon + '</span><span>' + it.label + '</span>' +
+                (it.extra ? '<span class="op-extra">' + it.extra + '</span>' : '') + '</div>';
         }).join('');
     }
     function toggleMoreOps() {

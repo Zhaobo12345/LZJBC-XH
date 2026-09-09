@@ -73,6 +73,7 @@
         }
         .more-ops-panel .op-item:last-child { border-bottom: none; }
         .more-ops-panel .op-icon { font-size: 15px; }
+        .more-ops-panel .op-extra { margin-left: auto; font-size: 11px; color: #98A2B3; }
 
         /* 状态横幅（拟定中） */
         .wc-banner {
@@ -901,6 +902,7 @@
     function renderMoreOps() {
         var p = $('moreOpsPanel'); if (!p) return;
         p.innerHTML =
+            '<div class="op-item" onclick="openCopyInitiate(); closeMoreOps()"><span class="op-icon">📑</span><span>复制发起</span><span class="op-extra">快捷发起同类型新合同</span></div>' +
             '<div class="op-item" onclick="openInfoModal(\'版本记录\', \'V1 初始版本（拟定中） 2024-01-05；V2 提交确认 2024-01-06\')"><span class="op-icon">🕐</span><span>版本记录</span></div>' +
             '<div class="op-item" onclick="openInfoModal(\'变更记录\', \'暂无变更记录\')"><span class="op-icon">📝</span><span>变更记录</span></div>' +
             '<div class="op-item" onclick="exportContract(); closeMoreOps()"><span class="op-icon">📄</span><span>导出合同文件</span></div>';

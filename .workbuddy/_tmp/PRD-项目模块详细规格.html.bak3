@@ -3174,7 +3174,7 @@
                         </tr>
                         <tr data-page-node-id="Gsm3phiHpLHAIP3oq1xDHn">
                             <td data-page-node-id="aiWdW8vOhbsVoLMivlqakl">发起页形态</td>
-                            <td data-page-node-id="bgJe60A6gED6lXBEfojsMb">沿用拟定中页（<a href="service-miniapp/worker-contract-draft-initial-new.html" target="_blank">worker-contract-draft-initial-new.html</a>）布局，各字段预填蓝本合同取值并标注「沿用 / 已调整」，全部可编辑；底部为「取消 / 仅保存 / 提交并邀请乙方」。发起页字段规格与隶属架构层级选择详见<a href="PRD-合同模块详细规格.html#sec-7-12" target="_blank">《PRD-合同模块详细规格》7.12.2 / 7.12.3</a></td>
+                            <td data-page-node-id="bgJe60A6gED6lXBEfojsMb">沿用拟定中页布局，各字段预填蓝本合同取值并标注「沿用 / 已调整」，全部可编辑；底部为「取消 / 仅保存 / 提交并邀请乙方」</td>
                         </tr>
                         <tr data-page-node-id="WbIs3OG0ABoJUXI7BW2uNN">
                             <td data-page-node-id="YvxFxAnDgpXVAm54qBeki7">隶属架构层级</td>
@@ -3186,6 +3186,15 @@
                         </tr>
                     </tbody>
                 </table>
+
+                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;" data-page-node-id="DD4NtM1HL5XhXyVMqDD9y2">6.12.1 对原有交互的影响</div>
+                <ul style="font-size:13px;line-height:1.9;" data-page-node-id="girHmWSffBRR6ECVUoUhXj">
+                    <li data-page-node-id="7uCC3m8LDJhbnYaciSBQ96"><strong data-page-node-id="VUb4mqEaSbdrecob749afX">一个工作组可存在多份合同</strong>：工作组名下合同按份管理，追加新合同通过「查看合同」内的按份「复制发起」进行（见 6.6 前置校验2、6.7）。</li>
+                    <li data-page-node-id="lbmK2doHpobtQsLjse3q1g"><strong data-page-node-id="SgqmKqN0NzJrSUDqR2S5i5">头部统计</strong>：新增「合同份数」统计项，与工作组数量、成员数量并列（见 6.2）。</li>
+                    <li data-page-node-id="D7KSB1NjTH7QozFfI8PFB4"><strong data-page-node-id="h8Rass0s5eSo2Co5XJqDMJ">查看合同</strong>：弹窗内为「聚合统计行 + 多份合同列表」，每份独立可点击跳转详情，并各自带「复制发起」（见 6.7）。</li>
+                    <li data-page-node-id="tVmOLUTRvfbA4iwKBARPB1"><strong data-page-node-id="H1aLTeiTlJ8zPwAPYCqZ73">退出 / 删除 / 添加子级</strong>：限制规则保持生效，判定口径为该工作组名下任意一份合同满足条件即触发（见 6.8）。</li>
+                    <li data-page-node-id="idew0rrYm5rXowryy4K4j0"><strong data-page-node-id="jwnM8Fme6BCBeQ9QziHUqo">创建合同</strong>：入口展示随合同有无而变——暂无合同的工作组展示「📝 创建合同」并走空白新建；已存在合同的工作组展示「查看合同」，通过其中按份「复制发起」追加新合同（见 6.4 / 6.9）。</li>
+                </ul>
             </div>
         </div>
 

@@ -2433,6 +2433,7 @@
     // 更多菜单内容按状态动态生成：
     //   - 受邀方确认中（worker_inviting_receiver）：仅展示「导出合同文件」
     //   - 其余非终态状态：版本记录 / 变更记录 / 导出合同文件（对齐「合同详情（合规版）」）
+    //   - 发起方（state.viewer === 'sender'）视角额外在菜单首位提供「复制发起」入口（快捷发起同类型新合同）
     // 受邀方终态（抢单失败 / 已拒绝）由 updateStatus 直接隐藏整行工具栏，无需渲染菜单
     function renderMoreOps(status) {
         var panel = $('moreOpsPanel');
@@ -2448,9 +2449,13 @@
                 { icon: '📜', label: '变更记录', fn: 'WCP.showChangeRecordModal()' },
                 { icon: '📄', label: '导出合同文件', fn: 'WCP.exportContract()' }
             ];
+            // 发起方视角：新增「复制发起」入口（快捷发起同类型新合同），置于菜单首位
+            if (state.viewer === 'sender') {
+                items.unshift({ icon: '📑', label: '复制发起', fn: 'WCP.openCopyInitiate()', extra: '快捷发起同类型新合同' });
+            }
         }
         panel.innerHTML = items.map(function (it) {
-            return '<div class="op-item" onclick="' + it.fn + '; WCP.closeMoreOps();"><span class="op-icon">' + it.icon + '</span><span>' + escapeHtml(it.label) + '</span></div>';
+            return '<div class="op-item" onclick="' + it.fn + '; WCP.closeMoreOps();"><span class="op-icon">' + it.icon + '</span><span>' + escapeHtml(it.label) + '</span>' + (it.extra ? '<span class="op-extra">' + escapeHtml(it.extra) + '</span>' : '') + '</div>';
         }).join('');
     }
 
@@ -2998,6 +3003,12 @@
         resetDemo: resetDemo,
         toggleMoreOps: toggleMoreOps,
         closeMoreOps: closeMoreOps,
+        // 复制发起：跳转独立复制发起页（contract-copy-initiate.html），带入来源标识与合同 id 便于后续预填
+        openCopyInitiate: function () {
+            var params = 'from=detail';
+            if (state.workerId) params += '&source=' + encodeURIComponent(state.workerId);
+            global.location.href = 'contract-copy-initiate.html?' + params;
+        },
         showVersionModal: showVersionModal,
         closeVersionModal: closeVersionModal,
         showChangeRecordModal: showChangeRecordModal,

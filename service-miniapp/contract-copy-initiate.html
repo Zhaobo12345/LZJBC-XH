@@ -326,12 +326,57 @@
         .copy-badge.keep { background: #F2F3F5; color: #86909C; }
         .copy-badge.adjusted { background: #FFF7E6; color: #FA8C16; }
 
-        /* 复制来源说明卡（复制特有） */
-        .copy-source-card {
-            margin: 4px 12px 6px; padding: 8px 12px; border-radius: 10px;
-            background: #E6F4FF; border: 1px solid #BAE0FF;
-            font-size: 11px; color: #1677FF; line-height: 1.6;
+        /* 复制发起说明侧栏：与手机框右侧并排（不换行），窄屏时自身收缩，不干扰框内实际页面查看 */
+        .copy-demo-stage { display: flex; flex-wrap: nowrap; justify-content: center; align-items: flex-start; gap: 16px; padding: 20px 12px; }
+        .copy-demo-stage .phone-frame { margin: 0; flex-shrink: 0; }
+        .copy-note { flex: 0 1 220px; min-width: 150px; box-sizing: border-box; padding: 6px 0 6px 12px; background-color: transparent; border: none; border-left: 2px dashed #91CAFF; border-radius: 0; font-size: 11px; line-height: 1.65; color: #1677FF; }
+        .copy-note .cn-title { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+        .copy-note p { margin: 0 0 8px; }
+        .copy-note p:last-child { margin-bottom: 0; }
+
+        /* 隶属架构层级（复制特有：默认可改，默认=被复制合同所属架构层级） */
+        .arch-level-row {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 12px; background: #fff; border: 1px solid var(--primary-light);
+            border-radius: 10px; cursor: pointer; margin-top: 4px;
         }
+        .arch-level-row:active { background: #F7F8FA; }
+        .arch-level-row .al-value { display: flex; align-items: center; gap: 6px; min-width: 0; overflow: hidden; font-size: 14px; color: #222; font-weight: 500; }
+        .arch-level-row .al-value .al-tag { font-size: 10px; color: #00B42A; background: #E8FFEA; border-radius: 4px; padding: 1px 6px; font-weight: 600; flex-shrink: 0; }
+        .arch-level-row .al-value .al-tag.adj { color: #FA8C16; background: #FFF3E6; }
+        .arch-level-row .al-change { font-size: 13px; color: #1677FF; flex-shrink: 0; margin-left: 8px; }
+        .arch-level-hint { font-size: 11px; color: #999; margin-top: 6px; line-height: 1.5; }
+        /* 层级徽标（二级=蓝 / 三级=青）与完整路径面包屑 */
+        .al-badge { font-size: 10px; color: #1677FF; background: #E6F0FF; border-radius: 4px; padding: 1px 6px; font-weight: 600; flex-shrink: 0; }
+        .al-badge.al-badge-l3 { color: #13A8A8; background: #E6F7F7; }
+        .arch-level-path { font-size: 11px; color: #8A94A6; margin-top: 6px; line-height: 1.5; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .arch-level-item .al-badge { font-size: 10px; color: #1677FF; background: #E6F0FF; border-radius: 4px; padding: 1px 6px; font-weight: 600; flex-shrink: 0; }
+        .arch-level-item .al-badge.al-badge-l3 { color: #13A8A8; background: #E6F7F7; }
+        .arch-level-item .al-path { font-size: 11px; color: #A0A8B8; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        /* 树形分组 + 范围徽标 */
+        .arch-level-item.al-child { margin-left: 14px; padding-left: 14px; border-left: 2px solid #e3e6eb; }
+        .arch-level-item.al-child .al-icon { width: 26px; height: 26px; font-size: 13px; }
+        .arch-level-item.al-disabled { opacity: .5; cursor: not-allowed; }
+        .arch-level-item.al-disabled:active { background: transparent; }
+        .al-scope { font-size: 10px; border-radius: 4px; padding: 1px 6px; font-weight: 600; flex-shrink: 0; margin-left: 2px; }
+        .al-scope.same { color: #1677FF; background: #E6F0FF; }
+        .al-scope.empty { color: #00B42A; background: #E8FFEA; }
+        .al-scope.dis { color: #B04141; background: #FBEAEA; }
+        /* 弹窗内模糊搜索框（保持树形与规则可见，仅按名称/工种/路径过滤） */
+        .al-search-wrap { padding: 8px 4px 6px; position: sticky; top: 0; background: #fff; z-index: 2; }
+        .al-search-input { width: 100%; box-sizing: border-box; padding: 9px 12px; border: 1px solid #e3e6eb; border-radius: 10px; font-size: 13px; color: #222; outline: none; -webkit-appearance: none; }
+        .al-search-input:focus { border-color: #1677FF; }
+        .al-search-input::placeholder { color: #b6bcc6; }
+        .al-empty { font-size: 12px; color: #b6bcc6; text-align: center; padding: 18px 0; }
+        .arch-level-item { display: flex; align-items: center; gap: 10px; padding: 13px 4px; border-bottom: 1px solid #f2f3f5; cursor: pointer; }
+        .arch-level-item:last-child { border-bottom: none; }
+        .arch-level-item:active { background: #F7F8FA; }
+        .arch-level-item .al-icon { width: 34px; height: 34px; border-radius: 9px; background: #f0f7ff; color: #1677ff; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+        .arch-level-item .al-main { flex: 1; min-width: 0; }
+        .arch-level-item .al-name { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 14px; color: #222; font-weight: 500; }
+        .arch-level-item .al-desc { font-size: 11px; color: #999; margin-top: 2px; }
+        .arch-level-item .al-check { color: #1677ff; font-size: 16px; flex-shrink: 0; }
+        .arch-level-item .al-default-tag { font-size: 10px; color: #00B42A; background: #E8FFEA; border-radius: 4px; padding: 1px 6px; margin-left: 6px; }
 
         /* toast */
         .app-toast {
@@ -414,6 +459,7 @@
     </style>
 </head>
 <body data-page-node-id="wh5MndfC1OPTerHCjmLM6P">
+<div class="copy-demo-stage">
 <div class="phone-frame" data-page-node-id="Qmnlpz0GuyqgcCaItckkAp">
     <div class="status-bar" data-page-node-id="mpMYD5Ij4W0jVAO1OAL4Yl">
         <div class="time" data-page-node-id="wOAHtDcgi4PYct6lPRYtnU">9:41</div>
@@ -447,9 +493,17 @@
             <div class="wc-banner-desc" data-page-node-id="vczBNmDmobgoLcBQ2nSneg">合同处于拟定中。可直接修改合同名称、合同金额、工期与违约责任，并选择意向乙方（仅各工种，1-3 人）后提交邀请。</div>
         </div>
 
-        <!-- 复制来源说明（复制特有） -->
-        <div class="copy-source-card">
-            📋 复制发起：沿用原合同「<b>全屋水电改造合同</b>」（水电班组服务合同）的内容并默认预填，可按新工人情况逐项调整后快速发起；标注「沿用原值」的字段修改后变为「已调整」。
+        <!-- 复制发起说明已移至手机框外右侧侧栏（.copy-note），不占用框内实际页面空间 -->
+
+        <!-- 隶属架构层级（复制特有：默认可改，默认=被复制合同所属架构层级） -->
+        <div class="worker-invite-card" style="margin-top: 0;">
+            <div class="card-title" style="margin-bottom:6px;">🏗️ 隶属架构层级</div>
+            <div class="arch-level-row" id="archLevelRow" onclick="openArchLevelPicker()">
+                <span class="al-value"><span class="al-badge" id="archLevelBadge">二级</span><span id="archLevelValue">水电工作组</span><span class="al-tag" id="archLevelTag">默认</span><span class="al-scope" id="archLevelScope"></span></span>
+                <span class="al-change">更换 ›</span>
+            </div>
+            <div class="arch-level-path" id="archLevelPath"></div>
+            <div class="arch-level-hint" id="archLevelHint"></div>
         </div>
 
         <!-- 合同甲方与意向乙方 -->
@@ -613,6 +667,22 @@
         </div>
     </div>
 
+    <!-- 隶属架构层级选择（复制特有） -->
+    <div class="wcd-modal-mask" id="archLevelModal" onclick="if(event.target===this)closeArchLevelPicker()" data-page-node-id="archLevelMask">
+        <div class="wcd-sheet" data-page-node-id="archLevelSheet">
+            <div class="wcd-sheet-head" data-page-node-id="archLevelHead"><div class="title" data-page-node-id="archLevelTitle">选择隶属架构层级</div><div class="close" onclick="closeArchLevelPicker()" data-page-node-id="archLevelClose">✕</div></div>
+            <div class="wcd-sheet-filter" data-page-node-id="archLevelFilter">仅可选同类型（被复制合同工种）与暂无合同的架构；异类型且已有合同者不可选</div>
+            <div class="wcd-sheet-body" data-page-node-id="archLevelBody">
+                <div class="al-search-wrap">
+                    <input id="archLevelSearch" class="al-search-input" type="text" placeholder="搜索架构名称 / 工种 / 路径…" oninput="filterArchLevelList()" />
+                </div>
+                <div id="archLevelList" data-page-node-id="archLevelListInner"></div>
+                <div class="al-empty" id="archLevelEmpty" style="display:none;">未找到匹配的架构层级</div>
+            </div>
+            <div class="wcd-sheet-foot" data-page-node-id="archLevelFoot"><div class="btn cancel" onclick="closeArchLevelPicker()" data-page-node-id="archLevelCancel">取消</div></div>
+        </div>
+    </div>
+
     <!-- 预览合同弹窗（全屏，对齐「拟定中（发起方）」状态页） -->
     <div class="fulltext-modal" id="wcFullTextModal" onclick="if(event.target===this)closeFullText()" data-page-node-id="9MrPEELmLDOUjsETLfEaRz">
         <div class="status-bar" data-page-node-id="up2HgLGZHnz057yOCGM4Xo">
@@ -750,6 +820,14 @@
 
     <input type="file" id="draftAttInput" style="display:none;" onchange="onDraftAttPicked(event)" data-page-node-id="sqJOZG7uYvyQoTDREKxIxI">
 </div>
+
+    <aside class="copy-note">
+        <div class="cn-title">📋 复制发起说明</div>
+        <p>本页基于「<b>全屋水电改造合同</b>」（水电班组服务合同）复制发起：原合同内容默认预填，可按新工人情况逐项调整后快速发起。</p>
+        <p>字段右侧标注「沿用原值」表示沿用蓝本；修改后变为「已调整」。</p>
+        <p>「🏗️ 隶属架构层级」默认可改，点「更换 ›」可选同类型或暂无合同的架构（支持模糊搜索）。</p>
+    </aside>
+</div><!-- /copy-demo-stage -->
 
 <!-- 原型导航：与 worker-contract-detail.html 一致（新增「拟定中（发起方）-新」并置为当前） -->
     <div class="page-nav" data-page-node-id="eX6cwHb3zdOBO5vO9iW6NV">
@@ -1029,6 +1107,142 @@
     var currentStatus = 'worker_draft_initial'; // 当前页态：非签约态；已签约态可置 'signed' / 'signed_done'
     var draftTab = 'contract-text';
     var tplKind = 'text', previewKind = null, previewId = null;
+
+    /* ===================== 隶属架构层级（复制特有：默认可改） ===================== */
+    function getQueryParam(name) {
+        var m = new RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search || '');
+        return m ? decodeURIComponent(m[1].replace(/\+/g, ' ')) : '';
+    }
+    // 一级根节点（项目总架构，不可选作归属终点）
+    var ARCH_ROOT = '陈庄施工队·西安锦业路项目';
+    // 源合同工种：决定可选的"同类型"范围（仅同类型架构 + 无合同的其它架构可选）
+    var SOURCE_TRADE = C.type;
+    var TRADE_NAMES = { shuidian: '水电', niwa: '泥瓦', mugong: '木工', youqi: '油漆' };
+    // 可选归属层级：二级工作组 + 三级子组；trade=归属工种，hasContracts=该层级是否已有合同
+    var ARCH_LEVEL_MAP = [
+        { name: '水电工作组', level: 2, parent: null, trade: 'shuidian', hasContracts: true },
+        { name: '水电二组',   level: 3, parent: '水电工作组', trade: 'shuidian', hasContracts: false },
+        { name: '水电三组',   level: 3, parent: '水电工作组', trade: 'shuidian', hasContracts: false },
+        { name: '强电施工组', level: 2, parent: null, trade: 'shuidian', hasContracts: false },
+        { name: '泥瓦工作组', level: 2, parent: null, trade: 'niwa', hasContracts: true },
+        { name: '木工工作组', level: 2, parent: null, trade: 'mugong', hasContracts: false },
+        { name: '油漆工作组', level: 2, parent: null, trade: 'youqi', hasContracts: false }
+    ];
+    // 默认归属 = 被复制合同所属层级（架构页带入 group；详情页用蓝本默认层级）
+    var defaultArchLevel = getQueryParam('group') || C.group;
+    // 默认项不在预置列表时，按源工种二级兜底（保证可追踪完整路径）
+    if (!ARCH_LEVEL_MAP.some(function (x) { return x.name === defaultArchLevel; })) {
+        ARCH_LEVEL_MAP.unshift({ name: defaultArchLevel, level: 2, parent: null, trade: SOURCE_TRADE, hasContracts: true });
+    }
+    var selectedArchLevel = defaultArchLevel;
+    var archLevelAdjusted = false;
+    function archFind(name) {
+        for (var i = 0; i < ARCH_LEVEL_MAP.length; i++) if (ARCH_LEVEL_MAP[i].name === name) return ARCH_LEVEL_MAP[i];
+        return { name: name, level: 2, parent: null, trade: SOURCE_TRADE, hasContracts: true };
+    }
+    function archPath(opt) {
+        var parts = [ARCH_ROOT];
+        if (opt.parent) parts.push(opt.parent);
+        parts.push(opt.name);
+        return parts.join(' › ');
+    }
+    // 可选规则：同类型（源工种）架构 或 无合同的其它架构；异类型且有合同者不可选
+    function archAllowed(opt) { return opt.trade === SOURCE_TRADE || !opt.hasContracts; }
+    function archScope(opt) {
+        if (!archAllowed(opt)) return { cls: 'dis', text: '已有合同·不可选' };
+        if (opt.trade === SOURCE_TRADE) return { cls: 'same', text: '同类型' };
+        return { cls: 'empty', text: '无合同' };
+    }
+    function archLevelText(level) { return level === 3 ? '三级' : '二级'; }
+    function archLevelDesc(opt) {
+        if (opt.name === defaultArchLevel) return '被复制合同当前所属层级（默认）';
+        if (!archAllowed(opt)) return '异类型且已有合同，不可作为复制合同的归属层级';
+        if (opt.level === 3) return '挂在「' + opt.parent + '」下的子施工组，可拆分并行作业';
+        if (opt.trade === SOURCE_TRADE) return '同类型（' + escapeHtml(C.typeName) + '）架构，可并行归属';
+        return '暂无合同架构，可承接新合同';
+    }
+    function renderArchLevelValue() {
+        var opt = archFind(selectedArchLevel);
+        var valEl = $('archLevelValue'); if (valEl) valEl.textContent = opt.name;
+        var badgeEl = $('archLevelBadge');
+        if (badgeEl) { badgeEl.textContent = archLevelText(opt.level); badgeEl.className = 'al-badge' + (opt.level === 3 ? ' al-badge-l3' : ''); }
+        var tagEl = $('archLevelTag');
+        if (tagEl) {
+            if (archLevelAdjusted) { tagEl.textContent = '已调整'; tagEl.classList.add('adj'); }
+            else { tagEl.textContent = '默认'; tagEl.classList.remove('adj'); }
+        }
+        var scopeEl = $('archLevelScope');
+        if (scopeEl) { var sc = archScope(opt); scopeEl.textContent = sc.text; scopeEl.className = 'al-scope ' + sc.cls; }
+        var pathEl = $('archLevelPath'); if (pathEl) pathEl.textContent = archPath(opt);
+        var hintEl = $('archLevelHint');
+        if (hintEl) {
+            hintEl.textContent = archLevelAdjusted
+                ? ('已更换为「' + opt.name + '」；新合同将归入该架构层级，原合同不受影响。')
+                : '';
+        }
+    }
+    function appendArchItem(listEl, opt, isChild, selName) {
+        var allowed = archAllowed(opt);
+        var sel = opt.name === selName;
+        var sc = archScope(opt);
+        var item = document.createElement('div');
+        item.className = 'arch-level-item' + (isChild ? ' al-child' : '') + (allowed ? '' : ' al-disabled');
+        var tradeName = TRADE_NAMES[opt.trade] || opt.trade || '';
+        item.setAttribute('data-key', (opt.name + ' ' + (opt.parent || '') + ' ' + tradeName + ' ' + archPath(opt)).toLowerCase());
+        item.innerHTML = '<div class="al-icon">🏗️</div>' +
+            '<div class="al-main"><div class="al-name">' +
+            '<span class="al-badge' + (opt.level === 3 ? ' al-badge-l3' : '') + '">' + archLevelText(opt.level) + '</span>' +
+            escapeHtml(opt.name) +
+            (opt.name === defaultArchLevel ? '<span class="al-default-tag">默认</span>' : '') +
+            '<span class="al-scope ' + sc.cls + '">' + sc.text + '</span></div>' +
+            '<div class="al-path">' + escapeHtml(archPath(opt)) + '</div>' +
+            '<div class="al-desc">' + escapeHtml(archLevelDesc(opt)) + '</div></div>' +
+            (sel ? '<div class="al-check">✓</div>' : '');
+        if (allowed) {
+            item.onclick = function () {
+                selectedArchLevel = opt.name;
+                archLevelAdjusted = (opt.name !== defaultArchLevel);
+                renderArchLevelValue();
+                closeArchLevelPicker();
+            };
+        }
+        listEl.appendChild(item);
+    }
+    function openArchLevelPicker() {
+        var listEl = $('archLevelList'); if (!listEl) return;
+        listEl.innerHTML = '';
+        var searchEl = document.getElementById('archLevelSearch'); if (searchEl) searchEl.value = '';
+        // 可选范围说明见弹窗顶部 wcd-sheet-filter（与树形范围徽标、置灰一致，避免重复描述）
+        // 树形分组：二级为父节点，三级缩进为其子节点
+        var childrenOf = {};
+        ARCH_LEVEL_MAP.forEach(function (o) { if (o.parent) { (childrenOf[o.parent] = childrenOf[o.parent] || []).push(o); } });
+        ARCH_LEVEL_MAP.filter(function (o) { return !o.parent; }).forEach(function (opt) {
+            appendArchItem(listEl, opt, false, selectedArchLevel);
+            (childrenOf[opt.name] || []).forEach(function (child) {
+                appendArchItem(listEl, child, true, selectedArchLevel);
+            });
+        });
+        filterArchLevelList();
+        var mask = $('archLevelModal'); if (mask) mask.classList.add('show');
+    }
+    // 模糊搜索：按 名称 / 工种 / 所属路径 实时过滤树（保留范围徽标与不可选状态）
+    function filterArchLevelList() {
+        var inp = document.getElementById('archLevelSearch');
+        var q = (inp ? inp.value : '').trim().toLowerCase();
+        var items = document.querySelectorAll('#archLevelList .arch-level-item');
+        var shown = 0;
+        items.forEach(function (it) {
+            var key = it.getAttribute('data-key') || '';
+            var hit = !q || key.indexOf(q) > -1;
+            it.style.display = hit ? '' : 'none';
+            if (hit) shown++;
+        });
+        var emptyEl = document.getElementById('archLevelEmpty');
+        if (emptyEl) emptyEl.style.display = (q && shown === 0) ? '' : 'none';
+    }
+    function closeArchLevelPicker() { var m = $('archLevelModal'); if (m) m.classList.remove('show'); }
+    // 进入页面时按来源刷新默认层级展示
+    renderArchLevelValue();
 
     /* ===================== 头像 / 电子名片 ===================== */
     function avatarColor(seed) {
@@ -1852,8 +2066,12 @@
             showToast('请至少选择 1 名意向乙方（最多 3 人）');
             return;
         }
-        showToast('已提交并邀请乙方（' + editInvited.length + ' 人）');
-        setTimeout(function () { showCopyDiffModal(); }, 400);
+        showToast('已提交并邀请乙方（' + editInvited.length + ' 人）' + (archLevelAdjusted ? '\n归入层级：' + archPath(archFind(selectedArchLevel)) : ''));
+        // 校验通过：气泡消失后直接进入「确认中（发起方）」，不展示差异对比弹窗
+        setTimeout(function () {
+            window.location.href = 'worker-contract-confirming-initiator-new.html?invites=' +
+                encodeURIComponent(JSON.stringify(editInvited));
+        }, 2300);
     }
     function doSave() {
         var breach = $('breachInput');
@@ -1864,38 +2082,6 @@
     function doCancelCopy() {
         showToast('已取消复制发起，返回原合同');
         setTimeout(function () { location.href = 'worker-contract-detail.html'; }, 600);
-    }
-
-    /* 复制发起特有：提交后展示差异对比（沿用 / 已调整 / 已更换 逐项） */
-    function showCopyDiffModal() {
-        function row(state, text) {
-            var cls = state === '沿用' ? 'keep' : 'adjusted';
-            var label = state === '沿用' ? '沿用' : (state === '更换' ? '已更换' : '已调整');
-            return '<div class="rec-row"><span class="rec-tag" style="background:' + (state === '沿用' ? '#F2F3F5;color:#86909C;' : '#FFF7E6;color:#FA8C16;') + '">' + label + '</span>' + text + '</div>';
-        }
-        var name = ($('editNameInput').value || '').trim();
-        var amount = ($('editAmountInput').value || '').trim();
-        var duration = ($('editDurationInput').value || '').trim();
-        var nameAdj = document.getElementById('badgeName').classList.contains('adjusted');
-        var amountAdj = document.getElementById('badgeAmount').classList.contains('adjusted');
-        var durAdj = document.getElementById('badgeDuration').classList.contains('adjusted');
-        var breachAdj = document.getElementById('badgeBreach').classList.contains('adjusted');
-        var extraAdj = document.getElementById('badgeExtra').classList.contains('adjusted');
-        var tplAdj = document.getElementById('badgeTplText').classList.contains('adjusted');
-        var partyAAdj = document.getElementById('badgePartyA').classList.contains('adjusted');
-        var html = '';
-        html += row(partyAAdj ? '调整' : '沿用', '甲方：' + escapeHtml((partyA && partyA.name) || '陈庄') + '（默认当前甲方）');
-        html += row('调整', '意向乙方：' + escapeHtml(editInvited.map(function (m) { return m.name; }).join('、')) + '（原合同乙方：张水电）');
-        html += row(nameAdj ? '调整' : '沿用', '合同名称：' + escapeHtml(name));
-        html += row(amountAdj ? '调整' : '沿用', '合同金额：¥' + escapeHtml(amount));
-        html += row(durAdj ? '调整' : '沿用', '工期：' + escapeHtml(duration) + ' 天');
-        html += row(tplAdj ? '更换' : '沿用', '文本模板：' + (C.templateText ? escapeHtml(C.templateText) : '沿用原合同模板'));
-        html += row(breachAdj ? '调整' : '沿用', '违约责任');
-        html += row(extraAdj ? '调整' : '沿用', '补充条款');
-        html += row(stagesDirty ? '调整' : '沿用', '阶段任务（' + C.stages.length + ' 个阶段）');
-        html += row(attsDirty ? '调整' : '沿用', '附件（' + C.attachments.length + ' 个）');
-        html += '<div class="rec-row" style="color:#999;">新合同已进入「确认中」，邀约已发送给所选意向乙方；原合同不受影响。</div>';
-        openInfoModal('复制发起结果（差异对比）', html);
     }
 
     /* ===================== 顶部「更多」菜单（对齐 worker_draft_initial 状态） ===================== */

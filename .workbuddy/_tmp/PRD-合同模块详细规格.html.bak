@@ -365,7 +365,6 @@
             <li data-page-node-id="fgZOGShfEykNIQ81GLMx07"><a href="#sec-7-9" data-page-node-id="a0tjrX5Z24jvkGwY6rSpQL">7.9 服务方端交互效果</a></li>
             <li data-page-node-id="mkDX1JzCNpSfwyyqZ3AAME"><a href="#sec-7-10" data-page-node-id="elBcolobfvCUUEQXRV3z2f">7.10 更多菜单渲染规则（按状态）</a></li>
             <li data-page-node-id="daDqjTR1IacOHiqPGc7HGo"><a href="#sec-7-11" data-page-node-id="1yoID2v7ScirDzBAYjcWYy">7.11 阶段任务区任务项展示与点击交互（按状态）</a></li>
-<li><a href="#sec-7-12">7.12 复制发起入口规格（工人合同详情页·发起方）</a></li>
         </ul>
     </li>
     <li class="toc-chapter collapsed" data-page-node-id="2mRDcp1FtcVvVnr3EDAVUQ">
@@ -4254,8 +4253,7 @@
                     <thead data-page-node-id="FhSNHcUsYbZW99HieABT2L"><tr data-page-node-id="JD23FuqxUCkM1HYLSj8fJm"><th data-page-node-id="CF2mEGwTEeIF3u7BtXvOb7">状态</th><th data-page-node-id="TIQzFXpO0h6Q82j7yaljvE">菜单项</th></tr></thead>
                     <tbody data-page-node-id="vJNukjCsvrQknTEEvfXo2d">
                         <tr data-page-node-id="60T1IXbpCXSexNPGTEapG4"><td data-page-node-id="wl5hqbBbhF9Qq84GuWAwc5"><code data-page-node-id="rymJXqOhvkb4aBvxHixYKs">worker_inviting_receiver</code>（确认中·受邀方）</td><td data-page-node-id="SlGxnb0HiAnZNCzZfhOeba"><strong data-page-node-id="YJTex1PHNU5CUS7aQbS3jV">仅「导出合同文件」</strong></td></tr>
-<tr data-page-node-id="u2TlgPyVR92HZsRxDRNpZO"><td data-page-node-id="DJ5CvQqjGJ5Hw2SwI9xgpD">发起方视角各非终态（拟定中 / 确认中 / 已签约 / 发起方变更各态）</td><td data-page-node-id="jLKdeoj75NnTQBL2jiDY9q"><strong>「📑 复制发起」置首</strong>，其后依次为「版本记录」/「变更记录」/「导出合同文件」（复制发起规则见 <a href="#sec-7-12" data-page-node-id="a712a">7.12</a>）</td></tr>
-<tr data-page-node-id="c2row"><td data-page-node-id="c2td1">其余非终态（受邀方非确认中态）</td><td data-page-node-id="c2td2">「版本记录」/「变更记录」/「导出合同文件」</td></tr>
+                        <tr data-page-node-id="u2TlgPyVR92HZsRxDRNpZO"><td data-page-node-id="DJ5CvQqjGJ5Hw2SwI9xgpD">其余非终态（发起方各态 / 变更各态 / 拟定中）</td><td data-page-node-id="jLKdeoj75NnTQBL2jiDY9q">「版本记录」/「变更记录」/「导出合同文件」</td></tr>
                         <tr data-page-node-id="gwdkqJoVaaEELLqHezgkFY"><td data-page-node-id="jB0x1AorxY1QUnK9joclL4">终态（<code data-page-node-id="Jk0CCvsGFf3pkoUe4VLAsv">worker_lost_receiver</code> / <code data-page-node-id="Sk9dBM7gUnUPpk3jxLJBEu">worker_rejected_receiver</code>）</td><td data-page-node-id="IZvzTxc9399qOnagoWXZAH"><strong data-page-node-id="LmBXke7Phc4IpbAPRQOBNz">整行工具栏隐藏</strong>（不渲染菜单，仅轻量「邀约已结束」视图，见 <a href="#sec-8-6" data-page-node-id="oVriq5AASjaawDn5CqLZ9Q">8.6</a>）</td></tr>
                     </tbody>
                 </table>
@@ -4318,162 +4316,6 @@
 
                 <h4 style="margin-top:16px;" data-page-node-id="FWjRRfYykHogUiEXNvN6l3">7.11.3 只读「任务详情」弹窗（确认中 / 变更各态）</h4>
                 <p data-page-node-id="liUxOFqlrZpeJ0c1hbA8wG">点击任务打开 <code data-page-node-id="B9FvCMOLFXcQ30P2Epb0hM">taskDetailModal</code> 只读弹窗，展示六项内容：任务名称、执行人、确认人、执行标准、确认标准、担责标准。三项标准取值优先级：任务数据（data 属性）&rarr; 按任务名称的标准映射（<code data-page-node-id="6xHOrBWa31sDgSjxeLoaEq">TASK_STANDARD_MAP</code>）&rarr; 通用兜底文案（<code data-page-node-id="1NCH8mHF3uwOsHJu4LbhLz">GENERIC_STD</code>），保证均有值；执行人 / 确认人为空时显示「暂未设置」。关闭方式：「✕」按钮或遮罩点击。</p>
-            </div>
-            <div class="subsection" id="sec-7-12">
-                <div class="subsection-title">7.12 复制发起入口规格（工人合同详情页·发起方）</div>
-                <p>工人合同详情页<strong>发起方视角</strong>的顶部「合同操作 更多」菜单首位为「📑 复制发起」，用于以<strong>当前合同</strong>为蓝本快速发起一份同类型的新合同（适用于同一工种需再签一份同类合同的场景）。受邀方视角<strong>不提供</strong>该入口。</p>
-                <table>
-                    <thead><tr><th>属性</th><th>规格</th></tr></thead>
-                    <tbody>
-                        <tr><td>入口位置</td><td>顶部「合同操作 更多」下拉菜单<strong>首位</strong>（其后为「版本记录」/「变更记录」/「导出合同文件」）</td></tr>
-                        <tr><td>适用视角</td><td>仅<strong>发起方视角</strong>（拟定中 / 确认中 / 已签约及发起方变更各态）；受邀方视角（含确认中·受邀方与受邀方终态）不提供</td></tr>
-                        <tr><td>权限规则</td><td><strong>与「创建合同」权限规则完全一致</strong>：由同一创建合同权限位控制，无该权限时不发起并提示“您没有创建合同的权限”</td></tr>
-                        <tr><td>蓝本合同</td><td>当前正在查看的这份合同；沿用其合同类型、文本模板、阶段任务、金额、工期、条款与附件，均可在发起页修改</td></tr>
-                        <tr><td>目标页面</td><td>复制发起独立页（<code><a class="proto-link" href="service-miniapp/contract-copy-initiate.html">contract-copy-initiate.html</a></code>），携带来源标识（<code>from=detail</code>）与蓝本合同标识（<code>source</code>）</td></tr>
-                        <tr><td>持久化方式</td><td><strong>非 localStorage 写入</strong>：仅通过页面跳转参数传递蓝本来源，不在原详情页做任何数据回写</td></tr>
-                        <tr><td>与原合同关系</td><td>只读引用，<strong>原合同状态、条款与任务均不受影响</strong>，新合同独立流转</td></tr>
-                    </tbody>
-                </table>
-
-                <h4 style="margin-top:16px;">7.12.1 覆盖页面与示例</h4>
-                <ul style="font-size:13px;line-height:1.9;">
-                    <li>合并页 <code><a class="proto-link" href="service-miniapp/worker-contract-detail.html">worker-contract-detail.html</a></code>（六类工种合同共用）。</li>
-                    <li>拟定中（发起方）<code><a class="proto-link" href="service-miniapp/worker-contract-draft-initial-new.html">worker-contract-draft-initial-new.html</a></code>。</li>
-                    <li>确认中（发起方）<code><a class="proto-link" href="service-miniapp/worker-contract-confirming-initiator-new.html">worker-contract-confirming-initiator-new.html</a></code>。</li>
-                    <li>已签约（发起方）<code><a class="proto-link" href="service-miniapp/worker-contract-signed-initiator-new.html">worker-contract-signed-initiator-new.html</a></code>。</li>
-                </ul>
-                <p style="font-size:12px;color:#888;margin-top:8px;">注：受邀方视角的「已签约（受邀方）」「已签约（已履约）」保留顶部「合同操作 更多」工具栏，但菜单项<strong>不含</strong>「复制发起」，仍为「版本记录」/「变更记录」/「导出合同文本」。</p>
-
-<h4 style="margin-top:16px;">7.12.2 复制发起页字段规格（与拟定中页差异）</h4>
-                <p style="font-size:13px;">复制发起页（<a href="service-miniapp/contract-copy-initiate.html" target="_blank">contract-copy-initiate.html</a>）沿用拟定中页（规格见 7.5.3.1）布局，但字段取值与交互存在以下差异：</p>
-                <table>
-                    <thead>
-                        <tr><th>字段 / 区域</th><th>复制发起页</th><th>拟定中页</th><th>规则说明</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>隶属架构层级</td>
-                            <td><b>独立卡片</b>（页面顶部），默认＝被复制合同所属层级，可更换</td>
-                            <td>无此区域（层级由入口节点确定）</td>
-                            <td>复制发起特有，详见 7.12.3</td>
-                        </tr>
-                        <tr>
-                            <td>合同类型</td>
-                            <td>沿用蓝本合同类型，<b>静态展示、不可修改</b>（如「（类型：水电班组服务合同）」）</td>
-                            <td>由创建流程确定</td>
-                            <td>复制发起不支持跨类型发起</td>
-                        </tr>
-                        <tr>
-                            <td>合同甲方</td>
-                            <td>默认＝当前甲方，带徽标「默认当前甲方」，可经「更换甲方」重新选择（单选，支持按姓名 / 角色模糊搜索）</td>
-                            <td>需选择，无徽标</td>
-                            <td>沿用当前操作人对应的甲方身份</td>
-                        </tr>
-                        <tr>
-                            <td>意向乙方</td>
-                            <td><b>初始为空</b>，带徽标「待选择（无默认）」，<b>必须重新选择 1–3 人</b>；<b>不沿用蓝本合同乙方</b></td>
-                            <td>初始为空，需选择 1–3 人</td>
-                            <td>新合同需重新发起邀约与确认，原乙方不自动带入</td>
-                        </tr>
-                        <tr>
-                            <td>合同名称 / 合同金额 / 工期</td>
-                            <td>预填蓝本合同取值，带徽标「沿用原值」；任一改动后徽标变为「已调整」</td>
-                            <td>为空或为当前草稿值，无徽标</td>
-                            <td>徽标规则见本节末说明</td>
-                        </tr>
-                        <tr>
-                            <td>文本模板 / 违约责任 / 补充条款</td>
-                            <td>沿用蓝本合同取值并可编辑，带沿用徽标；违约责任为必填</td>
-                            <td>自行填写</td>
-                            <td>违约责任未填写时提交被拦截并聚焦该输入项</td>
-                        </tr>
-                        <tr>
-                            <td>阶段任务</td>
-                            <td>徽标「沿用原清单」，可增删阶段 / 任务，或经「更换任务模板」整体替换</td>
-                            <td>自行添加</td>
-                            <td>沿用后仍可完全重新编排</td>
-                        </tr>
-                        <tr>
-                            <td>附件</td>
-                            <td>徽标「沿用原列表」，可上传新附件或删除沿用附件</td>
-                            <td>自行上传</td>
-                            <td>删除沿用附件不影响蓝本合同</td>
-                        </tr>
-                        <tr>
-                            <td>底部操作</td>
-                            <td><b>取消 / 仅保存 / 提交并邀请乙方</b>；「取消」＝放弃本次复制发起，提示「已取消复制发起，返回原合同」并返回原合同详情；「仅保存」＝<b>不做必填校验</b>，将当前填写内容保存为新合同草稿（保持「拟定中」，不发送邀约、不影响原合同），提示「已保存草稿」并停留在本页</td>
-                            <td>仅保存 / 提交并邀请乙方</td>
-                            <td>复制发起多出的「取消」为流程退出入口</td>
-                        </tr>
-                        <tr>
-                            <td>提交校验</td>
-                            <td>与拟定中页一致：合同名称必填、合同金额为正数、违约责任必填、意向乙方 1–3 人；不通过时页面内气泡提示且不跳转</td>
-                            <td>同左</td>
-                            <td>两套页面校验口径保持一致</td>
-                        </tr>
-                        <tr>
-                            <td>提交结果</td>
-                            <td>校验通过 → 气泡「已提交并邀请乙方（N 人）」（<b>更换过层级时追加「归入层级：完整路径」</b>）→ 气泡消失后进入「确认中（发起方）」</td>
-                            <td>气泡后进入「确认中（发起方）」</td>
-                            <td>复制发起不展示差异对比弹窗</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <ul style="font-size:13px;line-height:1.9;">
-                    <li><strong>沿用徽标（灰）</strong>：该字段当前取值与蓝本合同一致。</li>
-                    <li><strong>已调整徽标（橙）</strong>：该字段已被修改；输入框一经输入即由「沿用原值」变为「已调整」。</li>
-                    <li><strong>待选择徽标（橙）</strong>：复制发起特有，用于标识该字段无默认值、必须主动选择（当前仅意向乙方）。</li>
-                </ul>
-
-<h4 style="margin-top:16px;">7.12.3 隶属架构层级选择规格</h4>
-                <p style="font-size:13px;">复制发起页顶部「🏗️ 隶属架构层级」卡片用于确定<b>新合同归入的架构层级</b>；该卡片为复制发起特有，拟定中页无此区域。</p>
-                <table>
-                    <thead>
-                        <tr><th>属性</th><th>规格</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>卡片构成</td>
-                            <td>第一行：级别徽标（二级 / 三级）＋ 层级名称 ＋ 状态标签（默认 / 已调整）＋ 范围徽标（同类型 / 无合同）；第二行：完整路径面包屑（一级项目 › 二级工作组 › 三级子组）；第三行：仅更换后显示「已更换为「X」；新合同将归入该架构层级，原合同不受影响。」</td>
-                        </tr>
-                        <tr>
-                            <td>默认值</td>
-                            <td>被复制合同当前所属层级——由架构页进入时取 <code>group</code> 参数，由合同详情进入时取蓝本合同默认层级；默认值不在预置层级列表时，按源工种二级层级兜底，保证可追踪完整路径</td>
-                        </tr>
-                        <tr>
-                            <td>触发方式</td>
-                            <td>点击卡片整行或右侧「更换 ›」→ 打开底部抽屉「选择隶属架构层级」</td>
-                        </tr>
-                        <tr>
-                            <td>抽屉顶部</td>
-                            <td>标题「选择隶属架构层级」＋ 关闭按钮；过滤规则说明「仅可选同类型（被复制合同工种）与暂无合同的架构；异类型且已有合同者不可选」</td>
-                        </tr>
-                        <tr>
-                            <td>搜索</td>
-                            <td>顶部搜索框（placeholder「搜索架构名称 / 工种 / 路径…」），实时模糊匹配<b>层级名称、父级名称、工种中文名与完整路径</b>；无匹配时显示「未找到匹配的架构层级」</td>
-                        </tr>
-                        <tr>
-                            <td>列表形态</td>
-                            <td><b>树形分组</b>：二级工作组为父节点，三级子组缩进列于其下；每项显示级别徽标 ＋ 层级名称 ＋「默认」标签（默认项专属）＋ 范围徽标 ＋ 完整路径 ＋ 说明文案；当前选中项右侧显示 ✓</td>
-                        </tr>
-                        <tr>
-                            <td>可选规则</td>
-                            <td>与蓝本合同<b>同类型</b>（工种一致）或<b>暂无合同</b>的层级可选；<b>异类型且已有合同者置灰且不可点击</b>；一级根节点（项目总架构）不可作为归属终点，仅作为路径起点展示</td>
-                        </tr>
-                        <tr>
-                            <td>选择后</td>
-                            <td>卡片同步更新（级别徽标 / 层级名称 / 状态标签变「已调整」/ 完整路径 / 提示行），抽屉自动关闭</td>
-                        </tr>
-                        <tr>
-                            <td>生效范围</td>
-                            <td>仅决定新合同的归属层级；蓝本合同与原合同均不做任何写操作、不受影响</td>
-                        </tr>
-                        <tr>
-                            <td>提交时</td>
-                            <td>仅当更换过层级时，提交气泡追加「归入层级：完整路径」</td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
 

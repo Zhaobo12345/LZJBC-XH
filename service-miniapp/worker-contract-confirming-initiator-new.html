@@ -73,6 +73,7 @@
         }
         .more-ops-panel .op-item:last-child { border-bottom: none; }
         .more-ops-panel .op-icon { font-size: 15px; }
+        .more-ops-panel .op-extra { margin-left: auto; font-size: 11px; color: #98A2B3; }
 
         /* 状态横幅（拟定中） */
         .wc-banner {
@@ -159,6 +160,9 @@
         .member-role { font-size: 11px; color: #999; }
         .invite-chip .member-avatar { width: 22px; height: 22px; font-size: 11px; }
         .invite-chip .chip-text { margin-left: 4px; }
+        .invite-chip .chip-status { margin-left: 6px; font-size: 11px; padding: 1px 8px; border-radius: 10px; line-height: 1.5; }
+        .invite-chip .chip-status.pending { color: #d46b08; background: #fff7e6; border: 1px solid #ffd591; }
+        .invite-chip .chip-status.confirmed { color: #389e0d; background: #f6ffed; border: 1px solid #b7eb8f; }
 
         .member-picker { position: relative; }
         .member-picker-control {
@@ -472,7 +476,7 @@
 
             <!-- 意向乙方（只读查看，不可添加/删除） -->
             <div class="form-section-title" id="inviteRoleTitle" data-page-node-id="huHYUbjIlg9shwqhvkyGiQ">意向乙方（仅各工种，邀请 1-3 人）</div>
-            <div class="invite-chips" data-page-node-id="i7GDhrHVc3d5A2BpVVNbzQ">
+            <div class="invite-chips" id="inviteChips" data-page-node-id="i7GDhrHVc3d5A2BpVVNbzQ">
                 <span class="invite-chip" data-page-node-id="amRwE9QZW9KodIKk0eKQO0"><span class="member-avatar" style="background:#1677ff;" data-page-node-id="S4JI6TZ4GP0yUvXXS0z6lG">张</span><span class="chip-text" data-page-node-id="srMgPcYcWgoLdffwqVGvRL">张水电（水电工）</span></span>
             </div>
 
@@ -824,6 +828,7 @@
     function renderMoreOps() {
         var p = $('moreOpsPanel'); if (!p) return;
         p.innerHTML =
+            '<div class="op-item" onclick="openCopyInitiate(); closeMoreOps()"><span class="op-icon">📑</span><span>复制发起</span><span class="op-extra">快捷发起同类型新合同</span></div>' +
             '<div class="op-item" onclick="openInfoModal(\'版本记录\', \'V1 初始版本（拟定中） 2024-01-05；V2 提交确认 2024-01-06\')"><span class="op-icon">🕐</span><span>版本记录</span></div>' +
             '<div class="op-item" onclick="openInfoModal(\'变更记录\', \'暂无变更记录\')"><span class="op-icon">📝</span><span>变更记录</span></div>' +
             '<div class="op-item" onclick="exportContract(); closeMoreOps()"><span class="op-icon">📄</span><span>导出合同文件</span></div>';
@@ -864,6 +869,7 @@
         if (icon) icon.textContent = collapsed ? '▼' : '▶';
     }
     function closeMoreOps() { var p = $('moreOpsPanel'); if (p) p.classList.remove('show'); }
+    function openCopyInitiate() { window.location.href = 'contract-copy-initiate.html?from=detail'; }
     function esc(s) { s = String(s == null ? '' : s); return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 
     // 阶段 + 任务数据（对齐「拟定中（发起方）-新」水电工种模板，确认中状态为只读查看）
@@ -943,8 +949,36 @@
         setTimeout(function () { showToast('PDF文件已生成，正在打开微信分享...\n\n文件包含：合同基本信息、签约双方信息、合同正文、附件'); }, 1500);
     }
 
+    /* ===================== 从「拟定中（发起方）」带入的意向乙方（提交后按所选人数与状态展示） ===================== */
+    function getQueryParam(name) {
+        var m = new RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+        return m ? decodeURIComponent(m[1]) : null;
+    }
+    function renderInvitedFromQuery() {
+        var raw = getQueryParam('invites');
+        var box = $('inviteChips');
+        if (!box || !raw) return; // 无参数则保留默认演示 chip
+        var list;
+        try { list = JSON.parse(raw); } catch (e) { return; }
+        if (!Array.isArray(list) || !list.length) return;
+        box.innerHTML = '';
+        list.forEach(function (m) {
+            var initial = (m.name || '?').charAt(0);
+            var chip = document.createElement('span');
+            chip.className = 'invite-chip';
+            chip.innerHTML =
+                '<span class="member-avatar" style="background:#1677ff;">' + esc(initial) + '</span>' +
+                '<span class="chip-text">' + esc(m.name) + '（' + esc(m.role) + '）</span>' +
+                '<span class="chip-status pending">待确认</span>';
+            box.appendChild(chip);
+        });
+        var title = $('inviteRoleTitle');
+        if (title) title.textContent = '意向乙方（已邀请 ' + list.length + ' 人，待确认）';
+    }
+
     renderMoreOps();
     renderStages();
+    renderInvitedFromQuery();
 </script>
 </body>
 </html>

@@ -178,6 +178,28 @@
             border-radius: 8px; z-index: 100; opacity: 0; pointer-events: none; transition: opacity .2s; white-space: pre-line; text-align: center;
         }
         .app-toast.show { opacity: 1; }
+
+        /* ===== 合同操作 更多（已签约-受邀方 / 已履约） ===== */
+        .contract-ops-bar { display:flex; align-items:center; justify-content:space-between; padding:10px 12px 2px; }
+        .contract-ops-bar .ops-label { font-size:12px; color:#999; }
+        .contract-ops-bar .ops-more { display:inline-flex; align-items:center; gap:4px; font-size:13px; color:#1677ff; padding:4px 8px; border-radius:6px; cursor:pointer; }
+        .contract-ops-bar .ops-more:active { background:#f0f7ff; }
+        .contract-ops-bar .ops-more .caret { font-size:10px; transition:transform .2s; }
+        .contract-ops-bar .ops-more.open .caret { transform:rotate(180deg); }
+        .ops-panel { display:none; margin:4px 12px 0; background:#fff; border:1px solid #e5e6eb; border-radius:10px; overflow:hidden; }
+        .ops-panel.show { display:block; }
+        .ops-panel .op-item { display:flex; align-items:center; gap:10px; padding:11px 14px; font-size:14px; color:#1d2129; border-bottom:1px solid #f2f3f5; cursor:pointer; }
+        .ops-panel .op-item:last-child { border-bottom:none; }
+        .ops-panel .op-icon { font-size:15px; }
+        .ops-rec-row { padding:11px 14px; border-bottom:1px solid #f2f3f5; font-size:13px; color:#444; line-height:1.6; }
+        .ops-rec-row:last-child { border-bottom:none; }
+        .ops-rec-tag { display:inline-block; font-size:11px; color:#1677ff; background:#e6f4ff; border-radius:4px; padding:1px 6px; margin-right:6px; }
+        .ops-rec-time { display:block; font-size:11px; color:#999; margin-top:3px; }
+        .ops-export-row { display:flex; align-items:center; gap:10px; padding:12px; border:1px solid #eef0f3; border-radius:10px; margin:12px 14px; cursor:pointer; }
+        .ops-export-row:active { background:#f7faff; }
+        .ops-export-row .e-icon { font-size:20px; }
+        .ops-export-row .e-title { font-size:14px; color:#222; font-weight:600; }
+        .ops-export-row .e-desc { font-size:11px; color:#999; margin-top:2px; }
     </style>
 </head>
 <body>
@@ -189,6 +211,17 @@
     <div class="nav-bar">
         <a class="nb-back" href="worker-contract-detail.html">&lsaquo;</a>
         <div class="title">工人合同详情</div>
+    </div>
+
+    <!-- 合同操作 更多 -->
+    <div class="contract-ops-bar">
+        <span class="ops-label">合同操作</span>
+        <span class="ops-more" id="opsMoreBtn" onclick="toggleOpsPanel()">更多<span class="caret">▾</span></span>
+    </div>
+    <div class="ops-panel" id="opsPanel">
+        <div class="op-item" onclick="openInfoModal('版本记录')"><span class="op-icon">📋</span><span>版本记录</span></div>
+        <div class="op-item" onclick="openInfoModal('变更记录')"><span class="op-icon">📜</span><span>变更记录</span></div>
+        <div class="op-item" onclick="showExportModal()"><span class="op-icon">📄</span><span>导出合同文本</span></div>
     </div>
 
     <div class="receive-scroll">
@@ -254,6 +287,33 @@
                 <div class="detail-section"><div class="detail-label">担责标准</div><div class="detail-value" id="detailLiableStandard">—</div></div>
             </div>
             <div class="modal-footer"><button class="submit-btn" onclick="closeTaskDetailModal()">关闭</button></div>
+        </div>
+    </div>
+
+    <!-- 合同操作 · 版本/变更记录 弹窗 -->
+    <div class="task-detail-modal" id="opsInfoModal">
+        <div class="modal-content">
+            <div class="modal-header"><div class="modal-title" id="opsInfoTitle">版本记录</div><div class="modal-close" onclick="closeInfoModal()">✕</div></div>
+            <div class="modal-body" id="opsInfoBody"></div>
+            <div class="modal-footer"><button class="submit-btn" onclick="closeInfoModal()">关闭</button></div>
+        </div>
+    </div>
+
+    <!-- 合同操作 · 导出合同文本 弹窗 -->
+    <div class="task-detail-modal" id="opsExportModal">
+        <div class="modal-content">
+            <div class="modal-header"><div class="modal-title">导出合同文本</div><div class="modal-close" onclick="closeExportModal()">✕</div></div>
+            <div class="modal-body">
+                <div class="ops-export-row" onclick="exportToPDF()">
+                    <div class="e-icon">📄</div>
+                    <div><div class="e-title">导出为 PDF</div><div class="e-desc">生成完整合同 PDF 保存至手机</div></div>
+                </div>
+                <div class="ops-export-row" onclick="shareToWechat()">
+                    <div class="e-icon">💬</div>
+                    <div><div class="e-title">分享到微信</div><div class="e-desc">生成 PDF 并通过微信发送给对方</div></div>
+                </div>
+            </div>
+            <div class="modal-footer"><button class="submit-btn" onclick="closeExportModal()">取消</button></div>
         </div>
     </div>
 
@@ -475,6 +535,53 @@
     // 初始化
     renderStages();
     renderHero();
+
+    /* ===== 合同操作 更多（版本记录 / 变更记录 / 导出合同文本） ===== */
+    var OPS_VERSION_HTML = '<div class="ops-rec-row"><span class="ops-rec-tag">V1</span>初始版本（确认签约）<div class="ops-rec-time">2024-01-06 签约生效</div></div>' +
+        '<div class="ops-rec-row"><span class="ops-rec-tag">V2</span>履约完成版本<div class="ops-rec-time">2024-01-20 全部任务完成</div></div>';
+    var OPS_CHANGE_HTML = '<div class="ops-rec-row">暂无变更记录</div>';
+
+    function toggleOpsPanel() {
+        var p = $('opsPanel'), b = $('opsMoreBtn');
+        if (!p) return;
+        p.classList.toggle('show');
+        if (b) b.classList.toggle('open');
+    }
+    function closeOpsPanel() {
+        var p = $('opsPanel'), b = $('opsMoreBtn');
+        if (p) p.classList.remove('show');
+        if (b) b.classList.remove('open');
+    }
+    function openInfoModal(title) {
+        var t = $('opsInfoTitle'), b = $('opsInfoBody'), m = $('opsInfoModal');
+        if (t) t.textContent = title;
+        if (b) b.innerHTML = (title === '版本记录') ? OPS_VERSION_HTML : OPS_CHANGE_HTML;
+        if (m) m.classList.add('show');
+        closeOpsPanel();
+    }
+    function closeInfoModal() {
+        var m = $('opsInfoModal');
+        if (m) m.classList.remove('show');
+    }
+    function showExportModal() {
+        var m = $('opsExportModal');
+        if (m) m.classList.add('show');
+        closeOpsPanel();
+    }
+    function closeExportModal() {
+        var m = $('opsExportModal');
+        if (m) m.classList.remove('show');
+    }
+    function exportToPDF() {
+        closeExportModal();
+        showToast('正在生成PDF文件...');
+        setTimeout(function () { showToast('PDF文件已保存到手机本地\n\n文件包含：合同基本信息、签约双方信息、合同正文、附件'); }, 1500);
+    }
+    function shareToWechat() {
+        closeExportModal();
+        showToast('正在生成PDF文件...');
+        setTimeout(function () { showToast('PDF文件已生成，正在打开微信分享...'); }, 1500);
+    }
 </script>
 </body>
 </html>
