@@ -2669,7 +2669,7 @@
                         <tr data-page-node-id="Yz0123456789012AbCdf">
                             <td data-page-node-id="FgHij3456789012KlMnP">候选范围与过滤</td>
                             <td data-page-node-id="PqRst3456789012UvWxZ">项目内全部人员，按「姓名 / 角色」关键字模糊匹配（如「水电」「王」）</td>
-                            <td data-page-node-id="ZaBcd3456789012EfGhJ">按所选合同类型对应的工种<strong data-page-node-id="KcLmn3456789012OpQrU">自动过滤候选</strong>：选「拆除班组」仅列拆除工、选「水电班组」仅列水电工，余者类推（六类班组各自仅展示对应工种候选，非工种角色不出现）；在过滤后的候选范围内仍支持按「姓名 / 角色」关键字模糊匹配手动选择。例如选「水电班组服务合同」时，意向乙方候选仅含水电工，业主 / 设计师 / 项目总 / 工长 / 其他工种工人均不进入候选名单</td>
+                            <td data-page-node-id="ZaBcd3456789012EfGhJ">项目内全部人员，按「姓名 / 角色」关键字模糊匹配手动选择；<strong data-page-node-id="KcLmn3456789012OpQrU">不按所选工种自动过滤候选</strong>（选「水电班组」仍展示全部项目人员供手动挑选）</td>
                         </tr>
                         <tr data-page-node-id="JkLmn3456789012OpQrU">
                             <td data-page-node-id="UvWxy3456789012ZaBcF">选填 / 必填</td>

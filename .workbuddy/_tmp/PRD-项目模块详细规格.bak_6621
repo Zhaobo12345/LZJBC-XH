@@ -2626,7 +2626,7 @@
 
                             <td data-page-node-id="ktk2Z9C3zUYabOXvW6beEX">可搜索选择框（member-picker）</td>
 
-                            <td data-page-node-id="vSox7Vdv6Q9MZfrkw0oZg3">选项：项目内已有人员（角色对应《PRD-完整文档》定义的角色值），支持按姓名或角色关键字模糊匹配；placeholder："请选择乙方（选填）"；甲、乙方均填写且为同一人时提示"甲方与乙方不能相同"。<br>注：选择六类班组服务合同（工人合同）时，本单行字段整体切换为「意向乙方」多选形态（选填，0–3 人）；基础/设计合同保持单人选乙方（选填）。两种形态的展示规则、控件样式与交互详见 <a href="#sec-6-6-2-1" style="color: var(--primary-color);" data-page-node-id="X1yzAbCdef0123456789">6.6.2.1 乙方字段按合同类型的形态切换</a>。</td>
+                            <td data-page-node-id="vSox7Vdv6Q9MZfrkw0oZg3">选项：项目内已有人员（角色对应《PRD-完整文档》定义的角色值），支持按姓名或角色关键字模糊匹配；placeholder："请选择乙方（选填）"；甲、乙方均填写且为同一人时提示"甲方与乙方不能相同"。<br>注：选择六类班组服务合同（工人合同）时，本字段形态变为「意向乙方」（选填，0–3 人，按工种过滤六类工种候选），其余选填规则不变；基础/设计合同为单人选乙方（选填）。</td>
 
                         </tr>
                         <tr data-page-node-id="TOYDWUNpJRbExaHvXcq1JJ">
@@ -2637,77 +2637,6 @@
                         </tr>
                     </tbody>
                 </table>
-
-                <div class="subsection-title" style="font-size: 14px; margin-top: 16px;" id="sec-6-6-2-1" data-page-node-id="AbCdef0123456789GhIj">6.6.2.1 乙方字段按合同类型的形态切换（工人 vs 非工人）</div>
-                <div class="code-block" style="font-size: 12px;" data-page-node-id="JkLmn0123456789OpQrSt">
-切换规则：合同类型下拉选择「六类班组服务合同（工人合同：拆除/水电/木作/泥瓦/油漆/小零工）」时，乙方字段整体切换为「意向乙方（多选，0–3 人）」形态，并隐藏原单人选「乙方」；选择「基础施工/设计服务合同（非工人合同）」时，仅展示单人选「乙方」并隐藏意向乙方区块。该切换由「合同类型」的 onChange（onContractTypeChange）实时控制两个区块的 display 互斥，不刷新页面。
-                </div>
-                <table data-page-node-id="UvWxy0123456789ZaBcD">
-                    <thead data-page-node-id="EfGhi0123456789JkLmN">
-                        <tr data-page-node-id="OpQrs0123456789TuVwX">
-                            <th data-page-node-id="Yz0123456789AbCde">维度</th>
-                            <th data-page-node-id="FgHij0123456789KlMnO">非工人合同（基础/设计）· 乙方</th>
-                            <th data-page-node-id="PqRst0123456789UvWxY">工人合同（六类班组）· 意向乙方</th>
-                        </tr>
-                    </thead>
-                    <tbody data-page-node-id="ZaBcd0123456789EfGhI">
-                        <tr data-page-node-id="JkLmn3456789012OpQrS">
-                            <td data-page-node-id="UvWxy3456789012ZaBcD">触发显示条件</td>
-                            <td data-page-node-id="EfGhi3456789012JkLmN">合同类型 = 基础施工 / 设计服务合同</td>
-                            <td data-page-node-id="OpQrs3456789012TuVwX">合同类型 = 六类班组服务合同之一</td>
-                        </tr>
-                        <tr data-page-node-id="Yz0123456789012AbCde">
-                            <td data-page-node-id="FgHij3456789012KlMnO">字段标签</td>
-                            <td data-page-node-id="PqRst3456789012UvWxY">乙方（无必填红 *，纯选填）</td>
-                            <td data-page-node-id="ZaBcd3456789012EfGhI">区块标题「意向乙方（选填，最多 3 人）」；控件标签「邀请人员」（均无红 *）</td>
-                        </tr>
-                        <tr data-page-node-id="JkLmn3456789012OpQrT">
-                            <td data-page-node-id="UvWxy3456789012ZaBcE">控件形态</td>
-                            <td data-page-node-id="EfGhi3456789012JkLmO">单人选 member-picker（点击展开面板、单选）</td>
-                            <td data-page-node-id="OpQrs3456789012TuVwY">多选 member-picker + 选中结果以 chip 列表展示；点击控件展开面板、可重复勾选最多 3 人</td>
-                        </tr>
-                        <tr data-page-node-id="Yz0123456789012AbCdf">
-                            <td data-page-node-id="FgHij3456789012KlMnP">候选范围与过滤</td>
-                            <td data-page-node-id="PqRst3456789012UvWxZ">项目内全部人员，按「姓名 / 角色」关键字模糊匹配（如「水电」「王」）</td>
-                            <td data-page-node-id="ZaBcd3456789012EfGhJ">按所选合同类型对应的工种<strong data-page-node-id="KcLmn3456789012OpQrU">自动过滤候选</strong>：选「拆除班组」仅列拆除工、选「水电班组」仅列水电工，余者类推（六类班组各自仅展示对应工种候选，非工种角色不出现）；在过滤后的候选范围内仍支持按「姓名 / 角色」关键字模糊匹配手动选择。例如选「水电班组服务合同」时，意向乙方候选仅含水电工，业主 / 设计师 / 项目总 / 工长 / 其他工种工人均不进入候选名单</td>
-                        </tr>
-                        <tr data-page-node-id="JkLmn3456789012OpQrU">
-                            <td data-page-node-id="UvWxy3456789012ZaBcF">选填 / 必填</td>
-                            <td data-page-node-id="EfGhi3456789012JkLmP">选填（可留空）</td>
-                            <td data-page-node-id="OpQrs3456789012TuVwZ">选填（0–3 人均可，0 人也允许创建）</td>
-                        </tr>
-                        <tr data-page-node-id="Yz0123456789012AbCdg">
-                            <td data-page-node-id="FgHij3456789012KlMnQ">数量上限</td>
-                            <td data-page-node-id="PqRst3456789012UvWx0">1 人（单选）</td>
-                            <td data-page-node-id="ZaBcd3456789012EfGhK">3 人；达上限后其余候选在面板中置灰（disabled），点击已选满时的候选项不追加</td>
-                        </tr>
-                        <tr data-page-node-id="JkLmn3456789012OpQrV">
-                            <td data-page-node-id="UvWxy3456789012ZaBcG">占位 / 空态文案</td>
-                            <td data-page-node-id="EfGhi3456789012JkLmQ">请选择乙方（选填）</td>
-                            <td data-page-node-id="OpQrs3456789012TuVw0">请邀请意向乙方（选填，最多 3 人）；选中后控件文案变为「已选 N / 3 人」</td>
-                        </tr>
-                        <tr data-page-node-id="Yz0123456789012AbCdh">
-                            <td data-page-node-id="FgHij3456789012KlMnR">选中后展示</td>
-                            <td data-page-node-id="PqRst3456789012UvWx1">控件内显示「姓名（角色）」</td>
-                            <td data-page-node-id="ZaBcd3456789012EfGhL">控件内「已选 N / 3 人」+ 下方 chip 列表，每个 chip 为「姓名（角色）✕」，✕ 可单独移除该候选人</td>
-                        </tr>
-                        <tr data-page-node-id="JkLmn3456789012OpQrW">
-                            <td data-page-node-id="UvWxy3456789012ZaBcH">互斥 / 校验</td>
-                            <td data-page-node-id="EfGhi3456789012JkLmR">甲方与乙方为同一人 → 提示「甲方与乙方不能相同」</td>
-                            <td data-page-node-id="OpQrs3456789012TuVx1">同左（甲方不可与任一意向乙方为同一人）；意向乙方内部不校验互斥；提交时仅校验上限 &gt;3 阻断，提示「最多邀请 3 名意向乙方」</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="note" style="margin-top: 10px;" data-page-node-id="AbCde3456789012FgHij">
-                    <div class="note-title" data-page-node-id="KcLmn3456789012OpQrX">样式与交互要点</div>
-                    <ul style="margin: 0; padding-left: 20px;" data-page-node-id="UvWxy3456789012ZaBcI">
-                        <li data-page-node-id="EfGhi3456789012JkLmS">两个字段通过 <code data-page-node-id="OpQrs3456789012TuVx2">display</code> 互斥：<code data-page-node-id="Yz0123456789012AbCdi">isWorker</code> 为真时 <code data-page-node-id="FgHij3456789012KlMnS">inviteSection</code> 显示、<code data-page-node-id="PqRst3456789012UvWx2">partyBGroup</code> 隐藏；否则反之，不刷新页面。</li>
-                        <li data-page-node-id="JkLmn3456789012OpQrY">必填红 *：仅「合同类型」「合同名称」出现；乙方与意向乙方均<strong data-page-node-id="ZaBcd3456789012EfGhM">不带红 *</strong>（均为选填）。</li>
-                        <li data-page-node-id="UvWxy3456789012ZaBcJ">意向乙方 chip 的移除按钮（✕）点击时阻止冒泡，仅移除对应候选人，不影响面板其它交互。</li>
-                        <li data-page-node-id="EfGhi3456789012JkLmT">搜索框输入即时过滤候选；无匹配结果显示「未找到匹配人员」。</li>
-                        <li data-page-node-id="OpQrs3456789012TuVx3">撤回后「重新提交邀约」回到本页时，按存储的邀约名单预填意向乙方 chip 并还原显示形态，沿用同一套交互。</li>
-                    </ul>
-                </div>
 
                 <div class="subsection-title" style="font-size: 14px; margin-top: 16px;" data-page-node-id="Ed30CN6YdEbew19MxKQjW2">6.6.3 提示信息</div>
                 <div class="code-block" style="font-size: 12px;" data-page-node-id="DGCRVtzAa6B1SCqDAxFZov">

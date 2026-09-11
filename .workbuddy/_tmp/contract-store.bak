@@ -79,8 +79,6 @@
         var invitations = (data.invited || []).map(function (m) {
             return { userId: m.userId, name: m.name, role: m.role, status: 'pending' };
         });
-        // 默认「邀请中（确认中）」；创建为草稿时由调用方传入 status: 'worker_draft'（仅入库、不立即发送邀约消息）
-        var status = data.status || 'worker_inviting';
         var contract = {
             id: data.id,
             name: data.name || '',
@@ -93,7 +91,7 @@
             projectAddress: data.projectAddress || '',
             amount: data.amount || '',
             isWorker: true,
-            status: status,
+            status: 'worker_inviting',
             invitations: invitations,
             partyB: '',
             partyBName: '',
@@ -104,8 +102,6 @@
             versionLog: []
         };
         saveContract(contract);
-        // 仅当合同处于「邀请中」状态时才立即生成「合同邀约」消息；草稿态（worker_draft）待用户「提交并邀请乙方」时再发送
-        if (status === 'worker_inviting') {
         // 为每个被邀请人生成一条「合同邀约」消息
         invitations.forEach(function (inv) {
             addMessage({
@@ -125,7 +121,6 @@
                 unread: true
             });
         });
-        }
         return contract;
     }
 

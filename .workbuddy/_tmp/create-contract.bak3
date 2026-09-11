@@ -697,8 +697,6 @@
                 if (inviteSection) inviteSection.style.display = 'none';
                 if (partyBGroup) partyBGroup.style.display = 'block';
             }
-            invitedList = []; // 切换合同类型时清空意向乙方，避免跨工种残留选择
-            renderInviteChips();
             clearError('type');
         }
 
@@ -726,12 +724,8 @@
         function renderInviteList() {
             var listEl = document.getElementById('inviteList');
             var keyword = (document.getElementById('inviteSearch').value || '').trim().toLowerCase();
-            var typeValue = document.getElementById('contractType').value;
-            var selectedType = CONTRACT_TYPES.filter(function (t) { return t.value === typeValue; })[0];
-            var tradeRole = (selectedType && ContractStore.isWorkerType(typeValue)) ? selectedType.role : null;
             listEl.innerHTML = '';
             var matched = PROJECT_MEMBERS.filter(function (m) {
-                if (tradeRole && m.role !== tradeRole) return false; // 按所选工种自动过滤候选
                 if (!keyword) return true;
                 return m.name.toLowerCase().indexOf(keyword) > -1 ||
                     m.role.toLowerCase().indexOf(keyword) > -1;
@@ -849,7 +843,7 @@
                 invited: invitedList,
                 status: 'worker_draft'
             });
-            window.location.href = 'worker-contract-draft-initial-new.html?id=' + encodeURIComponent(id);
+            window.location.href = 'worker-contract-detail.html?id=' + encodeURIComponent(id) + '&viewer=sender';
         }
 
         function escapeHtml(s) {

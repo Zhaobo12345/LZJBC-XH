@@ -6,7 +6,6 @@
     <title>家装平台小程序原型 - 工人合同详情（拟定中（发起方）-新）</title>
     <link rel="stylesheet" href="common.css" data-page-node-id="KBCM39xLNZcDsepLusbwV2">
     <link rel="stylesheet" href="css/contract-detail.css" data-page-node-id="KTOExwNsC6Zs8RxXzrx5w6">
-    <script src="contract-store.js"></script>
     <style>
         /* ===== 拟定中（发起方）-新：与「拟定中（发起方）」布局一致，叠加 工期 / 违约责任(必填) / 合同正文默认收起 三处差异 ===== */
         * { box-sizing: border-box; }
@@ -1783,33 +1782,13 @@
             showToast('请至少选择 1 名意向乙方（最多 3 人）');
             return;
         }
-        if (currentContractId && window.ContractStore) {
-            syncContractFromInputs();
-            window.ContractStore.patchContract(currentContractId, {
-                name: C.name, amount: C.amount, duration: C.duration,
-                breach: C.breach, extraClauses: C.extraClauses,
-                contentIntro: C.contentIntro, stages: C.stages, attachments: C.attachments
-            });
-            window.ContractStore.submitInvite(currentContractId, editInvited);
-            showToast('已提交并邀请乙方（' + editInvited.length + ' 人）');
-            setTimeout(function () { window.location.href = 'worker-contract-detail.html?id=' + encodeURIComponent(currentContractId) + '&viewer=sender'; }, 2300);
-        } else {
-            showToast('已提交并邀请乙方（' + editInvited.length + ' 人）');
-            var invitesParam = encodeURIComponent(JSON.stringify(editInvited));
-            setTimeout(function () { window.location.href = 'worker-contract-confirming-initiator-new.html?invites=' + invitesParam; }, 2300);
-        }
+        showToast('已提交并邀请乙方（' + editInvited.length + ' 人）');
+        var invitesParam = encodeURIComponent(JSON.stringify(editInvited));
+        setTimeout(function () { window.location.href = 'worker-contract-confirming-initiator-new.html?invites=' + invitesParam; }, 2300);
     }
     function doSave() {
         var breach = $('breachInput');
         if (breach) breach.classList.remove('required-error');
-        if (currentContractId && window.ContractStore) {
-            syncContractFromInputs();
-            window.ContractStore.patchContract(currentContractId, {
-                name: C.name, amount: C.amount, duration: C.duration,
-                breach: C.breach, extraClauses: C.extraClauses,
-                contentIntro: C.contentIntro, stages: C.stages, attachments: C.attachments
-            });
-        }
         showToast('已保存草稿');
     }
 
@@ -1883,45 +1862,7 @@
         icon.textContent = hidden ? '▼' : '▶';
     }
 
-    /* ===================== 新建合同回载（按 ?id 加载真实合同；无 ?id 保留示例数据） ===================== */
-    var currentContractId = '';
-    function getQueryParam(key) {
-        var m = new RegExp('[?&]' + key + '=([^&]*)').exec(window.location.search);
-        return m ? decodeURIComponent(m[1]) : '';
-    }
-    function loadFromQuery() {
-        var id = getQueryParam('id');
-        if (!id || !window.ContractStore) return;
-        var c = window.ContractStore.getContract(id);
-        if (!c) return;
-        currentContractId = id;
-        var tpl = STAGE_TEMPLATES[c.type] || STAGE_TEMPLATES[C.type] || STAGE_TEMPLATES.shuidian;
-        C.type = c.type || C.type;
-        C.typeName = c.typeName || C.typeName;
-        C.name = c.name || C.name;
-        C.amount = c.amount || C.amount;
-        C.group = c.group || C.group;
-        C.duration = c.duration || C.duration || '30';
-        C.projectAddress = c.projectAddress || 'XX市XX区XX路XX号';
-        C.extraClauses = (c.extraClauses != null) ? c.extraClauses : C.extraClauses;
-        C.breach = (c.breach != null) ? c.breach : '';
-        C.contentIntro = c.contentIntro || (tpl ? tpl.contentIntro : C.contentIntro);
-        C.stages = (c.stages && c.stages.length) ? c.stages : (tpl ? clone(tpl.stages) : C.stages);
-        C.attachments = (c.attachments && c.attachments.length) ? c.attachments : C.attachments;
-        C.templateText = c.templateText || '';
-        C.templateStage = c.templateStage || '';
-        if (c.partyA) {
-            partyA = (WORKER_CANDIDATES.filter(function (m) { return m.id === c.partyA; })[0]) || null;
-        }
-        if (c.invitations && c.invitations.length) {
-            editInvited = c.invitations.map(function (i) { return { userId: i.userId, name: i.name, role: i.role }; });
-        } else {
-            editInvited = [];
-        }
-    }
-
     /* ===================== 初始化 ===================== */
-    loadFromQuery();
     renderInviteChips();
     renderInviteList();
     renderPartyAChips();
