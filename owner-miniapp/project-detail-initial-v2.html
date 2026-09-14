@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-page-node-id="VGBHf9cHswZjsVX36iuS6z">
-<head data-page-node-id="RUl6HTP7NPFTy4EizYDyFW">
-    <meta charset="UTF-8" data-page-node-id="8J4FSQNBUbXynVCHO3UHOT">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" data-page-node-id="mBcy1pxXdh31EeMShoNldl">
+<html lang="zh-CN" data-page-node-id="NLsPtjsnLz6DIRBVAqXWwD">
+<head data-page-node-id="NSQ13d79I4nQvPCE3C6bEK">
+    <meta charset="UTF-8" data-page-node-id="PBtq7JhrwZcoovGVJPWGjY">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" data-page-node-id="IJbWc2gm3F5SssgphrNRNS">
     <title>家装平台小程序原型 - 项目详情（初始-新版）</title>
     <style>
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -456,125 +456,90 @@
         .tab-item.active { color: var(--primary); }
         .tab-item:not(.active) { color: var(--text-3); }
 
-        /* ===== 角色演示开关（与项目列表页「演示开关」同源，置于手机框外侧右侧） ===== */
-        .role-demo-switch {
-            position: absolute; left: calc(100% + 16px); top: 80px;
-            background: #fff; border: 1px solid #ffe7ba; border-radius: 12px;
-            padding: 12px 14px; box-shadow: 0 4px 16px rgba(0,0,0,.1); z-index: 100; width: 132px;
-        }
-        .role-demo-switch .switch-title { font-size: 12px; font-weight: 600; color: #333; margin-bottom: 8px; text-align: center; }
-        .role-demo-switch .switch-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
-        .role-demo-switch .switch-status { color: var(--primary); font-weight: 600; font-size: 12px; white-space: nowrap; }
-        .role-demo-switch .switch-status.worker { color: var(--warning); }
-        .role-demo-switch .switch-hint { font-size: 10px; color: #999; text-align: center; line-height: 1.3; }
-        .switch { position: relative; display: inline-block; width: 36px; height: 20px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider {
-            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #ccc; transition: .3s; border-radius: 20px;
-        }
-        .slider:before {
-            position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px;
-            background-color: #fff; transition: .3s; border-radius: 50%;
-        }
-        .switch input:checked + .slider { background-color: var(--warning); }
-        .switch input:checked + .slider:before { transform: translateX(16px); }
     </style>
 </head>
-<body data-page-node-id="g1FClbnfUZNh11RZq8nFdK">
-    <div class="page-nav" data-page-node-id="DK74frdvtfc1T2oVcvFbTG">
-        <div class="page-nav-title" onclick="togglePageNav()" title="收起 / 展开 原型导航" data-page-node-id="vHw8y59UsHHhGfIS0pZBHF">原型导航 <span class="toggle-btn" id="pageNavToggle" data-page-node-id="eHolhOR1bmgRhs3o6uSEYP">▼</span></div>
-        <a href="home.html" data-page-node-id="RKlTqIHGCcKNMGYhLU6LFZ">首页</a>
-        <a href="project-list.html" data-page-node-id="eSTpOME72QpkxILYsgGC2D">项目主页（进行中）</a>
-        <a href="project-detail-initial-v2.html" class="active" data-page-node-id="mj3mWMFM08aPyyTjFOIf9a">项目详情（初始-新版）</a>
-        <a href="project-detail-completed-v2.html" data-page-node-id="Mgwl8lASJDFvvBA4nx9mrO">项目详情（已完成-新版）</a>
-        <a href="project-info.html" data-page-node-id="seOhJ1X6jAuw1At656qMFT">项目信息</a>
-        <a href="architecture.html" data-page-node-id="HjCFuBOSP4ZCELuyTM6Iew">项目架构</a>
-        <a href="create-project.html" data-page-node-id="ROEjKTB6gd6M07i3yCL043">创建项目</a>
-        <a href="contract-detail.html" data-page-node-id="aYyuDbuTRP2tjOmqGZDvBo">合同详情</a>
-        <a href="task-detail.html" data-page-node-id="7YGCDYcBGqt0De301VkeEc">任务详情</a>
+<body data-page-node-id="tisWb7DjvGAsxLLMbJdpam">
+    <div class="page-nav" data-page-node-id="bBqcVMMFwjwUETqqHSlEFi">
+        <div class="page-nav-title" onclick="togglePageNav()" title="收起 / 展开 原型导航" data-page-node-id="h6NnfqSI7cjwpEfE0ZafYH">原型导航 <span class="toggle-btn" id="pageNavToggle" data-page-node-id="aP0Vl091e7kKOxIbZo4Spx">▼</span></div>
+        <a href="home.html" data-page-node-id="KV5ClW1d88HY0XlPr4IiP1">首页</a>
+        <a href="project-detail-ongoing-v2.html" data-page-node-id="A4EEnXvXOnUVD5gPIohNyR">项目主页（进行中）</a>
+        <a href="project-detail-initial-v2.html" class="active" data-page-node-id="GF6IWruKAjOhC9l8tsUBRf">项目详情（初始-新版）</a>
+        <a href="project-detail-completed-v2.html" data-page-node-id="cPPbeaCrV6TvmMiUEIBWLE">项目详情（已完成-新版）</a>
+        <a href="project-info.html" data-page-node-id="KXgAaHiaXUvxNkOyAHbJjV">项目信息</a>
+        <a href="architecture.html" data-page-node-id="keo1IQWlYLidnQKHh9MSBP">项目架构</a>
+        <a href="create-project.html" data-page-node-id="RJUmZXwcDBWAL8H7qRODRA">创建项目</a>
+        <a href="contract-detail.html" data-page-node-id="OCAPIjBLD4bqBuCowR3BBF">合同详情</a>
+        <a href="task-detail.html" data-page-node-id="5ASh0MNTcG3wQVGz0q2kZl">任务详情</a>
     </div>
 
-    <div class="stage" data-page-node-id="veezREe4vMohiea9IhAGCJ">
-    <div class="phone-frame" data-page-node-id="y8K58yu5ICtmV6nqNTBDQq">
-        <div class="status-bar" data-page-node-id="HWGofwiaMjQyVDcAAZ0Oos">
-            <span class="time" data-page-node-id="lTF7dnYVOJjY46v86KU3kg">9:41</span>
-            <div class="icons" data-page-node-id="z6lOql2L8k9BtpC0tW2ml7">📶 🔋</div>
+    <div class="stage" data-page-node-id="fBG0yncMctjFNjXMqqXiLY">
+    <div class="phone-frame" data-page-node-id="eMrHF8970QzAxGD8dKVGLP">
+        <div class="status-bar" data-page-node-id="fMAttSBCB2Qync5F3NkrWO">
+            <span class="time" data-page-node-id="vISF9MjhFhwzxZkOVjSf1w">9:41</span>
+            <div class="icons" data-page-node-id="BKobqmuGFkoEI6uDB3STaR">📶 🔋</div>
         </div>
-        <div class="nav-bar" data-page-node-id="xm4yzSajzg2N0cMY2YZqiD">
-            <div class="title" data-page-node-id="AdhOeQfRBfs7YKUpYeMFsA">项目详情</div>
-            <div class="nb-actions" data-page-node-id="nw2amp3bOM8ivlGXEKIcO8"><div class="native-capsule" title="微信原生胶囊：由微信客户端渲染，开发者不可自定义其内容" data-page-node-id="TiscmMHDGqA3cgU2N5X70P"><span class="nc-left" data-page-node-id="79Qv6CqpvVAdp7ZyHdYASV">⋯</span><span class="nc-divider" data-page-node-id="TDefeq1ovCHi2eRhcOv9iI"></span><span class="nc-right" data-page-node-id="uDkUldJq8DHJxFPeZfb86Y">○</span></div></div>
+        <div class="nav-bar" data-page-node-id="l4ygjUORTyuTh5ONqW848Q">
+            <div class="title" data-page-node-id="ozsRWys41a6yCyGHLgxtQK">项目详情</div>
+            <div class="nb-actions" data-page-node-id="xSGEbNKjRneO891jvl3Tt5"><div class="native-capsule" title="微信原生胶囊：由微信客户端渲染，开发者不可自定义其内容" data-page-node-id="xvKHo0SyIRyAkljtoAt2JS"><span class="nc-left" data-page-node-id="rjnYCuelaS6SVWL7AlwCEh">⋯</span><span class="nc-divider" data-page-node-id="6yCFrKHICfoE8ut477BfgT"></span><span class="nc-right" data-page-node-id="ZumDWVRHDyhLfcnooTKET9">○</span></div></div>
         </div>
 
         <!-- 顶部：项目切换条 -->
-        <div class="topbar" data-page-node-id="7UhLP1p5bRu3tsyQCqSjxB">
-            <div class="proj-switch" data-page-node-id="urhfONdjqbcSXjCtuJcXHw">
+        <div class="topbar" data-page-node-id="0luJJzV1RIylk62iEyZcHl">
+            <div class="proj-switch" data-page-node-id="LCcWg0GYhKdFH5hYBEYOCz">
                 <!-- 左侧：点击查看当前项目信息（跳转 project-info 页） -->
-                <div class="proj-info-zone" onclick="viewProjectInfo()" data-page-node-id="CAq6i2bhuHuK8RSMLUoB7u">
-                    <div class="proj-switch-left" data-page-node-id="AVS1hqYdhni7fnYw4lx466">
-                        <span class="proj-name" id="curProjName" data-page-node-id="5gHVdrwFaueBuzTbp6lWWJ">—</span>
-                        <span class="proj-status" id="curProjStatus" data-page-node-id="PAAG4Jmn4BFvtTZpYi2oLh">—</span>
+                <div class="proj-info-zone" onclick="viewProjectInfo()" data-page-node-id="isiOQVpYXOZlwwg0wCR4va">
+                    <div class="proj-switch-left" data-page-node-id="bFXS0IUOcImuUggz4YBjA8">
+                        <span class="proj-name" id="curProjName" data-page-node-id="qbKKJC98jlvW3giOryN0lf">—</span>
+                        <span class="proj-status" id="curProjStatus" data-page-node-id="dUjafta5uBhLcarMptFnkZ">—</span>
                     </div>
-                    <div class="proj-switch-hero" id="topHero" data-page-node-id="7Z62CBapBt7uDQE0ePbgB0"></div>
-                    <span class="info-arrow" data-page-node-id="xN0w2VZKDX6PWYtQG6kSay">›</span>
+                    <div class="proj-switch-hero" id="topHero" data-page-node-id="AC5MDfOYE3CtFp2d005occ"></div>
+                    <span class="info-arrow" data-page-node-id="q7ZAg2aBxp7YAGx71IWjoN">›</span>
                 </div>
                 <!-- 右侧：点击展开项目切换面板 -->
-                <div class="proj-switch-right" onclick="togglePanel()" data-page-node-id="h8bBLx45tqg8lZK5MPDM4S">
-                    <span class="switch-hint" data-page-node-id="NAGBH9CL3ottyfvgki0DoJ">切换</span>
-                    <span class="switch-arrow" id="switchArrow" data-page-node-id="x3NoUp6AmHjLMnE7zhM0PJ">▾</span>
+                <div class="proj-switch-right" onclick="togglePanel()" data-page-node-id="blJn4j3L1jHW136aRJCpG0">
+                    <span class="switch-hint" data-page-node-id="TgJqcnEuN5zNxBnqH4dvG8">切换</span>
+                    <span class="switch-arrow" id="switchArrow" data-page-node-id="wXbGVZiSxktgs3EbhBycbC">▾</span>
                 </div>
             </div>
 
             <!-- 项目下拉面板：置于 topbar 内，相对切换条定位展开 -->
-            <div class="proj-panel" id="projPanel" data-page-node-id="P7FavnzOEkT2P61qKZbv0c">
-                <div class="proj-panel-filter" id="projPanelFilter" data-page-node-id="ew3O2lkVBGH2gCFJcok8Gy">
-                    <div class="pf-item active" data-filter="all" onclick="setPanelFilter('all', this)" data-page-node-id="rcF3eiR8wBGQcQAi2LHiih">全部</div>
-                    <div class="pf-item" data-filter="ongoing" onclick="setPanelFilter('ongoing', this)" data-page-node-id="871iw6hii7b0JLOqErHArp">进行中</div>
-                    <div class="pf-item" data-filter="done" onclick="setPanelFilter('done', this)" data-page-node-id="r1rWv64sgfL8Gtv1FbwxDf">已完成</div>
+            <div class="proj-panel" id="projPanel" data-page-node-id="VsMejWTSb041D5uFEveKyl">
+                <div class="proj-panel-filter" id="projPanelFilter" data-page-node-id="GN0HXUCq51jW2ftKJ1vGMA">
+                    <div class="pf-item active" data-filter="all" onclick="setPanelFilter('all', this)" data-page-node-id="ZUun8x2o4GjHs22pymR48l">全部</div>
+                    <div class="pf-item" data-filter="ongoing" onclick="setPanelFilter('ongoing', this)" data-page-node-id="4gqMc35iWDdiGnpgDLMqhA">进行中</div>
+                    <div class="pf-item" data-filter="done" onclick="setPanelFilter('done', this)" data-page-node-id="4rNmjpWrrBIVnhOJgDsfi0">已完成</div>
                 </div>
-                <div class="proj-panel-inner" id="projPanelInner" data-page-node-id="waLq7DSayAloqFHe0Jly3q"></div>
-                <div class="proj-panel-foot" data-page-node-id="eeHlGP7wPFas4aWZ5fgSao">
-                    <button class="proj-new-btn" onclick="createProject()" data-page-node-id="yysgK6M8AWTkUHeXCdrw8K">＋ 新建项目</button>
+                <div class="proj-panel-inner" id="projPanelInner" data-page-node-id="BJ6N4T3vPl3WqnPHT5rr2t"></div>
+                <div class="proj-panel-foot" data-page-node-id="nsJUznCOQpZIgiSAOlJq9B">
+                    <button class="proj-new-btn" onclick="createProject()" data-page-node-id="swTtwC39TEbK5piB4oBMAB">＋ 新建项目</button>
                 </div>
             </div>
         </div>
 
         <!-- 详情区 -->
-        <div class="detail-scroll" id="detailArea" data-page-node-id="HPj8TK1au8BtuT0rpmKTOj"></div>
+        <div class="detail-scroll" id="detailArea" data-page-node-id="S88pwdvCs0o9ySAjev6eeg"></div>
 
-        <!-- 小程序主导航（项目为当前选中项） -->
-        <div class="tab-bar" data-page-node-id="UYRNRwfWvI6fRdtrsPXS1F">
-            <div class="tab-item" onclick="location.href='home.html'" data-page-node-id="5DVfMYqN4AhqUuHQR213H9">
-                <div class="icon" data-page-node-id="lcGraBWY17Uy77OpywYoMn">🏠</div>
-                <div class="label" data-page-node-id="6ysSTXAWjgLIgzpDQL05GJ">首页</div>
+        <!-- 小程序主导航（与业主端 home.html 规范一致：首页 / 我的家 / 消息 / 我的） -->
+        <div class="tab-bar" data-page-node-id="Sk8MpMHEbl59kBKO0iOoFT">
+            <div class="tab-item" onclick="location.href='home.html'" data-page-node-id="j6cZ75IpydPTjFbWauinlA">
+                <div class="icon" data-page-node-id="VduXsJsWZFlrecFb9Fzu9U">🏠</div>
+                <div class="label" data-page-node-id="ezGheGnhipc6I5JGESy8ZY">首页</div>
             </div>
-            <div class="tab-item active" data-page-node-id="UiRqiEf9ZLG4Im5arqnCL6">
-                <div class="icon" data-page-node-id="jVtCqaL1PAdJMOvFCQPetv">📋</div>
-                <div class="label" data-page-node-id="6qb6VfrRSMpFm3BzGTQd88">项目</div>
+            <div class="tab-item active" onclick="location.href='project-detail-ongoing-v2.html'" data-page-node-id="tuiAqOYtxDw6suyAXZY4Rj">
+                <div class="icon" data-page-node-id="MujwTywN7XEkt1t1GLkX1s">📋</div>
+                <div class="label" data-page-node-id="GG3OxgjizDwprDmBCpkt5w">我的家</div>
             </div>
-            <div class="tab-item" onclick="location.href='message.html'" data-page-node-id="qEb69tOJOubJkxbfQfPv4A">
-                <div class="icon" data-page-node-id="4FytzLexTILqcgvDqu9xUI">💬</div>
-                <div class="label" data-page-node-id="EzbbtphYPsCkGlQ9T0EKXz">消息</div>
+            <div class="tab-item" onclick="location.href='message.html'" data-page-node-id="o1gkjtOJeVweWCPxMTi7He">
+                <div class="icon" data-page-node-id="Fi6tDCz7sy2vfcxainxDuD">💬</div>
+                <div class="label" data-page-node-id="8bPbeuSUEDi99mmlDikDQi">消息</div>
             </div>
-            <div class="tab-item" onclick="showToast('个人中心开发中')" data-page-node-id="ShOlh6xLwzD4ATQyZXteWr">
-                <div class="icon" data-page-node-id="qoFBmvzyO7O0ZtOVBol27R">👤</div>
-                <div class="label" data-page-node-id="joXCtstAEDZ6tDlAJkTbo1">我的</div>
+            <div class="tab-item" onclick="showToast('个人中心开发中')" data-page-node-id="KBaMj2daell7h7Q91SxED4">
+                <div class="icon" data-page-node-id="TdEm6ZbHky7SsP5uZEcDuZ">👤</div>
+                <div class="label" data-page-node-id="hA4kwn8g3yxqqNP8VNl3E9">我的</div>
             </div>
         </div>
     </div>
 
-    <!-- 角色演示开关：置于手机框外侧右侧，与项目列表页「演示开关」同源 -->
-    <div class="role-demo-switch" data-page-node-id="mSRm9C8kkk4fdBBBnQGrL3">
-        <div class="switch-title" data-page-node-id="f9zv8zEeCfUgKDCelYArYj">演示开关</div>
-        <div class="switch-item" data-page-node-id="wM6O0yGcCOfeLDERn8V9QL">
-            <span class="switch-status" id="roleStatus" data-page-node-id="3xA56R7fIoh3LvJAUbSeuL">非工人</span>
-            <label class="switch" data-page-node-id="nDGbAu7Bd1BIQ0R9mErcOO">
-                <input type="checkbox" id="roleSwitch" onchange="toggleRoleSwitch(this.checked)" data-page-node-id="XfaHIgKdxJDJAwMBUhA5fo">
-                <span class="slider" data-page-node-id="VFkib8n6OkODkt4vC2uTuh"></span>
-            </label>
-        </div>
-        <div class="switch-hint" data-page-node-id="n6zY0SO5cMHrtiOuxS6XfV">切换角色视角</div>
-    </div>
 
     </div>
 
@@ -621,7 +586,6 @@
         var PROJECTS = [ newProject ];
 
         var currentIndex = 0;
-        var currentRole = 'nonworker'; // 初始项目页：项目创建者（非工人视角）
         var panelFilter = 'all';
 
         /* ===================== 渲染：项目切换条 ===================== */
@@ -732,59 +696,13 @@
                 '</div>';
         }
 
-        /* 工人视角初始项目详情（单页演示开关切换；顶部单一项目信息头与全局切换条共用） */
-        function renderInitialWorker(p) {
-            var trade = p.trade || '泥瓦';
-            var levels = buildLevelOptions(trade + '工作组');
-            return '<div class="detail-fade">' +
-                // 待办事项（工人视角：初始态 0 待办，与项目列表工人视角一致）
-                '<div class="card todo-card worker"><div class="card-title"><span>📋 待办事项</span>' +
-                    '<span class="badge-wrap"><span class="badge">0</span></span>' +
-                    '<span class="more" onclick="openPage(\'todo-list.html\')">查看全部 ></span></div>' +
-                    '<div class="todo-content"><div class="empty-state" style="font-size:12px;color:#999;padding:8px 0;">暂无待办，待工长分配任务、发起合同后在此显示</div></div></div>' +
-                // 我的任务（工人视角：0/0）
-                '<div class="card my-task-card worker" onclick="openPage(\'task-list.html?role=exec\')"><div class="card-title"><span>📌 我的任务</span><span class="more">查看全部 ></span></div>' +
-                    '<div class="my-task-stats">' +
-                        '<div class="my-task-stat"><div class="value">0</div><div class="label">已完成</div></div>' +
-                        '<div class="my-task-divider"></div>' +
-                        '<div class="my-task-stat"><div class="value">0</div><div class="label">我作为执行人的全部任务</div></div>' +
-                    '</div></div>' +
-                // 吸顶快捷入口 + 架构（工人视角，与项目列表工人视角一致）
-                '<div class="sticky-header" id="stickyHeader">' +
-                    '<div class="quick-nav" id="quickNavWork">' +
-                        '<div class="quick-nav-item keep" onclick="go(\'activity-list.html\')"><div class="icon activity">📝</div><div class="label">项目动态</div></div>' +
-                        '<div class="quick-nav-item" onclick="go(\'architecture.html\')"><div class="icon structure">🏗️</div><div class="label">架构</div></div>' +
-                        '<div class="quick-nav-item" onclick="go(\'member.html\')"><div class="icon member">👥</div><div class="label">成员</div></div>' +
-                        '<div class="quick-nav-item" onclick="go(\'project-files.html\')"><div class="icon file">📁</div><div class="label">资料</div></div></div>' +
-                    '<div class="level-selector arch-half" id="levelSelectorWork"><div class="level-dropdown" onclick="toggleLevelOpts(this)">' +
-                        '<div class="current"><div class="icon">⚡</div><div>' +
-                        '<div class="text-row"><div class="text">' + trade + '工作组</div><div class="type-badge workgroup">工作组</div></div>' +
-                        '<div class="breadcrumb-inline"><span class="breadcrumb-item">项目部</span><span class="separator">›</span><span class="breadcrumb-item active">' + trade + '工作组</span></div>' +
-                        '<div class="level-default-hint">默认我的工作组</div></div></div>' +
-                        '<div class="arrow">▼</div></div>' +
-                        '<div class="level-options">' + levels + '</div></div>' +
-                '</div>' +
-                // 合同 / 任务统计（工人视角：初始态均为 0）
-                '<div class="stats-row">' +
-                    '<div class="card contract-half worker"><div class="card-title"><span>📄 合同</span></div>' +
-                        '<div class="contract-list show" id="contractListWorker"><div class="empty-state" style="font-size:12px;color:#999;padding:8px 0;">暂无合同，待工长发起班组合同后在此查看</div></div></div>' +
-                    '<div class="card task-half worker"><div class="card-title"><span>📊 任务统计</span><span class="more" onclick="go(\'task-list.html\')">查看全部 ></span></div>' +
-                        '<div class="task-stats">' +
-                            '<div class="task-stat-item"><div class="icon-wrap all">📋</div><div class="info"><div class="value"><span class="current">0</span><span class="separator">/</span><span class="total">0</span></div><div class="label">全部任务</div></div></div>' +
-                            '<div class="task-stat-item"><div class="icon-wrap accept">⏳</div><div class="info"><div class="value">0</div><div class="label">确认中任务</div></div></div>' +
-                            '<div class="task-stat-item"><div class="icon-wrap contract">▶</div><div class="info"><div class="value">0</div><div class="label">执行中任务</div></div></div>' +
-                        '</div></div>' +
-                '</div>' +
-                '</div>';
-        }
-
         /* ===================== 顶部一行：项目名/切换（切换条已承载，无需额外摘要） ===================== */
 
         /* ===================== 主渲染 ===================== */
         function renderDetail() {
             var p = PROJECTS[currentIndex];
             var area = document.getElementById('detailArea');
-            area.innerHTML = (currentRole === 'worker') ? renderInitialWorker(p) : renderInitial(p);
+            area.innerHTML = renderInitial(p);
         }
 
         /* ===================== 交互 ===================== */
@@ -894,17 +812,6 @@
             setTimeout(function () { t.remove(); }, 1600);
         }
 
-        /* 角色演示开关：非工人 / 工人 视角切换（单页内切换，替代独立工人页） */
-        function toggleRoleSwitch(checked) {
-            currentRole = checked ? 'worker' : 'nonworker';
-            var rs = document.getElementById('roleStatus');
-            if (rs) {
-                rs.textContent = currentRole === 'worker' ? '工人' : '非工人';
-                rs.classList.toggle('worker', checked);
-            }
-            renderDetail();
-        }
-        /* 工人视角交互：层级切换 / 吸顶阴影由通用逻辑处理（见上） */
 
         /* ===================== 点击面板外部自动收起 ===================== */
         document.addEventListener('click', function (e) {
