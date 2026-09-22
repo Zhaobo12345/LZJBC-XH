@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<html lang="zh-CN" data-page-node-id="7z40p2EfBFY8L8lCVVFBS5">
+<head data-page-node-id="1FVOitDt2MnjfwH3JbJ0ib">
+    <meta charset="UTF-8" data-page-node-id="u2dkvuk5xyYt8i4inRQunk">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" data-page-node-id="zbTpNrLy7qdpixO2XY0Rr2">
     <title>家装平台小程序原型 - 项目成员</title>
-    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="common.css" data-page-node-id="Z0h2aqQmR1jqHMgyP3Ohgl">
     <style>
         .page-content {
             height: calc(100% - 44px);
@@ -299,6 +299,45 @@
             padding: 2px 8px;
             border-radius: 10px;
         }
+
+        /* 架构层级标识徽标（L0/L1/L2），不改变整体布局，仅作标识 */
+        .level-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            margin-left: 6px;
+            padding: 1px 7px;
+            border-radius: 9px;
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 1.5;
+            white-space: nowrap;
+        }
+        .level-badge::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: currentColor;
+        }
+        .level-badge.lv0 { color: #1890FF; background-color: rgba(24,144,255,0.12); }
+        .level-badge.lv1 { color: #52C41A; background-color: rgba(82,196,26,0.12); }
+        .level-badge.lv2 { color: #722ED1; background-color: rgba(114,46,209,0.12); }
+
+        .member-level-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: 6px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 1.5;
+            width: fit-content;
+            vertical-align: middle;
+        }
+        .member-level-tag.lv2 { color: #722ED1; background-color: rgba(114,46,209,0.12); }
 
         .member-card {
             display: flex;
@@ -1571,197 +1610,197 @@
     }
 </style>
 </head>
-<body>
-    <div class="phone-frame">
-        <div class="status-bar">
-            <div class="time">9:41</div>
-            <div class="icons">📶 🔋</div>
+<body data-page-node-id="MQLSSaW2FefBLUFyevyFrj">
+    <div class="phone-frame" data-page-node-id="cDYGFjxZa7QJPKF4nQDCjJ">
+        <div class="status-bar" data-page-node-id="NobzUD3y1FyHSMFYJGZwvb">
+            <div class="time" data-page-node-id="RDgpkXgwmk5x6W5npsHv7C">9:41</div>
+            <div class="icons" data-page-node-id="VGkoF5v46KLKfB6RC49KfO">📶 🔋</div>
         </div>
         
-        <div class="nav-bar">
-            <div class="back" onclick="history.back()">← 返回</div>
-            <div class="title centered">项目成员</div>
+        <div class="nav-bar" data-page-node-id="d5yaSprqcuSWoruCzsL9Nk">
+            <div class="back" onclick="history.back()" data-page-node-id="1w0ZK9mce0TIB6nDpJVVTo">← 返回</div>
+            <div class="title centered" data-page-node-id="TcWjZ04qWHEpHAF9Nxs6ma">项目成员</div>
             
             
         
-            <div class="actions"><div class="native-capsule" title="微信原生胶囊：由微信客户端渲染，开发者不可自定义其内容"><span class="nc-left">⋯</span><span class="nc-divider"></span><span class="nc-right">○</span></div></div>
+            <div class="actions" data-page-node-id="lxosbEs9FAAG5rYtNJ51qf"><div class="native-capsule" title="微信原生胶囊：由微信客户端渲染，开发者不可自定义其内容" data-page-node-id="OJhEx81CnME2IJHsA54Z2N"><span class="nc-left" data-page-node-id="7gOBbezsuzB9VPvjXVdKaB">⋯</span><span class="nc-divider" data-page-node-id="SDqdQwhoICqaVA2ZAPHuBP"></span><span class="nc-right" data-page-node-id="WmxsJhgIfS74d7bfCOd1TT">○</span></div></div>
         </div>
             
 
         
-        <div class="page-content">
-            <div class="member-header">
-                <div class="project-name">XX小区整体装修</div>
-                <div class="member-header-row">
-                    <div class="member-count" id="memberCount">共 24 位成员</div>
-                    <button class="exit-btn-header" onclick="showSelfExitConfirm()">退出项目</button>
+        <div class="page-content" data-page-node-id="86DJdrfIVBKSMHYpVJDpQN">
+            <div class="member-header" data-page-node-id="uWzxT6U8b0GQ1EDJX3exNx">
+                <div class="project-name" data-page-node-id="skIItT0anVteATmp6VlgPI">XX小区整体装修</div>
+                <div class="member-header-row" data-page-node-id="webDMFPEisrwyX13j6Y30H">
+                    <div class="member-count" id="memberCount" data-page-node-id="Bz0SuMcU5aRmbyqM8sdkIO">共 24 位成员</div>
+                    <button class="exit-btn-header" onclick="showSelfExitConfirm()" data-page-node-id="DOQKt91UZJ9Ig17HHzb0NU">退出项目</button>
                 </div>
             </div>
             
-            <div class="filter-bar">
-                <div class="filter-wrapper" style="flex: 1;">
-                    <div class="filter-selector" id="filterSelector" onclick="toggleFilterDropdown()">
-                        <div class="selector-text">
-                            <span class="icon">🏢</span>
-                            <span class="label" id="filterLabel">全部成员</span>
+            <div class="filter-bar" data-page-node-id="lsVjt2sUoMP38ObB68STld">
+                <div class="filter-wrapper" style="flex: 1;" data-page-node-id="IPAxwf0ulooZE58C3AhSLt">
+                    <div class="filter-selector" id="filterSelector" onclick="toggleFilterDropdown()" data-page-node-id="iz1D4SSesB7cYVZauQFmIn">
+                        <div class="selector-text" data-page-node-id="KLkBJ5c9dajwArNKOeqwpP">
+                            <span class="icon" data-page-node-id="4aH1e6IeRHHi3JXSVPtj4z">🏢</span>
+                            <span class="label" id="filterLabel" data-page-node-id="CnGXS7iQjQTfuwFpKcKLpM">全部成员</span>
                         </div>
-                        <span class="arrow">▼</span>
+                        <span class="arrow" data-page-node-id="Y4QLU7CNloDEeb1iq8dG7l">▼</span>
                     </div>
-                    <div class="filter-dropdown" id="filterDropdown">
-                        <div class="dropdown-item selected" onclick="selectFilter('all', '全部成员', 24)">
-                            <div class="item-text">
-                                <span class="item-icon">🏢</span>
-                                <span class="item-name">全部成员</span>
+                    <div class="filter-dropdown" id="filterDropdown" data-page-node-id="FMWqCU19KxmCy4EO3itzHY">
+                        <div class="dropdown-item selected" onclick="selectFilter('all', '全部成员', 24)" data-page-node-id="69OEP2Ki4MDCyv4pkMNcsF">
+                            <div class="item-text" data-page-node-id="WImwUsEFal96HzayVtbZ3E">
+                                <span class="item-icon" data-page-node-id="hBMX2g1eFZ8qaimVEbBE9C">🏢</span>
+                                <span class="item-name" data-page-node-id="pdkVCYkwO3YB9O188SGIWx">全部成员</span>
                             </div>
-                            <div class="item-count">24人</div>
+                            <div class="item-count" data-page-node-id="wPpEFliwrlls1XnZ2HntRJ">24人</div>
                         </div>
-                        <div class="dropdown-item" onclick="selectFilter('project', '项目部', 3)">
-                            <div class="item-text">
-                                <span class="item-icon">🏢</span>
-                                <span class="item-name">项目部</span>
+                        <div class="dropdown-item" onclick="selectFilter('project', '项目部', 3)" data-page-node-id="yuMZPdFEa3WW1irXeROcg9">
+                            <div class="item-text" data-page-node-id="P0TlrgTvoum4TFenlVFQfV">
+                                <span class="item-icon" data-page-node-id="uLMDqlPleOGKR3uxaqbYeX">🏢</span>
+                                <span class="item-name" data-page-node-id="zwWUTNRsCflwSomOqEOmKu">项目部</span>
                             </div>
-                            <div class="item-count">3人</div>
+                            <div class="item-count" data-page-node-id="3gac6RpQzuJdxiuDJGtZoF">3人</div>
                         </div>
-                        <div class="dropdown-item" onclick="selectFilter('water', '水电工作组', 8)">
-                            <div class="item-text">
-                                <span class="item-icon">👷</span>
-                                <span class="item-name">水电工作组</span>
+                        <div class="dropdown-item" onclick="selectFilter('water', '水电工作组', 8)" data-page-node-id="5uXK1LyLtCE2aHIPHYsF8R">
+                            <div class="item-text" data-page-node-id="AuXux10os6xBils0dvSZaU">
+                                <span class="item-icon" data-page-node-id="itxkgcDMmfaZCTfGEiROpG">👷</span>
+                                <span class="item-name" data-page-node-id="5zxEPZPO7dfjc3hMkTWQGW">水电工作组</span>
                             </div>
-                            <div class="item-count">8人</div>
+                            <div class="item-count" data-page-node-id="Jrl4DLeqDhRsTOHA7rdN6y">8人</div>
                         </div>
-                        <div class="dropdown-item" onclick="selectFilter('tile', '泥瓦工作组', 6)">
-                            <div class="item-text">
-                                <span class="item-icon">🧱</span>
-                                <span class="item-name">泥瓦工作组</span>
+                        <div class="dropdown-item" onclick="selectFilter('tile', '泥瓦工作组', 6)" data-page-node-id="NQCY75pWUmptJccRHS24oE">
+                            <div class="item-text" data-page-node-id="J869gGUVjtnnyh2GTtoaNs">
+                                <span class="item-icon" data-page-node-id="H3En7EeQhi1J7s3NIlMKKD">🧱</span>
+                                <span class="item-name" data-page-node-id="KrWXtKHRpwsrvhYkEAIJ8h">泥瓦工作组</span>
                             </div>
-                            <div class="item-count">6人</div>
+                            <div class="item-count" data-page-node-id="r2VhAHZDApNQAuj4a01pzY">6人</div>
                         </div>
-                        <div class="dropdown-item" onclick="selectFilter('wood', '木工工作组', 4)">
-                            <div class="item-text">
-                                <span class="item-icon">🪵</span>
-                                <span class="item-name">木工工作组</span>
+                        <div class="dropdown-item" onclick="selectFilter('wood', '木工工作组', 4)" data-page-node-id="XXFjYNrbj9ZRwnCxi4jbwC">
+                            <div class="item-text" data-page-node-id="CGfJIOFjBeFOyVNM5I9ocP">
+                                <span class="item-icon" data-page-node-id="ylwOAFeE8nifUilgfsqE6n">🪵</span>
+                                <span class="item-name" data-page-node-id="eCRdg6aDx59I3kjMTnyf9V">木工工作组</span>
                             </div>
-                            <div class="item-count">4人</div>
+                            <div class="item-count" data-page-node-id="k1DaLHLu9scGG7FhTh9XIe">4人</div>
                         </div>
-                        <div class="dropdown-item" onclick="selectFilter('paint', '油漆工作组', 3)">
-                            <div class="item-text">
-                                <span class="item-icon">🎨</span>
-                                <span class="item-name">油漆工作组</span>
+                        <div class="dropdown-item" onclick="selectFilter('paint', '油漆工作组', 3)" data-page-node-id="Sk8QUjkSeKDSKJtfMroi87">
+                            <div class="item-text" data-page-node-id="6VnPug0LcTEoToqdGJHCpO">
+                                <span class="item-icon" data-page-node-id="STOvItntazMUHzxZmsLPgv">🎨</span>
+                                <span class="item-name" data-page-node-id="IMJjmVdGY95i6CaAfXQD34">油漆工作组</span>
                             </div>
-                            <div class="item-count">3人</div>
+                            <div class="item-count" data-page-node-id="gfOT48ZsMEkqkkv2E6cCcp">3人</div>
                         </div>
                     </div>
                 </div>
-                <div class="search-btn" onclick="toggleSearchBar()">🔍</div>
+                <div class="search-btn" onclick="toggleSearchBar()" data-page-node-id="QcfXJhNj4HcfRd6zopPm9q">🔍</div>
             </div>
             
-            <div class="search-bar" id="searchBar">
-                <div class="search-input-wrap">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" class="search-input" id="searchInput" placeholder="搜索成员姓名、角色..." oninput="handleSearch(this.value)">
-                    <span class="clear-btn" onclick="clearSearch()">✕</span>
+            <div class="search-bar" id="searchBar" data-page-node-id="JeWOQgcNzp3irMnWsYHKZ8">
+                <div class="search-input-wrap" data-page-node-id="OKUTr2cWUsnWmqzNGAdr98">
+                    <span class="search-icon" data-page-node-id="WQVwtgMCplSppIsqGX1AP9">🔍</span>
+                    <input type="text" class="search-input" id="searchInput" placeholder="搜索成员姓名、角色..." oninput="handleSearch(this.value)" data-page-node-id="YIqDSiIF42gSohDnhxsWNK">
+                    <span class="clear-btn" onclick="clearSearch()" data-page-node-id="ButpzZAjMMZ6dXPyq8Hcm0">✕</span>
                 </div>
-                <span class="cancel-btn" onclick="closeSearchBar()">取消</span>
+                <span class="cancel-btn" onclick="closeSearchBar()" data-page-node-id="jQeaUNDIdMOq7aEDx1u86T">取消</span>
             </div>
             
-            <div class="search-result-info" id="searchResultInfo"></div>
+            <div class="search-result-info" id="searchResultInfo" data-page-node-id="lyQxcj47Hu9ir6afTeaOjE"></div>
             
-            <div class="member-list no-manage" id="memberList">
+            <div class="member-list no-manage" id="memberList" data-page-node-id="icB0HQstOpcYYCgDINxCaE">
             </div>
             
-            <div class="invite-fab" onclick="showInviteModal()">+</div>
+            <div class="invite-fab" onclick="showInviteModal()" data-page-node-id="3zvLoEa527xlAo946aAU8H">+</div>
         </div>
         
-        <div class="invite-modal" id="inviteModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title">邀请成员</div>
-                    <div class="modal-close" onclick="closeInviteModal()">✕</div>
+        <div class="invite-modal" id="inviteModal" data-page-node-id="IUY3eNMCKRWE1r0uRpjG0B">
+            <div class="modal-content" data-page-node-id="1VQspBaiFU3dadb9rwOFE7">
+                <div class="modal-header" data-page-node-id="GuaQtYBRcURHqwr3cf02Rp">
+                    <div class="modal-title" data-page-node-id="DJwza6sDDYfWgFprBMolPB">邀请成员</div>
+                    <div class="modal-close" onclick="closeInviteModal()" data-page-node-id="GSOBmJPUCk2Jro6tfDjjQ2">✕</div>
                 </div>
-                <div class="modal-body">
-                    <div class="invite-category" id="inviteCategory">
-                        <div class="cat-seg active" data-cat="service" onclick="selectInviteCategory(this, 'service')">服务人员</div>
-                        <div class="cat-seg" data-cat="owner" onclick="selectInviteCategory(this, 'owner')">业主/业主家人</div>
+                <div class="modal-body" data-page-node-id="YX2TvAElFRPBStF2fDIriC">
+                    <div class="invite-category" id="inviteCategory" data-page-node-id="6EB4wXYTW4tBIAhvE6kvrH">
+                        <div class="cat-seg active" data-cat="service" onclick="selectInviteCategory(this, 'service')" data-page-node-id="qJ7A1SiL8wWpAt0irsReIx">服务人员</div>
+                        <div class="cat-seg" data-cat="owner" onclick="selectInviteCategory(this, 'owner')" data-page-node-id="31XyqLpCfzSDf2phyXgt93">业主/业主家人</div>
                     </div>
 
-                    <div id="serviceInviteFields">
-                    <div class="form-group">
-                        <label class="form-label">
-                            <span class="required">*</span>
-                            <span>邀请到架构层</span>
+                    <div id="serviceInviteFields" data-page-node-id="IVnz7IsyCVz5k9J08DcBRa">
+                    <div class="form-group" data-page-node-id="25YVDROWd5OBo50z0DFTAo">
+                        <label class="form-label" data-page-node-id="9sRDK0gR0CwwJWAqYz3lAf">
+                            <span class="required" data-page-node-id="1LqbmXQkTymULQOdcfQAQM">*</span>
+                            <span data-page-node-id="wgaLurnBVlBA2Ga3EMC2xf">邀请到架构层</span>
                         </label>
-                        <div class="searchable-select" id="groupSelect">
-                            <div class="select-trigger" onclick="toggleGroupSelect()">
-                                <div class="selected-text">
-                                    <span class="item-icon">🏢</span>
-                                    <span class="item-name" id="selectedGroupName">项目部</span>
+                        <div class="searchable-select" id="groupSelect" data-page-node-id="xKNijyXmEkqg5CRDLnVygI">
+                            <div class="select-trigger" onclick="toggleGroupSelect()" data-page-node-id="1TKnpAHCrvGKpd5NKPjLZw">
+                                <div class="selected-text" data-page-node-id="HloyiMpI44GHHfigSvWHaK">
+                                    <span class="item-icon" data-page-node-id="iahopyEY9QeDSseLKbDfXx">🏢</span>
+                                    <span class="item-name" id="selectedGroupName" data-page-node-id="F1CfH2DzynJdNLPsS4hipk">项目部</span>
                                 </div>
-                                <span class="arrow">▼</span>
+                                <span class="arrow" data-page-node-id="EFENw4iGwEQtD3FJ8u71LI">▼</span>
                             </div>
-                            <div class="select-dropdown" id="groupDropdown">
-                                <div class="dropdown-search">
-                                    <input type="text" placeholder="搜索架构层..." oninput="filterGroups(this.value)">
+                            <div class="select-dropdown" id="groupDropdown" data-page-node-id="Kax4BcizN5hosVowlHI0uC">
+                                <div class="dropdown-search" data-page-node-id="vGRO0Xl7VOYFn12RmYZK1a">
+                                    <input type="text" placeholder="搜索架构层..." oninput="filterGroups(this.value)" data-page-node-id="5LYKZMKpOo3XKI3UTIJZV7">
                                 </div>
-                                <div class="dropdown-list" id="groupDropdownList">
-                                    <div class="dropdown-item selected" data-value="project" data-icon="🏢" data-name="项目部" onclick="selectGroup(this)">
-                                        <span class="item-icon">🏢</span>
-                                        <span class="item-name">项目部</span>
-                                        <span class="check-icon">✓</span>
+                                <div class="dropdown-list" id="groupDropdownList" data-page-node-id="htjxXlvTtH7cf6fBnppOv8">
+                                    <div class="dropdown-item selected" data-value="project" data-icon="🏢" data-name="项目部" onclick="selectGroup(this)" data-page-node-id="OEmuxbuhRyGx1AFrUWwDXr">
+                                        <span class="item-icon" data-page-node-id="IdUcziOTjyr0gpqLmMFn5j">🏢</span>
+                                        <span class="item-name" data-page-node-id="8GLJWwmZrFKWC3Ar2SQp6u">项目部</span>
+                                        <span class="check-icon" data-page-node-id="3CgbnzRF7m8qJ2YTKSkv92">✓</span>
                                     </div>
-                                    <div class="dropdown-item" data-value="water" data-icon="👷" data-name="水电工作组" onclick="selectGroup(this)">
-                                        <span class="item-icon">👷</span>
-                                        <span class="item-name">水电工作组</span>
-                                        <span class="check-icon" style="display: none;">✓</span>
+                                    <div class="dropdown-item" data-value="water" data-icon="👷" data-name="水电工作组" onclick="selectGroup(this)" data-page-node-id="OwKwxcb1ka83iepzI0DwrV">
+                                        <span class="item-icon" data-page-node-id="TC2ne12ddiEuFiEuxC0ll0">👷</span>
+                                        <span class="item-name" data-page-node-id="cP1Zett1RveM8ktuFA7G6U">水电工作组</span>
+                                        <span class="check-icon" style="display: none;" data-page-node-id="BM5qjsiYnKX7Ej3315F1g9">✓</span>
                                     </div>
-                                    <div class="dropdown-item" data-value="tile" data-icon="🧱" data-name="泥瓦工作组" onclick="selectGroup(this)">
-                                        <span class="item-icon">🧱</span>
-                                        <span class="item-name">泥瓦工作组</span>
-                                        <span class="check-icon" style="display: none;">✓</span>
+                                    <div class="dropdown-item" data-value="tile" data-icon="🧱" data-name="泥瓦工作组" onclick="selectGroup(this)" data-page-node-id="ycHrtfwjnHDd3307FVudyk">
+                                        <span class="item-icon" data-page-node-id="pAeRzKILYlZeDjNiu5qoXG">🧱</span>
+                                        <span class="item-name" data-page-node-id="5UdBMqYjxooT3VjDxSazcI">泥瓦工作组</span>
+                                        <span class="check-icon" style="display: none;" data-page-node-id="v3GZsLtcBFLl79NTRHAsME">✓</span>
                                     </div>
-                                    <div class="dropdown-item" data-value="wood" data-icon="🪵" data-name="木工工作组" onclick="selectGroup(this)">
-                                        <span class="item-icon">🪵</span>
-                                        <span class="item-name">木工工作组</span>
-                                        <span class="check-icon" style="display: none;">✓</span>
+                                    <div class="dropdown-item" data-value="wood" data-icon="🪵" data-name="木工工作组" onclick="selectGroup(this)" data-page-node-id="6fQqpv0BjMELko2V6RA9kt">
+                                        <span class="item-icon" data-page-node-id="l84pcj7pQ8fZPwCwxJFmh9">🪵</span>
+                                        <span class="item-name" data-page-node-id="9a8KS4fGBqj1EVD9xNWThs">木工工作组</span>
+                                        <span class="check-icon" style="display: none;" data-page-node-id="Vv8nT37Xxf464sVzG9nQOC">✓</span>
                                     </div>
-                                    <div class="dropdown-item" data-value="paint" data-icon="🎨" data-name="油漆工作组" onclick="selectGroup(this)">
-                                        <span class="item-icon">🎨</span>
-                                        <span class="item-name">油漆工作组</span>
-                                        <span class="check-icon" style="display: none;">✓</span>
+                                    <div class="dropdown-item" data-value="paint" data-icon="🎨" data-name="油漆工作组" onclick="selectGroup(this)" data-page-node-id="O00lSAbOmmFSGXwRizo2XP">
+                                        <span class="item-icon" data-page-node-id="1WOHFOH8fzpIjbfHdrizT5">🎨</span>
+                                        <span class="item-name" data-page-node-id="xDbxK4bztlLUZUtPjWDB6u">油漆工作组</span>
+                                        <span class="check-icon" style="display: none;" data-page-node-id="6ywqoHlSSlaNEVhUW3ZsmC">✓</span>
                                     </div>
-                                    <div class="dropdown-item" data-value="hvac" data-icon="❄️" data-name="暖通工作组" onclick="selectGroup(this)">
-                                        <span class="item-icon">❄️</span>
-                                        <span class="item-name">暖通工作组</span>
-                                        <span class="check-icon" style="display: none;">✓</span>
+                                    <div class="dropdown-item" data-value="hvac" data-icon="❄️" data-name="暖通工作组" onclick="selectGroup(this)" data-page-node-id="MHraeBhy6HntPkmKhOBINK">
+                                        <span class="item-icon" data-page-node-id="jBIqy1ZpqMk5bn88AB4zDl">❄️</span>
+                                        <span class="item-name" data-page-node-id="quHgIgl0L7C2ehUagDhBTT">暖通工作组</span>
+                                        <span class="check-icon" style="display: none;" data-page-node-id="ZrAgkJBzmE2GdHNUGLjwUz">✓</span>
                                     </div>
-                                    <div class="dropdown-item" data-value="ceiling" data-icon="🏠" data-name="吊顶工作组" onclick="selectGroup(this)">
-                                        <span class="item-icon">🏠</span>
-                                        <span class="item-name">吊顶工作组</span>
-                                        <span class="check-icon" style="display: none;">✓</span>
+                                    <div class="dropdown-item" data-value="ceiling" data-icon="🏠" data-name="吊顶工作组" onclick="selectGroup(this)" data-page-node-id="4goeFi0cm1yjdfxFCjgzUo">
+                                        <span class="item-icon" data-page-node-id="aPxWBOEU7kOjxu94KRsQ2d">🏠</span>
+                                        <span class="item-name" data-page-node-id="d1ebG67ogFIa4TNv0dnEEq">吊顶工作组</span>
+                                        <span class="check-icon" style="display: none;" data-page-node-id="HzU0U7Yr8zcwmP0P8vMR9c">✓</span>
                                     </div>
-                                    <div class="dropdown-item" data-value="floor" data-icon="🪵" data-name="地板工作组" onclick="selectGroup(this)">
-                                        <span class="item-icon">🪵</span>
-                                        <span class="item-name">地板工作组</span>
-                                        <span class="check-icon" style="display: none;">✓</span>
+                                    <div class="dropdown-item" data-value="floor" data-icon="🪵" data-name="地板工作组" onclick="selectGroup(this)" data-page-node-id="Fmkkgy246EEB77PccoV7Hq">
+                                        <span class="item-icon" data-page-node-id="1B4uhzfDhenagpahg7lZgw">🪵</span>
+                                        <span class="item-name" data-page-node-id="0s2foFfYFdCvFX8DyBlKo9">地板工作组</span>
+                                        <span class="check-icon" style="display: none;" data-page-node-id="8axteNAVb9S8NEOCzeLoEi">✓</span>
                                     </div>
-                                    <div class="dropdown-item" data-value="door" data-icon="🚪" data-name="门窗工作组" onclick="selectGroup(this)">
-                                        <span class="item-icon">🚪</span>
-                                        <span class="item-name">门窗工作组</span>
-                                        <span class="check-icon" style="display: none;">✓</span>
+                                    <div class="dropdown-item" data-value="door" data-icon="🚪" data-name="门窗工作组" onclick="selectGroup(this)" data-page-node-id="O2FMBcm9390l9K59hkGgDE">
+                                        <span class="item-icon" data-page-node-id="1TRLS59Ju8ItyKiA1ops4g">🚪</span>
+                                        <span class="item-name" data-page-node-id="Oy3ctgf4P0qe54S1T5BIVw">门窗工作组</span>
+                                        <span class="check-icon" style="display: none;" data-page-node-id="9SOmaqdHnYmxnxgNe7fwDE">✓</span>
                                     </div>
-                                    <div class="dropdown-item" data-value="cabinet" data-icon="🗄️" data-name="橱柜工作组" onclick="selectGroup(this)">
-                                        <span class="item-icon">🗄️</span>
-                                        <span class="item-name">橱柜工作组</span>
-                                        <span class="check-icon" style="display: none;">✓</span>
+                                    <div class="dropdown-item" data-value="cabinet" data-icon="🗄️" data-name="橱柜工作组" onclick="selectGroup(this)" data-page-node-id="W8mwlfBYmrjA8qMUDK53C3">
+                                        <span class="item-icon" data-page-node-id="0jEPtlHuFTAeFvuLLpvBCL">🗄️</span>
+                                        <span class="item-name" data-page-node-id="GsdjYUz90FqM9hoGpGJRH1">橱柜工作组</span>
+                                        <span class="check-icon" style="display: none;" data-page-node-id="sdbg4hGKkAAaxAb2s8JZED">✓</span>
                                     </div>
-                                    <div class="dropdown-item" data-value="sanitary" data-icon="🚿" data-name="卫浴工作组" onclick="selectGroup(this)">
-                                        <span class="item-icon">🚿</span>
-                                        <span class="item-name">卫浴工作组</span>
-                                        <span class="check-icon" style="display: none;">✓</span>
+                                    <div class="dropdown-item" data-value="sanitary" data-icon="🚿" data-name="卫浴工作组" onclick="selectGroup(this)" data-page-node-id="oBvTnhhe7EFzvgh7XUEvTv">
+                                        <span class="item-icon" data-page-node-id="5GENI9eLIq1XApcK3Ttd3g">🚿</span>
+                                        <span class="item-name" data-page-node-id="WnAEHZCI6GbnXxE0NuzyN7">卫浴工作组</span>
+                                        <span class="check-icon" style="display: none;" data-page-node-id="dDuBxpAiEh8ZCyhKqroPcl">✓</span>
                                     </div>
-                                    <div class="dropdown-item" data-value="electric" data-icon="💡" data-name="电工工作组" onclick="selectGroup(this)">
-                                        <span class="item-icon">💡</span>
-                                        <span class="item-name">电工工作组</span>
-                                        <span class="check-icon" style="display: none;">✓</span>
+                                    <div class="dropdown-item" data-value="electric" data-icon="💡" data-name="电工工作组" onclick="selectGroup(this)" data-page-node-id="T9AFAEHIduCMRtO5GCmEhJ">
+                                        <span class="item-icon" data-page-node-id="UkpYrypcncIo2QxXGBaRLA">💡</span>
+                                        <span class="item-name" data-page-node-id="YpmoaPyDEJB0l0b0tvcoGy">电工工作组</span>
+                                        <span class="check-icon" style="display: none;" data-page-node-id="52ZOA6Y1GBPr7l0hybQHKr">✓</span>
                                     </div>
                                 </div>
                             </div>
@@ -1770,248 +1809,248 @@
                     </div><!-- /serviceInviteFields -->
                     
 
-                    <div class="invite-target-app" id="inviteTargetApp">
-                        <span class="app-icon">🛠️</span>
-                        <div class="app-text">
-                            <div class="app-line">被邀请人将进入 <b>服务端小程序</b></div>
-                            <div class="app-perm">默认权限：仅基础公开数据，无治理权限</div>
+                    <div class="invite-target-app" id="inviteTargetApp" data-page-node-id="sWevRBP6rE4WH7aDAes3Wz">
+                        <span class="app-icon" data-page-node-id="evxl2FAbUGZfdLwFTqCD1W">🛠️</span>
+                        <div class="app-text" data-page-node-id="v6HhbadXUAHkAJtCEpER7p">
+                            <div class="app-line" data-page-node-id="6Wel9u1NSZEB0w426AQmVN">被邀请人将进入 <b data-page-node-id="AG3508kkFvByqKb5TB20Nr">服务端小程序</b></div>
+                            <div class="app-perm" data-page-node-id="4OlVQE0gF3EicsDrR6oEs8">默认权限：仅基础公开数据，无治理权限</div>
                         </div>
                     </div>
                     
-                    <div class="form-group">
-                        <label class="form-label">
-                            <span class="required">*</span>
-                            <span>邀请方式</span>
+                    <div class="form-group" data-page-node-id="cQnHCEt9QsElVqi2rf8IoY">
+                        <label class="form-label" data-page-node-id="lkirW0x9Rq96Qv5u4dl0Z0">
+                            <span class="required" data-page-node-id="q4tmHrE85jlBjfdJDr7IQs">*</span>
+                            <span data-page-node-id="jb1TAV6EfwUjIFMiVJ1vig">邀请方式</span>
                         </label>
-                        <div class="invite-methods">
-                            <div class="invite-method active" onclick="selectInviteMethod(this, 'platform')">
-                                <div class="method-icon">👥</div>
-                                <div class="method-name">平台内选择</div>
+                        <div class="invite-methods" data-page-node-id="PaB80upl8no8Zdj2sDPWvk">
+                            <div class="invite-method active" onclick="selectInviteMethod(this, 'platform')" data-page-node-id="ZV5U8Ni7eE3x2RziKO5H0b">
+                                <div class="method-icon" data-page-node-id="dBwMjzaOz1RRXuXug3mAPJ">👥</div>
+                                <div class="method-name" data-page-node-id="HeiG8X8DFpoxZQdxiWLtDG">平台内选择</div>
                             </div>
-                            <div class="invite-method" onclick="selectInviteMethod(this, 'qrcode')">
-                                <div class="method-icon">📷</div>
-                                <div class="method-name">二维码邀请</div>
+                            <div class="invite-method" onclick="selectInviteMethod(this, 'qrcode')" data-page-node-id="EIGukBH79zsAFHHT9uBGAt">
+                                <div class="method-icon" data-page-node-id="yWPx8HZsB3ybXO9yOOdbkU">📷</div>
+                                <div class="method-name" data-page-node-id="mkCCrI8gzqBQWEg4mK6Okz">二维码邀请</div>
                             </div>
-                            <div class="invite-method" onclick="selectInviteMethod(this, 'wechat')">
-                                <div class="method-icon">💚</div>
-                                <div class="method-name">微信好友</div>
+                            <div class="invite-method" onclick="selectInviteMethod(this, 'wechat')" data-page-node-id="HUMC6SHzMsCwGp14RVlrcT">
+                                <div class="method-icon" data-page-node-id="An6KcJbxywx518DPL8dtNE">💚</div>
+                                <div class="method-name" data-page-node-id="wgVc3y2qc8O2TiBbzwHzuv">微信好友</div>
                             </div>
                         </div>
                     </div>
                     
-                    <div id="platformInviteForm">
-                        <div class="form-group">
-                            <label class="form-label">
-                                <span class="required">*</span>
-                                <span>选择平台用户</span>
+                    <div id="platformInviteForm" data-page-node-id="x1GVPYzaT7qFRyqEifJjAa">
+                        <div class="form-group" data-page-node-id="ldC4uoYwMO1pfFVv6jMX0l">
+                            <label class="form-label" data-page-node-id="NaNUaJV8w9cyioc5wapLi7">
+                                <span class="required" data-page-node-id="fbqdShiIbMxvJ0zbajGzRX">*</span>
+                                <span data-page-node-id="WvJVvcr6iexKdBmkimc6Pp">选择平台用户</span>
                             </label>
-                            <div class="platform-user-search">
-                                <input type="text" class="form-input" id="platformUserSearch" placeholder="搜索平台内的服务人员 / 业主..." oninput="filterPlatformUsers(this.value)">
+                            <div class="platform-user-search" data-page-node-id="gKaou9YPFQizeZOTZnZYPJ">
+                                <input type="text" class="form-input" id="platformUserSearch" placeholder="搜索平台内的服务人员 / 业主..." oninput="filterPlatformUsers(this.value)" data-page-node-id="gTdNNbFYmkn2GaUaZBv0RR">
                             </div>
-                            <div class="platform-user-list" id="platformUserList"></div>
+                            <div class="platform-user-list" id="platformUserList" data-page-node-id="QyApq3gDMgLrAOFHLnBmQq"></div>
                         </div>
                     </div>
                     
-                    <div id="qrcodeInviteForm" style="display: none;">
-                        <div class="qrcode-preview">
-                            <div class="qrcode-placeholder">二维码</div>
-                            <div class="qrcode-text">扫码加入工作组</div>
+                    <div id="qrcodeInviteForm" style="display: none;" data-page-node-id="SmBwgM4YU5FjErK4Vbjbzr">
+                        <div class="qrcode-preview" data-page-node-id="OkoeLGZy3qIq3iAO5oQw2x">
+                            <div class="qrcode-placeholder" data-page-node-id="1iM6vkvreXU2lEe0GsLmIh">二维码</div>
+                            <div class="qrcode-text" data-page-node-id="wdgy8VzjLQruRA7x0yJg1Z">扫码加入工作组</div>
                         </div>
-                        <div class="qrcode-expire">二维码有效期：7天</div>
+                        <div class="qrcode-expire" data-page-node-id="zVJX71PX12OPRo1VV4nCOS">二维码有效期：7天</div>
                     </div>
 
-                    <div id="wechatInviteForm" style="display: none;">
-                        <div class="wechat-invite-preview">
-                            <div class="wechat-share-card">
-                                <div class="card-thumb">🏠</div>
-                                <div class="card-info">
-                                    <div class="card-title" id="wechatCardTitle">家装项目协作邀请</div>
-                                    <div class="card-desc" id="wechatCardDesc">点击加入项目，开始协作</div>
+                    <div id="wechatInviteForm" style="display: none;" data-page-node-id="jUGX0ikYP4WB2ZAcOrGISQ">
+                        <div class="wechat-invite-preview" data-page-node-id="yesccuillWABm8dvStXR22">
+                            <div class="wechat-share-card" data-page-node-id="hwWSY6vYtV8kPHBErEHmeI">
+                                <div class="card-thumb" data-page-node-id="fGKGNJIo9grVarTIjuaVAZ">🏠</div>
+                                <div class="card-info" data-page-node-id="Mo2MoXOMQYaqdScmzhrvOQ">
+                                    <div class="card-title" id="wechatCardTitle" data-page-node-id="FWbYTbDf7W6cHAp6PJ1BC6">家装项目协作邀请</div>
+                                    <div class="card-desc" id="wechatCardDesc" data-page-node-id="Hr0AtcHL08GKAFSfh3a8tf">点击加入项目，开始协作</div>
                                 </div>
                             </div>
-                            <button class="wechat-share-btn" onclick="shareToWechat()">
-                                <span class="btn-icon">💬</span>
-                                <span>发送给微信好友</span>
+                            <button class="wechat-share-btn" onclick="shareToWechat()" data-page-node-id="4xPly9bE7exe9IAFGYdEJQ">
+                                <span class="btn-icon" data-page-node-id="VEo5x6zUziRSl0t0IC232E">💬</span>
+                                <span data-page-node-id="soinmaTw1iblZMgNTzLxBK">发送给微信好友</span>
                             </button>
-                            <div class="wechat-invite-tip">点击后将调起微信分享面板，选择好友发送邀请卡片</div>
+                            <div class="wechat-invite-tip" data-page-node-id="72FzWDh8d5GDWVUZWpD5X6">点击后将调起微信分享面板，选择好友发送邀请卡片</div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-actions">
-                    <button class="modal-btn cancel" onclick="closeInviteModal()">取消</button>
-                    <button class="modal-btn confirm" onclick="sendInvite()">发送邀请</button>
+                <div class="modal-actions" data-page-node-id="M64Hyg4v5sGMM0BDCYlUlg">
+                    <button class="modal-btn cancel" onclick="closeInviteModal()" data-page-node-id="HbR6bGaaVCSiruADTAlzcJ">取消</button>
+                    <button class="modal-btn confirm" onclick="sendInvite()" data-page-node-id="vQJ6qR1KVH2pYbaeUnDXKx">发送邀请</button>
                 </div>
             </div>
         </div>
         
-        <div class="permission-modal" id="permissionModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title">权限设置</div>
-                    <div class="modal-close" onclick="closePermissionModal()">✕</div>
+        <div class="permission-modal" id="permissionModal" data-page-node-id="6HUlLVR5c1dnJSIA11wGue">
+            <div class="modal-content" data-page-node-id="lGbMDxadnobGxikQ4StkWf">
+                <div class="modal-header" data-page-node-id="44uDvDV41SXpnIXguuVHJB">
+                    <div class="modal-title" data-page-node-id="1UO6BT5ByeQpD3uF2dCDMz">权限设置</div>
+                    <div class="modal-close" onclick="closePermissionModal()" data-page-node-id="10J56NNxtlpMuQ9OpwDb0I">✕</div>
                 </div>
                 
-                <div class="member-info-card">
-                    <div class="avatar" id="modalAvatar">张</div>
-                    <div class="info">
-                        <div class="name" id="modalName">张三</div>
-                        <div class="role" id="modalRole">项目部 · 项目经理</div>
+                <div class="member-info-card" data-page-node-id="8h1SrPDrb80CnQPHHFDGUw">
+                    <div class="avatar" id="modalAvatar" data-page-node-id="FFrR27sK1GAL6CVs3bC0YT">张</div>
+                    <div class="info" data-page-node-id="Y60I52wbcNDAZy4Ok5tomN">
+                        <div class="name" id="modalName" data-page-node-id="B1BeqMz0XJ0yGdRU1he3EA">张三</div>
+                        <div class="role" id="modalRole" data-page-node-id="cwMaCpF5zDjlfcDovP1IhH">项目部 · 项目经理</div>
                     </div>
                 </div>
                 
-                <div class="permission-warning" id="permissionWarning" style="display: none;">
-                    <div class="warning-icon">⚠️</div>
-                    <div class="warning-text">该成员是项目中唯一拥有全部权限的管理者，修改权限后可能导致项目无人管理。</div>
+                <div class="permission-warning" id="permissionWarning" style="display: none;" data-page-node-id="ixWxbZpsiHU55JV4Nor2at">
+                    <div class="warning-icon" data-page-node-id="WfVe2bYyadrzUpVQ9kjhDT">⚠️</div>
+                    <div class="warning-text" data-page-node-id="aHoSSYwyo3l9O87NxD6hZx">该成员是项目中唯一拥有全部权限的管理者，修改权限后可能导致项目无人管理。</div>
                 </div>
                 
-                <div class="permission-section">
-                    <div class="section-title"><span class="icon">📊</span> 数据权限</div>
-                    <div class="section-desc">设置成员可查看的数据范围，不选择则默认可查看全部公开数据</div>
+                <div class="permission-section" data-page-node-id="UtTgA5bjzDCCtXvYmpuHYd">
+                    <div class="section-title" data-page-node-id="uctGQAmJJYGercwr6Z5i1G"><span class="icon" data-page-node-id="6sT61xNTR88uaL7hx5KazR">📊</span> 数据权限</div>
+                    <div class="section-desc" data-page-node-id="XDGv5F7GFlD7MJBPihV8gj">设置成员可查看的数据范围，不选择则默认可查看全部公开数据</div>
                     
-                    <div class="permission-option" onclick="selectDataPermission(this, 'all')">
-                        <div class="radio"></div>
-                        <div class="option-content">
-                            <div class="option-title">全部数据</div>
-                            <div class="option-desc">可查看项目内所有层级的数据</div>
+                    <div class="permission-option" onclick="selectDataPermission(this, 'all')" data-page-node-id="b7oNXbILyaypRutItfpAC8">
+                        <div class="radio" data-page-node-id="gK3pXAN2d2ZGIL4SReGxzR"></div>
+                        <div class="option-content" data-page-node-id="5jB5gm6XCDyBPvWP3XOZbS">
+                            <div class="option-title" data-page-node-id="T5tHueVLVaasJFjRqOUyE9">全部数据</div>
+                            <div class="option-desc" data-page-node-id="GNnyeCH6q3UTA7TLTnG6Rj">可查看项目内所有层级的数据</div>
                         </div>
                     </div>
-                    <div class="permission-option" onclick="selectDataPermission(this, 'level')">
-                        <div class="radio"></div>
-                        <div class="option-content">
-                            <div class="option-title">所在架构层级</div>
-                            <div class="option-desc">仅可查看所属工作组及下级的数据</div>
+                    <div class="permission-option" onclick="selectDataPermission(this, 'level')" data-page-node-id="Ijhx2bBsjWoCQNVnciEFia">
+                        <div class="radio" data-page-node-id="18BSs1TmPofYKUVdpXrPcC"></div>
+                        <div class="option-content" data-page-node-id="tb1Ax9ImbCSl6pOIw8UU8F">
+                            <div class="option-title" data-page-node-id="Rhfyu1pyvLrmYTmBSsw8EO">所在架构层级</div>
+                            <div class="option-desc" data-page-node-id="VwHJdonop2ZdKVjqVvykqC">仅可查看所属工作组及下级的数据</div>
                         </div>
                     </div>
-                    <div class="permission-option" onclick="selectDataPermission(this, 'level_with_contract')">
-                        <div class="radio"></div>
-                        <div class="option-content">
-                            <div class="option-title">所在架构及下属层级权限（含合同）</div>
-                            <div class="option-desc">可查看所属工作组及下级的数据，包含合同相关内容</div>
+                    <div class="permission-option" onclick="selectDataPermission(this, 'level_with_contract')" data-page-node-id="Q4MyMJ0h7osolAFobgL7Ia">
+                        <div class="radio" data-page-node-id="hgbKdcX4GVu7bKsMFpbImQ"></div>
+                        <div class="option-content" data-page-node-id="CgH9cm3CRgh9lNS4n1nlXh">
+                            <div class="option-title" data-page-node-id="O6uiogBsCHsBcATxhDrs1d">所在架构及下属层级权限（含合同）</div>
+                            <div class="option-desc" data-page-node-id="ZdUFNDyMDs7JCiejl5dYIC">可查看所属工作组及下级的数据，包含合同相关内容</div>
                         </div>
                     </div>
-                    <div class="permission-option" onclick="selectDataPermission(this, 'none')">
-                        <div class="radio"></div>
-                        <div class="option-content">
-                            <div class="option-title">仅基础公开数据</div>
-                            <div class="option-desc">仅可查看基础公开数据、所在架构层数据及参与签署合同数据</div>
+                    <div class="permission-option" onclick="selectDataPermission(this, 'none')" data-page-node-id="WWWv7GiTs0vzvG5N842Wbs">
+                        <div class="radio" data-page-node-id="2ivGMUElclHy4KypFDYBIe"></div>
+                        <div class="option-content" data-page-node-id="AC4ECSvi9cS8anF3p7Zq7e">
+                            <div class="option-title" data-page-node-id="XRMBqu1YdtnRMBMAKfTQ1a">仅基础公开数据</div>
+                            <div class="option-desc" data-page-node-id="N8eS7ZSluu4TwzMW0u9EGm">仅可查看基础公开数据、所在架构层数据及参与签署合同数据</div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="permission-section">
-                    <div class="section-title"><span class="icon">⚙️</span> 治理权限</div>
-                    <div class="section-desc">设置成员可执行的操作权限，不选择则无治理权限</div>
+                <div class="permission-section" data-page-node-id="EtI8g0jDPFsAHX0IABP79v">
+                    <div class="section-title" data-page-node-id="DBq9hjPKdalsFZxhBg9Qtv"><span class="icon" data-page-node-id="FPCGFbi0yJpNgkzXxHNDAm">⚙️</span> 治理权限</div>
+                    <div class="section-desc" data-page-node-id="28F5Pzp0lifXDzuLKM8xfJ">设置成员可执行的操作权限，不选择则无治理权限</div>
                     
-                    <div class="permission-checkbox-group">
-                        <div class="permission-checkbox" onclick="toggleManagePermission(this, 'all')">
-                            <div class="checkbox">✓</div>
-                            <div class="option-content">
-                                <div class="option-title">全部权限</div>
-                                <div class="option-desc">拥有项目的全部管理权限-含权限配置</div>
+                    <div class="permission-checkbox-group" data-page-node-id="WSboPVOCrgr4psv92z55ev">
+                        <div class="permission-checkbox" onclick="toggleManagePermission(this, 'all')" data-page-node-id="f0gomgYV2lAdjUBN8DikH5">
+                            <div class="checkbox" data-page-node-id="fQwuE5f02TSmUuDnbh4RrW">✓</div>
+                            <div class="option-content" data-page-node-id="5jPr9cekTEQtlZQBGGRVaj">
+                                <div class="option-title" data-page-node-id="0XdHoVku29LBhsxGyJ3KzR">全部权限</div>
+                                <div class="option-desc" data-page-node-id="FFWqGP3TEMM5xA3XFFEvbV">拥有项目的全部管理权限-含权限配置</div>
                             </div>
                         </div>
-                        <div class="permission-checkbox" onclick="toggleManagePermission(this, 'edit')">
-                            <div class="checkbox"></div>
-                            <div class="option-content">
-                                <div class="option-title">编辑项目</div>
-                                <div class="option-desc">可编辑项目信息、创建架构和合同</div>
+                        <div class="permission-checkbox" onclick="toggleManagePermission(this, 'edit')" data-page-node-id="aMWeQJYxwJ9lDWyXGOwCVm">
+                            <div class="checkbox" data-page-node-id="2GUOTqtMQqPH1JADQMS6SN"></div>
+                            <div class="option-content" data-page-node-id="XqoNaaJTJHM4seHet1TDbo">
+                                <div class="option-title" data-page-node-id="pWZGfQ4R6MIRHCCejqDXXB">编辑项目</div>
+                                <div class="option-desc" data-page-node-id="tVKcHg9aSylJpILmBV1ytb">可编辑项目信息、创建架构和合同</div>
                             </div>
                         </div>
-                        <div class="permission-checkbox" onclick="toggleManagePermission(this, 'remove')">
-                            <div class="checkbox"></div>
-                            <div class="option-content">
-                                <div class="option-title">移出人员</div>
-                                <div class="option-desc">可将成员从项目中移出</div>
+                        <div class="permission-checkbox" onclick="toggleManagePermission(this, 'remove')" data-page-node-id="BEyjs1dxHtyTELqgfiWare">
+                            <div class="checkbox" data-page-node-id="0dUVRDWOSBtkCvqQvZR2ZV"></div>
+                            <div class="option-content" data-page-node-id="IKERPO5jSavpFfHEsBeuqF">
+                                <div class="option-title" data-page-node-id="jZhXmPWsYDldOrS1CvjHgf">移出人员</div>
+                                <div class="option-desc" data-page-node-id="MqCBawOYEHh576Ou8rHvuz">可将成员从项目中移出</div>
                             </div>
                         </div>
-                        <div class="permission-checkbox" onclick="toggleManagePermission(this, 'add_group')">
-                            <div class="checkbox"></div>
-                            <div class="option-content">
-                                <div class="option-title">添加工作组</div>
-                                <div class="option-desc">可在项目中创建新的工作组</div>
+                        <div class="permission-checkbox" onclick="toggleManagePermission(this, 'add_group')" data-page-node-id="90A63TJnSOa8c9ehM9j4UG">
+                            <div class="checkbox" data-page-node-id="FWwRBFKJJOfLFHkX9f5mll"></div>
+                            <div class="option-content" data-page-node-id="ADKzU0n5Z7GpBij7SzSkjx">
+                                <div class="option-title" data-page-node-id="OyPsCO4FEaojml6luHxdGO">添加工作组</div>
+                                <div class="option-desc" data-page-node-id="jb88MDlrcQGjhvFlr6Bvi2">可在项目中创建新的工作组</div>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="remove-member-section" id="removeMemberSection">
-                    <button class="remove-btn" id="removeBtn" onclick="showRemoveConfirm()">移出项目</button>
+                <div class="remove-member-section" id="removeMemberSection" data-page-node-id="Necct3oSzGW5VS0Tw2Ib7C">
+                    <button class="remove-btn" id="removeBtn" onclick="showRemoveConfirm()" data-page-node-id="DrTS0a9OBGA8bU8Mjlo8Ql">移出项目</button>
                 </div>
                 
-                <div class="modal-actions">
-                    <button class="modal-btn cancel" onclick="closePermissionModal()">取消</button>
-                    <button class="modal-btn confirm" onclick="savePermission()">保存</button>
+                <div class="modal-actions" data-page-node-id="xZkjrbHBM8u7LRiEAOPmXG">
+                    <button class="modal-btn cancel" onclick="closePermissionModal()" data-page-node-id="ye4nRWH5UqTuXlKZgGuAyD">取消</button>
+                    <button class="modal-btn confirm" onclick="savePermission()" data-page-node-id="nXBmOXT6jIvbSyGtCMffLt">保存</button>
                 </div>
             </div>
         </div>
 
         <!-- 人员操作模态框：当前登录用户仅有“移出人员”权限时弹出，仅含“移出项目”操作，无权限配置项 -->
-        <div class="permission-modal" id="memberActionModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title">人员操作</div>
-                    <div class="modal-close" onclick="closeMemberActionModal()">✕</div>
+        <div class="permission-modal" id="memberActionModal" data-page-node-id="Y60ODU89pyZukp5DfR6PvG">
+            <div class="modal-content" data-page-node-id="l1NbBLg7VmmBSTixtwvnE8">
+                <div class="modal-header" data-page-node-id="gRUCxwEdDoWOR5mEg6DuG1">
+                    <div class="modal-title" data-page-node-id="HNLrwwyHUMTXJ1vzvmGAGB">人员操作</div>
+                    <div class="modal-close" onclick="closeMemberActionModal()" data-page-node-id="m2OJZcRjVCDqpuxIGPL9fK">✕</div>
                 </div>
-                <div class="member-info-card">
-                    <div class="avatar" id="actionModalAvatar">张</div>
-                    <div class="info">
-                        <div class="name" id="actionModalName">张三</div>
-                        <div class="role" id="actionModalRole">项目部 · 项目经理</div>
+                <div class="member-info-card" data-page-node-id="YjdGF6onHkWWmuHMllBlhV">
+                    <div class="avatar" id="actionModalAvatar" data-page-node-id="O0DDfjeszX3FrVJy7xvfdv">张</div>
+                    <div class="info" data-page-node-id="Pam3mQ3Etb3WqF9Cef4VIw">
+                        <div class="name" id="actionModalName" data-page-node-id="rBTcmiqJ0kBjFu4l6p0WVC">张三</div>
+                        <div class="role" id="actionModalRole" data-page-node-id="d9edKjEdfI1kFxUWEHIgEw">项目部 · 项目经理</div>
                     </div>
                 </div>
-                <div class="permission-warning" id="actionWarning" style="display: none;">
-                    <div class="warning-icon">⚠️</div>
-                    <div class="warning-text">该成员是项目中唯一拥有全部权限的管理者，无法移出。</div>
+                <div class="permission-warning" id="actionWarning" style="display: none;" data-page-node-id="d4nX7fzHuXSpBX3McxAag6">
+                    <div class="warning-icon" data-page-node-id="c5zWtp496KNTa4nlios8sr">⚠️</div>
+                    <div class="warning-text" data-page-node-id="uk48JSrByFUHbpX4I2BOCx">该成员是项目中唯一拥有全部权限的管理者，无法移出。</div>
                 </div>
-                <div class="remove-member-section" id="actionRemoveSection">
-                    <button class="remove-btn" id="actionRemoveBtn" onclick="showRemoveConfirm()">移出项目</button>
+                <div class="remove-member-section" id="actionRemoveSection" data-page-node-id="YLdDCaQUd8nTymSicSLfIw">
+                    <button class="remove-btn" id="actionRemoveBtn" onclick="showRemoveConfirm()" data-page-node-id="e0qIN1NvfTv8uEfW9Exd1H">移出项目</button>
                 </div>
             </div>
         </div>
 
-        <div class="app-modal" id="confirmModal">
-            <div class="modal-box">
-                <div class="modal-title" id="confirmTitle">确认移出</div>
-                <div class="modal-content" id="confirmContent">确定要将该成员移出项目吗？移出后该成员将无法访问项目数据。</div>
-                <div class="modal-actions">
-                    <button class="modal-btn cancel" onclick="closeConfirmModal()">取消</button>
-                    <button class="modal-btn danger" id="confirmBtn" onclick="handleConfirm()">确认移出</button>
+        <div class="app-modal" id="confirmModal" data-page-node-id="c1BguwOCRL6yZQh04oUPCE">
+            <div class="modal-box" data-page-node-id="ndBgHisTwSBBt9F2jJq7Dw">
+                <div class="modal-title" id="confirmTitle" data-page-node-id="wWmVadXzeRCL7lcZizSEZp">确认移出</div>
+                <div class="modal-content" id="confirmContent" data-page-node-id="6aoQbMwHJTsGeeBix5G7sq">确定要将该成员移出项目吗？移出后该成员将无法访问项目数据。</div>
+                <div class="modal-actions" data-page-node-id="olRVnr4Hjr53lwCQiTnIr0">
+                    <button class="modal-btn cancel" onclick="closeConfirmModal()" data-page-node-id="vZeE9vmZI36KaljRG4HIYl">取消</button>
+                    <button class="modal-btn danger" id="confirmBtn" onclick="handleConfirm()" data-page-node-id="XXwGApNIddOuDsst7MvH2a">确认移出</button>
                 </div>
             </div>
         </div>
         
-        <div class="app-modal" id="alertModal">
-            <div class="modal-box">
-                <div class="modal-title" id="alertTitle">提示</div>
-                <div class="modal-content" id="alertContent"></div>
-                <div class="modal-actions">
-                    <button class="modal-btn confirm" onclick="closeAlertModal()" style="flex: 1;">确定</button>
+        <div class="app-modal" id="alertModal" data-page-node-id="JLdz0QGCjobfzn2CSVwFrv">
+            <div class="modal-box" data-page-node-id="NknNiyHxagXDzLnmDpKRh2">
+                <div class="modal-title" id="alertTitle" data-page-node-id="JMLbIZkATAtUcYBHidOJd0">提示</div>
+                <div class="modal-content" id="alertContent" data-page-node-id="3gZo4bpjRj8RaCJH8tQes1"></div>
+                <div class="modal-actions" data-page-node-id="GnGk495I06RtEbP37mUyuV">
+                    <button class="modal-btn confirm" onclick="closeAlertModal()" style="flex: 1;" data-page-node-id="vu3XZCUoK9bWWVec6KVymI">确定</button>
                 </div>
             </div>
         </div>
         
-        <div class="app-toast" id="appToast"></div>
+        <div class="app-toast" id="appToast" data-page-node-id="e7CGCK3DPKdaIqkNwXESzM"></div>
     </div>
     
-    <div class="demo-control-panel" id="permissionControlPanel">
-        <div class="panel-title">当前用户权限演示</div>
-        <div class="segmented-control" id="permissionSegment">
-            <div class="segment active" data-perm="none" onclick="setDemoPermission('none')">无权限</div>
-            <div class="segment" data-perm="remove" onclick="setDemoPermission('remove')">仅移出人员</div>
-            <div class="segment" data-perm="all" onclick="setDemoPermission('all')">全部权限</div>
+    <div class="demo-control-panel" id="permissionControlPanel" data-page-node-id="VFrvjyNVX2o6DtQjGVhCve">
+        <div class="panel-title" data-page-node-id="1WPaAvkfZKPrkCoiMFwjwu">当前用户权限演示</div>
+        <div class="segmented-control" id="permissionSegment" data-page-node-id="tCWyFeradisGl5rlAU5kdu">
+            <div class="segment active" data-perm="none" onclick="setDemoPermission('none')" data-page-node-id="DLwtBGVZLtrnCKvwD6Odqb">无权限</div>
+            <div class="segment" data-perm="remove" onclick="setDemoPermission('remove')" data-page-node-id="mkhEHFm3f42Nb1bARAXiVf">仅移出人员</div>
+            <div class="segment" data-perm="all" onclick="setDemoPermission('all')" data-page-node-id="XmPcHY8RlAft8HwH7r0p5j">全部权限</div>
         </div>
-        <div class="status-text uncertified" id="permissionStatusText">无权限：区域不可点击</div>
+        <div class="status-text uncertified" id="permissionStatusText" data-page-node-id="xBuVBfrKwiCmZx3USaV1Xo">无权限：区域不可点击</div>
     </div>
     
-    <div class="page-nav">
-        <div class="page-nav-title">原型导航</div>
-        <a href="home.html" class="page-nav-item">首页</a>
-        <a href="project-list.html" class="page-nav-item">项目主页（进行中）</a>
-        <a href="project-list.html" class="page-nav-item">项目主页（进行中）</a>
-        <a href="member.html" class="page-nav-item active">项目成员</a>
-        <a href="architecture.html" class="page-nav-item">项目架构</a>
-        <a href="task-list.html" class="page-nav-item">任务列表</a>
-        <a href="contract-detail.html" class="page-nav-item">合同详情</a>
+    <div class="page-nav" data-page-node-id="HLZX5aEzwL7qDNuDYHmYVl">
+        <div class="page-nav-title" data-page-node-id="E9nqsfhek5Jx9pvajc0Ee0">原型导航</div>
+        <a href="home.html" class="page-nav-item" data-page-node-id="UdYKkJZLoJW7q9E0RkhPyG">首页</a>
+        <a href="project-list.html" class="page-nav-item" data-page-node-id="VkziLxbBjz6Unb3SIgrHvx">项目主页（进行中）</a>
+        <a href="project-list.html" class="page-nav-item" data-page-node-id="CNj1WQHIVVH4u5dT6yYOJF">项目主页（进行中）</a>
+        <a href="member.html" class="page-nav-item active" data-page-node-id="lptAENsCHe8uYeDpYoGk9W">项目成员</a>
+        <a href="architecture.html" class="page-nav-item" data-page-node-id="lT9AMPaTMhNy4FmavgXstu">项目架构</a>
+        <a href="task-list.html" class="page-nav-item" data-page-node-id="IPiHdixHrdOvJ70ImhLudg">任务列表</a>
+        <a href="contract-detail.html" class="page-nav-item" data-page-node-id="eg79TpR7HDyCbnmaWzareU">合同详情</a>
     </div>
     
     <script>
@@ -2019,7 +2058,7 @@
             'zhangsan': {
                 name: '张三',
                 avatar: '张',
-                role: '项目部 · 项目经理',
+                role: '项目部',
                 roleTag: 'manager',
                 group: 'project',
                 groupName: '项目部',
@@ -2031,7 +2070,7 @@
             'lisi': {
                 name: '李四',
                 avatar: '李',
-                role: '项目部 · 施工主管',
+                role: '项目部',
                 roleTag: 'foreman',
                 group: 'project',
                 groupName: '项目部',
@@ -2043,7 +2082,7 @@
             'wangwu': {
                 name: '王五',
                 avatar: '王',
-                role: '项目部 · 业主代表',
+                role: '项目部',
                 roleTag: 'owner',
                 group: 'project',
                 groupName: '项目部',
@@ -2055,7 +2094,7 @@
             'zhaoliu': {
                 name: '赵六',
                 avatar: '赵',
-                role: '水电工作组 · 组长',
+                role: '水电工作组',
                 roleTag: 'foreman',
                 group: 'water',
                 groupName: '水电工作组',
@@ -2067,7 +2106,7 @@
             'sunba': {
                 name: '孙八',
                 avatar: '孙',
-                role: '强电施工组 · 施工人员',
+                role: '强电施工组',
                 roleTag: 'worker',
                 group: 'water',
                 groupName: '水电工作组',
@@ -2079,7 +2118,7 @@
             'qianjiu': {
                 name: '钱九',
                 avatar: '钱',
-                role: '弱电施工组 · 施工人员',
+                role: '弱电施工组',
                 roleTag: 'worker',
                 group: 'water',
                 groupName: '水电工作组',
@@ -2091,7 +2130,7 @@
             'zhoushi': {
                 name: '周十',
                 avatar: '周',
-                role: '泥瓦工作组 · 组长',
+                role: '泥瓦工作组',
                 roleTag: 'foreman',
                 group: 'tile',
                 groupName: '泥瓦工作组',
@@ -2103,7 +2142,7 @@
             'wushi': {
                 name: '吴十',
                 avatar: '吴',
-                role: '木工工作组 · 组长',
+                role: '木工工作组',
                 roleTag: 'foreman',
                 group: 'wood',
                 groupName: '木工工作组',
@@ -2115,7 +2154,7 @@
             'zhengshiyi': {
                 name: '郑十一',
                 avatar: '郑',
-                role: '油漆工作组 · 组长',
+                role: '油漆工作组',
                 roleTag: 'foreman',
                 group: 'paint',
                 groupName: '油漆工作组',
@@ -2128,12 +2167,26 @@
 
         const groupOrder = ['project', 'water', 'tile', 'wood', 'paint'];
         const groupNames = {
-            'project': { name: '项目部', icon: '🏢' },
-            'water': { name: '水电工作组', icon: '👷' },
-            'tile': { name: '泥瓦工作组', icon: '🧱' },
-            'wood': { name: '木工工作组', icon: '🪵' },
-            'paint': { name: '油漆工作组', icon: '🎨' }
+            'project': { name: '项目部', icon: '🏢', level: 0 },
+            'water': { name: '水电工作组', icon: '👷', level: 1 },
+            'tile': { name: '泥瓦工作组', icon: '🧱', level: 1 },
+            'wood': { name: '木工工作组', icon: '🪵', level: 1 },
+            'paint': { name: '油漆工作组', icon: '🎨', level: 1 }
         };
+
+        // 架构层级标识：L0 项目总架构 / L1 工作组 / L2 子施工组（复用架构页配色）
+        const LEVEL_META = {
+            0: { label: 'L0', name: '项目总架构', color: '#1890FF', bg: 'rgba(24,144,255,0.12)' },
+            1: { label: 'L1', name: '工作组', color: '#52C41A', bg: 'rgba(82,196,26,0.12)' },
+            2: { label: 'L2', name: '子施工组', color: '#722ED1', bg: 'rgba(114,46,209,0.12)' }
+        };
+
+        // 由成员数据推导其所属架构层级（L2 子施工组仅强电/弱电施工人员）
+        function memberLevel(m) {
+            if (m.group === 'project') return 0;
+            if (m.role.indexOf('强电施工组') > -1 || m.role.indexOf('弱电施工组') > -1) return 2;
+            return 1;
+        }
 
         let currentFilter = 'all';
         let currentMemberId = '';
@@ -2179,7 +2232,7 @@
                     html += `
                         <div class="member-group">
                             <div class="group-header">
-                                <div class="group-name"><span class="icon">${groupInfo.icon}</span> ${groupInfo.name}</div>
+                                <div class="group-name"><span class="icon">${groupInfo.icon}</span> ${groupInfo.name}<span class="level-badge lv${groupInfo.level}" title="${LEVEL_META[groupInfo.level].name}">${LEVEL_META[groupInfo.level].label}</span></div>
                                 <div class="group-count">${groupCounts[groupKey]}人</div>
                             </div>
                     `;
@@ -2224,7 +2277,7 @@
                             <span class="name clickable" onclick="event.stopPropagation(); goToProfile('${member.id}', '${member.name}', '${member.role}')">${member.name}</span>
                             <span class="role-tag ${member.roleTag}">${getRoleTagName(member.roleTag)}</span>
                         </div>
-                        <div class="meta">${member.role}</div>
+                        <div class="meta">${member.role}${memberLevel(member) === 2 ? ` <span class="member-level-tag lv2" title="L2 · 子施工组">L2</span>` : ''}</div>
                     </div>
                     <div class="permission-badge" onclick="event.stopPropagation(); showPermissionModalIfAllowed('${member.id}')">
                         ${dataPermTag}
@@ -2575,7 +2628,7 @@
                     html += `
                         <div class="member-group">
                             <div class="group-header">
-                                <div class="group-name"><span class="icon">${groupInfo.icon}</span> ${groupInfo.name}</div>
+                                <div class="group-name"><span class="icon">${groupInfo.icon}</span> ${groupInfo.name}<span class="level-badge lv${groupInfo.level}" title="${LEVEL_META[groupInfo.level].name}">${LEVEL_META[groupInfo.level].label}</span></div>
                                 <div class="group-count">${groupCounts[groupKey]}人</div>
                             </div>
                     `;

@@ -416,6 +416,8 @@
                     <li data-page-node-id="jPGaWHVk53QfKgZNJjM9rc"><a href="#sub-7-11" data-page-node-id="dQKJiOZM4DMBDo9wSG0QTt">7.11 权限管理入口可见性规则</a></li>
                     <li data-page-node-id="QKHLDrDoTr34hhCqvZvgU5"><a href="#sub-7-12" data-page-node-id="er3AQbh2grqlbaiN7fHZft">7.12 成员个人电子名片跳转规则</a></li>
                     <li data-page-node-id="zJ3s2zCchsKKU044k2LwUN"><a href="#sub-7-13" data-page-node-id="GKjjQLgapnWxYavLLoSbVJ">7.13 人员操作模态框规则</a></li>
+                    <li data-page-node-id="a7_14_toc"><a href="#sub-7-14" data-page-node-id="a7_14_toct">7.14 成员架构层级标识规格</a></li>
+                    <li data-page-node-id="a7_15_toc"><a href="#sub-7-15" data-page-node-id="a7_15_toct">7.15 成员卡权限角标展示规格</a></li>
                 </ul>
             </li>
             <li class="nav-item collapsed" id="nav-page-files-service" data-page-node-id="PLuQjyfcXmviHka7XiWVON">
@@ -4140,6 +4142,177 @@
                 </div>
             </div>
 
+            <div class="subsection" id="sub-7-14" data-page-node-id="a7_14_sec">
+                <div class="subsection-title" data-page-node-id="a7_14_title">7.14 成员架构层级标识规格</div>
+                <p data-page-node-id="a7_14_intro">项目成员页的成员列表按"项目架构"的三级层级组织并展示（三级层级定义与标识颜色见 <a href="#sub-6-3" style="color: var(--primary-color);" data-page-node-id="a7_14_ref63">6.3 架构层级规格示例</a>），以明确每位成员在架构中的归属；同时保持"人员卡片"为视觉主体，层级仅作标识、不喧宾夺主。整体布局仍为按工作组分组列表，不引入树形 / 折叠结构，不改既有筛选与搜索交互。</p>
+                <table data-page-node-id="a7_14_tbl">
+                    <thead data-page-node-id="a7_14_th">
+                        <tr data-page-node-id="a7_14_tr1">
+                            <th data-page-node-id="a7_14_c1">架构层级</th>
+                            <th data-page-node-id="a7_14_c2">标识位置</th>
+                            <th data-page-node-id="a7_14_c3">标识形式</th>
+                            <th data-page-node-id="a7_14_c4">配色</th>
+                            <th data-page-node-id="a7_14_c5">说明</th>
+                        </tr>
+                    </thead>
+                    <tbody data-page-node-id="a7_14_tb">
+                        <tr data-page-node-id="a7_14_r1">
+                            <td data-page-node-id="a7_14_r1c1">项目部（Level 0）</td>
+                            <td data-page-node-id="a7_14_r1c2">组标题（项目部分组头部）</td>
+                            <td data-page-node-id="a7_14_r1c3">圆点 + "L0" 药丸徽标，悬停显示"项目总架构"</td>
+                            <td data-page-node-id="a7_14_r1c4">蓝 #1890FF</td>
+                            <td data-page-node-id="a7_14_r1c5">项目部成员归属 L0；由组标题统一标识，不在每张卡重复</td>
+                        </tr>
+                        <tr data-page-node-id="a7_14_r2">
+                            <td data-page-node-id="a7_14_r2c1">工作组（Level 1）</td>
+                            <td data-page-node-id="a7_14_r2c2">组标题（水电 / 泥瓦 / 木工 / 油漆工作组分组头部）</td>
+                            <td data-page-node-id="a7_14_r2c3">圆点 + "L1" 药丸徽标，悬停显示"工作组"</td>
+                            <td data-page-node-id="a7_14_r2c4">绿 #52C41A</td>
+                            <td data-page-node-id="a7_14_r2c5">工作组成员归属 L1；由组标题统一标识</td>
+                        </tr>
+                        <tr data-page-node-id="a7_14_r3">
+                            <td data-page-node-id="a7_14_r3c1">施工组（Level 2，子施工组）</td>
+                            <td data-page-node-id="a7_14_r3c2">成员卡片姓名下方组名同行</td>
+                            <td data-page-node-id="a7_14_r3c3">紫色 "L2" 小标（与组名同一行，不独占一行）</td>
+                            <td data-page-node-id="a7_14_r3c4">紫 #722ED1</td>
+                            <td data-page-node-id="a7_14_r3c5">子施工组成员（如强电施工组、弱电施工组）实际隶属于某 L1 工作组，嵌套在父工作组内，需在卡片级显式标注 L2 以明确层级归属；组名本身已显示"强电施工组 / 弱电施工组"</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="note" style="margin-top: 16px;" data-page-node-id="a7_14_note">
+                    <div class="note-title" data-page-node-id="a7_14_nt">说明</div>
+                    <ul data-page-node-id="a7_14_ul">
+                        <li data-page-node-id="a7_14_li1">L0 / L1 由所属组标题统一标识，避免与人员信息冗余；仅 L2 子施工组在卡片级补标，因其嵌在父工作组内、需点明层级。</li>
+                        <li data-page-node-id="a7_14_li2">配色复用架构模块体系（蓝 / 绿 / 紫），与架构页一致；层级推导依据成员数据中的 group / subGroup 归属（如"强电施工组 / 弱电施工组"字样判定 L2），与 §6.3 三级模型对齐。</li>
+                        <li data-page-node-id="a7_14_li3">筛选栏"架构层级"筛选与搜索结果中的组标题同步带层级徽标，保持一致体验。</li>
+                        <li data-page-node-id="a7_14_li4">原型对应页面：<code data-page-node-id="a7_14_code">service-miniapp/member.html</code>（业主端与服务方保持一致，详见 16.2）。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="subsection" id="sub-7-15" data-page-node-id="a7_15_sec">
+                <div class="subsection-title" data-page-node-id="a7_15_title">7.15 成员卡权限角标展示规格</div>
+                <p data-page-node-id="a7_15_intro">成员卡片右侧固定展示两枚权限角标（纵向排列、右对齐）：上方为「数据」角标、下方为「治理」角标，用于在不进入弹窗的前提下快速呈现该成员的<strong data-page-node-id="a7_15_intro_b">数据可见范围</strong>与<strong data-page-node-id="a7_15_intro_b2">治理权限概况</strong>。角标为只读展示，"数据 / 治理"两行文案分别为权限设置模态框内选项的<strong data-page-node-id="a7_15_intro_b3">简写形式</strong>，与弹窗选项一一对应（弹窗可配置项与校验见 <a href="#sub-7-8" style="color: var(--primary-color);" data-page-node-id="a7_15_ref78">7.8 权限配置规则</a>）；点击角标或右侧「›」箭头进入权限入口（触发方式与可见性见 <a href="#sub-7-11" style="color: var(--primary-color);" data-page-node-id="a7_15_ref711">7.11 权限管理入口可见性规则</a>）。</p>
+
+                <p style="margin-top: 16px;" data-page-node-id="a7_15_h1"><strong data-page-node-id="a7_15_h1s">7.15.1 数据权限角标映射</strong></p>
+                <table data-page-node-id="a7_15_tbl1">
+                    <thead data-page-node-id="a7_15_th1">
+                        <tr data-page-node-id="a7_15_tr1">
+                            <th data-page-node-id="a7_15_c1">数据权限值</th>
+                            <th data-page-node-id="a7_15_c2">角标文案</th>
+                            <th data-page-node-id="a7_15_c3">弹窗选项文案</th>
+                            <th data-page-node-id="a7_15_c4">说明（数据可见范围）</th>
+                        </tr>
+                    </thead>
+                    <tbody data-page-node-id="a7_15_tb1">
+                        <tr data-page-node-id="a7_15_r1">
+                            <td data-page-node-id="a7_15_r1c1"><code data-page-node-id="a7_15_r1k">all</code></td>
+                            <td data-page-node-id="a7_15_r1c2">数据: 全部</td>
+                            <td data-page-node-id="a7_15_r1c3">全部数据</td>
+                            <td data-page-node-id="a7_15_r1c4">可查看项目内所有层级的数据</td>
+                        </tr>
+                        <tr data-page-node-id="a7_15_r2">
+                            <td data-page-node-id="a7_15_r2c1"><code data-page-node-id="a7_15_r2k">level</code></td>
+                            <td data-page-node-id="a7_15_r2c2">数据: 所在层级</td>
+                            <td data-page-node-id="a7_15_r2c3">所在架构层级</td>
+                            <td data-page-node-id="a7_15_r2c4">仅可查看所属工作组及下级的数据</td>
+                        </tr>
+                        <tr data-page-node-id="a7_15_r3">
+                            <td data-page-node-id="a7_15_r3c1"><code data-page-node-id="a7_15_r3k">level_with_contract</code></td>
+                            <td data-page-node-id="a7_15_r3c2">数据: 层级含合同</td>
+                            <td data-page-node-id="a7_15_r3c3">所在架构及下属层级权限（含合同）</td>
+                            <td data-page-node-id="a7_15_r3c4">可查看所属工作组及下级的数据，包含合同相关内容</td>
+                        </tr>
+                        <tr data-page-node-id="a7_15_r4">
+                            <td data-page-node-id="a7_15_r4c1"><code data-page-node-id="a7_15_r4k">none</code></td>
+                            <td data-page-node-id="a7_15_r4c2">数据: 公开</td>
+                            <td data-page-node-id="a7_15_r4c3">仅基础公开数据</td>
+                            <td data-page-node-id="a7_15_r4c4">仅可查看基础公开数据、所在架构层数据及参与签署合同数据</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="margin-top: 16px;" data-page-node-id="a7_15_h2"><strong data-page-node-id="a7_15_h2s">7.15.2 治理权限角标映射</strong></p>
+                <table data-page-node-id="a7_15_tbl2">
+                    <thead data-page-node-id="a7_15_th2">
+                        <tr data-page-node-id="a7_15_tr2">
+                            <th data-page-node-id="a7_15_d1">判定条件</th>
+                            <th data-page-node-id="a7_15_d2">角标文案</th>
+                            <th data-page-node-id="a7_15_d3">说明</th>
+                        </tr>
+                    </thead>
+                    <tbody data-page-node-id="a7_15_tb2">
+                        <tr data-page-node-id="a7_15_s1">
+                            <td data-page-node-id="a7_15_s1c1">治理权限包含 <code data-page-node-id="a7_15_s1k">all</code></td>
+                            <td data-page-node-id="a7_15_s1c2">治理: 全部</td>
+                            <td data-page-node-id="a7_15_s1c3">拥有项目的全部管理权限（含权限配置）</td>
+                        </tr>
+                        <tr data-page-node-id="a7_15_s2">
+                            <td data-page-node-id="a7_15_s2c1">治理权限非空、但不含 <code data-page-node-id="a7_15_s2k">all</code>（仅含 edit / remove / add_group 中的一项或多项）</td>
+                            <td data-page-node-id="a7_15_s2c2">治理: 部分</td>
+                            <td data-page-node-id="a7_15_s2c3">拥有部分治理权限（不明确展开具体项，具体项在弹窗内查看）</td>
+                        </tr>
+                        <tr data-page-node-id="a7_15_s3">
+                            <td data-page-node-id="a7_15_s3c1">治理权限为空</td>
+                            <td data-page-node-id="a7_15_s3c2">治理: 无</td>
+                            <td data-page-node-id="a7_15_s3c3">无任何治理权限，仅可查看</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="margin-top: 16px;" data-page-node-id="a7_15_h3"><strong data-page-node-id="a7_15_h3s">7.15.3 角标配色规则</strong></p>
+                <table data-page-node-id="a7_15_tbl3">
+                    <thead data-page-node-id="a7_15_th3">
+                        <tr data-page-node-id="a7_15_tr3">
+                            <th data-page-node-id="a7_15_p1">角标</th>
+                            <th data-page-node-id="a7_15_p2">底色 / 文字色</th>
+                            <th data-page-node-id="a7_15_p3">适用取值</th>
+                        </tr>
+                    </thead>
+                    <tbody data-page-node-id="a7_15_tb3">
+                        <tr data-page-node-id="a7_15_p1r">
+                            <td data-page-node-id="a7_15_p1r1">数据角标（有数据权限）</td>
+                            <td data-page-node-id="a7_15_p1r2">蓝底 / 蓝字</td>
+                            <td data-page-node-id="a7_15_p1r3">all / level / level_with_contract（全部 / 所在层级 / 层级含合同）</td>
+                        </tr>
+                        <tr data-page-node-id="a7_15_p2r">
+                            <td data-page-node-id="a7_15_p2r1">数据角标（公开）</td>
+                            <td data-page-node-id="a7_15_p2r2">灰底 / 灰字（弱化）</td>
+                            <td data-page-node-id="a7_15_p2r3">none（公开）</td>
+                        </tr>
+                        <tr data-page-node-id="a7_15_p3r">
+                            <td data-page-node-id="a7_15_p3r1">治理角标（有治理权限）</td>
+                            <td data-page-node-id="a7_15_p3r2">绿底 / 绿字</td>
+                            <td data-page-node-id="a7_15_p3r3">全部 / 部分</td>
+                        </tr>
+                        <tr data-page-node-id="a7_15_p4r">
+                            <td data-page-node-id="a7_15_p4r1">治理角标（无治理权限）</td>
+                            <td data-page-node-id="a7_15_p4r2">灰底 / 灰字（弱化）</td>
+                            <td data-page-node-id="a7_15_p4r3">无</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="margin-top: 16px;" data-page-node-id="a7_15_h4"><strong data-page-node-id="a7_15_h4s">7.15.4 展示与交互规则</strong></p>
+                <ul data-page-node-id="a7_15_ul">
+                    <li data-page-node-id="a7_15_li1"><strong data-page-node-id="a7_15_li1b">位置</strong>：位于成员卡片最右侧，两行纵向排列（上「数据」、下「治理」）并右对齐；角标右侧为「›」箭头。</li>
+                    <li data-page-node-id="a7_15_li2"><strong data-page-node-id="a7_15_li2b">展示恒定</strong>：角标文案恒展示<strong data-page-node-id="a7_15_li2b2">该成员自身</strong>的权限配置，不随<strong data-page-node-id="a7_15_li2b3">当前登录用户</strong>权限变化而改变；变化的仅是可点击性与箭头显隐（无权限时角标弱化、区域不可点击、箭头隐藏，见 7.11）。</li>
+                    <li data-page-node-id="a7_15_li3"><strong data-page-node-id="a7_15_li3b">点击</strong>：点击角标区域或「›」箭头触发权限入口 —— 全部权限 → 完整「权限设置」模态框；仅移出人员 → 「人员操作」模态框；无权限 → 不响应。</li>
+                    <li data-page-node-id="a7_15_li4"><strong data-page-node-id="a7_15_li4b">保存回写</strong>：权限设置保存成功后，成员列表即时重渲染，对应成员的角标文案同步更新为新配置（见 7.8.5）。</li>
+                    <li data-page-node-id="a7_15_li5"><strong data-page-node-id="a7_15_li5b">弱化语义</strong>：最低数据档（数据: 公开）与无治理权限（治理: 无）统一使用灰色弱化样式，便于一眼区分「有权限 / 无权限」。</li>
+                </ul>
+
+                <div class="note" style="margin-top: 16px;" data-page-node-id="a7_15_note">
+                    <div class="note-title" data-page-node-id="a7_15_nt">说明</div>
+                    <ul data-page-node-id="a7_15_noteul">
+                        <li data-page-node-id="a7_15_nli1">与 7.8 的分工：7.8 描述权限设置模态框内的可配置项、多选联动与保存校验；本节描述成员卡片外层角标的展示口径与文案映射。</li>
+                        <li data-page-node-id="a7_15_nli2">角标文案为弹窗选项的简写（如弹窗"所在架构及下属层级权限（含合同）"在卡片上简写为"数据: 层级含合同"），映射关系固定，见 7.15.1 / 7.15.2。</li>
+                        <li data-page-node-id="a7_15_nli3">原型实现位置：<code data-page-node-id="a7_15_nli3c">service-miniapp/member.html</code> 的 <code data-page-node-id="a7_15_nli3c2">renderMemberCard()</code>，角标文案与配色由成员数据的 <code data-page-node-id="a7_15_nli3c3">dataPermission</code> / <code data-page-node-id="a7_15_nli3c4">managePermissions</code> 推导。</li>
+                        <li data-page-node-id="a7_15_nli4">业主端与服务方保持一致（详见 16.2）。</li>
+                    </ul>
+                </div>
+            </div>
+
                         <div class="note" style="margin-top: 16px;" data-page-node-id="mQHVNVrbCsP7wuQhX4xzYb">
                 <div class="note-title" data-page-node-id="drCKQq9L9muJFlH3IHnzbn">说明</div>
                 <p data-page-node-id="maV836yUF6NQVbCWBXzsp3">消息中心收到的"加入项目"类邀请，被邀请人点击"接受邀请"后的处理（含多角色选择逻辑）属于<strong data-page-node-id="gatHjDtHx9mxRLIisPZIqq">消息</strong>独立功能，其完整规则详见《PRD-完整文档》<a href="PRD-完整文档.html#message-feature" data-page-node-id="a1OaGXjPT8m05egAW8iPen">七、消息功能</a>，本章不重复展开。</p>
@@ -6616,6 +6789,8 @@
                     <li data-page-node-id="WoPsTPAhfA7XJkpAPVXUxS">权限管理入口可见性（"›"箭头与权限区域按当前用户权限三态展示：无权限隐藏、仅移出人员/全部权限显示，详见"<a href="#sub-7-11" style="color: var(--primary-color);" data-page-node-id="s0qKd3OMwI3A4kvvZ0Z6Hz">7.11 权限管理入口可见性规则</a>"）</li>
                     <li data-page-node-id="rv6VCovdSNwu6XvCJ7kG71">成员个人电子名片（点击成员头像/姓名跳转 <code data-page-node-id="xDhhdngMLTOGzykgr4uS6l">member-profile.html</code>，权限无关，详见"<a href="#sub-7-12" style="color: var(--primary-color);" data-page-node-id="rPevrjiktNF9L45ICDENJJ">7.12 成员个人电子名片跳转规则</a>"）</li>
                     <li data-page-node-id="oBzcRX2aoDqVYl0iMXFMi7">人员操作模态框（当前用户仅拥有"移出人员"权限时，点击成员弹出"人员操作"模态框，仅可移出，详见"<a href="#sub-7-13" style="color: var(--primary-color);" data-page-node-id="lNRkJLeJzHqTNEPLlwCDtO">7.13 人员操作模态框规则</a>"）</li>
+                    <li data-page-node-id="a16_2_lvl">成员架构层级标识（按项目架构三级层级展示 L0 项目部 / L1 工作组 / L2 子施工组，组标题带层级徽标、L2 成员卡片级补标，配色复用架构页蓝 / 绿 / 紫，详见"<a href="#sub-7-14" style="color: var(--primary-color);" data-page-node-id="a16_2_lvlref">7.14 成员架构层级标识规格</a>"）</li>
+                    <li data-page-node-id="a16_2_permbadge">成员卡权限角标（卡片右侧两行角标：上「数据」下「治理」，数据权限四档映射"数据: 全部 / 所在层级 / 层级含合同 / 公开"、治理权限三态映射"治理: 全部 / 部分 / 无"，蓝 / 绿 / 灰配色，文案为弹窗选项简写，详见"<a href="#sub-7-15" style="color: var(--primary-color);" data-page-node-id="a16_2_permbadgeref">7.15 成员卡权限角标展示规格</a>"）</li>
                     <li data-page-node-id="nriAVeK0GsReeNJGRgagfn">扫码 / 微信卡片邀请接收侧演示（业主端落地演示页 <code data-page-node-id="neGg5gRBDlefPm1qbklVR1">owner-miniapp/invite-join.html</code>，入口位于业主端消息页"接受邀请演示控制"面板下方；加入确认、确认后跳转项目详情页、7 天失效提示等规则详见"<a href="#sub-7-5" style="color: var(--primary-color);" data-page-node-id="l1Q2xn65u5kU0ZXVY6CJXw">7.5 邀请方式规格 → 接收侧演示页说明</a>"。业主端加入身份固定为"业主"（无单独"业主家人"角色，弹窗不展示"加入身份"行），默认权限为 <code data-page-node-id="hGPfyiP5E8RGABFUolkFPe">full</code>（全部权限）；演示面板含"当前接收人已认证角色"（单角色 / 多角色）控制项，多角色时确认加入后先选择一个已有角色再跳转项目详情页）</li>
                 </ul>
                 <div class="note" style="margin-top: 16px;" data-page-node-id="13sHMGTmBIPFXxEvknEOPN">
