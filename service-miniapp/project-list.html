@@ -711,6 +711,10 @@
                 { name: '水电班组服务合同', meta: '水电工作组 | 金额：8万', percent: 65, badge: '已确认', badgeCls: 'green', detail: 'contract-detail.html?status=draft' },
                 { name: '泥瓦工班组服务合同', meta: '泥瓦工作组 | 金额：12万', percent: 30, badge: '已确认', badgeCls: 'green', detail: 'contract-detail.html?status=confirming_sender' }
             ],
+            // 非工人（基础施工服务合同）：仅非工人视角「合同概览」展示，点击跳转非工人合同详情页
+            baseContracts: [
+                { name: '基础施工服务合同', meta: '基础施工 | 金额：88万', percent: 100, badge: '已签约', badgeCls: 'green', detail: 'contract-detail.html' }
+            ],
             levels: [
                 { name: '项目部', count: '4个工作组 · 8份合同', selected: false },
                 { name: '水电工作组', count: '3个施工组 · 2份合同', selected: false },
@@ -800,7 +804,7 @@
                     '<div class="check" style="visibility:' + (i === 0 ? 'visible' : 'hidden') + ';">✓</div></div>';
             }).join('');
 
-            var contracts = SHARED.contracts.map(function (c) {
+            var contracts = SHARED.baseContracts.concat(SHARED.contracts).map(function (c) {
                 return '<div class="contract-item" onclick="navigate(\'' + c.detail + '\')">' +
                     '<div class="info"><div class="name">' + c.name + '</div><div class="meta">' + c.meta + '</div></div>' +
                     '<div class="progress-wrap"><div class="percent">' + c.percent + '%</div>' +

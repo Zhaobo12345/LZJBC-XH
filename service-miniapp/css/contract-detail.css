@@ -15,6 +15,9 @@
     --spacing-md: 12px;
     --spacing-lg: 16px;
     
+    /* 合同正文展示区最大高度：拟定中 / 变更中 / 只读态 三态统一，避免过高 */
+    --contract-text-max-height: 120px;
+    
     /* 状态颜色变量 */
     --color-draft: #8C8C8C;
     --color-draft-light: #BFBFBF;
@@ -417,6 +420,23 @@
     padding: 12px;
     background-color: var(--bg-secondary);
     border-radius: 8px;
+}
+
+/* 只读态「合同正文」：与拟定中 / 变更中 三态高度统一，超出部分渐隐并引导「查看全文」 */
+#readonlyContractText {
+    max-height: var(--contract-text-max-height);
+    overflow: hidden;
+    position: relative;
+}
+
+#readonlyContractText::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(to bottom, transparent, var(--bg-secondary));
 }
 
 .text-content .change-highlight-text {
@@ -1331,6 +1351,23 @@
 
 .fulltext-modal .article-content p:last-child {
     margin-bottom: 0;
+}
+
+.fulltext-modal .article-content .clause-subtitle {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 12px;
+    margin-bottom: 6px;
+}
+
+.fulltext-modal .article-content .clause-item {
+    padding-left: 16px;
+    text-indent: -16px;
+}
+
+.fulltext-modal .article-content .clause-sub2 {
+    padding-left: 32px;
+    text-indent: -32px;
 }
 
 /* 状态切换器 */
@@ -2535,7 +2572,7 @@
     font-size: 13px;
     color: var(--text-secondary);
     line-height: 1.6;
-    max-height: 100px;
+    max-height: var(--contract-text-max-height);
     overflow: hidden;
     position: relative;
 }
@@ -3846,7 +3883,7 @@
     font-size: 13px;
     color: var(--text-primary);
     line-height: 1.8;
-    max-height: 150px;
+    max-height: var(--contract-text-max-height);
     overflow: hidden;
     position: relative;
 }

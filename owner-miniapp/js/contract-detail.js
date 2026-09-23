@@ -115,12 +115,10 @@ const ContractDetailPage = (function() {
         },
         confirmed: {
             text: '已确认',
-            desc: '双方已确认，请上传签约后的合同附件，上传后合同正式生效',
+            desc: '双方已确认，签约文件由乙方上传后合同正式生效',
             bannerClass: 'confirmed',
             showPcGuide: false,
-            actions: [
-                { text: '上传签约文件', type: 'primary', action: 'upload' }
-            ]
+            actions: []
         },
         confirmed_party_a: {
             text: '已确认',
@@ -176,9 +174,7 @@ const ContractDetailPage = (function() {
             isChangeFlow: true,
             showRejectReason: true,
             rejectReason: '变更内容不符合平台规范，请补充完善变更范围说明及验收标准后重新发起变更申请',
-            actions: [
-                { text: '重新发起变更', type: 'primary', action: 'resubmit_change' }
-            ]
+            actions: []
         },
         change_confirming_sender: {
             text: '变更确认中',
@@ -837,16 +833,10 @@ const ContractDetailPage = (function() {
      */
     function updateSignFileCard(status) {
         const signFileCard = document.getElementById('signFileCard');
-        const signFileUploadBtn = document.getElementById('signFileUploadBtn');
         const showSignFileStates = ['signed', 'changing', 'change_confirming', 'change_confirmed', 'change_platform_reviewing', 'change_platform_rejected', 'change_confirming_sender', 'change_confirming_receiver', 'change_signing_wait'];
-        const canUploadSignFileStates = ['confirmed'];
         
         if (signFileCard) {
             signFileCard.style.display = showSignFileStates.includes(status) ? 'block' : 'none';
-        }
-        
-        if (signFileUploadBtn) {
-            signFileUploadBtn.style.display = canUploadSignFileStates.includes(status) ? 'inline' : 'none';
         }
     }
     
@@ -928,7 +918,7 @@ const ContractDetailPage = (function() {
             'platform_rejected': { desc: '请根据驳回原因修改后重新提交', show: true },
             'confirming_sender': { desc: '已提交确认，等待对方确认', show: true },
             'confirming_receiver': { desc: '请确认合同内容或驳回修改', show: true },
-            'confirmed': { desc: '双方已确认，请上传签约文件', show: true },
+            'confirmed': { desc: '双方已确认，签约文件由乙方上传后合同正式生效', show: true },
             'confirmed_party_a': { desc: '双方已确认，等待乙方上传签约附件', show: true },
             'signed': { desc: '合同已签约生效，可发起变更申请', show: true },
             'changing': { desc: '变更申请已发起，等待对方确认', show: true },
@@ -1081,7 +1071,6 @@ const ContractDetailPage = (function() {
             withdraw: { title: '撤回确认', message: '确定要撤回确认申请吗？撤回后可重新编辑合同。' },
             reject: { title: '驳回修改', message: '确定要驳回此合同并要求修改吗？' },
             confirm: { title: '确认合同', message: '是否确认此合同内容？确认后乙方上传签约文件。' },
-            upload: { title: '上传签约文件', message: '请选择要上传的签约文件（支持PDF、JPG、PNG格式）。' },
             change: { title: '发起变更', message: '确定要发起合同变更吗？变更后需对方确认。' },
             withdraw_change: { title: '撤回变更', message: '确定要撤回变更申请吗？撤回后阶段任务将恢复流转。' },
             reject_change: { title: '驳回变更', message: '确定要驳回变更申请吗？' },
@@ -1090,17 +1079,10 @@ const ContractDetailPage = (function() {
             reject_sign: { title: '驳回签约', message: '确定要驳回签约文件吗？' },
             confirm_sign: { title: '确认签约', message: '确定要确认签约吗？确认后合同将正式生效。' },
             withdraw_change_review: { title: '撤回变更申请', message: '确定要撤回变更申请吗？撤回后可重新编辑变更内容。' },
-            resubmit_change: { title: '重新发起变更', message: '确定要重新发起变更申请吗？提交后将由平台运营人员进行审核。' },
             reject_change_flow: { title: '驳回变更', message: '确定要驳回变更申请吗？' },
             confirm_change_flow: { title: '确认变更', message: '是否确认变更？确认后乙方上传签约文件变更生效！' },
             upload_change_sign: { title: '上传变更签约文件', message: '请选择要上传的变更签约文件（支持PDF、JPG、PNG格式）。' }
         };
-        
-        if (action === 'upload') {
-            closeModal();
-            showSignUploadPage();
-            return;
-        }
         
         if (action === 'upload_change_sign') {
             closeModal();
@@ -1252,10 +1234,6 @@ const ContractDetailPage = (function() {
             '撤回变更申请': () => {
                 showCustomToast('已撤回变更申请，可重新编辑变更内容');
                 updateContractStatus('signed');
-            },
-            '重新发起变更': () => {
-                showCustomToast('重新提交成功！已提交至平台审核');
-                updateContractStatus('change_platform_reviewing');
             },
             '上传变更签约文件': () => {
                 showCustomToast('变更签约文件已上传！变更已正式生效，系统已生成新的版本记录。');
@@ -1979,19 +1957,36 @@ const ContractDetailPage = (function() {
      * 阶段任务只读弹窗：执行标准 / 确认标准 / 担责标准（按任务名映射，保证必有值）
      */
     var TASK_EXEC_STD = {
-        '材料采购': '按合同清单采购合格材料，进场前提供合格证/检测报告，规格、数量与预算一致。',
-        '材料运输': '材料运输过程做好防护，按约定时间运抵现场，避免损坏与延误。',
-        '材料确认': '材料进场后报甲方（张三）及确认人验收，验收合格方可使用，留存验收记录。',
-        '开槽': '按设计图纸弹线开槽，横平竖直，避开原有管线，符合水电施工规范及安全要求。',
-        '布管': '管线敷设牢固、走向合理，符合设计规范与安全要求，做好固定与标识。',
-        '穿线': '导线规格符合设计，接线牢固、绝缘良好，严禁私拉乱接，预留检修口。',
-        '阶段确认': '本阶段全部任务完成，经甲方（张三）及确认人现场确认合格后进入下一阶段。',
-        '开关插座安装': '按图纸定位安装，平整牢固、接线正确，通电前完成绝缘测试。',
-        '灯具安装': '按图纸定位安装，固定牢固、接线正确，通电测试正常无异常。',
+        '组织全屋放线': '给班组进行放线前交底→班组放线→工长验线→完成任务拍照上传（每个空间不少于1张）',
+        '组织开工交底、验线和验辅料': '①邀约所有参与方参加开工交底→记录开工交底事项并明确相关责任人→②组织设计师进行验线标记不合格位置→③组织客户对辅料进行验收→任务完成提报相关人确认验收',
+        '签订《拆除班组合同》': '编辑任务化班组合同→同班组进行洽谈→调整班组合同条款→发起线上签约',
+        '给拆除班组进场交底': '发起交底→确定交底内容→按照标准完成交底动作并录制视频（每项1条视频）→任务完成提报班组进行确认验收',
+        '拆除施工完工验收已修改': '收到班组的完工验收申请→工长发起验收→工长逐条进行验收并拍视频存证（每项1条视频或照片）→选择验收人（客户、项目总、设计师）→验收都合格，点击班组验收通过→验收不合格，点击班组验收驳回',
+        '签订《水电班组合同》': '编辑任务化班组合同→同班组进行洽谈→调整班组合同条款→发起线上签约',
+        '给水电班组进场交底': '发起交底→确定交底内容→按照标准完成交底动作并录制视频（每项1条视频）→任务完成提报班组进行确认验收',
+        '水电施工完工验收': '收到班组的完工验收申请→工长发起验收→工长逐条进行验收并拍视频存证（每项1条视频或照片）→选择验收人（客户、项目总、设计师）→验收都合格，点击班组验收通过→验收不合格，点击班组验收驳回',
+        '签订《木工班组合同》': '编辑任务化班组合同→同班组进行洽谈→调整班组合同条款→发起线上签约',
+        '给木工班组进场交底': '发起交底→确定交底内容→按照标准完成交底动作并录制视频（每项1条视频）→任务完成提报班组进行确认验收',
+        '木工基层完工验收': '收到班组的完工验收申请→工长发起验收→工长逐条进行验收并拍视频存证（每项1条视频或照片）→选择验收人（客户、项目总、设计师）→验收都合格，点击班组验收通过→验收不合格，点击班组验收驳回',
+        '木工面层完工验收': '收到班组的完工验收申请→工长发起验收→工长逐条进行验收并拍视频存证（每项1条视频或照片）→选择验收人（客户、项目总、设计师）→验收都合格，点击班组验收通过→验收不合格，点击班组验收驳回',
+        '签订《瓦工班组合同》': '编辑任务化班组合同→同班组进行洽谈→调整班组合同条款→发起线上签约',
+        '给瓦工班组进场交底': '发起交底→确定交底内容→按照标准完成交底动作并录制视频（每项1条视频）→任务完成提报班组进行确认验收',
+        '瓦工基层完工验收': '收到班组的完工验收申请→工长发起验收→工长逐条进行验收并拍视频存证（每项1条视频或照片）→选择验收人（客户、项目总、设计师）→验收都合格，点击班组验收通过→验收不合格，点击班组验收驳回',
+        '防水隐蔽验收': '收到班组的完工验收申请→工长发起验收→工长逐条进行验收并拍视频存证（每项1条视频或照片）→验收都合格，点击班组验收通过→验收不合格，点击班组验收驳回',
+        '瓦工面层完工验收': '收到班组的完工验收申请→工长发起验收→工长逐条进行验收并拍视频存证（每项1条视频或照片）→选择验收人（客户、项目总、设计师）→验收都合格，点击班组验收通过→验收不合格，点击班组验收驳回',
+        '签订《油工班组合同》': '编辑任务化班组合同→同班组进行洽谈→调整班组合同条款→发起线上签约',
+        '给油工班组进场交底': '发起交底→确定交底内容→按照标准完成交底动作并录制视频（每项1条视频）→任务完成提报班组进行确认验收',
+        '油工基层完工验收': '收到班组的完工验收申请→工长发起验收→工长逐条进行验收并拍视频存证（每项1条视频或照片）→验收都合格，点击班组验收通过→验收不合格，点击班组验收驳回',
+        '油工面层完工验收': '收到班组的完工验收申请→工长发起验收→工长逐条进行验收并拍视频存证（每项1条视频或照片）→选择验收人（客户、项目总、设计师）→验收都合格，点击班组验收通过→验收不合格，点击班组验收驳回',
+        '基础施工完工验收': '收到班组的完工验收申请→工长发起验收→工长逐条进行验收并拍视频存证（每项1条视频或照片）→选择验收人（客户、项目总、设计师）→验收都合格，点击班组验收通过→验收不合格，点击班组验收驳回',
+        '现场巡查': '新建巡查任务→对现场进行巡查→记录巡查问题→拍摄巡查照片或视频→任务提报完成',
+        '现场例会': '组织例会→新建例会任务→记录会议纪要→相关责任人确认',
+        '进度播报': '新建播报任务→编写进度播报文本→上传附件→（重要事项确认许添加确认人）→提报任务',
+        '通知主材产品测量': '项目沟通群通知相关主材产品→相关方收到确认',
+        '与主材产品方案交底': '创建交底任务→记录交底事项（可以录制视频）→选择交底确认人→提报任务',
+        '结算申请': '填写结算申请单→客户签字确认',
         '新增点位布线': '按新增点位图纸布线，规格符合设计要求，接线牢固、绝缘良好。',
-        '新增点位验收': '新增点位工程完工后报甲方（张三）及业主验收，测试合格并签署验收记录。',
-        '清理现场': '施工面清洁、垃圾清运干净，成品保护完好，现场具备交付条件。',
-        '最终确认': '全部阶段任务完成，经甲方（张三）及全体确认人验收合格，项目整体交付。'
+        '新增点位验收': '新增点位工程完工后报甲方（张三）及业主验收，测试合格并签署验收记录。'
     };
     var GENERIC_EXEC_STD = '按合同约定及施工规范完成本项任务，质量合格、安全合规，验收达标。';
     var GENERIC_CONFIRM_STD = '由确认人按照上述执行标准及合同约定组织验收，合格后方可进入下一工序；不合格须限期整改至合格。';
@@ -2031,24 +2026,63 @@ const ContractDetailPage = (function() {
         var meta = parseTaskMeta(taskItem);
         var executor = meta.executor || '未指定';
         var confirmers = meta.confirmers.length ? meta.confirmers.join('、') : '未指定';
-        var execStd = TASK_EXEC_STD[name] || GENERIC_EXEC_STD;
+        var execStd = taskItem.dataset.execStandard || TASK_EXEC_STD[name] || GENERIC_EXEC_STD;
+        var confirmStd = taskItem.dataset.confirmStandard || GENERIC_CONFIRM_STD;
+        var liableStd = taskItem.dataset.liableStandard || GENERIC_LIABLE_STD;
         setText('detailTaskName', name);
         setText('detailExecutor', executor);
         setText('detailConfirmers', confirmers);
         setText('detailExecStandard', execStd);
-        setText('detailConfirmStandard', GENERIC_CONFIRM_STD);
-        setText('detailLiableStandard', GENERIC_LIABLE_STD);
+        setText('detailConfirmStandard', confirmStd);
+        setText('detailLiableStandard', liableStd);
         var modal = document.getElementById('taskDetailModal');
         if (modal) modal.classList.add('show');
     }
 
     /**
-     * 阶段任务项点击分派：已签约跳转，其余状态弹只读详情。
+     * 已签约（含履约完成演示）状态：跳转任务详情页，并携带任务上下文参数。
+     * 不改动跳转目标与后续任何功能、操作、交互流程；任务详情页无参数时保持原有示例数据。
+     * @param {HTMLElement} taskItem - 任务项元素
+     * @param {string} taskName - 已清洗的任务名称
+     */
+    function navigateToTaskDetail(taskItem, taskName) {
+        // 隶属阶段：任务所属阶段的阶段名称
+        var stageName = '';
+        var stageItem = taskItem.closest ? taskItem.closest('.stage-item') : null;
+        if (stageItem) {
+            var stageNameEl = stageItem.querySelector('.stage-name');
+            if (stageNameEl) stageName = stageNameEl.textContent.trim();
+        }
+
+        // 隶属合同：取合同信息行的合同名称，取不到时回退演示合同名称
+        var contractName = '';
+        var contractNameEl = document.getElementById('contractNameValue');
+        if (contractNameEl && contractNameEl.textContent.trim()) {
+            contractName = contractNameEl.textContent.trim();
+        }
+        if (!contractName) contractName = '基础施工服务合同';
+
+        var params = new URLSearchParams();
+        params.set('from', 'contract');
+        params.set('taskName', taskName || '');
+        params.set('contractName', contractName);
+        params.set('stageName', stageName);
+        params.set('execStandard', taskItem.dataset.execStandard || '');
+        params.set('confirmStandard', taskItem.dataset.confirmStandard || '');
+        params.set('liableStandard', taskItem.dataset.liableStandard || '');
+
+        location.href = 'task-detail.html?' + params.toString();
+    }
+
+    /**
+     * 阶段任务项点击分派：已签约跳转并携带上下文，其余状态弹只读详情。
      * @param {HTMLElement} taskItem - 任务项元素
      */
     function onTaskItemClick(taskItem) {
         if (state.currentStatus === 'signed') {
-            location.href = 'task-detail.html';
+            var taskNameEl = taskItem.querySelector('.task-name');
+            var taskName = taskNameEl ? taskNameEl.textContent.trim() : '未设置';
+            navigateToTaskDetail(taskItem, taskName);
         } else {
             openTaskReadonly(taskItem);
         }
@@ -2560,78 +2594,6 @@ const ContractDetailPage = (function() {
     // ==================== 签约文件函数 ====================
     
     /**
-     * 显示签约文件上传页面
-     */
-    function showSignUploadPage() {
-        const page = document.getElementById('signUploadPage');
-        if (page) page.classList.add('show');
-    }
-    
-    /**
-     * 关闭签约文件上传页面
-     */
-    function closeSignUploadPage() {
-        const page = document.getElementById('signUploadPage');
-        if (page) page.classList.remove('show');
-    }
-    
-    /**
-     * 处理签约文件选择
-     * @param {HTMLInputElement} input - 文件输入元素
-     */
-    function handleSignFileSelect(input) {
-        if (input.files.length > 0) {
-            const file = input.files[0];
-            state.signFiles.push({
-                name: file.name,
-                size: (file.size / 1024).toFixed(1) + 'KB'
-            });
-            renderSignFileList();
-        }
-    }
-    
-    /**
-     * 渲染签约文件列表
-     */
-    function renderSignFileList() {
-        const fileList = document.getElementById('signFileList');
-        if (!fileList) return;
-        
-        fileList.innerHTML = state.signFiles.map((file, index) => `
-            <div class="file-item">
-                <div class="file-icon">📄</div>
-                <div class="file-info">
-                    <div class="file-name">${file.name}</div>
-                    <div class="file-size">${file.size}</div>
-                </div>
-                <div class="file-remove" onclick="ContractDetailPage.removeSignFile(${index})">×</div>
-            </div>
-        `).join('');
-    }
-    
-    /**
-     * 移除签约文件
-     * @param {number} index - 文件索引
-     */
-    function removeSignFile(index) {
-        state.signFiles.splice(index, 1);
-        renderSignFileList();
-    }
-    
-    /**
-     * 提交签约文件
-     */
-    function submitSignFile() {
-        if (state.signFiles.length === 0) {
-            showCustomToast('请上传签约文件');
-            return;
-        }
-        showCustomToast('签约文件已上传！合同已正式生效。');
-        closeSignUploadPage();
-        updateContractStatus('signed');
-    }
-    
-    /**
      * 显示签约确认弹窗
      */
     function showSignConfirmModal() {
@@ -2816,11 +2778,6 @@ const ContractDetailPage = (function() {
         filterConfirmerList,
         
         // 签约文件
-        showSignUploadPage,
-        closeSignUploadPage,
-        handleSignFileSelect,
-        removeSignFile,
-        submitSignFile,
         showSignConfirmModal,
         closeSignConfirmModal,
         previewSignFile,
@@ -2904,11 +2861,6 @@ window.removeExecutor = ContractDetailPage.removeExecutor;
 window.selectConfirmer = ContractDetailPage.selectConfirmer;
 window.filterExecutorList = ContractDetailPage.filterExecutorList;
 window.filterConfirmerList = ContractDetailPage.filterConfirmerList;
-window.showSignUploadPage = ContractDetailPage.showSignUploadPage;
-window.closeSignUploadPage = ContractDetailPage.closeSignUploadPage;
-window.handleSignFileSelect = ContractDetailPage.handleSignFileSelect;
-window.removeSignFile = ContractDetailPage.removeSignFile;
-window.submitSignFile = ContractDetailPage.submitSignFile;
 window.showSignConfirmModal = ContractDetailPage.showSignConfirmModal;
 window.closeSignConfirmModal = ContractDetailPage.closeSignConfirmModal;
 window.previewSignFile = ContractDetailPage.previewSignFile;

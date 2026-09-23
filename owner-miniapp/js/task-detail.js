@@ -2934,6 +2934,55 @@ const TaskDetailPage = (function() {
     
     initEventListeners();
     initFromUrl();
+    applyTaskContextFromUrl();
+
+    /**
+     * 按合同内原文整条渲染单项标准（保留 → 流程符号），与合同详情页字段值保持一致。
+     * @param {string} id - 标准列表容器 id
+     * @param {string} text - 标准原文；为空（如变更新增任务暂无标准）时展示「未设置」占位，避免串到本页默认示例
+     */
+    function renderStandardFromContract(id, text) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        var item = document.createElement('div');
+        item.className = 'standard-item';
+        var num = document.createElement('span');
+        num.className = 'num';
+        num.textContent = '1.';
+        var txt = document.createElement('span');
+        txt.className = 'text';
+        txt.textContent = (text && text.trim()) ? text : '未设置';
+        item.appendChild(num);
+        item.appendChild(txt);
+        el.innerHTML = '';
+        el.appendChild(item);
+    }
+
+    /**
+     * 应用由合同详情页阶段任务跳转带入的任务上下文（from=contract）。
+     * 仅覆盖：任务名称、隶属合同与阶段、执行 / 确认 / 担责三项标准；
+     * 无该参数时不做任何处理，保持任务详情页原有示例数据、功能与交互。
+     */
+    function applyTaskContextFromUrl() {
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('from') !== 'contract') return;
+
+        var taskName = urlParams.get('taskName') || '';
+        var contractName = urlParams.get('contractName') || '';
+        var stageName = urlParams.get('stageName') || '';
+
+        var nameEl = document.getElementById('taskName');
+        if (nameEl && taskName) nameEl.textContent = taskName;
+
+        if (contractName || stageName) {
+            var stageEl = document.querySelector('.task-stage');
+            if (stageEl) stageEl.textContent = '📍 ' + contractName + ' > ' + stageName;
+        }
+
+        renderStandardFromContract('execStandard', urlParams.get('execStandard') || '');
+        renderStandardFromContract('confirmStandard', urlParams.get('confirmStandard') || '');
+        renderStandardFromContract('liableStandard', urlParams.get('liableStandard') || '');
+    }
     
     window.updateTaskStatus = updateTaskStatus;
     window.switchUserRole = switchUserRole;
