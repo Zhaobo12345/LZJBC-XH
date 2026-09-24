@@ -266,6 +266,8 @@
             background: var(--bg-primary); outline: none; font-family: inherit; resize: vertical; line-height: 1.5;
         }
         .edit-textarea:focus { border-color: var(--primary-color); }
+        /* 违约责任（只读）文本框：手机端统一高度、禁用 PC 端拖拽拉伸 */
+        #contentSection .edit-textarea { min-height: 72px; resize: none; line-height: 1.6; }
         /* 合同甲方：当前甲方与「更换甲方」同行，节省空间 */
         .party-a-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
         .party-a-row .invite-chips { margin-bottom: 0; flex: 1 1 auto; }
@@ -612,6 +614,22 @@
         .wc-preview-btn:active { opacity: 0.85; }
 
         /* 受邀方视角合同正文预览：关键条款（甲方责权 / 乙方责权）排版 */
+        /* 合同正文预览框：统一固定高度（内容为全文开头「双方权责」摘要，超出截断 + 底部渐隐，引导点击「查看全文」） */
+        .contract-text-preview {
+            position: relative; height: 150px; max-height: 150px; overflow: hidden;
+        }
+        .contract-text-preview::after {
+            content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 42px;
+            background: linear-gradient(rgba(255,255,255,0), var(--bg-primary, #fff));
+            pointer-events: none;
+        }
+        .contract-text-preview .clause-sub {
+            font-size: 12px; font-weight: 600; color: var(--text-primary, #1D2129);
+            margin: 6px 0 3px;
+        }
+        .contract-text-preview .clause-line {
+            font-size: 12px; line-height: 1.6; color: var(--text-secondary, #4E5969);
+        }
         .contract-text-preview .clause-block { margin-bottom: 10px; }
         .contract-text-preview .clause-block:last-child { margin-bottom: 0; }
         .contract-text-preview .clause-title {
@@ -695,7 +713,7 @@
         #inviteEditPanel .edit-input:focus,
         #draftContentWrap .edit-input:focus { border-color: #1677ff; box-shadow: 0 0 0 2px rgba(22,119,255,.12); }
         #inviteEditPanel .edit-textarea,
-        #draftContentWrap .edit-textarea { width: 100%; box-sizing: border-box; border: 1px solid #e3e3e3; border-radius: 8px; padding: 9px 10px; font-size: 13px; color: #333; background: #fff; outline: none; font-family: inherit; resize: vertical; line-height: 1.7; min-height: 96px; }
+        #draftContentWrap .edit-textarea { width: 100%; box-sizing: border-box; border: 1px solid #e3e3e3; border-radius: 8px; padding: 9px 10px; font-size: 13px; color: #333; background: #fff; outline: none; font-family: inherit; resize: none; line-height: 1.7; min-height: 96px; }
         #inviteEditPanel .edit-textarea:focus,
         #draftContentWrap .edit-textarea:focus { border-color: #1677ff; box-shadow: 0 0 0 2px rgba(22,119,255,.12); }
         #inviteEditPanel .field-row,
@@ -808,7 +826,7 @@
         #changeReadOnlyWrap .edit-field > label { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
         #changeReadOnlyWrap .edit-input,
         #changeReadOnlyWrap .edit-textarea { width: 100%; box-sizing: border-box; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 12px; font-size: 13px; color: var(--text-primary); background: var(--bg-secondary); outline: none; font-family: inherit; }
-        #changeReadOnlyWrap .edit-textarea { min-height: 70px; resize: none; line-height: 1.7; }
+        #changeReadOnlyWrap .edit-textarea { min-height: 72px; resize: none; line-height: 1.6; }
         #changeReadOnlyWrap .edit-input.ro,
         #changeReadOnlyWrap .edit-textarea.ro { background: var(--bg-secondary); color: var(--text-secondary); border-color: var(--border-color); cursor: default; }
         #changeReadOnlyWrap .field-row { display: flex; align-items: center; gap: 8px; }

@@ -1102,19 +1102,8 @@
             return;
         }
 
-        // 合同正文：对齐「拟定中」样式——form-label-row（合同正文 + 查看全文）+ 截断预览框（点击查看全文弹全文）
-        var preview;
-        if (isReceiver) {
-            // 受邀方视角：合同正文仅展示关键条款（甲方责权 / 乙方责权），其余内容点击「查看全部正文」查看
-            preview = receiverKeyClausesHTML();
-        } else {
-            preview = '<p>根据《中华人民共和国民法典》及相关法律法规的规定，甲乙双方本着平等、自愿、公平、诚实信用的原则，就' + escapeHtml(c.typeName) + '事宜协商一致，订立本合同。</p>' +
-                '<p class="text-title">一、工程概况</p>' +
-                '<p>工程名称：' + escapeHtml(c.name) + '</p>' +
-                '<p>工程地点：XX市XX区XX路XX号</p>' +
-                '<p>工程内容：' + escapeHtml(getContentIntro()) + '</p>';
-        }
-        var viewFullTextLabel = isReceiver ? '查看全部正文 >' : '查看全文 >';
+        // 合同正文（查看全文）区域已取消：全文化解至「固定详细条款 → 查看条款」独立全文页（对齐「已签约（发起方）-新」布局）。
+        // 发起方 / 受邀方非变更态统一仅展示「违约责任 / 固定详细条款 / 补充条款」，不再保留截断预览框与「查看全文」入口。
         var extra = getExtra();
         // 变更阶段：补充条款若被修改，以高亮标记「变更后」内容
         var cpExtra = (isChangeStage() ? getActiveChangeProposal() : null);
@@ -1136,12 +1125,22 @@
                 '<div class="text-content"><span class="text-content-change">' + escapeHtml(cpExtra.stageNote) + '</span></div>' +
             '</div>';
         }
+        var breachText = '1、甲方逾期付款的，按逾期金额千分之三/日支付违约金。\n2、乙方工期延误或质量不符的，应无偿返工并承担违约责任。';
+        var fullTextHref = isReceiver ? 'worker-contract-receive-clauses-new.html' : 'worker-contract-draft-fulltext-new.html';
         var html = '<div class="card">' +
-            '<div class="form-group">' +
-                '<div class="form-label-row"><label class="form-label">合同正文</label>' +
-                '<span class="view-full-link" onclick="WCP.showFullText()">' + viewFullTextLabel + '</span></div>' +
-                '<div class="contract-text-preview">' + preview + '</div>' +
+            // 违约责任（对齐「已签约（发起方）-新」布局，只读）
+            '<div class="form-group" style="margin-top:16px;">' +
+                '<div class="edit-field" style="margin-bottom:0;">' +
+                '<label>违约责任</label>' +
+                '<textarea class="edit-textarea ro" readonly>' + escapeHtml(breachText) + '</textarea>' +
+                '</div>' +
             '</div>' +
+            // 固定详细条款（对齐「已签约（发起方）-新」布局）
+            '<div class="form-group" style="margin-top:16px;">' +
+                '<div class="form-label-row"><label class="form-label">固定详细条款</label>' +
+                '<a class="view-full-link" href="' + fullTextHref + '">查看条款</a></div>' +
+            '</div>' +
+            // 补充条款（保留）
             '<div class="form-group" style="margin-top:16px;">' +
                 '<div class="form-label-row"><label class="form-label">补充条款</label>' +
                 (extraChanged ? '<span class="text-content-change-tag">变更后</span>' : '') + '</div>' +
@@ -1150,21 +1149,6 @@
             stageChangeBlock +
             '</div>';
         $('contentSection').innerHTML = html;
-    }
-
-    // 受邀方视角合同正文预览：仅展示关键条款（甲方责权 / 乙方责权）
-    function receiverKeyClausesHTML() {
-        return '<div class="clause-block"><div class="clause-title">一、甲方责权</div><ol class="clause-list">' +
-            '<li>甲方有权按照相关工艺及质量标准监督、指导乙方工作，并根据工作过程及完成情况给予奖励、处罚。</li>' +
-            '<li>甲方应按照工程施工要求在乙方施工前进行相关培训及交底，包含但不限于《现场施工管理规定》、《施工工艺及验收标准》、图纸交底等。</li>' +
-            '<li>甲方有责任按时为乙方提供满足工作需要的场地、材料、工具、安全措施等。</li>' +
-            '</ol></div>' +
-            '<div class="clause-block"><div class="clause-title">二、乙方责权</div><ol class="clause-list">' +
-            '<li>乙方有权在约定的支付节点获得报酬。</li>' +
-            '<li>当遇到现场、图纸冲突时，乙方应第一时间告知甲方进行协调。</li>' +
-            '<li>乙方在工作中应自觉保护其他工种的劳动成果，不得擅自破坏。</li>' +
-            '<li>乙方不得擅自把甲方提供的工具、材料拿出场外或使用到其他工地。</li>' +
-            '</ol></div>';
     }
 
     function renderStagesSection() {
@@ -2370,59 +2354,63 @@
         m.classList.add('show');
     }
     function buildContractBodyHTML() {
-        var c = state.contract;
-        var intro = getContentIntro();
-        var amount = c.amount ? (c.amount + ' 元') : '—';
-        return '<div class="contract-article"><div class="article-title">第一条 工程概况</div><div class="article-content">' +
-            '<p>1.1 工程名称：' + escapeHtml(c.name) + '</p>' +
-            '<p>1.2 工程地点：XX市XX区XX路XX号</p>' +
-            '<p>1.3 工程内容：' + escapeHtml(intro) + '</p>' +
-            '<p>1.4 承包方式：包工包料</p></div></div>' +
-            '<div class="contract-article"><div class="article-title">第二条 合同价款及支付方式</div><div class="article-content">' +
-            '<p>2.1 合同总价：人民币 ' + escapeHtml(amount) + '（含税）。</p>' +
-            '<p>2.2 支付方式：合同签订后支付预付款，材料进场验收合格后支付进度款，完工验收后支付尾款。</p></div></div>' +
-            '<div class="contract-article"><div class="article-title">第三条 双方权利义务</div><div class="article-content">' +
-            '<p>3.1 甲方（' + escapeHtml(c.partyAName || '陈庄') + '）应按约定支付工程款，并提供施工所需条件。</p>' +
-            '<p>3.2 乙方应按标准施工，自确认加入后自动归入项目架构层级「' + escapeHtml(c.group || '—') + '」。</p></div></div>' +
-            '<div class="contract-article"><div class="article-title">第四条 工程质量及验收</div><div class="article-content">' +
-            '<p>4.1 乙方应严格按国家现行施工验收规范施工。</p>' +
-            '<p>4.2 分阶段验收，隐蔽工程验收合格后方可进行下一道工序。</p></div></div>' +
-            '<div class="contract-article"><div class="article-title">第五条 违约责任</div><div class="article-content">' +
-            '<p>5.1 甲方逾期付款的，按逾期金额千分之三/日支付违约金。</p>' +
-            '<p>5.2 乙方工期延误或质量不符的，应无偿返工并承担违约责任。</p></div></div>' +
-            '<div class="contract-article"><div class="article-title">第六条 争议解决</div><div class="article-content">' +
-            '<p>6.1 协商不成的，向工程所在地人民法院提起诉讼。</p></div></div>';
+        // 合同正文（全文）：双方权责 / 质量验收 / 安全及文明施工 / 道德承诺 / 其他条款（序号已按全文顺序重排）
+        return '<div class="contract-article"><div class="article-title">一、双方权责</div><div class="article-content">' +
+            '<p class="clause-subtitle">1、甲方责任</p>' +
+            '<p class="clause-item">A. 提供施工图纸，协调物业办理施工手续，提供作业面，配合乙方进场施工</p>' +
+            '<p class="clause-item">B. 给乙方进行进场前的交底培训</p>' +
+            '<p class="clause-item">C. 对乙方的施工内容进行验收</p>' +
+            '<p class="clause-item">D. 依据合同款项申请支付乙方</p>' +
+            '<p class="clause-subtitle">2、甲方权利</p>' +
+            '<p class="clause-item">A. 有权审核乙方的相关证件</p>' +
+            '<p class="clause-item">B. 对不合格的施工项目，有权要求整改或停工</p>' +
+            '<p class="clause-item">C. 乙方施工质量不达标且拒不整改的，甲方有权扣除相应费用</p>' +
+            '<p class="clause-item">D. 对不按合同约定履约的乙方，可随时提出更换</p>' +
+            '<p class="clause-subtitle">3、乙方责任</p>' +
+            '<p class="clause-item">A. 严格按合同、图纸及规范施工，确保工程质量</p>' +
+            '<p class="clause-item">B. 配合甲方提出的合理的变更事项</p>' +
+            '<p class="clause-item">C. 保修期内免费维修因施工质量导致的问题</p>' +
+            '<p class="clause-subtitle">4、乙方权利</p>' +
+            '<p class="clause-item">A. 依据合同约定要求甲方支付合同款项</p>' +
+            '<p class="clause-item">B. 发生变更，有权追加合理的费用</p>' +
+        '</div></div>' +
+        '<div class="contract-article"><div class="article-title">二、质量验收</div><div class="article-content">' +
+            '<p class="clause-item">1、甲方依据《施工工艺标准》进行验收</p>' +
+            '<p class="clause-item">2、验收流程：班组自检-工长预检-业主正式验收-班组交接互检</p>' +
+            '<p class="clause-item">3、验收不合格的，乙方需在2日内整改完毕，经过两次验收仍然不合格的，甲方有权扣除相应的合同金额并终止与乙方的合同。</p>' +
+        '</div></div>' +
+        '<div class="contract-article"><div class="article-title">三、安全及文明施工</div><div class="article-content">' +
+            '<p class="clause-item">1、乙方必须购买意外保险（提供保单），施工中发生安全事故由乙方承担全部责任</p>' +
+            '<p class="clause-item">2、施工期间若因乙方操作不当导致甲方或第三方财产损失，乙方负责赔偿</p>' +
+            '<p class="clause-item">3、乙方需遵守现场《安全文明施工规定》</p>' +
+        '</div></div>' +
+        '<div class="contract-article"><div class="article-title">四、道德承诺</div><div class="article-content">' +
+            '<p class="clause-item">1）工人承诺，在整个施工服务过程中不做任何违反道德的事情，如有违反自愿赔偿非法所得。</p>' +
+            '<p class="clause-sub2">1. 搞恶意增项的，自罚30倍。</p>' +
+            '<p class="clause-sub2">2. 恶意虚增费用和费用造假的，自罚30倍。</p>' +
+            '<p class="clause-sub2">3. 商品以次充好和掺假调包的，自罚30倍。</p>' +
+            '<p class="clause-sub2">4. 私下侵吞业主财物的，自罚30倍。</p>' +
+            '<p class="clause-sub2">5. 知劣买劣、知假买假的，自罚30倍。</p>' +
+            '<p class="clause-sub2">6. 私下收取好处费、返佣、回扣等，自罚30倍。</p>' +
+            '<p class="clause-sub2">7. 耍手段胁迫甲方而获取不当利益的，自罚30倍。</p>' +
+            '<p class="clause-sub2">8. 故意使坏妨碍安全、质量、工期造成损失的，自罚10倍。</p>' +
+            '<p class="clause-sub2">9. 无条件接受社会舆论公开谴责。</p>' +
+            '<p class="clause-item">2）取证与执行</p>' +
+            '<p class="clause-sub2">1. 客户或甲方自行取证留存。</p>' +
+            '<p class="clause-sub2">2. 直接按非法所得金额的倍数赔偿客户。</p>' +
+            '<p class="clause-sub2">3. 如果拒绝赔偿，客户或甲方有权扣除乙方已有的项目资金，并提起诉讼。</p>' +
+        '</div></div>' +
+        '<div class="contract-article"><div class="article-title">五、其他条款</div><div class="article-content">' +
+            '<p class="clause-item">1、如因不可抗力，甲乙双方可协商一致终止合同</p>' +
+            '<p class="clause-item">2、因本合同引起的争议，双方应协商解决，协商不成的，提交项目所在地人民法院诉讼解决</p>' +
+            '<p class="clause-item">3、本合同未尽事宜，可签订补充协议，补充协议与本合同具有同等效力</p>' +
+            '<p class="clause-item">4、本合同一式两份，甲乙双方各执一份，自签字盖章之日起生效</p>' +
+        '</div></div>';
     }
     // 受邀方视角「查看全部正文」完整合同正文：关键条款（甲方责权 / 乙方责权）前置，再附标准条款
     function buildReceiverContractHTML() {
-        var c = state.contract;
-        var addr = c.projectAddress ? escapeHtml(c.projectAddress) : 'XX市XX区XX路XX号';
-        var intro = getContentIntro();
-        var amount = c.amount ? (c.amount + ' 元') : '—';
-        return '<div class="contract-article"><div class="article-title">第一条 工程概况</div><div class="article-content">' +
-            '<p>1.1 工程名称：' + escapeHtml(c.name) + '</p>' +
-            '<p>1.2 工程地点：' + addr + '</p>' +
-            '<p>1.3 工程内容：' + escapeHtml(intro) + '</p></div></div>' +
-            '<div class="contract-article"><div class="article-title">第二条 甲方责权</div><div class="article-content">' +
-            '<p>2.1 甲方有权按照相关工艺及质量标准监督、指导乙方工作，并根据工作过程及完成情况给予奖励、处罚。</p>' +
-            '<p>2.2 甲方应按照工程施工要求在乙方施工前进行相关培训及交底，包含但不限于《现场施工管理规定》、《施工工艺及验收标准》、图纸交底等。</p>' +
-            '<p>2.3 甲方有责任按时为乙方提供满足工作需要的场地、材料、工具、安全措施等。</p></div></div>' +
-            '<div class="contract-article"><div class="article-title">第三条 乙方责权</div><div class="article-content">' +
-            '<p>3.1 乙方有权在约定的支付节点获得报酬。</p>' +
-            '<p>3.2 当遇到现场、图纸冲突时，乙方应第一时间告知甲方进行协调。</p>' +
-            '<p>3.3 乙方在工作中应自觉保护其他工种的劳动成果，不得擅自破坏。</p>' +
-            '<p>3.4 乙方不得擅自把甲方提供的工具、材料拿出场外或使用到其他工地。</p></div></div>' +
-            '<div class="contract-article"><div class="article-title">第四条 合同价款及支付方式</div><div class="article-content">' +
-            '<p>4.1 合同总价：人民币 ' + escapeHtml(amount) + '（含税）。</p>' +
-            '<p>4.2 支付方式：合同签订后支付预付款，材料进场验收合格后支付进度款，完工验收后支付尾款。</p></div></div>' +
-            '<div class="contract-article"><div class="article-title">第五条 工程质量及验收</div><div class="article-content">' +
-            '<p>5.1 乙方应严格按国家现行施工验收规范施工。</p>' +
-            '<p>5.2 分阶段验收，隐蔽工程验收合格后方可进行下一道工序。</p></div></div>' +
-            '<div class="contract-article"><div class="article-title">第六条 违约责任</div><div class="article-content">' +
-            '<p>6.1 甲方逾期付款的，按逾期金额千分之三/日支付违约金。</p>' +
-            '<p>6.2 乙方工期延误或质量不符的，应无偿返工并承担违约责任。</p></div></div>' +
-            '<div class="contract-article"><div class="article-title">第七条 争议解决</div><div class="article-content">' +
-            '<p>7.1 协商不成的，向工程所在地人民法院提起诉讼。</p></div></div>';
+        // 受邀方全文与发起方同源（同一份固定条款正文）
+        return buildContractBodyHTML();
     }
     function buildFullContractHTML() {
         var c = state.contract;
