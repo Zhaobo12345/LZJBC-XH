@@ -1959,5 +1959,26 @@
     renderMoreOps();
 </script>
 <script src="../shared/doc-viewer/doc-viewer.js"></script>
+
+<div id="__PROBE__">PENDING</div>
+<script>
+(function(){
+  function run(){
+    try{
+      var out = {};
+      var inputs = document.querySelectorAll('.task-edit-item .task-input');
+      var vals = Array.prototype.map.call(inputs, function(i){ return (i.value || '').trim(); });
+      out.count = vals.length;
+      out.withCheck = vals.filter(function(v){ return v.indexOf('\u2705') > -1; });
+      out.sample = vals.slice(0, 4);
+      var it = document.querySelector('.task-edit-item');
+      if (it) { var cs = getComputedStyle(it); out.bg = cs.backgroundColor; out.radius = cs.borderRadius; }
+      document.getElementById('__PROBE__').textContent = JSON.stringify(out);
+    } catch(e){ document.getElementById('__PROBE__').textContent = 'ERR:' + e.message; }
+  }
+  if (document.readyState === 'complete' || document.readyState === 'interactive') setTimeout(run, 700);
+  else window.addEventListener('load', function(){ setTimeout(run, 700); });
+})();
+</script>
 </body>
 </html>

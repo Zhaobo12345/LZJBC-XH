@@ -777,5 +777,30 @@ var TASK_STD_MAP = {
     }
 </script>
 <script src="../shared/doc-viewer/doc-viewer.js"></script>
+
+<div id="__PROBE__">PENDING</div>
+<script>
+(function(){
+  function run(){
+    try{
+      var out = {};
+      var box = document.getElementById('stagesSection') || document.getElementById('stageWrap');
+      if(!box){ document.getElementById('__PROBE__').textContent = 'ERR:no-box'; return; }
+      var names = Array.prototype.map.call(box.querySelectorAll('.task-item .task-name'), function(e){
+        return (e.textContent || '').trim(); });
+      out.count = names.length;
+      out.withCheck = names.filter(function(n){ return n.indexOf('\u2705') > -1; });
+      out.sample = names.slice(0, 4);
+      var ti = box.querySelector('.task-item');
+      if (ti) { var cs = getComputedStyle(ti);
+        out.bg = cs.backgroundColor; out.radius = cs.borderRadius;
+        out.padding = cs.padding; out.marginBottom = cs.marginBottom; out.borderBottom = cs.borderBottomWidth; }
+      document.getElementById('__PROBE__').textContent = JSON.stringify(out);
+    } catch(e){ document.getElementById('__PROBE__').textContent = 'ERR:' + e.message; }
+  }
+  if (document.readyState === 'complete' || document.readyState === 'interactive') setTimeout(run, 700);
+  else window.addEventListener('load', function(){ setTimeout(run, 700); });
+})();
+</script>
 </body>
 </html>

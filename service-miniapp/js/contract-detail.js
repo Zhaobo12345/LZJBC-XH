@@ -1070,9 +1070,9 @@ const ContractDetailPage = (function() {
             if (partyAEl && snap.partyA != null) partyAEl.value = snap.partyA;
             if (partyBEl && snap.partyB != null) partyBEl.value = snap.partyB;
             if (contentEl && snap.content != null) contentEl.value = snap.content;
-            if (snap.stages && snap.stages.length) {
-                renderStagesFromSnapshot(snap.stages);
-            }
+            // 注意：阶段任务数据始终以页面静态 HTML（规范数据，与「待平台审核」一致）为准，
+            // 不再用旧草稿静默覆盖 editStageList，避免刷新后展示非最新/错误阶段。
+            // 「仅保存」仍持久化并恢复上述文本字段；阶段列表的增删改交互保持不变。
         } catch (e) {
             // 快照损坏则忽略，回退到默认表单
         }
@@ -1234,6 +1234,7 @@ const ContractDetailPage = (function() {
         const statusTextMap = {
             'draft': '拟定中',
             'draft_party_a': '拟定中（甲方）',
+            'draft_submittable': '拟定中(可提交)',
             'platform_reviewing': '待平台审核',
             'reviewed_pass': '已通过',
             'reviewed_reject': '已驳回',
@@ -3261,9 +3262,10 @@ const ContractDetailPage = (function() {
         const editTaskConfirmStandard = document.getElementById('editTaskConfirmStandard');
         const editTaskLiableStandard = document.getElementById('editTaskLiableStandard');
         
-        if (editTaskExecStandard) editTaskExecStandard.value = execStandard;
-        if (editTaskConfirmStandard) editTaskConfirmStandard.value = confirmStandard;
-        if (editTaskLiableStandard) editTaskLiableStandard.value = liableStandard;
+        // 编辑态恢复文本框默认高度（只读详情曾按内容撑开设置过内联高度，避免泄漏到编辑态）
+        if (editTaskExecStandard) { editTaskExecStandard.value = execStandard; editTaskExecStandard.style.height = ''; }
+        if (editTaskConfirmStandard) { editTaskConfirmStandard.value = confirmStandard; editTaskConfirmStandard.style.height = ''; }
+        if (editTaskLiableStandard) { editTaskLiableStandard.value = liableStandard; editTaskLiableStandard.style.height = ''; }
         
         const modal = document.getElementById('editTaskModal');
         if (modal) modal.classList.add('show');
@@ -3449,6 +3451,16 @@ const ContractDetailPage = (function() {
             const title = modal.querySelector('.modal-title');
             if (title) title.textContent = '任务详情（只读）';
             modal.classList.add('show');
+
+            // 手机端规范：只读详情内三项标准文本框按内容撑开（配合 CSS 去滚动条/去 PC 拖拽把手），
+            // 需在弹窗显示（display:flex）后测量 scrollHeight 才准确。仅作用于只读态，编辑任务不受影响。
+            ['editTaskExecStandard', 'editTaskConfirmStandard', 'editTaskLiableStandard'].forEach(function (id) {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.style.height = 'auto';
+                // border-box 下需补足上下边框(共 2px)，避免最后一行被裁切
+                el.style.height = (el.scrollHeight + 2) + 'px';
+            });
         }
     }
     

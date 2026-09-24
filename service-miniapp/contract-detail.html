@@ -283,6 +283,35 @@
         .worker-flow .wf-label { font-size: 11px; margin-top: 4px; color: var(--text-secondary, #4E5969); }
         .worker-flow .wf-line { flex: 1; height: 2px; background: var(--border-color, #E5E6EB); margin: 0 4px 16px; }
         .worker-flow .wf-line.done { background: var(--success-color, #00875A); }
+
+        /* 只读任务详情弹窗：按文字量自动撑开，取消滚动条（手机端规范）
+           仅作用于本页 .task-detail-modal，不影响编辑任务弹窗与其他页面 */
+        .task-detail-modal .modal-content {
+            max-height: none !important;
+            overflow: visible !important;
+        }
+        .task-detail-modal {
+            align-items: flex-start !important;
+            overflow-y: auto !important;
+            padding: 8vh 0 !important;
+            /* 与项目「无滚动条」约定一致：隐藏弹窗内滚动条，内容仍可滑动查看，不裁切 */
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+        }
+        .task-detail-modal::-webkit-scrollbar { display: none !important; }
+
+        /* 任务详情（只读）弹窗（#editTaskModal.readonly）：三项标准按内容撑开、取消自身滚动条与 PC 拖拽把手；
+           弹窗本体隐藏滚动条、保留手动上下滑查看（手机端小程序规范）。
+           仅作用于 .readonly 只读态，编辑任务（非只读）的原有交互不变，其他页面不受影响 */
+        .edit-task-modal.readonly .form-textarea {
+            resize: none !important;
+            overflow: hidden !important;
+        }
+        .edit-task-modal.readonly .modal-content {
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+        }
+        .edit-task-modal.readonly .modal-content::-webkit-scrollbar { display: none !important; }
     </style>
 </head>
 <body data-page-node-id="r3vMDlkYdHOuRAhbaXV87D">

@@ -1151,6 +1151,18 @@
         $('contentSection').innerHTML = html;
     }
 
+    /**
+     * 任务名「✅」完成记号清洗。
+     * 说明：该记号写在演示任务名前，语义为「已完成」，属静态残留标识：
+     * 已签约前任务不支持执行，不应出现完成标识；已签约但未履约时页面 meta 亦为「待开始」，
+     * 与完成记号自相矛盾。故仅在「已签约（已履约完成）」演示态保留（该态本就有 ✓ 已完成 标识）。
+     */
+    function cleanTaskName(name) {
+        var s = (name == null) ? '' : String(name);
+        if (state.status === 'worker_signed' && state.fulfilled) return s;
+        return s.replace(/^\s*✅\s*/, '');
+    }
+
     function renderStagesSection() {
         var c = state.contract;
         var stages = getStages();
@@ -1162,15 +1174,16 @@
                 var clickAttr = isSigned
                     ? 'onclick="WCP.goTaskDetail(this)"'
                     : 'onclick="WCP.viewTaskDetail(this)"';
+                var taskName = cleanTaskName(t.name);
                 return '<div class="task-item" ' + clickAttr +
-                    ' data-task-name="' + escapeHtml(t.name) + '"' +
+                    ' data-task-name="' + escapeHtml(taskName) + '"' +
                     ' data-executor="' + escapeHtml(t.exec || '') + '"' +
                     ' data-confirmers="' + escapeHtml(t.conf || '') + '"' +
                     ' data-exec-standard="' + escapeHtml(t.execStd || '') + '"' +
                     ' data-confirm-standard="' + escapeHtml(t.confStd || '') + '"' +
                     ' data-liable-standard="' + escapeHtml(t.liableStd || '') + '"' +
                     '><div class="task-info">' +
-                    '<div class="task-name">' + escapeHtml(t.name) + (isFulfilled ? ' <span class="task-done-tag">✓ 已完成</span>' : '') + '</div>' +
+                    '<div class="task-name">' + escapeHtml(taskName) + (isFulfilled ? ' <span class="task-done-tag">✓ 已完成</span>' : '') + '</div>' +
                     '</div></div>';
             }).join('');
             return '<div class="stage-item"><div class="stage-header" onclick="WCP.toggleStage(this)">' +
@@ -1529,13 +1542,13 @@
         return stages.map(function (s, i) {
             var tasks = (s.tasks || []).map(function (t) {
                 return '<div class="task-item" onclick="WCP.viewTaskDetail(this)"' +
-                    ' data-task-name="' + escapeHtml(t.name) + '"' +
+                    ' data-task-name="' + escapeHtml(cleanTaskName(t.name)) + '"' +
                     ' data-executor="' + escapeHtml(t.exec || '') + '"' +
                     ' data-confirmers="' + escapeHtml(t.conf || '') + '"' +
                     ' data-exec-standard="' + escapeHtml(t.execStd || '') + '"' +
                     ' data-confirm-standard="' + escapeHtml(t.confStd || '') + '"' +
                     ' data-liable-standard="' + escapeHtml(t.liableStd || '') + '"' +
-                    '><div class="task-info"><div class="task-name">' + escapeHtml(t.name) + '</div></div></div>';
+                    '><div class="task-info"><div class="task-name">' + escapeHtml(cleanTaskName(t.name)) + '</div></div></div>';
             }).join('');
             return '<div class="stage-item"><div class="stage-header" onclick="WCP.toggleStage(this)">' +
                 '<div class="stage-icon">' + (i + 1) + '</div>' +
@@ -2110,7 +2123,7 @@
             var seqOn = (s.order === '顺序执行');
             var tasks = (s.tasks || []).map(function (t, j) {
                 return '<div class="task-edit-item">' +
-                    '<input class="task-input" value="' + escapeHtml(t.name) + '" placeholder="任务名称" oninput="WCP.updateDraftTaskName(' + i + ',' + j + ',this.value)" onclick="WCP.editTaskDetail(this,' + i + ',' + j + ')" readonly>' +
+                    '<input class="task-input" value="' + escapeHtml(cleanTaskName(t.name)) + '" placeholder="任务名称" oninput="WCP.updateDraftTaskName(' + i + ',' + j + ',this.value)" onclick="WCP.editTaskDetail(this,' + i + ',' + j + ')" readonly>' +
                     '<div class="task-action-btn edit" onclick="WCP.editTaskDetail(this,' + i + ',' + j + ')" title="编辑详情">✎</div>' +
                     '<div class="task-action-btn" onclick="WCP.deleteDraftTask(' + i + ',' + j + ')">×</div>' +
                     '</div>';
@@ -2421,7 +2434,7 @@
         var stages = getStages();
         var stageHtml = stages.map(function (s) {
             var ts = (s.tasks || []).map(function (t) {
-                return '<div style="margin-bottom:8px;"><p style="margin:0 0 4px;"><strong>' + escapeHtml(t.name) + '</strong>　<span style="font-weight:400;color:#86909C;">执行：' + escapeHtml(t.exec || '—') + '　确认：' + escapeHtml(t.conf || '—') + '</span></p>' +
+                return '<div style="margin-bottom:8px;"><p style="margin:0 0 4px;"><strong>' + escapeHtml(t.name.replace(/^\s*✅\s*/, '')) + '</strong>　<span style="font-weight:400;color:#86909C;">执行：' + escapeHtml(t.exec || '—') + '　确认：' + escapeHtml(t.conf || '—') + '</span></p>' +
                     '<p style="margin:0 0 2px;">执行标准：' + escapeHtml(t.execStd || '（未填写）') + '</p>' +
                     '<p style="margin:0 0 2px;">确认标准：' + escapeHtml(t.confStd || '（未填写）') + '</p>' +
                     '<p style="margin:0;">担责标准：' + escapeHtml(t.liableStd || '（未填写）') + '</p></div>';

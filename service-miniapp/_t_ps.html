@@ -911,18 +911,14 @@
         #receiverChangeWrap .rc-hero-meta b { display: block; font-size: 12px; color: var(--text-tertiary, #999); font-weight: 400; margin-bottom: 2px; }
 
         /* 阶段任务（只读）：各任务独立圆角背景、任务间明显分隔（对齐非工人合同详情任务卡） */
-        #stagesSection .stage-tasks .task-item,
-        #changeStagesBox .stage-tasks .task-item,
-        #rcStageWrap .stage-tasks .task-item {
+        #stagesSection .stage-tasks .task-item {
             background-color: var(--bg-secondary, #F5F5F5);
             border-radius: 8px;
             margin-bottom: 8px;
             padding: 10px 12px;
             border-bottom: none;
         }
-        #stagesSection .stage-tasks .task-item:last-child,
-        #changeStagesBox .stage-tasks .task-item:last-child,
-        #rcStageWrap .stage-tasks .task-item:last-child { margin-bottom: 0; }
+        #stagesSection .stage-tasks .task-item:last-child { margin-bottom: 0; }
 
     </style>
 
@@ -1671,5 +1667,31 @@
     <script src="contract-store.js"></script>
     <script src="worker-contract-detail.js"></script>
 <script src="../shared/doc-viewer/doc-viewer.js"></script>
+
+<div id="__PROBE__">PENDING</div>
+<script>
+(function(){
+  function run(){
+    try{
+      var out = {};
+      var b = document.getElementById('bannerText');
+      out.banner = b ? b.textContent.trim() : null;
+      var sb = document.getElementById('statusBanner');
+      out.bannerClass = sb ? sb.className : null;
+      var box = document.getElementById('stagesSection');
+      out.stageMeta = box && box.querySelector('.stage-meta') ? box.querySelector('.stage-meta').textContent.trim() : null;
+      out.doneTagCount = box ? box.querySelectorAll('.task-done-tag').length : -1;
+      out.firstTask = box && box.querySelector('.task-item .task-name') ? box.querySelector('.task-item .task-name').textContent.trim() : null;
+      var fb = document.getElementById('fulfilledBadge');
+      out.fulfilledBadgeDisplay = fb ? getComputedStyle(fb).display : null;
+      out.hasWCP = !!window.WCP;
+      out.wcpKeys = window.WCP ? Object.keys(window.WCP).length : 0;
+      document.getElementById('__PROBE__').textContent = JSON.stringify(out);
+    } catch(e){ document.getElementById('__PROBE__').textContent = 'ERR:'+e.message; }
+  }
+  if (document.readyState === 'complete') setTimeout(run, 800);
+  else window.addEventListener('load', function(){ setTimeout(run, 800); });
+})();
+</script>
 </body>
 </html>
