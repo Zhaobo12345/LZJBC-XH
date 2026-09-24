@@ -1153,13 +1153,16 @@
 
     /**
      * 任务名「✅」完成记号清洗。
-     * 说明：该记号写在演示任务名前，语义为「已完成」，属静态残留标识：
-     * 已签约前任务不支持执行，不应出现完成标识；已签约但未履约时页面 meta 亦为「待开始」，
-     * 与完成记号自相矛盾。故仅在「已签约（已履约完成）」演示态保留（该态本就有 ✓ 已完成 标识）。
+     * 说明：该记号写在演示任务名前，语义为「已完成」，属静态残留标识。
+     * 规则：仅当任务确已完成（已签约且已履约完成）或处于「变更对应状态」（用户明确要求变更态保留）时保留；
+     * 其余状态（拟定中 / 确认中 / 已签约但未履约「待开始」）一律去除——签约前及待开始阶段任务不支持执行，
+     * 不应出现完成标识，否则与「待开始」meta 自相矛盾。
      */
     function cleanTaskName(name) {
         var s = (name == null) ? '' : String(name);
-        if (state.status === 'worker_signed' && state.fulfilled) return s;
+        var keepMark = (state.status === 'worker_signed' && state.fulfilled) ||
+                       (typeof state.status === 'string' && state.status.indexOf('change') === 0);
+        if (keepMark) return s;
         return s.replace(/^\s*✅\s*/, '');
     }
 
